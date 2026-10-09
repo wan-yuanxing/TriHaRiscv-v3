@@ -1,0 +1,40 @@
+\chapter{作品概述}
+
+\section{功能与特性}
+
+本设计 TriHaRiscv\footnote{TriHaRiscv 的命名灵感来源于团队名称“哈哈哈”（Triple Ha）。}是面向边缘图像处理和神经网络推理的RISC-V异构计算平台，采用Verilog语言进行RTL设计，集成CPU、NPU、系统互连与存储，
+以及图像采集显示链路。CPU负责程序控制和通用计算，NPU负责卷积、矩阵乘等运算，视频链路完成图像输入与结果显示。系
+统的基本功能与特性如下：
+\begin{itemize}
+    \item CPU采用六级流水线、双发射、顺序执行架构。
+    \item 支持RV32IMC指令集及Zicsr扩展，支持机器模式（M-mode）、CSR访问、中断和异常处理。
+    \item 支持动态分支预测，预测组件表项深度可参数化配置。
+    \item 支持参数化开启或关闭指令缓存（I-Cache）和数据缓存（D-Cache）。
+    \item NPU采用脉动阵列，支持INT8乘法和INT32累加，完成卷积及矩阵乘运算。
+    \item CPU通过寄存器配置和启动NPU任务，支持状态查询和任务完成中断。
+    \item 采用DMA搬运特征图、模型参数和计算结果，支持分块计算的数据传输。
+    \item 支持AXI4和AXI-Lite总线。
+    \item 集成片上RAM，支持DDR3板载外部存储，为CPU、NPU及视频帧缓存提供存储空间。
+    \item 支持UART、GPIO、定时器、I\textsuperscript{2}C和SPI基本外设。
+    \item 支持图像采集、输入预处理、帧缓存管理和HDMI显示输出。
+    \item 支持量化模型的裸机部署，提供NPU驱动、算子调度及结果处理功能。
+\end{itemize}
+
+\section{应用领域}
+
+{[}待填写：使用场景、目标用户、输入输出条件、部署约束、模型数量和离线运行边界。{]}
+
+\section{主要技术特点}
+
+\begin{itemize}
+\tightlist
+\item {[}待填写{]}
+\item {[}待填写{]}
+\item {[}待填写{]}
+\item {[}待填写{]}
+\end{itemize}
+
+
+\section{设计流程}
+
+{[}待填写：需求、方案、模块验证、系统集成、目标实现、板测和归档流程。{]}

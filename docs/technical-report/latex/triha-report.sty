@@ -1,0 +1,59 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{triha-report}[2026/09/30 TriHaRiscv technical report]
+\RequirePackage[a4paper,top=30.4mm,bottom=25.4mm,left=28mm,right=25mm,headheight=40pt,headsep=2mm]{geometry}
+\RequirePackage{fontspec}
+\IfFontExistsTF{SimSun}{\setCJKmainfont[AutoFakeBold=2]{SimSun}}{\setCJKmainfont[BoldFont=FandolSong-Bold]{FandolSong-Regular}}
+\IfFontExistsTF{SimHei}{\setCJKsansfont[AutoFakeBold=2]{SimHei}}{\setCJKsansfont[BoldFont=FandolHei-Bold]{FandolHei-Regular}}
+\IfFontExistsTF{KaiTi}{\setCJKmonofont{KaiTi}}{\setCJKmonofont{FandolFang-Regular}}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
+\IfFontExistsTF{Arial}{\setsansfont{Arial}}{\setsansfont{TeX Gyre Heros}}
+\IfFontExistsTF{Consolas}{\setmonofont[Scale=0.9]{Consolas}}{\setmonofont[Scale=0.9]{Latin Modern Mono}}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{graphicx,booktabs,longtable,array,tabularx,calc}
+\RequirePackage{xcolor}
+\definecolor{reportblue}{HTML}{24475C}
+\definecolor{noteback}{HTML}{F1F5F7}
+\RequirePackage{fancyhdr}
+\RequirePackage{enumitem}
+\RequirePackage{fvextra}
+\RequirePackage{caption}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\RequirePackage[numbers,sort&compress,square]{natbib}
+\RequirePackage{xurl}
+\RequirePackage[hidelinks,unicode]{hyperref}
+\hypersetup{bookmarksnumbered=true,pdftitle={TriHaRiscv v3 技术文档模板},pdfauthor={},pdfsubject={RV32 FPGA heterogeneous system technical document template}}
+\ctexset{
+  contentsname={目\ \ 录},
+  chapter={name={第,部分},number=\chinese{chapter},format=\centering\sffamily\bfseries\zihao{-2},aftername={\ },tocline={\CTEXnumberline{#1}#2},beforeskip=4pt,afterskip=10pt},
+  section={format=\sffamily\bfseries\zihao{4},aftername={\ },beforeskip=16pt,afterskip=8pt},
+  subsection={format=\sffamily\bfseries\zihao{-4},aftername={\ },beforeskip=12pt,afterskip=6pt}
+}
+\renewcommand{\CTEX@toc@width@n}[1]{\settowidth{\@tempdima}{#1\ }}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+\linespread{1.25}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{3em}
+\setlist{nosep,leftmargin=2em,topsep=5pt}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\setlength{\LTpre}{8pt}
+\setlength{\LTpost}{8pt}
+\captionsetup{font=small,labelfont=bf,labelsep=space}
+\renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
+\renewcommand{\thetable}{\arabic{chapter}-\arabic{table}}
+\renewcommand{\theequation}{\arabic{chapter}-\arabic{equation}}
+\pagestyle{fancy}
+\fancyhf{}
+\newcommand{\officialreportheader}{\includegraphics[width=65.158mm,height=11.924mm]{../figure/template-header.png}}
+\fancyhead[C]{\officialreportheader}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.75pt}
+\renewcommand{\headruleskip}{1pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[C]{\officialreportheader}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0.75pt}}
+\newenvironment{reporttable}{\par\small\linespread{1.1}\selectfont}{\par}
+\AtBeginEnvironment{thebibliography}{\small\linespread{1.1}\selectfont\setlength{\bibsep}{4pt}}
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{breaklines,fontsize=\small}
+\newcommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}

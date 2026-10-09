@@ -1,0 +1,21 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  phase/.style={draw=reportblue,fill=noteback,align=center,text width=3.9cm,minimum height=1.0cm,font=\small},
+  flow/.style={-{Stealth[length=2.2mm]},thick,draw=reportblue}
+]
+\node[phase] (scope) at (-2.5,3.0) {需求与边界\\输入输出、模型、器件};
+\node[phase] (reference) at (2.5,3.0) {参考与复用审查\\数值约定、来源与许可};
+\node[phase] (unit) at (2.5,1.3) {单模块验证\\CPU、NPU、DMA、视频};
+\node[phase] (system) at (-2.5,1.3) {系统与软件集成\\存储、任务和结果发布};
+\node[phase] (implementation) at (-2.5,-0.4) {目标实现与检查\\资源、CDC、多角时序};
+\node[phase] (board) at (2.5,-0.4) {板测与归档\\功能、实拍、原始证据};
+\draw[flow] (scope) -- (reference);
+\draw[flow] (reference) -- (unit);
+\draw[flow] (unit) -- (system);
+\draw[flow] (system) -- (implementation);
+\draw[flow] (implementation) -- (board);
+\end{tikzpicture}
+\caption{设计与验证流程示意，不表示所有阶段已经完成}
+
+\end{figure}

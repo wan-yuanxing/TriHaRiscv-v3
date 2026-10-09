@@ -1,0 +1,19 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  evidence/.style={draw=reportblue,fill=noteback,align=left,text width=12cm,minimum height=0.75cm,font=\small},
+  flow/.style={-{Stealth[length=2mm]},draw=reportblue}
+]
+\node[evidence] (source) at (0,4.4) {源码审查：结构、接口、来源与配置存在；不证明运行结果};
+\node[evidence] (component) at (0,3.3) {单模块仿真：指定输入和边界行为；不证明整机集成};
+\node[evidence] (system) at (0,2.2) {整机仿真：控制、数据、软件路径；不证明器件时序};
+\node[evidence] (route) at (0,1.1) {布局布线与时序：指定器件/约束的实现结果；不证明实物功能};
+\node[evidence] (physical) at (0,0) {板测与应用：对应位流/固件的可观测功能；限定测试范围};
+\draw[flow] (source) -- (component);
+\draw[flow] (component) -- (system);
+\draw[flow] (system) -- (route);
+\draw[flow] (route) -- (physical);
+\end{tikzpicture}
+\caption{证据层级与可支持的结论范围}
+
+\end{figure}

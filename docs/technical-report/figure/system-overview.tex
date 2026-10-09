@@ -1,0 +1,31 @@
+\begin{figure}[htbp]
+\centering
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[
+  module/.style={draw=reportblue,fill=noteback,rounded corners=2pt,align=center,text width=3.25cm,minimum height=1.0cm,font=\small},
+  wide/.style={module,text width=11.9cm},
+  flow/.style={-{Stealth[length=2.5mm]},thick,draw=reportblue}
+]
+\node[wide] (models) at (0,5.5) {主机参考与模型工具：数值约定、模型包、权重与输入校验};
+\node[wide] (runtime) at (0,3.8) {裸机运行时：模型/帧身份、算子调度、缓冲所有权、错误与计时};
+\node[module] (cpu) at (-4.35,1.9) {RV32 CPU\\流水线、BPU、I/D Cache};
+\node[module] (npu) at (0,1.9) {8×8 NPU 与 DMA\\INT8 输入、INT32 累加};
+\node[module] (video) at (4.35,1.9) {视频数据通路\\采集、预处理、同帧显示};
+\node[wide] (bus) at (0,0) {AXI128 共享访问与仲裁／目标 DDR 适配；MMIO 控制路径按实际顶层连接};
+\node[module] (mmio) at (-4.35,-1.9) {本地 RAM 与外设\\UART、GPIO、计时/诊断};
+\node[module] (ddr) at (0,-1.9) {DDR 与地址约定\\CPU 私有区／DMA 共享区};
+\node[module] (board) at (4.35,-1.9) {Pango 目标平台\\时钟复位、厂商 IP 与 I/O};
+\draw[flow] (models) -- (runtime);
+\draw[flow] (runtime.south -| cpu) -- (cpu.north);
+\draw[flow] (runtime.south -| npu) -- (npu.north);
+\draw[flow] (runtime.south -| video) -- (video.north);
+\draw[flow] (cpu.south) -- (bus.north -| cpu);
+\draw[flow] (npu.south) -- (bus.north -| npu);
+\draw[flow] (video.south) -- (bus.north -| video);
+\draw[flow] (bus.south -| mmio) -- (mmio.north);
+\draw[flow] (bus.south -| ddr) -- (ddr.north);
+\draw[flow] (bus.south -| board) -- (board.north);
+\end{tikzpicture}}
+\caption{系统职责与数据关系示意；各模块完成层级以提交版本证据为准}
+
+\end{figure}
