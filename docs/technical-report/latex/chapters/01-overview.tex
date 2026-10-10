@@ -37,4 +37,35 @@
 
 \section{设计流程}
 
-{[}待填写：需求、方案、模块验证、系统集成、目标实现、板测和归档流程。{]}
+本设计以构建CPU与NPU协同工作的RISC-V异构计算平台为目标，以YOLOv5目标检测模型的部署与运行为应用场景。
+CPU负责程序控制、任务调度和结果处理，NPU承担卷积、矩阵乘等计算密集型运算，视频链路完成图像采集与检测结果显示。
+围绕模型运行所需的控制、计算和图像输入输出功能，设计分为CPU、NPU及视频链路三条开发路线，整体流程如图\ref{fig:design-flow}所示。
+
+\begin{center}
+\begin{minipage}{\linewidth}
+\centering
+\captionsetup{type=figure,hypcap=false}
+\includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{../figure/rv32-soc-page4.pdf}
+\caption{TriHaRiscv设计流程}\label{fig:design-flow}
+\end{minipage}
+\end{center}
+
+三条开发路线的内容如下：
+\begin{enumerate}
+    \item CPU路线面向模型运行中的控制与通用计算需求，从RV32I五级流水线起步，依次完成流水线优化、指令集扩展和动态分支预测，
+    再进行前后端解耦与六级流水线改造，加入Cache存储系统，形成双发射顺序执行结构，为裸机程序和NPU任务调度提供处理核心。
+    \item NPU路线面向YOLOv5中的卷积等运算，从PE运算单元扩展到脉动阵列，配套设计片上数据缓冲、NPU控制器和DMA控制器，
+    完成计算调度及数据搬运；随后进行卷积映射与算子扩展，结合模型量化和软件调度完成模型部署。
+    \item 视频路线面向目标检测的图像输入与结果显示，依次完成视频采集接口、时序解析、跨时钟域传输和图像预处理，
+    配套DDR帧缓存管理及HDMI显示输出，连接图像采集、模型输入和检测结果显示。
+\end{enumerate}
+
+系统配套开发与三条路线同步进行，包括AXI-Lite总线与基础外设、AXI数据互连总线与共享访问仲裁，以及DDR控制器和存储接口适配。
+这些模块为CPU、NPU及视频链路提供寄存器访问、数据传输和共享存储通路。
+
+SoC集成阶段连接三条路线中的模块，统一地址映射、控制接口和中断通路，开展模型调度、数据搬运及视频帧缓存访问的联合验证。
+FPGA部署阶段在盘古100pro+平台完成时钟复位、引脚和时序约束配置，进行综合、布局布线与板级功能检查，
+随后开展CPU性能、FPGA实现指标及应用性能评估。
+
+性能评估阶段，CPU侧采用CoreMark/MHz、CoreMark/LUTs和IPC评价通用计算能力、资源效率和指令执行效率；FPGA实现侧依据布局布线后的时序结果评估最高工作频率（Fmax），
+统计逻辑、寄存器、DSP和片上存储等资源占用。应用侧围绕YOLOv5目标检测，以推理延迟、处理帧率和存储带宽等指标开展端到端性能评估。

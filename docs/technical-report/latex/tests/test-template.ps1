@@ -37,6 +37,15 @@ foreach ($chapter in $chapters) {
     if ([regex]::Matches($text, '\\chapter\*?\{').Count -ne 1) { throw "Expected one chapter heading: $($chapter.Name)" }
 }
 $overview = [IO.File]::ReadAllText((Join-Path $chaptersDir '01-overview.tex'), $utf8)
+$designFlowSection = [regex]::Match($overview, '(?s)\\section\{设计流程\}(.*?)(?=\\section\{|\z)').Groups[1].Value
+$designFlowFigure = Join-Path $documentDir 'figure/rv32-soc-page4.pdf'
+if (-not (Test-Path -LiteralPath $designFlowFigure -PathType Leaf)) { throw 'The exported fourth-page design flow diagram is missing.' }
+if ($designFlowSection -notmatch '\\includegraphics\[[^]]+\]\{\.\./figure/rv32-soc-page4\.pdf\}' -or $designFlowSection -notmatch '\\caption\{TriHaRiscv设计流程\}\\label\{fig:design-flow\}') { throw 'The fourth-page design flow diagram must remain under section 1.4.' }
+if ($designFlowSection -notmatch '\\ref\{fig:design-flow\}' -or $designFlowSection -match '待填写：') { throw 'Section 1.4 must describe and reference the design flow diagram.' }
+foreach ($flowTopic in @('CPU', 'NPU', 'YOLOv5', '视频链路', '系统配套', '联合验证', 'FPGA部署', 'CoreMark', 'IPC', 'Fmax', '资源占用', '端到端性能评估')) {
+    if (-not $designFlowSection.Contains($flowTopic)) { throw "Missing design flow description: $flowTopic" }
+}
+if ([regex]::Matches($designFlowSection, '\\item\b').Count -ne 3) { throw 'The design flow must describe three development routes.' }
 $system = [IO.File]::ReadAllText((Join-Path $chaptersDir '02-system.tex'), $utf8)
 $results = [IO.File]::ReadAllText((Join-Path $chaptersDir '03-results.tex'), $utf8)
 $summary = [IO.File]::ReadAllText((Join-Path $chaptersDir '04-summary.tex'), $utf8)
@@ -96,7 +105,7 @@ $integrationSections = @(
     @{ Title = '系统互连与存储'; Number = '2.4'; Subsections = @('总线结构', '存储组织', '访问仲裁', '共享数据访问约定') },
     @{ Title = '图像采集与显示链路'; Number = '2.5'; Subsections = @('图像采集', '输入预处理', '帧缓存管理', '显示输出') },
     @{ Title = '模型部署'; Number = '2.6'; Subsections = @('模型选型', '量化方案', '模型导出', '算子映射', '裸机运行时', '推理流程') },
-    @{ Title = 'FPGA平台实现'; Number = '2.7'; Subsections = @('目标平台', '工程配置', '时钟复位', '板级接口', '实现约束') }
+    @{ Title = 'FPGA实现'; Number = '2.7'; Subsections = @('目标平台', '工程配置', '时钟复位', '板级接口', '实现约束') }
 )
 foreach ($sectionSpec in $integrationSections) {
     $sectionPattern = '(?s)\\section\{' + [regex]::Escape($sectionSpec.Title) + '\}(.*?)(?=\\section\{|\z)'
