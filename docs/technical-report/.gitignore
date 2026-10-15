@@ -9,7 +9,3 @@ latex/*.toc
 latex/*.xdv
 latex/*.synctex.gz
 latex/tmp/
-
-# Editor backups
-*.bkp
-~$*

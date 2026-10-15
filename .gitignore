@@ -1,0 +1,42 @@
+# Reproducible build outputs and simulation traces
+/build/
+**/build/
+*.vcd
+*.fst
+*.wlf
+*.jou
+
+# LaTeX intermediate files; retain source, figures, and the published PDF
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.xdv
+*.synctex.gz
+
+# Editor and operating-system temporary files
+*.bkp
+*.bak
+*.tmp
+*.swp
+*.swo
+~$*
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Machine-local environment and credentials
+.env
+.env.*
+!.env.example

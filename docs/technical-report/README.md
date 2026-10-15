@@ -76,7 +76,7 @@ technical-report/
 
 ```powershell
 $env:PATH = 'D:\texlive\2026\bin\windows;' + $env:PATH
-& '.\docs\technical-report\latex\scripts\build.ps1'
+& 'D:\FPGA\TriHaRiscv-v3\docs\technical-report\latex\scripts\build.ps1'
 ```
 
 输出文件为 `D:\FPGA\TriHaRiscv-v3\docs\technical-report\latex\main.pdf`。构建脚本只编译，不生成或覆盖正文源文件。编辑器将 `latex/main.tex` 设为主文件，使用 XeLaTeX 或 latexmk 构建。
