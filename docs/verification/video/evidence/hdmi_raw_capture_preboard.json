@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "status": "digital_and_internal_timing_pass_waiting_for_valid_hdmi_input",
+  "implementation_commits": [
+    "5ca0c10",
+    "27960cb",
+    "61d3a07",
+    "22bfb22",
+    "86aed0d"
+  ],
+  "physical_hdmi_raw_capture_verified": false,
+  "physical_capture_program_performed": false,
+  "board_configuration": "Prior RX image remains running; no capture image downloaded this phase.",
+  "pending": [
+    "Restore valid 800x600/60.32Hz source",
+    "Capture Program/Verify and actual frame CRC",
+    "60-second status and user KEY0 recapture",
+    "Restore current RX package and user colorbar confirmation"
+  ],
+  "regression": {
+    "path": "build/video/regression/20261016T152024_025404Z/result.json",
+    "sha256": "b30d5c467cadfc56c02dd5c2e48117f9bc4c7494391ed7edbc83c26975862e58",
+    "status": "pass",
+    "passed": [
+      "capture_ingress",
+      "capture_engine",
+      "hdmi_capture_board",
+      "axi_bridge",
+      "write_dma",
+      "axi_capture",
+      "axi_capture_board",
+      "ddr_bist",
+      "ddr_board",
+      "config",
+      "timing",
+      "clocks",
+      "rx_init",
+      "rx_measure",
+      "rx_board",
+      "tx_init",
+      "board",
+      "rx"
+    ]
+  },
+  "python_tests": {
+    "run": 38,
+    "passed": 37,
+    "skipped": 1,
+    "skip": "Windows symlink privilege"
+  },
+  "build": {
+    "path": "build/video/pds/20261016T152024_020998Z/result.json",
+    "sha256": "872887c4fa8443dc6a398e04c4dab1ec2f3068110d799f593fbc4ce84f297720",
+    "status": "pass",
+    "resources": {
+      "lut": 12043.0,
+      "registers": 12174.0,
+      "drm": 4.0
+    },
+    "artifact_sha256": "2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b",
+    "verify_mask_sha256": "544f8384c10d0da6425d8cb7687f6dd3e76f257ddfccfafdb395835897408d9d",
+    "internal_timing_met": true
+  },
+  "timing_audit": {
+    "path": "build/video/hdmi-constraints-audit/interim-20261016T152024_020998Z/result.json",
+    "sha256": "ef9724de27c212ef32293dbf82d4f680af37482dbde28698b49451c3d56d4447",
+    "status": "physical_timing_pass_with_documented_skew_report_limitation",
+    "selected_seed": 7,
+    "all_eight_checks": {
+      "Setup_Slow": {
+        "minimum_slack_ns": 0.233,
+        "failing_endpoints": 0,
+        "total_endpoints": 43223
+      },
+      "Setup_Fast": {
+        "minimum_slack_ns": 3.096,
+        "failing_endpoints": 0,
+        "total_endpoints": 43223
+      },
+      "Hold_Slow": {
+        "minimum_slack_ns": 0.137,
+        "failing_endpoints": 0,
+        "total_endpoints": 42954
+      },
+      "Hold_Fast": {
+        "minimum_slack_ns": 0.102,
+        "failing_endpoints": 0,
+        "total_endpoints": 42954
+      },
+      "Recovery_Slow": {
+        "minimum_slack_ns": 3.454,
+        "failing_endpoints": 0,
+        "total_endpoints": 7187
+      },
+      "Recovery_Fast": {
+        "minimum_slack_ns": 4.966,
+        "failing_endpoints": 0,
+        "total_endpoints": 7187
+      },
+      "Removal_Slow": {
+        "minimum_slack_ns": 0.278,
+        "failing_endpoints": 0,
+        "total_endpoints": 7187
+      },
+      "Removal_Fast": {
+        "minimum_slack_ns": 0.187,
+        "failing_endpoints": 0,
+        "total_endpoints": 7187
+      }
+    }
+  },
+  "external_io_timing_verified": false,
+  "vendor_training_simulation_passed": false,
+  "captured_content_displayed": false,
+  "formal_three_branch_capture_done_implemented": false,
+  "cpu_fabric_or_multi_master_verified": false,
+  "source_hashes": {
+    "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+    "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc": "2df24e663a5fbadface0e93217b624d222f616dcf320ca4f2248d3290a69b69b",
+    "fpga/pg2l100h/ip/video_ddr_manifest.json": "9f2521e8b4dc38e8de44b0c74ad4776d0623745a09267d4b3f7430ab12fdb7ee",
+    "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+    "fpga/pg2l100h/project/video_hdmi_capture.json": "6c06b7e82282ca9066a9e4c3ea762924a3efdc2524ccac0a0ee1752b9d6979b1",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv": "6fbd2fbdc9ce3c4682b187d5cf30700d5baf4d07028930e2adf75dd77d428b22",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+    "fpga/pg2l100h/rtl/video_hdmi_capture_top.sv": "cf5cda3c211e8a02e39d930022728f825fd346d34b6d96bf3c70f9c7f0ce6eda",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+    "rtl/video/axi128_hmic256.sv": "03081f944fa934b2100741e883867dba9eaa4e492f13eb4e39d019c985eb0950",
+    "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/rgb888_packer.sv": "6116912b5f5d37000dfca442ce6378b96080c9d31d6f8b30a6facd8e6fd044ac",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "rtl/video/video_capture_engine.sv": "f556f95048044d8aa15a709bd061d2e502f4b80593b17fd4ccadc1273f2f7451",
+    "rtl/video/video_capture_ingress.sv": "e4e462df5b0d6de6d11d2b7145eb5675dacc452886369023fb332ab175f8f806",
+    "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+    "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+    "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+    "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+    "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "scripts/video/build_pds.py": "6854d2ac91e9588d4a061f3f8be6bc99e466e29a8fb4dce0c283b1de353245b0",
+    "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+    "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+    "scripts/video/gen_ddr.py": "8b4924d3e1513fc585e0f7d34cfb7e4598675f80018c799bd9d2199622e8dad2",
+    "scripts/video/gen_edid.py": "e8d089439adb24e9a983a61384a2c39d4bce699004c208a5a8ad0db5ea8df19a",
+    "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+    "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe"
+  },
+  "independent_reviews": {
+    "guard_spec": {
+      "path": "build/video/hdmi-constraints-audit/collect-guard-spec/result.json",
+      "sha256": "4f1122383623184acca8d33c39053895745f8109880fd816a71b503810a36355",
+      "status": "pass"
+    },
+    "guard_quality": {
+      "path": "build/video/hdmi-board-quality/collect-guard-addendum/result.json",
+      "sha256": "a367cfdacc28f58de32abd92b7353115126eeb8d7e2e314d9a45dadae7f41ba0",
+      "status": "QUALITY_PASS"
+    },
+    "engine_transfer_spec": {
+      "path": "build/video/hdmi-constraints-audit/engine-transfer-spec/result.json",
+      "sha256": "2497a0212496b92862a8765f20245fc888330c9b249db968e8816d9f37becc16",
+      "status": "pass"
+    },
+    "final_spec": {
+      "path": "build/video/hdmi-board-spec-review/seed4-timeout-addendum.json",
+      "sha256": "a30673852dd7cfc91f10483c4f6aea1622e21ef226b8d9b70503b3da9879fd87",
+      "status": "SPEC_ADDENDUM_APPROVED"
+    },
+    "final_quality": {
+      "path": "build/video/hdmi-control-quality/result.json",
+      "sha256": "6c23d64b2f1afb995bfb79f4041129f999423cc999b8ae8f213bb0bc5cb8dcd5",
+      "status": "QUALITY_PASS"
+    }
+  },
+  "package": {
+    "path": "build/video/releases/video_hdmi_capture_2e01feb8e69d/manifest.json",
+    "sha256": "872887c4fa8443dc6a398e04c4dab1ec2f3068110d799f593fbc4ce84f297720",
+    "status": "pass",
+    "target": "video_hdmi_capture",
+    "artifact_sha256": "2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b",
+    "verify_mask_sha256": "544f8384c10d0da6425d8cb7687f6dd3e76f257ddfccfafdb395835897408d9d"
+  },
+  "restore_package": {
+    "path": "build/video/releases/video_rx_board_26d25f7dd060/manifest.json",
+    "sha256": "be4faafbf8b7c61823727f2e054c914c32188977785d860684ea4abb5c5e5891",
+    "status": "pass",
+    "target": "video_rx_board",
+    "artifact_sha256": "26d25f7dd06015ba0f5419baab8f071a43b6dd9eff24c80d5481b58e2e80094e",
+    "verify_mask_sha256": "33a4116bde3fc05bd4c9a0ca7ff7bb0e76bc65166d7928640e3de452de7f61fc"
+  },
+  "last_source_check": {
+    "path": "build/video/board_serial/20261016T154115_485565Z/result.json",
+    "sha256": "b8373b4604218220065b8e7f4082dacbe2f7ded3f6e15a766140605920ca1094",
+    "status": "pass",
+    "physical_rx_mode_verified": false,
+    "raw_sha256": "3ebf134f8b8ac7704a279ae808dc356dcb25116f6bce313245c980631b40140a"
+  },
+  "last_mode": {
+    "type": 1,
+    "flags": 53,
+    "rgb_signature": 27912,
+    "h_active": 1,
+    "v_active": 0,
+    "h_total": 1056,
+    "v_total": 0,
+    "h_sync": 128,
+    "v_sync": 0,
+    "h_front": 40,
+    "h_back": 263,
+    "v_front": 65535,
+    "v_back": 0,
+    "pixel_hz": 19839600,
+    "good_frames": 18903,
+    "bad_frames": 45495,
+    "tx_done": true,
+    "tx_error": false,
+    "rx_boot_done": true,
+    "rx_error": false,
+    "rx_configured": true,
+    "snapshot_fresh": true,
+    "frequency_good": false,
+    "mode_good": false
+  },
+  "preflight_jtag": {
+    "path": "build/video/jtag_scan/20261016T144326_559828Z/result.json",
+    "sha256": "46343546b631198b8fe854d60833f0242b7e6ae5597b856f2fb851af66788eb9",
+    "status": "identified"
+  }
+}

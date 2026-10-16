@@ -37,7 +37,7 @@ python scripts/video/package_board.py --target video_hdmi_capture
 python scripts/video/program_board.py --target video_hdmi_capture --start-server
 ```
 
-配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；两个 DDR 板级测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
+配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；三个 DDR 板级测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
 
 彩条目标的管脚、LED、复位、下载与时序边界见 [板测说明](../verification/video/board_smoke.md)。
 
@@ -134,7 +134,7 @@ fpga/pg2l100h/
   rtl/video_rx_board_top.sv              下降沿接收采样与本地彩条
   rtl/video_ddr_bist_top.sv              HMIC、独立监测、复位和 BIST
   rtl/video_axi_capture_top.sv           HMIC、合成 raw 写入与 UART type 4
-  rtl/video_ddr_snapshot_cdc.sv          两个 DDR 目标共用的冻结快照握手
+  rtl/video_ddr_snapshot_cdc.sv          三个 DDR 目标共用的冻结快照握手
   rtl/video_hdmi_capture_top.sv          HDMI初始化、彩条输出、帧入口和HMIC
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据

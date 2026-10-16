@@ -77,6 +77,18 @@ python scripts/video/read_board.py --port COM12 --seconds 12
 
 桥修改后的 `build/video/pds/20261016T141414_953504Z` 最佳种子1仍有一个setup端点−0.030ns，路径为FIFO包合法性经descriptor清零使能进入DMA字节计数器；另两个种子为−0.071/−0.167ns。全部hold/recovery/removal仍通过，失败产物禁止下载。审计确认单独移动计数器always块仍保留合法清零依赖，故保持RTL不变，构建脚本改为固定种子4..9六组串行搜索和该目标3600秒超时，原约束不变。最终脚本规格/质量补充审查分别为 `build/video/hdmi-board-spec-review/seed4-timeout-addendum.json` 和 `build/video/hdmi-recipe-quality/result.json`。
 
-当前PDS为 `build/video/pds/20261016T144157_393343Z`，最终完整回归为 `build/video/regression/20261016T144157_396782Z`；完整回归18个套件已通过且输入哈希匹配，PDS仍在运行，保持125MHz及原约束，须全部验收后才能下载。较早全回归因构建脚本/桥输入在运行中改变而失效，不作为最终通过证据。`143005_472008Z` 构建和 `143025_874418Z` 回归因工具会话重置中断，保留interruption.json及局部日志，没有最终通过结论。
+`build/video/pds/20261016T144157_393343Z` 最佳种子6仍有5个setup端点、WNS−0.066ns，全部其余检查与CDC约束通过；该产物也禁止下载。最差路径为bridge的beats/RLAST经读回元数据故障进入packer/DMA控制。源端弹性寄存器不能切断该路径，因此未采用。
 
-当前开发板保持上一批RX彩条镜像；本批当前脚本对应的恢复构建为 `build/video/pds/20261016T143015_641311Z`，已通过内部时序并打包为 `build/video/releases/video_rx_board_26d25f7dd060`，尚未重新下载。新工程内部时序和hash审核通过后再下载，完成实际CRC、KEY0新帧和恢复RX验证后更新本节及小型证据。
+第二处阶段等价修改把读回元数据故障从inactive写控制中拆出：`transfer_fault_now` 保留所有原有非读回故障，`fault_now` 按原优先级重新插入0x09（高于0x07总任务超时，低于其余先行故障）。只有packer.pixel_valid及DMA.abort使用transfer_stopping；状态推进、描述符与对外诊断继续用完整stopping。READ_*只能在DMA退休后进入，此时DMA已IDLE且不可重新获得写事务。实现提交 `86aed0d`，引擎哈希 `f556f95048044d8aa15a709bd061d2e502f4b80593b17fd4ccadc1273f2f7451`。
+
+`build/video/hdmi-control-timing/result.json` 记录前后65例逐周期与76,073组四态对比；独立规格 `build/video/hdmi-constraints-audit/engine-transfer-spec/result.json` 另58,432组检查；独立质量 `build/video/hdmi-control-quality/result.json` 另23,040组控制、65例逐周期及131,534个读回阶段所有权/状态采样，均通过且零编译警告。诊断故障仍检查严格RID/RESP/LAST与原首错优先级。新网表中读回元数据到packer D/CE端点由150变为0，通用诊断检查仍保留。
+
+最终PDS `build/video/pds/20261016T152024_020998Z` 通过并选择种子7，125MHz slow setup WNS+0.233ns，fast+3.096ns；hold+0.137/+0.102ns、recovery+3.454/+4.966ns、removal+0.278/+0.187ns，全部失败端点为0。资源12043 LUT、12174寄存器、4 DRM。约束和125MHz目标均未放宽。位流SHA256 `2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b`，下载包 `build/video/releases/video_hdmi_capture_2e01feb8e69d`。
+
+最终完整回归 `build/video/regression/20261016T152024_025404Z` 的18个套件通过，94个输入哈希均匹配；38项Python测试中37通过、1项Windows符号链接权限跳过。新引擎完整800×600仍为480000像素、1440000字节及CRC d1ec37c8。
+
+独立物理时序审核 `build/video/hdmi-constraints-audit/interim-20261016T152024_020998Z/result.json` 通过：56个Gray位保留实际20/6/20ns约束、本地同步级setup/hold及80/150ns快照均通过，复位无D/CE/RAM接点，139个引脚无冲突。PDS不输出独立max-skew断言表，报告明确区分逐位delay及由数据到达时间计算的spread，不把它们伪称工具直接skew断言。外部AC及厂商训练仿真均未签核。
+
+较早全回归因构建脚本/桥输入在运行中改变而失效，不作为最终通过证据。`143005_472008Z` 构建和 `143025_874418Z` 回归因工具会话重置中断，保留interruption.json及局部日志，没有最终通过结论。
+
+当前开发板保持上一批RX彩条镜像；本批当前脚本对应的恢复构建为 `build/video/pds/20261016T143015_641311Z`，已通过内部时序并打包为 `build/video/releases/video_rx_board_26d25f7dd060`，尚未重新下载。联合目标尚未Program/Verify：23:39和23:41下载前串口复查发现当前输入不合格，像素频率约19.84MHz且场时序未锁定；已请求用户唤醒源电脑并核对活动信号800×600、60.32Hz，尚待回复。JTAG预检已识别PG2L100H/0x00602899。恢复合法输入后才下载，继续实际CRC、60秒状态、KEY0新帧及恢复RX验收；不能将本次数字/内部时序通过当作物理采帧通过。上板前摘要为 `evidence/hdmi_raw_capture_preboard.json`。

@@ -25,7 +25,7 @@
 | V015b-core | AXI128→HMIC256 桥核心 | core 域串行读写、上下 lane、非法 burst 排空、masked readback-before-B 和故障隔离；canonical191例、独立354例及质量复核通过；共享 fabric/CDC/跨主端排序仍待集成 |
 | V020a | RGB888 打包与行式写 DMA | R/G/B 字节序、跨拍 spill、行尾 keep、stride padding、4 KiB拆分、abort/错误排空；完整 raw/preview 数字测试及独立规格/质量审查通过 |
 | V020b | 合成 raw AXI/DMA物理自检与KEY0 | 完整800×600、1,440,000字节/90,000拍数字及物理读回通过；60秒完成状态无错，KEY0后heartbeat329→1、17个新PASS包；PDS125 MHz内部多角时序通过，core WNS +0.087 ns，10919 LUT、10488寄存器、0 DRM；已恢复RX、验证输入合格，用户确认稳定彩条 |
-| V020c-in-progress | 真实HDMI单帧raw采集 | FIFO/入口和引擎已完成数字实现及独立规格/质量审查；完整800×600字节oracle与CRC通过，139个bit-port及联合顶层规格审查通过。联合PDS仍有setup缺口，正在保持原约束优化布局，物理采集尚未验收 |
+| V020c-in-progress | 真实HDMI单帧raw采集 | 数字实现、独立规格/质量、18套件最终回归及联合PDS通过；125MHz WNS+0.233ns、12043 LUT/12174寄存器/4 DRM，位流已打包。下载前复查当前输入不合格，等待用户恢复800×600源；本批尚未下载，实际CRC/KEY0验收待做 |
 
 已获得 P1 三项物理功能通过证据：稳定彩条、合法 HDMI 输入时序、DDR 校准及复位后自检。本批新增 AXI 桥核心和单平面写 DMA，尚未接入真实 HDMI 帧流或 CPU fabric；采集/显示整链路、共享接口冻结、外部 AC 签核及更长稳定性记录仍未完成。
 
@@ -72,3 +72,9 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 首轮布线core WNS −0.195 ns，因读回比较进入写选通组合路径；仅按互斥读写阶段等价拆分写掩码故障条件，保留所有响应/故障语义。两组四态等价测试、当前哈希桥质量复核通过；最终125 MHz WNS +0.087 ns，约束原样保留。包为 `build/video/releases/video_axi_capture_f1535f12e7d3`，位流SHA256 `f1535f12e7d3ce07fa3c144122e1d31b6fa460ae13f6a97eec44304f90315328`。
 
 独立RX恢复包为 `build/video/releases/video_rx_board_46d80ec8eed2`，按当前构建脚本重新生成，已在本轮完成Program/Verify和模式复验。机器可读摘要为 `docs/verification/video/evidence/axi_capture_bringup.json`；历史 `rx_ddr_bringup.json` 保持历史证据，不重标为当前源验证。软件实现提交 `c928706`；只提交本批Video变更，保持当前分支，不push。
+
+## HDMI raw 单帧本批收尾状态
+
+实现提交为 `27960cb`（引擎）、`61d3a07`（写缓存等价故障条件）、`22bfb22`（联合板级工程及脚本）、`86aed0d`（读回专用故障与写控制分离）。最终回归与PDS、独立审计均绑定当前源码；未push。预板测摘要见 [hdmi_raw_capture_preboard.json](../verification/video/evidence/hdmi_raw_capture_preboard.json)，详细验证见 [hdmi_raw_capture.md](../verification/video/hdmi_raw_capture.md)。
+
+本批JTAG只读预检通过，但23:39/23:41串口显示源像素频率约19.84MHz、场时序未锁；已请求唤醒视频源并确认活动模式，未收到恢复确认前不开始采帧验收。开发板仍运行原RX镜像，采帧包 `video_hdmi_capture_2e01feb8e69d` 尚未下载；当前脚本对应恢复包为 `video_rx_board_26d25f7dd060`。实际源/DDR CRC、KEY0新帧及恢复彩条观察仍待验收。

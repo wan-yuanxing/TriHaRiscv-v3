@@ -46,8 +46,8 @@
 
 ## Task 4：PDS、物理验收和交付
 
-- [ ] `python scripts/video/build_pds.py --target video_hdmi_capture --stage bitstream`：新目录，当前哈希，全部内部约束满足；失败产物不下载。
-- [ ] 重新构建/打包恢复用RX镜像；新目标按 `.sbit/.smsk` 哈希打包。
+- [x] `python scripts/video/build_pds.py --target video_hdmi_capture --stage bitstream`：新目录，当前哈希，全部内部约束满足；失败产物不下载。
+- [x] 重新构建/打包恢复用RX镜像；新目标按 `.sbit/.smsk` 哈希打包。
 - [ ] Program/Verify后串口 `physical_hdmi_raw_capture_verified` 为真，480000像素/1440000字节/CRC相等/无overflow；记录CRC碰撞和有限FIFO边界。
 - [ ] KEY0后heartbeat复位、新帧计数/CRC再次完成；恢复RX、串口模式及用户彩条观察。
 - [ ] 更新接口、README文件树、STATUS、单独小型证据；旧阶段JSON保持历史。只做Video本地提交，不push。
