@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位及独立发送初始化；采集/显示 MMIO、DDR DMA、帧所有权接口仍是后续实施契约。TX-only 板级端口与状态见 `docs/verification/video/board_smoke.md`。
+依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位、独立发送初始化、固定 EDID 接收配置及精确输入时序监测；下降沿 RX 采样已通过真实 800×600 输入板测。采集/显示 MMIO、DDR DMA、帧所有权接口仍是后续实施契约。TX-only 端口见 `docs/verification/video/board_smoke.md`，RX/DDR 证据见 `docs/verification/video/rx_ddr_bringup.md`。
 
 ## 已实现：video_pattern_core
 

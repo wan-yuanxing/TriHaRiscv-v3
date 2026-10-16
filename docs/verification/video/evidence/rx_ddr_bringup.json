@@ -3,8 +3,9 @@
   "date": "2026-10-16",
   "base_commit": "16556d1",
   "scope": "RX fixed EDID/timing diagnostics and standalone native DDR BIST; no DMA/AXI128/fabric/NPU",
-  "physical_rx_mode_verified": false,
-  "physical_ddr_bist_verified": false,
+  "physical_rx_mode_verified": true,
+  "physical_ddr_bist_verified": true,
+  "physical_ddr_key0_retest_verified": true,
   "external_io_timing_verified": false,
   "flash_written": false,
   "regression": {
@@ -92,16 +93,96 @@
     "ddr_reset_125MHz": 4.909
   },
   "last_successful_rx_program": {
-    "path": "build/video/board_program/20261016T094030_851511Z/result.json",
-    "sha256": "e45fd6fbe50b8d9d5df0e9e8ad56d2025fb3907b940d5a108d0abd0cb4929507",
+    "path": "build/video/board_program/20261016T111054_248396Z/result.json",
+    "sha256": "a7f03c4d865451562f4675edb7e9f6dd516a5b9a0cb3fd9010b6ad1bba7e2704",
     "status": "pass",
-    "directory": "build\\video\\board_program\\20261016T094030_851511Z",
+    "directory": "build\\video\\board_program\\20261016T111054_248396Z",
     "target": "video_rx_board",
-    "verify_mask_sha256": "d0a856293fd5fddbac22379eda354d8be597cf4ac6ade2159914a9d907361766",
-    "bitstream_sha256": "04caece3fe5535699d7221aa58601d1e74a6e3b89a00e633384475cea6cdeefd",
+    "verify_mask_sha256": "9d0c1a060fedb3b25833fe0bfb4a865ce987798b3725cf6031ac4e259b542032",
+    "bitstream_sha256": "406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c",
     "device_found": true,
     "programmed": true,
-    "verified": true
+    "verified": true,
+    "flash_written": false
+  },
+  "rx_initial_program": {
+    "path": "build/video/board_program/20261016T110456_457538Z/result.json",
+    "sha256": "7b750218bc71025fdbff134d2fdee4bac83b4af46e053ff04bd793f5b155bb1a",
+    "status": "pass",
+    "directory": "build\\video\\board_program\\20261016T110456_457538Z",
+    "target": "video_rx_board",
+    "verify_mask_sha256": "9d0c1a060fedb3b25833fe0bfb4a865ce987798b3725cf6031ac4e259b542032",
+    "bitstream_sha256": "406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c",
+    "device_found": true,
+    "programmed": true,
+    "verified": true,
+    "flash_written": false
+  },
+  "rx_initial_capture": {
+    "path": "build/video/board_serial/20261016T110528_345372Z/result.json",
+    "sha256": "edbe1e045bb565988f6d43f4f98f8e551cb380cb00665b78daddd6548aa40186",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T110528_345372Z",
+    "physical_rx_mode_verified": true,
+    "physical_ddr_bist_verified": false,
+    "raw_sha256": "08b148a23160bdf05f05c1fbb4e8add4e6194cfc21e7873b9dbe9c1487abd868"
+  },
+  "rx_restored_capture": {
+    "path": "build/video/board_serial/20261016T111115_426058Z/result.json",
+    "sha256": "80abca980f68cd4239859fdeca0612188cb619561cb30ab977c598285c626ada",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T111115_426058Z",
+    "physical_rx_mode_verified": true,
+    "physical_ddr_bist_verified": false,
+    "raw_sha256": "4a16e9e14523fc976e44f1459c1ec3067d010bddc09ba92cba26689d25a06aac"
+  },
+  "rx_continuous_capture": {
+    "path": "build/video/board_serial/20261016T111144_938879Z/result.json",
+    "sha256": "5c3d80902c0c0edc2c657355f3ab06427630cad62239dac12af3f493d4e33643",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T111144_938879Z",
+    "physical_rx_mode_verified": true,
+    "physical_ddr_bist_verified": false,
+    "raw_sha256": "b02bb27e6daf342720f6045a220c26839023d3345be7bd54c18b44b19a2cf995"
+  },
+  "ddr_program": {
+    "path": "build/video/board_program/20261016T110604_136058Z/result.json",
+    "sha256": "585072c2fb333b663ae7174b1e6a8681cd072acf1f3b5024eac47048a0587afe",
+    "status": "pass",
+    "directory": "build\\video\\board_program\\20261016T110604_136058Z",
+    "target": "video_ddr_bist",
+    "verify_mask_sha256": "ccb18a3940181b07b83f4993b5e873d5a37f086e143ab6b3c29fc950f989ac3b",
+    "bitstream_sha256": "9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4",
+    "device_found": true,
+    "programmed": true,
+    "verified": true,
+    "flash_written": false
+  },
+  "ddr_initial_capture": {
+    "path": "build/video/board_serial/20261016T110623_200438Z/result.json",
+    "sha256": "356f902729a348d3de72c9bcb83df9793f3b5368ded8d9103f07905748f510c9",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T110623_200438Z",
+    "physical_rx_mode_verified": false,
+    "physical_ddr_bist_verified": true,
+    "raw_sha256": "e8d97e58537f4ffae0a198b0de8fadb426af5552fd7e21c9da67fe3fd0af3169"
+  },
+  "ddr_key0_capture": {
+    "path": "build/video/board_serial/20261016T110704_647625Z/result.json",
+    "sha256": "57990e03a8fc0c3f457113b80bc26a28a8714ce12bc26f8c7bcb0a72f06f234f",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T110704_647625Z",
+    "physical_rx_mode_verified": false,
+    "physical_ddr_bist_verified": true,
+    "raw_sha256": "ab21cc27734d23a719209c310d21fdbdda0aa9c81103fe0aa46e983fce1a5afa"
+  },
+  "ddr_key0_retest": {
+    "user_confirmed_key0_press": true,
+    "heartbeat_before": 173,
+    "heartbeat_after": 1,
+    "post_reset_healthy_pass_packets": 16,
+    "compared_beats_each": 3014685,
+    "scope": "Heartbeat reset observed, followed by fresh init/PLL/PASS packets; transient training/busy interval not sampled"
   },
   "rx_positive_capture_diagnostics": {
     "path": "build/video/board_serial/20261016T094117_901074Z/result.json",
@@ -109,7 +190,8 @@
     "status": "pass",
     "directory": "build\\video\\board_serial\\20261016T094117_901074Z",
     "physical_rx_mode_verified": false,
-    "physical_ddr_bist_verified": false
+    "physical_ddr_bist_verified": false,
+    "raw_sha256": "06635098f7d378613dcd4fd3a9130e27308bc268d8751a089674ffa9871f0e0e"
   },
   "rx_measurement": {
     "pixel_hz_range": [
@@ -122,19 +204,39 @@
     ],
     "vs_high_clocks": 4224,
     "vs_period_clocks": 663168,
-    "problem": "Positive capture: one-clock HS variations; mode_good=false; falling-capture build still needs physical test",
+    "capture_seconds": 60,
+    "valid_packets": 60,
+    "mode_packets": 31,
+    "geometry": {
+      "h_active": 800,
+      "v_active": 600,
+      "h_total": 1056,
+      "v_total": 628,
+      "h_sync": 128,
+      "v_sync": 4,
+      "h_front": 40,
+      "h_back": 88,
+      "v_front": 1,
+      "v_back": 23
+    },
+    "good_frame_first_last": [
+      2144,
+      5643
+    ],
+    "bad_frames": 0,
+    "all_sampled_modes_good": true,
+    "historical_problem": "Positive-edge capture showed one-clock HS variations; falling-edge capture now physically qualifies strict complete mode",
     "user_source_confirmation": "PC active signal 800x600 at displayed60.32Hz"
   },
   "jtag_last_scan": {
-    "path": "build/video/jtag_scan/20261016T105929_019078Z/result.json",
-    "sha256": "565a621b80d554cd6368805c1828514314b2b947dbe86bd66a4a9b37dedbfdc1",
-    "status": "unavailable",
-    "directory": "build\\video\\jtag_scan\\20261016T105929_019078Z",
-    "device_found": false,
+    "path": "build/video/jtag_scan/20261016T110442_787297Z/result.json",
+    "sha256": "81b04c302e43e2fb3387b8e1d450872bff61e68a46049d1b3fe742f5a546462e",
+    "status": "identified",
+    "directory": "build\\video\\jtag_scan\\20261016T110442_787297Z",
+    "device_found": true,
     "programmed": false,
-    "reason": "Target PG2L100H was not identified; inspect scan/server logs",
     "exit_code": 0,
-    "frequency": "100KHz"
+    "frequency": null
   },
   "jtag_after_user_cable_reseat": [
     {
@@ -160,12 +262,18 @@
       "frequency": "100KHz"
     }
   ],
-  "pending_hardware_measurement": {
+  "hardware_voltage_measurement": {
     "user_has_multimeter": true,
     "j12_4_to_2_volts": null,
-    "setup": "Board-end cable disconnected while power off; DC voltage measured after power on; expected A3V3 about3.3V"
+    "status": "Not measured; JTAG identification and programming recovered before measurement"
   },
-  "last_program_attempt": {
+  "jtag_recovery": {
+    "user_suspected": "J12 cable contact",
+    "identification_recovered": true,
+    "device_id": "0x00602899",
+    "scope": "Recovery supports contact issue; exact contact fault not instrumentally located"
+  },
+  "last_failed_program_attempt": {
     "path": "build/video/board_program/20261016T102918_260561Z/result.json",
     "sha256": "3d845ca487bd15a6d933d334c8169f04d4494040104e76a3d44eb12d53d2ee1c",
     "status": "fail",
@@ -175,7 +283,8 @@
     "bitstream_sha256": "e39dbf9509096633b169afd13b48cb7c7eef653c4ee677b609c97cd0712996ab",
     "device_found": false,
     "programmed": false,
-    "verified": false
+    "verified": false,
+    "flash_written": false
   },
   "historical_raw_retry": {
     "path": "build/video/raw_jtag_retry/20261016T095514_600179Z/result.json",
@@ -191,7 +300,11 @@
     "identified": false,
     "exit_code": 0
   },
-  "board_current_image": "Unknown after user power cycle; no TRV1 packets received",
+  "board_current_image": "video_rx_board falling-capture406edfee9a21; restored Program/Verify, UART mode qualification and user confirmed stable colorbars",
+  "user_display_observation": {
+    "after_rx_restore": "Stable colorbars",
+    "photo_or_video_recorded": false
+  },
   "bist_default": {
     "window_bytes_each": 1048576,
     "high_base_bytes": 1072693248,
@@ -214,10 +327,8 @@
     "build/video/ddr-physical-audit/vendor-reset-sequence-run.log"
   ],
   "remaining": [
-    "Restore JTAG identification",
-    "Program/Verify falling-capture RX and qualify complete mode",
-    "Program/Verify DDR; actual calibration/BIST and KEY0 rerun",
     "External I/O AC signoff",
+    "Longer stability runs and photo/video archive",
     "Formal AXI128/fabric visibility, capture/display DMA and remaining Video pipeline"
   ],
   "review_evidence_sha256": {

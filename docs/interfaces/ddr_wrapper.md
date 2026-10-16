@@ -1,6 +1,6 @@
 # DDR wrapper 准入契约
 
-状态：已实现独立 `video_ddr_bist` native 板测目标，**正式 AXI128 ddr_wrapper 尚未实现**。真实校准/自检以本批证据为准；此文不提供跨主端可见性或带宽保证。
+状态：独立 `video_ddr_bist` 已通过真实校准、自检和 KEY0 后重测，**正式 AXI128 ddr_wrapper 尚未实现**。证据见 `docs/verification/video/evidence/rx_ddr_bringup.json`；此文不提供跨主端可见性或带宽保证。
 
 规格要求逻辑 128 bit AXI4 DMA、字节地址、INCR、最多 16 beat、4 KiB 拆分，首版每主端读/写各最多一个未完成事务。CPU 负责 fabric 地址、仲裁和排序，Video 负责厂商 DDR IP 与 native 封装。
 
