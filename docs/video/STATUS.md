@@ -1,6 +1,6 @@
 # Video 工作台账
 
-更新：2026-10-16。分支：`video/windows-bringup`。用户已确认板卡、HDMI 源和显示器已就绪；当前开发在主工程内执行，未建立第二份源码副本。
+更新：2026-10-17。分支：`video/windows-bringup`。用户已确认板卡、HDMI 源和显示器已就绪；当前开发在主工程内执行，未建立第二份源码副本。
 
 ## 本批已交付
 
@@ -25,9 +25,9 @@
 | V015b-core | AXI128→HMIC256 桥核心 | core 域串行读写、上下 lane、非法 burst 排空、masked readback-before-B 和故障隔离；canonical191例、独立354例及质量复核通过；共享 fabric/CDC/跨主端排序仍待集成 |
 | V020a | RGB888 打包与行式写 DMA | R/G/B 字节序、跨拍 spill、行尾 keep、stride padding、4 KiB拆分、abort/错误排空；完整 raw/preview 数字测试及独立规格/质量审查通过 |
 | V020b | 合成 raw AXI/DMA物理自检与KEY0 | 完整800×600、1,440,000字节/90,000拍数字及物理读回通过；60秒完成状态无错，KEY0后heartbeat329→1、17个新PASS包；PDS125 MHz内部多角时序通过，core WNS +0.087 ns，10919 LUT、10488寄存器、0 DRM；已恢复RX、验证输入合格，用户确认稳定彩条 |
-| V020c-in-progress | 真实HDMI单帧raw采集 | 数字实现、独立规格/质量、18套件最终回归及联合PDS通过；125MHz WNS+0.233ns、12043 LUT/12174寄存器/4 DRM，位流已打包。下载前复查当前输入不合格，等待用户恢复800×600源；本批尚未下载，实际CRC/KEY0验收待做 |
+| V020c-raw | 真实HDMI单帧raw采集 | 实采及同镜像JTAG重启复测通过：480000像素/1440000字节、CRC源/DDR一致、无overflow，FIFO峰值121；60秒60个状态包合格。已恢复RX并Verify，7个输入快照合格、坏帧0。用户远程，物理KEY0及恢复画面观察仍待现场验收 |
 
-已获得 P1 三项物理功能通过证据：稳定彩条、合法 HDMI 输入时序、DDR 校准及复位后自检。本批新增 AXI 桥核心和单平面写 DMA，尚未接入真实 HDMI 帧流或 CPU fabric；采集/显示整链路、共享接口冻结、外部 AC 签核及更长稳定性记录仍未完成。
+已获得 P1 三项物理功能通过证据：稳定彩条、合法 HDMI 输入时序、DDR 校准及复位后自检。本批已将真实HDMI单帧raw接入FIFO、AXI桥和单平面写DMA并完成物理CRC复测，尚未接入CPU fabric；采集/显示整链路、共享接口冻结、外部 AC 签核及更长稳定性记录仍未完成。
 
 本轮 RX/DDR 的独立说明见 [rx_ddr_bringup.md](../verification/video/rx_ddr_bringup.md)。当前用户确认电脑活动信号为 800×600、60.32 Hz，实测 VS 原始高电平为 4224 个像素时钟、场周期 663168；没有将 HS 边沿歧义读出的 VS=3 放宽为可接受模式。最终 RX 位流 SHA256 为 `406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c`，DDR 位流为 `9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4`；两者已连同各自同名校验掩码打包。
 
@@ -75,6 +75,10 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 
 ## HDMI raw 单帧本批收尾状态
 
-实现提交为 `27960cb`（引擎）、`61d3a07`（写缓存等价故障条件）、`22bfb22`（联合板级工程及脚本）、`86aed0d`（读回专用故障与写控制分离）。最终回归与PDS、独立审计均绑定当前源码；未push。预板测摘要见 [hdmi_raw_capture_preboard.json](../verification/video/evidence/hdmi_raw_capture_preboard.json)，详细验证见 [hdmi_raw_capture.md](../verification/video/hdmi_raw_capture.md)。
+实现提交为 `27960cb`（引擎）、`61d3a07`（写缓存等价故障条件）、`22bfb22`（联合板级工程及脚本）、`86aed0d`（读回专用故障与写控制分离）。最终18套件回归、PDS和独立审计均绑定当前源码；125MHz slow setup余量+0.233ns，12043 LUT、12174寄存器、4 DRM，原约束未放宽。保留本地分支，未push。
 
-本批JTAG只读预检通过，但23:39/23:41串口显示源像素频率约19.84MHz、场时序未锁；已请求唤醒视频源并确认活动模式，未收到恢复确认前不开始采帧验收。开发板仍运行原RX镜像，采帧包 `video_hdmi_capture_2e01feb8e69d` 尚未下载；当前脚本对应恢复包为 `video_rx_board_26d25f7dd060`。实际源/DDR CRC、KEY0新帧及恢复彩条观察仍待验收。
+2026-10-17用户恢复800×600源后，采帧包 `video_hdmi_capture_2e01feb8e69d` 已实际Program/Verify；首帧和60秒状态通过，CRC5c1e6651。用户远程无法按KEY0，改以同镜像JTAG重新配置作自动重启测试：heartbeat757→1，新帧CRC8aa54beb，45个新的完成包全部合格。此操作不能替代物理KEY0验收。
+
+已恢复 `video_rx_board_26d25f7dd060` 并Verify，串口7个快照合格、坏帧0；现场彩条观察尚未确认。手工KEY0及画面确认保留待验。当前仍为raw单平面，尚未实现捕获内容显示、preview/input、三分支CAPTURE_DONE或共享CPU fabric。
+
+物理证据见 [hdmi_raw_capture.json](../verification/video/evidence/hdmi_raw_capture.json)，详细结果见 [hdmi_raw_capture.md](../verification/video/hdmi_raw_capture.md)。[hdmi_raw_capture_preboard.json](../verification/video/evidence/hdmi_raw_capture_preboard.json) 保留为前一天上板前的历史状态，不重写或混作当前物理结论。

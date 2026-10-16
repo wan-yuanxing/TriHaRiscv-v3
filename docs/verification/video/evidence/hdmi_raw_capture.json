@@ -1,0 +1,437 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "implementation_build_date": "2026-10-16",
+  "base_commit": "598a064",
+  "fifo_ingress_commit": "5ca0c10",
+  "engine_commit": "27960cb",
+  "bridge_guard_commit": "61d3a07",
+  "engine_timing_commit": "86aed0d",
+  "implementation_commit": "22bfb22",
+  "scope": "Physical HDMI RGB888 single raw frame through asynchronous FIFO and production DMA/bridge into reserved DDR; source/readback CRC32",
+  "physical_hdmi_raw_capture_verified": true,
+  "physical_hdmi_raw_capture_key0_retest_verified": false,
+  "physical_hdmi_raw_capture_jtag_reconfiguration_retest_verified": true,
+  "pending_manual_checks": [
+    "Physical KEY0 recapture",
+    "On-site observation of restored colorbars"
+  ],
+  "manual_check_limitation": "User is remote and cannot press the physical button.",
+  "captured_content_displayed": false,
+  "formal_three_branch_capture_done_implemented": false,
+  "cpu_fabric_or_multi_master_verified": false,
+  "external_io_timing_verified": false,
+  "vendor_training_simulation_passed": false,
+  "flash_written": false,
+  "crc_limit": "CRC32 equality has collision risk; independent digital byte oracle checks active bytes, padding and redzones.",
+  "regression_and_build_source_hashes_match_current": true,
+  "source_hashes": {
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc": "2df24e663a5fbadface0e93217b624d222f616dcf320ca4f2248d3290a69b69b",
+    "fpga/pg2l100h/ip/video_ddr_manifest.json": "9f2521e8b4dc38e8de44b0c74ad4776d0623745a09267d4b3f7430ab12fdb7ee",
+    "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+    "fpga/pg2l100h/project/video_hdmi_capture.json": "6c06b7e82282ca9066a9e4c3ea762924a3efdc2524ccac0a0ee1752b9d6979b1",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv": "6fbd2fbdc9ce3c4682b187d5cf30700d5baf4d07028930e2adf75dd77d428b22",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+    "fpga/pg2l100h/rtl/video_hdmi_capture_top.sv": "cf5cda3c211e8a02e39d930022728f825fd346d34b6d96bf3c70f9c7f0ce6eda",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+    "rtl/video/axi128_hmic256.sv": "03081f944fa934b2100741e883867dba9eaa4e492f13eb4e39d019c985eb0950",
+    "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/rgb888_packer.sv": "6116912b5f5d37000dfca442ce6378b96080c9d31d6f8b30a6facd8e6fd044ac",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "rtl/video/video_capture_engine.sv": "f556f95048044d8aa15a709bd061d2e502f4b80593b17fd4ccadc1273f2f7451",
+    "rtl/video/video_capture_ingress.sv": "e4e462df5b0d6de6d11d2b7145eb5675dacc452886369023fb332ab175f8f806",
+    "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+    "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+    "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+    "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+    "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "scripts/video/build_pds.py": "6854d2ac91e9588d4a061f3f8be6bc99e466e29a8fb4dce0c283b1de353245b0",
+    "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+    "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+    "scripts/video/gen_ddr.py": "8b4924d3e1513fc585e0f7d34cfb7e4598675f80018c799bd9d2199622e8dad2",
+    "scripts/video/gen_edid.py": "e8d089439adb24e9a983a61384a2c39d4bce699004c208a5a8ad0db5ea8df19a",
+    "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+    "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe"
+  },
+  "regression": {
+    "path": "build/video/regression/20261016T152024_025404Z/result.json",
+    "sha256": "b30d5c467cadfc56c02dd5c2e48117f9bc4c7494391ed7edbc83c26975862e58",
+    "status": "pass",
+    "passed": [
+      "capture_ingress",
+      "capture_engine",
+      "hdmi_capture_board",
+      "axi_bridge",
+      "write_dma",
+      "axi_capture",
+      "axi_capture_board",
+      "ddr_bist",
+      "ddr_board",
+      "config",
+      "timing",
+      "clocks",
+      "rx_init",
+      "rx_measure",
+      "rx_board",
+      "tx_init",
+      "board",
+      "rx"
+    ]
+  },
+  "build": {
+    "path": "build/video/pds/20261016T152024_020998Z/result.json",
+    "sha256": "872887c4fa8443dc6a398e04c4dab1ec2f3068110d799f593fbc4ce84f297720",
+    "status": "pass",
+    "resources": {
+      "lut": 12043.0,
+      "registers": 12174.0,
+      "drm": 4.0
+    },
+    "artifact_sha256": "2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b",
+    "verify_mask_sha256": "544f8384c10d0da6425d8cb7687f6dd3e76f257ddfccfafdb395835897408d9d",
+    "internal_timing_met": true
+  },
+  "physical_timing_audit": {
+    "path": "build/video/hdmi-constraints-audit/interim-20261016T152024_020998Z/result.json",
+    "sha256": "ef9724de27c212ef32293dbf82d4f680af37482dbde28698b49451c3d56d4447",
+    "status": "physical_timing_pass_with_documented_skew_report_limitation"
+  },
+  "independent_reviews": {
+    "engine_spec": {
+      "path": "build/video/hdmi-engine-spec-review/result.json",
+      "sha256": "7f0e3d6fe6233999217cb2d9843a8d3655b7790e690013ccfffbf051c90113e1",
+      "status": "SPEC_APPROVED"
+    },
+    "engine_quality_before_guard": {
+      "path": "build/video/hdmi-engine-quality/result.json",
+      "sha256": "41d4738cea18a6cb118b4e2e7ca2377a05eff3a7d1b04bc49b13061971d70794",
+      "status": "QUALITY_PASS"
+    },
+    "board_spec_before_guard": {
+      "path": "build/video/hdmi-board-spec-review/result.json",
+      "sha256": "478f4d183da4af8fa2f3531174f63ee7b3aeff4871020b0e963c61f86f690b34",
+      "status": "SPEC_APPROVED"
+    },
+    "seed_spec_addendum": {
+      "path": "build/video/hdmi-board-spec-review/seed-addendum.json",
+      "sha256": "9eb8ed62e75f36a04106543da6a7c49269f32d2cc3c557fe03f86b91f181831d",
+      "status": "SPEC_ADDENDUM_APPROVED"
+    },
+    "guard_spec": {
+      "path": "build/video/hdmi-constraints-audit/collect-guard-spec/result.json",
+      "sha256": "4f1122383623184acca8d33c39053895745f8109880fd816a71b503810a36355",
+      "status": "pass"
+    },
+    "guard_quality": {
+      "path": "build/video/hdmi-board-quality/collect-guard-addendum/result.json",
+      "sha256": "a367cfdacc28f58de32abd92b7353115126eeb8d7e2e314d9a45dadae7f41ba0",
+      "status": "QUALITY_PASS"
+    },
+    "final_spec": {
+      "path": "build/video/hdmi-board-spec-review/seed4-timeout-addendum.json",
+      "sha256": "a30673852dd7cfc91f10483c4f6aea1622e21ef226b8d9b70503b3da9879fd87",
+      "status": "SPEC_ADDENDUM_APPROVED"
+    },
+    "final_quality": {
+      "path": "build/video/hdmi-control-quality/result.json",
+      "sha256": "6c23d64b2f1afb995bfb79f4041129f999423cc999b8ae8f213bb0bc5cb8dcd5",
+      "status": "QUALITY_PASS"
+    }
+  },
+  "engine_transfer_spec": {
+    "path": "build/video/hdmi-constraints-audit/engine-transfer-spec/result.json",
+    "sha256": "2497a0212496b92862a8765f20245fc888330c9b249db968e8816d9f37becc16",
+    "status": "pass"
+  },
+  "engine_transfer_proof": {
+    "path": "build/video/hdmi-control-timing/result.json",
+    "sha256": "466638711926df3fee25450bdec23e6f430cd81dc82b24751959378c312d0cec",
+    "ok": true,
+    "production_engine_sha256": "f556f95048044d8aa15a709bd061d2e502f4b80593b17fd4ccadc1273f2f7451",
+    "applied_cases": {
+      "paired": 65,
+      "four_state": 76073
+    }
+  },
+  "program": {
+    "path": "build/video/board_program/20261016T160405_257631Z/result.json",
+    "sha256": "252aee9b64b63fc223b1e717df01dbdea8f411a1088724a24dd0c8e322a7421b",
+    "status": "pass",
+    "target": "video_hdmi_capture",
+    "programmed": true,
+    "verified": true,
+    "bitstream_sha256": "2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b"
+  },
+  "initial_uart": {
+    "path": "build/video/board_serial/20261016T160436_736778Z/result.json",
+    "sha256": "6191b310e5ffb535883a42d4c8fdd14da6d57967ed57a88a817c10532bae37e3",
+    "status": "pass",
+    "raw_sha256": "3a50625205048c09bdc148bc2d8e83788a1a9e9f033fd867550708937999f9e9",
+    "physical_hdmi_raw_capture_verified": true,
+    "type5_packets": 12,
+    "first": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 1545496145,
+      "ddr_crc": 1545496145,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 33,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    },
+    "last": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 1545496145,
+      "ddr_crc": 1545496145,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 55,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    }
+  },
+  "stable_uart": {
+    "path": "build/video/board_serial/20261016T160511_081466Z/result.json",
+    "sha256": "b4ab1a9f69eef7c6c2c3072a54779930cc47e29af97c8de470fdf596114c2c32",
+    "status": "pass",
+    "raw_sha256": "2189590893e55b0694b65d435e79ceb43006995830445f0adea10b7a21d50ee1",
+    "physical_hdmi_raw_capture_verified": true,
+    "type5_packets": 60,
+    "first": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 1545496145,
+      "ddr_crc": 1545496145,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 101,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    },
+    "last": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 1545496145,
+      "ddr_crc": 1545496145,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 219,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    }
+  },
+  "reconfiguration_program": {
+    "path": "build/video/board_program/20261016T161034_341524Z/result.json",
+    "sha256": "e217f115d76ade11c3b711c13ce671020d61fca7b50253adff408de5073df19e",
+    "status": "pass",
+    "target": "video_hdmi_capture",
+    "programmed": true,
+    "verified": true,
+    "bitstream_sha256": "2e01feb8e69d3ce4c832650daebf9cea3b64e03b2ad80eb7411c2f9c52e1e70b"
+  },
+  "reconfiguration_uart": {
+    "path": "build/video/board_serial/20261016T161033_906361Z/result.json",
+    "sha256": "1bfa4eea65419a657930728c7f620feaf982600b32b3dbdbbb2ea05f2d470ed5",
+    "status": "pass",
+    "raw_sha256": "4659fc288a5e7ca928c98a8eed220f774de2bddd4030a863efb1399acdb51d70",
+    "physical_hdmi_raw_capture_verified": true,
+    "type5_packets": 51,
+    "first": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 1545496145,
+      "ddr_crc": 1545496145,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 747,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    },
+    "last": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 2326088683,
+      "ddr_crc": 2326088683,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 87,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    },
+    "heartbeat_before": 757,
+    "heartbeat_after_min": 1,
+    "fresh_completed_packets": 45,
+    "first_new": {
+      "type": 5,
+      "flags": 117,
+      "phase": 165,
+      "error_code": 0,
+      "captured_pixels": 480000,
+      "checked_bytes": 1440000,
+      "source_crc": 2326088683,
+      "ddr_crc": 2326088683,
+      "frame_tag": 1,
+      "fifo_peak": 121,
+      "heartbeat": 1,
+      "init_done": true,
+      "busy": false,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false
+    },
+    "method": "Volatile JTAG reprogram and Verify of identical capture bitstream; separate from KEY0 pin verification."
+  },
+  "restore_build": {
+    "path": "build/video/pds/20261016T143015_641311Z/result.json",
+    "sha256": "be4faafbf8b7c61823727f2e054c914c32188977785d860684ea4abb5c5e5891",
+    "status": "pass",
+    "artifact_sha256": "26d25f7dd06015ba0f5419baab8f071a43b6dd9eff24c80d5481b58e2e80094e",
+    "verify_mask_sha256": "33a4116bde3fc05bd4c9a0ca7ff7bb0e76bc65166d7928640e3de452de7f61fc"
+  },
+  "restore_package": "build/video/releases/video_rx_board_26d25f7dd060",
+  "restore_program": {
+    "path": "build/video/board_program/20261016T161202_519848Z/result.json",
+    "sha256": "ddcba28aba544004afc6e250e7c65860405f23558f78f7c71ef40bd046c5d33d",
+    "status": "pass",
+    "target": "video_rx_board",
+    "programmed": true,
+    "verified": true,
+    "bitstream_sha256": "26d25f7dd06015ba0f5419baab8f071a43b6dd9eff24c80d5481b58e2e80094e"
+  },
+  "restore_uart": {
+    "path": "build/video/board_serial/20261016T161245_850325Z/result.json",
+    "sha256": "bcd09f06d0aa76547902487f0747d3b0e707a800719b4d0a04d0224a4c8f89e3",
+    "status": "pass",
+    "raw_sha256": "3723f0a2dd7c68aac5daada676a6690d0151534e81bbf7ccbfb1f0c6959eca90",
+    "physical_rx_mode_verified": true
+  },
+  "user_restored_colorbars_confirmed": false,
+  "source_recovery_uart": {
+    "path": "build/video/board_serial/20261016T160329_468251Z/result.json",
+    "sha256": "8278168148301f25a3efa1977c31be27ee443182eb7bbcd37f3963fc42f2f640",
+    "status": "pass",
+    "physical_rx_mode_verified": true,
+    "raw_sha256": "ac8606da683cfa94b14abc277aa62011b877201fe124462c8a8fdb862d6caf81"
+  },
+  "user_source_recovery_confirmed": true,
+  "digital_full_frame": {
+    "width": 800,
+    "height": 600,
+    "pixels": 480000,
+    "bytes": 1440000,
+    "axi128_beats": 90000,
+    "crc32_hex": "d1ec37c8"
+  },
+  "failed_builds_retained": [
+    {
+      "path": "build/video/pds/20261016T134740_921577Z/result.json",
+      "sha256": "8528c257f51f8de917c2cb47b0b4bed8df086909a395d4d195d9b67b9e98d734",
+      "status": "fail",
+      "error": "Routed internal timing constraints not met; inspect timing report"
+    },
+    {
+      "path": "build/video/pds/20261016T135851_729836Z/result.json",
+      "sha256": "674faecd4d00749fcc4de2a35e0af5fc66baf309d5c2e0f56da26c19ecce1bd8",
+      "status": "fail",
+      "error": "Routed internal timing constraints not met; inspect timing report"
+    },
+    {
+      "path": "build/video/pds/20261016T141414_953504Z/result.json",
+      "sha256": "1b2080a90d0766884343521bc18c14e4beff8b6fcaa72e98be46ae7d02a80ae0",
+      "status": "fail",
+      "error": "Routed internal timing constraints not met; inspect timing report"
+    },
+    {
+      "path": "build/video/pds/20261016T144157_393343Z/result.json",
+      "sha256": "0a568829d93488958686bef2f6174aa76587539ff51e14451e9e8370d3b1262a",
+      "status": "fail",
+      "error": "Routed internal timing constraints not met; inspect timing report"
+    }
+  ],
+  "interrupted_runs_retained": [
+    {
+      "path": "build/video/pds/20261016T143005_472008Z/interruption.json",
+      "sha256": "b5a91f301bd93ecff85ff7adc217a0f4da7dfe6251acb54d8ea092aa7270d3ce",
+      "status": "interrupted",
+      "reason": "Tool session reset; root verified no Python/PDS/vvp process survives and run never finalized. Preserve prior partial logs; not timing PASS or final regression."
+    },
+    {
+      "path": "build/video/regression/20261016T143025_874418Z/interruption.json",
+      "sha256": "b5a91f301bd93ecff85ff7adc217a0f4da7dfe6251acb54d8ea092aa7270d3ce",
+      "status": "interrupted",
+      "reason": "Tool session reset; root verified no Python/PDS/vvp process survives and run never finalized. Preserve prior partial logs; not timing PASS or final regression."
+    }
+  ]
+}

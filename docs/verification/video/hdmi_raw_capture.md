@@ -1,6 +1,6 @@
 # 真实 HDMI 单帧 raw 采集验证
 
-日期2026-10-16，基线 `598a064`，实施设计见 `docs/superpowers/specs/2026-10-16-video-hdmi-raw-capture-design.md`。本批把真实不可背压像素送入已板测packer/DMA/桥，不把前一批合成图样物理结果改称HDMI帧采集。
+实现与构建日期2026-10-16，物理板测日期2026-10-17，基线 `598a064`，实施设计见 `docs/superpowers/specs/2026-10-16-video-hdmi-raw-capture-design.md`。本批把真实不可背压像素送入已板测packer/DMA/桥，不把前一批合成图样物理结果改称HDMI帧采集。
 
 ## 完成条件和范围
 
@@ -69,7 +69,7 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/read_board.py --port COM12 --seconds 12
 ```
 
-真实HDMI联合目标正在实施，尚未产生本批物理采集通过结论。联合顶层规格及质量审查已通过，记录为 `build/video/hdmi-board-spec-review/result.json`、`seed-addendum.json` 和 `build/video/hdmi-board-quality/result.json`。质量审查以真实引脚采样/光栅/计时/模式门控走完4个1056×628帧，独立核对1,440,000个DDR字节及CRC；仅强制HDMI初始化健康，DDR仍为数字替身。下述桥等价修改另以独立增量审查绑定新依赖哈希。
+真实HDMI联合目标已完成本批raw单帧物理采集及JTAG重配置复测；现场KEY0和恢复后画面观察仍待验收。联合顶层规格及质量审查已通过，记录为 `build/video/hdmi-board-spec-review/result.json`、`seed-addendum.json` 和 `build/video/hdmi-board-quality/result.json`。质量审查以真实引脚采样/光栅/计时/模式门控走完4个1056×628帧，独立核对1,440,000个DDR字节及CRC；仅强制HDMI初始化健康，DDR仍为数字替身。下述桥等价修改另以独立增量审查绑定新依赖哈希。
 
 `build/video/pds/20261016T134740_921577Z` 已消除组合环及复位数据使能路径，全部hold/recovery/removal通过，但slow setup为−0.541ns，另有core到PHY的−0.238ns路径。仅优化固定种子1/2/3的 `build/video/pds/20261016T135851_729836Z` 最佳种子2仍有42个setup端点、WNS−0.209ns；core到PHY已分别+0.670/+0.871ns，其余7项多角检查通过。这两份失败产物均禁止下载。
 
@@ -91,4 +91,21 @@ python scripts/video/read_board.py --port COM12 --seconds 12
 
 较早全回归因构建脚本/桥输入在运行中改变而失效，不作为最终通过证据。`143005_472008Z` 构建和 `143025_874418Z` 回归因工具会话重置中断，保留interruption.json及局部日志，没有最终通过结论。
 
-当前开发板保持上一批RX彩条镜像；本批当前脚本对应的恢复构建为 `build/video/pds/20261016T143015_641311Z`，已通过内部时序并打包为 `build/video/releases/video_rx_board_26d25f7dd060`，尚未重新下载。联合目标尚未Program/Verify：23:39和23:41下载前串口复查发现当前输入不合格，像素频率约19.84MHz且场时序未锁定；已请求用户唤醒源电脑并核对活动信号800×600、60.32Hz，尚待回复。JTAG预检已识别PG2L100H/0x00602899。恢复合法输入后才下载，继续实际CRC、60秒状态、KEY0新帧及恢复RX验收；不能将本次数字/内部时序通过当作物理采帧通过。上板前摘要为 `evidence/hdmi_raw_capture_preboard.json`。
+本批当前脚本对应的恢复构建为 `build/video/pds/20261016T143015_641311Z`，下载包 `build/video/releases/video_rx_board_26d25f7dd060`。2026-10-16上板前曾因源像素频率约19.84MHz、场时序未锁而等待；该历史状态见 `evidence/hdmi_raw_capture_preboard.json`，保持原记录，不重标为板测通过。
+
+## 2026-10-17 物理板测
+
+用户唤醒源电脑并确认活动模式800×600、60.32Hz后，`build/video/board_serial/20261016T160329_468251Z` 复查输入合格。随后对联合采帧包执行实际Program/Verify：`build/video/board_program/20261016T160405_257631Z`，PG2L100H/0x00602899，未写Flash。
+
+| 物理记录 | 结果 |
+|---|---|
+| 首轮12秒 `build/video/board_serial/20261016T160436_736778Z` | 12个type5包全部合格；480000像素、1440000字节，源/DDR CRC均5c1e6651，FIFO RAM峰值121/2048，无错误/overflow |
+| 60秒状态 `build/video/board_serial/20261016T160511_081466Z` | 60个完成状态包全部合格，heartbeat101→219；这些包重复报告同一已完成帧，不代表60次新采帧 |
+| 同镜像JTAG重新配置 `build/video/board_program/20261016T161034_341524Z` | 同一2e01feb8…位流再次Program/Verify成功；全FPGA重配置后重新初始化和采帧 |
+| 重配置过程串口 `build/video/board_serial/20261016T161033_906361Z` | heartbeat757→1；45个新的完成包，480000像素、1440000字节，源/DDR CRC均8aa54beb，FIFO峰值121，无错误/overflow |
+| 恢复RX `build/video/board_program/20261016T161202_519848Z` | 26d25f7dd060…恢复包Program/Verify成功 |
+| 恢复后串口 `build/video/board_serial/20261016T161245_850325Z` | 7个RX快照模式合格，800×600/1056×628、全部同步与porch正确，约40.0001～40.0002MHz，坏帧0，TX初始化正常 |
+
+用户说明当前远程操作，无法按实体KEY0。因此使用已授权的同镜像JTAG重新配置完成自动重启复测；该操作验证重新配置后的校准及新帧采集，**不代表KEY0引脚、按键或其板级路径已经验收**。恢复后的现场彩条也未由用户观察确认，当前仅有Program/Verify、TX初始化及RX模式串口证据。这两项手工检查保留为待验，未伪造完成。
+
+本阶段已证明真实HDMI raw单帧经FIFO/DMA/桥写入物理DDR并读回CRC一致，尚未显示采集内容。preview/input、正式三分支完成事件、读DMA显示及CPU fabric保持后续范围。机器可读证据为 `evidence/hdmi_raw_capture.json`，绑定不可变运行目录、源码、位流/掩码、独立审查和三次实际下载记录。
