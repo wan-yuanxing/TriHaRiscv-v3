@@ -385,5 +385,5 @@
     }
   },
   "physical_rx_mode_restored_verified": true,
-  "user_observed_restored_stable_colorbars": false
+  "user_observed_restored_stable_colorbars": true
 }

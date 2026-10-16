@@ -39,7 +39,7 @@ DMA canonical19例包括完整800×600 raw和400×300 preview，独立62例；pa
 - 初始12秒：`build/video/board_serial/20261016T122058_274896Z`，12个type4包全部flags21、phaseA5、错误码0、首错字段0；实际/期望均90000拍、1440000字节、base87300000，全部PLL锁定。
 - 稳态60秒：`build/video/board_serial/20261016T122126_647692Z`，60包无错，heartbeat73→191。该记录是完成状态持续监测；自检在每次协调复位后执行一轮，不把每个UART包算作一次新帧写入或吞吐测量。
 - KEY0：用户确认短按一次。`build/video/board_serial/20261016T122253_540658Z` 采集到heartbeat329→1，之后17个新包全部重新完成90000拍检查、错误码0、全部PLL锁定；证明重新校准及同一路径重新写入/核验成功。
-- 恢复RX：`build/video/board_program/20261016T122412_291781Z` Program/Verify成功；`build/video/board_serial/20261016T122434_498418Z` 的5个type1快照全部模式合格，800×600、1056×628及同步/porch正确，像素40,000,100–40,000,200 Hz，坏帧0、好帧395→998。当前运行此RX镜像。
+- 恢复RX：`build/video/board_program/20261016T122412_291781Z` Program/Verify成功；`build/video/board_serial/20261016T122434_498418Z` 的5个type1快照全部模式合格，800×600、1056×628及同步/porch正确，像素40,000,100–40,000,200 Hz，坏帧0、好帧395→998。用户随后确认显示器已恢复稳定彩条；当前运行此RX镜像。
 
 源码/报告/原始串口哈希与摘要位于 `docs/verification/video/evidence/axi_capture_bringup.json`。软件实现提交为 `c928706`。本轮证明合成raw图样经生产packer/DMA/AXI桥在物理DDR写后读及KEY0重测；不表示PC的HDMI内容已经进入DDR，也不代表三分支CAPTURE_DONE或外部AC时序已签核。
 
