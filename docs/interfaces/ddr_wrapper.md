@@ -1,12 +1,28 @@
 # DDR wrapper 准入契约
 
-状态：独立 `video_ddr_bist` 已通过真实校准、自检和 KEY0 后重测，**正式 AXI128 ddr_wrapper 尚未实现**。证据见 `docs/verification/video/evidence/rx_ddr_bringup.json`；此文不提供跨主端可见性或带宽保证。
+状态：独立 `video_ddr_bist` 已通过真实校准、自检和 KEY0 后重测；本批新增 `axi128_hmic256` AXI128 桥核心及独立 AXI/DMA 验证目标。SoC fabric、多时钟接入和系统级共享仲裁仍待集成；物理验证以对应批次证据为准，不由组件仿真代替。
 
 规格要求逻辑 128 bit AXI4 DMA、字节地址、INCR、最多 16 beat、4 KiB 拆分，首版每主端读/写各最多一个未完成事务。CPU 负责 fabric 地址、仲裁和排序，Video 负责厂商 DDR IP 与 native 封装。
 
 所选 HMIC_S 参考接口为 256 bit 数据、28 bit 32-bit-word 地址，一拍 32 B、地址增加 8；无标准 WVALID、RREADY、B 通道。WSTRB 高有效。必须缓存完整 native 写命令的数据，并在读命令前为不能背压的返回预留空间。
 
-复用候选：旧工程 `targets/pango676/ddr/axi128_hmic256.sv`、CDC 和相应测试。其合成 B 响应只表示最后 native 数据接纳，不能直接解释为物理 DRAM 错误检测或跨主端可见性已证明。
+旧工程 `targets/pango676/ddr/axi128_hmic256.sv` 的 lane/cache 结构作为来源参考，新接口按本工程重新验证；旧 CDC/arbiter 没有迁入。旧版 B 只表示 native 数据接纳，新版增加下述写后核验契约。
+
+## AXI128 桥核心
+
+`rtl/video/axi128_hmic256.sv` 的 `clk` 是 DDR core 用户时钟，当前为 125 MHz；所有上游 AXI 信号须已在此域。不同主逻辑时钟须在统一边界接入经过审查的 CDC，本桥不隐含异步采样。`rst_n` 必须与上游 master、桥缓存和 HMIC 协调，禁止单独复位桥后复用旧 native 事务。
+
+接口为 32 bit **逻辑字节地址**、4 bit ID、128 bit 数据/16 byte strobes，支持 `0x80000000..0x87ffffff` 内的 16 B 对齐、SIZE=4、INCR、1..16 拍且不跨 4 KiB 的 burst。全范围检查后才减 `0x80000000`，向下按 32 B 对齐并转 native word 地址。桥一次拥有一个读或写事务，写优先处理同时提出的 AW/AR；W 可先提出，但桥收到 AW 后才接纳。上半 lane 开始的最大请求占 9 个 native 缓存项。
+
+完整写 burst 收齐后才发 native AW，原始数据与有效字节掩码保持至验证结束。全部写拍接纳后，通过同一独占 native 端口读回全部覆盖范围；只核对本次 WSTRB 有效字节，成功才返回 B OKAY。所有主端必须由上游 fabric 进入这一个桥，不得另有 native 写端在写入与核验之间覆盖数据。OKAY 表示本端口观测到匹配的读回，不表示物理 DRAM 持久化、ECC 或任意旁路写端的可见性保证。
+
+AXI 读数据完整缓存后才输出，RREADY 可任意背压。native AW+首 W、AR+首 R 同拍和连续返回均被验证；native 无 WVALID/RREADY/B 的差异不暴露给上游。
+
+非法地址/参数写按 AWLEN 排空 W 后返回 DECERR，不写缓存或 DDR；非法读返回 ARLEN+1 个零数据 DECERR。WLAST 错误排空 advertised 数量后 SLVERR 并隔离。native ID/LAST/X、核验失配、native 看门狗或曾初始化后的失锁均保持 `fault/fault_code`，协调复位前禁止新任务。上游 WVALID 空隙及 B/R 背压不是 native 超时。
+
+已经提出的 native VALID/地址/ID/长度在故障时继续保持；接纳后按 advertised 长度排空，写用零掩码、读丢弃，再完成相应 AXI 错误响应。native 永不恢复时只能协调复位；不承诺无条件有界错误响应。已完成并受阻的 B/R 保持原内容，不能因后续失锁改变。已接纳 AW 但 W 未收齐时仍接受其余 W；master 停发则同样需要协调复位。
+
+当前 `video_axi_capture` 是该核心与单平面 DMA 的独立板测设计；它不替代 CPU 正式仲裁器，不提供显示水位/QoS 或多主端最大等待保证。详见 `docs/verification/video/axi_capture_bringup.md`。
 
 V015 的必要验证：
 

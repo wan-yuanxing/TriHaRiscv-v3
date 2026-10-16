@@ -35,11 +35,11 @@ def review_messages(log, verified_fdc=""):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
-    board = args.target in ("video_board_smoke", "video_rx_board", "video_ddr_bist")
-    ddr = args.target == "video_ddr_bist"
+    board = args.target in ("video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture")
+    ddr = args.target in ("video_ddr_bist", "video_axi_capture")
     if not board and args.stage != "synth":
         parser.error("Component targets have no board pins; only synth is supported")
     work = fresh_run("pds")

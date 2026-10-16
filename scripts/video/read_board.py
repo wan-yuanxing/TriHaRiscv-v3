@@ -38,6 +38,11 @@ def decode_packets(data):
             record=dict(zip(fields,struct.unpack('<BBH7I',packet[4:36])))
             flags=('tx_done','tx_error','rx_boot_done','rx_error','rx_configured',
                    'snapshot_fresh','frequency_good','mode_good')
+        elif packet[4]==4:
+            fields=('type','flags','phase','error_code','compared_beats','first_error_word_address',
+                    'first_error_xor_low32','test_base_bytes','frame_bytes','expected_beats','heartbeat')
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked')
         else:continue
         for bit,name in enumerate(flags):
             record[name]=bool(record['flags']&(1<<bit))
@@ -56,6 +61,16 @@ def qualify_ddr(records):
                and r['window_beats']==32768 for r in rows[-2:])
 
 
+def qualify_axi_dma(records):
+    rows=[r for r in records if r['type']==4]
+    if len(rows)<2 or rows[-1]['heartbeat']==rows[-2]['heartbeat']:return False
+    return all(r['init_done'] and r['all_pll_locked'] and r['done'] and not r['busy']
+               and not r['error'] and r['error_code']==0 and r['phase']==0xa5
+               and r['compared_beats']==90000 and r['expected_beats']==90000
+               and r['first_error_word_address']==0 and r['first_error_xor_low32']==0
+               and r['test_base_bytes']==0x87300000 and r['frame_bytes']==1440000 for r in rows[-2:])
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -66,7 +81,7 @@ def main():
     work=fresh_run('board_serial')
     result={'status':'running','directory':str(work.relative_to(ROOT)), 'port':args.port,'records':[],
             'operation':'receive_only_uart','physical_rx_mode_verified':False,
-            'physical_ddr_bist_verified':False}
+            'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False}
     write_json(BUILD/'latest_board_serial.json',result)
     try:
         shell=shutil.which('powershell.exe')
@@ -109,6 +124,7 @@ try {
             and all(row[k] for k in ('mode_good','frequency_good','snapshot_fresh','rx_boot_done','rx_configured','tx_done'))
             and not(row['tx_error'] or row['rx_error']) for row in rx_records[-3:])
         result['physical_ddr_bist_verified']=qualify_ddr(records)
+        result['physical_axi_dma_verified']=qualify_axi_dma(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

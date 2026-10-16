@@ -25,15 +25,21 @@ python scripts/video/build_pds.py --target video_ddr_bist --stage bitstream
 python scripts/video/package_board.py --target video_ddr_bist
 python scripts/video/program_board.py --target video_ddr_bist --start-server
 python scripts/video/read_board.py --port COM12 --seconds 12
+python scripts/video/build_pds.py --target video_axi_capture --stage bitstream
+python scripts/video/package_board.py --target video_axi_capture
+python scripts/video/program_board.py --target video_axi_capture --start-server
+python scripts/video/read_board.py --port COM12 --seconds 12
 ```
 
-配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行当前已实现的配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、8 组 native BIST 和 DDR 板级数字替身；不代表物理采集/DDR/推理已经通过。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
+配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；两个 DDR 板级测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
 
 彩条目标的管脚、LED、复位、下载与时序边界见 [板测说明](../verification/video/board_smoke.md)。
 
 工具覆盖、版本与运行证据见 [Windows 工具链](../verification/video/toolchain.md)。`prepare_reference` 只提取选中文件；DDR 构建随后用 `gen_ddr.py` 在独立目录生成并复核完整 74 个硬件源文件。生成器的通用 FDC 不用于板卡，正式目标单独加载已审查的 FDC/RCF。
 
 新增两个独立上板目标：`video_rx_board` 保持本地彩条、配置固定 EDID 并报告真实输入；`video_ddr_bist` 暂停 HDMI，执行破坏性 native DDR 自检。目标、下载包、日志和物理验收各自记录，不能把独立 BIST 当作正式 AXI128 wrapper 已实现。
+
+`video_axi_capture` 在已验证 DDR 物理壳中集成生产 AXI128 桥、packer 和 DMA，使用可背压的合成 RGB 源写入预留测试区，再独立逐字节检查 raw 帧及 guard；UART type 4 单独报告结果。它暂停 HDMI 输出，测试结束应恢复 `video_rx_board`。真实 HDMI 像素跨域、preview/input 分支、CAPTURE_DONE 和 CPU fabric 仍待集成，范围见 [本批验证](../verification/video/axi_capture_bringup.md)。
 
 新增文件按职责放置：`config/video_edid.hex` 和生成头保存 EDID；`rtl/video/video_rx_measure.sv`、`video_rx_probe.sv`、`ddr_native_bist.sv` 为便携组件；板级初始化、CDC、UART 和两个 top 在 `fpga/pg2l100h/rtl/`；目标清单与 FDC/RCF 位于各自的 `project/`、`constraints/`；对应 TB、设备/内存数字模型在 `tb/video/`。`gen_edid.py`、`gen_ddr.py`、`program_board.py`、`read_board.py` 扩展原生脚本入口，生成物始终留在 `build/video/`。
 
@@ -51,6 +57,10 @@ rtl/video/
   video_rx.sv                            候选 RGB888 坐标、完整帧几何和就绪丢失监测
   video_rx_measure.sv / video_rx_probe.sv 精确时序和独立原始边沿探针
   ddr_native_bist.sv                      native256 地址/数据/掩码自检
+  axi128_hmic256.sv                      core 域串行桥与 masked readback-before-B
+  rgb888_packer.sv                       R/G/B 内存字节序、跨拍 spill 和行尾 keep
+  video_write_dma.sv                     单平面步长写入、burst 缓存和响应排空
+  video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
 sw/include/video_cfg.h                    同源生成的 C 常量
 tb/video/
   tb_timing.sv                           完整光栅/像素/复位自检
@@ -66,6 +76,10 @@ tb/video/
   tb_rx_measure.sv / tb_rx_probe.sv       精确时序和原始探针测试
   tb_rx_telemetry.sv / tb_diag_uart.sv    跨域与逐 bit 串口测试
   tb_ddr_native_bist.sv / tb_ddr_board.sv  native 和板级数字自检
+  tb_axi128_hmic256.sv                   AXI/native 地址、掩码、响应和故障保持
+  tb_rgb888_packer.sv / tb_write_dma.sv   字节顺序、尾拍、步长、abort 和错误
+  tb_axi_capture_bist.sv                 完整帧 byte-memory oracle 与故障注入
+  tb_axi_capture_board.sv                新目标 UART、复位和旧 PASS 撤销
   models/                               PLL、MS72xx 串行、native 内存和板级 IP 数字模型
 scripts/video/
   common.py                             原生命令/工具/哈希/结果辅助
@@ -88,6 +102,7 @@ fpga/pg2l100h/
   project/video_rx.json                  接收帧几何监测组件目标
   project/video_rx_board.json            本地彩条和物理输入诊断目标
   project/video_ddr_bist.json             独立 native DDR 板测目标
+  project/video_axi_capture.json          AXI/DMA 独立目标，共用 DDR FDC/RCF
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
   constraints/video_rx_board.fdc         RX/TX 管脚、半周期采样与 CDC 约束
@@ -101,6 +116,8 @@ fpga/pg2l100h/
   rtl/video_diag_uart.sv                 整包锁存的诊断 UART
   rtl/video_rx_board_top.sv              下降沿接收采样与本地彩条
   rtl/video_ddr_bist_top.sv              HMIC、独立监测、复位和 BIST
+  rtl/video_axi_capture_top.sv           HMIC、合成 raw 写入与 UART type 4
+  rtl/video_ddr_snapshot_cdc.sv          两个 DDR 目标共用的冻结快照握手
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据
 docs/video/STATUS.md                     任务、依赖和完成状态
@@ -116,9 +133,10 @@ build/video/                            被忽略的运行结果、参考副本�
 - `build/video/latest_pds.json`：最近一次 PDS 目标的状态、资源与输入哈希。
 - `build/video/latest_pds_video_board_smoke.json`、`latest_pds_video_rx.json`：各目标独立结果，避免组件综合覆盖板级下载包依据。
 - `build/video/latest_pds_video_rx_board.json`、`latest_pds_video_ddr_bist.json`：RX/DDR 板级目标的内部时序、位流和校验掩码哈希。
+- `build/video/latest_pds_video_axi_capture.json`：AXI/DMA 目标的独立构建证据；对应 `latest_package_video_axi_capture.json` 保存下载包入口。
 - `build/video/latest_package.json`：通过哈希复核的板级位流包。
 - `build/video/latest_package_video_rx_board.json`、`latest_package_video_ddr_bist.json`：RX/DDR 各自最新发布包。
-- `build/video/latest_board_program.json`、`latest_board_serial.json`：实际下载/校验和串口采集；串口收包成功与 RX/DDR 合格分别记录。
+- `build/video/latest_board_program.json`、`latest_board_serial.json`：实际下载/校验和串口采集；串口收包成功与 RX/native DDR/AXI-DMA 合格分别记录。
 - `build/video/latest_jtag_scan.json`：只读扫描结果，不能替代 Program/Verify 或画面证据。
 - `build/video/vendor/{hdmi,ddr}/provenance.json`：参考包与成员哈希。
 - 回归和 PDS 使用独立时间戳目录；时间戳目录用 UTC，报告日期按北京时间记录。

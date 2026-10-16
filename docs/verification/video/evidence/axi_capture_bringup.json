@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "base_commit": "ff9284a",
+  "scope": "Synthetic backpressurable RGB888 raw -> production packer/DMA/AXI128 bridge -> DDR -> independent byte checker",
+  "physical_axi_dma_verified": false,
+  "physical_axi_dma_key0_retest_verified": false,
+  "physical_hdmi_frame_capture_verified": false,
+  "formal_three_branch_capture_done_implemented": false,
+  "cpu_fabric_or_multi_master_verified": false,
+  "external_io_timing_verified": false,
+  "vendor_training_simulation_passed": false,
+  "flash_written": false,
+  "regression": {
+    "path": "build/video/regression/20261016T120334_259053Z/result.json",
+    "sha256": "e00c381bda2383316eecc8c7cd12f4f279e0b39f64538571b723d6fde11b20b2",
+    "status": "pass",
+    "directory": "build\\video\\regression\\20261016T120334_259053Z",
+    "passed": [
+      "axi_bridge",
+      "write_dma",
+      "axi_capture",
+      "axi_capture_board",
+      "ddr_bist",
+      "ddr_board",
+      "config",
+      "timing",
+      "clocks",
+      "rx_init",
+      "rx_measure",
+      "rx_board",
+      "tx_init",
+      "board",
+      "rx"
+    ]
+  },
+  "regression_and_build_source_hashes_match_current": true,
+  "python_tests": {
+    "run": 35,
+    "passed": 34,
+    "skipped": 1,
+    "skip": "Windows symlink privilege"
+  },
+  "digital_raw_frame": {
+    "width": 800,
+    "height": 600,
+    "bytes": 1440000,
+    "compared_axi128_beats": 90000
+  },
+  "source_hashes": {
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
+    "fpga/pg2l100h/rtl/video_axi_capture_top.sv": "df7e883e362123219ee73eba53725e143bcbee502cfd72f9535430f6de77947d",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+    "rtl/video/axi128_hmic256.sv": "c180dbce9901f77ae1d1d93146a27316d5c13e99bc7fa9ca4ccf35cffcbf6867",
+    "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+    "rtl/video/rgb888_packer.sv": "6116912b5f5d37000dfca442ce6378b96080c9d31d6f8b30a6facd8e6fd044ac",
+    "rtl/video/video_axi_capture_bist.sv": "7d4013d7c7f1b2dec1d08213b68e47b42405e828ccca94b1d255115c35db484a",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba"
+  },
+  "build": {
+    "path": "build/video/pds/20261016T120259_929949Z/result.json",
+    "sha256": "2d515aa6e0b75af2d6dc0e1a15a1a3a9c58a2cd2671d64f07d8bf4e11013905f",
+    "status": "pass",
+    "directory": "build\\video\\pds\\20261016T120259_929949Z",
+    "resources": {
+      "lut": 10919.0,
+      "registers": 10488.0,
+      "drm": 0.0
+    },
+    "internal_timing_met": true,
+    "artifact_sha256": "f1535f12e7d3ce07fa3c144122e1d31b6fa460ae13f6a97eec44304f90315328",
+    "verify_mask_sha256": "abca3915c7c77fbc8f9e3c583205c9bc4c321934af701d97fe3a81eb2f505da4",
+    "timing_report": "build\\video\\pds\\20261016T120259_929949Z\\report_timing\\video_axi_capture_top.rtr"
+  },
+  "timing": {
+    "core_mhz": 125,
+    "core_setup_wns_ns": 0.087,
+    "all_corners_setup_hold_recovery_removal_pass": true,
+    "constraints_unchanged": true
+  },
+  "package": {
+    "path": "build/video/latest_package_video_axi_capture.json",
+    "sha256": "7c51356bfb3281d8b143af991bc2b5880a2ff7f77f1538d5a70ce38929971f34",
+    "status": "pass",
+    "directory": "build\\video\\releases\\video_axi_capture_f1535f12e7d3",
+    "bitstream_sha256": "f1535f12e7d3ce07fa3c144122e1d31b6fa460ae13f6a97eec44304f90315328",
+    "verify_mask_sha256": "abca3915c7c77fbc8f9e3c583205c9bc4c321934af701d97fe3a81eb2f505da4"
+  },
+  "bridge_timing_refactor": {
+    "path": "build/video/axi-bridge-agent/20261016-timing-guard/evidence.json",
+    "sha256": "5d3f5f993b99103580139d9da862bcf3e21bb420ab809c6d819cfefd2d67509a"
+  },
+  "bridge_updated_quality": {
+    "path": "build/video/axi-physical-audit/20261016-independent/updated_quality.json",
+    "sha256": "2b8a2e37ee69e9ce66487ce0d72f769bc1f2f0835d7409f16c83ec1bf03f929d",
+    "status": "UPDATED_SOURCE_QUALITY_PASS",
+    "bridge_sha256": "c180dbce9901f77ae1d1d93146a27316d5c13e99bc7fa9ca4ccf35cffcbf6867",
+    "canonical_cases": 191,
+    "independent_spec_cases": 354,
+    "bounds_checks": 4495,
+    "first_error_retention_checks": 459,
+    "four_state_guard_equivalence_cases": 524288
+  },
+  "physical_timing_audit": {
+    "path": "build/video/axi-physical-audit/20261016-independent/result.json",
+    "sha256": "e9b9ddb49a350050a7459794830ec2c9d39e4320a23b6e21d5f567cf2e2467c9",
+    "status": "PHYSICAL_TIMING_AUDIT_PASS",
+    "new_report_sha256": "bfeca6c28c36a17c28cbfc8b83604eec8e880195889de8db29762d1f5de1b93b",
+    "netlist_guard_read_data_leaves_old": 256,
+    "netlist_guard_read_data_leaves_new": 0
+  },
+  "independent_reviews": {
+    "bridge_spec_before_equivalent_guard": {
+      "path": "build/video/axi-bridge-spec-review/result.json",
+      "sha256": "590ebc422dfa275a2fec451e73f41cbe95d49c2cfc16ec4bbeb1e04b9b1128a8",
+      "status": "SPECIFICATION_PASS_READY_FOR_INDEPENDENT_CODE_QUALITY_REVIEW"
+    },
+    "bridge_quality_before_equivalent_guard": {
+      "path": "build/video/axi-bridge-quality-review/result.json",
+      "sha256": "8c3ea2a4e0574fb5031df42f1d678ab18ced008c99705a0d04e36cc80225a999",
+      "status": "QUALITY_PASS"
+    },
+    "dma_spec": {
+      "path": "build/video/dma-spec-review/20261016-independent/result.json",
+      "sha256": "fe8ea2f65cc63673a00cf56b606d8d24d89ad3438fe62f259eb8d0e9eb675fbd",
+      "status": "SPEC_PASS"
+    },
+    "dma_packer_quality": {
+      "path": "build/video/dma-quality-review/20261016-independent/result.json",
+      "sha256": "ae1f7c15e1cf344ce7545260812430ee98c3ab0522e2caabd1643ca7ae12d74f",
+      "status": "QUALITY_PASS"
+    },
+    "engine_spec": {
+      "path": "build/video/axi-capture-spec-review/result.json",
+      "sha256": "e09e5387e959c7af2fe97be5ad3a2b6456e3aae4e694a05bd4fec0eecc9c9c20",
+      "status": "SPECIFICATION_PASS_READY_FOR_INDEPENDENT_CODE_QUALITY_REVIEW"
+    },
+    "engine_board_quality": {
+      "path": "build/video/axi-capture-quality-review/result.json",
+      "sha256": "4d19a85ade19658e9603769cfb54a8d40b44f8363a3f6051c46547c2b5aa9cd1",
+      "status": "QUALITY_PASS",
+      "tested_bridge_dependency": "c180dbce9901f77ae1d1d93146a27316d5c13e99bc7fa9ca4ccf35cffcbf6867"
+    }
+  },
+  "failed_first_route": {
+    "path": "build/video/pds/20261016T115053_557801Z/result.json",
+    "sha256": "9c4386d8c6b6e3d57d985d2b751d0cb6873eb82516f06fe7c53f193a7c4380a8",
+    "status": "fail",
+    "error": "Routed internal timing constraints not met; inspect timing report"
+  },
+  "jtag_failed_attempt": {
+    "path": "build/video/board_program/20261016T121021_342085Z/result.json",
+    "sha256": "c4e8b9f60f6645d8277436be2aa0cc0b748fde0b3895a08753a72b6175caceff",
+    "status": "fail",
+    "target": "video_axi_capture",
+    "programmed": false,
+    "verified": false
+  },
+  "jtag_failed_retry": {
+    "path": "build/video/jtag_scan/20261016T121054_322906Z/result.json",
+    "sha256": "5d906bf81ae018073f3f841789c8ee2927816f6644020eb8d163dc11d0bea7aa",
+    "status": "unavailable",
+    "frequency": "500KHz",
+    "device_found": false
+  },
+  "last_rx_receive_only": {
+    "path": "build/video/board_serial/20261016T121133_087757Z/result.json",
+    "sha256": "b67bb01e7973360365e44849ae38df3958056987affca29ac3d5cbeb0719a2d9",
+    "status": "pass",
+    "physical_rx_mode_verified": false,
+    "raw_sha256": "380ea49495e9887447887d23d0f11d64e43b92b692f0a9829c14322f3b7a6254"
+  },
+  "board_state": "New image not programmed: FPGA not identified. Existing RX UART received, current HDMI mode not qualified."
+}

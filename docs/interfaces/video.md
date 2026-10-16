@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位、独立发送初始化、固定 EDID 接收配置及精确输入时序监测；下降沿 RX 采样已通过真实 800×600 输入板测。采集/显示 MMIO、DDR DMA、帧所有权接口仍是后续实施契约。TX-only 端口见 `docs/verification/video/board_smoke.md`，RX/DDR 证据见 `docs/verification/video/rx_ddr_bringup.md`。
+依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位、独立发送初始化、固定 EDID 接收配置及精确输入时序监测；下降沿 RX 采样已通过真实 800×600 输入板测。本批新增 core 域单平面写 DMA 与 RGB888 打包器，物理 HDMI 帧采集、显示 DMA/MMIO 和帧所有权仍待集成。TX-only 端口见 `docs/verification/video/board_smoke.md`，RX/DDR 证据见 `docs/verification/video/rx_ddr_bringup.md`，本批范围见 `docs/verification/video/axi_capture_bringup.md`。
 
 ## 已实现：video_pattern_core
 
@@ -46,6 +46,12 @@ UART C24、115200、8N1。每包 37 字节：ASCII `TRV1`，32 字节 payload，
 flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snapshotfresh、frequencygood、modegood。只有完整帧几何、全部同步/porch、频率及初始化条件同时通过才置 modegood。串口收包成功不表示模式验收成功；type 3 的 VS 周期以像素时钟为单位，不能与 type 1 的行数混淆。两种包分别为完整 CDC 快照，跨包不保证同一帧。
 
 ## 后续 CPU–Video 协议准入
+
+新增单平面组件 `rgb888_packer` 与 `video_write_dma`，以 core 域 ready/valid 流连接；物理 HDMI 的不可背压像素仍须通过后续 FIFO/CDC 和帧接纳器接入。内存递增地址按 R、G、B 保存，`WDATA[8*k+:8]` 对应字节地址 `AWADDR+k`，不能直接把 `24'hRRGGBB` 低字节优先解释为同一格式。
+
+DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和 stride 为16 B对齐，stride≥row_bytes>0；整个有效区和最后总线拍必须在逻辑 DDR 窗口内。stream 为 `s_data[127:0]/s_keep[15:0]/s_row_last`，keep 为全有效或行末连续低位1，row_last 与行字节数严格匹配。每次 AW 前完整缓存 burst，按行、16拍和4 KiB拆分；stride padding 不写。
+
+`result_valid/result_ready/result_success/result_code/result_tag/written_bytes` 是**单平面写结果**，保持至消费；written_bytes 只计正确 BID/OKAY B 覆盖的有效字节，错误 burst 仍可能部分改写内存。它不表示完整 HDMI 帧几何合格，也不等于 `CAPTURE_DONE/INPUT_READY`。abort 丢弃未公开数据，已公开的 AW/W/B 必须排空；上游须 flush 旧 packer/stream 后再发新请求。wrong BID/无主 B/初始化丢失等端口故障须协调复位。
 
 保留规格的控制基址 `0x2001_0000` 与寄存器区间；当前不生成可误用的完整 `video_regs.h`，待详细位定义、复位值、W1C 和忙时规则形成一致版本后一起生成 RTL/C。
 

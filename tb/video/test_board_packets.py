@@ -55,5 +55,29 @@ class PacketTests(unittest.TestCase):
         self.assertEqual(record['vs_period_clocks'],663168)
         self.assertEqual(record['de_rises'],600)
 
+    def axi_dma_packet(self,flags=0x15,count=90000,heartbeat=7,phase=0xa5,base=0x87300000,frame_bytes=1440000):
+        raw=b'TRV1'+struct.pack('<4B7I',4,flags,phase,0,count,0,0,base,frame_bytes,90000,heartbeat)
+        check=0
+        for byte in raw:check^=byte
+        return raw+bytes([check])
+
+    def test_axi_dma_has_distinct_qualified_raw_frame_result(self):
+        records=decode_packets(self.axi_dma_packet(heartbeat=7)+self.axi_dma_packet(heartbeat=9))
+        self.assertEqual(len(records),2)
+        from read_board import qualify_axi_dma
+        self.assertTrue(qualify_axi_dma(records))
+        self.assertEqual(records[0]['test_base_bytes'],0x87300000)
+        self.assertEqual(records[0]['frame_bytes'],1440000)
+        self.assertFalse(qualify_ddr(records))
+        self.assertFalse(qualify_axi_dma(decode_packets(self.ddr_packet(heartbeat=7)+self.ddr_packet(heartbeat=9))))
+
+    def test_axi_dma_rejects_stale_short_error_and_wrong_allocation(self):
+        from read_board import qualify_axi_dma
+        self.assertFalse(qualify_axi_dma(decode_packets(self.axi_dma_packet()*2)))
+        for kwargs in ({'flags':0x1d},{'flags':0x05},{'count':89999},{'phase':0xa4},
+                       {'base':0x80000000},{'frame_bytes':1439999}):
+            records=decode_packets(self.axi_dma_packet(heartbeat=7,**kwargs)+self.axi_dma_packet(heartbeat=9,**kwargs))
+            self.assertFalse(qualify_axi_dma(records))
+
 
 if __name__=='__main__':unittest.main()

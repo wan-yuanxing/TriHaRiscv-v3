@@ -6,6 +6,7 @@
   "sources": [
     "rtl/video/ddr_native_bist.sv",
     "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv",
     "fpga/pg2l100h/rtl/video_ddr_bist_top.sv"
   ],
   "vendor_sources": [],

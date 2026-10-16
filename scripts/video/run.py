@@ -28,7 +28,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -59,6 +59,47 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('axi_bridge','all'):
+            paths=[ROOT/p for p in ('rtl/video/axi128_hmic256.sv',
+                'tb/video/models/axi_bridge_native_model.sv','tb/video/tb_axi128_hmic256.sv')]
+            add_inputs(result,paths)
+            log=simulate(work,'axi_bridge','tb_axi128_hmic256',paths,timeout=600)
+            if 'AXI128_HMIC256_PASS' not in log:raise RuntimeError('Missing bridge pass marker')
+            result['passed'].append('axi_bridge')
+        if args.suite in ('write_dma','all'):
+            for name,source,marker in (
+                ('rgb888_packer','rgb888_packer','RGB888_PACKER_PASS'),
+                ('write_dma','video_write_dma','VIDEO_WRITE_DMA_PASS')):
+                paths=[ROOT/f'rtl/video/{source}.sv',ROOT/f'tb/video/tb_{name}.sv']
+                add_inputs(result,paths)
+                log=simulate(work,name,'tb_'+name,paths,timeout=600)
+                if marker not in log:raise RuntimeError('Missing pass marker: '+name)
+            result['passed'].append('write_dma')
+        if args.suite in ('axi_capture','axi_capture_board','all'):
+            manifest_axi_path=ROOT/'fpga/pg2l100h/project/video_axi_capture.json'
+            manifest_axi=json.loads(manifest_axi_path.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in manifest_axi['sources']]
+            add_inputs(result,[manifest_axi_path,*paths])
+            if args.suite in ('axi_capture','all'):
+                test_paths=[ROOT/'tb/video/tb_axi_capture_bist.sv']
+                add_inputs(result,test_paths)
+                for width,height in ((13,3),(16,3),(1367,3),(800,600)):
+                    name=f'axi_capture_{width}_{height}'
+                    binary=work/(name+'.vvp')
+                    run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_axi_capture_bist',
+                        f'-Ptb_axi_capture_bist.TEST_WIDTH={width}',f'-Ptb_axi_capture_bist.TEST_HEIGHT={height}',
+                        '-o',binary,*paths,*test_paths],work/(name+'_compile.log'))
+                    command=[tool('vvp'),binary]
+                    if width==800:command.append('+normal_only')
+                    log=run_logged(command,work/(name+'_simulation.log'),timeout=600)
+                    if 'VIDEO_AXI_CAPTURE_BIST_PASS' not in log:raise RuntimeError('Missing capture engine pass marker')
+                result['passed'].append('axi_capture')
+            if args.suite in ('axi_capture_board','all'):
+                test_paths=[ROOT/p for p in manifest_axi['tests']]
+                add_inputs(result,test_paths)
+                log=simulate(work,'axi_capture_board',manifest_axi['test_top'],paths+test_paths,timeout=600)
+                if 'VIDEO_AXI_CAPTURE_BOARD_PASS' not in log:raise RuntimeError('Missing capture board pass marker')
+                result['passed'].append('axi_capture_board')
         if args.suite in ('ddr_bist','ddr_board','all'):
             add_inputs(result,[
                 ROOT/'rtl/video/ddr_native_bist.sv',

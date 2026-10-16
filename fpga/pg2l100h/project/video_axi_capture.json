@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "target": "video_axi_capture",
+  "top": "video_axi_capture_top",
+  "test_top": "tb_axi_capture_board",
+  "sources": [
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/video_axi_capture_bist.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv",
+    "fpga/pg2l100h/rtl/video_axi_capture_top.sv"
+  ],
+  "vendor_sources": [],
+  "ddr_ip": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "generated_ip_instance": "I_ips_ddr_top",
+  "tests": [
+    "tb/video/models/ddr_native_model.sv",
+    "tb/video/models/ddr_board_ip_model.sv",
+    "tb/video/tb_axi_capture_board.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf"
+  ],
+  "scope": "Synthetic RGB888 raw plane -> row DMA -> verified AXI128 bridge -> real DDR, using reserved0x87300000..0x874fffff; no physical HDMI capture/CDC, preview/input branches, formal CAPTURE_DONE or CPU fabric."
+}
