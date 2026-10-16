@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "spec_version": "0.6",
+  "mode": {
+    "pixel_hz": 40000000,
+    "h_active": 800,
+    "h_front": 40,
+    "h_sync": 128,
+    "h_back": 88,
+    "v_active": 600,
+    "v_front": 1,
+    "v_sync": 4,
+    "v_back": 23,
+    "hsync_positive": true,
+    "vsync_positive": true
+  },
+  "preview": {
+    "width": 400,
+    "height": 300,
+    "left_x": 0,
+    "right_x": 400,
+    "y": 150,
+    "bytes_per_pixel": 3
+  },
+  "detector": {
+    "active_width": 160,
+    "active_height": 120,
+    "storage_height": 128,
+    "valid_channels": 3,
+    "storage_channels": 8,
+    "channel_order": "BGR",
+    "quantization_owner": "model/yunet/model_manifest"
+  }
+}

@@ -6,12 +6,13 @@ CPU 目标为 RV32IMC_Zicsr 六级单发射、顺序执行、顺序提交。先�
 
 ## 当前状态与文档入口
 
-截至 2026-10-15，本目录已有设计规格、审核记录和技术报告，并已建立本地 Git 仓库；`rtl/`、`sw/`、`tb/`、`model/`、`scripts/`、`fpga/` 为尚未放入实现源码的目录骨架，以 `.gitkeep` 保留空目录。尚无统一硬件构建和回归入口。**当前暂不迁移源码**，本 README 记录后续组织与协作约定，不表示实现已经完成。
+截至 2026-10-16，Video 路线已开始 Windows 原生实施：已建立固定模式同源配置、参考例程哈希提取、时序/彩条 RTL、自校验仿真和 PDS 组件综合入口。CPU/NPU 仍以各自后续交付为准。当前未实现本版板级 HDMI/DDR 完整链路，也未完成上板验收；实际进度见 [Video 工作台账](docs/video/STATUS.md)。
 
 项目唯一远端仓库为 [wan-yuanxing/TriHaRiscv-v3](https://github.com/wan-yuanxing/TriHaRiscv-v3)，本地 remote 名称为 `origin`。`TriHaRiscv-main` 是本地总工程目录名，不另建同名远端仓库。
 
 - [v0.6 设计规格](docs/TriHaRiscv_SoC_Design_Spec_v0.6.md)：功能、接口、地址、时序与验收依据，目录和分工对应第 12.3、15 节。
 - [v0.6 审核记录](docs/reviews/2026-10-14-v06-review.md)：两项文档问题已修复；迁移基线、CPU 来源适配和公共接口冻结仍待后续落实。
+- [Video 开发入口](docs/video/README.md)：Windows 命令、实际文件树和构建产物；[Video 路线计划](docs/superpowers/plans/2026-10-16-video-route.md)列出后续里程碑。
 - [技术报告说明](docs/technical-report/README.md)：LaTeX 正文、插图、参考文献与编译说明。该目录另有局部维护约定。
 
 README 负责工程导航与职责划分，技术细节以当前规格为准。发现冲突时先修订权威定义，再同步相关文档、RTL 和软件；不能用报告中的规划描述作为实测完成证据。
@@ -25,7 +26,7 @@ TriHaRiscv-main/
 ├── README.md                       总工程导航、目录归属与协作方式
 ├── .gitignore                      构建、文档编译、缓存与本地环境排除规则
 ├── .gitattributes                  文本换行与二进制文件规则
-├── config/                         [规划] 地址、寄存器、视频模式等公共定义
+├── config/                         已有视频配置；地址、寄存器契约继续建立
 ├── rtl/
 │   ├── cpu/                        六级 CPU、Cache、基础分支预测
 │   ├── npu/                        普通/逐点/深度卷积、辅助算子、NPU DMA
@@ -40,6 +41,7 @@ TriHaRiscv-main/
 ├── sw/
 │   ├── apps/face_avatar/           [规划] 完整演示入口
 │   ├── drivers/                    [规划] NPU、Video、UART、Timer 等驱动
+│   ├── include/                    已有生成的 video_cfg.h
 │   └── runtime/                    [规划] 启动、帧调度、定点后处理与错误恢复
 ├── model/
 │   └── yunet/                      [规划] 图审计、量化、整数参考、模型包导出
@@ -54,10 +56,11 @@ TriHaRiscv-main/
 ├── docs/
 │   ├── TriHaRiscv_SoC_Design_Spec_v0.6.md
 │   ├── reviews/                    审核发现、修复状态与遗留事项
-│   ├── interfaces/                 [规划] 公共接口契约与变更记录
-│   ├── verification/               [规划] 测试方法、配置和验证证据索引
+│   ├── interfaces/                 公共接口契约与冻结状态
+│   ├── verification/               测试方法、配置和验证证据索引
+│   ├── video/                      Video 开发入口与工作台账
 │   └── technical-report/           技术报告，结构见其 README
-└── build/                          [规划] 自动生成的工程、波形、日志和临时结果
+└── build/                          自动生成的工程、波形、日志和临时结果（忽略）
 ```
 
 手工维护的 RTL、驱动、测试和脚本放入对应源码目录，不放在 `build/`。模型包以 `model/yunet/` 的清单记录来源、版本和哈希，素材包以 `assets/avatars/` 的清单记录；`config/` 引用这些版本，不另抄一份模型或素材定义。大体积权重、像素与生成 IP 的保存策略在建立版本基线时确定，须保留可复现来源和生成方法。
@@ -95,7 +98,7 @@ CPU 维护软件中的统一帧状态和 `graph_active/frame_owner`；Video 提�
 
 ## 实施与集成顺序
 
-以下安排在恢复实施后执行；本地 Git 和唯一远端配置已建立，源码迁移仍待后续开展。
+Video 已从工程基线与独立组件开始实施；其余路线和共同节点按各自准入条件推进。参考复用逐项登记并回归，不整目录迁入旧应用。
 
 1. **补齐迁移基线与最小契约。** 在当前文档与目录基线上登记后续源码来源、版本/哈希、许可证和适配差异，冻结首批地址、寄存器、模型及素材清单。旧工程仅作参考和复用来源，不整目录搬入生成产物。
 2. **三线独立验证。** CPU 跑六级最小系统、CoreMark 和固定输出后处理；NPU 完成图审计、整数参考与代表层；Video 完成固定模式、DDR 自检及人工框/头像分屏。使用协议正确的测试模型解开依赖。

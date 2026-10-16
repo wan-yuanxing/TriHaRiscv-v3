@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "source_policy": "Original vendor bytes staged only under ignored build; keep notices. No blanket redistribution license identified in source inventory.",
+  "imported_manifests": {
+    "TriHaRiscv-v3/targets/pango676/video/hdmi/vendor_sources.json": "c1e08a14ba3fbe551ad648229c2728b22b858db812e979ac3a6fbbb171fb1d93",
+    "TriHaRiscv-v3/targets/pango676/ddr/hmic_contract.json": "6434483eb0ae28ebe033ff12648ea28a8a9cb5f7e88308da84c925c92dfbcf9c"
+  },
+  "references": {
+    "hdmi": {
+      "archive": "2_Demo/4_12_HDMI_IN_DDR3_HDMI_OUT.rar",
+      "sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b",
+      "files": [
+        {
+          "path": "source/rtl/HDMI_IN_DDR3_HDMI_OUT_top.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/HDMI_IN_DDR3_HDMI_OUT_top.v",
+          "sha256": "ca0d180208c8eca76f24b53aced44fe03d7bc9d8a28f39d622e220694dfb56a6"
+        },
+        {
+          "path": "source/hdmi/ms72xx_ctl.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/hdmi/ms72xx_ctl.v",
+          "sha256": "df3876bc1a3bf3a7efe7adeed56b2f9625af4ac9ba56074925671f49751cf69a"
+        },
+        {
+          "path": "source/hdmi/ms7200_ctl.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/hdmi/ms7200_ctl.v",
+          "sha256": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199"
+        },
+        {
+          "path": "source/hdmi/ms7210_ctl.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/hdmi/ms7210_ctl.v",
+          "sha256": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae"
+        },
+        {
+          "path": "source/hdmi/iic_dri.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/hdmi/iic_dri.v",
+          "sha256": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e"
+        },
+        {
+          "path": "source/rtl/sync_vg.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/sync_vg.v",
+          "sha256": "f86ff00096eee2d2cbff122d355eca5ce09c3e3c1518a50a871885441146cc95"
+        },
+        {
+          "path": "source/rtl/fram_buf.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/fram_buf.v",
+          "sha256": "d73f2d3be20f816362dc951eeda07eb7012ab55f27f73e6b2691a07ec2f38981"
+        },
+        {
+          "path": "source/rtl/wr_buf.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/wr_buf.v",
+          "sha256": "2f17442e09c2fcd9feebab9eb725d3a8daee99423121620c4513db9437af16d8"
+        },
+        {
+          "path": "source/rtl/rd_buf.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/rd_buf.v",
+          "sha256": "e211cb731de0d433a2d79a919cf45fce47a5828c7e84191d6f5543909b6cedc4"
+        },
+        {
+          "path": "source/rtl/wr_ctrl.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/wr_ctrl.v",
+          "sha256": "bdfd6cbf962c26ba2756aeea177d612b6428a6058ceb22ebfc452c59ea9193b8"
+        },
+        {
+          "path": "source/rtl/rd_ctrl.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/rd_ctrl.v",
+          "sha256": "40656be19a1afcf0cc743cee652b1d90339392f8ca5ca67cea270ddd12ae22e4"
+        },
+        {
+          "path": "source/rtl/wr_rd_ctrl_top.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/wr_rd_ctrl_top.v",
+          "sha256": "d130db39d2623ddcf78aba31da85a9cda6da269f851bc385938169039e634806"
+        },
+        {
+          "path": "source/rtl/wr_cmd_trans.v",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/source/rtl/wr_cmd_trans.v",
+          "sha256": "ccaa77338301ef6416f48b7aacdd6881bf5e8970d1e0575c41e45b79f826ca86"
+        },
+        {
+          "path": "ipcore/pll/pll.idf",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/ipcore/pll/pll.idf",
+          "sha256": "b0401ee91e562ebd466e7e533eed2cbb6c6d1bb26064a1e91b0a6268706528ee"
+        },
+        {
+          "path": "ipcore/cfg_pll/cfg_pll.idf",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/ipcore/cfg_pll/cfg_pll.idf",
+          "sha256": "dd0d0ccb74cf505f3609cfedca46628a8f770eec24326d29beeb53ece340c54b"
+        },
+        {
+          "path": "ipcore/ddr3_test/ddr3_test.idf",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/ipcore/ddr3_test/ddr3_test.idf",
+          "sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747"
+        },
+        {
+          "path": "HDMI_IN_DDR3_HDMI_OUT_top.fdc",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/HDMI_IN_DDR3_HDMI_OUT_top.fdc",
+          "sha256": "dfabea1eaeb089bb4f3d9602976a6c5d855db32eebc3c2264550380497a4b66e"
+        },
+        {
+          "path": "HDMI_IN_DDR3_HDMI_OUT.pds",
+          "member": "4_12_HDMI_IN_DDR3_HDMI_OUT/4_12_HDMI_IN_DDR3_HDMI_OUT/5_12_HDMI_IN_DDR3_HDMI_OUT/HDMI_IN_DDR3_HDMI_OUT.pds",
+          "sha256": "49e395c1d1489cbeced445f2983063c8cfd803c91f343b2b94c0e26df4168020"
+        }
+      ]
+    },
+    "ddr": {
+      "archive": "2_Demo/2_9_ddr3_test.rar",
+      "sha256": "2d5a28f5a32e694a88e91f80acdfb117ba0bf5c41a64b5f7c3726ae67c7bb6cf",
+      "files": [
+        {
+          "path": "ddr3_test.v",
+          "member": "2_9_ddr3_test/2_9_ddr3_test/ddr3_test/ipcore/ddr3_test/ddr3_test.v",
+          "sha256": "3c5441b4bff33dff73811c3a025ede3b6348cb5779e21778653659b6cbfb84e0"
+        },
+        {
+          "path": "ddr3_test.idf",
+          "member": "2_9_ddr3_test/2_9_ddr3_test/ddr3_test/ipcore/ddr3_test/ddr3_test.idf",
+          "sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747"
+        },
+        {
+          "path": "ddr3_test_ddrphy_top.v",
+          "member": "2_9_ddr3_test/2_9_ddr3_test/ddr3_test/ipcore/ddr3_test/ddr3_test_ddrphy_top.v",
+          "sha256": "a95c28f225d2984401a798f673efff209154ae5beb8a7356d303136b71ea49d5"
+        },
+        {
+          "path": "pnr/ddr_test.fdc",
+          "member": "2_9_ddr3_test/2_9_ddr3_test/ddr3_test/ipcore/ddr3_test/pnr/ddr_test.fdc",
+          "sha256": "bc33ed3e0096b32092384d3e55a1adceec9b954f35a491c1c07325e0f30846e7"
+        },
+        {
+          "path": "pnr/ddr3_test.rcf",
+          "member": "2_9_ddr3_test/2_9_ddr3_test/ddr3_test/ipcore/ddr3_test/pnr/ddr3_test.rcf",
+          "sha256": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002"
+        }
+      ]
+    }
+  }
+}

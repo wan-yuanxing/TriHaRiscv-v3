@@ -1,0 +1,182 @@
+{
+  "date_local": "2026-10-16",
+  "timezone": "Asia/Shanghai",
+  "scope": "Windows-native kickoff: tooling, selected reference staging, portable timing/pattern core",
+  "python_tests": {
+    "total": 11,
+    "passed": 10,
+    "skipped": 1,
+    "skip_reason": "Windows denies creating a test symlink (1314); real hardlink and path alias checks passed"
+  },
+  "raster_test": {
+    "frames": 3,
+    "raster_pixels_per_frame": 663168,
+    "active_pixels_per_frame": 480000,
+    "mid_frame_reset_recovery": true,
+    "synthesis_wrapper_checked": true
+  },
+  "regression": {
+    "status": "pass",
+    "suite": "all",
+    "directory": "build\\video\\regression\\20261016T071058_316663Z",
+    "passed": [
+      "config",
+      "timing"
+    ],
+    "physical_board": false,
+    "vendor_ddr_training": false,
+    "inputs": {
+      "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+      "fpga/pg2l100h/project/video_timing.json": "0a90fb6d203314e22c9e6b271a8c30f368b0955b982f5d5bab2ff48c305227dd",
+      "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+      "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+      "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+      "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+      "scripts/video/build_pds.py": "f74343fb3f6c5acd7253a5bd2042e91c87af82cbe66fa3498ae6c3ea79739be3",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/doctor.py": "93c8c5953b47bc064db65fbd7ebc695945a6483f203b86788c34569ab6e9f63f",
+      "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+      "scripts/video/prepare_reference.py": "69b84235d02b82837b942c8539c3b84724b2b14fab3f4799599347da70d44288",
+      "scripts/video/run.py": "53698f4f3c85926e6327e39f6f099a49672121c603e01d4d98d8a255036257b2",
+      "sw/include/video_cfg.h": "5dc811fddd42be0893d50ad125f59e39c5cb4c4ebbf78016b71b0aa7231c3a12",
+      "tb/video/tb_timing.sv": "4a52e62faced0029f9c6e47c7a71f0ee44b37109e62fc7f5a9964bc945676196",
+      "tb/video/test_config.py": "2ae48a2c2937a0f3c1aba01ecc860c9ce94b0c7c17b9ad7c0d8634a7ed9c1892",
+      "tb/video/test_references.py": "121cc51366367a838a6d7a3596b36b71c80a10e9bb4028561143f9bd9abbcaad"
+    },
+    "python": "3.13.13",
+    "iverilog_version": "Icarus Verilog version 12.0 (devel) (s20150603-1539-g2693dd32b)",
+    "vvp_version": "Icarus Verilog runtime version 12.0 (devel) (s20150603-1539-g2693dd32b)"
+  },
+  "synthesis": {
+    "status": "pass",
+    "target": "video_timing",
+    "stage": "synth",
+    "directory": "build\\video\\pds\\20261016T071058_314480Z",
+    "physical_board": false,
+    "timing_closed": false,
+    "vendor_ddr_training": false,
+    "scope": "standalone timing/pattern synthesis; no board pins, HDMI or DDR",
+    "inputs": {
+      "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+      "fpga/pg2l100h/constraints/video_timing.fdc": "9beba3ed5381d15c572af57a9d337d0b0b909fc5c03445dc749140d4c000782e",
+      "fpga/pg2l100h/project/video_timing.json": "0a90fb6d203314e22c9e6b271a8c30f368b0955b982f5d5bab2ff48c305227dd",
+      "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+      "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+      "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+      "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+      "scripts/video/build_pds.py": "f74343fb3f6c5acd7253a5bd2042e91c87af82cbe66fa3498ae6c3ea79739be3",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/doctor.py": "93c8c5953b47bc064db65fbd7ebc695945a6483f203b86788c34569ab6e9f63f",
+      "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+      "scripts/video/prepare_reference.py": "69b84235d02b82837b942c8539c3b84724b2b14fab3f4799599347da70d44288",
+      "scripts/video/run.py": "53698f4f3c85926e6327e39f6f099a49672121c603e01d4d98d8a255036257b2"
+    },
+    "pds_version": "2022.2-SP6.4",
+    "resources": {
+      "lut": 53.0,
+      "registers": 21.0,
+      "drm": 0.0
+    },
+    "artifact": "build\\video\\pds\\20261016T071058_314480Z\\synthesize\\video_pattern_core.snr",
+    "artifact_sha256": "d82f6c8414eb8ffe569fd696b4a0e602f43f2e8746fc430fd3afcfe470bae8ac"
+  },
+  "reference_staging": {
+    "hdmi": {
+      "files_verified": 18,
+      "archive_sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b"
+    },
+    "ddr": {
+      "files_verified": 5,
+      "archive_sha256": "2d5a28f5a32e694a88e91f80acdfb117ba0bf5c41a64b5f7c3726ae67c7bb6cf"
+    }
+  },
+  "reference_manifest_sha256": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+  "tool_discovery": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13",
+    "python_executable": "D:\\miniconda3\\python.exe",
+    "python_supported": true,
+    "tools": {
+      "iverilog": {
+        "path": "D:\\iverilog\\bin\\iverilog.EXE",
+        "exit_code": 0,
+        "version": "Icarus Verilog version 12.0 (devel) (s20150603-1539-g2693dd32b)"
+      },
+      "vvp": {
+        "path": "D:\\iverilog\\bin\\vvp.EXE",
+        "exit_code": 0,
+        "version": "Icarus Verilog runtime version 12.0 (devel) (s20150603-1539-g2693dd32b)"
+      },
+      "pds_shell": {
+        "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+        "exit_code": 0,
+        "version": "2022.2-SP6.4"
+      },
+      "vsim": {
+        "path": "D:\\modeltech64_2020.4\\win64\\vsim.EXE",
+        "exit_code": 0,
+        "version": "Model Technology ModelSim SE-64 vsim 2020.4 Simulator 2020.10 Oct 13 2020"
+      },
+      "tar": {
+        "path": "C:\\Windows\\system32\\tar.EXE",
+        "exit_code": 0,
+        "version": "bsdtar 3.8.8 - libarchive 3.8.8 zlib/1.2.13.1-motley liblzma/5.8.1 bz2lib/1.0.8 libzstd/1.5.7 cng/2.0 libb2/bundled "
+      }
+    },
+    "physical_board": false,
+    "scope": "executable/version discovery; no license or board signoff",
+    "required_tools_ready": true
+  },
+  "native_tool_smoke": [
+    {
+      "tool": "vlib",
+      "exit_code": 0,
+      "pass_marker": false,
+      "error_count": 0,
+      "log": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\vlib.log",
+      "summary": []
+    },
+    {
+      "tool": "vlog",
+      "exit_code": 0,
+      "pass_marker": false,
+      "error_count": 0,
+      "log": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\vlog.log",
+      "summary": [
+        "Errors: 0, Warnings: 0"
+      ]
+    },
+    {
+      "tool": "vsim",
+      "exit_code": 0,
+      "pass_marker": true,
+      "error_count": 0,
+      "log": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\vsim.log",
+      "summary": [
+        "# Errors: 0, Warnings: 0"
+      ]
+    },
+    {
+      "tool": "pds_compile_synthesize",
+      "exit_code": 0,
+      "artifact_exists": true,
+      "diagnostics": [
+        "C: SDC-2025: Clock source 'n:clk' need a clock constraint, please use 'create_clock' or 'create_generate_clock' to generate."
+      ],
+      "log": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\pds_smoke.log",
+      "artifact": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\synthesize\\tool_smoke.snr",
+      "note": "Initial requested work_dir did not exist; outputs landed in process cwd. Ensure work_dir exists and matches cwd."
+    },
+    {
+      "tool": "pds_constrained_compile_synthesize",
+      "exit_code": 0,
+      "artifact_exists": true,
+      "artifact": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\pds_constrained\\synthesize\\tool_smoke.snr",
+      "diagnostics": [],
+      "log": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\audit\\native_smoke_20261016_145614\\pds_constrained\\pds_smoke.log"
+    }
+  ],
+  "physical_board": false,
+  "vendor_ddr_training": false,
+  "timing_closed": false
+}

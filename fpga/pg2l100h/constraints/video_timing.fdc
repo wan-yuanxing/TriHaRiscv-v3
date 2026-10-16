@@ -1,0 +1,2 @@
+# Component timing only. Board I/O/PLL/CDC constraints belong to board targets.
+create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]
