@@ -21,6 +21,8 @@
 
 默认FIFO深度2048、字宽48；地址宽11，满时绝不推进写指针或覆盖旧数据。输出寄存器可额外持有一个已预取字，文档/水位把它与RAM容量区分。Gray跨域只允许单步本地指针更新，源总线时延与skew有独立约束，不用全时钟组false-path掩盖总线。
 
+入口支持FIFO_ADDR_WIDTH=1..11、FRAME_WIDTH/FRAME_HEIGHT=1..2048，非法参数在展开/仿真时拒绝；12bit EOF水位能精确表示受支持RAM容量，不用饱和值假称更大FIFO的保守水位。通用FIFO独立参数化，入口的范围限制不代表器件资源保证。
+
 每字编码：`[47:46]` kind，PIX=0、EOF=1，其余非法；PIX的bit45=row_last、[23:0]=RRGGBB，其余0。EOF的bit44=good、[43:32]=RAM保守最大占用（包含同步延迟影响，不计输出寄存器）、[31:0]=源帧CRC。RAM写端占用由本地write binary减同步read Gray解码获得，满标志与该保守观测一致。
 
 ingress接口固定为 `pixel_clk/pixel_reset_n/core_clk/core_reset_n`，源输入 `pixel_valid/pixel_rgb[23:0]/pixel_x[10:0]/pixel_y[10:0]/frame_start/frame_end/frame_good/mode_good/rx_ready`；core输入 `arm_toggle/cancel`，输出 `m_valid/m_ready/m_data[47:0]/source_fault/overflow`。几何参数 `FRAME_WIDTH/FRAME_HEIGHT`、FIFO参数 `FIFO_ADDR_WIDTH`。source_fault和overflow是core域两级同步后的保持状态。

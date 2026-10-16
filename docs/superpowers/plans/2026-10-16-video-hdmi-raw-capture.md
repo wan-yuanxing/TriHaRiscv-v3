@@ -14,12 +14,12 @@
 
 文件：创建 `rtl/video/video_async_fifo.sv`、`video_capture_ingress.sv` 和 `tb/video/tb_video_async_fifo.sv`、`tb_video_capture_ingress.sv`。
 
-- [ ] 先写独立队列oracle TB：两个自由运行、互不整倍频时钟，随机write/read、回卷、满/空、输出stall稳定、协调reset，未实现时命令返回非零。
-- [ ] 实现注册Gray指针、两级同步和同步读RAM，输出寄存器预取；记录真实RAM/输出容量及full/highwater。
-- [ ] 先写入口TB，arm在中途、下一合法frame_start接纳首像素，PIX/EOF逐字核对、源CRC独立oracle，overflow/错坐标/ready丢失/cancel只失败不伪造good EOF。
-- [ ] 按设计固定48bit封包、arm/cancel握手和source fault保持；小几何及异步相位扫描通过。
-- [ ] 执行命令并保存RED/GREEN：`iverilog -g2012 -Wall -s tb_video_async_fifo -o build/video/hdmi_ingress/fifo.vvp rtl/video/video_async_fifo.sv tb/video/tb_video_async_fifo.sv`；对应ingress加入两个RTL及TB。`vvp`必须出现独立PASS标记且exit0。
-- [ ] 独立规格审查通过，再质量审查；本任务只产生数字证据。
+- [x] 先写独立队列oracle TB：两个自由运行、互不整倍频时钟，随机write/read、回卷、满/空、输出stall稳定、协调reset，未实现时命令返回非零。
+- [x] 实现注册Gray指针、两级同步和同步读RAM，输出寄存器预取；记录真实RAM/输出容量及full/highwater。
+- [x] 先写入口TB，arm在中途、下一合法frame_start接纳首像素，PIX/EOF逐字核对、源CRC独立oracle，overflow/错坐标/ready丢失/cancel只失败不伪造good EOF。
+- [x] 按设计固定48bit封包、arm/cancel握手和source fault保持；小几何及异步相位扫描通过。
+- [x] 执行命令并保存RED/GREEN：`iverilog -g2012 -Wall -s tb_video_async_fifo -o build/video/hdmi_ingress/fifo.vvp rtl/video/video_async_fifo.sv tb/video/tb_video_async_fifo.sv`；对应ingress加入两个RTL及TB。`vvp`必须出现独立PASS标记且exit0。
+- [x] 独立规格审查通过，再质量审查；本任务只产生数字证据。
 
 ## Task 2：生产DMA集成与读回CRC
 
