@@ -28,7 +28,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_engine", "hdmi_capture_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -59,6 +59,56 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('capture_ingress','all'):
+            paths=[ROOT/p for p in ('rtl/video/video_async_fifo.sv','rtl/video/video_capture_ingress.sv',
+                                   'tb/video/tb_video_async_fifo.sv','tb/video/tb_video_capture_ingress.sv')]
+            add_inputs(result,paths)
+            for address_width,write_half,read_half,phase in ((1,5,7,2),(3,3,11,1),(3,13,2,4),(4,5,5,0),(11,12,4,1)):
+                name=f'capture_fifo_{address_width}_{write_half}_{read_half}'
+                binary=work/(name+'.vvp')
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_video_async_fifo',
+                    f'-Ptb_video_async_fifo.TEST_ADDR_WIDTH={address_width}',
+                    f'-Ptb_video_async_fifo.WR_HALF={write_half}',f'-Ptb_video_async_fifo.RD_HALF={read_half}',
+                    f'-Ptb_video_async_fifo.RD_PHASE={phase}','-o',binary,*paths],work/(name+'_compile.log'))
+                log=run_logged([tool('vvp'),binary],work/(name+'_simulation.log'),timeout=600)
+                if 'VIDEO_ASYNC_FIFO_PASS' not in log:raise RuntimeError('Missing async FIFO pass marker')
+            for width,height,address_width in ((5,3,4),(9,1,3),(13,3,3),(13,3,6)):
+                name=f'capture_ingress_{width}_{height}_{address_width}'
+                binary=work/(name+'.vvp')
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_video_capture_ingress',
+                    f'-Ptb_video_capture_ingress.TEST_WIDTH={width}',f'-Ptb_video_capture_ingress.TEST_HEIGHT={height}',
+                    f'-Ptb_video_capture_ingress.TEST_FIFO_ADDR_WIDTH={address_width}',
+                    '-o',binary,*paths],work/(name+'_compile.log'))
+                log=run_logged([tool('vvp'),binary],work/(name+'_simulation.log'),timeout=600)
+                if 'VIDEO_CAPTURE_INGRESS_PASS' not in log:raise RuntimeError('Missing capture ingress pass marker')
+            result['passed'].append('capture_ingress')
+        if args.suite in ('capture_engine','all'):
+            paths=[ROOT/p for p in ('rtl/video/video_async_fifo.sv','rtl/video/video_capture_ingress.sv',
+                'rtl/video/axi128_hmic256.sv','rtl/video/rgb888_packer.sv','rtl/video/video_write_dma.sv',
+                'rtl/video/video_capture_engine.sv','tb/video/tb_video_capture_engine.sv')]
+            add_inputs(result,paths)
+            for width,height in ((13,3),(16,3),(1367,3),(800,600)):
+                name=f'capture_engine_{width}_{height}'
+                binary=work/(name+'.vvp')
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_video_capture_engine',
+                    f'-Ptb_video_capture_engine.TEST_WIDTH={width}',f'-Ptb_video_capture_engine.TEST_HEIGHT={height}',
+                    '-o',binary,*paths],work/(name+'_compile.log'))
+                command=[tool('vvp'),binary]
+                if width==800:command.append('+normal_only')
+                log=run_logged(command,work/(name+'_simulation.log'),timeout=600)
+                if 'VIDEO_CAPTURE_ENGINE_PASS' not in log:raise RuntimeError('Missing physical capture engine pass marker')
+            result['passed'].append('capture_engine')
+        if args.suite in ('hdmi_capture_board','all'):
+            target=ROOT/'fpga/pg2l100h/project/video_hdmi_capture.json'
+            capture=json.loads(target.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in capture['sources']+capture['tests']]
+            vendor=[ROOT/'build/video/vendor/hdmi'/p for p in capture['vendor_sources']]
+            add_inputs(result,[target,*paths,*vendor,ROOT/'config/video_edid.hex',ROOT/'rtl/video/include/video_edid.vh'])
+            run_logged([sys.executable,ROOT/'scripts/video/gen_edid.py','--check'],work/'capture_edid_check.log')
+            log=simulate(work,'hdmi_capture_board',capture['test_top'],paths+vendor,
+                         [ROOT/'rtl/video/include'],timeout=600)
+            if 'VIDEO_HDMI_CAPTURE_BOARD_PASS' not in log:raise RuntimeError('Missing HDMI capture board pass marker')
+            result['passed'].append('hdmi_capture_board')
         if args.suite in ('axi_bridge','all'):
             paths=[ROOT/p for p in ('rtl/video/axi128_hmic256.sv',
                 'tb/video/models/axi_bridge_native_model.sv','tb/video/tb_axi128_hmic256.sv')]

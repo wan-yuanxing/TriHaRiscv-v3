@@ -35,11 +35,12 @@ def review_messages(log, verified_fdc=""):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
-    board = args.target in ("video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture")
-    ddr = args.target in ("video_ddr_bist", "video_axi_capture")
+    hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture")
+    ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture")
+    board = hdmi or ddr
     if not board and args.stage != "synth":
         parser.error("Component targets have no board pins; only synth is supported")
     work = fresh_run("pds")
@@ -65,7 +66,7 @@ def main():
         names = manifest["sources"] + manifest["constraints"] + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
             str(manifest_path.relative_to(ROOT))]
-        if args.target == "video_rx_board":
+        if args.target in ("video_rx_board", "video_hdmi_capture"):
             run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
             names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
         if ddr:
@@ -79,7 +80,7 @@ def main():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, destination)
         vendor_sources = []
-        if board and not ddr:
+        if hdmi:
             _, wrapper = generate_pll(work / "ip/video_pll")
             vendor_sources.append(wrapper)
             reference = json.loads((ROOT / "fpga/pg2l100h/ip/video_reference_manifest.json").read_text(encoding="utf-8"))
@@ -103,7 +104,7 @@ def main():
             idf, provenance = generate_ddr(work / 'ip/ddr')
             vendor_sources.append(idf)
             result['ddr_ip_provenance'] = provenance
-            result['vendor_inputs'] = {str(idf.relative_to(work)): sha256(idf)}
+            result.setdefault('vendor_inputs',{}).update({str(idf.relative_to(work)): sha256(idf)})
         lines = ["set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676"]
         lines += ["add_design " + tcl_path(work / "src" / name)
                   for name in manifest["sources"]]
@@ -116,6 +117,12 @@ def main():
             route="pnr -optimize_multi_corner_timing -fix_hold_violation"
             if ddr:
                 route += " -slack_prior_in_global_router TRUE"
+            if args.target == "video_hdmi_capture":
+                # The combined HDMI/DDR target is route-limited. Try six
+                # deterministic placements (4..9) serially; the final report
+                # still has to meet every constraint before packaging.
+                route += (" -gplace_seed 4 -gplace_times 6 -seed_step 1"
+                          " -saved_outcome 1 -parallel 1")
             lines += ["dev_map",route,"report_timing"]
         if args.stage == "bitstream":
             lines += ["gen_bit_stream -scbv {High Voltage}"]
@@ -126,7 +133,7 @@ def main():
             [executable, "-version"], work / "version.log").strip()
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
-                         cwd=work, timeout=1800 if ddr else 900)
+                         cwd=work, timeout=3600 if args.target == "video_hdmi_capture" else 1800 if ddr else 900)
         reference_fdc = ""
         if board:
             reference = json.loads((ROOT / 'fpga/pg2l100h/ip/video_reference_manifest.json').read_text(encoding='utf-8'))

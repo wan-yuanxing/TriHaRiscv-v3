@@ -53,6 +53,12 @@ DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和
 
 `result_valid/result_ready/result_success/result_code/result_tag/written_bytes` 是**单平面写结果**，保持至消费；written_bytes 只计正确 BID/OKAY B 覆盖的有效字节，错误 burst 仍可能部分改写内存。它不表示完整 HDMI 帧几何合格，也不等于 `CAPTURE_DONE/INPUT_READY`。abort 丢弃未公开数据，已公开的 AW/W/B 必须排空；上游须 flush 旧 packer/stream 后再发新请求。wrong BID/无主 B/初始化丢失等端口故障须协调复位。
 
+新增真实源入口 `video_capture_ingress` 和独立诊断引擎 `video_capture_engine`：core先接纳单次descriptor再翻转arm；像素域等待合法帧首，PIX/EOF经48bit Gray指针FIFO跨域。EOF同时携带good、源CRC和保守RAM水位；源坏帧、overflow和cancel保持至协调reset，不能从下一帧补旧帧。默认FIFO RAM2048字，另有一个读输出寄存器；无条件持续供数或任意native停顿下无溢出不在保证内。
+
+引擎分别保持good EOF和成功DMA结果，两者齐备才读DDR，按递增有效字节地址逐字节计算CRC32/ISO-HDLC。480000像素、1440000字节、tag1、计数/行末和CRC完整一致才置本地raw诊断done；读AR/R和写AW/W/B故障后按advertised长度排空。`busy=0`在故障后只表示诊断任务停止推进，不能作为端口已经排空或可复用的凭证；本阶段必须协调reset才重采。
+
+联合目标 `video_hdmi_capture` 的type5 UART报告原始源单帧数据一致性，本地输出仍是独立彩条。物理结果和CRC碰撞边界见 `docs/verification/video/hdmi_raw_capture.md`；该本地done不具有SoC三分支CAPTURE_DONE或CPU槽所有权语义。
+
 保留规格的控制基址 `0x2001_0000` 与寄存器区间；当前不生成可误用的完整 `video_regs.h`，待详细位定义、复位值、W1C 和忙时规则形成一致版本后一起生成 RTL/C。
 
 - CAPTURE_REQUEST：保存请求；在下一合法完整输入帧边界发布带 slot/frame_id 的 CAPTURE_ACCEPTED。

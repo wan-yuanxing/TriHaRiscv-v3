@@ -79,5 +79,48 @@ class PacketTests(unittest.TestCase):
             records=decode_packets(self.axi_dma_packet(heartbeat=7,**kwargs)+self.axi_dma_packet(heartbeat=9,**kwargs))
             self.assertFalse(qualify_axi_dma(records))
 
+    def hdmi_capture_packet(self,**changes):
+        fields=dict(flags=0x75,phase=0xa5,error_code=0,captured_pixels=480000,
+                    checked_bytes=1440000,source_crc=0x8b43291a,ddr_crc=0x8b43291a,
+                    frame_tag=1,fifo_peak=123,heartbeat=7)
+        fields.update(changes)
+        raw=b'TRV1'+struct.pack('<4B7I',5,*fields.values())
+        checksum=0
+        for byte in raw:checksum^=byte
+        return raw+bytes([checksum])
+
+    def test_hdmi_capture_requires_distinct_physical_input_result(self):
+        from read_board import qualify_hdmi_capture
+        records=decode_packets(self.hdmi_capture_packet(heartbeat=7)+self.hdmi_capture_packet(heartbeat=9))
+        self.assertEqual(records[0]['captured_pixels'],480000)
+        self.assertEqual(records[0]['source_crc'],0x8b43291a)
+        self.assertTrue(records[0]['rx_mode_good'])
+        self.assertTrue(qualify_hdmi_capture(records))
+        self.assertFalse(qualify_hdmi_capture(records[:1]))
+        self.assertFalse(qualify_hdmi_capture(decode_packets(self.axi_dma_packet(heartbeat=7)+self.axi_dma_packet(heartbeat=9))))
+
+    def test_hdmi_capture_rejects_stale_partial_fault_crc_and_missing_fields(self):
+        from read_board import qualify_hdmi_capture
+        self.assertFalse(qualify_hdmi_capture(decode_packets(self.hdmi_capture_packet()*2)))
+        bad=[{'flags':0x75^(1<<bit)} for bit in range(8)]
+        bad += [{'phase':0xa4},{'error_code':1},{'captured_pixels':479999},
+                {'checked_bytes':1439999},{'ddr_crc':0x8b43291b},{'frame_tag':2},
+                {'fifo_peak':2049},{'fifo_peak':0}]
+        for changes in bad:
+            with self.subTest(changes=changes):
+                records=decode_packets(self.hdmi_capture_packet(heartbeat=7,**changes)+self.hdmi_capture_packet(heartbeat=9,**changes))
+                self.assertFalse(qualify_hdmi_capture(records))
+        records=decode_packets(self.hdmi_capture_packet(heartbeat=7)+self.hdmi_capture_packet(heartbeat=9))
+        for field in records[-1]:
+            if field!='flags':
+                missing=[dict(row) for row in records];missing[-1].pop(field)
+                self.assertFalse(qualify_hdmi_capture(missing),field)
+
+    def test_hdmi_capture_accepts_equal_zero_crc_and_maximum_ram_occupancy(self):
+        from read_board import qualify_hdmi_capture
+        records=decode_packets(self.hdmi_capture_packet(heartbeat=0xffffffff,source_crc=0,ddr_crc=0,fifo_peak=2048)+
+                               self.hdmi_capture_packet(heartbeat=0,source_crc=0,ddr_crc=0,fifo_peak=2048))
+        self.assertTrue(qualify_hdmi_capture(records))
+
 
 if __name__=='__main__':unittest.main()

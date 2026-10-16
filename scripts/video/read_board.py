@@ -43,6 +43,11 @@ def decode_packets(data):
                     'first_error_xor_low32','test_base_bytes','frame_bytes','expected_beats','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked')
+        elif packet[4]==5:
+            fields=('type','flags','phase','error_code','captured_pixels','checked_bytes',
+                    'source_crc','ddr_crc','frame_tag','fifo_peak','heartbeat')
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
         else:continue
         for bit,name in enumerate(flags):
             record[name]=bool(record['flags']&(1<<bit))
@@ -71,6 +76,19 @@ def qualify_axi_dma(records):
                and r['test_base_bytes']==0x87300000 and r['frame_bytes']==1440000 for r in rows[-2:])
 
 
+def qualify_hdmi_capture(records):
+    rows=[r for r in records if r.get('type')==5]
+    if len(rows)<2 or rows[-1].get('heartbeat')==rows[-2].get('heartbeat'):return False
+    return all(all(r.get(name) is True for name in
+                   ('init_done','done','all_pll_locked','rx_mode_good','tx_done'))
+               and all(r.get(name) is False for name in ('busy','error','overflow'))
+               and r.get('phase')==0xa5 and r.get('error_code')==0
+               and r.get('captured_pixels')==480000 and r.get('checked_bytes')==1440000
+               and isinstance(r.get('source_crc'),int) and r['source_crc']==r.get('ddr_crc')
+               and r.get('frame_tag')==1 and 1<=r.get('fifo_peak',0)<=2048
+               and isinstance(r.get('heartbeat'),int) for r in rows[-2:])
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -81,7 +99,8 @@ def main():
     work=fresh_run('board_serial')
     result={'status':'running','directory':str(work.relative_to(ROOT)), 'port':args.port,'records':[],
             'operation':'receive_only_uart','physical_rx_mode_verified':False,
-            'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False}
+            'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False,
+            'physical_hdmi_raw_capture_verified':False}
     write_json(BUILD/'latest_board_serial.json',result)
     try:
         shell=shutil.which('powershell.exe')
@@ -125,6 +144,7 @@ try {
             and not(row['tx_error'] or row['rx_error']) for row in rx_records[-3:])
         result['physical_ddr_bist_verified']=qualify_ddr(records)
         result['physical_axi_dma_verified']=qualify_axi_dma(records)
+        result['physical_hdmi_raw_capture_verified']=qualify_hdmi_capture(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

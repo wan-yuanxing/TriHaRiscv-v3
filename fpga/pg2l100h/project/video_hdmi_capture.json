@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "target": "video_hdmi_capture",
+  "top": "video_hdmi_capture_top",
+  "test_top": "tb_video_hdmi_capture_board",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "rtl/video/video_test_pattern.sv",
+    "rtl/video/video_pattern_core.sv",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "rtl/video/video_rx.sv",
+    "rtl/video/video_rx_measure.sv",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/video_write_dma.sv",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv",
+    "rtl/video/video_async_fifo.sv",
+    "rtl/video/video_capture_ingress.sv",
+    "rtl/video/video_capture_engine.sv",
+    "fpga/pg2l100h/rtl/video_hdmi_capture_top.sv"
+  ],
+  "vendor_sources": [
+    "source/hdmi/ms7210_ctl.v",
+    "source/hdmi/iic_dri.v",
+    "source/hdmi/ms7200_ctl.v"
+  ],
+  "ddr_ip": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "generated_ip_instance": "I_ips_ddr_top",
+  "tests": [
+    "tb/video/models/ddr_native_model.sv",
+    "tb/video/models/ddr_board_ip_model.sv",
+    "tb/video/models/video_pll_model.sv",
+    "tb/video/tb_video_hdmi_capture_board.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc"
+  ],
+  "scope": "Single physical HDMI RGB888 frame through asynchronous FIFO and production DMA/AXI bridge into reserved DDR, source/readback CRC comparison; local output colorbars. No preview/input branches, formal CAPTURE_DONE, CPU fabric or external AC signoff."
+}

@@ -36,13 +36,13 @@
 
 文件：创建 `fpga/pg2l100h/rtl/video_hdmi_capture_top.sv`、`project/video_hdmi_capture.json`、`constraints/video_hdmi_capture.fdc`、`tb/video/tb_video_hdmi_capture_board.sv`；修改 `scripts/video/{run,build_pds,package_board,program_board,read_board}.py`、`tb/video/test_board_packets.py`。
 
-- [ ] 合并现有两个物理壳，保留DDR PHY/PLL/复位结构和必要层次，帧入口复位不能随RX enable/PLL临时丢失单独清FIFO。
-- [ ] 组合显式HDMI/vendor与DDR IDF输入；build脚本同时生成两种IP、分别哈希核验，沿用严格消息审查和所有原约束margin。
-- [ ] 新FDC只添加HDMI官方引脚和新CDC：wGray/rGray source-period max-delay＋skew、单bit第一同步级例外、EOF metadata通过FIFO，源总线无未定义跨域。
-- [ ] 先补type5独立host包测试，缺字段/错误CRC/overflow/旧heartbeat均不得合格，再实现解码和qualification。
-- [ ] 板级数字替身检查实际UART、冷启动、无源/无core、KEY0、PLL/init loss和stalePASS；不把数字IP当物理校准证据。
-- [ ] `run.py` 接入 `capture_ingress/capture_engine/hdmi_capture_board` 和all；最终冻结输入后跑 `python scripts/video/run.py --suite all`。
-- [ ] 规格及质量审查，核对原RX/native/AXI目标仍可构建/仿真。
+- [x] 合并现有两个物理壳，保留DDR PHY/PLL/复位结构和必要层次，帧入口复位不能随RX enable/PLL临时丢失单独清FIFO。
+- [x] 组合显式HDMI/vendor与DDR IDF输入；build脚本同时生成两种IP、分别哈希核验，沿用严格消息审查和所有原约束margin。
+- [x] 新FDC只添加HDMI官方引脚和新CDC：wGray/rGray source-period max-delay＋skew、单bit第一同步级例外、EOF metadata通过FIFO，源总线无未定义跨域。
+- [x] 先补type5独立host包测试，缺字段/错误CRC/overflow/旧heartbeat均不得合格，再实现解码和qualification。
+- [x] 板级数字替身检查实际UART、冷启动、无源/无core、KEY0、PLL/init loss和stalePASS；不把数字IP当物理校准证据。
+- [x] `run.py` 接入 `capture_ingress/capture_engine/hdmi_capture_board` 和all；最终冻结输入后跑 `python scripts/video/run.py --suite all`。
+- [x] 规格及质量审查，核对原RX/native/AXI目标仍可构建/仿真。
 
 ## Task 4：PDS、物理验收和交付
 

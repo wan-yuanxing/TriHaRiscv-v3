@@ -25,6 +25,7 @@
 | V015b-core | AXI128→HMIC256 桥核心 | core 域串行读写、上下 lane、非法 burst 排空、masked readback-before-B 和故障隔离；canonical191例、独立354例及质量复核通过；共享 fabric/CDC/跨主端排序仍待集成 |
 | V020a | RGB888 打包与行式写 DMA | R/G/B 字节序、跨拍 spill、行尾 keep、stride padding、4 KiB拆分、abort/错误排空；完整 raw/preview 数字测试及独立规格/质量审查通过 |
 | V020b | 合成 raw AXI/DMA物理自检与KEY0 | 完整800×600、1,440,000字节/90,000拍数字及物理读回通过；60秒完成状态无错，KEY0后heartbeat329→1、17个新PASS包；PDS125 MHz内部多角时序通过，core WNS +0.087 ns，10919 LUT、10488寄存器、0 DRM；已恢复RX、验证输入合格，用户确认稳定彩条 |
+| V020c-in-progress | 真实HDMI单帧raw采集 | FIFO/入口和引擎已完成数字实现及独立规格/质量审查；完整800×600字节oracle与CRC通过，139个bit-port及联合顶层规格审查通过。联合PDS仍有setup缺口，正在保持原约束优化布局，物理采集尚未验收 |
 
 已获得 P1 三项物理功能通过证据：稳定彩条、合法 HDMI 输入时序、DDR 校准及复位后自检。本批新增 AXI 桥核心和单平面写 DMA，尚未接入真实 HDMI 帧流或 CPU fabric；采集/显示整链路、共享接口冻结、外部 AC 签核及更长稳定性记录仍未完成。
 

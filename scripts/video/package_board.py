@@ -10,7 +10,7 @@ from common import BUILD, ROOT, sha256, write_json
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture'),default='video_board_smoke')
+    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture'),default='video_board_smoke')
     args=parser.parse_args([] if argv is None else argv)
     for path in (BUILD/'latest_package.json', BUILD/f'latest_package_{args.target}.json'):
         write_json(path,{"status":"running","target":args.target,"physical_board":False})
@@ -55,11 +55,14 @@ def package_current(target='video_board_smoke'):
         f"Scope: {result.get('scope','See manifest')}\n"
         "Internal routed timing passed. External board AC timing is not signed off.\n"
         "Device/board operation requires separate hardware evidence.\n"+
-        ("AXI/DMA destructive selftest: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART C24 at115200.\n" if target=='video_axi_capture' else
+        ("HDMI raw capture/CRC: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART type5 C24 at115200.\n" if target=='video_hdmi_capture' else
+         "AXI/DMA destructive selftest: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART C24 at115200.\n" if target=='video_axi_capture' else
          "DDR standalone destructive BIST: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART C24 at115200.\n" if target=='video_ddr_bist' else
          "LED0 heartbeat; LED1 PLL lock; LED2 input mode good; LED3 init error. UART C24 at115200.\n" if target=='video_rx_board'
          else "LED0 A20 heartbeat; LED1 C18 PLL lock; LED2 C19 error; LED3 E18 init done.\n")+
-        "KEY0 C22 active-low reset. DDR target interrupts HDMI output.\n"
+        "KEY0 C22 active-low reset.\n"+
+        ("Local HDMI color bars remain active during single-frame input capture.\n" if target=='video_hdmi_capture'
+         else "Standalone DDR targets interrupt HDMI output.\n")+
         "Power board and connect PDS JTAG; scan target before programming.\n"
         "PDS Configuration: Scan Device, assign this .sbit to PG2L100H, Program, Verify.\n"
         "Keep the matching .smsk beside the .sbit; PDS Verify requires both files.\n"
