@@ -117,6 +117,11 @@ module axi128_hmic256 #(
           (native_write && h_wready!==1'b0 && h_wready!==1'b1)) fault_now=8'h0b;
  end
  wire poisoned=fault||(fault_now!=0);
+ // Only COLLECT writes the expected/mask cache. Native readback faults
+ // cannot be active here; preserve immediate invalid-control suppression.
+ wire collect_poisoned=fault||(seen_online && init_done!==1'b1)||
+                       (w_take && wlast!==(up_q==beats_q-1))||
+                       (h_rvalid!==1'b0);
  // Read and write native phases are exclusive. Factor the write-mask guard
  // from that phase's faults so the 256-bit readback comparison cannot feed
  // native WSTRB. This is the same immediate first-fault suppression as
@@ -170,7 +175,7 @@ module axi128_hmic256 #(
     end
     COLLECT:if(w_take) begin
      // Rejected LEN may be 255: never use its count to index these RAMs.
-     if(legal_q&&!poisoned) begin
+     if(legal_q&&!collect_poisoned) begin
       if(!lane[0]) begin
        expected[lane[4:1]]<={128'b0,wdata};
        masks[lane[4:1]]<={16'b0,wstrb};
