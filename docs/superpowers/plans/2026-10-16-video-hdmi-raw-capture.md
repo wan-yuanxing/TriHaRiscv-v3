@@ -25,12 +25,12 @@
 
 文件：创建 `rtl/video/video_capture_engine.sv`、`tb/video/tb_video_capture_engine.sv`；复用已冻结packer/DMA/桥，优先不修改原组件。
 
-- [ ] RED TB以两个时钟经真实ingress驱动逐帧像素及事件，独立native byte memory验证R/G/B、padding/红区；CRC oracle不调用生产函数。
-- [ ] descriptor握手后arm；源EOF和DMA结果分别保持，两者齐备后读回；每周期一字节CRC，按行/16拍/4KiB读。
-- [ ] 同时验证13×3、16×3、1367×3和完整800×600，成功计数与ISO-HDLC CRC标准值；覆写非零高lane字节必须产生CRC错误。
-- [ ] 覆盖坏EOF/行末、overflow/source fault、AR/R协议错误、init丢失、源停钟和任务超时；fault不撤回AR/AW/W，错误后排空现有事务。
-- [ ] 按设计模块接口实现 `video_capture_engine` 并记录RED/GREEN、输入哈希和所有case数。
-- [ ] 独立规格审查通过，再质量审查；完整几何是独立byte oracle通过，物理结果另记。
+- [x] RED TB以两个时钟经真实ingress驱动逐帧像素及事件，独立native byte memory验证R/G/B、padding/红区；CRC oracle不调用生产函数。
+- [x] descriptor握手后arm；源EOF和DMA结果分别保持，两者齐备后读回；每周期一字节CRC，按行/16拍/4KiB读。
+- [x] 同时验证13×3、16×3、1367×3和完整800×600，成功计数与ISO-HDLC CRC标准值；覆写非零高lane字节必须产生CRC错误。
+- [x] 覆盖坏EOF/行末、overflow/source fault、AR/R协议错误、init丢失、源停钟和任务超时；fault不撤回AR/AW/W，错误后排空现有事务。
+- [x] 按设计模块接口实现 `video_capture_engine` 并记录RED/GREEN、输入哈希和所有case数。
+- [x] 独立规格审查通过，再质量审查；完整几何是独立byte oracle通过，物理结果另记。
 
 ## Task 3：HDMI＋DDR板级目标、脚本和数字集成
 
