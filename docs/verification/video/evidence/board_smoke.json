@@ -1,0 +1,357 @@
+{
+  "date_local": "2026-10-16",
+  "timezone": "Asia/Shanghai",
+  "scope": "TX-only 800x600 RGB888 board color bars and portable RX frame geometry monitor; no physical RX or DDR acceptance",
+  "baseline_commit": "84b8d69",
+  "python_tests": {
+    "total": 19,
+    "passed": 18,
+    "skipped": 1,
+    "skip_reason": "Windows symlink creation privilege WinError1314"
+  },
+  "regression": {
+    "status": "pass",
+    "directory": "build\\video\\regression\\20261016T082422_252210Z",
+    "passed": [
+      "config",
+      "timing",
+      "clocks",
+      "tx_init",
+      "board",
+      "rx"
+    ],
+    "log_sha256": {
+      "build/video/regression/20261016T082422_252210Z/python.log": "c739f46a012cdcf6459ad1118e4451baba65c394197fbdce60cc847a61a3c368",
+      "build/video/regression/20261016T082422_252210Z/simulation.log": "d0ced979c2a2722a42377a480c5b5213d67a03cca8f1126c732bce6972e87a4e",
+      "build/video/regression/20261016T082422_252210Z/pll_simulation.log": "020fb9366566d56a43cf64eae2610deb5f615c9747c775b6b7ac7e0fe20df1c2",
+      "build/video/regression/20261016T082422_252210Z/clock_reset_simulation.log": "9fe27bd09a6afb9b856a93d0ab3f6da1a5d53089f6f75f89566cbfc152b90300",
+      "build/video/regression/20261016T082422_252210Z/tx_init_simulation.log": "c4d93a398efbb27d5da93439dcadce6f2b2ac7c7a776caef5c4df73171c2c233",
+      "build/video/regression/20261016T082422_252210Z/board_simulation.log": "d71a1baf54c8b44f194f1603d4847e75d99b0c486e6578241625e35b2a597d2c",
+      "build/video/regression/20261016T082422_252210Z/rx_simulation.log": "4ece4e2a2f918a760f3d4ff8c99f1e1b3719b2822dfada54ed86d63d0c1ee300"
+    },
+    "source_sha256": {
+      "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+      "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe",
+      "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+      "fpga/pg2l100h/project/video_timing.json": "0a90fb6d203314e22c9e6b271a8c30f368b0955b982f5d5bab2ff48c305227dd",
+      "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+      "fpga/pg2l100h/rtl/video_board_smoke_top.sv": "3fd349f0725e4fe69e144cda3dd14da012d0c199bb129e2dbb7e918f5f0127d0",
+      "fpga/pg2l100h/rtl/video_clock_reset.sv": "6fbd2fbdc9ce3c4682b187d5cf30700d5baf4d07028930e2adf75dd77d428b22",
+      "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+      "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+      "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+      "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+      "scripts/video/build_pds.py": "aad40b87c97ebf8b7de41122c77ad9050fd3c8de2dbd533d293b15434b7f93c3",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/doctor.py": "93c8c5953b47bc064db65fbd7ebc695945a6483f203b86788c34569ab6e9f63f",
+      "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+      "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+      "scripts/video/package_board.py": "8405b05af9e878611aded80884a7d8ded8d7e2c4ee01bd0cdad4708a9ac02224",
+      "scripts/video/prepare_reference.py": "69b84235d02b82837b942c8539c3b84724b2b14fab3f4799599347da70d44288",
+      "scripts/video/run.py": "6c6811b92eb9ac12630f43af411e3fbb3b032e3f2c140e83d4bda674a99722f8",
+      "scripts/video/scan_board.py": "cc529568a71d14640b4a8f6f815cd7f2473b7a5d8d7d78472ea1515ed5481f1c",
+      "sw/include/video_cfg.h": "5dc811fddd42be0893d50ad125f59e39c5cb4c4ebbf78016b71b0aa7231c3a12",
+      "tb/video/models/ms7210_i2c_model.sv": "94db8036d6b887664d4e181f7b604f65d373965e971d5347ade30d9e2d2f5388",
+      "tb/video/models/video_pll_model.sv": "314099f94b6e866763c6067c2196a72a5e45319d1e7871790afdbe0b96b5868c",
+      "tb/video/tb_board_smoke.sv": "e6cbe80e6706569cd1f9af8d6595b740dedcb194e26e45d715010be8c9775beb",
+      "tb/video/tb_clock_reset.sv": "19018b1ff08d77e63385c7fd67955ef5cd43f8ceb44dece83a02551a3b9fcc5c",
+      "tb/video/tb_hdmi_tx_init.sv": "8cdfaa557354e4e5515852296afd15cf785e2394d718a30e8170d7a06ae90d63",
+      "tb/video/tb_pll.sv": "2f1bfe74835c9744bfadfd94db4521b8653ca0616eeba3db8de3f4a3bf36c19d",
+      "tb/video/tb_timing.sv": "4a52e62faced0029f9c6e47c7a71f0ee44b37109e62fc7f5a9964bc945676196",
+      "tb/video/tb_video_rx.sv": "e88a25f504fd0d4bab16e931be481661597b0d80be57758060542ac5de4e3b74",
+      "tb/video/test_config.py": "2ae48a2c2937a0f3c1aba01ecc860c9ce94b0c7c17b9ad7c0d8634a7ed9c1892",
+      "tb/video/test_package.py": "b4c4b8c7e2b967007cb850ff9f52f3518febd893cf1713eaf517fa21ceb38e06",
+      "tb/video/test_pds_messages.py": "b2d948f614887b13126b3cdda3f5e5632d8b8256c13a0d283194bba9a06dfffd",
+      "tb/video/test_pll.py": "1e7cef625b119d8c16db0d04ed0ac60c75404c0fe3607b6eeb3741d3f2263288",
+      "tb/video/test_references.py": "121cc51366367a838a6d7a3596b36b71c80a10e9bb4028561143f9bd9abbcaad",
+      "fpga/pg2l100h/project/video_rx.json": "27640167c29b273cbbae21347d5ad315b2dd818c53e3003be944dd54894d32a5",
+      "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+      "fpga/pg2l100h/project/video_board_smoke.json": "72f7738faf667447c13da2daecd2aa8fb760d0daad93efeb694bb549572a337f"
+    }
+  },
+  "pll": {
+    "reference_hz": 27000000,
+    "vco_hz": 1080000000,
+    "pixel_hz": 40000000,
+    "cfg_hz": 10000000,
+    "vendor_primitives_checked": true,
+    "vendor_model_sha256": {
+      "video_pll.v": "a07dbacf2c8d81b2b9013fd5806e9f5cbf74960eb8791fb415fe217b366e53a0",
+      "GTP_GPLL.v": "b1e0df6237c4502a5a01978c4e14db9b58c946c64cb614e88e89458c8c533fb2",
+      "GTP_CLKBUFG.v": "1f4bb3bf9deaacd248eb3c815e3627aeb0770cca08f46c6389e2d4b656b034fe"
+    }
+  },
+  "tx_init_full_wait": {
+    "status": "pass",
+    "directory": "build\\video\\regression\\20261016T074033_533416Z",
+    "config_clock_cycles": 3251424,
+    "config_writes": 49,
+    "scratch_register": "0x0003",
+    "scratch_value": "0x5A",
+    "scratch_is_chip_id": false,
+    "dut_and_model_sha256": {
+      "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+      "tb/video/tb_hdmi_tx_init.sv": "8cdfaa557354e4e5515852296afd15cf785e2394d718a30e8170d7a06ae90d63",
+      "tb/video/models/ms7210_i2c_model.sv": "94db8036d6b887664d4e181f7b604f65d373965e971d5347ade30d9e2d2f5388"
+    },
+    "note": "Historical full WAIT log; DUT/test/model bytes match current tree, tooling later hardened and included in current all regression"
+  },
+  "board_integration_simulation": {
+    "raster_pixels": 663168,
+    "rgb888_checked": true,
+    "rx_independent": true,
+    "absent_tx_error_checked": true
+  },
+  "rx_geometry": {
+    "good_frames": 12,
+    "closed_intervals": 19,
+    "rgb888_pixels_checked": 7164199,
+    "synthesis_status": "pass",
+    "synthesis_directory": "build\\video\\pds\\20261016T082322_125070Z",
+    "resources": {
+      "lut": 191.0,
+      "registers": 168.0,
+      "drm": 0.0
+    },
+    "synthesis_inputs": {
+      "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+      "fpga/pg2l100h/constraints/video_rx.fdc": "926a7eb807adeb0dcf0d86ef0d4d13cb9faa4587361036966a487a20012b685f",
+      "fpga/pg2l100h/project/video_rx.json": "27640167c29b273cbbae21347d5ad315b2dd818c53e3003be944dd54894d32a5",
+      "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+      "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+      "scripts/video/build_pds.py": "aad40b87c97ebf8b7de41122c77ad9050fd3c8de2dbd533d293b15434b7f93c3",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+      "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6"
+    },
+    "physical_frequency_measured": false,
+    "exact_sync_width_and_porch_checked": false
+  },
+  "board_build": {
+    "status": "pass",
+    "target": "video_board_smoke",
+    "stage": "bitstream",
+    "directory": "build\\video\\pds\\20261016T082043_087757Z",
+    "physical_board": false,
+    "timing_closed": false,
+    "vendor_ddr_training": false,
+    "internal_timing_met": true,
+    "external_io_timing_verified": false,
+    "scope": "TX-only board color bars; no RX/DDR; external I/O AC requirements unverified",
+    "inputs": {
+      "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+      "fpga/pg2l100h/constraints/video_board_smoke.fdc": "cb481decdf835f15a7185e4e6edb4a2f3662fc4d540421f3d9c5f4f130c32aeb",
+      "fpga/pg2l100h/project/video_board_smoke.json": "72f7738faf667447c13da2daecd2aa8fb760d0daad93efeb694bb549572a337f",
+      "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+      "fpga/pg2l100h/rtl/video_board_smoke_top.sv": "3fd349f0725e4fe69e144cda3dd14da012d0c199bb129e2dbb7e918f5f0127d0",
+      "fpga/pg2l100h/rtl/video_clock_reset.sv": "6fbd2fbdc9ce3c4682b187d5cf30700d5baf4d07028930e2adf75dd77d428b22",
+      "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
+      "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+      "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+      "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+      "scripts/video/build_pds.py": "aad40b87c97ebf8b7de41122c77ad9050fd3c8de2dbd533d293b15434b7f93c3",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/gen_config.py": "ac877b74716f59cd15bd454e321d670d63d910f182cb5a2dcf92d41130d35999",
+      "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+      "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe",
+      "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2"
+    },
+    "vendor_inputs": {
+      "ip\\video_pll\\video_pll.v": "a07dbacf2c8d81b2b9013fd5806e9f5cbf74960eb8791fb415fe217b366e53a0",
+      "vendor\\source\\hdmi\\ms7210_ctl.v": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae",
+      "vendor\\source\\hdmi\\iic_dri.v": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e"
+    },
+    "pds_version": "2022.2-SP6.4",
+    "resources": {
+      "lut": 307.0,
+      "registers": 252.0,
+      "drm": 0.5
+    },
+    "artifact": "build\\video\\pds\\20261016T082043_087757Z\\generate_bitstream\\video_board_smoke_top.sbit",
+    "artifact_sha256": "925da96138681fdcc2e1f18739d3a8d931a81f65f34d3972ed8c98bad17f9290",
+    "timing_report": "build\\video\\pds\\20261016T082043_087757Z\\report_timing\\video_board_smoke_top.rtr",
+    "verify_mask": "build\\video\\pds\\20261016T082043_087757Z\\generate_bitstream\\video_board_smoke_top.smsk",
+    "verify_mask_sha256": "94ff18ee499df3d0a9211be973ed589ed24298b1a2a895a55972f62e5bd25cc2"
+  },
+  "package": {
+    "status": "pass",
+    "directory": "build\\video\\releases\\video_board_smoke_925da9613868",
+    "bitstream_sha256": "925da96138681fdcc2e1f18739d3a8d931a81f65f34d3972ed8c98bad17f9290",
+    "verify_mask_sha256": "94ff18ee499df3d0a9211be973ed589ed24298b1a2a895a55972f62e5bd25cc2",
+    "physical_board": false
+  },
+  "pin_audit": {
+    "bit_ports": 37,
+    "attributes": 255,
+    "official_manual_rgb_matches": 24,
+    "raw_evidence": "build/video/board-audit/pins.json",
+    "source_sha256": [
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\vendor\\hdmi\\HDMI_IN_DDR3_HDMI_OUT_top.fdc",
+        "bytes": 51968,
+        "sha256": "dfabea1eaeb089bb4f3d9602976a6c5d855db32eebc3c2264550380497a4b66e"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\vendor\\hdmi\\source\\rtl\\HDMI_IN_DDR3_HDMI_OUT_top.v",
+        "bytes": 19916,
+        "sha256": "ca0d180208c8eca76f24b53aced44fe03d7bc9d8a28f39d622e220694dfb56a6"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\vendor\\hdmi\\source\\hdmi\\ms7210_ctl.v",
+        "bytes": 11483,
+        "sha256": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\vendor\\hdmi\\ipcore\\pll\\pll.idf",
+        "bytes": 41459,
+        "sha256": "b0401ee91e562ebd466e7e533eed2cbb6c6d1bb26064a1e91b0a6268706528ee"
+      },
+      {
+        "path": "D:\\FPGA\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\4_IC_datasheet\\HDMI PHY\\《MS7210 Datasheet-CN》-sp(1).pdf",
+        "bytes": 608203,
+        "sha256": "2e9ea30aaf970a5b53a6f9d71185959a8145df45f1ef0d516b77e13f6c5d25f3"
+      },
+      {
+        "path": "D:\\FPGA\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\1_Demo_document\\实验例程说明篇\\教程1_硬件实验指导手册_盘古676系列100Pro+开发板.pdf",
+        "bytes": 3504935,
+        "sha256": "f2fb07625a0a31705d7e8477308f7bcb1aa5272b6b0754cfbf9daca20ebec114"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-v3\\build\\pango676\\jtag_scan_only.tcl",
+        "bytes": 71,
+        "sha256": "45f371a6e679009ad4777ad2a9b736310f28b34e0355a5fd9fa706d15b38726e"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-v3\\build\\pango676\\jtag_scan_20260924_1826.log",
+        "bytes": 771,
+        "sha256": "6cee3109fb5e48862315a854a84be6e30ed103ea500eadf6a02e5c4687aa1c05"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-v3\\build\\pango676\\jtag_attempt_20260923\\scan_clean.tcl",
+        "bytes": 88,
+        "sha256": "0df36d7c6531b5b078560d9a7ad7a29467399c7cc23558d8e1afe534d33c3f8c"
+      },
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-v3\\build\\pango676\\jtag_attempt_20260923\\scan_clean.log",
+        "bytes": 848,
+        "sha256": "0b31bb0026cd35eaa2812fa8f680494b757cc8569276aeb42011f11adf990243"
+      }
+    ]
+  },
+  "internal_timing_met": true,
+  "external_io_timing_verified": false,
+  "physical_board_function_verified": true,
+  "vendor_ddr_training": false,
+  "remaining": [
+    "Record monitor OSD/LED states and picture/video; measure continuous run duration",
+    "MS7210 external sample edge/setup/hold and PCB skew",
+    "Physical RX initialization, source/EDID and pixel frequency/sync/porch confirmation",
+    "DDR complete IP wrapper, calibration and BIST",
+    "DMA/frame ownership/MMIO and CPU/NPU integration"
+  ],
+  "initial_jtag_failure": {
+    "latest_scan": {
+      "operation": "read_only_scan",
+      "device_found": false,
+      "frequency": "100KHz",
+      "programmed": false,
+      "directory": "build\\video\\jtag_scan\\20261016T080500_092915Z",
+      "exit_code": 0,
+      "status": "unavailable",
+      "reason": "Target PG2L100H was not identified; inspect scan/server logs"
+    },
+    "scan_log_sha256": "932da7ea56c1cf9ffdc87507db1c4d84f7abd8c6995065c34d5672559c8036b1",
+    "server_log_sha256": "53a7afcf1d1c04d757165698b6b8bac9070564cbe59f1f4a31bdc9379ecea6d0",
+    "raw_ids": [
+      "0xffffffff"
+    ],
+    "usb_cable_identified": true,
+    "user_confirmed_power_led_on": true,
+    "user_confirmed_j12_10pin_connected": true,
+    "user_confirmed_powered_off_reseat_then_powered_on": true,
+    "device_identified": false,
+    "programmed": false,
+    "verified": false,
+    "picture_observed": false,
+    "done_led_exists_or_location_confirmed": false,
+    "reason": "JtagServer-0306 after reseating at 100KHz; no effective target response. This does not establish a damaged FPGA or an RTL failure."
+  },
+  "historical_script_comparison": {
+    "operation": "historical_exact_read_only_scan",
+    "script": "D:\\FPGA\\TriHaRiscv-v3\\build\\pango676\\jtag_attempt_20260923\\scan_clean.tcl",
+    "script_sha256": "0df36d7c6531b5b078560d9a7ad7a29467399c7cc23558d8e1afe534d33c3f8c",
+    "programmed": false,
+    "directory": "build\\video\\jtag_history_compare\\20261016T081430_962039Z",
+    "exit_code": 0,
+    "device_found": true
+  },
+  "program_and_verify": {
+    "operation": "volatile_program_and_verify",
+    "status": "pass",
+    "directory": "build\\video\\board_program\\20261016T082259_109276Z",
+    "bitstream": "build\\video\\releases\\video_board_smoke_925da9613868\\video_board_smoke_top.sbit",
+    "bitstream_sha256": "925da96138681fdcc2e1f18739d3a8d931a81f65f34d3972ed8c98bad17f9290",
+    "verify_mask_sha256": "94ff18ee499df3d0a9211be973ed589ed24298b1a2a895a55972f62e5bd25cc2",
+    "device_found": true,
+    "programmed": true,
+    "verified": true,
+    "picture_observed": true,
+    "flash_written": false,
+    "log_sha256": "ae33737450f6d51149da2e46d5f8842d393984868b2d64e384b18e488aac401f",
+    "picture_evidence": "User explicitly confirmed stable color bars after final Program/Verify",
+    "key0_reset_recovery": true,
+    "key0_evidence": "User: 彩条稳定，按 KEY0 后能恢复",
+    "display_mode_osd_recorded": false,
+    "led_states_recorded": false,
+    "duration_minutes_measured": null
+  },
+  "hardware": {
+    "latest_read_only_scan": {
+      "operation": "read_only_scan",
+      "device_found": true,
+      "frequency": null,
+      "programmed": false,
+      "directory": "build\\video\\jtag_scan\\20261016T082422_246743Z",
+      "exit_code": 0,
+      "status": "identified"
+    },
+    "target": "PG2L100H",
+    "idcode": "0x00602899",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "stable_color_bars_user_confirmed": true,
+    "key0_reset_recovery_user_confirmed": true,
+    "done_bit": 1,
+    "done_led_exists_or_location_confirmed": false,
+    "measured_display_osd": null,
+    "measured_led_states": null,
+    "continuous_duration_minutes_measured": null,
+    "picture_or_video_file": null,
+    "initial_jtag_failure_root_cause": "Not established. Historical exact Tcl and current default scan script both subsequently succeeded; no evidence identifies prior CPU programming as the cause."
+  },
+  "package_mask_fix": {
+    "original_program_attempt": {
+      "operation": "volatile_program_and_verify",
+      "status": "partial",
+      "directory": "build\\video\\board_program\\20261016T081626_348271Z",
+      "bitstream": "build\\video\\releases\\video_board_smoke_41f91bbff423\\video_board_smoke_top.sbit",
+      "bitstream_sha256": "41f91bbff423f062339885f7a723d2ddfe39e6397d1581a1d5ea96ceaeb1be0d",
+      "device_found": true,
+      "programmed": true,
+      "verified": false,
+      "picture_observed": false,
+      "flash_written": false,
+      "reason": "Program succeeded. PDS Verify could not open missing package sibling .smsk. Console GBK printing also raised UnicodeEncodeError; raw log checked directly.",
+      "log_sha256": "8e63bbaed8310a05b5b14f9b626ff5867418393c7f52316dac2a1a90f1324d5b"
+    },
+    "cause": "Package omitted sibling .smsk required by cfg_verify",
+    "fix": "Build records mask SHA256; package validates and copies it; missing/corrupt mask invalidates package success",
+    "regressions_passed": [
+      "includes_matching_verification_mask",
+      "missing_or_changed_verification_mask_prevents_package_success",
+      "failed_package_invalidates_previous_success"
+    ]
+  },
+  "physical_board_function_scope": "TX-only 800x600 RGB888 color bars and KEY0 recovery, based on explicit user observations and Program/Verify logs. No RX, DDR or long-duration qualification."
+}

@@ -1,0 +1,2 @@
+# Component timing. Actual RX source input delay and pixel clock measurement are separate.
+create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]

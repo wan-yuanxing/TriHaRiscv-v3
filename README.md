@@ -6,7 +6,7 @@ CPU 目标为 RV32IMC_Zicsr 六级单发射、顺序执行、顺序提交。先�
 
 ## 当前状态与文档入口
 
-截至 2026-10-16，Video 路线已开始 Windows 原生实施：已建立固定模式同源配置、参考例程哈希提取、时序/彩条 RTL、自校验仿真和 PDS 组件综合入口。CPU/NPU 仍以各自后续交付为准。当前未实现本版板级 HDMI/DDR 完整链路，也未完成上板验收；实际进度见 [Video 工作台账](docs/video/STATUS.md)。
+截至 2026-10-16，Video 路线已完成 Windows 原生工程基础、时序/彩条、40/10 MHz PLL、独立 HDMI TX 初始化、板级目标和输入帧几何监测；彩条位流已通过内部时序检查、JTAG Program/Verify，用户确认显示器出现稳定彩条。DDR/物理 RX 完整链路与外部 I/O AC 时序继续验收。CPU/NPU 以各自交付为准，实际进度见 [Video 工作台账](docs/video/STATUS.md)。
 
 项目唯一远端仓库为 [wan-yuanxing/TriHaRiscv-v3](https://github.com/wan-yuanxing/TriHaRiscv-v3)，本地 remote 名称为 `origin`。`TriHaRiscv-main` 是本地总工程目录名，不另建同名远端仓库。
 

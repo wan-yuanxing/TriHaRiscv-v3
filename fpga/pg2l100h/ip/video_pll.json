@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "instance": "video_pll",
+  "reference_hz": 27000000,
+  "pixel_hz": 40000000,
+  "config_hz": 10000000,
+  "input_divider": 1,
+  "feedback_multiplier": 5,
+  "feedback_divider": 8,
+  "pixel_divider": 27,
+  "config_divider": 108,
+  "vco_hz": 1080000000,
+  "source": "build/video/vendor/hdmi/ipcore/pll/pll.idf"
+}

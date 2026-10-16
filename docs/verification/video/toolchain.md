@@ -33,6 +33,6 @@ python scripts/video/build_pds.py --target video_timing --stage synth
 - 正式回归与综合：`build/video/latest_all.json`、`latest_pds.json` 指向各自独立运行目录。
 - 小型可版本化摘要：`docs/verification/video/evidence/windows_kickoff.json`。
 
-PDS 执行前创建 work_dir，进程 cwd 与 work_dir 一致，防止工具把产物落到源码目录。当前 `build_pds.py` 仅开放组件 synth；尚未实现 board route/bitstream/download，不能用自动分配管脚的组件产物上板。
+PDS 执行前创建 work_dir，进程 cwd 与 work_dir 一致，防止工具把产物落到源码目录。`video_timing` 只开放组件 synth；`video_board_smoke` 开放 synth/route/bitstream 并固定官方管脚。实际下载、画面与外部 AC 时序验收另记，不能用自动分配管脚的组件产物上板。
 
-固定时序组件综合结果为 53 LUT、21 寄存器、0 DRM；输出端口尚无板级 I/O 时序约束，不能据此宣称 40 MHz 板级时序闭合。下一步围绕 40 MHz PLL、TX 初始化和实际板卡约束建立独立目标。
+固定时序组件综合结果为 53 LUT、21 寄存器、0 DRM；输出端口没有板级 I/O 约束，不能据此宣称板级时序闭合。现有板级目标加入 40/10 MHz PLL、独立 TX 初始化和官方管脚，布局布线内部约束通过；外部 MS7210 AC 参数与实际画面仍待验收，见 [板测说明](board_smoke.md)。

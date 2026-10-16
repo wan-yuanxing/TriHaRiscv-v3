@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。当前已实现并验证的接口仅为固定时序和彩条组件；采集/显示 MMIO、DDR DMA、帧所有权接口仍是后续实施契约。
+依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位及独立发送初始化；采集/显示 MMIO、DDR DMA、帧所有权接口仍是后续实施契约。TX-only 板级端口与状态见 `docs/verification/video/board_smoke.md`。
 
 ## 已实现：video_pattern_core
 
@@ -14,6 +14,16 @@
 | `rgb[23:0]` | `{R[7:0],G[7:0],B[7:0]}`，消隐为黑；当前八色条 |
 
 内部光栅坐标从有效区 `(0,0)` 起，水平 active/front/sync/back 为 800/40/128/88，垂直为 600/1/4/23。总计 1056×628，扫描率约 60.3165 Hz。像素有效区后的消隐属于同一光栅周期。
+
+## 已实现：video_rx 候选像素与帧几何确认
+
+输入 `pixel_clk/reset_n/enable/rx_ready/hs_in/vs_in/de_in/rgb_in` 已在接收像素域同步，RGB 为完整 24 bit。输出 `pixel_valid/rgb_out/x/y` 为注册的候选像素；`frame_start` 与首个候选 `(0,0)` 同拍。启动中途、disable、rx_ready 丢失后等待新的正 VS 边界，避免拼接前后两帧。
+
+下一正 VS 边界输出 `frame_end`，仅当刚结束间隔中每行连续 800 像素、600 活动行、1056 周期/行、628 行/场以及同步/DE 不重叠等检查通过时，`frame_good` 同拍为 1 并获得 `mode_locked`。首个完整合格间隔之前不宣称锁定；错误时撤销锁定，`mode_error` 复位前保持。
+
+`active_width/active_height/h_total/v_total` 分别记录最近非空行、间隔和 HS 周期的测量；失去 enable/readiness 后清除。该模块不测量自身像素时钟频率，也未完整检查同步脉宽与每个 porch 长度。物理 RX 初始化、外部时间基准及上板输入模式确认仍由后续板级链路完成。
+
+候选像素可以先写入预留存储，但消费者必须等 `frame_good` 后才能把它视为几何合格帧；还需等待各 DMA 写响应，才能发布正式 `CAPTURE_DONE/INPUT_READY`。本模块的事件不能替代这些完成语义。
 
 ## 后续 CPU–Video 协议准入
 

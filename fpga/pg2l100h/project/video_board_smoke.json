@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target": "video_board_smoke",
+  "top": "video_board_smoke_top",
+  "test_top": "tb_board_smoke",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "rtl/video/video_test_pattern.sv",
+    "rtl/video/video_pattern_core.sv",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "fpga/pg2l100h/rtl/video_board_smoke_top.sv"
+  ],
+  "vendor_sources": ["source/hdmi/ms7210_ctl.v", "source/hdmi/iic_dri.v"],
+  "tests": ["tb/video/tb_board_smoke.sv", "tb/video/models/video_pll_model.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_board_smoke.fdc"],
+  "scope": "TX-only RGB888 800x600 color bars; no RX or DDR; external I/O timing unverified"
+}

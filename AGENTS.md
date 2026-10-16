@@ -29,6 +29,9 @@ python scripts/video/prepare_reference.py --reference hdmi
 python scripts/video/prepare_reference.py --reference ddr
 python scripts/video/run.py --suite all
 python scripts/video/build_pds.py --target video_timing --stage synth
+python scripts/video/build_pds.py --target video_board_smoke --stage bitstream
+python scripts/video/package_board.py
+python scripts/video/scan_board.py --start-server
 ```
 
 工具通过 PATH、`TRIHA_IVERILOG`、`TRIHA_VVP`、`TRIHA_PDS_SHELL`、`TRIHA_VSIM`、`TRIHA_TAR` 及已安装默认位置发现；工具覆盖变量填写可执行文件路径。板卡包可通过 `TRIHA_BOARD_ROOT` 或命令参数指定。Python 文本文件显式用 UTF-8，不依赖 Windows 默认代码页。
@@ -39,6 +42,7 @@ python scripts/video/build_pds.py --target video_timing --stage synth
 - 失败返回非零。新运行先使旧成功标志失效，构建使用独立目录；保存输入哈希、工具版本和结果。
 - 分别报告组件仿真、综合、布局布线、物理时序、板测；不得以其中一项替代另一项。
 - `video_timing` 是便携时序/彩条组件，尚无 HDMI/PLL/DDR/板级管脚。它的综合成功不能用于下载或宣称板卡已点亮。
+- `video_board_smoke` 为 TX-only 板级彩条，包含 40/10 MHz PLL、独立发送初始化和官方 HDMI 管脚；只读扫描与实际下载分别记录。内部时序通过不等于 MS7210 外部 I/O 时序已验证。DDR/RX 不包含在此目标中。
 - Video 不自行假定 NPU 量化尺度或 CPU 的总线写可见性；未冻结契约在接口文档和任务表中明确记录。
 - 每批更新 `docs/video/STATUS.md`，列出本批证据、未完成项、依赖及下一步。
 - Git 保留小范围可审查变更，禁止 `git add .` 连带其他路线修改；不在并行任务使用的共享目录反复切换分支。当前 Video 分支为 `video/windows-bringup`。
