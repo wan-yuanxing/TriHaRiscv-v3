@@ -68,7 +68,8 @@ module video_capture_engine #(
         m_data[45]===(expected_x==FRAME_WIDTH-1);
     wire eof_legal=m_data[45]===1'b0 && m_data[44]===1'b1 &&
         captured_pixels==FRAME_PIXELS && expected_x==0 && expected_y==FRAME_HEIGHT;
-    reg [7:0] fault_now;
+    reg [7:0] fault_now,transfer_fault_now;
+    wire transfer_stopping=error||transfer_fault_now!=0;
     wire stopping=error||fault_now!=0;
     // Asynchronously reset state already disables READY. Do not distribute
     // the board startup reset through the FIFO's data/enable cone.
@@ -79,7 +80,7 @@ module video_capture_engine #(
     // need READY. Including READY here would feed DMA abort back through the
     // packer's output readiness and form a combinational cycle.
     wire packet_present=m_valid && state==CAPTURE && !eof_seen && !error;
-    wire pixel_valid=m_valid && state==CAPTURE && !eof_seen && pixel_kind && pixel_legal && !stopping;
+    wire pixel_valid=m_valid && state==CAPTURE && !eof_seen && pixel_kind && pixel_legal && !transfer_stopping;
     wire reader_arvalid=state==READ_AR;
     // RREADY can be low for sixteen byte clocks. After failure the same
     // advertised AXI burst is consumed before ownership is abandoned.
@@ -87,20 +88,27 @@ module video_capture_engine #(
     wire dma_result_bad=dma_result_valid && (dma_success!==1'b1 || dma_code!==8'd0 ||
         dma_tag!==32'd1 || dma_bytes!==FRAME_BYTES);
     always @* begin
-        fault_now=0;
-        if(seen_online&&!init_done)fault_now=8'h01;
-        else if(bridge_fault)fault_now=8'h80|bridge_code;
-        else if(dma_fault)fault_now=8'h06;
+        transfer_fault_now=0;
+        if(seen_online&&!init_done)transfer_fault_now=8'h01;
+        else if(bridge_fault)transfer_fault_now=8'h80|bridge_code;
+        else if(dma_fault)transfer_fault_now=8'h06;
         else if(!done)begin
-            if(overflow)fault_now=8'h02;
-            else if(source_fault)fault_now=8'h03;
+            if(overflow)transfer_fault_now=8'h02;
+            else if(source_fault)transfer_fault_now=8'h03;
             else if(packet_present && (pixel_kind?!pixel_legal:(eof_kind?!eof_legal:1'b1)))
-                fault_now=eof_kind?8'h05:8'h04;
-            else if(dma_result_bad)fault_now=8'h06;
-            else if(state==READ_R && bridge_rvalid && (bridge_rid!==4'h6 ||
-                bridge_rresp!==2'b00 || bridge_rlast!==(read_index==read_beats-1)))fault_now=8'h09;
-            else if(seen_online && timer>=TIMEOUT_CYCLES-1)fault_now=8'h07;
+                transfer_fault_now=eof_kind?8'h05:8'h04;
+            else if(dma_result_bad)transfer_fault_now=8'h06;
+            else if(seen_online && timer>=TIMEOUT_CYCLES-1)transfer_fault_now=8'h07;
         end
+    end
+    // Reader responses occur after DMA retirement. Keep their strict checks
+    // and priority in the diagnostic/state arbiter without feeding inactive
+    // write-side packer and DMA controls through the read metadata cone.
+    always @* begin
+        fault_now=transfer_fault_now;
+        if(!done && (transfer_fault_now==0 || transfer_fault_now==8'h07) &&
+            state==READ_R && bridge_rvalid && (bridge_rid!==4'h6 ||
+            bridge_rresp!==2'b00 || bridge_rlast!==(read_index==read_beats-1)))fault_now=8'h09;
     end
     rgb888_packer packer(
         .clk(clk),.reset_n(reset_n),.flush(1'b0),.pixel_valid(pixel_valid),
@@ -108,7 +116,7 @@ module video_capture_engine #(
         .s_valid(stream_valid),.s_data(stream_data),.s_keep(stream_keep),
         .s_row_last(stream_last),.s_ready(stream_ready));
     video_write_dma dma(
-        .clk(clk),.reset_n(reset_n),.online(init_done),.abort(stopping),
+        .clk(clk),.reset_n(reset_n),.online(init_done),.abort(transfer_stopping),
         .req_valid(state==DESCRIPTOR&&!stopping),.req_ready(dma_req_ready),
         .req_base(RAW_BASE),.req_row_bytes(ROW_BYTES),.req_stride(STRIDE),
         .req_rows(FRAME_HEIGHT[15:0]),.req_tag(32'd1),
