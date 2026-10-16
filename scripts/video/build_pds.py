@@ -8,6 +8,7 @@ import sys
 
 from common import BUILD, ROOT, fresh_run, input_hashes, run_logged, sha256, tool, write_json
 from gen_pll import generate as generate_pll
+from gen_ddr import generate as generate_ddr
 
 
 def tcl_path(path):
@@ -34,10 +35,11 @@ def review_messages(log, verified_fdc=""):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
-    board = args.target == "video_board_smoke"
+    board = args.target in ("video_board_smoke", "video_rx_board", "video_ddr_bist")
+    ddr = args.target == "video_ddr_bist"
     if not board and args.stage != "synth":
         parser.error("Component targets have no board pins; only synth is supported")
     work = fresh_run("pds")
@@ -56,12 +58,19 @@ def main():
                    work / "config_check.log")
         manifest_path = ROOT / f"fpga/pg2l100h/project/{args.target}.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        result["scope"] = manifest["scope"]
         top = manifest["top"]
         if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", top):
             raise ValueError("Invalid top module")
         names = manifest["sources"] + manifest["constraints"] + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
             str(manifest_path.relative_to(ROOT))]
+        if args.target == "video_rx_board":
+            run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
+            names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
+        if ddr:
+            names += [manifest['ddr_ip'], 'scripts/video/gen_ddr.py',
+                      'fpga/pg2l100h/ip/video_reference_manifest.json']
         result["inputs"] = input_hashes([ROOT / name for name in names] +
             [ROOT / "scripts/video" / name for name in
              ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py")])
@@ -70,7 +79,7 @@ def main():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, destination)
         vendor_sources = []
-        if board:
+        if board and not ddr:
             _, wrapper = generate_pll(work / "ip/video_pll")
             vendor_sources.append(wrapper)
             reference = json.loads((ROOT / "fpga/pg2l100h/ip/video_reference_manifest.json").read_text(encoding="utf-8"))
@@ -88,6 +97,13 @@ def main():
             result["inputs"].update(input_hashes([
                 ROOT / "fpga/pg2l100h/ip/video_pll.json",
                 ROOT / "fpga/pg2l100h/ip/video_reference_manifest.json"]))
+        if ddr:
+            # The IDF loads the exact 74 generated/protected sources once.
+            # Its generated generic pin FDC is never added to this project.
+            idf, provenance = generate_ddr(work / 'ip/ddr')
+            vendor_sources.append(idf)
+            result['ddr_ip_provenance'] = provenance
+            result['vendor_inputs'] = {str(idf.relative_to(work)): sha256(idf)}
         lines = ["set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676"]
         lines += ["add_design " + tcl_path(work / "src" / name)
                   for name in manifest["sources"]]
@@ -97,7 +113,10 @@ def main():
         lines += [f"compile -system_verilog -top_module {top} -include_path {{" +
                   tcl_path(work / "src/rtl/video/include") + "}", "synthesize -ads"]
         if args.stage in ("route", "bitstream"):
-            lines += ["dev_map", "pnr -optimize_multi_corner_timing -fix_hold_violation", "report_timing"]
+            route="pnr -optimize_multi_corner_timing -fix_hold_violation"
+            if ddr:
+                route += " -slack_prior_in_global_router TRUE"
+            lines += ["dev_map",route,"report_timing"]
         if args.stage == "bitstream":
             lines += ["gen_bit_stream -scbv {High Voltage}"]
         script = work / "build.tcl"
@@ -107,9 +126,11 @@ def main():
             [executable, "-version"], work / "version.log").strip()
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
-                         cwd=work, timeout=900)
+                         cwd=work, timeout=1800 if ddr else 900)
         reference_fdc = ""
         if board:
+            reference = json.loads((ROOT / 'fpga/pg2l100h/ip/video_reference_manifest.json').read_text(encoding='utf-8'))
+            expected = {item['path']: item['sha256'] for item in reference['references']['hdmi']['files']}
             reference_path = ROOT / "build/video/vendor/hdmi/HDMI_IN_DDR3_HDMI_OUT_top.fdc"
             if sha256(reference_path) != expected["HDMI_IN_DDR3_HDMI_OUT_top.fdc"]:
                 raise ValueError("Reference pin table hash mismatch")

@@ -16,24 +16,41 @@ python scripts/video/build_pds.py --target video_timing --stage synth
 python scripts/video/build_pds.py --target video_board_smoke --stage bitstream
 python scripts/video/package_board.py
 python scripts/video/scan_board.py --start-server
+python scripts/video/gen_edid.py --check
+python scripts/video/build_pds.py --target video_rx_board --stage bitstream
+python scripts/video/package_board.py --target video_rx_board
+python scripts/video/program_board.py --target video_rx_board --start-server
+python scripts/video/read_board.py --port COM12 --seconds 12
+python scripts/video/build_pds.py --target video_ddr_bist --stage bitstream
+python scripts/video/package_board.py --target video_ddr_bist
+python scripts/video/program_board.py --target video_ddr_bist --start-server
+python scripts/video/read_board.py --port COM12 --seconds 12
 ```
 
-配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行当前已实现的配置/参考、彩条、实际 PLL/复位、发送初始化、板级输出集成和输入帧几何监测；不代表物理采集/DDR/推理已经通过。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证初始化。
+配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行当前已实现的配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、8 组 native BIST 和 DDR 板级数字替身；不代表物理采集/DDR/推理已经通过。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
 
 彩条目标的管脚、LED、复位、下载与时序边界见 [板测说明](../verification/video/board_smoke.md)。
 
-工具覆盖、版本与运行证据见 [Windows 工具链](../verification/video/toolchain.md)。`prepare_reference` 默认只提取清单中的已验证文件，并不生成完整可综合 DDR IP；完整依赖 staging 属于后续板级任务。
+工具覆盖、版本与运行证据见 [Windows 工具链](../verification/video/toolchain.md)。`prepare_reference` 只提取选中文件；DDR 构建随后用 `gen_ddr.py` 在独立目录生成并复核完整 74 个硬件源文件。生成器的通用 FDC 不用于板卡，正式目标单独加载已审查的 FDC/RCF。
+
+新增两个独立上板目标：`video_rx_board` 保持本地彩条、配置固定 EDID 并报告真实输入；`video_ddr_bist` 暂停 HDMI，执行破坏性 native DDR 自检。目标、下载包、日志和物理验收各自记录，不能把独立 BIST 当作正式 AXI128 wrapper 已实现。
+
+新增文件按职责放置：`config/video_edid.hex` 和生成头保存 EDID；`rtl/video/video_rx_measure.sv`、`video_rx_probe.sv`、`ddr_native_bist.sv` 为便携组件；板级初始化、CDC、UART 和两个 top 在 `fpga/pg2l100h/rtl/`；目标清单与 FDC/RCF 位于各自的 `project/`、`constraints/`；对应 TB、设备/内存数字模型在 `tb/video/`。`gen_edid.py`、`gen_ddr.py`、`program_board.py`、`read_board.py` 扩展原生脚本入口，生成物始终留在 `build/video/`。
 
 ## 当前文件树
 
 ```text
 config/video_cfg.json                    固定模式与图像布局权威配置
+config/video_edid.hex                    固定 800×600 EDID
 rtl/video/
   include/video_cfg.vh                    生成的 RTL 常量
+  include/video_edid.vh                   生成的 EDID 查表
   video_timing.sv                         800×600 扫描计数与同步
   video_test_pattern.sv                   RGB888 八色条
   video_pattern_core.sv                   便携综合边界，外部提供 40 MHz
   video_rx.sv                            候选 RGB888 坐标、完整帧几何和就绪丢失监测
+  video_rx_measure.sv / video_rx_probe.sv 精确时序和独立原始边沿探针
+  ddr_native_bist.sv                      native256 地址/数据/掩码自检
 sw/include/video_cfg.h                    同源生成的 C 常量
 tb/video/
   tb_timing.sv                           完整光栅/像素/复位自检
@@ -45,17 +62,23 @@ tb/video/
   tb_hdmi_tx_init.sv                     真实串行配置、ACK/超时与复位
   tb_board_smoke.sv                      板级输出接线/完整光栅集成
   tb_video_rx.sv                         输入几何错误和整帧恢复
-  models/                               仿真用 PLL 与 MS7210 串行设备模型
+  tb_hdmi_rx_init.sv / tb_rx_board.sv     RX 串行初始化和板级数字集成
+  tb_rx_measure.sv / tb_rx_probe.sv       精确时序和原始探针测试
+  tb_rx_telemetry.sv / tb_diag_uart.sv    跨域与逐 bit 串口测试
+  tb_ddr_native_bist.sv / tb_ddr_board.sv  native 和板级数字自检
+  models/                               PLL、MS72xx 串行、native 内存和板级 IP 数字模型
 scripts/video/
   common.py                             原生命令/工具/哈希/结果辅助
   doctor.py                             本机工具发现与版本探测
   gen_config.py                         生成 RTL/C 定义
   gen_pll.py                            基于官方 IDF 生成真正 40/10 MHz PLL
+  gen_edid.py / gen_ddr.py               固定 EDID 和锁定来源的完整 HMIC IP
   prepare_reference.py                  只提取哈希匹配的参考文件
   run.py                                已实现的回归入口
   build_pds.py                          组件/板级综合、布局布线及位流入口
   scan_board.py                         只读 JTAG 线缆/器件扫描
   package_board.py                      核验哈希后打包板测位流和报告
+  program_board.py / read_board.py       易失下载/Verify 和接收只读串口诊断
 fpga/pg2l100h/
   project/video_timing.json              显式源文件与测试清单
   constraints/video_timing.fdc           组件 25 ns 时钟约束
@@ -63,11 +86,21 @@ fpga/pg2l100h/
   ip/video_pll.json                      双输出 PLL 静态分频 recipe
   project/video_board_smoke.json         TX-only 板测目标与正式 filelist
   project/video_rx.json                  接收帧几何监测组件目标
+  project/video_rx_board.json            本地彩条和物理输入诊断目标
+  project/video_ddr_bist.json             独立 native DDR 板测目标
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
+  constraints/video_rx_board.fdc         RX/TX 管脚、半周期采样与 CDC 约束
+  constraints/video_ddr_bist.fdc / .rcf   完整 DDR 管脚/时钟/复位和官方位置约束
+  ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
   rtl/video_clock_reset.sv               PLL 和各时钟域复位/外设启动
   rtl/hdmi_tx_init.sv                    独立发送初始化及 ACK/超时错误
   rtl/video_board_smoke_top.sv           RGB888 彩条板级顶层
+  rtl/hdmi_rx_init.sv                    RX 配置、EDID 和状态监测
+  rtl/video_rx_telemetry.sv              计频、快照握手和新鲜度
+  rtl/video_diag_uart.sv                 整包锁存的诊断 UART
+  rtl/video_rx_board_top.sv              下降沿接收采样与本地彩条
+  rtl/video_ddr_bist_top.sv              HMIC、独立监测、复位和 BIST
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据
 docs/video/STATUS.md                     任务、依赖和完成状态
@@ -82,9 +115,12 @@ build/video/                            被忽略的运行结果、参考副本�
 - `build/video/latest_all.json`：最新完整已实现套件的状态及日志目录。
 - `build/video/latest_pds.json`：最近一次 PDS 目标的状态、资源与输入哈希。
 - `build/video/latest_pds_video_board_smoke.json`、`latest_pds_video_rx.json`：各目标独立结果，避免组件综合覆盖板级下载包依据。
+- `build/video/latest_pds_video_rx_board.json`、`latest_pds_video_ddr_bist.json`：RX/DDR 板级目标的内部时序、位流和校验掩码哈希。
 - `build/video/latest_package.json`：通过哈希复核的板级位流包。
+- `build/video/latest_package_video_rx_board.json`、`latest_package_video_ddr_bist.json`：RX/DDR 各自最新发布包。
+- `build/video/latest_board_program.json`、`latest_board_serial.json`：实际下载/校验和串口采集；串口收包成功与 RX/DDR 合格分别记录。
 - `build/video/latest_jtag_scan.json`：只读扫描结果，不能替代 Program/Verify 或画面证据。
 - `build/video/vendor/{hdmi,ddr}/provenance.json`：参考包与成员哈希。
 - 回归和 PDS 使用独立时间戳目录；时间戳目录用 UTC，报告日期按北京时间记录。
 
-当前入口可生成彩条板测镜像，扫描脚本仅检查连接。下载按板测说明在 PDS Configuration 执行易失配置和验证；本批无 Flash 固化流程。外部 MS7210 AC 参数和实际画面仍须单独验收。
+当前入口可生成彩条、RX 诊断和独立 DDR 自检镜像；扫描脚本仅检查连接。`program_board.py` 在同一会话核对 FPGA ID 后执行易失配置与 Verify；本批无 Flash 固化流程。外部 AC 参数、实际画面、RX 模式和 DDR 校准/自检分别验收，当前状态见 STATUS。

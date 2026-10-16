@@ -25,6 +25,26 @@
 
 候选像素可以先写入预留存储，但消费者必须等 `frame_good` 后才能把它视为几何合格帧；还需等待各 DMA 写响应，才能发布正式 `CAPTURE_DONE/INPUT_READY`。本模块的事件不能替代这些完成语义。
 
+## 已实现：物理 RX 与串口诊断
+
+`video_rx_board_top` 按 TX → RX 顺序配置共享 I²C；SDA 开漏，SCL 仅一个所有者。G25 同时复位两颗收发芯片，RX 重连不得单独拉低它。RX boot 完成和频率事件后的配置完成分别报告；后者是保持状态，不是实时 HDMI 锁定信号。未经文档确认的状态寄存器只保留原始字节，不推测频率单位。
+
+固定 EDID 使用 40 MHz 的 800/256/600/28 详细时序，无扩展块。输入 HS/VS/DE/RGB888 在 PCLK 下降沿统一捕获，供上升沿几何监测和精确时序检查使用。选择依据为上板观察到原上升沿采样有一周期的 HS 边沿歧义；内部半周期时序与真实输入测量分别验证，仍不替代收发芯片外部 AC 参数的签核。
+
+频率计数以 10 MHz 配置时钟为时基，注册 Gray 计数经两级同步，在 10 ms 门宽测量；39.8–40.2 MHz 视为频率合格。完整状态经冻结源总线、req/ack 两级同步及额外等待沿传递。停钟后频率/新鲜度撤销最迟约两个门宽，不能当作零延迟断线中断。
+
+UART C24、115200、8N1。每包 37 字节：ASCII `TRV1`，32 字节 payload，前 36 字节逐字节 XOR 校验；payload 整包锁存，多字节小端。约每秒一包，RX 目标按 heartbeat 状态输出 type 1 和 type 3，不保证严格交替：
+
+| Payload 字节 | type 1：模式测量 | type 3：原始边沿探针 |
+|---|---|---|
+| 0 / 1 | 类型 / flags | 类型 / 同一 flags |
+| 2–3 | RGB888 帧签名 | 保留为 0 |
+| 4–23 | 10 个 uint16：ha、va、ht、vt、hs、vs、hfront、hback、vfront、vback | 5 个 uint32：VS 高电平周期、VS 周期、HS 上升/下降次数、VS 上升次数 |
+| 24–27 | 像素 Hz，uint32 | VS 下降次数，uint32 |
+| 28–31 | 好/坏帧计数低 16 位 | DE 上升次数，uint32 |
+
+flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snapshotfresh、frequencygood、modegood。只有完整帧几何、全部同步/porch、频率及初始化条件同时通过才置 modegood。串口收包成功不表示模式验收成功；type 3 的 VS 周期以像素时钟为单位，不能与 type 1 的行数混淆。两种包分别为完整 CDC 快照，跨包不保证同一帧。
+
 ## 后续 CPU–Video 协议准入
 
 保留规格的控制基址 `0x2001_0000` 与寄存器区间；当前不生成可误用的完整 `video_regs.h`，待详细位定义、复位值、W1C 和忙时规则形成一致版本后一起生成 RTL/C。

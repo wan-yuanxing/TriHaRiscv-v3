@@ -62,6 +62,7 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             build=Path(directory)
             (build/'latest_package.json').write_text('{"status":"pass","directory":"old"}')
+            (build/'latest_package_video_board_smoke.json').write_text('{"status":"pass","directory":"old"}')
             # A failed PDS result must invalidate, not preserve, the prior package.
             (build/'latest_pds.json').write_text('{"status":"fail"}')
             with patch.object(package_board,'BUILD',build), contextlib.redirect_stderr(io.StringIO()):
@@ -69,6 +70,7 @@ class PackageTests(unittest.TestCase):
             result=json.loads((build/'latest_package.json').read_text())
             self.assertEqual(result['status'],'fail')
             self.assertNotIn('directory',result)
+            self.assertEqual(json.loads((build/'latest_package_video_board_smoke.json').read_text())['status'],'fail')
 
 
 if __name__=='__main__': unittest.main()

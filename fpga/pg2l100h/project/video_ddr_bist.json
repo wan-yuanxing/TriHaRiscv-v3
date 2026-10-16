@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "target": "video_ddr_bist",
+  "top": "video_ddr_bist_top",
+  "test_top": "tb_ddr_board",
+  "sources": [
+    "rtl/video/ddr_native_bist.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "fpga/pg2l100h/rtl/video_ddr_bist_top.sv"
+  ],
+  "vendor_sources": [],
+  "ddr_ip": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "generated_ip_instance": "I_ips_ddr_top",
+  "tests": [
+    "tb/video/models/ddr_native_model.sv",
+    "tb/video/models/ddr_board_ip_model.sv",
+    "tb/video/tb_ddr_board.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf"
+  ],
+  "scope": "Standalone destructive native256 DDR BIST in two1MiB physical windows plus address sentinels; no HDMI/fabric/DMA. Portable IP substitute proves digital wrapper only; physical calibration and analog I/O timing require separate evidence."
+}

@@ -1,0 +1,121 @@
+"""Read framed board diagnostics through Windows SerialPort (no pyserial)."""
+import argparse
+from functools import reduce
+import json
+from pathlib import Path
+import re
+import shutil
+import struct
+import subprocess
+import sys
+
+from common import BUILD,ROOT,fresh_run,sha256,write_json
+
+
+def decode_packets(data):
+    records=[]
+    offset=0
+    names=('type','flags','rgb_signature','h_active','v_active','h_total','v_total',
+           'h_sync','v_sync','h_front','h_back','v_front','v_back','pixel_hz','good_frames','bad_frames')
+    while True:
+        start=data.find(b'TRV1',offset)
+        if start<0 or start+37>len(data):break
+        packet=data[start:start+37]
+        offset=start+1
+        if reduce(int.__xor__,packet,0):continue
+        if packet[4]==1:
+            record=dict(zip(names,struct.unpack('<BBH10HIHH',packet[4:36])))
+            flags=('tx_done','tx_error','rx_boot_done','rx_error','rx_configured',
+                   'snapshot_fresh','frequency_good','mode_good')
+        elif packet[4]==2:
+            fields=('type','flags','phase','error_code','compared_beats','first_error_word_address',
+                    'first_error_xor_low32','low_base_bytes','high_base_bytes','window_beats','heartbeat')
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked')
+        elif packet[4]==3:
+            fields=('type','flags','reserved','vs_high_clocks','vs_period_clocks',
+                    'hs_rises','hs_falls','vs_rises','vs_falls','de_rises')
+            record=dict(zip(fields,struct.unpack('<BBH7I',packet[4:36])))
+            flags=('tx_done','tx_error','rx_boot_done','rx_error','rx_configured',
+                   'snapshot_fresh','frequency_good','mode_good')
+        else:continue
+        for bit,name in enumerate(flags):
+            record[name]=bool(record['flags']&(1<<bit))
+        records.append(record)
+        offset=start+37
+    return records
+
+
+def qualify_ddr(records):
+    rows=[r for r in records if r['type']==2]
+    if len(rows)<2 or rows[-1]['heartbeat']==rows[-2]['heartbeat']:return False
+    return all(r['init_done'] and r['all_pll_locked'] and r['done'] and not r['busy']
+               and not r['error'] and r['error_code']==0 and r['compared_beats']==3_014_685
+               and r['first_error_word_address']==0 and r['first_error_xor_low32']==0
+               and r['low_base_bytes']==0 and r['high_base_bytes']==0x3ff00000
+               and r['window_beats']==32768 for r in rows[-2:])
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--port',required=True)
+    parser.add_argument('--seconds',type=int,default=8)
+    args=parser.parse_args()
+    if not re.fullmatch(r'COM[1-9][0-9]*',args.port,re.IGNORECASE) or not 1<=args.seconds<=60:
+        parser.error('Use explicit COM<n> and a duration from1to60seconds')
+    work=fresh_run('board_serial')
+    result={'status':'running','directory':str(work.relative_to(ROOT)), 'port':args.port,'records':[],
+            'operation':'receive_only_uart','physical_rx_mode_verified':False,
+            'physical_ddr_bist_verified':False}
+    write_json(BUILD/'latest_board_serial.json',result)
+    try:
+        shell=shutil.which('powershell.exe')
+        if shell is None:raise RuntimeError('Windows PowerShell not found')
+        script=work/'capture.ps1'
+        script.write_text('''param([string]$Port,[int]$Seconds,[string]$OutputFile)
+$ErrorActionPreference='Stop'
+$uart=[System.IO.Ports.SerialPort]::new($Port,115200,[System.IO.Ports.Parity]::None,8,[System.IO.Ports.StopBits]::One)
+$uart.ReadTimeout=200
+$uart.DtrEnable=$false
+$uart.RtsEnable=$false
+$stream=[System.IO.File]::Open($OutputFile,[System.IO.FileMode]::CreateNew,[System.IO.FileAccess]::Write,[System.IO.FileShare]::Read)
+try {
+    $uart.Open()
+    $timer=[System.Diagnostics.Stopwatch]::StartNew()
+    $buffer=[byte[]]::new(4096)
+    while($timer.Elapsed.TotalSeconds -lt $Seconds) {
+        try { $count=$uart.Read($buffer,0,$buffer.Length); $stream.Write($buffer,0,$count) }
+        catch [System.TimeoutException] { }
+    }
+} finally { $uart.Close(); $uart.Dispose(); $stream.Dispose() }
+''',encoding='ascii')
+        raw=work/'uart.bin'
+        quote=lambda value:"'"+str(value).replace("'","''")+"'"
+        command='& {\n'+script.read_text(encoding='ascii')+'\n} -Port '+quote(args.port)+\
+            ' -Seconds '+str(args.seconds)+' -OutputFile '+quote(raw)
+        with (work/'capture.log').open('w',encoding='utf-8') as log:
+            process=subprocess.run([shell,'-NoProfile','-NonInteractive','-Command',command],
+                stdout=log,stderr=subprocess.STDOUT,timeout=args.seconds+15)
+        if process.returncode:raise RuntimeError('Serial capture failed; inspect capture.log')
+        records=decode_packets(raw.read_bytes())
+        if not records:raise RuntimeError('No valid TRV1 board packets received')
+        result.update(status='pass',records=records,raw_sha256=sha256(raw))
+        latest=records[-1]
+        expected={'h_active':800,'v_active':600,'h_total':1056,'v_total':628,
+                  'h_sync':128,'v_sync':4,'h_front':40,'h_back':88,'v_front':1,'v_back':23}
+        rx_records=[r for r in records if r['type']==1]
+        result['physical_rx_mode_verified']=len(rx_records)>=3 and all(
+            all(row[k]==v for k,v in expected.items()) and 39_800_000<=row['pixel_hz']<=40_200_000
+            and all(row[k] for k in ('mode_good','frequency_good','snapshot_fresh','rx_boot_done','rx_configured','tx_done'))
+            and not(row['tx_error'] or row['rx_error']) for row in rx_records[-3:])
+        result['physical_ddr_bist_verified']=qualify_ddr(records)
+        print(json.dumps(latest,ensure_ascii=True))
+    except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
+        result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)
+    write_json(work/'result.json',result)
+    write_json(BUILD/'latest_board_serial.json',result)
+    print('VIDEO_BOARD_SERIAL:',result['status'],work)
+    return 0 if result['status']=='pass' else 1
+
+
+if __name__=='__main__':raise SystemExit(main())

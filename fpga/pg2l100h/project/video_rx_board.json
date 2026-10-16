@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target": "video_rx_board",
+  "top": "video_rx_board_top",
+  "test_top": "tb_rx_board",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "rtl/video/video_test_pattern.sv",
+    "rtl/video/video_pattern_core.sv",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "rtl/video/video_rx.sv",
+    "rtl/video/video_rx_measure.sv",
+    "rtl/video/video_rx_probe.sv",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "fpga/pg2l100h/rtl/video_rx_board_top.sv"
+  ],
+  "vendor_sources": [
+    "source/hdmi/ms7210_ctl.v",
+    "source/hdmi/iic_dri.v",
+    "source/hdmi/ms7200_ctl.v"
+  ],
+  "tests": [
+    "tb/video/tb_rx_board.sv",
+    "tb/video/models/video_pll_model.sv",
+    "tb/video/models/ms7210_i2c_model.sv",
+    "tb/video/models/ms7200_i2c_model.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_rx_board.fdc"
+  ],
+  "scope": "TX local colorbars plus RX fixed EDID, measured timing/frequency and diagnostic UART; no capture DMA/DDR"
+}

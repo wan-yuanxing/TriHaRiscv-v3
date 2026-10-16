@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "base_commit": "16556d1",
+  "scope": "RX fixed EDID/timing diagnostics and standalone native DDR BIST; no DMA/AXI128/fabric/NPU",
+  "physical_rx_mode_verified": false,
+  "physical_ddr_bist_verified": false,
+  "external_io_timing_verified": false,
+  "flash_written": false,
+  "regression": {
+    "path": "build/video/regression/20261016T104805_104909Z/result.json",
+    "sha256": "ad99363f0c7b412fbb282ca502312001ed0e8727d855a578b97670421842cf2e",
+    "status": "pass",
+    "directory": "build\\video\\regression\\20261016T104805_104909Z",
+    "passed": [
+      "ddr_bist",
+      "ddr_board",
+      "config",
+      "timing",
+      "clocks",
+      "rx_init",
+      "rx_measure",
+      "rx_board",
+      "tx_init",
+      "board",
+      "rx"
+    ]
+  },
+  "regression_source_hashes_match_current": true,
+  "python_tests": {
+    "run": 33,
+    "passed": 32,
+    "skipped": 1,
+    "skip": "Windows symlink privilege"
+  },
+  "rx_build": {
+    "path": "build/video/pds/20261016T104815_249764Z/result.json",
+    "sha256": "2d5b1cc9f8159f07bce8218b14228f7b6680b71efdc2d160cb96411e965463f1",
+    "status": "pass",
+    "directory": "build\\video\\pds\\20261016T104815_249764Z",
+    "target": "video_rx_board",
+    "stage": "bitstream",
+    "resources": {
+      "lut": 1970.0,
+      "registers": 2918.0,
+      "drm": 1.0
+    },
+    "internal_timing_met": true,
+    "external_io_timing_verified": false,
+    "artifact_sha256": "406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c",
+    "verify_mask_sha256": "9d0c1a060fedb3b25833fe0bfb4a865ce987798b3725cf6031ac4e259b542032"
+  },
+  "ddr_build": {
+    "path": "build/video/pds/20261016T103600_829655Z/result.json",
+    "sha256": "d6e78a0b43ff03de7db89e28cc62d07939080216cb7633a20b6adef69f34f51d",
+    "status": "pass",
+    "directory": "build\\video\\pds\\20261016T103600_829655Z",
+    "target": "video_ddr_bist",
+    "stage": "bitstream",
+    "resources": {
+      "lut": 6747.0,
+      "registers": 6816.0,
+      "drm": 0.0
+    },
+    "internal_timing_met": true,
+    "external_io_timing_verified": false,
+    "artifact_sha256": "9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4",
+    "verify_mask_sha256": "ccb18a3940181b07b83f4993b5e873d5a37f086e143ab6b3c29fc950f989ac3b"
+  },
+  "rx_package": {
+    "path": "build/video/latest_package_video_rx_board.json",
+    "sha256": "b8ef33266ecdada36ab2124e54ba763303df1a9d024794e4e3c7b61609ec234b",
+    "status": "pass",
+    "directory": "build\\video\\releases\\video_rx_board_406edfee9a21",
+    "target": "video_rx_board",
+    "verify_mask_sha256": "9d0c1a060fedb3b25833fe0bfb4a865ce987798b3725cf6031ac4e259b542032",
+    "bitstream_sha256": "406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c"
+  },
+  "ddr_package": {
+    "path": "build/video/latest_package_video_ddr_bist.json",
+    "sha256": "f4f982912106194a3d0af3267014847416d47543dd4803a394ae19c579a3afb8",
+    "status": "pass",
+    "directory": "build\\video\\releases\\video_ddr_bist_9617217b476b",
+    "target": "video_ddr_bist",
+    "verify_mask_sha256": "ccb18a3940181b07b83f4993b5e873d5a37f086e143ab6b3c29fc950f989ac3b",
+    "bitstream_sha256": "9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4"
+  },
+  "internal_timing_setup_ns": {
+    "rx_pixel_40MHz": 6.24,
+    "ddr_core_125MHz": 0.2,
+    "ddr_free_27MHz": 31.395,
+    "ddr_reset_125MHz": 4.909
+  },
+  "last_successful_rx_program": {
+    "path": "build/video/board_program/20261016T094030_851511Z/result.json",
+    "sha256": "e45fd6fbe50b8d9d5df0e9e8ad56d2025fb3907b940d5a108d0abd0cb4929507",
+    "status": "pass",
+    "directory": "build\\video\\board_program\\20261016T094030_851511Z",
+    "target": "video_rx_board",
+    "verify_mask_sha256": "d0a856293fd5fddbac22379eda354d8be597cf4ac6ade2159914a9d907361766",
+    "bitstream_sha256": "04caece3fe5535699d7221aa58601d1e74a6e3b89a00e633384475cea6cdeefd",
+    "device_found": true,
+    "programmed": true,
+    "verified": true
+  },
+  "rx_positive_capture_diagnostics": {
+    "path": "build/video/board_serial/20261016T094117_901074Z/result.json",
+    "sha256": "62c690c68f665c85b901a937f1305d50d80beff2888043c4af044a4293a3eaff",
+    "status": "pass",
+    "directory": "build\\video\\board_serial\\20261016T094117_901074Z",
+    "physical_rx_mode_verified": false,
+    "physical_ddr_bist_verified": false
+  },
+  "rx_measurement": {
+    "pixel_hz_range": [
+      40000100,
+      40000200
+    ],
+    "active": [
+      800,
+      600
+    ],
+    "vs_high_clocks": 4224,
+    "vs_period_clocks": 663168,
+    "problem": "Positive capture: one-clock HS variations; mode_good=false; falling-capture build still needs physical test",
+    "user_source_confirmation": "PC active signal 800x600 at displayed60.32Hz"
+  },
+  "jtag_last_scan": {
+    "path": "build/video/jtag_scan/20261016T095413_941365Z/result.json",
+    "sha256": "083cbbd89b62d81830494152ba61051105f0ad2c959bc5d1667a051ecdf8bd5c",
+    "status": "unavailable",
+    "directory": "build\\video\\jtag_scan\\20261016T095413_941365Z",
+    "device_found": false,
+    "programmed": false,
+    "reason": "Target PG2L100H was not identified; inspect scan/server logs",
+    "exit_code": 0,
+    "frequency": null
+  },
+  "last_program_attempt": {
+    "path": "build/video/board_program/20261016T102918_260561Z/result.json",
+    "sha256": "3d845ca487bd15a6d933d334c8169f04d4494040104e76a3d44eb12d53d2ee1c",
+    "status": "fail",
+    "directory": "build\\video\\board_program\\20261016T102918_260561Z",
+    "target": "video_rx_board",
+    "verify_mask_sha256": "31edbb78a5e352291e6b66ac700e4b5fa29e20130974d832085da41d9264020a",
+    "bitstream_sha256": "e39dbf9509096633b169afd13b48cb7c7eef653c4ee677b609c97cd0712996ab",
+    "device_found": false,
+    "programmed": false,
+    "verified": false
+  },
+  "historical_raw_retry": {
+    "path": "build/video/raw_jtag_retry/20261016T095514_600179Z/result.json",
+    "sha256": "3b334f2efded5e06665582dff8449725e6225b61a1fc77ce3607adb47b869013",
+    "programmed": false,
+    "identified": false,
+    "exit_code": 0
+  },
+  "delayed_raw_retry": {
+    "path": "build/video/raw_jtag_retry/20261016T100005_117881Z/result.json",
+    "sha256": "bc2a358c6ab2d59802bac436d4adf4d741e938623d1134b2f41b0bb4ded41c9a",
+    "programmed": false,
+    "identified": false,
+    "exit_code": 0
+  },
+  "board_current_image": "Unknown after user power cycle; no TRV1 packets received",
+  "bist_default": {
+    "window_bytes_each": 1048576,
+    "high_base_bytes": 1072693248,
+    "compared_beats": 3014685,
+    "physical_bytes": 1073741824,
+    "full_device_sweep": false
+  },
+  "official_rcf_byte_preserved": true,
+  "simulation_limit": "Protected ModelSim model compiled/elaborated, runtime GTP_GPLL division by zero at76ns; no training PASS",
+  "reset_exception_contract": "Raw asynchronous C/P legs and vendor phase32 startup protocol reviewed; FSM-safe free_release/startup_done source exception reaches only405 C/P reset endpoints, zero D/CE/RAMdata; not analog recovery signoff",
+  "review_evidence": [
+    "build/video/rx-init-agent/result.json",
+    "build/video/ddr-bist-agent/evidence.json",
+    "build/video/ddr-board-agent/source-audit.json",
+    "build/video/rx-probe-agent/latest_green.json",
+    "build/video/ddr-physical-audit/BIST_PIPELINED_CACHE_REVIEW.md",
+    "build/video/ddr-physical-audit/bist-pipelined-cache-reviewed-input.json",
+    "build/video/rx-physical-audit/RECOMMENDATIONS.md",
+    "build/video/ddr-physical-audit/phase-reset-hold-current-run.log",
+    "build/video/ddr-physical-audit/vendor-reset-sequence-run.log"
+  ],
+  "remaining": [
+    "Restore JTAG identification",
+    "Program/Verify falling-capture RX and qualify complete mode",
+    "Program/Verify DDR; actual calibration/BIST and KEY0 rerun",
+    "External I/O AC signoff",
+    "Formal AXI128/fabric visibility, capture/display DMA and remaining Video pipeline"
+  ],
+  "review_evidence_sha256": {
+    "build/video/rx-init-agent/result.json": "47c29bbcb50f6ad6ba3bbb545dffa049a8c43fc80858ba4f4a68290738c68e7a",
+    "build/video/ddr-bist-agent/evidence.json": "925fa26fe4995383ba40b6818bb4200d3dfa13db5ad361e07cc618d71005d6ba",
+    "build/video/ddr-board-agent/source-audit.json": "5a54516d38f4e2a2e18a7fa8c4e6fd7a2e704a894618d46696d388a9cc0f2239",
+    "build/video/rx-probe-agent/latest_green.json": "1f2cc716d3c9af96f84f486f3e3689e0595d24814fa02eadbeaba6152f6e457e",
+    "build/video/ddr-physical-audit/BIST_PIPELINED_CACHE_REVIEW.md": "d85886026f1a5fe9be7094773a3272ea471d88f978dd3b20100b81bcfaf73a10",
+    "build/video/ddr-physical-audit/bist-pipelined-cache-reviewed-input.json": "9acefb37a2e4c4c9db3927dc3ac54133d3c60bb134cb04465a80a9e44805bd4b",
+    "build/video/rx-physical-audit/RECOMMENDATIONS.md": "d0bb23bf91e8c56327f611b5cecf43bb2672e09e202914f974ed23afc3c7ab24",
+    "build/video/ddr-physical-audit/phase-reset-hold-current-run.log": "b25c9d1f0a1cb7ece7b74e1d4c1887e327e350117f1bd67d8c070a21efbdf8e7",
+    "build/video/ddr-physical-audit/vendor-reset-sequence-run.log": "9f75920cf2571e07f9477cb86610b3d3d2e649b2fa04d41baa0323a0847c3213"
+  }
+}

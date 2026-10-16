@@ -8,6 +8,14 @@ from common import BUILD, ROOT, fresh_run, input_hashes, run_logged, tool, write
 from gen_pll import generate as generate_pll
 
 
+def add_inputs(result,paths):
+    incoming=input_hashes(paths)
+    changed=[name for name,digest in incoming.items()
+             if name in result['inputs'] and result['inputs'][name]!=digest]
+    if changed:raise RuntimeError('Inputs changed between suites: '+', '.join(changed))
+    result['inputs'].update(incoming)
+
+
 def simulate(work, name, top, sources, includes=(), defines=(), timeout=120):
     binary = work / (name + ".vvp")
     command = [tool("iverilog"), "-g2012", "-Wall", "-s", top, "-o", binary]
@@ -20,7 +28,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -41,7 +49,7 @@ def main():
                   ROOT / "rtl/video/include/video_cfg.vh", ROOT / "sw/include/video_cfg.h"]
         paths += list((ROOT / "scripts/video").glob("*.py"))
         paths += list((ROOT / "tb/video").glob("test_*.py"))
-        if args.suite in ("clocks", "board", "tx_init", "tx_init_full", "rx", "all"):
+        if args.suite in ("clocks", "board", "tx_init", "tx_init_full", "rx", "rx_init", "rx_measure", "rx_board", "all"):
             paths += list((ROOT / "fpga/pg2l100h/rtl").glob("*.sv"))
             paths += list((ROOT / "tb/video").glob("*.sv"))
             paths += list((ROOT / "tb/video/models").glob("*.sv"))
@@ -49,9 +57,34 @@ def main():
                       ROOT / "fpga/pg2l100h/ip/video_reference_manifest.json"]
         result["inputs"] = input_hashes(set(paths))
         if args.suite in ("rx", "all"):
-            result["inputs"].update(input_hashes([
-                ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"]))
+            add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('ddr_bist','ddr_board','all'):
+            add_inputs(result,[
+                ROOT/'rtl/video/ddr_native_bist.sv',
+                ROOT/'fpga/pg2l100h/rtl/video_ddr_bist_top.sv',
+                ROOT/'fpga/pg2l100h/rtl/video_diag_uart.sv',
+                *list((ROOT/'tb/video').glob('*ddr*.sv')),
+                *list((ROOT/'tb/video/models').glob('*ddr*.sv'))])
+        if args.suite in ('ddr_bist','all'):
+            for window,burst in ((1,1),(2,2),(3,3),(5,2),(17,16),(33,16),(37,15),(137,7)):
+                binary=work/f'ddr_bist_{window}_{burst}.vvp'
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_ddr_native_bist',
+                    f'-Ptb_ddr_native_bist.TEST_WINDOW_BEATS={window}',
+                    f'-Ptb_ddr_native_bist.TEST_BURST_BEATS={burst}','-o',binary,
+                    ROOT/'rtl/video/ddr_native_bist.sv',ROOT/'tb/video/models/ddr_native_model.sv',
+                    ROOT/'tb/video/tb_ddr_native_bist.sv'],work/f'ddr_bist_{window}_{burst}_compile.log')
+                log=run_logged([tool('vvp'),binary],work/f'ddr_bist_{window}_{burst}_simulation.log',timeout=600)
+                if 'PASS tb_ddr_native_bist' not in log:raise RuntimeError('Missing DDR BIST pass marker')
+            result['passed'].append('ddr_bist')
+        if args.suite in ('ddr_board','all'):
+            path=ROOT/'fpga/pg2l100h/project/video_ddr_bist.json'
+            ddr=json.loads(path.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in ddr['sources']+ddr['tests']]
+            add_inputs(result,[path,*paths])
+            log=simulate(work,'ddr_board','tb_ddr_board',paths,timeout=600)
+            if 'VIDEO_DDR_BOARD_PASS' not in log:raise RuntimeError('Missing DDR board pass marker')
+            result['passed'].append('ddr_board')
         if args.suite in ("config", "all"):
             run_logged([sys.executable, "-m", "unittest", "discover", "-s",
                         ROOT / "tb/video", "-p", "test_*.py", "-v"], work / "python.log")
@@ -87,6 +120,34 @@ def main():
                     raise RuntimeError("Missing " + marker)
             result["passed"].append("clocks")
         vendor = ROOT / "build/video/vendor/hdmi/source/hdmi"
+        if args.suite in ("rx_init", "rx_board", "all"):
+            run_logged([sys.executable, ROOT/"scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
+            add_inputs(result,[ROOT/"config/video_edid.hex",ROOT/"rtl/video/include/video_edid.vh"])
+        if args.suite in ("rx_init", "all"):
+            log=simulate(work,"rx_init","tb_hdmi_rx_init",[
+                ROOT/"fpga/pg2l100h/rtl/hdmi_rx_init.sv",vendor/"ms7200_ctl.v",vendor/"iic_dri.v",
+                ROOT/"tb/video/tb_hdmi_rx_init.sv",ROOT/"tb/video/models/ms7200_i2c_model.sv"],
+                [ROOT/"rtl/video/include"],timeout=600)
+            if "HDMI_RX_INIT_PASS" not in log: raise RuntimeError("Missing HDMI_RX_INIT_PASS")
+            result["passed"].append("rx_init")
+        if args.suite in ("rx_measure", "all"):
+            for name,source in [("rx_measure","rtl/video/video_rx_measure.sv"),
+                                ("rx_probe","rtl/video/video_rx_probe.sv"),
+                                ("rx_telemetry","fpga/pg2l100h/rtl/video_rx_telemetry.sv"),
+                                ("diag_uart","fpga/pg2l100h/rtl/video_diag_uart.sv")]:
+                add_inputs(result,[ROOT/source])
+                log=simulate(work,name,"tb_"+name,[ROOT/source,ROOT/f"tb/video/tb_{name}.sv"],timeout=600)
+                if f"VIDEO_{name.upper()}_PASS" not in log: raise RuntimeError("Missing pass marker: "+name)
+            result["passed"].append("rx_measure")
+        if args.suite in ("rx_board", "all"):
+            target=ROOT/"fpga/pg2l100h/project/video_rx_board.json"
+            rx_board=json.loads(target.read_text(encoding="utf-8"))
+            paths=[ROOT/p for p in rx_board["sources"]+rx_board["tests"]]
+            add_inputs(result,[target,*paths])
+            log=simulate(work,"rx_board","tb_rx_board",[*paths,*[ROOT/"build/video/vendor/hdmi"/p for p in rx_board["vendor_sources"]]],
+                         [ROOT/"rtl/video/include"],timeout=600)
+            if "VIDEO_RX_BOARD_PASS" not in log: raise RuntimeError("Missing VIDEO_RX_BOARD_PASS")
+            result["passed"].append("rx_board")
         tx_sources = [ROOT / "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
                       vendor / "ms7210_ctl.v", vendor / "iic_dri.v"]
         if args.suite in ("tx_init", "tx_init_full", "all"):
@@ -101,7 +162,7 @@ def main():
             board_path = ROOT / "fpga/pg2l100h/project/video_board_smoke.json"
             board = json.loads(board_path.read_text(encoding="utf-8"))
             from common import sha256
-            result["inputs"].update(input_hashes([board_path]))
+            add_inputs(result,[board_path])
             result["vendor_inputs"] = {str(path.relative_to(ROOT)): sha256(path)
                                        for path in tx_sources[1:]}
             log = simulate(work, "board", board["test_top"],
@@ -118,6 +179,9 @@ def main():
             if "VIDEO_RX_PASS" not in log:
                 raise RuntimeError("Missing VIDEO_RX_PASS")
             result["passed"].append("rx")
+        from common import sha256
+        changed=[name for name,digest in result['inputs'].items() if sha256(ROOT/name)!=digest]
+        if changed:raise RuntimeError('Inputs changed during regression: '+', '.join(changed))
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

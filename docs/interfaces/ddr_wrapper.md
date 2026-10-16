@@ -1,6 +1,6 @@
 # DDR wrapper 准入契约
 
-状态：参考包与接口差异已核对，**总工程尚未实现 ddr_wrapper**。此文用于 V015 前的准入，不能作为真实 DDR 校准或带宽证据。
+状态：已实现独立 `video_ddr_bist` native 板测目标，**正式 AXI128 ddr_wrapper 尚未实现**。真实校准/自检以本批证据为准；此文不提供跨主端可见性或带宽保证。
 
 规格要求逻辑 128 bit AXI4 DMA、字节地址、INCR、最多 16 beat、4 KiB 拆分，首版每主端读/写各最多一个未完成事务。CPU 负责 fabric 地址、仲裁和排序，Video 负责厂商 DDR IP 与 native 封装。
 
@@ -18,3 +18,11 @@ V015 的必要验证：
 6. 多主端访问、显示水位优先及最大服务等待，不能只测平均吞吐。
 
 实际容量、频率和器件参数以核对后的板卡/IP 为准；软件仍只访问 v0.6 规划并已验证的地址窗口。FDC/RCF 的层次重绑定和 PHY/PLL 反馈结构必须单独审查。
+
+独立 BIST 的配置为 N3/N2 差分 125 MHz、core 125 MHz、DDR 500 MHz、物理 1 GiB。覆盖低/高各 1 MiB、29 个地址哨兵、8 种全数据模式与 38 个掩码阶段；默认完成 3,014,685 个 256-bit 读比较。高窗口字节偏移为 `0x3ff00000`。它是破坏性测试，未遍历全部 1 GiB，也未证明 AXI128 lane、fabric 或跨主端排序。
+
+每个命令先用 17 拍生成并写满 16 项缓存、预取首拍，再发 AW/AR；缓存使用 LUT RAM，模式生成和读输出各有寄存级。写数据与读期望值均已预备，支持 AW 同拍最早 WREADY、返回不能背压、4 KiB 拆分及 ID/LAST/超时检查。这是有限功能自检，不作为峰值带宽测量。BIST 和控制器通过 KEY0 协调复位；初始化丢失保持失败，不能靠清状态继续旧事务。独立 27 MHz 监测域报告初始化超时、PLL/初始化丢失、PHY/align 错误及 core 停钟，任何错误撤销 PASS。
+
+沿用 `TRV1` 37 字节 UART 包，type 2 的 payload：byte1 flags 的 bit0..4 为 init/busy/done/error/allPLL；byte2 phase、byte3 errorcode；bytes4..7 比较数；8..11 首错 native **32-bit-word 地址**；12..15 首错 256-bit XOR 的**低 32 位**；16..19 低窗口字节偏移；20..23 高窗口字节偏移；24..27 窗口 beat 数；28..31 独立时基 heartbeat。低 32 位 XOR 为零不能排除高 lane 出错。板级保持错误 E0/E1/E2/E3/E4 分别表示 init 超时、init/PLL 丢失、PHY 初始化失败、align、快照停滞；native 错误码见组件源文件。
+
+保护库已通过 ModelSim 编译/展开，但本机厂商 GPLL 模型在 76 ns 因除零中止，未得到真实训练仿真通过。便携板级 TB 使用明确标记的数字 IP 替身，仅验证 wrapper、复位、CDC、UART 与 BIST 控制。
