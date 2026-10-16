@@ -126,15 +126,44 @@
     "user_source_confirmation": "PC active signal 800x600 at displayed60.32Hz"
   },
   "jtag_last_scan": {
-    "path": "build/video/jtag_scan/20261016T095413_941365Z/result.json",
-    "sha256": "083cbbd89b62d81830494152ba61051105f0ad2c959bc5d1667a051ecdf8bd5c",
+    "path": "build/video/jtag_scan/20261016T105929_019078Z/result.json",
+    "sha256": "565a621b80d554cd6368805c1828514314b2b947dbe86bd66a4a9b37dedbfdc1",
     "status": "unavailable",
-    "directory": "build\\video\\jtag_scan\\20261016T095413_941365Z",
+    "directory": "build\\video\\jtag_scan\\20261016T105929_019078Z",
     "device_found": false,
     "programmed": false,
     "reason": "Target PG2L100H was not identified; inspect scan/server logs",
     "exit_code": 0,
-    "frequency": null
+    "frequency": "100KHz"
+  },
+  "jtag_after_user_cable_reseat": [
+    {
+      "path": "build/video/jtag_scan/20261016T105905_265475Z/result.json",
+      "sha256": "4ec2e5d244641ed81f0c6930d176fb919f40b22f2865e67a259326bdafd66d4e",
+      "status": "unavailable",
+      "directory": "build\\video\\jtag_scan\\20261016T105905_265475Z",
+      "device_found": false,
+      "programmed": false,
+      "reason": "Target PG2L100H was not identified; inspect scan/server logs",
+      "exit_code": 0,
+      "frequency": null
+    },
+    {
+      "path": "build/video/jtag_scan/20261016T105929_019078Z/result.json",
+      "sha256": "565a621b80d554cd6368805c1828514314b2b947dbe86bd66a4a9b37dedbfdc1",
+      "status": "unavailable",
+      "directory": "build\\video\\jtag_scan\\20261016T105929_019078Z",
+      "device_found": false,
+      "programmed": false,
+      "reason": "Target PG2L100H was not identified; inspect scan/server logs",
+      "exit_code": 0,
+      "frequency": "100KHz"
+    }
+  ],
+  "pending_hardware_measurement": {
+    "user_has_multimeter": true,
+    "j12_4_to_2_volts": null,
+    "setup": "Board-end cable disconnected while power off; DC voltage measured after power on; expected A3V3 about3.3V"
   },
   "last_program_attempt": {
     "path": "build/video/board_program/20261016T102918_260561Z/result.json",
