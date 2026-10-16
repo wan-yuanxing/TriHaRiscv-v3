@@ -50,7 +50,7 @@
 - [x] 数字测试先验证已知 RGB→packer→DMA→bridge→native memory→AXI readback，错误、复位和 UART 不得输出旧 PASS。
 - [x] 独立顶层仅使用规格预留测试区，如 `0x87300000` 起2MiB；测试前后端点/红区检查；该区不是此前低/高1MiB BIST窗口。
 - [x] PDS 新目录构建、严格 C/E 消息审查、内部多角时序和当前源哈希复核；保留完整官方 PHY/PLL/复位约束及实例层次。
-- [ ] Program/Verify 后串口验证实际 AXI/DMA 字节数、读回匹配和故障状态，KEY0 重测；完成后恢复 RX 彩条诊断。
+- [x] Program/Verify 后串口验证实际 AXI/DMA 字节数、读回匹配和故障状态，KEY0 重测；完成后恢复 RX 彩条诊断。
 
 ## Task 4：交付
 
@@ -58,4 +58,4 @@
 - [x] 更新接口、来源、STATUS 和小型证据，分别报告仿真/内部时序/板测与仍未实现的 HDMI capture/三分支/AXI fabric/外部 AC。
 - [x] 只提交本批 Video 文件，不提交技术报告，不 push。
 
-当前检查点：软件实现、独立审查、完整回归、最终PDS和可下载包完成。实际Program/Verify因JTAG未识别而未执行成功，等待用户重插J12；物理自检/KEY0/恢复RX板测保持未勾选。
+完成检查点：软件实现、独立审查、完整回归、最终PDS及物理AXI/DMA自检通过。J12重插后Program/Verify成功，KEY0后heartbeat329→1、17个新PASS包；已恢复RX并复验800×600输入合格。证据见axi_capture_bringup.json；正式HDMI帧采集/三分支/CPU共享接入另行实施。

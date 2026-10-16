@@ -29,9 +29,19 @@ DMA canonical19例包括完整800×600 raw和400×300 preview，独立62例；pa
 
 `build/video/pds/20261016T120259_929949Z` 最终构建通过，内部多角时序为 All Constraints Met：core125 MHz setup WNS +0.087 ns，free27 MHz +32.027 ns、reset125 MHz +5.144 ns，慢/快角 hold/recovery/removal 均无违例。资源10919 LUT、10488寄存器、0 DRM；该裕量是本次具体布局布线结果，不能外推到新增共享负载后的 SoC。
 
-可下载包为 `build/video/releases/video_axi_capture_f1535f12e7d3`，位流 SHA256 `f1535f12e7d3ce07fa3c144122e1d31b6fa460ae13f6a97eec44304f90315328`，校验掩码 `abca3915c7c77fbc8f9e3c583205c9bc4c321934af701d97fe3a81eb2f505da4`。恢复用 RX 已按当前构建脚本重新构建并打包，位流 `46d80ec8eed2735ccf3aea79647eefd0a6a724fe3395998db17a8e02a1bd7880`；这只是可恢复产物，不表示已重新下载。
+可下载包为 `build/video/releases/video_axi_capture_f1535f12e7d3`，位流 SHA256 `f1535f12e7d3ce07fa3c144122e1d31b6fa460ae13f6a97eec44304f90315328`，校验掩码 `abca3915c7c77fbc8f9e3c583205c9bc4c321934af701d97fe3a81eb2f505da4`。恢复用 RX 已按当前构建脚本重新构建、打包并完成本轮下载/校验，位流 `46d80ec8eed2735ccf3aea79647eefd0a6a724fe3395998db17a8e02a1bd7880`。
 
-20:10 首次下载在器件识别前失败，默认与500 kHz扫描均没有找到FPGA，USB Cable II仍可枚举。失败记录为 `board_program/20261016T121021_342085Z` 和 `jtag_scan/20261016T121054_322906Z`，均未执行成功的Program/Verify。随后只读串口 `board_serial/20261016T121133_087757Z` 收到原RX的type1/3包，但当前输入模式不合格，不能沿用此前模式通过结论。本轮AXI/DMA物理自检与KEY0重测尚未获得证据，已请求用户断电重插J12排线；未写Flash。
+20:10 首次下载在器件识别前失败，默认与500 kHz扫描均没有找到FPGA，USB Cable II仍可枚举。失败记录为 `board_program/20261016T121021_342085Z` 和 `jtag_scan/20261016T121054_322906Z`，均未执行成功的Program/Verify。随后只读串口 `board_serial/20261016T121133_087757Z` 收到原RX的type1/3包，但当时输入模式不合格。用户再次断电重插J12两端并上电后，同一下载入口恢复识别 `PG2L100H / 0x00602899`；仍没有通过电气测量定位具体接点，未写Flash。
+
+## 物理结果与复位重测
+
+- AXI/DMA Program/Verify：`build/video/board_program/20261016T122034_433798Z`，下载的是上述 `f1535f12e7d3…` 位流，目标识别与两步操作均成功。
+- 初始12秒：`build/video/board_serial/20261016T122058_274896Z`，12个type4包全部flags21、phaseA5、错误码0、首错字段0；实际/期望均90000拍、1440000字节、base87300000，全部PLL锁定。
+- 稳态60秒：`build/video/board_serial/20261016T122126_647692Z`，60包无错，heartbeat73→191。该记录是完成状态持续监测；自检在每次协调复位后执行一轮，不把每个UART包算作一次新帧写入或吞吐测量。
+- KEY0：用户确认短按一次。`build/video/board_serial/20261016T122253_540658Z` 采集到heartbeat329→1，之后17个新包全部重新完成90000拍检查、错误码0、全部PLL锁定；证明重新校准及同一路径重新写入/核验成功。
+- 恢复RX：`build/video/board_program/20261016T122412_291781Z` Program/Verify成功；`build/video/board_serial/20261016T122434_498418Z` 的5个type1快照全部模式合格，800×600、1056×628及同步/porch正确，像素40,000,100–40,000,200 Hz，坏帧0、好帧395→998。当前运行此RX镜像。
+
+源码/报告/原始串口哈希与摘要位于 `docs/verification/video/evidence/axi_capture_bringup.json`。软件实现提交为 `c928706`。本轮证明合成raw图样经生产packer/DMA/AXI桥在物理DDR写后读及KEY0重测；不表示PC的HDMI内容已经进入DDR，也不代表三分支CAPTURE_DONE或外部AC时序已签核。
 
 ## 独立板测边界
 
