@@ -140,7 +140,10 @@ module axi128_hmic256 #(
  assign h_awid=id_q;assign h_arid=id_q;
  assign h_wdata=payload_q;
  assign h_wstrb=native_write&&!write_poisoned ? mask_q:32'b0;
- assign awready=rst_n && init_done===1'b1 && state==IDLE && !fault && fault_now==0;
+ // In IDLE there are no W/native transfers or pending native commands.
+ // Preserve all global diagnostics while pruning their irrelevant READY cone.
+ wire idle_poisoned=fault||(seen_online && init_done!==1'b1)||(h_rvalid!==1'b0);
+ assign awready=rst_n && init_done===1'b1 && state==IDLE && !idle_poisoned;
  assign arready=awready&&!awvalid;
  assign wready=rst_n && state==COLLECT;
  assign bvalid=state==BRESP;assign bid=id_q;assign bresp=response_q;
