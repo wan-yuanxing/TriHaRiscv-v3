@@ -69,7 +69,7 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/read_board.py --port COM12 --seconds 12
 ```
 
-真实HDMI联合目标已完成本批raw单帧物理采集及JTAG重配置复测；现场KEY0和恢复后画面观察仍待验收。联合顶层规格及质量审查已通过，记录为 `build/video/hdmi-board-spec-review/result.json`、`seed-addendum.json` 和 `build/video/hdmi-board-quality/result.json`。质量审查以真实引脚采样/光栅/计时/模式门控走完4个1056×628帧，独立核对1,440,000个DDR字节及CRC；仅强制HDMI初始化健康，DDR仍为数字替身。下述桥等价修改另以独立增量审查绑定新依赖哈希。
+真实HDMI联合目标已完成本批raw单帧物理采集、JTAG重配置复测，以及2026-10-17现场KEY0和恢复后画面验收。联合顶层规格及质量审查已通过，记录为 `build/video/hdmi-board-spec-review/result.json`、`seed-addendum.json` 和 `build/video/hdmi-board-quality/result.json`。质量审查以真实引脚采样/光栅/计时/模式门控走完4个1056×628帧，独立核对1,440,000个DDR字节及CRC；仅强制HDMI初始化健康，DDR仍为数字替身。下述桥等价修改另以独立增量审查绑定新依赖哈希。
 
 `build/video/pds/20261016T134740_921577Z` 已消除组合环及复位数据使能路径，全部hold/recovery/removal通过，但slow setup为−0.541ns，另有core到PHY的−0.238ns路径。仅优化固定种子1/2/3的 `build/video/pds/20261016T135851_729836Z` 最佳种子2仍有42个setup端点、WNS−0.209ns；core到PHY已分别+0.670/+0.871ns，其余7项多角检查通过。这两份失败产物均禁止下载。
 
@@ -106,6 +106,21 @@ python scripts/video/read_board.py --port COM12 --seconds 12
 | 恢复RX `build/video/board_program/20261016T161202_519848Z` | 26d25f7dd060…恢复包Program/Verify成功 |
 | 恢复后串口 `build/video/board_serial/20261016T161245_850325Z` | 7个RX快照模式合格，800×600/1056×628、全部同步与porch正确，约40.0001～40.0002MHz，坏帧0，TX初始化正常 |
 
-用户说明当前远程操作，无法按实体KEY0。因此使用已授权的同镜像JTAG重新配置完成自动重启复测；该操作验证重新配置后的校准及新帧采集，**不代表KEY0引脚、按键或其板级路径已经验收**。恢复后的现场彩条也未由用户观察确认，当前仅有Program/Verify、TX初始化及RX模式串口证据。这两项手工检查保留为待验，未伪造完成。
+首轮板测时用户远程操作，无法按实体KEY0，因此先以同镜像JTAG重新配置验证重新初始化和新帧采集。当时保留物理KEY0和恢复画面两项待验；后续现场补验如下，JTAG记录仍单独保留。
 
-本阶段已证明真实HDMI raw单帧经FIFO/DMA/桥写入物理DDR并读回CRC一致，尚未显示采集内容。preview/input、正式三分支完成事件、读DMA显示及CPU fabric保持后续范围。机器可读证据为 `evidence/hdmi_raw_capture.json`，绑定不可变运行目录、源码、位流/掩码、独立审查和三次实际下载记录。
+## 2026-10-17 现场KEY0及恢复画面补验
+
+沿用同一采帧位流 `2e01feb8e69d…` 和恢复包 `video_rx_board_26d25f7dd060`，未修改生产源码或写入Flash。
+
+| 物理记录 | 结果 |
+|---|---|
+| RX前置检查 `build/video/board_serial/20261017T012208_283063Z` | 输入模式合格后开始补验 |
+| 重新安装采帧镜像 `build/video/board_program/20261017T012300_965192Z` | Program/Verify成功，同一采帧位流 |
+| 按键前串口 `build/video/board_serial/20261017T012337_159568Z` | 单帧采集及CRC合格，随后开启按键过程记录 |
+| 实体KEY0过程 `build/video/board_serial/20261017T012418_613147Z` | 用户确认短按KEY0，heartbeat167→1；复位后首包phase0x30、busy=1、done=0，像素/读回字节计数均0；随后45个新完成状态包全部合格，480000像素、1440000字节，源/DDR CRC均ebf5a8c4，FIFO峰值121/2048，无错误/overflow |
+| 再次恢复RX `build/video/board_program/20261017T012531_400691Z` | Program/Verify成功 |
+| 恢复后串口 `build/video/board_serial/20261017T012551_557951Z` | 4个RX快照模式合格，坏帧0；用户确认重新出现稳定彩条 |
+
+用户分别确认“已短按KEY0，彩条已恢复”和恢复RX后的“已恢复稳定彩条”。按键记录在恢复RX前已停止，该观察区间没有JTAG编程；计数清零及后续完成状态证明实体KEY0后重新采集了一帧。45个完成状态包报告同一新帧，不代表45次采帧。两项现场检查均已关闭，独立证据为 `evidence/hdmi_raw_capture_key0.json`，绑定按键原始串口、Program/Verify日志、源码哈希及用户观察。
+
+本阶段已完成真实HDMI raw单帧经FIFO/DMA/桥写入物理DDR、读回CRC一致及实体KEY0重采验收；当前板卡已恢复RX且彩条稳定。尚未显示采集内容，preview/input、正式三分支完成事件、读DMA显示及CPU fabric保持后续范围。汇总证据为 `evidence/hdmi_raw_capture.json`，保留首轮及本次补验的不可变运行引用。

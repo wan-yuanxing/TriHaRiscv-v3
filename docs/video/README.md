@@ -45,9 +45,9 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 
 新增两个独立上板目标：`video_rx_board` 保持本地彩条、配置固定 EDID 并报告真实输入；`video_ddr_bist` 暂停 HDMI，执行破坏性 native DDR 自检。目标、下载包、日志和物理验收各自记录，不能把独立 BIST 当作正式 AXI128 wrapper 已实现。
 
-`video_axi_capture` 在已验证 DDR 物理壳中集成生产 AXI128 桥、packer 和 DMA，使用可背压的合成 RGB 源写入预留测试区，再独立逐字节检查 raw 帧及 guard；UART type 4 单独报告结果。它暂停 HDMI 输出，测试结束应恢复 `video_rx_board`。真实 HDMI 像素跨域、preview/input 分支、CAPTURE_DONE 和 CPU fabric 仍待集成，范围见 [本批验证](../verification/video/axi_capture_bringup.md)。
+`video_axi_capture` 在已验证 DDR 物理壳中集成生产 AXI128 桥、packer 和 DMA，使用可背压的合成 RGB 源写入预留测试区，再独立逐字节检查 raw 帧及 guard；UART type 4 单独报告结果。它暂停 HDMI 输出，测试结束应恢复 `video_rx_board`。该目标的合成自检范围见 [AXI/DMA验证](../verification/video/axi_capture_bringup.md)，真实HDMI单帧采集由下述联合目标验证。
 
-`video_hdmi_capture` 的单帧raw链路从真实HDMI候选像素，经48bit异步FIFO和既有DMA写入DDR，再比较源与DDR读回CRC。保留本地彩条输出，每次KEY0协调复位采一帧；type5资格与合成图样type4分开。2026-10-17实际raw帧CRC及同镜像JTAG重启复测已通过，已恢复RX；物理KEY0和现场画面确认仍待验。组件、联合构建与板测进度见 [HDMI raw记录](../verification/video/hdmi_raw_capture.md) 和STATUS，不能把命令入口存在当作已完成物理验收。
+`video_hdmi_capture` 的单帧raw链路从真实HDMI候选像素，经48bit异步FIFO和既有DMA写入DDR，再比较源与DDR读回CRC。保留本地彩条输出，每次KEY0协调复位采一帧；type5资格与合成图样type4分开。2026-10-17实际raw帧CRC、同镜像JTAG重启及实体KEY0重采均通过；KEY0后计数清零，新帧480000像素/1440000字节、源/DDR CRC均ebf5a8c4，无错误/overflow。已恢复RX并Verify、串口模式复查通过，用户确认稳定彩条，本阶段验收完成。采集内容显示、preview/input和三分支完成事件仍属后续工作，详情见 [HDMI raw记录](../verification/video/hdmi_raw_capture.md) 和STATUS。
 
 新增文件按职责放置：`config/video_edid.hex` 和生成头保存 EDID；`rtl/video/video_rx_measure.sv`、`video_rx_probe.sv`、`ddr_native_bist.sv` 为便携组件；板级初始化、CDC、UART 和两个 top 在 `fpga/pg2l100h/rtl/`；目标清单与 FDC/RCF 位于各自的 `project/`、`constraints/`；对应 TB、设备/内存数字模型在 `tb/video/`。`gen_edid.py`、`gen_ddr.py`、`program_board.py`、`read_board.py` 扩展原生脚本入口，生成物始终留在 `build/video/`。
 

@@ -50,5 +50,5 @@
 - [x] 重新构建/打包恢复用RX镜像；新目标按 `.sbit/.smsk` 哈希打包。
 - [x] Program/Verify后串口 `physical_hdmi_raw_capture_verified` 为真，480000像素/1440000字节/CRC相等/无overflow；记录CRC碰撞和有限FIFO边界。
 - [x] 同镜像JTAG重新配置后heartbeat757→1，新帧计数/CRC再次通过；恢复RX并Verify及串口模式复查通过。
-- [ ] 现场手工KEY0及恢复后的彩条观察：用户远程无法操作，保留待验；不以JTAG重配置替代该物理按键结论。
+- [x] 2026-10-17现场手工KEY0及恢复后的彩条观察：heartbeat167→1，复位后首包busy/未完成、计数为0，随后45个新完成状态包合格；480000像素/1440000字节、源/DDR CRC均ebf5a8c4，无错误/overflow。按键观察区间无JTAG编程；恢复RX并Verify后4个输入快照合格、坏帧0。用户分别确认KEY0后恢复和彩条最终稳定，见 `docs/verification/video/evidence/hdmi_raw_capture_key0.json`。
 - [x] 更新接口、README文件树、STATUS、单独小型证据；旧阶段JSON保持历史。只做Video本地提交，不push。

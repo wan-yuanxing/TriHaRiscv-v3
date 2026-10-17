@@ -10,13 +10,9 @@
   "implementation_commit": "22bfb22",
   "scope": "Physical HDMI RGB888 single raw frame through asynchronous FIFO and production DMA/bridge into reserved DDR; source/readback CRC32",
   "physical_hdmi_raw_capture_verified": true,
-  "physical_hdmi_raw_capture_key0_retest_verified": false,
+  "physical_hdmi_raw_capture_key0_retest_verified": true,
   "physical_hdmi_raw_capture_jtag_reconfiguration_retest_verified": true,
-  "pending_manual_checks": [
-    "Physical KEY0 recapture",
-    "On-site observation of restored colorbars"
-  ],
-  "manual_check_limitation": "User is remote and cannot press the physical button.",
+  "pending_manual_checks": [],
   "captured_content_displayed": false,
   "formal_three_branch_capture_done_implemented": false,
   "cpu_fabric_or_multi_master_verified": false,
@@ -362,8 +358,8 @@
   },
   "restore_package": "build/video/releases/video_rx_board_26d25f7dd060",
   "restore_program": {
-    "path": "build/video/board_program/20261016T161202_519848Z/result.json",
-    "sha256": "ddcba28aba544004afc6e250e7c65860405f23558f78f7c71ef40bd046c5d33d",
+    "path": "build/video/board_program/20261017T012531_400691Z/result.json",
+    "sha256": "7212a5035496c2ec922dc283483023a2965cb27488074a7d202207068bac80b4",
     "status": "pass",
     "target": "video_rx_board",
     "programmed": true,
@@ -371,13 +367,13 @@
     "bitstream_sha256": "26d25f7dd06015ba0f5419baab8f071a43b6dd9eff24c80d5481b58e2e80094e"
   },
   "restore_uart": {
-    "path": "build/video/board_serial/20261016T161245_850325Z/result.json",
-    "sha256": "bcd09f06d0aa76547902487f0747d3b0e707a800719b4d0a04d0224a4c8f89e3",
+    "path": "build/video/board_serial/20261017T012551_557951Z/result.json",
+    "sha256": "8aa82f9cf6d2d7623ef13ece2e14f43f1cc2251f0e91ec589f7edb7948488d5a",
     "status": "pass",
-    "raw_sha256": "3723f0a2dd7c68aac5daada676a6690d0151534e81bbf7ccbfb1f0c6959eca90",
-    "physical_rx_mode_verified": true
+    "physical_rx_mode_verified": true,
+    "raw_sha256": "81ebf8ecb3697c430a23cb1c6672f2839d51b5430b76a20b01c6e34c56c3b63c"
   },
-  "user_restored_colorbars_confirmed": false,
+  "user_restored_colorbars_confirmed": true,
   "source_recovery_uart": {
     "path": "build/video/board_serial/20261016T160329_468251Z/result.json",
     "sha256": "8278168148301f25a3efa1977c31be27ee443182eb7bbcd37f3963fc42f2f640",
@@ -433,5 +429,29 @@
       "status": "interrupted",
       "reason": "Tool session reset; root verified no Python/PDS/vvp process survives and run never finalized. Preserve prior partial logs; not timing PASS or final regression."
     }
-  ]
+  ],
+  "previous_manual_check_limitation": "User is remote and cannot press the physical button.",
+  "initial_restore_program": {
+    "path": "build/video/board_program/20261016T161202_519848Z/result.json",
+    "sha256": "ddcba28aba544004afc6e250e7c65860405f23558f78f7c71ef40bd046c5d33d",
+    "status": "pass",
+    "target": "video_rx_board",
+    "programmed": true,
+    "verified": true,
+    "bitstream_sha256": "26d25f7dd06015ba0f5419baab8f071a43b6dd9eff24c80d5481b58e2e80094e"
+  },
+  "initial_restore_uart": {
+    "path": "build/video/board_serial/20261016T161245_850325Z/result.json",
+    "sha256": "bcd09f06d0aa76547902487f0747d3b0e707a800719b4d0a04d0224a4c8f89e3",
+    "status": "pass",
+    "raw_sha256": "3723f0a2dd7c68aac5daada676a6690d0151534e81bbf7ccbfb1f0c6959eca90",
+    "physical_rx_mode_verified": true
+  },
+  "onsite_key0_followup": {
+    "path": "docs/verification/video/evidence/hdmi_raw_capture_key0.json",
+    "sha256": "56171b9cf4fbd89ea7cd4bbf819c2a007c0a86f04e7167a7d5e47e2ac1d0e651",
+    "status": "physical_key0_and_restored_picture_pass",
+    "physical_hdmi_raw_capture_key0_retest_verified": true,
+    "user_restored_colorbars_confirmed": true
+  }
 }
