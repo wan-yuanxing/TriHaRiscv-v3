@@ -80,7 +80,20 @@ module video_preview_capture #(
     wire preview_legal=preview_pixels<PREVIEW_PIXELS && (^scale_rgb)!==1'bx &&
         scale_last===(preview_x==FRAME_WIDTH/2-1);
     reg [7:0] fault_now;
-    wire stopping=error||fault_now!=0;
+    // Every branch of fault_now assigns a nonzero constant. Keep priority
+    // diagnostics intact, but use their parallel truth reduction for intake.
+    // Case-equality to 1 preserves procedural-if handling of X/Z predicates.
+    wire intake_fault =
+        ((seen_online&&!init_done)===1'b1) ||
+        ((bvalid && (!owner_valid || bid!==(owner_preview?4'd2:4'd1) || bresp!==2'b00))===1'b1) ||
+        ((raw_fault||preview_fault)===1'b1) ||
+        ((done===1'b0) && (
+            (overflow===1'b1) || (source_fault===1'b1) ||
+            ((packet_present&&(pixel_kind?!pixel_legal:(eof_kind?!eof_legal:1'b1)))===1'b1) ||
+            ((scale_fault || (scale_valid&&!preview_legal))===1'b1) ||
+            ((raw_result_bad||preview_result_bad)===1'b1) ||
+            ((seen_online&&timer>=TIMEOUT_CYCLES-1)===1'b1)));
+    wire stopping=error||intake_fault;
     wire pixel_valid=packet_present&&pixel_kind&&pixel_legal&&!stopping;
     // Each branch can take a PIX only if the other branch takes that same
     // PIX. Both READYs depend on storage state, never these gated VALIDs.

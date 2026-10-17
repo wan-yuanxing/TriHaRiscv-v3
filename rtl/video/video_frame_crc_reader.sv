@@ -28,12 +28,12 @@ module video_frame_crc_reader #(
     reg [4:0] burst_beats,beat_index,byte_index,byte_count;
     reg [127:0] data_q;
     function automatic descriptor_ok(input [31:0] base,row_bytes,stride,input [15:0] rows);
-        reg [63:0] last_byte,bus_end;
+        reg [63:0] last_byte;
         begin
             last_byte={32'd0,base}+({48'd0,rows}-64'd1)*{32'd0,stride}+{32'd0,row_bytes};
-            bus_end=(last_byte+64'd15)&64'hfffffffffffffff0;
+            // Aligned bound needs no round-up; nonzero rows keep the 64-bit sum below 2^48.
             descriptor_ok=rows!=0&&row_bytes!=0&&stride>=row_bytes&&base[3:0]==0&&stride[3:0]==0&&
-                base>=32'h80000000&&last_byte>{32'd0,base}&&bus_end<=64'h88000000;
+                base>=32'h80000000&&last_byte>{32'd0,base}&&last_byte<=64'h88000000;
         end
     endfunction
     function automatic [4:0] burst_length(input [31:0] left,address);
