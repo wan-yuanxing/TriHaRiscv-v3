@@ -68,5 +68,7 @@
 - [x] `python scripts/video/build_pds.py --target video_preview_board --stage bitstream` 全内部约束通过；逐位/CDC/bundle及引脚审计，不下载失败产物。032723构建选定seed6，最终14组只读报告与全部8类检查通过，原PNR哈希不变。
 - [x] `python scripts/video/package_board.py --target video_preview_board` 按位流/掩码哈希打包，保留RX回退包。preview包 `video_preview_board_a8658296e6b8`。
 - [x] `python scripts/video/program_board.py --target video_preview_board --start-server` 后读取UART；两路计数/CRC通过、显示commit及扫描持续、无欠载。源唤醒后同位流重新Program/Verify，12秒首测及60秒全包检查通过，raw/preview像素480000/120000，CRC ebf5a8c4/16fa9be1，欠载0、FIFO140/2048。实体KEY0另验，不用JTAG重配置替代。
-- [x] 现场同源双窗口和KEY0恢复分别确认；用户确认按KEY0后左右相同完整画面恢复。复位前后心跳399→99、扫描计数回到新epoch，复位后12个新包双CRC/显示合格；按键发生在两段记录之间，未声称连续捕获瞬时校准。
+- [ ] 现场同源双窗口图像正确性：用户后续澄清窗口内容纯黑，原确认已撤回。raw/preview CRC恰与全零帧相同；需已知亮色源、重采及实际内容核对后重新验收。
+- [x] 实体KEY0复位及重采统计：心跳399→99、扫描计数回到新epoch，复位后12个新包CRC/计数合格；按键发生在两段记录之间。此项不再作为窗口图像正确的证明。
+- [ ] 实体KEY0图像恢复：同位流曾显示真实桌面，随后KEY0又锁存全黑帧，验收失败并重新打开；先完成启动过程取证，再建立可失败测试、修复与真实桌面→KEY0→真实桌面复验。证据见 `docs/verification/video/evidence/preview_black_reset.json`。
 - [x] 更新 `docs/video/{STATUS,README}.md`、`docs/interfaces/video.md`、`docs/verification/video/shared_preview.md` 及小型JSON摘要；只做本地Video提交。原超时、重配置、60秒扫描和实体KEY0证据分别保留，preview镜像继续运行。

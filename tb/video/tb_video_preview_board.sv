@@ -37,7 +37,7 @@ module tb_video_preview_board;
     video_preview_board_top #(.STARTUP_CYCLES(8),.INIT_TIMEOUT_CYCLES(1000),
         .CORE_TIMEOUT_CYCLES(64),.HEARTBEAT_CYCLES(16),.UART_BAUD(2_700_000),
         .UART_INTERVAL_CYCLES(20),.FRAME_WIDTH(16),.FRAME_HEIGHT(6),.PREVIEW_WINDOW_Y(3),
-        .CAPTURE_TIMEOUT_CYCLES(20000)) dut(.*);
+        .CAPTURE_TIMEOUT_CYCLES(20000),.RX_WARMUP_FRAMES(2)) dut(.*);
 
     // Independent shortened OUTPUT raster for integration. Default-mode raster
     // and per-pixel visual oracle are exercised by the display component TB.
@@ -70,19 +70,38 @@ module tb_video_preview_board;
             wait(dut.core_reset_n && dut.ingress_pixel_reset_n);
         end
     endtask
-    task automatic source_frame;
+    task automatic send_source_frame(input bit startup_black);
         begin
             repeat(20)@(negedge pixclk_in);
             for(j=0;j<6;j=j+1)begin
                 for(i=0;i<16;i=i+1)begin
                     @(negedge pixclk_in);cv=1;fb=(i==0&&j==0);cx=i;cy=j;
-                    crgb={(8'h93^i[7:0]),(8'h65^j[7:0]),(8'hb7+i[7:0]+j[7:0])};
+                    crgb=startup_black?24'd0:
+                        {(8'h93^i[7:0]),(8'h65^j[7:0]),(8'hb7+i[7:0]+j[7:0])};
                 end
                 @(negedge pixclk_in);cv=0;fb=0;
                 repeat(8)@(negedge pixclk_in);
             end
             @(negedge pixclk_in);fe=1;fg=1;
             @(negedge pixclk_in);fe=0;fg=0;
+        end
+    endtask
+    task automatic source_frame;
+        begin
+            send_source_frame(1);
+            check(dut.ingress.pixel_count==0,"startup frames must not enter capture FIFO");
+            send_source_frame(1);
+            check(dut.ingress.pixel_count==0,"last startup frame must retire before capture");
+            send_source_frame(0);
+        end
+    endtask
+    task automatic receive_capture_packet;
+        begin
+            // UART alternates type6/type7. Require the image packet rather
+            // than allowing a display-only packet to skip the CRC oracles.
+            receive_packet(1);
+            if(packet[4]==7)receive_packet(1);
+            check(packet[4]==6,"must observe capture CRC packet in each successful epoch");
         end
     endtask
     initial begin
@@ -113,8 +132,14 @@ module tb_video_preview_board;
                     check({packet[15],packet[14],packet[13],packet[12]}==24,"preview pixel count");
                     check({packet[19],packet[18],packet[17],packet[16]}==
                           {packet[23],packet[22],packet[21],packet[20]},"raw source/read CRC");
+                    // Independent RGB byte oracle for the 16x6 source above;
+                    // transport equality alone would also accept a black frame.
+                    check({packet[19],packet[18],packet[17],packet[16]}==32'h7e63d0f0,
+                          "captured source pattern after startup black frames");
                     check({packet[27],packet[26],packet[25],packet[24]}==
                           {packet[31],packet[30],packet[29],packet[28]},"preview source/read CRC");
+                    check({packet[27],packet[26],packet[25],packet[24]}==32'h72198ae6,
+                          "preview pattern independent oracle");
                 end else begin
                     check({packet[11],packet[10],packet[9],packet[8]}==1,"display frame_id");
                     check({packet[15],packet[14],packet[13],packet[12]}==1,"single commit");
@@ -131,7 +156,7 @@ module tb_video_preview_board;
         check(hdmi_int_led&&!init_over_rx,"no core/init independently reported");receive_packet(0);
         dut.I_ips_ddr_top.model_core_enable=1;dut.I_ips_ddr_top.model_init_enable=1;
         reset_board;source_frame;wait(init_over_rx||hdmi_int_led);
-        check(init_over_rx&&!hdmi_int_led,"capture/CRC with digital frontend");receive_packet(1);passed=passed+1;
+        check(init_over_rx&&!hdmi_int_led,"capture/CRC with digital frontend");receive_capture_packet;passed=passed+1;
         force dut.locked=0;
         #1;check(dut.ingress_pixel_reset_n,"HDMI PLL loss must not clear FIFO ownership");
         repeat(30)@(negedge sys_clk);
@@ -139,13 +164,13 @@ module tb_video_preview_board;
         release dut.locked;
         repeat(30)@(negedge sys_clk);check(hdmi_int_led&&!init_over_rx,"HDMI fault remains sticky");
         reset_board;source_frame;wait(init_over_rx||hdmi_int_led);
-        check(init_over_rx&&!hdmi_int_led,"coordinated reset after HDMI fault");passed=passed+1;
+        check(init_over_rx&&!hdmi_int_led,"coordinated reset after HDMI fault");receive_capture_packet;passed=passed+1;
         @(negedge ref_clk_p);dut.I_ips_ddr_top.model_core_enable=0;
         repeat(100)@(negedge sys_clk);
         check(hdmi_int_led&&!init_over_rx&&dut.board_error_code==8'he4,"core stop masks prior PASS");
         dut.I_ips_ddr_top.model_core_enable=1;
         reset_board;source_frame;wait(init_over_rx||hdmi_int_led);
-        check(init_over_rx&&!hdmi_int_led,"KEY0 recaptures");passed=passed+1;
+        check(init_over_rx&&!hdmi_int_led,"KEY0 recaptures");receive_capture_packet;passed=passed+1;
         dut.I_ips_ddr_top.model_drop_lock=1;
         repeat(30)@(negedge sys_clk);check(hdmi_int_led&&!init_over_rx,"DDR PLL loss masks prior PASS");
         dut.I_ips_ddr_top.model_drop_lock=0;
@@ -155,7 +180,7 @@ module tb_video_preview_board;
         check(hdmi_int_led&&!init_over_rx&&dut.bist.error_code==3,"sticky source fault during CRC rejects display");
         receive_packet(0);release dut.source_fault;passed=passed+1;
         reset_board;source_frame;wait(init_over_rx||hdmi_int_led);
-        check(init_over_rx&&!hdmi_int_led,"reset recovers after source fault");
+        check(init_over_rx&&!hdmi_int_led,"reset recovers after source fault");receive_capture_packet;
         @(negedge dut.core_clk);force dut.source_fault=1;
         repeat(30)@(negedge sys_clk);
         check(hdmi_int_led&&!init_over_rx&&dut.bist.error_code==3,"source fault revokes held PASS");

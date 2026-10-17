@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批同帧raw/preview、共享显示读口和局部显示记录协议已通过双CRC、60秒扫描及KEY0/现场双窗口验收，证据见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批同帧raw/preview的CRC/扫描/KEY0统计已有板测，但用户后续澄清窗口内容纯黑，图像正确性重新待验，证据见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
 
 ## 已实现：video_pattern_core
 
@@ -58,6 +58,8 @@ flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snap
 显示的双bank双时钟RAM每行只读DDR一次，左右窗口各消费一次，右侧最后像素退出流水线后回收。默认窗口 `(0,150)` 和 `(400,150)`，各400×300，背景RGB `101820`，输出RGB/HS/VS/DE同拍延迟。欠载输出背景并锁存故障；扫描不可暂停。scalar控制仅切异步首级D路径，稳定bundle实设6ns，本地同步级保持常规setup/hold。core/pixel复位必须协调；此单记录目标优化掉未消费release payload，多记录目标必须补其6ns数据束约束。
 
 `video_preview_engine` 顺序完成capture→raw CRC→preview CRC→display；显示接管读口后保持所有权至协调reset，包括故障排空。source fault/overflow或DDR丢失会撤销诊断done；本目标仅一次frame_id1/slot0，KEY0使三域协调复位后重采。
+
+preview板级入口增加 `video_capture_startup_guard`，默认128个连续完整好帧之后才准入下一frame_start。只统计从frame_start起持续mode_good/rx_ready且good frame_end结束的完整区间；任意健康丢失或坏EOF清计数，饱和不回卷。RGB不参与判断，合法黑色帧仍可被选中。该稳定期针对已观察到的HDMI复位启动黑场；它不是通用的源内容就绪证明，也不改变入口FIFO/显示bank协调复位或既有5秒超时。当前物理复验未完成。
 
 联合目标UART仍为37B TRV1包；payload0为type，1为flags，2为phase，3为error_code，4..31为七个小端uint32：
 

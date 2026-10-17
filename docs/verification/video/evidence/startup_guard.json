@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-17",
+  "status": "physical_validation_pending",
+  "scope": "Startup stabilization for the diagnostic single-frame preview. No source-color rejection, new CDC, reset or timeout changes.",
+  "policy": {
+    "stable_complete_frames": 128,
+    "seconds_at_60_32_hz": 2.1220159151193636,
+    "rgb_qualifies_capture": false,
+    "limitation": "Bounded stabilization for the observed source; not a universal indication that an HDMI source has stopped outputting legal black."
+  },
+  "diagnosis": {
+    "path": "docs/verification/video/evidence/preview_black_reset.json",
+    "sha256": "f13845ae77c88bf8df1e52387f83b42983f4c0d4b13bfb9268865c8236a43fb0"
+  },
+  "behavioral_red": {
+    "path": "build/video/regression/20261017T122733_829867Z/result.json",
+    "sha256": "2bad0cb6c80a72d7ad33e4a885f72fdf9f439550438fb968771f4629dd2ebc68"
+  },
+  "digital_composite": {
+    "path": "build/video/startup_guard_digital_composite.json",
+    "sha256": "b306d6251334c8082b5848748f4aff0980382f06c1b4feef5faa449fef83ce0c"
+  },
+  "digital_suites": 24,
+  "digital_current_inputs_verified": true,
+  "independent_code_review": {
+    "path": "build/video/independent_startup_guard_review/20261017T124950_134546Z/result.json",
+    "sha256": "21a0f0c991634466af26a4d868743083088f22669fe4c758779f8b5e2c1bca2c"
+  },
+  "additional_digital_review": {
+    "path": "build/video/startup_guard_review/20261017T124835_492049Z/result.json",
+    "sha256": "1f53bf39d40f00cb02505cc691d9cf2605396f628d51b6d80043af7b2609bc53"
+  },
+  "physical_build": {
+    "status": "running",
+    "directory": "build/video/pds/20261017T122911_128053Z"
+  },
+  "constraint_audit": {
+    "status": "pending"
+  },
+  "physical_build_and_audit_verified": false,
+  "physical_image_recovery_verified": false,
+  "board": {
+    "status": "not_programmed"
+  },
+  "implementation_hashes": {
+    "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "f8b6b413a40cf4ce0d4880678b2353faf4938cbbdeab5f324467e3d793479bc4",
+    "fpga/pg2l100h/project/video_preview_board.json": "ee6b92f3dc5f21b50c9bedd78b22b3c676e97ea4520c3c3081404391d751eea0",
+    "scripts/video/run.py": "78fa76288680d415079af078e720c70b1ca756fe0fdc376c5ab7418d6d6bc526",
+    "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
+    "tb/video/tb_video_preview_board.sv": "cd57a80c321510c964dced39333c49e5aab8d20961ce0707cc7babd416009d33"
+  }
+}

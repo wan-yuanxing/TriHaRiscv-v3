@@ -14,7 +14,8 @@ module video_preview_board_top #(
     parameter integer FRAME_WIDTH=800,
     parameter integer FRAME_HEIGHT=600,
     parameter integer PREVIEW_WINDOW_Y=150,
-    parameter integer CAPTURE_TIMEOUT_CYCLES=625_000_000
+    parameter integer CAPTURE_TIMEOUT_CYCLES=625_000_000,
+    parameter integer RX_WARMUP_FRAMES=128
 )(
     input wire sys_clk,rst_in,ref_clk_p,ref_clk_n,
     input wire pixclk_in,hs_in,vs_in,de_in,
@@ -103,13 +104,19 @@ module video_preview_board_top #(
         if(!controller_reset_n)ingress_pixel_release<=0;
         else ingress_pixel_release<={ingress_pixel_release[0],1'b1};
     wire ingress_pixel_reset_n=ingress_pixel_release[1];
+    wire capture_ready;
+    video_capture_startup_guard #(.STABLE_FRAMES(RX_WARMUP_FRAMES)) startup_guard(
+        .pixel_clk(pixclk_in),.reset_n(ingress_pixel_reset_n),
+        .mode_good(geometry_locked&&timing_locked&&rx_health_sync[1]),.rx_ready(rx_enable_sync[1]),
+        .frame_start(frame_begin),.frame_end(frame_end),.frame_good(frame_good),
+        .capture_ready(capture_ready));
     wire fifo_valid,fifo_ready,source_fault,source_overflow,arm_toggle,cancel;
     wire [47:0] fifo_data;
     video_capture_ingress #(.FRAME_WIDTH(FRAME_WIDTH),.FRAME_HEIGHT(FRAME_HEIGHT)) ingress(
         .pixel_clk(pixclk_in),.pixel_reset_n(ingress_pixel_reset_n),.core_clk(core_clk),.core_reset_n(core_reset_n),
         .pixel_valid(candidate),.pixel_rgb(candidate_rgb),.pixel_x(candidate_x),.pixel_y(candidate_y),
         .frame_start(frame_begin),.frame_end(frame_end),.frame_good(frame_good),
-        .mode_good(geometry_locked&&timing_locked&&rx_health_sync[1]),.rx_ready(rx_enable_sync[1]),
+        .mode_good(capture_ready),.rx_ready(rx_enable_sync[1]),
         .arm_toggle(arm_toggle),.cancel(cancel),.m_valid(fifo_valid),.m_data(fifo_data),
         .m_ready(fifo_ready),.source_fault(source_fault),.overflow(source_overflow));
     GTP_CLKBUFG free_clk_ibufg(.CLKIN(sys_clk),.CLKOUT(free_clk));
