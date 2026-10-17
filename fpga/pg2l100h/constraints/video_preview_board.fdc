@@ -10,8 +10,9 @@ set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.req_stride*}] -t
 set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.req_row*}] -to [get_cells {bist.display.dma_row_latched*}]
 set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.bank_success*}] -to [get_cells {bist.display.bank_ready*}]
 # PDS merges commit_pixel_{id,slot} into identical active_{frame,slot} Qs.
+# It also merges the core frame_id output into commit_frame_id Qs.
 # Bound the actual surviving aliases, retaining the same 6ns data constraint.
-set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.active_frame* bist.display.active_slot*}] -to [get_cells {bist.display.commit_frame_id* bist.display.commit_slot* bist.display.frame_id*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.active_frame* bist.display.active_slot*}] -to [get_cells {bist.display.commit_frame_id* bist.display.commit_slot*}]
 # This one-record diagnostic does not consume release payloads; PDS removes
 # those Q->D paths (STA-3015 if constrained). Multi-record users must add the
 # release_pixel_{id,slot}->release_{frame_id,slot} 6ns bounds in their target.

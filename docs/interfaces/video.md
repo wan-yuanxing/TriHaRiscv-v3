@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。当前已实现固定时序、彩条、PLL/复位、独立发送初始化、固定 EDID 接收配置及精确输入时序监测；下降沿 RX 采样已通过真实 800×600 输入板测。本批新增 core 域单平面写 DMA 与 RGB888 打包器，物理 HDMI 帧采集、显示 DMA/MMIO 和帧所有权仍待集成。TX-only 端口见 `docs/verification/video/board_smoke.md`，RX/DDR 证据见 `docs/verification/video/rx_ddr_bringup.md`，本批范围见 `docs/verification/video/axi_capture_bringup.md`。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批实现同帧raw/preview、共享显示读口和局部显示记录协议，物理进度见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
 
 ## 已实现：video_pattern_core
 
@@ -45,9 +45,34 @@ UART C24、115200、8N1。每包 37 字节：ASCII `TRV1`，32 字节 payload，
 
 flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snapshotfresh、frequencygood、modegood。只有完整帧几何、全部同步/porch、频率及初始化条件同时通过才置 modegood。串口收包成功不表示模式验收成功；type 3 的 VS 周期以像素时钟为单位，不能与 type 1 的行数混淆。两种包分别为完整 CDC 快照，跨包不保证同一帧。
 
+## 同帧共享预览组件
+
+`preview_downscale` 使用core域ready/valid；RGB888按每通道四像素求和后 `(sum+2)>>2` 输出，输入为800×600、输出400×300。同步行RAM保留上一行，背压时输入和输出分别按握手推进。未知像素/行末或错误计数使fault保持至clear/reset。
+
+`video_preview_capture` 接收既有48bit PIX/EOF流，只有raw packer和scaler同时可接纳才消费同一个PIX；两条DMA以AW到B为所有权单位共享AXI。raw测试区 `0x87300000`，800×600、2400B行步长、1440000有效字节；preview测试区 `0x87460000`，400×300、1200B行步长、360000有效字节。两区均为预留诊断区，不是正式三槽配置。good EOF、tag1、480000/120000像素、两个成功写结果齐备后才完成双平面写阶段。
+
+`video_frame_crc_reader` 请求锁存base、row_bytes、stride、rows、tag和expected_crc，以16B对齐、最多16拍及4KiB边界分割，跳过stride padding，只对有效RGB字节计算CRC32/ISO-HDLC。结果保持到ready；故障和未知CRC不能成功。公开AR不会因abort/offline/timeout撤销，已公开长度必须排空；消费结果不代表故障端口可立即复用。
+
+`preview_display` 的core接口为 `record_valid/ready` 和base/stride/frame_id/slot。接纳后稳定总线经toggle握手跨到pixel域；首行就绪且 `pixel_frame_start` 才切换。`commit_valid/ready` 与 `release_valid/ready` 分别保持对应frame_id/slot；release晚于旧帧在途DMA及像素流水线引用退休。事件背压期间继续重复扫描活动帧。新记录不能使用仍受保护的base或slot；调用方仍须保证不同base代表互不重叠的分配区。
+
+显示的双bank双时钟RAM每行只读DDR一次，左右窗口各消费一次，右侧最后像素退出流水线后回收。默认窗口 `(0,150)` 和 `(400,150)`，各400×300，背景RGB `101820`，输出RGB/HS/VS/DE同拍延迟。欠载输出背景并锁存故障；扫描不可暂停。scalar控制仅切异步首级D路径，稳定bundle实设6ns，本地同步级保持常规setup/hold。core/pixel复位必须协调；此单记录目标优化掉未消费release payload，多记录目标必须补其6ns数据束约束。
+
+`video_preview_engine` 顺序完成capture→raw CRC→preview CRC→display；显示接管读口后保持所有权至协调reset，包括故障排空。source fault/overflow或DDR丢失会撤销诊断done；本目标仅一次frame_id1/slot0，KEY0使三域协调复位后重采。
+
+联合目标UART仍为37B TRV1包；payload0为type，1为flags，2为phase，3为error_code，4..31为七个小端uint32：
+
+| type | payload 4..27的六个uint32 | payload28..31 |
+|---|---|---|
+| 6 | raw_pixels、preview_pixels、raw_source_crc、raw_ddr_crc、preview_source_crc、preview_ddr_crc | heartbeat |
+| 7 | frame_id、commits、completed_scans、underflows、read_lines、fifo_peak | heartbeat |
+
+flags bit0..7为init_done、busy、done、error、all_pll_lock、rx_mode_good、tx_done、overflow；tx_done同时要求发送初始化完成和HDMI PLL锁定。两种状态来自同一个448bit冻结快照，UART每次发送完成后交替包型。`read_board.py` 分别输出capture与display资格；较新任一包的故障或重启会使前一轮PASS失效，显示还要求两次推进扫描、无欠载和相符行读预算。CRC相等证明有效字节的一致性，不能单独证明缩放数值或实际画面质量。
+
 ## 后续 CPU–Video 协议准入
 
-新增单平面组件 `rgb888_packer` 与 `video_write_dma`，以 core 域 ready/valid 流连接；物理 HDMI 的不可背压像素仍须通过后续 FIFO/CDC 和帧接纳器接入。内存递增地址按 R、G、B 保存，`WDATA[8*k+:8]` 对应字节地址 `AWADDR+k`，不能直接把 `24'hRRGGBB` 低字节优先解释为同一格式。
+单平面组件 `rgb888_packer` 与 `video_write_dma` 以core域ready/valid流连接，物理HDMI的不可背压像素由既有FIFO/CDC和帧接纳器接入。内存递增地址按R、G、B保存，`WDATA[8*k+:8]` 对应字节地址 `AWADDR+k`，不能直接把 `24'hRRGGBB` 低字节优先解释为同一格式。
+
+packer默认 `ALLOW_SIMULTANEOUS_TRANSFER=1` 保留同拍出入；共享预览的两个实例选择0，使输入和输出传输互斥，输入字节只按注册count定位，避免下游READY经占用更新参与输入字节位置选择。容量仍为18字节，17/18字节行尾分为完整拍及1/2字节尾拍。固定800/400像素行在无下游停顿时需950/475个core周期，125MHz下理论峰值约105.263Mpixel/s；这是组件上限，实际FIFO水位和端到端表现由板测另验。
 
 DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和 stride 为16 B对齐，stride≥row_bytes>0；整个有效区和最后总线拍必须在逻辑 DDR 窗口内。stream 为 `s_data[127:0]/s_keep[15:0]/s_row_last`，keep 为全有效或行末连续低位1，row_last 与行字节数严格匹配。每次 AW 前完整缓存 burst，按行、16拍和4 KiB拆分；stride padding 不写。
 

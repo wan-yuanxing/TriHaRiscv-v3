@@ -35,9 +35,13 @@ python scripts/video/run.py --suite hdmi_capture_board
 python scripts/video/build_pds.py --target video_hdmi_capture --stage bitstream
 python scripts/video/package_board.py --target video_hdmi_capture
 python scripts/video/program_board.py --target video_hdmi_capture --start-server
+python scripts/video/run.py --suite preview_display
+python scripts/video/build_pds.py --target video_preview_board --stage bitstream
+python scripts/video/package_board.py --target video_preview_board
+python scripts/video/program_board.py --target video_preview_board --start-server
 ```
 
-配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；三个 DDR 板级测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
+配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；DDR 板级集成测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
 
 彩条目标的管脚、LED、复位、下载与时序边界见 [板测说明](../verification/video/board_smoke.md)。
 
@@ -50,6 +54,10 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 `video_hdmi_capture` 的单帧raw链路从真实HDMI候选像素，经48bit异步FIFO和既有DMA写入DDR，再比较源与DDR读回CRC。保留本地彩条输出，每次KEY0协调复位采一帧；type5资格与合成图样type4分开。2026-10-17实际raw帧CRC、同镜像JTAG重启及实体KEY0重采均通过；KEY0后计数清零，新帧480000像素/1440000字节、源/DDR CRC均ebf5a8c4，无错误/overflow。已恢复RX并Verify、串口模式复查通过，用户确认稳定彩条，本阶段验收完成。采集内容显示、preview/input和三分支完成事件仍属后续工作，详情见 [HDMI raw记录](../verification/video/hdmi_raw_capture.md) 和STATUS。
 
 新增文件按职责放置：`config/video_edid.hex` 和生成头保存 EDID；`rtl/video/video_rx_measure.sv`、`video_rx_probe.sv`、`ddr_native_bist.sv` 为便携组件；板级初始化、CDC、UART 和两个 top 在 `fpga/pg2l100h/rtl/`；目标清单与 FDC/RCF 位于各自的 `project/`、`constraints/`；对应 TB、设备/内存数字模型在 `tb/video/`。`gen_edid.py`、`gen_ddr.py`、`program_board.py`、`read_board.py` 扩展原生脚本入口，生成物始终留在 `build/video/`。
+
+`video_preview_board` 在同一入口帧原子生成raw和400×300 preview，写退休后分别读取DDR核验CRC，再显示左右两个同帧窗口。它按需采一帧，KEY0协调复位后重采；上下背景为深色。当前物理验收进度见 [共享预览记录](../verification/video/shared_preview.md)，不能以数字仿真替代实际画面确认。type6报告两路像素数及四个CRC，type7报告帧号、提交、扫描、欠载、行读和FIFO水位；两个包来自同一448bit原子快照，资格检查会丢弃重启/故障前的旧PASS。
+
+新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
 
 ## 当前文件树
 
@@ -67,11 +75,17 @@ rtl/video/
   ddr_native_bist.sv                      native256 地址/数据/掩码自检
   axi128_hmic256.sv                      core 域串行桥与 masked readback-before-B
   rgb888_packer.sv                       R/G/B 内存字节序、跨拍 spill 和行尾 keep
+                                        默认同拍传输，preview目标选择输入/输出分拍
   video_write_dma.sv                     单平面步长写入、burst 缓存和响应排空
   video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
   video_async_fifo.sv                    Gray指针双时钟RAM和受阻输出寄存器
   video_capture_ingress.sv               合法帧首接纳、PIX/EOF、源CRC及overflow
   video_capture_engine.sv                单次raw写DMA、EOF/写结果汇合和读回CRC
+  preview_downscale.sv                   RGB888四像素平均及同步行RAM
+  video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
+  video_frame_crc_reader.sv              行式有效字节CRC及读事务排空
+  preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
+  video_preview_engine.sv                双平面CRC检查到显示读口的阶段所有权
 sw/include/video_cfg.h                    同源生成的 C 常量
 tb/video/
   tb_timing.sv                           完整光栅/像素/复位自检
@@ -89,13 +103,22 @@ tb/video/
   tb_ddr_native_bist.sv / tb_ddr_board.sv  native 和板级数字自检
   tb_axi128_hmic256.sv                   AXI/native 地址、掩码、响应和故障保持
   tb_rgb888_packer.sv / tb_write_dma.sv   字节顺序、尾拍、步长、abort 和错误
+  tb_rgb888_packer_serial.sv             两模式oracle、尾拍/受阻、默认波形及吞吐
   tb_axi_capture_bist.sv                 完整帧 byte-memory oracle 与故障注入
   tb_axi_capture_board.sv                新目标 UART、复位和旧 PASS 撤销
   tb_video_async_fifo.sv                 异步速比/相位、满空/回卷与输出稳定
   tb_video_capture_ingress.sv            帧首/EOF、源CRC、故障和协调复位
   tb_video_capture_engine.sv             真正两域入口、byte-memory oracle及CRC故障
   tb_video_hdmi_capture_board.sv         联合目标UART、复位/停钟的数字替身
+  tb_preview_downscale.sv                独立四像素数值oracle、受阻与X/Z拒绝
+  tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
+  tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
+  run_preview_display_test.py            独立显示仿真和不可变输入证据
+  tb_video_frame_crc_reader.sv           CRC、行尾/4KiB、错误与背压结果稳定
+  tb_video_preview_board.sv              联合type6/7和复位/健康撤销数字替身
+  test_preview_packets.py                两路CRC/显示资格和旧PASS失效
   models/                               PLL、MS72xx 串行、native 内存和板级 IP 数字模型
+    rgb888_packer_legacy_model.sv        冻结默认算法，仅作兼容性仿真参考
 scripts/video/
   common.py                             原生命令/工具/哈希/结果辅助
   doctor.py                             本机工具发现与版本探测
@@ -119,11 +142,13 @@ fpga/pg2l100h/
   project/video_ddr_bist.json             独立 native DDR 板测目标
   project/video_axi_capture.json          AXI/DMA 独立目标，共用 DDR FDC/RCF
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
+  project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
   constraints/video_rx_board.fdc         RX/TX 管脚、半周期采样与 CDC 约束
   constraints/video_ddr_bist.fdc / .rcf   完整 DDR 管脚/时钟/复位和官方位置约束
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
+  constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
   rtl/video_clock_reset.sv               PLL 和各时钟域复位/外设启动
   rtl/hdmi_tx_init.sv                    独立发送初始化及 ACK/超时错误
@@ -134,8 +159,9 @@ fpga/pg2l100h/
   rtl/video_rx_board_top.sv              下降沿接收采样与本地彩条
   rtl/video_ddr_bist_top.sv              HMIC、独立监测、复位和 BIST
   rtl/video_axi_capture_top.sv           HMIC、合成 raw 写入与 UART type 4
-  rtl/video_ddr_snapshot_cdc.sv          三个 DDR 目标共用的冻结快照握手
+  rtl/video_ddr_snapshot_cdc.sv          DDR 目标共用的冻结快照握手
   rtl/video_hdmi_capture_top.sv          HDMI初始化、彩条输出、帧入口和HMIC
+  rtl/video_preview_board_top.sv         真实源双平面、双窗口和448bit诊断快照
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据
 docs/video/STATUS.md                     任务、依赖和完成状态
@@ -153,6 +179,7 @@ build/video/                            被忽略的运行结果、参考副本�
 - `build/video/latest_pds_video_rx_board.json`、`latest_pds_video_ddr_bist.json`：RX/DDR 板级目标的内部时序、位流和校验掩码哈希。
 - `build/video/latest_pds_video_axi_capture.json`：AXI/DMA 目标的独立构建证据；对应 `latest_package_video_axi_capture.json` 保存下载包入口。
 - `build/video/latest_pds_video_hdmi_capture.json`、`latest_package_video_hdmi_capture.json`：真实HDMI单帧raw目标的联合构建与包入口。
+- `build/video/latest_pds_video_preview_board.json`、`latest_package_video_preview_board.json`：同帧共享预览目标的构建与包入口；验收必须另查Program/Verify、type6/7和现场记录。
 - `build/video/latest_package.json`：通过哈希复核的板级位流包。
 - `build/video/latest_package_video_rx_board.json`、`latest_package_video_ddr_bist.json`：RX/DDR 各自最新发布包。
 - `build/video/latest_board_program.json`、`latest_board_serial.json`：实际下载/校验和串口采集；串口收包成功与 RX/native DDR/AXI-DMA 合格分别记录。
