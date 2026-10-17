@@ -19,7 +19,7 @@
   },
   "digital_composite": {
     "path": "build/video/startup_guard_digital_composite.json",
-    "sha256": "e8f9b804d35827357c3da8f8b10b1374e066b961036450eed953ac3e1063dd4b"
+    "sha256": "502c7035800160589b48865b902c6e2ac0b4963c2b800e76607631e07b3711bf"
   },
   "digital_suites": 25,
   "digital_current_inputs_verified": true,
@@ -28,14 +28,38 @@
     "sha256": "21a0f0c991634466af26a4d868743083088f22669fe4c758779f8b5e2c1bca2c"
   },
   "additional_digital_review": {
-    "path": "build/video/startup_guard_review/20261017T134015_674991Z/result.json",
-    "sha256": "bac0dce6f533a555011fdbe3aa42b341ff0241689200b431ef60e55de7e93863"
+    "path": "build/video/startup_guard_review/20261017T142615_889421Z/result.json",
+    "sha256": "af8a3662b5521d471a4a98662db32cd604337a396fd4d9f0406a1911cb737af8"
   },
   "independent_stream_register_review": {
     "path": "build/video/independent_stream_register_review/20261017T134024_549790Z/result.json",
     "sha256": "807339165474b289fec56d0984c06c6a1ea5c4fa2f2ca110e4402f6bda4656fd"
   },
   "stream_register_current_checks_pending": false,
+  "crc_datapath_current_checks_pending": false,
+  "crc_datapath": {
+    "scope": "Same FSM, fault priority, timer and result timing; ARADDR may differ only while ARVALID=0 for rejected requests.",
+    "design": {
+      "path": "docs/superpowers/specs/2026-10-17-video-crc-datapath-timing-design.md",
+      "sha256": "c6388038503a3d677fc13964a9ab781ee04f5524fbb18804fb478933ed1f7232"
+    },
+    "independent_review": {
+      "path": "build/video/independent_crc_datapath_review/20261017T142231_839491Z/result.json",
+      "sha256": "574f6d827ff00b0d07300bbbc2813cbe1d88c3713939fc0425d36165be264b15"
+    },
+    "applied_pair": {
+      "path": "build/video/preview_timing_analysis/crc_datapath/applied.json",
+      "sha256": "005ad99c5119fcb19c9f1fa3482e3d31d72faaea7df6caa05b9ea1372a575e64"
+    },
+    "applied_independent_directed": {
+      "path": "build/video/preview_timing_analysis/crc_datapath/applied_independent/result.json",
+      "sha256": "e109b530685d2c85bc2f9a9dcd8c59b254c7c6b5ee4819b4e8ac9092342875ad"
+    },
+    "synthesis_review": {
+      "path": "build/video/independent_crc_synthesis_review/20261017T143502_449401Z/result.json",
+      "sha256": "545a6ef8628537377ef3acba5c9cce9594e64a0cb2ebf662d28def3a8aa42cfd"
+    }
+  },
   "timing_fallback": {
     "path": "build/video/preview_timing_analysis/bridge_phase_guards_startup_1259/applied.json",
     "sha256": "d263af1f8c7b513934697554cfc0837cd73de077cdc2d42c8e7201f17dcbf451"
@@ -56,16 +80,25 @@
       "sha256": "adefd3c848f20f648fb9e8b1f63c24c598ab3a961c2e905d9acc0dc054605b36",
       "status": "fail",
       "internal_timing_met": false
+    },
+    {
+      "path": "build/video/pds/20261017T133740_221065Z/result.json",
+      "sha256": "8c700b60222a9fbbe354ea402e5606a91c0bd7e8f2b862c9fea8d43e74923b26",
+      "status": "fail",
+      "internal_timing_met": false
     }
   ],
   "physical_build": {
     "status": "running",
-    "directory": "build/video/pds/20261017T133740_221065Z"
+    "directory": "build/video/pds/20261017T142615_898505Z"
   },
   "constraint_audit": {
     "status": "pending"
   },
   "physical_build_and_audit_verified": false,
+  "independent_physical_review": {
+    "status": "pending"
+  },
   "physical_image_recovery_verified": false,
   "board": {
     "status": "not_programmed"
@@ -74,11 +107,13 @@
     "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
     "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
     "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "rtl/video/video_frame_crc_reader.sv": "f1cc6e8036df520f2d2aa38f72a84fbc2d550a2fe0507f14d5b958f7aecdb711",
     "fpga/pg2l100h/rtl/video_preview_board_top.sv": "3e677bb993fcd27ae6fc7c3df03fa80ca27f0ff679c6a3ec013e4b9e72ab32fd",
     "fpga/pg2l100h/project/video_preview_board.json": "ac2efc6244da9ac54b6eed0ffc79469bcba3509e3721ee9f6d7801b1c9964d76",
     "scripts/video/run.py": "095100caf6a5f0693abf75ac631df9436c9af37e7382f2b822bd2f7124e0d739",
     "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
     "tb/video/tb_video_stream_register.sv": "89133fda354df8fdb09742d3cd5e830538957458c0a885be0b68346dbbd6f8f5",
-    "tb/video/tb_video_preview_board.sv": "cd57a80c321510c964dced39333c49e5aab8d20961ce0707cc7babd416009d33"
+    "tb/video/tb_video_preview_board.sv": "cd57a80c321510c964dced39333c49e5aab8d20961ce0707cc7babd416009d33",
+    "tb/video/tb_video_frame_crc_reader.sv": "0803366ff0a5d9cb3ad50f5614875cad8388a52ca3473d171dcd6ecbdc6330c8"
   }
 }

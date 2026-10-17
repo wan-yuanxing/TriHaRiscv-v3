@@ -27,6 +27,7 @@ module video_frame_crc_reader #(
     reg [15:0] rows_q,row_index;
     reg [4:0] burst_beats,beat_index,byte_index,byte_count;
     reg [127:0] data_q;
+    reg [31:0] next_address_q,next_row_base_q;
     function automatic descriptor_ok(input [31:0] base,row_bytes,stride,input [15:0] rows);
         reg [63:0] last_byte;
         begin
@@ -54,7 +55,7 @@ module video_frame_crc_reader #(
             crc_byte=value;
         end
     endfunction
-    wire [31:0] next_crc=crc_byte(crc_state,data_q[byte_index*8+:8]);
+    wire [31:0] next_crc=crc_byte(crc_state,data_q[7:0]);
     reg [7:0] fault_now;
     always @* begin
         fault_now=0;
@@ -75,6 +76,21 @@ module video_frame_crc_reader #(
     assign arsize=3'd4;assign arburst=2'b01;
     assign arvalid=reset_n&&state==ADDRESS;
     assign rready=reset_n&&state==RECEIVE;
+    // Scratch is consumed only after a normal R acceptance has filled it.
+    // Preserve the original nested procedural-if semantics for X stopping.
+    always @(posedge clk)begin
+        if(reset_n)begin
+            if(state==RECEIVE)begin
+                if(rvalid)begin
+                    if(stopping)begin end
+                    else begin
+                        next_address_q<=address_q+32'd16;
+                        next_row_base_q<=row_base+stride_q;
+                    end
+                end
+            end
+        end
+    end
     always @(posedge clk or negedge reset_n)begin
         if(!reset_n)begin
             state<=IDLE;timer<=0;result_code<=0;result_tag<=0;checked_bytes<=0;crc<=0;fault<=0;
@@ -93,13 +109,15 @@ module video_frame_crc_reader #(
                 IDLE:if(req_valid&&req_ready)begin
                     result_code<=0;result_tag<=(^req_tag===1'bx)?32'd0:req_tag;checked_bytes<=0;crc<=0;timer<=0;
                     crc_state<=32'hffffffff;row_index<=0;
+                    // Rejected payload is unowned; descriptor checks control publication.
+                    row_base<=req_base;address_q<=req_base;row_bytes_q<=req_row_bytes;
+                    stride_q<=req_stride;rows_q<=req_rows;row_remaining<=req_row_bytes;
+                    expected_q<=expected_crc;
                     if(descriptor_ok(req_base,req_row_bytes,req_stride,req_rows)!==1'b1 ||
                        (^req_tag===1'bx) || (^expected_crc===1'bx))begin
                         result_code<=8'h01;state<=RESULT;
                     end else begin
-                        row_base<=req_base;address_q<=req_base;row_bytes_q<=req_row_bytes;
-                        stride_q<=req_stride;rows_q<=req_rows;row_remaining<=req_row_bytes;
-                        expected_q<=expected_crc;state<=PREPARE;
+                        state<=PREPARE;
                     end
                 end
                 PREPARE:if(stopping||rvalid)state<=RESULT;
@@ -119,6 +137,7 @@ module video_frame_crc_reader #(
                     else begin beat_index<=beat_index+1'b1;state<=RECEIVE;end
                 end else begin
                     crc_state<=next_crc;checked_bytes<=checked_bytes+1'b1;
+                    data_q<={8'd0,data_q[127:8]};
                     if(byte_index==byte_count-1)begin
                         if(row_remaining<=16)begin
                             if(row_index==rows_q-1)begin
@@ -126,11 +145,11 @@ module video_frame_crc_reader #(
                                 if((^next_crc===1'bx)||(~next_crc)!==expected_q)begin result_code<=8'h0b;fault<=1;end
                                 state<=RESULT;
                             end else begin
-                                row_index<=row_index+1'b1;row_base<=row_base+stride_q;
-                                address_q<=row_base+stride_q;row_remaining<=row_bytes_q;state<=PREPARE;
+                                row_index<=row_index+1'b1;row_base<=next_row_base_q;
+                                address_q<=next_row_base_q;row_remaining<=row_bytes_q;state<=PREPARE;
                             end
                         end else begin
-                            address_q<=address_q+32'd16;row_remaining<=row_remaining-32'd16;
+                            address_q<=next_address_q;row_remaining<=row_remaining-32'd16;
                             if(beat_index==burst_beats-1)state<=PREPARE;
                             else begin beat_index<=beat_index+1'b1;state<=RECEIVE;end
                         end

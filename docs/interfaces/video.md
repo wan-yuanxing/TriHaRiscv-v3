@@ -53,6 +53,8 @@ flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snap
 
 `video_frame_crc_reader` 请求锁存base、row_bytes、stride、rows、tag和expected_crc，以16B对齐、最多16拍及4KiB边界分割，跳过stride padding，只对有效RGB字节计算CRC32/ISO-HDLC。结果保持到ready；故障和未知CRC不能成功。公开AR不会因abort/offline/timeout撤销，已公开长度必须排空；消费结果不代表故障端口可立即复用。
 
+CRC数据通路使用正常R接纳拍预存后续地址候选，既有BYTES周期内移位取低字节，不增加协议周期或故障窗口。无复位scratch仅在正常R接纳后使用。请求接纳沿即执行原完整描述符/未知值检查，拒绝仍即时code01且不发布AR；被拒payload可改变ARVALID=0时的ARADDR，调用方只在VALID成立时解释AR payload。原故障优先级和RESULT保持条件不变。
+
 `preview_display` 的core接口为 `record_valid/ready` 和base/stride/frame_id/slot。接纳后稳定总线经toggle握手跨到pixel域；首行就绪且 `pixel_frame_start` 才切换。`commit_valid/ready` 与 `release_valid/ready` 分别保持对应frame_id/slot；release晚于旧帧在途DMA及像素流水线引用退休。事件背压期间继续重复扫描活动帧。新记录不能使用仍受保护的base或slot；调用方仍须保证不同base代表互不重叠的分配区。
 
 显示的双bank双时钟RAM每行只读DDR一次，左右窗口各消费一次，右侧最后像素退出流水线后回收。默认窗口 `(0,150)` 和 `(400,150)`，各400×300，背景RGB `101820`，输出RGB/HS/VS/DE同拍延迟。欠载输出背景并锁存故障；扫描不可暂停。scalar控制仅切异步首级D路径，稳定bundle实设6ns，本地同步级保持常规setup/hold。core/pixel复位必须协调；此单记录目标优化掉未消费release payload，多记录目标必须补其6ns数据束约束。
