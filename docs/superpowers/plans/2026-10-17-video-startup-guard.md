@@ -12,5 +12,9 @@
 - [x] 新增 `rtl/video/video_capture_startup_guard.sv`，接入 `fpga/pg2l100h/rtl/video_preview_board_top.sv` 的入口mode_good；顶层RX_WARMUP_FRAMES默认128，板级TB用2。显式更新目标来源和 `scripts/video/run.py` 套件。
 - [x] 运行 `python scripts/video/run.py --suite all`：122911_118029Z的24套件/111输入通过，44项Python测试中43通过/1跳过。随后仅加强板级TB，124835_465106Z定向复跑通过；composite逐项确认唯一差异为TB、全部116项汇总当前输入匹配。独立复核124950_134546Z关闭CRC包覆盖问题，无阻塞RTL发现；新pixel域路径无新增CDC，保持旧接口/失败判定。
 - [ ] 运行 `python scripts/video/build_pds.py --target video_preview_board --stage bitstream`，现有八类内部时序和实际CDC/bundle审计全部通过后才打包。失败位流不下载。
+- [x] 第一轮 `pds/20261017T122911_128053Z` 六布局全部失败，setup余量依次−0.226/−2.473/−0.422/−1.030/−0.104/−0.486ns，保留原报告及拒绝结果。最优组含DMA描述符/FIFO路径，另一组桥payload→全局poisoned→读缓存WE；不把所有失败端点归因于同一路径。
+- [x] 对桥的已知状态分别消除无关fault输入，保留完整fault_now优先级/锁存、VADDR/VDATA masked验证、VALID及排空；隔离候选279552四态比较、191场景32197配对及三突变检查通过，独立复核通过后应用。当前实际桥SHA为 `f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408`。原时钟/超时不变，未知内部状态不在等价保证内。
+- [x] 对已应用桥重新做实际DUT复核及完整回归：`independent_applied_bridge_phase_guard_review/20261017T130902_274324Z` 再次编译实际源码并通过279552四态/191配对；`regression/20261017T130743_837727Z` 的24套件/111输入通过，合并116当前哈希匹配。附加8项板级CRC/合法黑帧/突变复核为 `startup_guard_review/20261017T130958_208241Z`。
+- [ ] 第二轮PDS `130743_823296Z` 仍需全内部时序及最终路径审计；当前数字资格已恢复，物理和画面资格保持待验。
 - [ ] `package_board.py --target video_preview_board`、`program_board.py --target video_preview_board --start-server`；首帧及60秒状态检查；开启长记录后请求一次实体KEY0，验正确源桌面恢复。
 - [ ] 更新STATUS/接口/验证摘要与原始结果引用，保留旧黑帧/超时/纠正证据；只提交本批Video文件，不push、不写Flash。

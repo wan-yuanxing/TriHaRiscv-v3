@@ -18,6 +18,10 @@
 
 新完整回归 `regression/20261017T122911_118029Z` 的24套件/111输入通过，44项Python测试中43通过/1跳过。独立复核发现板级TB可能只收type7而跳过CRC断言；已加强为四个成功epoch各自必须收到type6，`124835_465106Z` 定向复验通过。`startup_guard_digital_composite.json` 确认唯一被取代的输入是该TB，生产源码未变；独立复核 `independent_startup_guard_review/20261017T124950_134546Z` 关闭此项，无阻塞发现。新的PDS构建仍在运行，原125MHz/6ns/5秒超时约束不变，尚未下载新候选，现场图像恢复仍未通过。当前分层结果见 [startup_guard.json](evidence/startup_guard.json)，设计与任务见同日startup-guard文档。
 
+此后第一轮 `pds/20261017T122911_128053Z` 的六组布局全部未通过，最佳setup为−0.104ns，未下载。实际报告含DMA描述符、FIFO及桥读缓存控制等不同路径。对桥作已知状态下的等价控制简化：普通读/写/空闲阶段只保留该阶段可能发生的fault真值，VADDR/VDATA仍使用完整masked验证；原fault_now优先级、sticky诊断、VALID及排空不变。隔离候选 `bridge_phase_guards_startup_1259` 经279552四态比较、191场景32197逐周期配对及三突变检查，独立复核 `independent_bridge_phase_guard_review/20261017T130136_580922Z` 通过，随后仅LF归一后应用。未知内部状态不在等价范围内，协调复位后的状态保持已知。
+
+当前实际桥SHA `f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408` 的实际DUT独立复核 `independent_applied_bridge_phase_guard_review/20261017T130902_274324Z` 再次通过四态和逐周期检查；第二轮完整回归 `130743_837727Z` 的24套件/111输入全部通过，116项当前汇总哈希匹配。当前附加CRC/合法黑帧/突变复核为 `startup_guard_review/20261017T130958_208241Z`。PDS `130743_823296Z` 尚未完成签核；数字资格已恢复，物理/画面资格仍待验。上述变更没有放宽125MHz、6ns或超时，尚无新镜像板测。
+
 ## 数据路径与范围
 
 真实HDMI完整帧经48bit异步FIFO，在core域原子分送raw和2×2平均分支，各自packer/DMA写入预留测试区。raw `0x87300000`：800×600、2400B行步长、1440000有效字节；preview `0x87460000`：400×300、1200B行步长、360000有效字节。每通道缩放为 `(p00+p01+p10+p11+2)>>2`。good EOF及两路成功写结果齐备后，独立读取有效字节核验两平面CRC，再交给显示读口。

@@ -117,6 +117,27 @@ module axi128_hmic256 #(
           (native_write && h_wready!==1'b0 && h_wready!==1'b1)) fault_now=8'h0b;
  end
  wire poisoned=fault||(fault_now!=0);
+ // Use each guard directly in its phase; verification alone needs the
+ // masked readback comparator. Case truth preserves procedural-if X handling.
+ wire phase_init_fault=((seen_online && init_done!==1'b1)===1'b1);
+ wire quiet_poisoned=fault||phase_init_fault||(h_rvalid!==1'b0);
+ wire collect_phase_poisoned=quiet_poisoned||
+     ((w_take && wlast!==(up_q==beats_q-1))===1'b1);
+ wire write_phase_poisoned=quiet_poisoned||
+     ((nw_take && h_wid!==id_q)===1'b1)||
+     ((nw_take && h_wlast!==(pos_q==span_q-1))===1'b1)||
+     (timed_out===1'b1)||
+     (((h_awvalid && h_awready!==1'b0 && h_awready!==1'b1)||
+       (native_write && h_wready!==1'b0 && h_wready!==1'b1))===1'b1);
+ wire read_phase_poisoned=fault||phase_init_fault||
+     ((h_rvalid===1'b1 && !native_read)===1'b1)||
+     ((nr_take && h_rid!==id_q)===1'b1)||
+     ((nr_take && h_rlast!==(pos_q==span_q-1))===1'b1)||
+     ((nr_take && (^h_rdata===1'bx))===1'b1)||
+     (timed_out===1'b1)||
+     (((h_rvalid!==1'b0 && h_rvalid!==1'b1)||
+       (h_arvalid && h_arready!==1'b0 && h_arready!==1'b1))===1'b1);
+
  // Only COLLECT writes the expected/mask cache. Native readback faults
  // cannot be active here; preserve immediate invalid-control suppression.
  wire collect_poisoned=fault||(seen_online && init_done!==1'b1)||
@@ -161,7 +182,7 @@ module axi128_hmic256 #(
    else if(!timed_out) timer_q<=timer_q+1'b1;
    case(state)
     IDLE:begin
-     if(poisoned) state<=QUARANTINE;
+     if(quiet_poisoned) state<=QUARANTINE;
      else if(aw_take) begin
       id_q<=awid;beats_q<={1'b0,awlen}+9'd1;up_q<=0;half_q<=awaddr[4];
       legal_q<=legal(awaddr,awlen,awsize,awburst);response_q<=0;state<=COLLECT;
@@ -189,20 +210,20 @@ module axi128_hmic256 #(
       end
      end
      if(up_q==beats_q-1) begin
-      if(poisoned) begin response_q<=2'b10;state<=BRESP;end
+      if(collect_phase_poisoned) begin response_q<=2'b10;state<=BRESP;end
       else if(!legal_q) begin response_q<=2'b11;state<=BRESP;end
       else state<=WPRE;
      end else up_q<=up_q+1'b1;
     end
     WPRE:begin
      pos_q<=0;payload_q<=expected[0];mask_q<=masks[0];
-     if(poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=WADDR;
+     if(quiet_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=WADDR;
     end
     WADDR,WDATA:begin
      if(state==WADDR && h_awready===1'b1) state<=WDATA;
      if(nw_take) begin
       if(pos_q==span_q-1) begin
-       if(poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VPRE;
+       if(write_phase_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VPRE;
       end else begin
        pos_q<=pos_q+1'b1;payload_q<=expected[pos_q+1'b1];mask_q<=masks[pos_q+1'b1];
       end
@@ -210,7 +231,7 @@ module axi128_hmic256 #(
     end
     VPRE:begin
      pos_q<=0;payload_q<=expected[0];mask_q<=masks[0];
-     if(poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VADDR;
+     if(quiet_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VADDR;
     end
     VADDR,VDATA:begin
      if(state==VADDR && h_arready===1'b1) state<=VDATA;
@@ -224,25 +245,25 @@ module axi128_hmic256 #(
     RADDR,RDATA:begin
      if(state==RADDR && h_arready===1'b1) state<=RDATA;
      if(nr_take) begin
-      if(!poisoned) returned[pos_q]<=h_rdata;
-      if(pos_q==span_q-1) begin response_q<=poisoned ? 2'b10:2'b00;state<=RPRE;end
+      if(!read_phase_poisoned) returned[pos_q]<=h_rdata;
+      if(pos_q==span_q-1) begin response_q<=read_phase_poisoned ? 2'b10:2'b00;state<=RPRE;end
       else pos_q<=pos_q+1'b1;
      end
     end
     RPRE:begin
      up_q<=0;
-     if(poisoned) begin response_q<=2'b10;rdata_q<=0;end
+     if(quiet_poisoned) begin response_q<=2'b10;rdata_q<=0;end
      else rdata_q<=response_q!=0 ? 128'b0:(half_q ? returned[0][255:128]:returned[0][127:0]);
      state<=RRESP;
     end
     RRESP:if(rready) begin
-     if(up_q==beats_q-1) state<=poisoned ? QUARANTINE:IDLE;
+     if(up_q==beats_q-1) state<=quiet_poisoned ? QUARANTINE:IDLE;
      else begin
       up_q<=up_q+1'b1;
       rdata_q<=response_q!=0 ? 128'b0:(next_lane[0] ? returned[next_lane[4:1]][255:128]:returned[next_lane[4:1]][127:0]);
      end
     end
-    BRESP:if(bready) state<=poisoned ? QUARANTINE:IDLE;
+    BRESP:if(bready) state<=quiet_poisoned ? QUARANTINE:IDLE;
     default:state<=QUARANTINE;
    endcase
   end

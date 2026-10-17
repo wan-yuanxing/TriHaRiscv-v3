@@ -37,7 +37,7 @@
     "fpga/pg2l100h/rtl/video_preview_board_top.sv": "f8b6b413a40cf4ce0d4880678b2353faf4938cbbdeab5f324467e3d793479bc4",
     "fpga/pg2l100h/rtl/video_rx_board_top.sv": "1204b9d7e979be2d32412d41520631a33762654806ba67f3644c6a846c4bc183",
     "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
-    "rtl/video/axi128_hmic256.sv": "6589602b4df02f4408728b9c602be259ee93726ddd19c3587c33fbbc8632383b",
+    "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
     "rtl/video/ddr_native_bist.sv": "5fd4121580d93058d99407687a0dee206ee6a486224a9d784b5a2f8920a00e98",
     "rtl/video/include/video_cfg.vh": "4fd722db8165369b57e588ca54411ccf1fda3d81fcdf160b7d82f35689c18222",
     "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
@@ -124,14 +124,14 @@
   },
   "regression": {
     "path": "build/video/startup_guard_digital_composite.json",
-    "sha256": "b306d6251334c8082b5848748f4aff0980382f06c1b4feef5faa449fef83ce0c",
+    "sha256": "a9fb1278cd92fb43fdb805161078c5b4410b70a05ee98949e6b962209e114928",
     "status": "pass",
     "suites": 24,
-    "scope": "Full baseline plus targeted rerun after only board-TB CRC assertion strengthening; production inputs unchanged."
+    "scope": "Current full regression after applied bridge phase guards; all current runtime and strengthened TB inputs included."
   },
   "build": {
     "status": "running",
-    "directory": "build/video/pds/20261017T122911_128053Z",
+    "directory": "build/video/pds/20261017T130743_823296Z",
     "internal_timing_met": false
   },
   "internal_physical_audit": {
@@ -593,9 +593,9 @@
   "observed_source_desktop_once": true,
   "black_reset_diagnosis": {
     "path": "docs/verification/video/evidence/preview_black_reset.json",
-    "sha256": "f13845ae77c88bf8df1e52387f83b42983f4c0d4b13bfb9268865c8236a43fb0"
+    "sha256": "b7fde91827cd7faa82eb40b97ae9adf6f4c492fe311bdbe3030d7dfdeb3e4e84"
   },
-  "source_hashes_scope": "Current runtime and test inputs, checked against full regression plus TB-only strengthened targeted rerun; see startup_guard evidence.",
+  "source_hashes_scope": "Current runtime and test input hashes; exact verification composition is recorded in regression.scope and startup_guard evidence.",
   "historical_source_hashes": {
     "build/video/vendor/hdmi/source/hdmi/iic_dri.v": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e",
     "build/video/vendor/hdmi/source/hdmi/ms7200_ctl.v": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199",
@@ -756,6 +756,17 @@
   },
   "startup_guard_fix": {
     "path": "docs/verification/video/evidence/startup_guard.json",
-    "sha256": "dbb213d5c90ffb083011b69d0e8a61fa13786aad586b1c09b9c96107c1519c1b"
-  }
+    "sha256": "f5aa2aafdfe223f3901734e98784fe57c394edcbdc7df0ef7649a1ea4e1e8b96"
+  },
+  "timing_fallback_current_checks_pending": false,
+  "failed_timing_attempts": [
+    {
+      "path": "build/video/pds/20261017T122911_128053Z/result.json",
+      "sha256": "c5e74489e7b0d232c9faf14256509bfd2d8a854291a5d4579bf1707c33ebc032",
+      "status": "fail",
+      "artifact_sha256": "137637dc1e499b9f815fd3f06e2f4ca0844861bb8ea7b295e34949fed8a38e4b",
+      "verify_mask_sha256": null,
+      "internal_timing_met": false
+    }
+  ]
 }

@@ -11,7 +11,7 @@
   },
   "diagnosis": {
     "path": "docs/verification/video/evidence/preview_black_reset.json",
-    "sha256": "f13845ae77c88bf8df1e52387f83b42983f4c0d4b13bfb9268865c8236a43fb0"
+    "sha256": "b7fde91827cd7faa82eb40b97ae9adf6f4c492fe311bdbe3030d7dfdeb3e4e84"
   },
   "behavioral_red": {
     "path": "build/video/regression/20261017T122733_829867Z/result.json",
@@ -19,7 +19,7 @@
   },
   "digital_composite": {
     "path": "build/video/startup_guard_digital_composite.json",
-    "sha256": "b306d6251334c8082b5848748f4aff0980382f06c1b4feef5faa449fef83ce0c"
+    "sha256": "a9fb1278cd92fb43fdb805161078c5b4410b70a05ee98949e6b962209e114928"
   },
   "digital_suites": 24,
   "digital_current_inputs_verified": true,
@@ -28,12 +28,28 @@
     "sha256": "21a0f0c991634466af26a4d868743083088f22669fe4c758779f8b5e2c1bca2c"
   },
   "additional_digital_review": {
-    "path": "build/video/startup_guard_review/20261017T124835_492049Z/result.json",
-    "sha256": "1f53bf39d40f00cb02505cc691d9cf2605396f628d51b6d80043af7b2609bc53"
+    "path": "build/video/startup_guard_review/20261017T130958_208241Z/result.json",
+    "sha256": "dbaff6b0cde5821dcf6d861eb33aa258053741069244a00a29094dec1c117fd4"
   },
+  "timing_fallback": {
+    "path": "build/video/preview_timing_analysis/bridge_phase_guards_startup_1259/applied.json",
+    "sha256": "d263af1f8c7b513934697554cfc0837cd73de077cdc2d42c8e7201f17dcbf451"
+  },
+  "independent_applied_bridge_review": {
+    "path": "build/video/independent_applied_bridge_phase_guard_review/20261017T130902_274324Z/result.json",
+    "sha256": "fe662e45a36e8390e6121e494d5c95625f9df08e1dc4e0e3ee1b40d7741d6ae1"
+  },
+  "failed_timing_attempts": [
+    {
+      "path": "build/video/pds/20261017T122911_128053Z/result.json",
+      "sha256": "c5e74489e7b0d232c9faf14256509bfd2d8a854291a5d4579bf1707c33ebc032",
+      "status": "fail",
+      "internal_timing_met": false
+    }
+  ],
   "physical_build": {
     "status": "running",
-    "directory": "build/video/pds/20261017T122911_128053Z"
+    "directory": "build/video/pds/20261017T130743_823296Z"
   },
   "constraint_audit": {
     "status": "pending"
@@ -44,6 +60,7 @@
     "status": "not_programmed"
   },
   "implementation_hashes": {
+    "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
     "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
     "fpga/pg2l100h/rtl/video_preview_board_top.sv": "f8b6b413a40cf4ce0d4880678b2353faf4938cbbdeab5f324467e3d793479bc4",
     "fpga/pg2l100h/project/video_preview_board.json": "ee6b92f3dc5f21b50c9bedd78b22b3c676e97ea4520c3c3081404391d751eea0",
