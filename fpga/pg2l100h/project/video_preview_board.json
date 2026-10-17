@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "target": "video_preview_board",
+  "top": "video_preview_board_top",
+  "test_top": "tb_video_preview_board",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "rtl/video/video_rx.sv",
+    "rtl/video/video_rx_measure.sv",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/video_write_dma.sv",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv",
+    "rtl/video/video_async_fifo.sv",
+    "rtl/video/video_capture_ingress.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/video_preview_capture.sv",
+    "rtl/video/video_frame_crc_reader.sv",
+    "rtl/video/preview_display.sv",
+    "rtl/video/video_preview_engine.sv",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv"
+  ],
+  "vendor_sources": [
+    "source/hdmi/ms7210_ctl.v",
+    "source/hdmi/iic_dri.v",
+    "source/hdmi/ms7200_ctl.v"
+  ],
+  "ddr_ip": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "generated_ip_instance": "I_ips_ddr_top",
+  "tests": [
+    "tb/video/models/ddr_native_model.sv",
+    "tb/video/models/ddr_board_ip_model.sv",
+    "tb/video/models/video_pll_model.sv",
+    "tb/video/tb_video_preview_board.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc",
+    "fpga/pg2l100h/constraints/video_preview_board.fdc"
+  ],
+  "scope": "One physical HDMI frame concurrently writes raw and 2x2 shared preview; independent CRCs then two same-frame windows using one DDR row fetch. No detector/input, CAPTURE_DONE, CPU fabric or external AC signoff."
+}

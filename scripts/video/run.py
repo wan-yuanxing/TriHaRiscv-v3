@@ -16,19 +16,20 @@ def add_inputs(result,paths):
     result['inputs'].update(incoming)
 
 
-def simulate(work, name, top, sources, includes=(), defines=(), timeout=120):
+def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, parameters=(), run_args=()):
     binary = work / (name + ".vvp")
     command = [tool("iverilog"), "-g2012", "-Wall", "-s", top, "-o", binary]
     for directory in includes:
         command += ["-I", directory]
     command += ["-D"+define for define in defines]
+    command += [f"-P{top}.{key}={value}" for key,value in parameters]
     run_logged(command + list(sources), work / (name + "_compile.log"))
-    return run_logged([tool("vvp"), binary], work / (name + "_simulation.log"), timeout=timeout)
+    return run_logged([tool("vvp"), binary, *run_args], work / (name + "_simulation.log"), timeout=timeout)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_engine", "hdmi_capture_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -59,6 +60,49 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('preview_scale','all'):
+            paths=[ROOT/p for p in ('rtl/video/preview_downscale.sv','tb/video/tb_preview_downscale.sv')]
+            add_inputs(result,paths)
+            log=simulate(work,'preview_scale','tb_preview_downscale',paths,timeout=600)
+            if 'PREVIEW_DOWNSCALE_PASS' not in log:raise RuntimeError('Missing preview scaler pass marker')
+            result['passed'].append('preview_scale')
+        if args.suite in ('preview_capture','all'):
+            paths=[ROOT/p for p in ('rtl/video/preview_downscale.sv','rtl/video/rgb888_packer.sv',
+                'rtl/video/video_write_dma.sv','rtl/video/video_preview_capture.sv','tb/video/tb_video_preview_capture.sv')]
+            add_inputs(result,paths)
+            for width,height in ((2,2),(26,6),(32,6),(800,600)):
+                name=f'preview_capture_{width}_{height}'
+                log=simulate(work,name,'tb_video_preview_capture',paths,timeout=600,
+                    parameters=(('TEST_WIDTH',width),('TEST_HEIGHT',height)),
+                    run_args=('+normal_only',) if width==800 else ())
+                if 'VIDEO_PREVIEW_CAPTURE_PASS' not in log:raise RuntimeError('Missing dual capture pass marker')
+            result['passed'].append('preview_capture')
+        if args.suite in ('preview_display','all'):
+            paths=[ROOT/p for p in ('rtl/video/preview_display.sv','tb/video/tb_preview_display.sv')]
+            add_inputs(result,paths)
+            scenarios=[(f'case_{mode}',0,(f'+CASE={mode}',)) for mode in range(27)]
+            scenarios += [('ratio_fast',0,('+CORE_HALF=3','+PIXEL_HALF=10.5')),
+                          ('ratio_slow',0,('+CORE_HALF=5','+PIXEL_HALF=16.5')),('invalid_window',0,()),('full',1,())]
+            for name,full,options in scenarios:
+                log=simulate(work,'preview_display_'+name,'tb_preview_display',paths,timeout=600,
+                    parameters=(('FULL',full),('INVALID_WINDOW',int(name=='invalid_window'))),run_args=options)
+                if 'PASS preview_display' not in log:raise RuntimeError('Missing shared display pass marker')
+            result['passed'].append('preview_display')
+        if args.suite in ('preview_crc','all'):
+            paths=[ROOT/p for p in ('rtl/video/video_frame_crc_reader.sv','tb/video/tb_video_frame_crc_reader.sv')]
+            add_inputs(result,paths)
+            log=simulate(work,'preview_crc','tb_video_frame_crc_reader',paths,timeout=600)
+            if 'VIDEO_FRAME_CRC_READER_PASS' not in log:raise RuntimeError('Missing plane CRC pass marker')
+            result['passed'].append('preview_crc')
+        if args.suite in ('preview_board','all'):
+            target=ROOT/'fpga/pg2l100h/project/video_preview_board.json'
+            preview=json.loads(target.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in preview['sources']+preview['tests']]
+            vendor=[ROOT/'build/video/vendor/hdmi'/p for p in preview['vendor_sources']]
+            add_inputs(result,[target,*paths,*vendor,ROOT/'config/video_edid.hex',ROOT/'rtl/video/include/video_edid.vh'])
+            log=simulate(work,'preview_board',preview['test_top'],paths+vendor,[ROOT/'rtl/video/include'],timeout=600)
+            if 'VIDEO_PREVIEW_BOARD_PASS' not in log:raise RuntimeError('Missing preview board pass marker')
+            result['passed'].append('preview_board')
         if args.suite in ('capture_ingress','all'):
             paths=[ROOT/p for p in ('rtl/video/video_async_fifo.sv','rtl/video/video_capture_ingress.sv',
                                    'tb/video/tb_video_async_fifo.sv','tb/video/tb_video_capture_ingress.sv')]

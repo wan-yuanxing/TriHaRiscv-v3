@@ -1,0 +1,22 @@
+# Additional output-pixel/core CDC. Existing HDMI+DDR constraints load first.
+# All bundles are held through a two-flop control handshake; bound only data
+# paths to their explicit capture flops. Local synchronizer stages stay timed.
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {bist.display.record_sync1 bist.display.done_sync1* bist.display.commit_ack_sync1 bist.display.release_ack_sync1 bist.display.fault_sync1}]
+set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {bist.display.request_sync1* bist.display.commit_sync1 bist.display.release_sync1 bist.display.scan_sync1 bist.display.underflow_sync1}]
+
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.mailbox_base* bist.display.mailbox_stride* bist.display.mailbox_frame* bist.display.mailbox_slot*}] -to [get_cells {bist.display.pending_base* bist.display.pending_stride* bist.display.pending_frame* bist.display.pending_slot*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.req_base*}] -to [get_cells {bist.display.dma_base_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.req_stride*}] -to [get_cells {bist.display.dma_stride_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.req_row*}] -to [get_cells {bist.display.dma_row_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.bank_success*}] -to [get_cells {bist.display.bank_ready*}]
+# PDS merges commit_pixel_{id,slot} into identical active_{frame,slot} Qs.
+# Bound the actual surviving aliases, retaining the same 6ns data constraint.
+set_max_delay 6.0 -datapath_only -from [get_cells {bist.display.active_frame* bist.display.active_slot*}] -to [get_cells {bist.display.commit_frame_id* bist.display.commit_slot* bist.display.frame_id*}]
+# This one-record diagnostic does not consume release payloads; PDS removes
+# those Q->D paths (STA-3015 if constrained). Multi-record users must add the
+# release_pixel_{id,slot}->release_{frame_id,slot} 6ns bounds in their target.
+# Release handshake and ownership behavior are covered by component tests.
+
+# Assertion to asynchronous clear/preset only; release flops and local
+# recovery/removal paths retain timing. RAM enables use local run registers.
+set_false_path -from [get_clocks {free_clk}] -to [get_pins {display_pixel_release*/C bist.display.*/C bist.display.*/P}]

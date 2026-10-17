@@ -48,6 +48,14 @@ def decode_packets(data):
                     'source_crc','ddr_crc','frame_tag','fifo_peak','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
+        elif packet[4] in (6,7):
+            fields=(('type','flags','phase','error_code','captured_pixels','preview_pixels',
+                     'source_crc','ddr_crc','preview_crc','preview_ddr_crc','heartbeat')
+                    if packet[4]==6 else
+                    ('type','flags','phase','error_code','frame_id','commits','completed_scans',
+                     'underflows','read_lines','fifo_peak','heartbeat'))
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
         else:continue
         for bit,name in enumerate(flags):
             record[name]=bool(record['flags']&(1<<bit))
@@ -89,6 +97,53 @@ def qualify_hdmi_capture(records):
                and isinstance(r.get('heartbeat'),int) for r in rows[-2:])
 
 
+def _preview_healthy(record):
+    return (record.get('flags')==0x75 and all(record.get(name) is True for name in
+                ('init_done','done','all_pll_locked','rx_mode_good','tx_done'))
+            and all(record.get(name) is False for name in ('busy','error','overflow'))
+            and record.get('phase')==0xa5 and record.get('error_code')==0
+            and type(record.get('heartbeat')) is int and 0<=record['heartbeat']<=0xffffffff)
+
+
+def _current_preview_records(records):
+    # Both packet types describe one engine. A later fault or restart of
+    # either type invalidates all earlier success samples and their epoch.
+    current=[]
+    for row in reversed(records):
+        if row.get('type') not in (6,7):continue
+        if not _preview_healthy(row):break
+        current.append(row)
+    return list(reversed(current))
+
+
+def qualify_preview_capture(records):
+    rows=[row for row in _current_preview_records(records) if row.get('type')==6][-2:]
+    if len(rows)!=2 or rows[0].get('heartbeat')==rows[1].get('heartbeat'):return False
+    return all(_preview_healthy(row) and row.get('captured_pixels')==480000
+               and row.get('preview_pixels')==120000
+               and all(type(row.get(field)) is int and 0<=row[field]<=0xffffffff
+                       for field in ('source_crc','ddr_crc','preview_crc','preview_ddr_crc'))
+               and row['source_crc']==row['ddr_crc']
+               and row['preview_crc']==row['preview_ddr_crc'] for row in rows)
+
+
+def qualify_preview_display(records):
+    rows=[row for row in _current_preview_records(records) if row.get('type')==7][-2:]
+    if not qualify_preview_capture(records) or len(rows)!=2:return False
+    for row in rows:
+        if not (_preview_healthy(row) and row.get('frame_id')==1 and row.get('commits')==1
+                and row.get('underflows')==0 and type(row.get('fifo_peak')) is int
+                and 1<=row['fifo_peak']<=2048
+                and type(row.get('completed_scans')) is int and row['completed_scans']>=2
+                and type(row.get('read_lines')) is int
+                and 300*row['completed_scans']<=row['read_lines']<=300*(row['completed_scans']+2)):
+            return False
+    return (rows[0]['heartbeat']!=rows[1]['heartbeat']
+            and rows[0]['frame_id']==rows[1]['frame_id']
+            and rows[1]['completed_scans']>rows[0]['completed_scans']
+            and rows[1]['read_lines']>rows[0]['read_lines'])
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -100,7 +155,8 @@ def main():
     result={'status':'running','directory':str(work.relative_to(ROOT)), 'port':args.port,'records':[],
             'operation':'receive_only_uart','physical_rx_mode_verified':False,
             'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False,
-            'physical_hdmi_raw_capture_verified':False}
+            'physical_hdmi_raw_capture_verified':False,
+            'physical_preview_capture_verified':False,'physical_preview_display_verified':False}
     write_json(BUILD/'latest_board_serial.json',result)
     try:
         shell=shutil.which('powershell.exe')
@@ -145,6 +201,8 @@ try {
         result['physical_ddr_bist_verified']=qualify_ddr(records)
         result['physical_axi_dma_verified']=qualify_axi_dma(records)
         result['physical_hdmi_raw_capture_verified']=qualify_hdmi_capture(records)
+        result['physical_preview_capture_verified']=qualify_preview_capture(records)
+        result['physical_preview_display_verified']=qualify_preview_display(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)
