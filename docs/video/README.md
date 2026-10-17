@@ -57,6 +57,8 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 `video_preview_board` 在同一入口帧原子生成raw和400×300 preview，写退休后分别读取DDR核验CRC，再显示左右两个同帧窗口。它按需采一帧，KEY0协调复位后重采；上下背景为深色。当前物理验收进度见 [共享预览记录](../verification/video/shared_preview.md)，不能以数字仿真替代实际画面确认。type6报告两路像素数及四个CRC，type7报告帧号、提交、扫描、欠载、行读和FIFO水位；两个包来自同一448bit原子快照，资格检查会丢弃重启/故障前的旧PASS。
 
+本单帧目标已通过真实HDMI双CRC、60秒扫描及实体KEY0重采板测，用户已确认左右同源完整画面恢复。当前保留preview镜像运行；连续采集、检测input及正式三槽/CPU fabric仍为后续任务。
+
 新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
 
 ## 当前文件树

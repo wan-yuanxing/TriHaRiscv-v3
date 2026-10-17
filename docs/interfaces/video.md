@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批实现同帧raw/preview、共享显示读口和局部显示记录协议，物理进度见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批同帧raw/preview、共享显示读口和局部显示记录协议已通过双CRC、60秒扫描及KEY0/现场双窗口验收，证据见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
 
 ## 已实现：video_pattern_core
 

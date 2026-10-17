@@ -60,13 +60,13 @@
 
 - [x] 先建立独立字节oracle和明确行为RED，保留默认算法配对；候选不得以缺失参数的编译警告代替RED。
 - [x] 仅在全部布局失败后采用：`rgb888_packer` 默认保留同拍传输；preview的两实例选择输入/输出互斥，输入按注册count定位，不经output_take后的next_count。
-- [x] 验证0..18全部计数、17/18行尾、宽1..19、随机受阻、flush/reset、默认波形等价及完整800×600；理想800/400行需950/475core周期，约105.263Mpixel/s，仍需实际FIFO水位复验。
+- [x] 验证0..18全部计数、17/18行尾、宽1..19、随机受阻、flush/reset、默认波形等价及完整800×600；理想800/400行需950/475core周期，约105.263Mpixel/s；实际FIFO峰值140、KEY0后141/2048，无溢出，不据此声称连续采集fps。
 - [x] 独立规格/质量审查，当前输入完整capture oracle及全部回归，再做物理构建；不得改变AXI/native排空、当拍故障抑制、时钟或超时约束。当前109项输入、23套件回归通过，物理构建仍按Task5单独验收。
 
 ## Task 5：物理构建与验收
 
 - [x] `python scripts/video/build_pds.py --target video_preview_board --stage bitstream` 全内部约束通过；逐位/CDC/bundle及引脚审计，不下载失败产物。032723构建选定seed6，最终14组只读报告与全部8类检查通过，原PNR哈希不变。
 - [x] `python scripts/video/package_board.py --target video_preview_board` 按位流/掩码哈希打包，保留RX回退包。preview包 `video_preview_board_a8658296e6b8`。
-- [ ] `python scripts/video/program_board.py --target video_preview_board --start-server` 后读取UART；两路计数/CRC通过、显示commit及扫描持续、无欠载。Program/Verify已成功，首轮输入未锁定、像素0/超时7；等待源恢复后协调复位并继续板测。
-- [ ] 现场同源双窗口和KEY0恢复分别确认；远程无法确认时明确待验并保持证据准确。
-- [ ] 更新 `docs/video/{STATUS,README}.md`、`docs/interfaces/video.md`、`docs/verification/video/shared_preview.md` 及小型JSON摘要；只做本地Video提交。
+- [x] `python scripts/video/program_board.py --target video_preview_board --start-server` 后读取UART；两路计数/CRC通过、显示commit及扫描持续、无欠载。源唤醒后同位流重新Program/Verify，12秒首测及60秒全包检查通过，raw/preview像素480000/120000，CRC ebf5a8c4/16fa9be1，欠载0、FIFO140/2048。实体KEY0另验，不用JTAG重配置替代。
+- [x] 现场同源双窗口和KEY0恢复分别确认；用户确认按KEY0后左右相同完整画面恢复。复位前后心跳399→99、扫描计数回到新epoch，复位后12个新包双CRC/显示合格；按键发生在两段记录之间，未声称连续捕获瞬时校准。
+- [x] 更新 `docs/video/{STATUS,README}.md`、`docs/interfaces/video.md`、`docs/verification/video/shared_preview.md` 及小型JSON摘要；只做本地Video提交。原超时、重配置、60秒扫描和实体KEY0证据分别保留，preview镜像继续运行。
