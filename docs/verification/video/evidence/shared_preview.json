@@ -21,7 +21,7 @@
     "fpga/pg2l100h/project/video_board_smoke.json": "72f7738faf667447c13da2daecd2aa8fb760d0daad93efeb694bb549572a337f",
     "fpga/pg2l100h/project/video_ddr_bist.json": "bdb7e0c8e95454bb82468b76c49ff1ce9a1d05349d962c1dfe1df02cb65ced26",
     "fpga/pg2l100h/project/video_hdmi_capture.json": "6c06b7e82282ca9066a9e4c3ea762924a3efdc2524ccac0a0ee1752b9d6979b1",
-    "fpga/pg2l100h/project/video_preview_board.json": "ee6b92f3dc5f21b50c9bedd78b22b3c676e97ea4520c3c3081404391d751eea0",
+    "fpga/pg2l100h/project/video_preview_board.json": "ac2efc6244da9ac54b6eed0ffc79469bcba3509e3721ee9f6d7801b1c9964d76",
     "fpga/pg2l100h/project/video_rx.json": "27640167c29b273cbbae21347d5ad315b2dd818c53e3003be944dd54894d32a5",
     "fpga/pg2l100h/project/video_rx_board.json": "03b6f62181185c142e0c23ba303ae59e648b4427e428305c0d1de2f606e29e1d",
     "fpga/pg2l100h/project/video_timing.json": "0a90fb6d203314e22c9e6b271a8c30f368b0955b982f5d5bab2ff48c305227dd",
@@ -34,7 +34,7 @@
     "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
     "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
     "fpga/pg2l100h/rtl/video_hdmi_capture_top.sv": "cf5cda3c211e8a02e39d930022728f825fd346d34b6d96bf3c70f9c7f0ce6eda",
-    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "f8b6b413a40cf4ce0d4880678b2353faf4938cbbdeab5f324467e3d793479bc4",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "3e677bb993fcd27ae6fc7c3df03fa80ca27f0ff679c6a3ec013e4b9e72ab32fd",
     "fpga/pg2l100h/rtl/video_rx_board_top.sv": "1204b9d7e979be2d32412d41520631a33762654806ba67f3644c6a846c4bc183",
     "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
     "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
@@ -69,7 +69,7 @@
     "scripts/video/prepare_reference.py": "69b84235d02b82837b942c8539c3b84724b2b14fab3f4799599347da70d44288",
     "scripts/video/program_board.py": "c59e0dcb0610e6a715fed2265f60b01176f9b5574b0bacae39ef6e99812ba0b0",
     "scripts/video/read_board.py": "0a024e3946aa354ad98a8301e0438319536ce37ae43ba70ca7120985fe6b89fb",
-    "scripts/video/run.py": "78fa76288680d415079af078e720c70b1ca756fe0fdc376c5ab7418d6d6bc526",
+    "scripts/video/run.py": "095100caf6a5f0693abf75ac631df9436c9af37e7382f2b822bd2f7124e0d739",
     "scripts/video/scan_board.py": "cc529568a71d14640b4a8f6f815cd7f2473b7a5d8d7d78472ea1515ed5481f1c",
     "sw/include/video_cfg.h": "5dc811fddd42be0893d50ad125f59e39c5cb4c4ebbf78016b71b0aa7231c3a12",
     "tb/video/models/axi_bridge_native_model.sv": "7b202877281e2f58a46a2ca9a5b245027f468ace1e23d5d0784fa1efcccd3442",
@@ -120,18 +120,20 @@
     "tb/video/test_references.py": "121cc51366367a838a6d7a3596b36b71c80a10e9bb4028561143f9bd9abbcaad",
     "tb/video/test_regression_inputs.py": "15c33fa94f0067e85fce27bf428818b92107b20c9e858b3f3e77ece60ec61d83",
     "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
+    "tb/video/tb_video_stream_register.sv": "89133fda354df8fdb09742d3cd5e830538957458c0a885be0b68346dbbd6f8f5",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
     "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287"
   },
   "regression": {
     "path": "build/video/startup_guard_digital_composite.json",
-    "sha256": "a9fb1278cd92fb43fdb805161078c5b4410b70a05ee98949e6b962209e114928",
+    "sha256": "e8f9b804d35827357c3da8f8b10b1374e066b961036450eed953ac3e1063dd4b",
     "status": "pass",
-    "suites": 24,
-    "scope": "Current full regression after applied bridge phase guards; all current runtime and strengthened TB inputs included."
+    "suites": 25,
+    "scope": "Current full regression after startup guard, bridge phase guards and core stream register; all current runtime and strengthened TB inputs included. Digital models only."
   },
   "build": {
     "status": "running",
-    "directory": "build/video/pds/20261017T130743_823296Z",
+    "directory": "build/video/pds/20261017T133740_221065Z",
     "internal_timing_met": false
   },
   "internal_physical_audit": {
@@ -756,7 +758,7 @@
   },
   "startup_guard_fix": {
     "path": "docs/verification/video/evidence/startup_guard.json",
-    "sha256": "f5aa2aafdfe223f3901734e98784fe57c394edcbdc7df0ef7649a1ea4e1e8b96"
+    "sha256": "2e348c7640256c786a4f4fbfa45c6d5a431fc32d9258b2c8a8ba4d01f1431400"
   },
   "timing_fallback_current_checks_pending": false,
   "failed_timing_attempts": [
@@ -767,6 +769,13 @@
       "artifact_sha256": "137637dc1e499b9f815fd3f06e2f4ca0844861bb8ea7b295e34949fed8a38e4b",
       "verify_mask_sha256": null,
       "internal_timing_met": false
+    },
+    {
+      "path": "build/video/pds/20261017T130743_823296Z/result.json",
+      "sha256": "adefd3c848f20f648fb9e8b1f63c24c598ab3a961c2e905d9acc0dc054605b36",
+      "status": "fail",
+      "internal_timing_met": false
     }
-  ]
+  ],
+  "stream_register_current_checks_pending": false
 }

@@ -61,6 +61,8 @@ flags bit 0..7 为 TXdone、TXerror、RXbootdone、RXerror、RXconfigured、snap
 
 preview板级入口增加 `video_capture_startup_guard`，默认128个连续完整好帧之后才准入下一frame_start。只统计从frame_start起持续mode_good/rx_ready且good frame_end结束的完整区间；任意健康丢失或坏EOF清计数，饱和不回卷。RGB不参与判断，合法黑色帧仍可被选中。该稳定期针对已观察到的HDMI复位启动黑场；它不是通用的源内容就绪证明，也不改变入口FIFO/显示bank协调复位或既有5秒超时。当前物理复验未完成。
 
+preview板级FIFO读口与引擎之间另有 `video_stream_register`，在同一core域持有一个48bit词。无组合数据直通，空时增加一周期延迟，满时可在同一沿退休并替换；背压保持数据和valid。run/valid由既有core协调复位清零，数据存储不复位，取消不会独立丢弃所有权。FIFO RAM水位及EOF峰值字段仍排除core持有词；此级增加一个额外持有词，不改变原Gray指针或CDC束约束。
+
 联合目标UART仍为37B TRV1包；payload0为type，1为flags，2为phase，3为error_code，4..31为七个小端uint32：
 
 | type | payload 4..27的六个uint32 | payload28..31 |

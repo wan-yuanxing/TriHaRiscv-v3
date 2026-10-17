@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -60,6 +60,14 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('capture_pipe','all'):
+            paths=[ROOT/p for p in ('rtl/video/video_stream_register.sv','tb/video/tb_video_stream_register.sv')]
+            add_inputs(result,paths)
+            for width in (1,48):
+                log=simulate(work,f'capture_pipe_{width}','tb_video_stream_register',paths,
+                             parameters=(('TEST_WIDTH',width),))
+                if 'VIDEO_STREAM_REGISTER_PASS' not in log:raise RuntimeError('Missing stream register pass marker')
+            result['passed'].append('capture_pipe')
         if args.suite in ('capture_startup','all'):
             paths=[ROOT/p for p in ('rtl/video/video_capture_startup_guard.sv',
                                    'tb/video/tb_video_capture_startup_guard.sv')]

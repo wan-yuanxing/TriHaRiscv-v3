@@ -19,6 +19,7 @@
     "rtl/video/video_async_fifo.sv",
     "rtl/video/video_capture_ingress.sv",
     "rtl/video/video_capture_startup_guard.sv",
+    "rtl/video/video_stream_register.sv",
     "rtl/video/preview_downscale.sv",
     "rtl/video/video_preview_capture.sv",
     "rtl/video/video_frame_crc_reader.sv",
@@ -38,7 +39,8 @@
     "tb/video/models/ddr_board_ip_model.sv",
     "tb/video/models/video_pll_model.sv",
     "tb/video/tb_video_preview_board.sv",
-    "tb/video/tb_video_capture_startup_guard.sv"
+    "tb/video/tb_video_capture_startup_guard.sv",
+    "tb/video/tb_video_stream_register.sv"
   ],
   "constraints": [
     "fpga/pg2l100h/constraints/video_ddr_bist.fdc",

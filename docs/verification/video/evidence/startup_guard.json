@@ -19,18 +19,23 @@
   },
   "digital_composite": {
     "path": "build/video/startup_guard_digital_composite.json",
-    "sha256": "a9fb1278cd92fb43fdb805161078c5b4410b70a05ee98949e6b962209e114928"
+    "sha256": "e8f9b804d35827357c3da8f8b10b1374e066b961036450eed953ac3e1063dd4b"
   },
-  "digital_suites": 24,
+  "digital_suites": 25,
   "digital_current_inputs_verified": true,
   "independent_code_review": {
     "path": "build/video/independent_startup_guard_review/20261017T124950_134546Z/result.json",
     "sha256": "21a0f0c991634466af26a4d868743083088f22669fe4c758779f8b5e2c1bca2c"
   },
   "additional_digital_review": {
-    "path": "build/video/startup_guard_review/20261017T130958_208241Z/result.json",
-    "sha256": "dbaff6b0cde5821dcf6d861eb33aa258053741069244a00a29094dec1c117fd4"
+    "path": "build/video/startup_guard_review/20261017T134015_674991Z/result.json",
+    "sha256": "bac0dce6f533a555011fdbe3aa42b341ff0241689200b431ef60e55de7e93863"
   },
+  "independent_stream_register_review": {
+    "path": "build/video/independent_stream_register_review/20261017T134024_549790Z/result.json",
+    "sha256": "807339165474b289fec56d0984c06c6a1ea5c4fa2f2ca110e4402f6bda4656fd"
+  },
+  "stream_register_current_checks_pending": false,
   "timing_fallback": {
     "path": "build/video/preview_timing_analysis/bridge_phase_guards_startup_1259/applied.json",
     "sha256": "d263af1f8c7b513934697554cfc0837cd73de077cdc2d42c8e7201f17dcbf451"
@@ -45,11 +50,17 @@
       "sha256": "c5e74489e7b0d232c9faf14256509bfd2d8a854291a5d4579bf1707c33ebc032",
       "status": "fail",
       "internal_timing_met": false
+    },
+    {
+      "path": "build/video/pds/20261017T130743_823296Z/result.json",
+      "sha256": "adefd3c848f20f648fb9e8b1f63c24c598ab3a961c2e905d9acc0dc054605b36",
+      "status": "fail",
+      "internal_timing_met": false
     }
   ],
   "physical_build": {
     "status": "running",
-    "directory": "build/video/pds/20261017T130743_823296Z"
+    "directory": "build/video/pds/20261017T133740_221065Z"
   },
   "constraint_audit": {
     "status": "pending"
@@ -62,10 +73,12 @@
   "implementation_hashes": {
     "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
     "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
-    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "f8b6b413a40cf4ce0d4880678b2353faf4938cbbdeab5f324467e3d793479bc4",
-    "fpga/pg2l100h/project/video_preview_board.json": "ee6b92f3dc5f21b50c9bedd78b22b3c676e97ea4520c3c3081404391d751eea0",
-    "scripts/video/run.py": "78fa76288680d415079af078e720c70b1ca756fe0fdc376c5ab7418d6d6bc526",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "3e677bb993fcd27ae6fc7c3df03fa80ca27f0ff679c6a3ec013e4b9e72ab32fd",
+    "fpga/pg2l100h/project/video_preview_board.json": "ac2efc6244da9ac54b6eed0ffc79469bcba3509e3721ee9f6d7801b1c9964d76",
+    "scripts/video/run.py": "095100caf6a5f0693abf75ac631df9436c9af37e7382f2b822bd2f7124e0d739",
     "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
+    "tb/video/tb_video_stream_register.sv": "89133fda354df8fdb09742d3cd5e830538957458c0a885be0b68346dbbd6f8f5",
     "tb/video/tb_video_preview_board.sv": "cd57a80c321510c964dced39333c49e5aab8d20961ce0707cc7babd416009d33"
   }
 }

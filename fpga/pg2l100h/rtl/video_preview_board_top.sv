@@ -119,6 +119,13 @@ module video_preview_board_top #(
         .mode_good(capture_ready),.rx_ready(rx_enable_sync[1]),
         .arm_toggle(arm_toggle),.cancel(cancel),.m_valid(fifo_valid),.m_data(fifo_data),
         .m_ready(fifo_ready),.source_fault(source_fault),.overflow(source_overflow));
+    wire capture_stream_valid,capture_stream_ready;
+    wire [47:0] capture_stream_data;
+    // Cut the DRM-output -> packet/fault/ready -> DMA-counter enable path.
+    // This core-domain word retains ownership through stalls and errors.
+    video_stream_register #(.DATA_WIDTH(48)) capture_register(
+        .clk(core_clk),.reset_n(core_reset_n),.s_valid(fifo_valid),.s_ready(fifo_ready),.s_data(fifo_data),
+        .m_valid(capture_stream_valid),.m_ready(capture_stream_ready),.m_data(capture_stream_data));
     GTP_CLKBUFG free_clk_ibufg(.CLKIN(sys_clk),.CLKOUT(free_clk));
     // Match the original standalone differential-buffer structure. Internal
     // GPLL/PPLL feedback and PHY reset/training topology stay inside pinned IP.
@@ -174,7 +181,7 @@ module video_preview_board_top #(
         .pixel_clk(pix_clk),.pixel_reset_n(display_pixel_reset_n),.pixel_x(display_x),.pixel_y(display_y),
         .pixel_hs(hs),.pixel_vs(vs),.pixel_de(de),.frame_start(frame_start),
         .out_rgb(rgb),.out_hs(display_hs),.out_vs(display_vs),.out_de(display_de),
-        .m_valid(fifo_valid),.m_data(fifo_data),.m_ready(fifo_ready),
+        .m_valid(capture_stream_valid),.m_data(capture_stream_data),.m_ready(capture_stream_ready),
         .arm_toggle(arm_toggle),.cancel(cancel),.source_fault(source_fault),.overflow(source_overflow),
         .busy(bist_busy),.done(bist_done),.error(bist_error),.phase(bist_phase),.error_code(bist_error_code),
         .captured_pixels(captured_pixels),.preview_pixels(preview_pixels),.source_crc(source_crc),
