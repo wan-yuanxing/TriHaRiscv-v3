@@ -168,6 +168,12 @@ def main():
                 add_inputs(result,paths)
                 log=simulate(work,name,'tb_'+name,paths,timeout=600)
                 if marker not in log:raise RuntimeError('Missing pass marker: '+name)
+            paths=[ROOT/'rtl/video/rgb888_packer.sv',
+                   ROOT/'tb/video/models/rgb888_packer_legacy_model.sv',
+                   ROOT/'tb/video/tb_rgb888_packer_serial.sv']
+            add_inputs(result,paths)
+            log=simulate(work,'rgb888_packer_serial','tb_rgb888_packer_serial',paths,timeout=600)
+            if 'RGB888_PACKER_SERIAL_PASS' not in log:raise RuntimeError('Missing serial packer pass marker')
             result['passed'].append('write_dma')
         if args.suite in ('axi_capture','axi_capture_board','all'):
             manifest_axi_path=ROOT/'fpga/pg2l100h/project/video_axi_capture.json'

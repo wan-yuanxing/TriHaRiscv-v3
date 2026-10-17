@@ -118,7 +118,7 @@ module video_preview_capture #(
             else if(seen_online&&timer>=TIMEOUT_CYCLES-1)fault_now=8'h07;
         end
     end
-    rgb888_packer raw_packer(
+    rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) raw_packer(
         .clk(clk),.reset_n(reset_n),.flush(1'b0),
         .pixel_valid(pixel_valid&&scale_input_ready),.pixel_ready(raw_pixel_ready),
         .pixel_rgb(m_data[23:0]),.pixel_last(m_data[45]),
@@ -129,7 +129,7 @@ module video_preview_capture #(
         .s_valid(pixel_valid&&raw_pixel_ready),.s_ready(scale_input_ready),
         .s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
         .m_valid(scale_valid),.m_ready(scale_ready),.m_rgb(scale_rgb),.m_row_last(scale_last),.fault(scale_fault));
-    rgb888_packer preview_packer(
+    rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) preview_packer(
         .clk(clk),.reset_n(reset_n),.flush(1'b0),
         .pixel_valid(scale_valid&&!stopping),.pixel_ready(preview_pixel_ready),
         .pixel_rgb(scale_rgb),.pixel_last(scale_last),

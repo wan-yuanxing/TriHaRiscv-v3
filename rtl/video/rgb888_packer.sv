@@ -3,7 +3,9 @@
 // Backpressurable pixels only. Physical HDMI needs a separate sized FIFO/CDC.
 // Increasing byte addresses contain R,G,B. flush deliberately cancels an old
 // stream and is legal only after its DMA consumer has stopped taking data.
-module rgb888_packer(
+module rgb888_packer #(
+    parameter integer ALLOW_SIMULTANEOUS_TRANSFER=1
+)(
     input wire clk,reset_n,flush,
     input wire pixel_valid,input wire [23:0] pixel_rgb,input wire pixel_last,
     output wire pixel_ready,
@@ -19,6 +21,7 @@ module rgb888_packer(
     assign s_data=reservoir[127:0];
     assign s_keep=count>=16?16'hffff:(16'hffff>>(16-count));
     assign s_row_last=ending && count<=16;
+    generate if(ALLOW_SIMULTANEOUS_TRANSFER)begin: g_simultaneous
     assign pixel_ready=reset_n && !flush && !ending && (count<=15 || output_take);
     always @* begin
         next_reservoir=reservoir;next_count=count;next_ending=ending;
@@ -33,6 +36,23 @@ module rgb888_packer(
             if(pixel_last)next_ending=1;
         end
     end
+    end else begin: g_serial
+    assign pixel_ready=reset_n && !flush && !ending && count<=15;
+    always @* begin
+        next_reservoir=reservoir;next_count=count;next_ending=ending;
+        // Input and output transfers are mutually exclusive in this mode.
+        // Use registered occupancy so downstream READY cannot select insertion.
+        if(input_take)begin
+            next_reservoir[count*8+:24]={pixel_rgb[7:0],pixel_rgb[15:8],pixel_rgb[23:16]};
+            next_count=count+3;
+            if(pixel_last)next_ending=1;
+        end else if(output_take)begin
+            next_reservoir=reservoir>>128;
+            next_count=count>=16?count-16:0;
+            if(s_row_last)next_ending=0;
+        end
+    end
+    end endgenerate
     always @(posedge clk or negedge reset_n)begin
         if(!reset_n)begin reservoir<=0;count<=0;ending<=0;end
         else if(flush)begin reservoir<=0;count<=0;ending<=0;end
