@@ -97,6 +97,7 @@ module triha_issue
     ,input  [ 31:0]  writeback_exec1_value_i
     ,input           writeback_mem_valid_i
     ,input  [ 31:0]  writeback_mem_value_i
+    ,input [31:0]   writeback_mem_bypass_i
     ,input  [  5:0]  writeback_mem_exception_i
     ,input  [ 31:0]  writeback_mul_value_i
     ,input           writeback_div_valid_i
@@ -375,7 +376,7 @@ wire [`EXCEPTION_W-1:0] pipe0_exception_wb_w;
 wire [`EXCEPTION_W-1:0] issue_a_fault_w = opcode_a_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
                                           opcode_a_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
 
-biriscv_pipe_ctrl
+triha_pipe_ctrl
 #( 
      .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
     ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
@@ -426,6 +427,7 @@ u_pipe0_ctrl
     // Execution stage 2: Other results
     ,.mem_complete_i(writeback_mem_valid_i)
     ,.mem_result_e2_i(writeback_mem_value_i)
+    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
     ,.mem_exception_e2_i(writeback_mem_exception_i)
     ,.mul_result_e2_i(writeback_mul_value_i)
 
@@ -497,7 +499,7 @@ wire [`EXCEPTION_W-1:0] pipe1_exception_wb_w;
 wire [`EXCEPTION_W-1:0] issue_b_fault_w = opcode_b_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
                                           opcode_b_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
 
-biriscv_pipe_ctrl
+triha_pipe_ctrl
 #( 
      .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
     ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
@@ -548,6 +550,7 @@ u_pipe1_ctrl
     // Execution stage 2: Other results
     ,.mem_complete_i(writeback_mem_valid_i)
     ,.mem_result_e2_i(writeback_mem_value_i)
+    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
     ,.mem_exception_e2_i(writeback_mem_exception_i)
     ,.mul_result_e2_i(writeback_mul_value_i)
 

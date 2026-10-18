@@ -14,6 +14,7 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pa
 | `rtl/cpu/triha_cpu.v`、`ADAPTATIONS.json` | 直接维护的内部连接派生Verilog及多文件差异哈希；单发射不生成第二执行单元，保留共享CSR/异常控制 |
 | `rtl/cpu/triha_frontend.v`、`triha_issue.v` | 寄存重定向及issue数据/有效控制分离，六个主流水级不变 |
 | `rtl/cpu/triha_multiplier.v`、`triha_csr.v` | 宽数据寄存器独立采样；原有效、hold、异常及提交写控制继续生效 |
+| `rtl/cpu/triha_lsu.v`、`triha_pipe_ctrl.v` | 纯load旁路与fault提交载荷分离，保留精确badaddr/mtval和所有提交/停顿门控 |
 | `rtl/cpu/vendor/` | 固定来源源码、LICENSE、UPSTREAM.json、原始测试映像；保留原文件，不批量改名或重排 |
 | `rtl/soc/` | 后续正式互连、外设、IRQ和系统集成；以新主工程接口为准 |
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |

@@ -159,6 +159,16 @@ issue的类别/寄存器冒险检查先独立计算候选资格，取消/CSR重�
 
 新最差路径从data_error_i经LSU返回值选择、E2旁路，进入除法器输入比较与初始减法，19级逻辑、逻辑3.569ns/布线14.204ns。源码确认LSU将fault地址和正常load数据复用同一个writeback总线，导致错误控制进入并不应消费的旁路数据。下一步分离旁路数据与fault提交载荷，保留原badaddr/mtval路径，不增加load返回寄存级。证据`docs/verification/cpu/compact_region_timing.json`绑定第5轮同RTL及实际区域转换/报告。
 
+## Load旁路与fault载荷分离（第7轮，当前最优setup）
+
+LSU额外导出纯load数据，仅用于E2旁路；原writeback完成总线继续在fault时传badaddr，WB捕获、异常编码和mtval路径不变。旁路数据选择使用已注册E2有效位，目的tag、stall和提交门控仍按原逻辑工作；没有新增寄存级或load延迟。定向测试保留fault、ack、stall三类RED；修改后在错误数据为X时也确认WB无效/目的寄存器关闭、badaddr与mtval精确。三种种子×两模式逐周期事务/WB/预测/11项CSR状态、独立存储按序异常及IRQ通过，真实错误负例正确拒绝。
+
+同区域/同10ns约束重新实现，CPU-only7289 LUT/6084 FF/0 DRM/4 APM，224 IO另计；比第6轮多33 LUT、FF不变。原生返回0，277次主详细迭代到0未布通，完整430.784秒。实际setup Slow/Fast **-4.918/-0.038ns**，hold +0.116/+0.104ns，脉宽 +4.346/+4.345ns，仍未通过100MHz。相对第6轮改善2.126ns，相对最早完整I/O基线改善10.639ns；不是部署验收完成。
+
+CoreMark、WB事件数和CRC完全不变：单1682259/观察IPC0.872543/短估算2.972194，双1390197/1.055853/3.596613。startup、14指令探针、validation、冒烟与故障注入均符合预期；均为RTL测试。
+
+新最差从data_error_i经过异常/取消和发射有效位，进入LSU地址格式选择及32位加法，终止于mem_addr_q[28]；17级逻辑、逻辑2.835ns/布线12.701ns。源码中地址格式由opcode_valid_i参与选择，宽请求数据也在错误时清零。下一步将请求地址/数据/属性与有效控制分开，仍须保持所有有效及停顿中的事务载荷，保持fault取消和精确异常。证据`docs/verification/cpu/load_bypass_timing.json`。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

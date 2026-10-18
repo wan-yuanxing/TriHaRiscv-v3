@@ -99,6 +99,7 @@ wire  [ 31:0]  branch_exec0_source_w;
 wire  [  1:0]  fetch_in_priv_w;
 wire  [ 31:0]  csr_opcode_rb_operand_w;
 wire  [ 31:0]  writeback_mem_value_w;
+wire [31:0] writeback_mem_bypass_w;
 wire  [ 31:0]  writeback_div_value_w;
 wire           csr_opcode_valid_w;
 wire           branch_csr_request_w;
@@ -403,7 +404,7 @@ u_mmu
 );
 
 
-biriscv_lsu
+triha_lsu
 #(
      .MEM_CACHE_ADDR_MAX(MEM_CACHE_ADDR_MAX)
     ,.MEM_CACHE_ADDR_MIN(MEM_CACHE_ADDR_MIN)
@@ -442,6 +443,7 @@ u_lsu
     ,.mem_flush_o(mmu_lsu_flush_w)
     ,.writeback_valid_o(writeback_mem_valid_w)
     ,.writeback_value_o(writeback_mem_value_w)
+    ,.writeback_bypass_o(writeback_mem_bypass_w)
     ,.writeback_exception_o(writeback_mem_exception_w)
     ,.stall_o(lsu_stall_w)
 );
@@ -607,6 +609,7 @@ u_issue
     ,.writeback_exec1_value_i(writeback_exec1_value_w)
     ,.writeback_mem_valid_i(writeback_mem_valid_w)
     ,.writeback_mem_value_i(writeback_mem_value_w)
+    ,.writeback_mem_bypass_i(writeback_mem_bypass_w)
     ,.writeback_mem_exception_i(writeback_mem_exception_w)
     ,.writeback_mul_value_i(writeback_mul_value_w)
     ,.writeback_div_valid_i(writeback_div_valid_w)
