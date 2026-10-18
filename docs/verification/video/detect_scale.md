@@ -2,6 +2,8 @@
 
 依据v0.6第6.3、8.2节，本批在用户确认“NPU清单尚未提供，先推进独立Video组件”后执行。设计/计划为71c3e68，算术流水调整另见`docs/superpowers/specs/2026-10-18-video-detect-scale-pipeline-note.md`。
 
+本文的27套件/128输入及“当前”哈希是09fd86d验收时的冻结记录。后续格式组件扩展回归/构建入口后，全树状态见[input_format.md](input_format.md)，不能用旧入口哈希批准新的工作树；缩小RTL本身未因此修改。
+
 ## 功能边界
 
 `detect_downscale`把整幅800×600 RGB888按不重叠5×5分组，每通道`floor((sum+12)/25)`产生160×120 RGB888，输出57,600字节。输入均参与累计，包含四角及末行末列。输出仍为RGB；这不是最终BGR/INT8/C8张量，不含底部8行、DMA、SoC槽状态或INPUT_READY/CAPTURE_DONE。

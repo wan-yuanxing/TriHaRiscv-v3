@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_input_pad",
+  "top": "detect_input_pad",
+  "test_top": "tb_detect_input_pad",
+  "sources": ["rtl/video/detect_input_pad.sv"],
+  "tests": ["tb/video/tb_detect_input_pad.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_input_format.fdc"],
+  "scope": "raw RGB to BGR and bottom-zero padding component; no quantization, DMA or board acceptance"
+}

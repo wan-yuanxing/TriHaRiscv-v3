@@ -61,7 +61,9 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`、`preview_clocks`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
 
-检测分支先落地独立`detect_downscale`：800×600 RGB888按5×5完整块平均成为160×120 RGB888，含全范围舍入、背压/复位及完整几何验证。`python scripts/video/run.py --suite detect_scale`运行组件测试和Python整数参考，`python scripts/video/build_pds.py --target video_detect_scale --stage synth`只作组件综合；不生成板测位流。NPU清单未提供，BGR/量化/补边/C8和第三路DMA继续按依赖推进，详见[检测缩小记录](../verification/video/detect_scale.md)。
+检测分支先落地独立`detect_downscale`：800×600 RGB888按5×5完整块平均成为160×120 RGB888，含全范围舍入、背压/复位及完整几何验证。`python scripts/video/run.py --suite detect_scale`运行组件测试和Python整数参考，`python scripts/video/build_pds.py --target video_detect_scale --stage synth`只作组件综合；不生成板测位流。后续格式组件见下文，模型量化与正式三分支继续按依赖推进，详见[检测缩小记录](../verification/video/detect_scale.md)。
+
+格式阶段新增量化前`detect_input_pad`和量化后`detect_c8_pack`：前者转换BGR并补足128行，后者接收外部量化BGR及显式零编码，产生C8/128bit流。`python scripts/video/run.py --suite input_format`运行两个组件、整数参考及现有DMA字节内存联测；测试量化映射不作为模型参数。`video_input_pad`、`video_c8_pack`仅支持组件synth。真实量化、正式三分支完成和板测仍单列，见[格式验证](../verification/video/input_format.md)。
 
 ## 当前文件树
 
@@ -89,6 +91,8 @@ rtl/video/
   video_capture_engine.sv                单次raw写DMA、EOF/写结果汇合和读回CRC
   preview_downscale.sv                   RGB888四像素平均及同步行RAM
   detect_downscale.sv                    RGB888完整5×5块平均及累计RAM/算术流水
+  detect_input_pad.sv                    量化前RGB→BGR、底部raw零及元数据
+  detect_c8_pack.sv                      外部量化BGR和显式零值→C8/128bit
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
   video_frame_crc_reader.sv              行式有效字节CRC及读事务排空
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
@@ -120,6 +124,9 @@ tb/video/
   tb_preview_downscale.sv                独立四像素数值oracle、受阻与X/Z拒绝
   tb_detect_downscale.sv                 25坐标oracle、6376总和、全尺寸和异常/复位
   test_detect_reference.py               独立Python整数参考和坐标/舍入检查
+  tb_detect_input_pad.sv / tb_detect_c8_pack.sv 通道/补行/元数据/打包及取消测试
+  tb_detect_input_dma.sv                 scaler到C8/DMA字节内存联测，测试量化独立标记
+  test_input_format_reference.py         BGR/raw补行和外部量化C8布局参考测试
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   run_preview_display_test.py            独立显示仿真和不可变输入证据
@@ -138,6 +145,7 @@ scripts/video/
   prepare_reference.py                  只提取哈希匹配的参考文件
   run.py                                已实现的回归入口
   detect_reference.py                   规格定义的几何整数参考，不含模型量化
+  input_format_reference.py             独立通道/补行/C8布局参考，不执行量化
   build_pds.py                          组件/板级综合、布局布线及位流入口
   scan_board.py                         只读 JTAG 线缆/器件扫描
   package_board.py                      核验哈希后打包板测位流和报告
@@ -155,6 +163,7 @@ fpga/pg2l100h/
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
   project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
+  project/video_input_pad.json / video_c8_pack.json 独立格式组件显式清单
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
   constraints/video_rx_board.fdc         RX/TX 管脚、半周期采样与 CDC 约束
@@ -162,6 +171,7 @@ fpga/pg2l100h/
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
+  constraints/video_input_format.fdc     BGR/补行及C8组件8ns时钟
   ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
   rtl/video_clock_reset.sv               原有目标的PLL/各域复位/外设启动
   rtl/video_preview_clock_reset.sv       预览专用KEY0重采与HDMI链路启动分离

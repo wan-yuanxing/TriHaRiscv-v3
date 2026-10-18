@@ -10,6 +10,16 @@
 
 该组件不转换BGR、不量化、不补8行或C8无效通道，不发布三分支就绪。模型尺度和量化零值未冻结，不把RGB888输出称作可供NPU执行的正式输入。组件验证见[detect_scale.md](../verification/video/detect_scale.md)。
 
+## 检测输入格式组件
+
+`detect_input_pad`处理量化前图像，输入s_rgb高/中/低字节为R/G/B，输出m_bgr高/中/低字节为B/G/R。默认160×120→160×128，底部生成raw零；输出伴随row_last/frame_last/padding。宽1..2048、有效高1..2048、存储高有效高..2048，支持零补行。单帧clear/reset，row_last不匹配或未知RGB在接纳时置fault，补行/完成后额外s_valid置fault。
+
+`detect_c8_pack`的req_valid/req_ready/req_zero锁存本帧外部模型所有者提供的量化零编码。s_q_bgr的高/中/低字节为已经量化的B/G/R；s_row_last/s_frame_last/s_padding必须匹配本帧坐标，padding三个有效通道必须等于req_zero。它不执行量化，不从raw补0推测量化零。输入字节以二补码编码原样搬运，未定义尺度、舍入或饱和。
+
+输出m_data[7:0]为先像素B，[15:8]为G，[23:16]为R，[63:24]为5个量化零；后像素位于[127:64]。m_keep在整拍为ffff、奇数宽行尾为00ff，尾拍无效高64bit清0，不跨行拼装。m_row_last/m_frame_last同拍保持。默认行1280有效字节、共163840字节；本地done仅在末输出消费后成立，必须继续等待所有DMA写响应才能形成未来的正式三分支完成事件。
+
+两个模块均遵守背压保持，fault不撤销已公开VALID，clear/reset是协调取消。pack的半拍、未消费输出及done均在取消时清除；请求前不接纳数据，fault/完整帧后不再接纳新帧。验证见[input_format.md](../verification/video/input_format.md)。
+
 ## 已实现：video_pattern_core
 
 | 信号 | 含义 |

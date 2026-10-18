@@ -1,0 +1,2 @@
+# Component timing estimate only, not routed or board I/O timing approval.
+create_clock -name core_clk -period 8.000 [get_ports {clk}]

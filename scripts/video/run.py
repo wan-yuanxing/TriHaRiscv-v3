@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,7 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite not in ("timing", "detect_scale"):
+        if args.suite not in ("timing", "detect_scale", "input_format"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -60,6 +60,29 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('input_format','all'):
+            units=('detect_input_pad','detect_c8_pack')
+            paths=[ROOT/('rtl/video/'+n+'.sv') for n in units]
+            tests=[ROOT/('tb/video/tb_'+n+'.sv') for n in units]
+            dma=[ROOT/'rtl/video/detect_downscale.sv',*paths,ROOT/'rtl/video/video_write_dma.sv',
+                 ROOT/'tb/video/tb_detect_input_dma.sv']
+            add_inputs(result,[*paths,*tests,*dma,ROOT/'scripts/video/input_format_reference.py',
+                ROOT/'tb/video/test_input_format_reference.py',ROOT/'fpga/pg2l100h/project/video_input_pad.json',
+                ROOT/'fpga/pg2l100h/project/video_c8_pack.json',ROOT/'fpga/pg2l100h/constraints/video_input_format.fdc'])
+            for unit,source,test in zip(units,paths,tests):
+                for width,active,height,case in ((1,1,1,0),(3,2,4,0),(4,3,5,0),(257,1,2,0),
+                                                 (160,120,128,0),(3,2,4,1),(3,2,4,2)):
+                    top='tb_'+unit
+                    log=simulate(work,f'{unit}_{width}_{active}_{height}_{case}',top,[source,test],
+                        parameters=(('W',width),('AH',active),('H',height),('CASE',case)),timeout=600)
+                    if unit.upper()+'_PASS' not in log:raise RuntimeError('Missing input format pass marker')
+            for width,height,padded in ((5,5,1),(15,10,4),(20,15,5),(800,600,128)):
+                log=simulate(work,f'input_dma_{width}_{height}_{padded}','tb_detect_input_dma',dma,
+                    parameters=(('FW',width),('FH',height),('PH',padded)),timeout=600)
+                if 'DETECT_INPUT_DMA_PASS' not in log:raise RuntimeError('Missing input tensor DMA pass marker')
+            log=run_logged([sys.executable,ROOT/'tb/video/test_input_format_reference.py'],work/'input_format_reference.log')
+            if 'OK' not in log:raise RuntimeError('Missing format reference pass marker')
+            result['passed'].append('input_format')
         if args.suite in ('detect_scale','all'):
             paths=[ROOT/p for p in ('rtl/video/detect_downscale.sv','tb/video/tb_detect_downscale.sv')]
             add_inputs(result,[*paths,ROOT/'fpga/pg2l100h/project/video_detect_scale.json',
