@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -60,6 +60,15 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('preview_clocks','all'):
+            paths=[ROOT/p for p in ('fpga/pg2l100h/rtl/video_preview_clock_reset.sv',
+                'tb/video/models/video_pll_model.sv','tb/video/tb_video_preview_clock_reset.sv')]
+            add_inputs(result,paths)
+            for held in (0,1):
+                log=simulate(work,f'preview_clocks_{held}','tb_video_preview_clock_reset',paths,
+                    parameters=(('HOLD_KEY0_AT_BOOT',held),))
+                if 'VIDEO_PREVIEW_CLOCK_RESET_PASS' not in log:raise RuntimeError('Missing preview clock/reset pass marker')
+            result['passed'].append('preview_clocks')
         if args.suite in ('capture_pipe','all'):
             paths=[ROOT/p for p in ('rtl/video/video_stream_register.sv','tb/video/tb_video_stream_register.sv')]
             add_inputs(result,paths)

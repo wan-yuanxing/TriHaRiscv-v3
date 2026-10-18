@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "controlled_rx_startup_content_transition_observed",
+  "scope": "Independent RX observer; no DDR/preview or image-recovery acceptance.",
+  "physical_key0_confirmed": true,
+  "reset_count_after_marker": 1,
+  "record_count": 680,
+  "raw_decode_exact": true,
+  "pre_key0_crc": "33bac95a",
+  "first_observed_post_reset_sequence": 8,
+  "first_observed_post_reset_crc": "ebf5a8c4",
+  "crc_frame128": "5243da6a",
+  "crc_frame129": "aebe097e",
+  "last_content_change_frame": 188,
+  "final_crc": "33bac95a",
+  "exact_post_reset_samples": 20,
+  "exact_sample_sequence_range": [
+    310,
+    6040
+  ],
+  "exact_sample_span_ms": 95000.898,
+  "preview_image_acceptance": false,
+  "refs": {
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/result.json": "4e7fa51700fbf2bd4cecc464172dc8c2b73957271bf6971f87ccccbee4229a13",
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/uart.bin": "d11aef3169636b68093c3e3f2268c0d3dc6ca9bfac0a86daaa19034e0b4605f6",
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/chunks.ndjson": "6bcd210f3b95c512116d232b61e52d167de5d0d97de08256342edc9b4bd17a17",
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/records.ndjson": "9908d6c04824e2f5197d2f566237866169936824d79f0d6de31b00d96936f498",
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/history_key0_annotations.json": "34c7e43d4d5ba7a0acd2743c50ff61f82446b28944267345fc8c220d4352d612",
+    "build/video/rx_image_probe_serial/20261018T034758_212305Z/history_analysis.json": "f1383f46ad978f93aee0cc35e9675c009b356116c83ae28442716511ef72ad51",
+    "build/video/rx_image_probe_program/20261018T034813_684485Z/result.json": "b37c9553aeb4c62248b9e0f532361bb35831e565ce1c0a0b92d89fa76ac7b1b7"
+  },
+  "limits": [
+    "RX-only target is not simultaneous instrumentation of preview capture.",
+    "Do not use static-pattern CRC or nonzero pixel count to gate general video capture.",
+    "This trace supports avoiding reset-induced HDMI content transition; physical preview recovery still needs validation."
+  ]
+}

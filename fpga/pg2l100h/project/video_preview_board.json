@@ -5,7 +5,7 @@
   "test_top": "tb_video_preview_board",
   "sources": [
     "rtl/video/video_timing.sv",
-    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv",
     "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
     "rtl/video/video_rx.sv",
     "rtl/video/video_rx_measure.sv",
@@ -39,6 +39,7 @@
     "tb/video/models/ddr_board_ip_model.sv",
     "tb/video/models/video_pll_model.sv",
     "tb/video/tb_video_preview_board.sv",
+    "tb/video/tb_video_preview_clock_reset.sv",
     "tb/video/tb_video_capture_startup_guard.sv",
     "tb/video/tb_video_stream_register.sv"
   ],

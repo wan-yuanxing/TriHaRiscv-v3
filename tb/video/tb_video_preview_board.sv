@@ -38,6 +38,11 @@ module tb_video_preview_board;
         .CORE_TIMEOUT_CYCLES(64),.HEARTBEAT_CYCLES(16),.UART_BAUD(2_700_000),
         .UART_INTERVAL_CYCLES(20),.FRAME_WIDTH(16),.FRAME_HEIGHT(6),.PREVIEW_WINDOW_Y(3),
         .CAPTURE_TIMEOUT_CYCLES(20000),.RX_WARMUP_FRAMES(2)) dut(.*);
+    defparam dut.clocks.STARTUP_CYCLES=8;
+    reg protect_hdmi_link=0;
+    initial begin wait(rstn_out);protect_hdmi_link=1;end
+    always @(negedge rstn_out)
+        if(protect_hdmi_link && dut.locked)$fatal(1,"KEY0 must preserve the running HDMI link");
 
     // Independent shortened OUTPUT raster for integration. Default-mode raster
     // and per-pixel visual oracle are exercised by the display component TB.

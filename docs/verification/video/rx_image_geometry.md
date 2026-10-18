@@ -31,3 +31,11 @@ UART 115200、TRV1、32字节payload、XOR，初版按type1/3/8/9循环。type8/
 保持源端与接线不变，随后相同诊断镜像再次Program/Verify（`rx_image_probe_program/20261018T034813_684485Z`）恢复40MHz、完整四角图，128/129与当前CRC均33bac95a、最后变化帧1。新连续记录 `rx_image_probe_serial/20261018T034758_212305Z` 在85404.051ms处标记下一次单次KEY0；这是JTAG对照后的独立实体按键请求，结果仍待记录，不能以这次Program恢复替代按键验收。
 
 参考路径进一步核对：固定厂商 `source/rtl/HDMI_IN_DDR3_HDMI_OUT_top.v` 的rstn_out只由PLL locked及1ms计数产生；KEY0的rst_in只写入未被使用的rst_reg，并未连接HDMI或DDR复位。当前工程 `video_clock_reset` 则让rst_in重新复位HDMI和重跑EDID/初始化。这是待验证的复位架构差异，尚未认定芯片内部具体失败原因，也未修改复位策略。
+
+下一次单次KEY0已确认，`rx_image_probe_serial/20261018T034758_212305Z` 在标记后只有一次序号回退32967→8。序号8是480000个合法黑像素，时序合格；序号128/129的CRC5243da6a/aebe097e，均非参考图；最后一次内容变化在188，随后20个取样帧（序号310..6040，95秒）持续精确匹配33bac95a、462440及全边界。680条原始UART记录解码完全一致，已干净停止。证据为 [rx_image_probe_startup_transition.json](evidence/rx_image_probe_startup_transition.json)。这证明好时序早于静态源图恢复；独立目标不能逐帧代替preview同目标观测。
+
+依据该证据开始实施[预览链路复位分离](../../superpowers/specs/2026-10-18-video-preview-link-reset-design.md)：保留KEY0对pixel/cfg、DDR与协调流水线的复位，独立locked→link_release启动链让HDMI转换器和EDID/I2C控制器不随KEY0重新初始化。原RX诊断模块与video_clock_reset保持原样。128帧、125MHz、6ns、5秒和黑帧准入不改；PLL实际失锁仍重启HDMI。旧模块的明确KEY0失败测试已复现，新12场景时钟测试及5场景预览板级数字测试通过；完整回归、新PDS、独立复核与实体画面验收仍在进行。
+
+复位分离的诊断恢复范围：KEY0不再清理HDMI控制器已锁存的NACK/初始化超时；此类错误需重新配置、断电上电或实际PLL失锁后重启链路，不能宣称KEY0能够恢复一切HDMI错误。KEY0仍清理原DDR、采集和显示任务错误。初次连接和源端热插拔的内容稳定时间仍不由CRC/颜色判定。
+
+当前完整数字回归 `regression/20261018T040244_825780Z` 已通过26套件，122项输入哈希全部匹配。初始独立复核 `independent_preview_link_reset_review/20261018T040453_701914Z` 的46检查/130哈希通过，无阻塞发现；包含额外22场景与实际生成GPLL冷启动模型。该复核不提前批准随后完成的全回归或活动PDS。综合17个链路状态在PNR中可能打包为16个物理资源，link_release两级合入gopSRL2，不能冒称两个独立FF路径；来自LOCK的未报告reset恢复时间也不能当作非空时序通过。新PDS仍在运行，实体画面未验。

@@ -35,7 +35,7 @@ module video_preview_board_top #(
 );
     wire free_clk,ref_clk,core_clk,core_reset_n,controller_reset_n;
     wire cfg_clk,locked,pixel_reset_n,cfg_reset_n;
-    video_clock_reset clocks(.sys_clk(sys_clk),.reset_n(rst_in),.pixel_clk(pix_clk),
+    video_preview_clock_reset clocks(.sys_clk(sys_clk),.reset_n(rst_in),.pixel_clk(pix_clk),
         .cfg_clk(cfg_clk),.locked(locked),.pixel_reset_n(pixel_reset_n),
         .cfg_reset_n(cfg_reset_n),.tx_reset_n(rstn_out));
     wire tx_scl,rx_scl,tx_done,tx_error,rx_done,rx_error,rx_configured;
