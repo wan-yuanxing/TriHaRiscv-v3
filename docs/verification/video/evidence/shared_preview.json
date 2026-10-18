@@ -132,12 +132,17 @@
     "scope": "Current full regression after latency-preserving CRC datapath refactor, startup guard, bridge phase guards and core stream register; current persistent CRC oracle/reset coverage included. Digital models only."
   },
   "build": {
-    "status": "running",
-    "directory": "build/video/pds/20261017T142615_898505Z",
-    "internal_timing_met": false
+    "path": "build/video/pds/20261017T142615_898505Z/result.json",
+    "sha256": "698ac89e4b62c7690a8b67d0a65935909f88d717ab66b00a32e59c3f6d045cb3",
+    "status": "pass",
+    "artifact_sha256": "4dffe2d2e51b55e622f2c97224a410a399beb4772561cb7369376f7a4ae00de7",
+    "verify_mask_sha256": "a2c40c7045ee985f8285c138a3c08ca496f4b6a7ae4e39267a3623cd3afe0e09",
+    "internal_timing_met": true
   },
   "internal_physical_audit": {
-    "status": "pending"
+    "path": "build/video/preview_constraints_audit/20261017T142615_898505Z/result.json",
+    "sha256": "7a5d39c9ebc8bfaf1eebda1ff7a06f4699fcfe98f136e00d75b62c0105338e30",
+    "status": "pass"
   },
   "independent_reviews": [
     {
@@ -224,7 +229,7 @@
   "flash_written": false,
   "crc_limit": "CRC32 equality has collision risk. Independent digital byte/pixel oracles check scaling, windows, padding and guards.",
   "pending_manual_checks": [
-    "Verify new startup guard bitstream displays actual source desktop before and after physical KEY0"
+    "Diagnose compressed/cropped desktop with a full-frame corner probe and verify actual source image after physical KEY0"
   ],
   "serial_evidence": [],
   "initial_board_attempts": [
@@ -332,7 +337,9 @@
     }
   ],
   "independent_physical_review": {
-    "status": "pending"
+    "path": "build/video/independent_internal_signoff/20261017T150606_961164Z/result.json",
+    "sha256": "9b5ab2b9112a3866c2761ad932175e8f22731391e0fe0bfbf3967c4495ec6579",
+    "build_directory": "build/video/pds/20261017T142615_898505Z"
   },
   "program": {
     "status": "not_qualified_for_current_build"
@@ -352,8 +359,8 @@
     "zero_preview_crc": "16fa9be1"
   },
   "image_content_verified": false,
-  "visual_acceptance_status": "startup_guard_physical_validation_pending",
-  "board_verification_scope": "Current startup guard digital checks verified; current physical build/image recovery remain pending. Historical desktop-to-KEY0-to-black evidence retained.",
+  "visual_acceptance_status": "startup_guard_image_geometry_failed",
+  "board_verification_scope": "Current digital checks, internal routed timing and Program/Verify pass. Physical KEY0 produced complete CRC-consistent frames but the user photo shows compressed/cropped desktop; image acceptance failed and diagnosis continues.",
   "physical_key0_reset_transport_verified": false,
   "key0_image_recovery_verified": false,
   "observed_source_desktop_once": false,
@@ -522,7 +529,7 @@
   },
   "startup_guard_fix": {
     "path": "docs/verification/video/evidence/startup_guard.json",
-    "sha256": "e3a0b018dcc34f05376500d54cd6154c271f519187261f1639c74b9009b44c94"
+    "sha256": "b6021ca227a7f72b7b5f2e1331bb329882cec7fb2f0520606256253ae237cfb0"
   },
   "timing_fallback_current_checks_pending": false,
   "failed_timing_attempts": [
@@ -800,5 +807,17 @@
     "scope": "Historical reset/count/CRC evidence only. The original content interpretation was withdrawn after the user clarified black windows; a later desktop-to-KEY0-to-black reproduction supersedes its image recovery conclusion."
   },
   "historical_physical_key0_reset_transport_verified": true,
-  "historical_observed_source_desktop_once": true
+  "historical_observed_source_desktop_once": true,
+  "latest_program_attempt": {
+    "path": "build/video/board_program/20261017T154106_443047Z/result.json",
+    "sha256": "fddd156967aa9d40bda89136b59d6b4d2dd332451a858e900fc8433612c78618",
+    "status": "pass",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false
+  },
+  "latest_image_failure": {
+    "path": "build/video/preview_geometry_diagnosis/20261018T022734_926351Z/result.json",
+    "sha256": "9ea8c46fca8f9603f421005d6b07404a7d5a38329611a9650783277a6273f32d"
+  }
 }

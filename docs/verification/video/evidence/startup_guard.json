@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "date": "2026-10-17",
-  "status": "physical_validation_pending",
+  "date": "2026-10-18",
+  "status": "image_validation_failed",
   "scope": "Startup stabilization for the diagnostic single-frame preview. No source-color rejection, new CDC, reset or timeout changes.",
   "policy": {
     "stable_complete_frames": 128,
@@ -89,19 +89,41 @@
     }
   ],
   "physical_build": {
-    "status": "running",
-    "directory": "build/video/pds/20261017T142615_898505Z"
+    "path": "build/video/pds/20261017T142615_898505Z/result.json",
+    "sha256": "698ac89e4b62c7690a8b67d0a65935909f88d717ab66b00a32e59c3f6d045cb3",
+    "status": "pass",
+    "internal_timing_met": true
+  },
+  "layout_reports": {
+    "path": "build/video/pds_seed_reports/20261017T142615_898505Z/result.json",
+    "sha256": "f71d948b724a39ecb50e9cabafe97752edca5d80325b325bfd8c75dedc9f5ff7"
   },
   "constraint_audit": {
-    "status": "pending"
+    "path": "build/video/preview_constraints_audit/20261017T142615_898505Z/result.json",
+    "sha256": "7a5d39c9ebc8bfaf1eebda1ff7a06f4699fcfe98f136e00d75b62c0105338e30",
+    "status": "pass"
   },
-  "physical_build_and_audit_verified": false,
+  "physical_build_and_audit_verified": true,
   "independent_physical_review": {
-    "status": "pending"
+    "path": "build/video/independent_internal_signoff/20261017T150606_961164Z/result.json",
+    "sha256": "9b5ab2b9112a3866c2761ad932175e8f22731391e0fe0bfbf3967c4495ec6579",
+    "build_directory": "build/video/pds/20261017T142615_898505Z"
   },
   "physical_image_recovery_verified": false,
+  "latest_image_failure": {
+    "path": "build/video/preview_geometry_diagnosis/20261018T022734_926351Z/result.json",
+    "sha256": "9ea8c46fca8f9603f421005d6b07404a7d5a38329611a9650783277a6273f32d"
+  },
+  "latest_program_attempt": {
+    "path": "build/video/board_program/20261017T154106_443047Z/result.json",
+    "sha256": "fddd156967aa9d40bda89136b59d6b4d2dd332451a858e900fc8433612c78618",
+    "status": "pass",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false
+  },
   "board": {
-    "status": "not_programmed"
+    "status": "image_recovery_failed"
   },
   "implementation_hashes": {
     "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
