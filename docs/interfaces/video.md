@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。本批新增独立检测缩小组件；CPU fabric/MMIO、正式input三分支完成及SoC三槽生命周期尚未冻结，下述局部接口不替代共同契约。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。后续已实现320预处理、同帧三分支核心及独立板级诊断入口；CPU fabric/MMIO与SoC三槽生命周期仍待集成，下述局部接口不替代共同契约。
 
 ## 独立检测缩小组件
 
@@ -39,6 +39,10 @@
 `axi_write_arbiter3`将三路AXI写主按AW至B为所有权单元round-robin仲裁；owner注册后才公开AW，早B不释放owner，B仅在合法phase路由。无主B消费并报错，响应ID/RESP严格四态检查。sticky fault不能阻止待选已公开AW继续获得仲裁并排空。DMA使用注册error取消以消除READY/错误校验组合反馈；故障检测沿既有合法缓冲字仍可进入DMA，故障帧必须丢弃。
 
 core错误码：01离线、09仲裁/响应、06 writer结果/端口、0c取消、02 overflow、03源、04 PIX、05 EOF/CRC、0a缩小输出/尺寸、07采集超时、08非法请求，保留首因。accepted在入口选中帧的首像素经流水到core时发布，不新增物理SOF时间戳。独立数值/控制、完整三路AXI字节内存、综合和未实现范围见[three_capture.md](../verification/video/three_capture.md)。
+
+板级集成补充：三路descriptor均接纳后还须等NCHW顶部补零完成、可接收有效像素才arm，避免最早到达帧在补零期间填满入口FIFO。`video_three_engine`固定slot A/frame_id1/version1，消费accepted/completion后依次读回raw、preview、input，最后提交双窗显示。raw/preview匹配采集CRC，input报告实际有效字节CRC；后者不等于任意桌面的独立数值证明。reader新增默认开启的`CHECK_EXPECTED_CRC`参数；关闭时仍保留所有描述符/四态/响应/超时/排空检查。engine输出`port_drained`仅是capture写口状态，读回和显示可仍占用native口。
+
+独立`video_three_board`目标保持既有时钟/复位及CDC约束；UART type8追加frame_id/version/input_pixels/input_written_bytes/input_checked_bytes/input_ddr_crc/heartbeat七个小端uint32。三类包共用健康后缀，晚到type8错误也撤销旧preview资格。实时板级PASS与历史capture完成分开；CPU MMIO、共享fabric及三槽生命周期仍未实现。详细范围见[three_board.md](../verification/video/three_board.md)。
 
 ## 已实现：video_pattern_core
 

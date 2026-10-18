@@ -36,8 +36,9 @@
 | V020f-320-rtl | 固定5:2双线性RTL | 默认800×600→320×240有效RGB、同步行RAM/分步取整已实现；十组定向及六幅全尺寸OpenCV哈希、4突变拒绝通过。综合246LUT/134FF、1个DRM18K/0APM，8ns估计setup+4.025ns。29套件/145输入完整回归和独立审查通过，尚非NCHW/DMA或板测。见[验证记录](../verification/video/detect_bilinear.md)。 |
 | V020g-nchw | 320 BGR NCHW行式DMA | 已实现单行缓存、上下40行零、B/G/R平面和响应排空；公共配置及RTL/C迁移至307200B张量、320KiB槽。完整回归30套件/151输入、162份仿真PASS日志，独立79项检查及184项哈希复核通过；综合1223LUT/791FF/1DRM18K/0APM，8ns估计setup+2.109ns；组件结果及范围见[验证记录](../verification/video/nchw_dma.md)。无三分支/CPU fabric/板测。 |
 | V020h-three | 同帧三分支采集核心 | 已实现slot/frame_id/version锁存、原子三路分送、good EOF/raw CRC及三路B退休、保持事件和显式排空；完整回归31套件/159输入、209份仿真PASS日志；独立88条命令/5突变、仲裁7突变及224项哈希复核通过。综合3959LUT/2825FF/3DRM18K/2APM，8ns估计setup+0.596ns。见[验证记录](../verification/video/three_capture.md)。CPU MMIO/fabric/三槽调度及板测未完成。 |
+| V020i-three-board | 三分支板级接入及实体KEY0 | 独立目标/串行三路读回/双窗及type8诊断已通过。完整回归32套件/167输入/235份仿真PASS日志，Python67通过/1权限跳过，规格/质量审查通过。第二轮种子14在原8ns/6ns约束下通过内部时序及路径审计，125MHz slow setup/hold为0.000/+0.066ns，16713LUT/17029寄存器/9.5DRM。Program/Verify成功；正式279包中按键前后约116/159秒持续健康，三路CRC均匹配四角图，欠载0，用户确认单次KEY0前后双窗完整。见[集成记录](../verification/video/three_board.md)及[证据](../verification/video/evidence/three_board.json)。 |
 
-已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。当前同帧raw/preview目标已通过四角图和真实桌面的两次受控实体KEY0验收；保留工作镜像33e1b8242053，串口已正常停止。旧版黑帧与裁切失败不重写为成功。检测input板级接入、正式三分支/三槽、CPU fabric、共享接口冻结、外部AC签核及连续采集仍未完成。
+已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。同帧raw/preview目标保留工作镜像33e1b8242053；新增三分支独立镜像89c2e860fde4已通过四角图三路CRC及单次实体KEY0验收，当前板卡保持该镜像，串口已正常停止。旧版黑帧、裁切及本轮错误源图记录均保留。CPU MMIO/fabric、正式三槽所有权、跨master可见性、NPU推理、外部AC签核及连续采集仍未完成。
 
 本轮 RX/DDR 的独立说明见 [rx_ddr_bringup.md](../verification/video/rx_ddr_bringup.md)。当前用户确认电脑活动信号为 800×600、60.32 Hz，实测 VS 原始高电平为 4224 个像素时钟、场周期 663168；没有将 HS 边沿歧义读出的 VS=3 放宽为可接受模式。最终 RX 位流 SHA256 为 `406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c`，DDR 位流为 `9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4`；两者已连同各自同名校验掩码打包。
 
@@ -53,8 +54,8 @@
 | V013c | 输出板测补全 | 已有恢复后 60 秒串口记录及用户稳定彩条观察；补显示器模式/LED、照片或录像及更长持续运行记录 |
 | V014c | RX 热插拔与长时输入 | 本版固定输入已实测合格；后续扩展拔插/停源、整链路恢复和更长稳定性证据 |
 | V015b-integration | AXI桥共享接入 | 核心及独立AXI/DMA物理自检、KEY0已通过；接入CPU fabric/CDC，验证跨主端写后读、在途复位及带宽 |
-| V020 | 检测input与正式三分支采集 | V020d的受控KEY0画面恢复及320检测input组件/参考已通过；同帧三分支核心和组件级完成记录已实现；下一步接板级入口及CPU MMIO/fabric，验收正式就绪事件/槽状态/提交契约，再扩展连续采集。 |
-| V020e-input | 320输入RTL与正式输入集成 | 320数值参考、双线性及NCHW/DMA组件已实现，公共配置和RTL/C已统一300KiB张量、320KiB槽；同帧raw/preview/input及good EOF/全写响应汇合已在新核心实现；下一步接入板级入口，完成CPU地址/版本/MMIO/可见性和槽生命周期，再执行板测。 |
+| V020 | 检测input与正式三分支采集 | 同帧三分支独立板测和实体KEY0已通过；下一步接CPU MMIO/fabric，验收正式就绪事件/槽状态/提交契约及跨master写后读可见性，再扩展连续采集。 |
+| V020e-input | 320输入RTL与正式输入集成 | 320数值参考、双线性及NCHW/DMA已实现，公共配置和RTL/C统一300KiB张量、320KiB槽；独立板级三分支的已知图CRC与KEY0已通过。下一步完成CPU地址/版本/MMIO/可见性和槽生命周期，再对接实际NPU推理。 |
 | V030 | 检测预处理＋人工框/头像 | NPU 量化清单、素材清单；真实张量与像素参考一致 |
 | V040 | 三槽/CDC/压力与错误恢复 | 延迟/相位扫描、在途读写及释放 ACK、实际模拟 NPU DDR 流量 |
 | V050 | CPU/Video/NPU 两两集成 | 对应路线接口与可运行产物 |
@@ -63,7 +64,7 @@
 ## 尚未关闭的共同契约
 
 - CPU＋Video：MMIO 详细位定义、事件保持/W1C、提交记录锁存点、旧槽释放、fabric 仲裁和写后读可见性。
-- NPU＋Video：用户已选适配外部4fc0fc8的320×320 UINT8 NCHW；精确OpenCV4.11参考、缩小与NCHW/DMA组件已落地，待匹配最终真实源图/NPU推理基线。320KiB槽已纳入公共JSON及生成RTL/C；CPU译码/fence/跨master可见性、NPU RTL和板级三分支入口仍未验收。
+- NPU＋Video：用户已选适配外部4fc0fc8的320×320 UINT8 NCHW；精确OpenCV4.11参考、缩小与NCHW/DMA及独立三分支板测已通过，物理已知图证据为三路CRC对照。320KiB槽已纳入公共JSON及生成RTL/C；CPU译码/fence/跨master可见性、NPU RTL和真实推理基线仍待验收。
 - CPU＋Video：头像锚点、目标矩形和边界规则；三帧槽最坏生命周期证据。
 
 ## 本轮硬件连接观察

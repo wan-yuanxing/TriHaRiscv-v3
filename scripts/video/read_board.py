@@ -48,6 +48,11 @@ def decode_packets(data):
                     'source_crc','ddr_crc','frame_tag','fifo_peak','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
+        elif packet[4]==8:
+            fields=('type','flags','phase','error_code','capture_frame_id','preprocess_version',
+                    'input_pixels','input_written_bytes','input_checked_bytes','input_ddr_crc','heartbeat')
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
         elif packet[4] in (6,7):
             fields=(('type','flags','phase','error_code','captured_pixels','preview_pixels',
                      'source_crc','ddr_crc','preview_crc','preview_ddr_crc','heartbeat')
@@ -106,11 +111,11 @@ def _preview_healthy(record):
 
 
 def _current_preview_records(records):
-    # Both packet types describe one engine. A later fault or restart of
-    # either type invalidates all earlier success samples and their epoch.
+    # All capture/display/input packets describe one engine. A later fault
+    # or restart of any type invalidates every earlier success sample.
     current=[]
     for row in reversed(records):
-        if row.get('type') not in (6,7):continue
+        if row.get('type') not in (6,7,8):continue
         if not _preview_healthy(row):break
         current.append(row)
     return list(reversed(current))
@@ -144,6 +149,31 @@ def qualify_preview_display(records):
             and rows[1]['read_lines']>rows[0]['read_lines'])
 
 
+def qualify_three_readback(records):
+    # One current suffix across ALL three packet types. A later input fault
+    # must invalidate earlier capture/display samples in the same UART log.
+    current=[]
+    for row in reversed(records):
+        if row.get('type') not in (6,7,8):continue
+        if not _preview_healthy(row):break
+        current.append(row)
+    current.reverse()
+    rows=[row for row in current if row.get('type')==8][-2:]
+    if len(rows)!=2 or not qualify_preview_display(current):return False
+    captures=[row for row in current if row.get('type')==6][-2:]
+    if any(captures[0][field]!=captures[1][field] for field in ('source_crc','preview_crc')):return False
+    if rows[0].get('heartbeat')==rows[1].get('heartbeat'):return False
+    for row in rows:
+        if not (row.get('capture_frame_id')==1 and row.get('preprocess_version')==1
+                and row.get('input_pixels')==76800 and row.get('input_written_bytes')==307200
+                and row.get('input_checked_bytes')==307200
+                and type(row.get('input_ddr_crc')) is int and 0<=row['input_ddr_crc']<=0xffffffff):
+            return False
+    # This is a complete, stable readback observation, not an independent
+    # numerical comparison of an arbitrary source desktop with NPU input.
+    return rows[0]['input_ddr_crc']==rows[1]['input_ddr_crc']
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -156,7 +186,8 @@ def main():
             'operation':'receive_only_uart','physical_rx_mode_verified':False,
             'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False,
             'physical_hdmi_raw_capture_verified':False,
-            'physical_preview_capture_verified':False,'physical_preview_display_verified':False}
+            'physical_preview_capture_verified':False,'physical_preview_display_verified':False,
+            'physical_three_branch_readback_verified':False,'physical_three_input_numerical_verified':False}
     write_json(BUILD/'latest_board_serial.json',result)
     try:
         shell=shutil.which('powershell.exe')
@@ -203,6 +234,7 @@ try {
         result['physical_hdmi_raw_capture_verified']=qualify_hdmi_capture(records)
         result['physical_preview_capture_verified']=qualify_preview_capture(records)
         result['physical_preview_display_verified']=qualify_preview_display(records)
+        result['physical_three_branch_readback_verified']=qualify_three_readback(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

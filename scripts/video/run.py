@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -75,7 +75,7 @@ def main():
                 log=simulate(work,f'three_{width}_{height}','tb_video_three_branch_capture',paths+[tests[0]],includes,
                     parameters=(('W',width),('H',height),('PT',top),('PB',bottom)),timeout=600)
                 if 'VIDEO_THREE_CAPTURE_PASS' not in log:raise RuntimeError('Missing same-frame three-branch pass')
-            for case in range(1,29):
+            for case in range(1,30):
                 log=simulate(work,f'three_case_{case}','tb_video_three_branch_capture',paths+[tests[0]],includes,
                     run_args=(f'+CASE={case}',),timeout=120)
                 if 'VIDEO_THREE_CAPTURE_PASS' not in log:raise RuntimeError('Missing three-branch control pass')
@@ -243,6 +243,35 @@ def main():
             log=simulate(work,'preview_crc','tb_video_frame_crc_reader',paths,timeout=600)
             if 'VIDEO_FRAME_CRC_READER_PASS' not in log:raise RuntimeError('Missing plane CRC pass marker')
             result['passed'].append('preview_crc')
+        if args.suite in ('three_board','all'):
+            target=ROOT/'fpga/pg2l100h/project/video_three_board.json'
+            board=json.loads(target.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in board['sources']+board['tests']]
+            vendor=[ROOT/'build/video/vendor/hdmi'/p for p in board['vendor_sources']]
+            extra=[ROOT/'tb/video/tb_video_frame_crc_checksum.sv',ROOT/'tb/video/tb_video_three_engine.sv',
+                   ROOT/'tb/video/models/axi_bridge_native_model.sv',ROOT/'tb/video/tb_video_three_throughput.sv']
+            add_inputs(result,[target,*paths,*vendor,*extra,ROOT/'config/video_edid.hex',ROOT/'rtl/video/include/video_edid.vh',
+                ROOT/'tb/video/check_three_capture_dump.py',ROOT/'tb/video/check_bilinear_dump.py'])
+            log=simulate(work,'three_checksum','tb_video_frame_crc_checksum',
+                [ROOT/'rtl/video/video_frame_crc_reader.sv',extra[0]],timeout=120)
+            if 'VIDEO_FRAME_CRC_CHECKSUM_PASS' not in log:raise RuntimeError('Missing input checksum pass marker')
+            engine_sources=[p for p in paths if p.suffix=='.sv' and not p.name.startswith('tb_')
+                            and p.name not in ('video_three_board_top.sv','ddr_board_ip_model.sv','video_pll_model.sv')]
+            for case in range(22):
+                log=simulate(work,f'three_engine_{case}','tb_video_three_engine',engine_sources+extra[1:3],
+                    [ROOT/'rtl/video/include'],timeout=600,run_args=(f'+CASE={case}',))
+                if 'VIDEO_THREE_ENGINE_PASS' not in log:raise RuntimeError('Missing three-branch engine pass marker')
+            log=simulate(work,'three_board',board['test_top'],paths+vendor,[ROOT/'rtl/video/include'],timeout=600)
+            if 'VIDEO_THREE_BOARD_PASS' not in log:raise RuntimeError('Missing three-branch board pass marker')
+            throughput_sources=[ROOT/p for p in board['sources'] if p.startswith('rtl/video/') and
+                Path(p).name not in ('video_timing.sv','video_rx.sv','video_rx_measure.sv','video_capture_startup_guard.sv',
+                                     'video_frame_crc_reader.sv','preview_display.sv','video_three_engine.sv')]
+            log=simulate(work,'three_throughput','tb_video_three_throughput',throughput_sources+[extra[3]],
+                [ROOT/'rtl/video/include'],timeout=600,run_args=(f'+DUMP={(work/"three_rate_input.hex").as_posix()}',))
+            if 'VIDEO_THREE_THROUGHPUT_PASS' not in log:raise RuntimeError('Missing physical-rate candidate throughput pass')
+            run_logged([sys.executable,ROOT/'tb/video/check_three_capture_dump.py','--path',work/'three_rate_input.hex'],
+                work/'three_rate_golden.log')
+            result['passed'].append('three_board')
         if args.suite in ('preview_board','all'):
             target=ROOT/'fpga/pg2l100h/project/video_preview_board.json'
             preview=json.loads(target.read_text(encoding='utf-8'))

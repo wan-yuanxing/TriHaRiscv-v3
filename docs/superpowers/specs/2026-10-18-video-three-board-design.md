@@ -18,6 +18,9 @@ raw/preview须匹配采集端CRC；input没有独立流式平面CRC，读回报�
 和CRC，借助已冻结数值oracle/已知测试图验证，不能把自算CRC称为任意桌面的
 独立数值校验。三路读回均使用公共生成地址，禁止旧诊断0x873...地址混入。
 
+实速集成补充：三路descriptor接纳后，arm还须等NCHW顶部补零完成并可接收有效
+像素。最早到达的帧不能与整段顶部补零串行等待叠加，入口FIFO保持2048字。
+
 为input读回增加CRC reader的`CHECK_EXPECTED_CRC=0`参数模式，默认1保持旧目标
 语义；该模式仅取消最终expected比较，未知数据、描述符、ID/RESP/LAST、超时
 和在途排空规则保持。input按3*(PAD_TOP+有效高+PAD_BOTTOM)行读取，每行有效

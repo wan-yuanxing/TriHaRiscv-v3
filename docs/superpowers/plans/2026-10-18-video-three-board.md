@@ -17,17 +17,17 @@ no worktree switch, CPU migration, Flash, push or merge.
 Files: `rtl/video/video_frame_crc_reader.sv`, new `rtl/video/video_three_engine.sv`,
 `tb/video/tb_video_frame_crc_checksum.sv`, `tb/video/tb_video_three_engine.sv`.
 
-- [ ] Write self-checking checksum/engine tests and save expected RED under build/video.
+- [x] Write self-checking checksum/engine tests and save expected RED under build/video.
   Check checksum-only result against a separately computed byte CRC, reject unknown data,
   and retain held results. Engine memory must contain actual native writes at generated
   raw/preview/input slotA bases, with independent numerical input and padding assertions.
-- [ ] Add default-on `CHECK_EXPECTED_CRC`; gate only final expected comparison:
+- [x] Add default-on `CHECK_EXPECTED_CRC`; gate only final expected comparison:
   `if ((^next_crc===1'bx)||(CHECK_EXPECTED_CRC && (~next_crc)!==expected_q)) ...`.
-- [ ] Implement engine request and accepted/completion consumption once per reset;
+- [x] Implement engine request and accepted/completion consumption once per reset;
   raw/preview checked reader -> input checksum reader -> display. Input read geometry:
   `row_bytes=FRAME_WIDTH*2/5`, `stride=(row_bytes+15)/16*16`,
   `rows=3*(FRAME_HEIGHT*2/5+PAD_TOP+PAD_BOTTOM)`.
-- [ ] Verify nontrivial small geometry, delayed native port, wrong/corrupt responses,
+- [x] Verify nontrivial small geometry, delayed native port, wrong/corrupt responses,
   source fault, missing EOF, no early AR/commit, reset recovery and live health.
   Keep TIMEOUT_CYCLES default625000000; error cannot reset port or gate exposed VALID.
 
@@ -37,16 +37,16 @@ Files: new `fpga/pg2l100h/rtl/video_three_board_top.sv`,
 `fpga/pg2l100h/project/video_three_board.json`, `tb/video/tb_video_three_board.sv`;
 modify `scripts/video/read_board.py`, its tests, and explicit build/package/program selectors.
 
-- [ ] Add failing board/decoder tests first. For type8 decode six little-endian fields:
+- [x] Add failing board/decoder tests first. For type8 decode six little-endian fields:
   `frame_id,preprocess_version,input_pixels,input_written_bytes,input_checked_bytes,input_ddr_crc`.
-- [ ] Reuse the old board shell with `video_three_engine` instance named `bist`, preserving
+- [x] Reuse the old board shell with `video_three_engine` instance named `bist`, preserving
   `bist.display`/reset synchronizer hierarchy and original constraints. Add PAD_TOP/BOTTOM
   parameters only for small tests; production defaults40/40. Rotate UART kind0/1/2,
   snapshot672bits with coherent existing CDC, no separate unsynchronized multibit status.
-- [ ] Add the explicit target to PDS/package/program and regression commands; preserve
+- [x] Add the explicit target to PDS/package/program and regression commands; preserve
   old target selectors and source files. Check three UART packet types, heartbeat,
   KEY0/PLL/core/DDR/source-fault health and reset recovery using the digital DDR model.
-- [ ] Exercise real800×600 40MHz candidate stream through unforced ingress/FIFO and
+- [x] Exercise real800×600 40MHz candidate stream through unforced ingress/FIFO and
   three-branch backpressure, checking no overflow and complete counts; record model limits.
 
 ## Task 3: Verification, synthesis and delivery

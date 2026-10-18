@@ -254,6 +254,7 @@ module tb_video_three_branch_capture #(parameter integer W=30,H=20,PT=2,PB=1);
             if(case_id==8||case_id==11)hold_aw=1;
             if(case_id==9||case_id==12)hold_w=1;
             if(case_id==10||case_id==13)hold_b=1;
+            if(case_id==29)hold_b=1;
             if(case_id==14)bad_bid=1;if(case_id==15)bad_resp=1;
             request();
             case(case_id)
@@ -296,6 +297,12 @@ module tb_video_three_branch_capture #(parameter integer W=30,H=20,PT=2,PB=1);
                 28:begin
                     wait(dut.result_valid_vec[0]);@(negedge clk);force dut.result_tags[31:0]=32'hbad;
                     wait(error);@(negedge clk);release dut.result_tags[31:0];result_check(6);
+                end
+                29:begin
+                    wait(pending_b);repeat(50)@(negedge clk);
+                    if(arm_toggle||accepted_valid||captured_pixels!=0||bytes_by_branch[1]!=0||bytes_by_branch[2]!=0)
+                        $fatal(1,"armed before input padding retired");
+                    hold_b=0;result_check(0);
                 end
                 default:$fatal(1,"unknown case");
             endcase

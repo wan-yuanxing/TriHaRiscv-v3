@@ -73,6 +73,15 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 `video_three_branch_capture`新增同帧raw/preview/input核心，锁存slot/frame_id/version，在good EOF、三路尺寸与全部写响应齐备后保持完成记录。三主AXI轮转仲裁不会在错误时撤销已公开事务。`python scripts/video/run.py --suite three_capture`运行三路真实字节内存/故障/事件/全尺寸黄金图；`python scripts/video/build_pds.py --target video_three_capture --stage synth`仅组件综合。旧板级预览目标保持原入口；CPU MMIO、共享fabric和板级三分支另验，见[三分支记录](../verification/video/three_capture.md)。
 
+`video_three_board`为独立三分支板级目标：使用公共slot A地址，补零就绪后采帧，全部写响应退休后读回三路，再显示双窗。`--suite three_board`包含checksum reader、22个引擎场景、板级数字替身和40MHz完整候选流；`build_pds.py --target video_three_board --stage bitstream`使用原板级管脚/8ns时钟/6ns CDC束约束。UART type6/7/8分别报告捕获、显示及NPU张量读回；真实板测状态见[集成记录](../verification/video/three_board.md)。
+
+三分支独立上板验收现已通过：32套件/167输入完整回归、235份仿真PASS日志，
+内部布线及路径审计通过，Program/Verify成功；四角图三路CRC精确匹配，
+实体KEY0前后分别约116/159秒稳定，用户确认双窗四角及边框完整。当前包为
+`video_three_board_89c2e860fde4`，125MHz最差setup余量0.000ns。
+这是固定slot A的一次采帧诊断；下一阶段接CPU MMIO/共享fabric及槽生命周期，
+NPU推理与连续采集另验。详见[证据摘要](../verification/video/evidence/three_board.json)。
+
 ## 当前文件树
 
 ```text
@@ -93,6 +102,7 @@ rtl/video/
   video_write_dma.sv                     单平面步长写入、burst 缓存和响应排空
   axi_write_arbiter3.sv                   三主AW至B轮转所有权、早/无主响应故障
   video_three_branch_capture.sv          同帧raw/preview/input、元数据事件和全写退休
+  video_three_engine.sv                  三路完成、串行CRC/张量读回后提交显示
   video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
   video_async_fifo.sv                    Gray指针双时钟RAM和受阻输出寄存器
   video_capture_ingress.sv               合法帧首接纳、PIX/EOF、源CRC及overflow
@@ -118,6 +128,10 @@ tb/video/
   tb_video_three_branch_capture.sv       三路字节内存、槽位/事件/EOF/CRC/故障
   tb_three_capture_parameters.sv         非法几何请求先验拒绝、不提前子模块fatal
   check_three_capture_dump.py            三分支实际input内存的冻结哈希
+  tb_video_three_engine.sv               实际native内存、串行读所有权/故障排空
+  tb_video_three_board.sv                KEY0/暖机/时钟健康、UART三类包
+  tb_video_three_throughput.sv           40MHz完整候选流、native字节覆盖及FIFO峰值
+  test_three_board_packets.py            输入读回字段、共同健康后缀和过期记录拒绝
   tb_nchw_parameters.sv                  非法参数与高度溢出的启动拒绝
   check_nchw_dump.py                     直接核对硬件NCHW字节与冻结OpenCV哈希
   test_references.py                     提取字节、哈希失败、目录越界检查

@@ -1,0 +1,4 @@
+# Sticky free-clock board health enters the core through a two-flop control
+# synchronizer. Only its first D stage is asynchronous; the second stays timed.
+# Existing 8ns core clock and 6ns bundled-data bounds remain unchanged.
+set_false_path -from [get_clocks {free_clk}] -to [get_cells {board_fault_core_meta}]

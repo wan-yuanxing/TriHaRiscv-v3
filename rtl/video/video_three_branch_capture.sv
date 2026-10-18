@@ -231,7 +231,9 @@ module video_three_branch_capture #(
                 end
                 DESCRIPTORS:begin
                     requested<=requested|req_ready_vec;
-                    if(&(requested|req_ready_vec))begin arm_toggle<=~arm_toggle;state<=CAPTURE;end
+                    // Finish top-padding writes before selecting a physical
+                    // frame: their initial stall can exceed the ingress FIFO.
+                    if(&(requested|req_ready_vec)&&input_pixel_ready)begin arm_toggle<=~arm_toggle;state<=CAPTURE;end
                 end
                 CAPTURE:if(eof_seen&&(&retired)&&port_drained&&count_good)state<=WAIT_EVENT;
                 WAIT_EVENT:if(accepted_consumed)begin completion_valid<=1;completion_success<=1;completion_code<=0;state<=DONE;end

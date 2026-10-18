@@ -3,7 +3,8 @@
 // Read one retired image plane. No new task until all advertised reads drain.
 module video_frame_crc_reader #(
     parameter [3:0] AXI_ID=4'h6,
-    parameter integer TIMEOUT_CYCLES=625000000
+    parameter integer TIMEOUT_CYCLES=625000000,
+    parameter integer CHECK_EXPECTED_CRC=1
 )(
     input wire clk,reset_n,online,abort,req_valid,
     output wire req_ready,
@@ -142,7 +143,7 @@ module video_frame_crc_reader #(
                         if(row_remaining<=16)begin
                             if(row_index==rows_q-1)begin
                                 crc<=~next_crc;
-                                if((^next_crc===1'bx)||(~next_crc)!==expected_q)begin result_code<=8'h0b;fault<=1;end
+                                if((^next_crc===1'bx)||(CHECK_EXPECTED_CRC&&(~next_crc)!==expected_q))begin result_code<=8'h0b;fault<=1;end
                                 state<=RESULT;
                             end else begin
                                 row_index<=row_index+1'b1;row_base<=next_row_base_q;
