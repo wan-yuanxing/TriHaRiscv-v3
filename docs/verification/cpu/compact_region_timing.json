@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "status": "TIMING_FAIL",
+  "scope": "Physical region experiment with byte-identical RTL and timing FDC from late-cancel round; not deployment acceptance",
+  "recorded_utc": "2026-10-18T13:44:02.319155+00:00",
+  "result": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1332528251156Z\\result.json",
+    "sha256": "ffb11c9f98927f16e7ed84c808c7ed2044374de59afe9a04f68f1ddadbf7ee58",
+    "source_unchanged": true,
+    "verified_outputs": 382
+  },
+  "parent_result": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1307477976991Z\\result.json",
+    "sha256": "dd6812d3344117d21150ac39cede191597ee7a064325f003c7a4c5dd3d02d861"
+  },
+  "rtl_and_timing_identical": true,
+  "timing": {
+    "met": false,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": -7.044,
+        "total_negative_slack_ns": -6598.293,
+        "failing_endpoints": 3705,
+        "endpoints": 19384
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.113,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 19384
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.346,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 5750
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": -1.567,
+        "total_negative_slack_ns": -387.159,
+        "failing_endpoints": 539,
+        "endpoints": 19384
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.103,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 19384
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.345,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 5750
+      }
+    ],
+    "performance_slack_ns": -7.044,
+    "worst_setup_ns": -7.044,
+    "performance_consistent": true,
+    "all_constraints_met": false
+  },
+  "mapped_resources": {
+    "lut": 7256.0,
+    "registers": 6084.0,
+    "drm": 0.0,
+    "apm": 4.0,
+    "io": 224.0
+  },
+  "native_return_code": 0,
+  "elapsed_seconds": 282.539,
+  "main_detailed": {
+    "iteration": 150,
+    "unrouted": 0
+  },
+  "region": {
+    "pcf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1332528251156Z\\device_map\\triha_core.pcf",
+    "sha256": "1584b3d2acaa924a96b15ab3b5896fc4bf234e501a9cd09fadf24f35c1dca638",
+    "bounds": [
+      0,
+      64,
+      100,
+      199
+    ],
+    "unique_cpu_leaf_bindings": 10484,
+    "fixed_sites": 0,
+    "independent_all_cell_coordinate_audit": false,
+    "hierarchy_warning": "PDS reports i:u_cpu is not a GTP before flattening; actual leaf PAP_REGION and PCF propagation are present.",
+    "duplicate_region_warnings": 2118
+  },
+  "report": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1332528251156Z\\report_timing\\triha_core.rtr",
+    "sha256": "2b44915c802f8deae4d583e4645134f3d6137c33d698cdbe5df85e2674eed3a5"
+  },
+  "worst_path": {
+    "start": "data_error_i (port)",
+    "end": "u_cpu/u_div/dividend_q[28]/opit_0_inv_AQ_perm/CIN"
+  },
+  "parent_setup_ns": -10.564,
+  "setup_delta_ns": 3.5200000000000005,
+  "board_validated": false,
+  "official_coremark": false
+}

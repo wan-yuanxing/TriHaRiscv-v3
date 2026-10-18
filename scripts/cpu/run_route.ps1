@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe')
+param([string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe', [switch] $Compact)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
@@ -22,12 +22,13 @@ $timer=[Diagnostics.Stopwatch]::StartNew()
 Write-Host "CPU_ROUTE_RUN directory=$work"
 try {
     Assert-TrihaAdaptation $root
-    $recipeName='fpga/pg2l100h/project/cpu_route.json'
+    $recipeName=if($Compact){'fpga/pg2l100h/project/cpu_route_compact.json'}else{'fpga/pg2l100h/project/cpu_route.json'}
     $recipe=Get-Content (Join-Path $root $recipeName) -Raw|ConvertFrom-Json
     $core=Get-Content (Join-Path $root $recipe.core_manifest) -Raw|ConvertFrom-Json
     if($recipe.dual_issue -ne 0 -or $recipe.period_ns -ne 10 -or $core.top -ne 'triha_core'){throw 'Unexpected route configuration.'}
     $result['boundary']=$recipe
-    $names=@($core.sources)+@($core.headers)+@($recipeName,$recipe.core_manifest,$recipe.constraints,
+    $physicalFiles=if('physical_constraints' -in $recipe.PSObject.Properties.Name){@($recipe.physical_constraints)}else{@()}
+    $names=@($core.sources)+@($core.headers)+$physicalFiles+@($recipeName,$recipe.core_manifest,$recipe.constraints,
         'rtl/cpu/ADAPTATIONS.json','rtl/cpu/vendor/UPSTREAM.json','scripts/cpu/run_route.ps1',
         'scripts/cpu/route_reports.ps1','scripts/cpu/pds_reports.ps1','scripts/cpu/firmware_common.ps1')
     foreach($name in $names) {
@@ -42,6 +43,7 @@ try {
     $lines=@("set_arch -family $($core.family) -device $($core.device) -speedgrade $($core.speedgrade) -package $($core.package)")
     foreach($name in $core.sources){$lines+='add_design '+(TclPath (Join-Path $work ('src/'+$name)))}
     $lines+='add_constraint '+(TclPath (Join-Path $work ('src/'+$recipe.constraints)))
+    foreach($name in $physicalFiles){$lines+='add_constraint '+(TclPath (Join-Path $work ('src/'+$name)))}
     $include=TclPath (Join-Path $work ('src/'+$core.include_directory))
     $lines+="compile -top_module triha_core -include_path {$include} -defined_parameters {DUAL_ISSUE 0}"
     $lines+='synthesize -ads -write_verilog TRUE'

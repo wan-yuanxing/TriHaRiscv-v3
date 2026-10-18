@@ -151,6 +151,14 @@ issue的类别/寄存器冒险检查先独立计算候选资格，取消/CSR重�
 
 后续改为单因素物理布局诊断：相同RTL、时序FDC和seed1，只增加PDS官方PAP_REGION层次约束，尝试两个相邻时钟区域；运行入口`run_route.ps1 -Compact`。在工具转换绑定与实际最终时序核验前，不宣称区域约束生效或100MHz通过。规划见`docs/cpu/physical_compact_plan.md`。
 
+## 同RTL区域布局诊断（第6轮）
+
+第5轮RTL和原时序FDC逐项SHA256相同，只增加PAP_REGION物理约束。映射PCF生成10484个唯一CPU叶节点绑定，范围(0,64,100,199)，无固定site约束；映射报告也保存了各叶节点PAP_REGION。工具对层次对象给出“非GTP、可能不生效”的早期提示，并对已继承绑定给出2118条重复约束提示，均保留在日志；没有独立逐单元坐标审计，不用输入属性本身冒充验证。
+
+原生返回0，150次主详细迭代到0未布通，PNR3分27秒、完整282.539秒。CPU映射仍7256 LUT/6084 FF/0 DRM/4 APM。实际setup Slow/Fast **-7.044/-1.567ns**，hold +0.113/+0.103ns，脉宽 +4.346/+4.345ns。比同RTL未约束区域第5轮改善3.520ns，但仍未通过100MHz；不能把布线耗时缩短当频率验收。
+
+新最差路径从data_error_i经LSU返回值选择、E2旁路，进入除法器输入比较与初始减法，19级逻辑、逻辑3.569ns/布线14.204ns。源码确认LSU将fault地址和正常load数据复用同一个writeback总线，导致错误控制进入并不应消费的旁路数据。下一步分离旁路数据与fault提交载荷，保留原badaddr/mtval路径，不增加load返回寄存级。证据`docs/verification/cpu/compact_region_timing.json`绑定第5轮同RTL及实际区域转换/报告。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

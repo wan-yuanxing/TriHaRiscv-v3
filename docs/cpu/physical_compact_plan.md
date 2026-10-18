@@ -5,9 +5,11 @@
 固定第5轮RTL、原10ns/完整I/O/hold/multicorner时序FDC、seed1和10分钟PNR/900秒外层上限。附加`cpu_compact.fdc`：`define_attribute {i:u_cpu} {PAP_REGION} {cpu_compact(0,64,100,199)}`。依据本机PDS UCE手册2.3.4.7，模块层次属性会传播至映射叶节点。器件clock_utilization报告中这两个相邻区域合计18400 LUT、40 APM容量，足以容纳CPU；这是容量判断，不是频率证据。
 
 - [x] 通过独立recipe保存区域属性，原时序FDC字节不变。
-- [ ] 完整运行compile/synthesize/dev_map/place/route/report_timing。
-- [ ] 核对约束转换及叶节点绑定；没有实际证据则标记UNKNOWN，不把输入属性当生效证明。
-- [ ] 核对六项Slow/Fast最终时序、performance一致性、冻结源与输出哈希及原生退出码。
-- [ ] 保存与第5轮的同RTL比较和实际资源/关键路径，不将工具成功、布局估算或拥塞数当100MHz通过。
+- [x] 完整运行compile/synthesize/dev_map/place/route/report_timing。
+- [x] 核对约束转换及叶节点绑定；映射报告与PCF均有10484个CPU绑定。保留层次/重复提示；没有完整独立坐标审计。
+- [x] 核对六项Slow/Fast最终时序、performance一致性、冻结源与输出哈希及原生退出码。
+- [x] 保存与第5轮的同RTL比较和实际资源/关键路径，不将工具成功、布局估算或拥塞数当100MHz通过。
+
+结果：Slow/Fast setup -7.044/-1.567ns，比第5轮改善3.520ns，仍未达成100MHz。新路径为fault地址选择→load旁路→除法输入；按实际证据继续分离旁路与异常载荷。
 
 运行入口：`pwsh -NoProfile -File scripts/cpu/run_route.ps1 -Compact`。未生成bitstream或编程板卡。

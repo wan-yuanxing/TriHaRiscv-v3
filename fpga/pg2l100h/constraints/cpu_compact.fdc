@@ -1,0 +1,4 @@
+# Physical-only diagnostic region. The 10ns/I/O/hold timing FDC is unchanged.
+# PDS UCE guide section 2.3.4.7: hierarchy PAP_REGION propagates to mapped leaves.
+# Two clock regions contain 18,400 LUT capacity and 40 APMs (device report).
+define_attribute {i:u_cpu} {PAP_REGION} {cpu_compact(0,64,100,199)}
