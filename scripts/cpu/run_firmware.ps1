@@ -37,6 +37,7 @@ function Native([string] $Exe, [string[]] $Arguments, [string] $Label, [int] $Ti
 }
 
 try {
+    Assert-TrihaAdaptation $root
     if (($Fault -eq 'crc' -and $Program -ne 'coremark') -or
         ($Fault -eq 'count' -and $Program -ne 'retire') -or
         ($Fault -eq 'trap' -and $Program -ne 'runtime')) { throw 'Fault does not match the selected test.' }
@@ -54,7 +55,7 @@ try {
     }
     $filelist = @(Get-Content (Join-Path $root 'config/cpu_sources.f') |
         ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') })
-    $localInputs = @($filelist) + @('config/cpu_sources.f','config/cpu_toolchain.json',
+    $localInputs = @($filelist) + @('rtl/cpu/ADAPTATIONS.json','config/cpu_sources.f','config/cpu_toolchain.json',
         'scripts/cpu/run_firmware.ps1','scripts/cpu/firmware_common.ps1','scripts/cpu/run_modelsim.do',
         'sw/runtime/crt0.S','sw/runtime/triha_tcm.ld','sw/runtime/triha_runtime.h',
         'sw/runtime/triha_runtime.c','sw/tests/runtime_smoke.c','sw/tests/retire_probe.S',

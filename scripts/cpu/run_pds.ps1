@@ -31,6 +31,7 @@ foreach ($selected in $modes) {
     $timer = [Diagnostics.Stopwatch]::StartNew()
     Write-Host "CPU_PDS_RUN mode=$selected stage=$Stage directory=$work"
     try {
+        Assert-TrihaAdaptation $root
         $manifestName = 'fpga/pg2l100h/project/cpu_core.json'
         $manifest = Get-Content -LiteralPath (Join-Path $root $manifestName) -Raw | ConvertFrom-Json
         if ($manifest.top -ne 'triha_core' -or $manifest.device -ne 'PG2L100H') { throw 'Wrong CPU top/device.' }
@@ -40,7 +41,7 @@ foreach ($selected in $modes) {
         $result['device'] = "$($manifest.device)/$($manifest.package)/$($manifest.speedgrade)"
         $names = @($manifest.sources) + @($manifest.headers) + @($manifest.constraints) + @($manifestName,
             'scripts/cpu/run_pds.ps1','scripts/cpu/pds_reports.ps1','scripts/cpu/firmware_common.ps1',
-            'rtl/cpu/vendor/UPSTREAM.json')
+            'rtl/cpu/vendor/UPSTREAM.json','rtl/cpu/ADAPTATIONS.json')
         foreach ($name in $names) {
             if ($name.Contains('..') -or [IO.Path]::IsPathRooted($name)) { throw 'Unsafe input path.' }
             $source = Join-Path $root $name

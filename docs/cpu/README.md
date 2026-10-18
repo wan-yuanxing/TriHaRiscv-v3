@@ -11,6 +11,7 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量及CPU-only Pa
 | 位置 | 内容 |
 |---|---|
 | `rtl/cpu/triha_core.v` | CPU 产品封装，默认单发射，固定六级；完整导出取指/数据/缓存维护协议 |
+| `rtl/cpu/triha_cpu.v`、`ADAPTATIONS.json` | 直接维护的内部连接派生Verilog及差异哈希；单发射不生成第二执行单元，保留共享CSR/异常控制 |
 | `rtl/cpu/vendor/` | 固定来源源码、LICENSE、UPSTREAM.json、原始测试映像；保留原文件，不批量改名或重排 |
 | `rtl/soc/` | 后续正式互连、外设、IRQ和系统集成；以新主工程接口为准 |
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |
@@ -41,6 +42,7 @@ pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode singl
 pwsh -NoProfile -File scripts/cpu/test_pds_reports.ps1
 pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode single -Stage map
 pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode dual -Stage map
+pwsh -NoProfile -File scripts/cpu/run_equivalence.ps1 -Mode both -Seed 37
 ```
 
 `-Case fail` 和 `-Case timeout` 是负例，单独执行预期返回1；`all`要求两个正例通过且两个负例被实际拒绝，才返回0。每次结果在输出显示的独立 `build/cpu/<case>-<UTC>/result.json`，日志与输入/输出哈希同行保存。ModelSim工具目录可用`-ModelSimBin`覆盖，单个原生进程默认墙钟上限60秒。
@@ -63,4 +65,6 @@ pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode dual -Stage map
 
 `run_pds.ps1`默认只综合，可用`-Stage map`继续器件映射；默认原生进程上限900秒。显式清单只包含核，冻结副本、日志、snr/dmr、实际参数和原语统计保存到`build/cpu/pds-<mode>-<UTC>/result.json`。可用`TRIHA_PDS_SHELL`或`-PdsShell`指定已安装工具。PDS Generics使用名称/数值对（`DUAL_ISSUE 1`），脚本必须从展开日志复核真实配置；综合和映射资源分别记录，因为工具可能在映射时继续优化。
 
-下一步先核对单发射配置中仍保留的第二执行相关逻辑，补齐ISA/CSR/异常/访存定向验证，再建立明确CPU总线I/O时序的隔离物理目标，运行实际100MHz双corner后布线。正式SoC/DDR/NPU集成另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。
+单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`使用相同背压TCM对父版/候选作逐周期总线、WB、预测和CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。它属于定向差分仿真，不是完整ISA或形式证明。
+
+下一步建立明确CPU总线I/O时序的隔离物理目标，运行实际100MHz双corner后布线；完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。

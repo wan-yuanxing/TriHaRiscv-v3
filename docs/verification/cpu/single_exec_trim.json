@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "recorded_utc": "2026-10-18T11:11:22.1972556Z",
+  "branch": "cpu/windows-baseline",
+  "scope": "single-issue EX1 specialization; directed differential/CoreMark/resource validation only",
+  "adaptation_manifest": "rtl/cpu/ADAPTATIONS.json",
+  "adaptation_sha256": "c926ec39ea6b18f56899e421f43270c7e2df1bab87124ab5ea58ed22e6466363",
+  "vendor_originals_unchanged": true,
+  "source_delta_verified": true,
+  "shared_issue_csr_exception_control_retained": true,
+  "differential": {
+    "seeds": [
+      37,
+      1234567,
+      271828
+    ],
+    "issue_modes": 2,
+    "cycle_checks": "all CPU memory outputs, valid WB payloads, predictor updates, eleven CSR states",
+    "control_events": [
+      "instruction fault",
+      "illegal instruction",
+      "breakpoint",
+      "unaligned load",
+      "load bus fault",
+      "unaligned store",
+      "store bus fault",
+      "M-mode ecall",
+      "external IRQ/mret"
+    ],
+    "trap_mask": 511,
+    "formal_proof": false,
+    "complete_isa_proof": false
+  },
+  "coremark": {
+    "cycles_and_wb_and_crc_equal_parent": true,
+    "executions": [
+      {
+        "mode": "single",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1659900,
+          "wb_completed": 1467843,
+          "observed_ipc": 0.8842960419302368,
+          "coremark_per_mhz_short_estimate": 3.012229652388698,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1705893,
+          "issued": 1505912,
+          "paired_cycles": 0,
+          "issued_is_not_instret": true
+        }
+      },
+      {
+        "mode": "dual",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1380497,
+          "wb_completed": 1467843,
+          "observed_ipc": 1.0632714160190135,
+          "coremark_per_mhz_short_estimate": 3.621884002645424,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1420530,
+          "issued": 1505912,
+          "paired_cycles": 321372,
+          "issued_is_not_instret": true
+        }
+      }
+    ],
+    "official_score": false
+  },
+  "resources": {
+    "single_parent": {
+      "lut": 8819,
+      "ff": 6113,
+      "drm": 0,
+      "apm": 4
+    },
+    "single_current": {
+      "lut": 7709.0,
+      "registers": 6017.0,
+      "drm": 0.0,
+      "apm": 4.0,
+      "io": 224.0
+    },
+    "single_lut_saved": 1110,
+    "single_ff_saved": 96,
+    "single_lut_reduction_percent": 12.58646105000567,
+    "dual_parent": {
+      "lut": 10191,
+      "ff": 6298,
+      "drm": 0,
+      "apm": 4
+    },
+    "dual_current": {
+      "lut": 10511.0,
+      "registers": 6298.0,
+      "drm": 0.0,
+      "apm": 4.0,
+      "io": 224.0
+    },
+    "dual_lut_increase": 320,
+    "dual_ff_change": 0,
+    "mapped_single_ex1_absent": true,
+    "mapped_dual_ex1_present": true,
+    "synthesis_single_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1102299785117Z\\synthesize\\triha_core.snr",
+    "single_mapping_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1102299785117Z\\device_map\\triha_core.dmr",
+    "synthesis_dual_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1102572696977Z\\synthesize\\triha_core.snr",
+    "dual_mapping_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1102572696977Z\\device_map\\triha_core.dmr",
+    "scope": "CPU-only; 224 IO reported separately; no TCM/SoC/DDR/NPU/Video"
+  },
+  "cases": [
+    {
+      "case": "differential_seed37",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261018T1102326314532Z\\result.json",
+      "sha256": "1a04bb417924a5b8d6d7480a48fe5fc5ddd5e6bfe3e0fdd5c96a1b316a2d47c6",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2387,
+          "trap_mask": 511,
+          "i_stalls": 180,
+          "d_stalls": 72
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2361,
+          "trap_mask": 511,
+          "i_stalls": 184,
+          "d_stalls": 87
+        }
+      ]
+    },
+    {
+      "case": "differential_seed1234567",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261018T1102572591586Z\\result.json",
+      "sha256": "da7b961b869772536eef4315d7a085959c4080cbe3ab3ae0d2d2656db07f3b31",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2403,
+          "trap_mask": 511,
+          "i_stalls": 192,
+          "d_stalls": 75
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2382,
+          "trap_mask": 511,
+          "i_stalls": 206,
+          "d_stalls": 96
+        }
+      ]
+    },
+    {
+      "case": "differential_seed271828",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261018T1103019610032Z\\result.json",
+      "sha256": "9f7681530a769a90efcc5ef5b4cfb23ac1a0cf873c3c648dad510c73bd37a616",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2440,
+          "trap_mask": 511,
+          "i_stalls": 190,
+          "d_stalls": 101
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2367,
+          "trap_mask": 511,
+          "i_stalls": 218,
+          "d_stalls": 78
+        }
+      ]
+    },
+    {
+      "case": "broken_dual_negative",
+      "status": "FAIL",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261018T1102299483211Z\\result.json",
+      "sha256": "8dc48717c04c4edda4bb14115d4cb4fa10498af0594476558b00458e0b0458a2",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "executions": [],
+      "witness_log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261018T1102299483211Z\\simulation-dual.stdout.log",
+      "witness_sha256": "356fb95c3ce8b8e870346f0846da1f395872624ca732e55b20644be00e208558"
+    },
+    {
+      "case": "coremark",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T1102299568898Z\\result.json",
+      "sha256": "6d54429788dc97607ae91a1b27b6e2c1eba73db9c1cf4729c659e1fb97b3d542",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1659900,
+            "wb_completed": 1467843,
+            "observed_ipc": 0.8842960419302368,
+            "coremark_per_mhz_short_estimate": 3.012229652388698,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1705893,
+            "issued": 1505912,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1380497,
+            "wb_completed": 1467843,
+            "observed_ipc": 1.0632714160190135,
+            "coremark_per_mhz_short_estimate": 3.621884002645424,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1420530,
+            "issued": 1505912,
+            "paired_cycles": 321372,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "case": "runtime",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T1103331605511Z\\result.json",
+      "sha256": "c97afc8b3a945683e776e7e2b252323d77fd7c3be71df92047e8a40e68a3b002",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 619,
+            "issued": 464,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 563,
+            "issued": 464,
+            "paired_cycles": 89,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "case": "retire",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T1103388662545Z\\result.json",
+      "sha256": "937527dd783ab26c7489a0b26685518a202eb28eae58f304384daf46078e8763",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 40,
+            "issued": 22,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 36,
+            "issued": 22,
+            "paired_cycles": 4,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "case": "validation",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T1103332024164Z\\result.json",
+      "sha256": "5c799f54d184ac4e6245fbd8103578d226b5344c9a005f20292dec9a4ef31afb",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 333416,
+            "wb_completed": 294349,
+            "observed_ipc": 0.882828058641457,
+            "coremark_per_mhz_short_estimate": 2.9992561844662524,
+            "crc": [
+              "18f2",
+              "e3c1",
+              "0747",
+              "8d84"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 379333,
+            "issued": 332451,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "case": "pango_single",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1102299785117Z\\result.json",
+      "sha256": "853aff6ad8135d96255028fd2ec6094dda66860ba82cbb176ac52d75e200d38c",
+      "source_unchanged": true,
+      "runner_return_code": 0
+    },
+    {
+      "case": "pango_dual",
+      "status": "PASS",
+      "accepted": true,
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1102572696977Z\\result.json",
+      "sha256": "0ead56f0cc235a6613277956c4ed7c3676e07c9534cddc0c83393ca446e66ee6",
+      "source_unchanged": true,
+      "runner_return_code": 0
+    }
+  ],
+  "smoke": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\summary-20261018T1103430823623Z.json",
+    "sha256": "414074bcf0c797aa33f92190b21fc5780e1b5fe625bf90de410bb08b0d6b8edb",
+    "status": "PASS"
+  },
+  "cpu_rtl_simulated": true,
+  "routed": false,
+  "timing_closed": false,
+  "board_validated": false,
+  "limitations": [
+    "Directed differential simulation, not a full ISA/formal proof.",
+    "Dual LUT count increased by 320 despite equal observed behavior; no dual area benefit claimed.",
+    "No routed 100MHz timing result; synthetic test clock is not physical signoff."
+  ]
+}

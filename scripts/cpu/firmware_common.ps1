@@ -3,6 +3,14 @@ function Get-TrihaHash([string] $Path) {
     (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Assert-TrihaAdaptation([string] $Root) {
+    $manifest = Get-Content -LiteralPath (Join-Path $Root 'rtl/cpu/ADAPTATIONS.json') -Raw | ConvertFrom-Json
+    if ((Get-TrihaHash (Join-Path $Root $manifest.base)) -ne $manifest.base_sha256 -or
+        (Get-TrihaHash (Join-Path $Root $manifest.derived)) -ne $manifest.derived_sha256) {
+        throw 'CPU adaptation no longer matches its reviewed source hashes.'
+    }
+}
+
 function Save-TrihaJson([string] $Path, $Value) {
     $text = ($Value | ConvertTo-Json -Depth 14).Replace("`r`n", "`n") + "`n"
     [IO.File]::WriteAllText($Path, $text, [Text.UTF8Encoding]::new($false))

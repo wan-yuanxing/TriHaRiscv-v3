@@ -43,7 +43,7 @@ module triha_core #(
     input  wire        data_error_i,
     input  wire [10:0] data_resp_tag_i
 );
-    riscv_core #(
+    triha_cpu #(
         .SUPPORT_BRANCH_PREDICTION(1),
         .SUPPORT_MULDIV(1),
         .SUPPORT_SUPER(0),

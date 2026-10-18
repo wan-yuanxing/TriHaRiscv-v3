@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "base": "rtl/cpu/vendor/src/core/riscv_core.v",
+  "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+  "derived": "rtl/cpu/triha_cpu.v",
+  "derived_sha256": "80379724012c3da4d3b08b515cce1535f8f2c1ea6d35a80224023ba1d2ddf79d",
+  "changes": [
+    "Rename integration module to triha_cpu.",
+    "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
+    "Keep original issue, CSR, exception and memory control connections."
+  ],
+  "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+}

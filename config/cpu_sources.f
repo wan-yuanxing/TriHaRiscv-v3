@@ -16,6 +16,7 @@ rtl/cpu/vendor/src/core/biriscv_npc.v
 rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v
 rtl/cpu/vendor/src/core/biriscv_regfile.v
 rtl/cpu/vendor/src/core/riscv_core.v
+rtl/cpu/triha_cpu.v
 rtl/cpu/triha_core.v
 rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem.v
 rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem_ram.v
