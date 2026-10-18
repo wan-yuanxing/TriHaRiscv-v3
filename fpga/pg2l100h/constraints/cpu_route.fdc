@@ -1,0 +1,10 @@
+# CPU isolation timing model, not a board or final SoC contract.
+# Same-clock boundary: max 2ns/min 0.5ns at all functional ports.
+# No false paths or multicycle exceptions, including reset.
+create_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]
+set_clock_uncertainty 0.100 -from [get_clocks {cpu_clk}] -to [get_clocks {cpu_clk}] -setup
+set_clock_uncertainty 0.050 -from [get_clocks {cpu_clk}] -to [get_clocks {cpu_clk}] -hold
+set_input_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {rst_ni external_irq_i inst_accept_i inst_valid_i inst_error_i inst_rdata_i* data_rdata_i* data_accept_i data_ack_i data_error_i data_resp_tag_i*}]
+set_input_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {rst_ni external_irq_i inst_accept_i inst_valid_i inst_error_i inst_rdata_i* data_rdata_i* data_accept_i data_ack_i data_error_i data_resp_tag_i*}]
+set_output_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {inst_req_o inst_flush_o inst_invalidate_o inst_addr_o* data_addr_o* data_wdata_o* data_re_o data_wstrb_o* data_cacheable_o data_req_tag_o* data_invalidate_o data_writeback_o data_flush_o}]
+set_output_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {inst_req_o inst_flush_o inst_invalidate_o inst_addr_o* data_addr_o* data_wdata_o* data_re_o data_wstrb_o* data_cacheable_o data_req_tag_o* data_invalidate_o data_writeback_o data_flush_o}]

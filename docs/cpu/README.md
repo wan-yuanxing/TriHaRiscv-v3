@@ -2,7 +2,7 @@
 
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-18。
 
-Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量及CPU-only Pango综合/映射已经建立；实现与证据见 [STATUS.md](STATUS.md)。正式SoC、完整ISA和100MHz后布线仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
+Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pango综合/映射已经建立，并完成首轮隔离后布线；100MHz setup尚未收敛，详见 [STATUS.md](STATUS.md)。正式SoC、完整ISA及板测仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
 
 ## 目录与旧工程风格
 
@@ -43,6 +43,8 @@ pwsh -NoProfile -File scripts/cpu/test_pds_reports.ps1
 pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode single -Stage map
 pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode dual -Stage map
 pwsh -NoProfile -File scripts/cpu/run_equivalence.ps1 -Mode both -Seed 37
+pwsh -NoProfile -File scripts/cpu/test_route_reports.ps1
+pwsh -NoProfile -File scripts/cpu/run_route.ps1
 ```
 
 `-Case fail` 和 `-Case timeout` 是负例，单独执行预期返回1；`all`要求两个正例通过且两个负例被实际拒绝，才返回0。每次结果在输出显示的独立 `build/cpu/<case>-<UTC>/result.json`，日志与输入/输出哈希同行保存。ModelSim工具目录可用`-ModelSimBin`覆盖，单个原生进程默认墙钟上限60秒。
@@ -67,4 +69,6 @@ pwsh -NoProfile -File scripts/cpu/run_equivalence.ps1 -Mode both -Seed 37
 
 单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`使用相同背压TCM对父版/候选作逐周期总线、WB、预测和CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。它属于定向差分仿真，不是完整ISA或形式证明。
 
-下一步建立明确CPU总线I/O时序的隔离物理目标，运行实际100MHz双corner后布线；完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。
+`run_route.ps1`运行单发射完整compile/synthesize/dev_map/pnr/report_timing。独立`cpu_route.json/.fdc`声明10ns、同钟I/O max2/min0.5ns、setup/hold不确定度0.1/0.05ns，没有false path或multicycle例外；管脚由工具自动布局。这是CPU隔离诊断的边界假设，不是正式SoC或板卡契约。PNR上限10分钟、外层900秒；每次新目录，保存源、数据库和最终报告哈希。仅所有实际时序检查通过才返回PASS；工具成功但时序违例记录为TIMING_FAIL，入口返回2。
+
+下一步依据真实异常/取消到前端PC/预测路径，区分外围I/O布局和核内组合依赖，再验证具体优化；完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。
