@@ -1,4 +1,4 @@
-/* Directed cycle differential test, shared TCM, backpressure and real faults. */
+/* Legacy redirect cycle differential test; registered mode has ordered tests. */
 `timescale 1ns / 1ps
 `include "biriscv_defs.v"
 module tb_cpu_equivalence #(parameter integer DUAL_ISSUE=0, parameter integer BROKEN_DUAL=0);
@@ -82,6 +82,7 @@ module tb_cpu_equivalence #(parameter integer DUAL_ISSUE=0, parameter integer BR
         .mem_i_pc_o(old_mem_i_pc_o)
     );
     triha_cpu #(
+        .REGISTER_REDIRECT(0),
         .SUPPORT_DUAL_ISSUE(DUAL_ISSUE), .SUPPORT_BRANCH_PREDICTION(1),
         .SUPPORT_MULDIV(1), .SUPPORT_SUPER(0), .SUPPORT_MMU(0),
         .SUPPORT_LOAD_BYPASS(1), .SUPPORT_MUL_BYPASS(1),
@@ -177,8 +178,20 @@ module tb_cpu_equivalence #(parameter integer DUAL_ISSUE=0, parameter integer BR
         if (new_mem_i_rd_o && !i_allow) i_stalls=i_stalls+1;
         if (data_request && !d_allow) d_stalls=d_stalls+1;
 
-        if ((1'b1) && {new_mem_d_addr_o,new_mem_d_data_wr_o,new_mem_d_rd_o,new_mem_d_wr_o,new_mem_d_cacheable_o,new_mem_d_req_tag_o,new_mem_d_invalidate_o,new_mem_d_writeback_o,new_mem_d_flush_o,new_mem_i_rd_o,new_mem_i_flush_o,new_mem_i_invalidate_o,new_mem_i_pc_o} !==
-            {old_mem_d_addr_o,old_mem_d_data_wr_o,old_mem_d_rd_o,old_mem_d_wr_o,old_mem_d_cacheable_o,old_mem_d_req_tag_o,old_mem_d_invalidate_o,old_mem_d_writeback_o,old_mem_d_flush_o,old_mem_i_rd_o,old_mem_i_flush_o,old_mem_i_invalidate_o,old_mem_i_pc_o}) $fatal(1,"CPU_EQ_FAIL bus cycle=%0d",cycles);
+        // Request/control pins always compare. Payload compares during an active
+        // transaction, including stalls; idle address/data are not bus transfers.
+        if ({new_mem_d_rd_o,new_mem_d_wr_o,new_mem_d_invalidate_o,new_mem_d_writeback_o,new_mem_d_flush_o,
+             new_mem_i_rd_o,new_mem_i_flush_o,new_mem_i_invalidate_o,new_mem_i_pc_o} !==
+            {old_mem_d_rd_o,old_mem_d_wr_o,old_mem_d_invalidate_o,old_mem_d_writeback_o,old_mem_d_flush_o,
+             old_mem_i_rd_o,old_mem_i_flush_o,old_mem_i_invalidate_o,old_mem_i_pc_o})
+            $fatal(1,"CPU_EQ_FAIL request_control cycle=%0d",cycles);
+        if (($test$plusargs("COMPARE_IDLE_BUS") || new_mem_d_rd_o || |new_mem_d_wr_o ||
+             new_mem_d_invalidate_o || new_mem_d_writeback_o || new_mem_d_flush_o) &&
+            {new_mem_d_addr_o,new_mem_d_data_wr_o,new_mem_d_cacheable_o,new_mem_d_req_tag_o} !==
+            {old_mem_d_addr_o,old_mem_d_data_wr_o,old_mem_d_cacheable_o,old_mem_d_req_tag_o})
+            $fatal(1,"CPU_EQ_FAIL bus_payload cycle=%0d active=%b old=%h new=%h",cycles,
+                new_mem_d_rd_o || |new_mem_d_wr_o || new_mem_d_invalidate_o || new_mem_d_writeback_o || new_mem_d_flush_o,
+                old_mem_d_addr_o,new_mem_d_addr_o);
         if ((1'b1) && {u_new.u_issue.pipe0_valid_wb_w} !==
             {u_old.u_issue.pipe0_valid_wb_w}) $fatal(1,"CPU_EQ_FAIL valid0 cycle=%0d",cycles);
         if ((u_new.u_issue.pipe0_valid_wb_w) && {u_new.u_issue.pipe0_pc_wb_w,u_new.u_issue.pipe0_opc_wb_w,u_new.u_issue.pipe0_rd_wb_w} !==

@@ -80,6 +80,7 @@ fetch_fault_target:
 after_fetch_fault:
     li a0, 8
     bne s0, a0, fail
+#ifndef NO_EXTERNAL_IRQ
     li t0, 0x800
     csrw mie, t0
     li t0, 8
@@ -91,6 +92,7 @@ wait_irq:
     beqz s1, wait_irq
     li a0, 1
     bne s1, a0, fail
+#endif
     fence.i
     li a0, 0
     csrw 0x8b2, a0

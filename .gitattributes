@@ -17,6 +17,10 @@ fpga/pg2l100h/constraints/video_ddr_bist.rcf -text whitespace=cr-at-eol
 rtl/cpu/vendor/** -text -whitespace
 # Keep the maintained derivative's inherited whitespace for a minimal diff.
 rtl/cpu/triha_cpu.v -whitespace
+rtl/cpu/triha_frontend.v -whitespace
+rtl/cpu/triha_issue.v -whitespace
+rtl/cpu/triha_multiplier.v -whitespace
+rtl/cpu/triha_csr.v -whitespace
 # Preserve measured Windows test/provenance bytes in frozen receipts.
 rtl/cpu/ADAPTATIONS.json -text whitespace=cr-at-eol
 tb/cpu/tb_cpu_equivalence.v -text whitespace=cr-at-eol

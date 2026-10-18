@@ -33,6 +33,7 @@ module triha_cpu
     ,parameter SUPPORT_MULDIV   = 1
     ,parameter SUPPORT_SUPER    = 0
     ,parameter SUPPORT_MMU      = 0
+    ,parameter REGISTER_REDIRECT = 1
     ,parameter SUPPORT_DUAL_ISSUE = 1
     ,parameter SUPPORT_LOAD_BYPASS = 1
     ,parameter SUPPORT_MUL_BYPASS = 1
@@ -254,9 +255,10 @@ wire           fetch1_instr_mul_w;
 wire           mmu_store_fault_w;
 
 
-biriscv_frontend
+triha_frontend
 #(
      .EXTRA_DECODE_STAGE(EXTRA_DECODE_STAGE)
+    ,.REGISTER_REDIRECT(REGISTER_REDIRECT)
     ,.NUM_BTB_ENTRIES(NUM_BTB_ENTRIES)
     ,.SUPPORT_BRANCH_PREDICTION(SUPPORT_BRANCH_PREDICTION)
     ,.GSHARE_ENABLE(GSHARE_ENABLE)
@@ -443,7 +445,7 @@ u_lsu
 );
 
 
-biriscv_csr
+triha_csr
 #(
      .SUPPORT_SUPER(SUPPORT_SUPER)
     ,.SUPPORT_MULDIV(SUPPORT_MULDIV)
@@ -491,7 +493,7 @@ u_csr
 );
 
 
-biriscv_multiplier
+triha_multiplier
 u_mul
 (
     // Inputs
@@ -535,7 +537,7 @@ u_div
 );
 
 
-biriscv_issue
+triha_issue
 #(
      .SUPPORT_REGFILE_XILINX(SUPPORT_REGFILE_XILINX)
     ,.SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)

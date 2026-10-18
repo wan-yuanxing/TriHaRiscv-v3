@@ -11,7 +11,9 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pa
 | 位置 | 内容 |
 |---|---|
 | `rtl/cpu/triha_core.v` | CPU 产品封装，默认单发射，固定六级；完整导出取指/数据/缓存维护协议 |
-| `rtl/cpu/triha_cpu.v`、`ADAPTATIONS.json` | 直接维护的内部连接派生Verilog及差异哈希；单发射不生成第二执行单元，保留共享CSR/异常控制 |
+| `rtl/cpu/triha_cpu.v`、`ADAPTATIONS.json` | 直接维护的内部连接派生Verilog及多文件差异哈希；单发射不生成第二执行单元，保留共享CSR/异常控制 |
+| `rtl/cpu/triha_frontend.v`、`triha_issue.v` | 寄存重定向及issue数据/有效控制分离，六个主流水级不变 |
+| `rtl/cpu/triha_multiplier.v`、`triha_csr.v` | 宽数据寄存器独立采样；原有效、hold、异常及提交写控制继续生效 |
 | `rtl/cpu/vendor/` | 固定来源源码、LICENSE、UPSTREAM.json、原始测试映像；保留原文件，不批量改名或重排 |
 | `rtl/soc/` | 后续正式互连、外设、IRQ和系统集成；以新主工程接口为准 |
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |
@@ -67,8 +69,14 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 
 `run_pds.ps1`默认只综合，可用`-Stage map`继续器件映射；默认原生进程上限900秒。显式清单只包含核，冻结副本、日志、snr/dmr、实际参数和原语统计保存到`build/cpu/pds-<mode>-<UTC>/result.json`。可用`TRIHA_PDS_SHELL`或`-PdsShell`指定已安装工具。PDS Generics使用名称/数值对（`DUAL_ISSUE 1`），脚本必须从展开日志复核真实配置；综合和映射资源分别记录，因为工具可能在映射时继续优化。
 
-单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`使用相同背压TCM对父版/候选作逐周期总线、WB、预测和CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。它属于定向差分仿真，不是完整ISA或形式证明。
+单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`显式选择旧重定向时序（REGISTER_REDIRECT=0），使用相同背压TCM作逐周期请求控制、有效/停顿中的总线载荷、WB、预测和11项CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。新增数据采样会改变没有请求时的空闲地址，`-CompareIdleBus`保留旧诊断且预期在第2085周期报告空闲地址差异，不能将它称为事务不一致。
+
+新默认寄存重定向有真实恢复延迟，使用`run_redirect.ps1 -Test ordered -Mode both -Seed 37`验证；另外复测1234567/271828种子。每个原核/候选执行均有独立镜像、随机接纳背压和0~3拍响应等待；同步异常模式比较完整按序WB载荷、store及异常轨迹，844次完成/91次store，不要求周期相同。`-Interrupt`单独运行IRQ/mret自检，异步IRQ入口不要求逐条轨迹相同；`-Broken`破坏真实load数据并要求拒绝。它们是定向差分仿真，均不是完整ISA或形式证明。
+
+`run_redirect.ps1 -Test frontend`检查寄存边界、在途返回、请求/输出背压和连续重定向；`-LegacyFrontend`应因原组合绕过而失败。`-Test payload/muldata/csrdata`分别检查issue及乘法/CSR的数据采样与有效位隔离。`-Test mularith`用独立整数模型校验四种乘法、气泡和hold，`-Broken`注入真实结果错误并要求拒绝。这些测试不增加生产源清单；原模块仅在仿真清单中作对照。
 
 `run_route.ps1`运行单发射完整compile/synthesize/dev_map/pnr/report_timing。独立`cpu_route.json/.fdc`声明10ns、同钟I/O max2/min0.5ns、setup/hold不确定度0.1/0.05ns，没有false path或multicycle例外；管脚由工具自动布局。这是CPU隔离诊断的边界假设，不是正式SoC或板卡契约。PNR上限10分钟、外层900秒；每次新目录，保存源、数据库和最终报告哈希。仅所有实际时序检查通过才返回PASS；工具成功但时序违例记录为TIMING_FAIL，入口返回2。
 
-下一步依据真实异常/取消到前端PC/预测路径，区分外围I/O布局和核内组合依赖，再验证具体优化；完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。
+`review_route.ps1 -RunDirectory <既有运行目录>`只读核验冻结源/输出、实际原生退出码、阶段标志、参数及最终时序，另存新收据，不回写旧result。PDS可能将逻辑表达式参数打印为`1'b1`；解析器同时接受正确的1位/32位值，并检查前端寄存选择和外层MMU仍关闭。
+
+后续以实际STA路径判断，完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。当前时序候选与逐轮结果见STATUS及`redirect_timing_plan.md`；不将局部改动或工具PASS称为100MHz通过。

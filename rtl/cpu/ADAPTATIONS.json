@@ -1,13 +1,67 @@
 {
-  "schema_version": 1,
-  "base": "rtl/cpu/vendor/src/core/riscv_core.v",
-  "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
-  "derived": "rtl/cpu/triha_cpu.v",
-  "derived_sha256": "80379724012c3da4d3b08b515cce1535f8f2c1ea6d35a80224023ba1d2ddf79d",
-  "changes": [
-    "Rename integration module to triha_cpu.",
-    "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
-    "Keep original issue, CSR, exception and memory control connections."
-  ],
-  "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+  "schema_version": 2,
+  "adaptations": [
+    {
+      "base": "rtl/cpu/vendor/src/core/riscv_core.v",
+      "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+      "derived": "rtl/cpu/triha_cpu.v",
+      "derived_sha256": "187c81be2402bcb5dd570315d2cf229e2d5a1a9a4ad31b1eaa606ecaead9ec9e",
+      "changes": [
+        "Rename integration module to triha_cpu.",
+        "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
+        "Keep original issue, CSR, exception and memory control connections.",
+        "Connect maintained frontend and select registered redirect independently of outer MMU.",
+        "Connect maintained issue module with payload selection independent of kill/exception controls.",
+        "Connect maintained multiplier/CSR data-register derivatives."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
+      "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+      "derived": "rtl/cpu/triha_frontend.v",
+      "derived_sha256": "f515dbcf880bffc834f9a9960d37e04fd1e6b7725f289773f37968f8bb9fbc12",
+      "changes": [
+        "Rename integration module to triha_frontend.",
+        "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+      "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+      "derived": "rtl/cpu/triha_issue.v",
+      "derived_sha256": "fda172955859ff6ab2a35c51f6c008b601779e5322a3f6f149b0022e96dc242b",
+      "changes": [
+        "Rename integration module to triha_issue.",
+        "Choose opcode/PC/fault payload from fetch validity and expected PC independently of squash/CSR redirect; retain original slot validity and all issue enables.",
+        "Select CSR invalid-instruction payload flag independently of late kill controls; CSR side-effect enable unchanged."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
+      "base_sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+      "derived": "rtl/cpu/triha_multiplier.v",
+      "derived_sha256": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+      "changes": [
+        "Rename integration module to triha_multiplier.",
+        "Sample multiplier operand data whenever not held, matching existing execution-unit data registers; pipeline validity still controls result use.",
+        "Remove now-unused mult_inst_w decode."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_csr.v",
+      "base_sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+      "derived": "rtl/cpu/triha_csr.v",
+      "derived_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+      "changes": [
+        "Rename integration module to triha_csr.",
+        "Separate wide CSR data registers from late opcode valid, retaining original valid, exception, read-side-effect and commit-write controls.",
+        "Decode payload set/clear/immediate independently of valid; valid instructions produce identical data."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    }
+  ]
 }

@@ -5,9 +5,14 @@ function Get-TrihaHash([string] $Path) {
 
 function Assert-TrihaAdaptation([string] $Root) {
     $manifest = Get-Content -LiteralPath (Join-Path $Root 'rtl/cpu/ADAPTATIONS.json') -Raw | ConvertFrom-Json
-    if ((Get-TrihaHash (Join-Path $Root $manifest.base)) -ne $manifest.base_sha256 -or
-        (Get-TrihaHash (Join-Path $Root $manifest.derived)) -ne $manifest.derived_sha256) {
-        throw 'CPU adaptation no longer matches its reviewed source hashes.'
+    if ($manifest.schema_version -ne 2 -or @($manifest.adaptations).Count -lt 1) {
+        throw 'Unsupported CPU adaptation manifest.'
+    }
+    foreach ($entry in $manifest.adaptations) {
+        if ((Get-TrihaHash (Join-Path $Root $entry.base)) -ne $entry.base_sha256 -or
+            (Get-TrihaHash (Join-Path $Root $entry.derived)) -ne $entry.derived_sha256) {
+            throw "CPU adaptation no longer matches reviewed source hashes: $($entry.derived)"
+        }
     }
 }
 

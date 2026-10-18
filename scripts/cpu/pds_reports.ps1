@@ -40,20 +40,30 @@ function Get-TrihaPdsCells([string] $Text) {
 function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual) {
     $expected = [ordered]@{
         SUPPORT_BRANCH_PREDICTION=1;SUPPORT_MULDIV=1;SUPPORT_SUPER=0;SUPPORT_MMU=0
+        REGISTER_REDIRECT=1
         SUPPORT_DUAL_ISSUE=$Dual;SUPPORT_LOAD_BYPASS=1;SUPPORT_MUL_BYPASS=1
         SUPPORT_REGFILE_XILINX=0;EXTRA_DECODE_STAGE=0
     }
-    foreach ($scope in @('triha_core','triha_core/u_cpu')) {
+    $scopes = [ordered]@{
+        'triha_core' = [ordered]@{DUAL_ISSUE=$Dual}
+        'triha_core/u_cpu' = $expected
+        'triha_core/u_cpu/u_frontend' = [ordered]@{REGISTER_REDIRECT=1;SUPPORT_MMU=0}
+        'triha_core/u_cpu/u_frontend/u_fetch' = [ordered]@{SUPPORT_MMU=1}
+        'triha_core/u_cpu/u_mmu' = [ordered]@{SUPPORT_MMU=0}
+    }
+    foreach ($scope in $scopes.Keys) {
         $pattern = '(?ms)^I: Module instance \{' + [regex]::Escape($scope) +
             '\} parameter value:\r?\n(.*?)(?=^I:|\z)'
         $blocks = [regex]::Matches($Text,$pattern)
         if ($blocks.Count -ne 1) { throw "Missing/duplicate elaborated CPU scope: $scope" }
-        $keys = if ($scope -eq 'triha_core') { @('DUAL_ISSUE') } else { @($expected.Keys) }
+        $keys = @($scopes[$scope].Keys)
         foreach ($key in $keys) {
             $values = [regex]::Matches($blocks[0].Groups[1].Value,
-                '(?m)^\s*' + $key + " = 32'b([01]{32})\s*$")
-            $wanted = if ($key -eq 'DUAL_ISSUE') { $Dual } else { $expected[$key] }
-            if ($values.Count -ne 1 -or [Convert]::ToUInt32($values[0].Groups[1].Value,2) -ne $wanted) {
+                '(?m)^\s*' + $key + " = (1|32)'b([01]+)\s*$")
+            $wanted = $scopes[$scope][$key]
+            if ($values.Count -ne 1 -or
+                $values[0].Groups[2].Value.Length -ne [int]$values[0].Groups[1].Value -or
+                [Convert]::ToUInt32($values[0].Groups[2].Value,2) -ne $wanted) {
                 throw "Wrong/missing elaborated CPU parameter: $scope/$key; expected $wanted"
             }
         }

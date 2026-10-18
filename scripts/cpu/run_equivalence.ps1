@@ -3,6 +3,7 @@
 param(
     [ValidateSet('single','dual','both')][string] $Mode = 'both',
     [switch] $BrokenDual,
+    [switch] $CompareIdleBus,
     [ValidateRange(1,2147483647)][int] $Seed = 1
 )
 Set-StrictMode -Version Latest
@@ -15,7 +16,8 @@ $commands = [Collections.Generic.List[object]]::new()
 $result = [ordered]@{status='RUNNING';mode=$Mode;broken_dual=[bool]$BrokenDual;seed=$Seed
     directory=$work;input_hashes=[ordered]@{};output_hashes=[ordered]@{};native_commands=$commands
     source_unchanged=$false;executions=@();error=$null;runner_return_code=$null
-    scope='directed cycle differential simulation; not complete ISA/formal proof'}
+    register_redirect=0;compare_idle_bus=[bool]$CompareIdleBus
+    scope='legacy redirect request/control and active/stalled payload cycle differential simulation; registered redirect uses run_redirect.ps1; not complete ISA/formal proof'}
 $resultPath = Join-Path $work 'result.json'
 Save-TrihaJson $resultPath $result
 Write-Host "CPU_EQ_RUN mode=$Mode seed=$Seed directory=$work"
@@ -58,6 +60,7 @@ try {
         $dual = [int]($selected -eq 'dual')
         $output = Native (Join-Path $modelsim 'vsim.exe') @('-c','-onfinish','exit','-t','1ps','-voptargs=+acc',
             "-gDUAL_ISSUE=$dual",('-gBROKEN_DUAL=' + [int][bool]$BrokenDual),'work.tb_cpu_equivalence',
+            $(if($CompareIdleBus){'+COMPARE_IDLE_BUS'}else{'+TRANSACTION_BUS'}),
             ('+MEM_IMAGE=' + $image.Replace('\','/')),"+FETCH_FAULT_PC=$faultPc","+SEED=$Seed",
             '-do',(Join-Path $root 'scripts/cpu/run_modelsim.do')) "simulation-$selected"
         if ($output -match 'CPU_EQ_FAIL|\*\* (Error|Fatal)') { throw 'Differential test reported failure.' }

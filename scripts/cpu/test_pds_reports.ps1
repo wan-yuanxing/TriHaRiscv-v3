@@ -19,12 +19,28 @@ foreach ($bad in @('Executing : compile successfully.',
 }
 if ($rejected -ne 2) { throw 'Failed/missing PDS stage was accepted.' }
 $configuration = "I: Module instance {triha_core} parameter value:`n    DUAL_ISSUE = 32'b00000000000000000000000000000000`nI: Module instance {triha_core/u_cpu} parameter value:`n"
-foreach ($key in @('SUPPORT_BRANCH_PREDICTION','SUPPORT_MULDIV','SUPPORT_SUPER','SUPPORT_MMU',
+foreach ($key in @('SUPPORT_BRANCH_PREDICTION','SUPPORT_MULDIV','SUPPORT_SUPER','SUPPORT_MMU','REGISTER_REDIRECT',
     'SUPPORT_DUAL_ISSUE','SUPPORT_LOAD_BYPASS','SUPPORT_MUL_BYPASS','SUPPORT_REGFILE_XILINX','EXTRA_DECODE_STAGE')) {
-    $value = [int]($key -in @('SUPPORT_BRANCH_PREDICTION','SUPPORT_MULDIV','SUPPORT_LOAD_BYPASS','SUPPORT_MUL_BYPASS'))
+    $value = [int]($key -in @('SUPPORT_BRANCH_PREDICTION','SUPPORT_MULDIV','SUPPORT_LOAD_BYPASS','SUPPORT_MUL_BYPASS','REGISTER_REDIRECT'))
     $configuration += "    $key = 32'b" + [Convert]::ToString($value,2).PadLeft(32,'0') + "`n"
 }
+$configuration += "I: Module instance {triha_core/u_cpu/u_frontend} parameter value:`n    REGISTER_REDIRECT = 32'b00000000000000000000000000000001`n    SUPPORT_MMU = 32'b00000000000000000000000000000000`n"
+$configuration += "I: Module instance {triha_core/u_cpu/u_frontend/u_fetch} parameter value:`n    SUPPORT_MMU = 32'b00000000000000000000000000000001`n"
+$configuration += "I: Module instance {triha_core/u_cpu/u_mmu} parameter value:`n    SUPPORT_MMU = 32'b00000000000000000000000000000000`n"
 Assert-TrihaPdsConfiguration $configuration 0 | Out-Null
+$logicalConfiguration=$configuration.Replace("{triha_core/u_cpu/u_frontend/u_fetch} parameter value:`n    SUPPORT_MMU = 32'b00000000000000000000000000000001", "{triha_core/u_cpu/u_frontend/u_fetch} parameter value:`n    SUPPORT_MMU = 1'b1")
+Assert-TrihaPdsConfiguration $logicalConfiguration 0 | Out-Null
+$wrongRedirect = $configuration.Replace("REGISTER_REDIRECT = 32'b00000000000000000000000000000001", "REGISTER_REDIRECT = 32'b00000000000000000000000000000000")
+$rejected = $false
+try { Assert-TrihaPdsConfiguration $wrongRedirect 0 | Out-Null } catch { $rejected = $true }
+if (-not $rejected) { throw 'Unregistered redirect was accepted.' }
+$rejected=0
+$badFetch=$logicalConfiguration.Replace("{triha_core/u_cpu/u_frontend/u_fetch} parameter value:`n    SUPPORT_MMU = 1'b1", "{triha_core/u_cpu/u_frontend/u_fetch} parameter value:`n    SUPPORT_MMU = 1'b0")
+$badMmu=$logicalConfiguration.Replace("{triha_core/u_cpu/u_mmu} parameter value:`n    SUPPORT_MMU = 32'b00000000000000000000000000000000", "{triha_core/u_cpu/u_mmu} parameter value:`n    SUPPORT_MMU = 32'b00000000000000000000000000000001")
+foreach($bad in @($badFetch,$badMmu,$logicalConfiguration.Replace("SUPPORT_MMU = 1'b1", "SUPPORT_MMU = 1'b01"))) {
+    try { Assert-TrihaPdsConfiguration $bad 0 | Out-Null } catch { ++$rejected }
+}
+if($rejected -ne 3){throw 'Incorrect fetch timing/MMU binding or malformed width was accepted.'}
 $rejected = 0
 foreach ($bad in @($configuration,'')) {
     try { Assert-TrihaPdsConfiguration $bad 1 | Out-Null } catch { ++$rejected }
@@ -38,4 +54,4 @@ foreach ($key in $mappedResources.Keys) {
 $rejected = $false
 try { Get-TrihaPdsMappedResources '' | Out-Null } catch { $rejected = $true }
 if (-not $rejected) { throw 'Empty map report was accepted.' }
-Write-Host 'CPU_PDS_REPORT_TEST PASS resource_stage_configuration_checks=12'
+Write-Host 'CPU_PDS_REPORT_TEST PASS resource_stage_configuration_checks'
