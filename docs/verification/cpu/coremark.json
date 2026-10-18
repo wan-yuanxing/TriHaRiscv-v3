@@ -1,0 +1,449 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "Windows GCC bare-metal startup and CoreMark 1.0 short RTL measurement",
+  "recorded_utc": "2026-10-18T09:54:21.8304646Z",
+  "branch": "cpu/windows-baseline",
+  "worktree": "D:/FPGA/TriHaRiscv-cpu-windows",
+  "gcc_version": "riscv-none-elf-gcc.exe (xPack GNU RISC-V Embedded GCC x86_64) 15.2.0\r\nCopyright (C) 2025 Free Software Foundation, Inc.\r\nThis is free software; see the source for copying conditions.  There is NO\r\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "modelsim_version": "Model Technology ModelSim SE-64 vsim 2020.4 Simulator 2020.10 Oct 13 2020",
+  "benchmark_version": "1.0",
+  "source_tag": "v1.01",
+  "iterations": 5,
+  "total_data_bytes": 2000,
+  "compiler_flags": [
+    "-march=rv32im_zicsr",
+    "-mabi=ilp32",
+    "-std=gnu99",
+    "-O3",
+    "-mcmodel=medany",
+    "-mno-relax",
+    "-msmall-data-limit=0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Wall",
+    "-Wextra",
+    "-Werror=implicit-function-declaration"
+  ],
+  "compiler_sha256": "9fd3aecdd6ae127a5545709f44f8f154b4a39898b021fe87d2991947b0a235c5",
+  "memory": "128KiB test TCM; data loaded directly at VMA; startup clears poisoned BSS",
+  "simulated_clock_hz": 100000000,
+  "physical_clock_validated": false,
+  "same_elf_in_both_modes": true,
+  "elf_sha256": "1ddb1ef650f11e78718414e4c4d246b3be98a928c92d258383a3dfb8c9d54564",
+  "count_negative_same_loaded_image": true,
+  "performance": [
+    {
+      "mode": "single",
+      "status": "PASS",
+      "program_exit_code": 0,
+      "measurement": {
+        "cycles": 1659900,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8842960419302368,
+        "coremark_per_mhz_short_estimate": 3.012229652388698,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "short_duration_warning": true,
+        "official_score": false
+      },
+      "issue_observation": {
+        "total_cycles": 1705893,
+        "issued": 1505912,
+        "paired_cycles": 0,
+        "issued_is_not_instret": true
+      }
+    },
+    {
+      "mode": "dual",
+      "status": "PASS",
+      "program_exit_code": 0,
+      "measurement": {
+        "cycles": 1380497,
+        "wb_completed": 1467843,
+        "observed_ipc": 1.0632714160190135,
+        "coremark_per_mhz_short_estimate": 3.621884002645424,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "short_duration_warning": true,
+        "official_score": false
+      },
+      "issue_observation": {
+        "total_cycles": 1420530,
+        "issued": 1505912,
+        "paired_cycles": 321372,
+        "issued_is_not_instret": true
+      }
+    }
+  ],
+  "comparison": {
+    "cycle_reduction_percent": 16.832520031327192,
+    "throughput_increase_percent": 20.23930511982279,
+    "scope": "same ELF and TCM; issue-width parameter is the only DUT change"
+  },
+  "retirement_observer": {
+    "source": "two WB completion-valid signals, gated by stall and exception type",
+    "window": "half-open clock interval between actual cycle-CSR reads at E1, before same-edge WB counts",
+    "directed_range_count": 14,
+    "traces": [
+      {
+        "mode": "single",
+        "count": 14,
+        "lane1_count": 0,
+        "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948281147632Z\\retire-single.log",
+        "sha256": "cce7389402ab517b5acd1912e095d9290c957ef4514b40eed9b89cdfaac6691c"
+      },
+      {
+        "mode": "dual",
+        "count": 14,
+        "lane1_count": 3,
+        "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948281147632Z\\retire-dual.log",
+        "sha256": "578b1780faead0aaf01b1970fe44382fb4721515c0ddda1250e8f71c477c578d"
+      }
+    ],
+    "architectural_minstret": false,
+    "complete_retirement_proof": false
+  },
+  "cases": [
+    {
+      "case": "runtime",
+      "accepted": true,
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T0948223582360Z\\result.json",
+      "result_sha256": "6dc5faf98df3e935460789637534930b0ebfadd3dd104e906567a1a41431f51b",
+      "elf_sha256": "24978e8c975c82c20b52ba22430acd01cfb2c0b29fede177ff456c54b2de0707",
+      "tcm_sha256": "fb1eb64a804c9aa832779e075b7a7c2f8ee4af8f38de66bff7e59fd0617fc19f",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 619,
+            "issued": 464,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 563,
+            "issued": 464,
+            "paired_cycles": 89,
+            "issued_is_not_instret": true
+          }
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T0948223582360Z\\simulation-single.stdout.log",
+          "sha256": "baa751a08db6a4d51f0660ed82300714bde796f1db81f70e32734a90836b9a12"
+        },
+        {
+          "mode": "dual",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T0948223582360Z\\simulation-dual.stdout.log",
+          "sha256": "22ffb657d57a83e6fa1fdebdd0b03ceb7a20f6006718f80a07288b162b90aff1"
+        }
+      ],
+      "error": null
+    },
+    {
+      "case": "retirement",
+      "accepted": true,
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948281147632Z\\result.json",
+      "result_sha256": "68a3e0f3df2d0fdcecb346f15b16d503de64f86c6eeb551cc3f72972a26d5e1a",
+      "elf_sha256": "2f0e23286fed399ab126d71af88149d1b8dcd04b913035f885001462e9ea688c",
+      "tcm_sha256": "774584d60ac501e46a603a1dd8d1bb92a2ee975ea9425d577401c0e6f1da7dd1",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 40,
+            "issued": 22,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 36,
+            "issued": 22,
+            "paired_cycles": 4,
+            "issued_is_not_instret": true
+          }
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948281147632Z\\simulation-single.stdout.log",
+          "sha256": "b5bdefe690447f15313add77dcac32ca2783f6b5f39a30c9737a800aeca4a88e"
+        },
+        {
+          "mode": "dual",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948281147632Z\\simulation-dual.stdout.log",
+          "sha256": "b9ef604b8233f883b6b273e01c162e99c64fb7580b7214245f762455daf0101b"
+        }
+      ],
+      "error": null
+    },
+    {
+      "case": "performance",
+      "accepted": true,
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0947418610808Z\\result.json",
+      "result_sha256": "10846f5a5d0312ba3b28ec7d06b1192c97d240fbb4ade8b0257bffe166bf638f",
+      "elf_sha256": "1ddb1ef650f11e78718414e4c4d246b3be98a928c92d258383a3dfb8c9d54564",
+      "tcm_sha256": "af7368276174ea11d052963271a805cbb2457a77b34fdf7521845ead6df038c9",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1659900,
+            "wb_completed": 1467843,
+            "observed_ipc": 0.8842960419302368,
+            "coremark_per_mhz_short_estimate": 3.012229652388698,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1705893,
+            "issued": 1505912,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1380497,
+            "wb_completed": 1467843,
+            "observed_ipc": 1.0632714160190135,
+            "coremark_per_mhz_short_estimate": 3.621884002645424,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1420530,
+            "issued": 1505912,
+            "paired_cycles": 321372,
+            "issued_is_not_instret": true
+          }
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0947418610808Z\\simulation-single.stdout.log",
+          "sha256": "d28c61ccaf626ba9aa306dd3179320a8669a2ebc0dbf49dcabb420899a24c5ad"
+        },
+        {
+          "mode": "dual",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0947418610808Z\\simulation-dual.stdout.log",
+          "sha256": "3badaf3399dcba30e9795d4ed42281e41a81104b5ed0970e8d52bfa01fc2ca6b"
+        }
+      ],
+      "error": null
+    },
+    {
+      "case": "validation",
+      "accepted": true,
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0948223828577Z\\result.json",
+      "result_sha256": "72cf0879279f191e690f0c32363015f13f5f97e0929e9f4bce268cd082b39343",
+      "elf_sha256": "b2d5d9779bfb7bbc3bac4a2c4fc8da36cf84bf05c7656a8b195ba8041eb6b9dd",
+      "tcm_sha256": "45782898451c43e926828fca6c4922eed4d532e945cf08c2a8e0d4b1e9800e44",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 333416,
+            "wb_completed": 294349,
+            "observed_ipc": 0.882828058641457,
+            "coremark_per_mhz_short_estimate": 2.9992561844662524,
+            "crc": [
+              "18f2",
+              "e3c1",
+              "0747",
+              "8d84"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 379333,
+            "issued": 332451,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0948223828577Z\\simulation-single.stdout.log",
+          "sha256": "3caed20322d44e1dd8afae57beddcd53a96b4f9785ac156b8c04aa49d19bdcc8"
+        }
+      ],
+      "error": null
+    },
+    {
+      "case": "count_negative",
+      "accepted": true,
+      "expected_status": "FAIL",
+      "actual_status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948223933238Z\\result.json",
+      "result_sha256": "ab697bc44810065297b094c432c2d493e1daa9c777a61279e04699d7f3385975",
+      "elf_sha256": "1ad1c70b6d8b335f5d9e2660cc729661a7cfff41eca2774ca5cd7f234c91e5fa",
+      "tcm_sha256": "774584d60ac501e46a603a1dd8d1bb92a2ee975ea9425d577401c0e6f1da7dd1",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "FAIL",
+          "program_exit_code": 0,
+          "measurement": null
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261018T0948223933238Z\\simulation-single.stdout.log",
+          "sha256": "6ce97ab31061c69ec2b33063dcd8c485a76d733cffbd367de9dc307b26cca059"
+        }
+      ],
+      "error": "Firmware or observer reported failure."
+    },
+    {
+      "case": "trap_negative",
+      "accepted": true,
+      "expected_status": "FAIL",
+      "actual_status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T0948259129805Z\\result.json",
+      "result_sha256": "32dc3faf49b0d2e4ff9ecfda0f5936402f6e1dc1717e2269413682e6c65899f7",
+      "elf_sha256": "4e764f3628ee2e4f251ba25ce57fb7541561379a116361f2a226060580177312",
+      "tcm_sha256": "a27ec82c3a1bbc46885352f8367ba33e96769336865e511db32e8ff5944cdd51",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "FAIL",
+          "program_exit_code": 1,
+          "measurement": null
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261018T0948259129805Z\\simulation-single.stdout.log",
+          "sha256": "ca00becd42afae3eb2a94331bef1a3723664e50af96f8ebce4c0bfb8e42b829d"
+        }
+      ],
+      "error": "Program exited with code 1."
+    },
+    {
+      "case": "crc_negative",
+      "accepted": true,
+      "expected_status": "FAIL",
+      "actual_status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0948421041220Z\\result.json",
+      "result_sha256": "0b88285f70f1bca36136f9cef07fc64df210f8ae2f3925efd17a1273e624aa03",
+      "elf_sha256": "bca63311adbe51aa61029a0ee9dd974cb07490fd51d8c0796e85e32d8f2de247",
+      "tcm_sha256": "fcd54f21bb24c203ab2904b0046a524ddecaa92b4026226bcad23815ecc93eb8",
+      "executions": [
+        {
+          "mode": "single",
+          "status": "FAIL",
+          "program_exit_code": 1,
+          "measurement": null
+        }
+      ],
+      "logs": [
+        {
+          "mode": "single",
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261018T0948421041220Z\\simulation-single.stdout.log",
+          "sha256": "174eca8e7c055deb195c15515c5ecff075c9ffc2d4e9d3e1a23c507281d604c4"
+        }
+      ],
+      "error": "Program exited with code 1."
+    }
+  ],
+  "smoke_regression": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\summary-20261018T0948320355634Z.json",
+    "sha256": "49b20047d39fe6cd3df53a9cc131f119336c27b2413e3ae24a463ea717428b3c",
+    "status": "PASS"
+  },
+  "reds": [
+    "build/cpu/startup-red/compile.log",
+    "build/cpu/coremark-red/compile.log"
+  ],
+  "source_and_output_hashes_rechecked": true,
+  "official_coremark_score": false,
+  "pds_executed": false,
+  "board_validated": false,
+  "soc_integrated": false,
+  "limitations": [
+    "Under the official 10-second minimum; original duration warning retained.",
+    "WB observer has directed validation only; no complete ISA/exception/retirement proof.",
+    "No CPU-only Pango area or actual post-route 100MHz result.",
+    "Historical measurements with different compiler/ISA/storage are not directly comparable."
+  ]
+}

@@ -2,7 +2,7 @@
 
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-18。
 
-首批 Windows ModelSim 基线已经建立；实现与证据见 [STATUS.md](STATUS.md)。正式 SoC、完整 ISA、CoreMark、资源和100MHz后布线仍需后续验收，主目录中的 Video 分支尚未合入本批 CPU RTL。
+Windows ModelSim 基线、GCC裸机启动及CoreMark1.0短RTL测量已经建立；实现与证据见 [STATUS.md](STATUS.md)。正式SoC、完整ISA、资源和100MHz后布线仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
 
 ## 目录与旧工程风格
 
@@ -16,7 +16,8 @@
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |
 | `scripts/cpu/run.ps1`、`run_modelsim.do` | Windows 原生入口及 ModelSim 执行；每次独立运行目录 |
 | `config/cpu_sources.f` | 显式仿真模块清单；不递归搜集所有 RTL |
-| `sw/` | 后续启动、驱动和ISA程序；`sw/benchmarks/coremark/`已保存CoreMark v1.0固定源码，运行时移植待做 |
+| `sw/runtime/`、`sw/tests/` | 测试TCM启动/链接/输出/退出、data/BSS自检和14指令计数探针 |
+| `sw/benchmarks/coremark/` | CoreMark1.0固定原始源码与独立平台适配；构建生成窄formatter适配 |
 | `fpga/pg2l100h/` | 后续 CPU 专用目标/约束及 Pango 适配；沿用一套板级/DDR实现 |
 | `docs/verification/cpu/` | 小型证据与原始结果索引 |
 | `build/cpu/` | BIN、ModelSim work库、日志、结果JSON及后续PDS产物，Git忽略 |
@@ -33,13 +34,21 @@ pwsh -NoProfile -File scripts/cpu/run.ps1 -Case all
 pwsh -NoProfile -File scripts/cpu/run.ps1 -Case single
 pwsh -NoProfile -File scripts/cpu/run.ps1 -Case dual
 pwsh -NoProfile -File scripts/cpu/check_toolchain.ps1
+pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program runtime -Mode both
+pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program retire -Mode both
+pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode both -Iterations 5
+pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode single -RunKind validation -Iterations 1
 ```
 
 `-Case fail` 和 `-Case timeout` 是负例，单独执行预期返回1；`all`要求两个正例通过且两个负例被实际拒绝，才返回0。每次结果在输出显示的独立 `build/cpu/<case>-<UTC>/result.json`，日志与输入/输出哈希同行保存。ModelSim工具目录可用`-ModelSimBin`覆盖，单个原生进程默认墙钟上限60秒。
 
 已安装 ModelSim 在 `D:/modeltech64_2020.4/win64/`，PDS 在 `D:/pango/PDS_2022.2-SP6.4/`，Windows GCC15.2.0在 `D:/AI_Tools/xpack-riscv-none-elf-gcc-15.2.0-1/`。GCC归档校验通过，实际RV32I/ILP32与RV32IM_Zicsr/ILP32编译、链接和ELF32检查通过；未改系统PATH，配置在`config/cpu_toolchain.json`，可用`TRIHA_RISCV_GCC`覆盖完整gcc.exe路径。
 
-用户接受发行包实际前缀`riscv-none-elf-`，以RV32/ILP32能力为准。ModelSim冒烟当前仍使用固定ELF；编译探针未执行，不代表正式固件或CoreMark已跑通。CoreMark基准版本为1.0，源码补丁标签为v1.01，固定版本及文件哈希单独记录于`sw/benchmarks/coremark/UPSTREAM.json`。主流程保持Windows + Codex + ModelSim + PDS + RISC-V GCC，无新增生成语言或WSL依赖。
+用户接受发行包实际前缀`riscv-none-elf-`，以RV32/ILP32能力为准。`run.ps1`使用固定冒烟ELF；`run_firmware.ps1`使用本机GCC编译、链接，再加载ELF的PT_LOAD到同一TCM模型。CoreMark基准版本为1.0，源码补丁标签为v1.01，固定版本及原始文件哈希单独记录于`sw/benchmarks/coremark/UPSTREAM.json`。主流程保持Windows + Codex + ModelSim + PDS + RISC-V GCC，无新增生成语言或WSL依赖。
+
+固件入口每次建立`build/cpu/firmware-<program>-<UTC>/`，保存完整编译命令、ELF、反汇编、生成适配文件、ModelSim日志与前后输入哈希。默认单次仿真墙钟上限180秒、仿真周期上限2000万；这是短测入口。单/双模式共用一个ELF。`-Program runtime -Fault trap`、`-Program retire -Fault count`、`-Program coremark -Fault crc -Iterations 1`是负例，分别要求真实异常、计数不符、基准CRC错误被宿主以返回1拒绝。CRC负例仅修改build中的测试副本。
+
+计时读取真实cycle CSR，软件ticks必须等于仿真观察到的两次读CSR区间。IPC使用该区间两路WB完成事件，定向探针验证14条动态指令（包含branch/store/load及双路完成），现核没有架构minstret实现；完整ISA/异常退休仍待验收。5次迭代不足官方最短10秒，保持原始短时长警告，只报告短RTL估算，不能作为官方CoreMark或100MHz物理时序证据。
 
 ## 功能与集成边界
 
@@ -49,4 +58,4 @@ pwsh -NoProfile -File scripts/cpu/check_toolchain.ps1
 
 开发工作树共享主仓库Git历史，后续以小范围提交集成。新建工作树不自动包含主目录未提交的Video/DDR修改，跨线接入前需核对其版本。旧工程仅用于来源与历史证据，新构建不跨目录依赖旧CPU、库或生成产物。
 
-后续顺序：正式启动与CoreMark v1.0移植 → ISA/异常/访存定向验证与真实退休观测 → CoreMark实测 → CPU-only原生资源与Pango RAM/APM映射 → 实际100MHz双corner后布线 → 正式SoC/DDR/NPU集成。每项分别记录证据，不以冒烟替代后续验收。
+后续顺序：补齐ISA/CSR/异常/访存定向验证与退休观测 → CPU-only原生资源与Pango RAM/APM映射 → 实际100MHz双corner后布线 → 正式SoC/DDR/NPU集成。CoreMark在配置或硬件行为改变后按相同边界复测。每项分别记录证据。

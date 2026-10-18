@@ -1,10 +1,10 @@
 /*
  * @file       tb_triha_core.v
- * @brief      ModelSim 自校验 CPU 冒烟与失败程序测试
+ * @brief      ModelSim 自校验 CPU 冒烟、固件与完成事件观察
  * @details
- * - 复用固定 biRISC-V ELF 和 TCM 模型；本文件只适配测试入口
+ * - TCM加载固定冒烟或本机GCC编译的固件；地址仅用于测试
  * - 检查真实 SIM_CTRL 退出、发射配置和周期上限
- * - issue 计数为观察值，不作为退休 IPC 或 CoreMark
+ * - issue不代替退休；WB完成事件仅在定向验证范围内计算观察IPC
  */
 
 `timescale 1ns / 1ps
@@ -13,7 +13,8 @@
 module tb_triha_core #(
     parameter integer DUAL_ISSUE = 0,
     parameter integer PROGRAM_FAIL = 0,
-    parameter integer MAX_CYCLES = 100000
+    parameter integer MAX_CYCLES = 100000,
+    parameter integer FIRMWARE_MODE = 0
 );
     reg clk;
     reg rst_ni;
@@ -26,6 +27,19 @@ module tb_triha_core #(
     integer issued;
     integer pairs;
     integer exit_code;
+    reg [63:0] retired_total;
+    reg [63:0] retired_start;
+    reg [63:0] retired_window;
+    reg [31:0] cycle_start;
+    reg [31:0] cycle_window;
+    reg [31:0] probe_start;
+    reg [31:0] probe_end;
+    integer cycle_reads;
+    integer probe_enabled;
+    integer probe_expected;
+    integer probe_retired;
+    integer trace_file;
+    integer ignored_plusarg;
 
     wire inst_req;
     wire inst_flush;
@@ -110,6 +124,65 @@ module tb_triha_core #(
 
     always #5 clk = ~clk;
 
+    // 只观察已经通过WB停顿门控的完成事件，store/branch也必须计数。
+    function retirement_allowed;
+        input [5:0] exception;
+        begin
+            case (exception)
+                6'd0, `EXCEPTION_FENCE, `EXCEPTION_ERET_U,
+                `EXCEPTION_ERET_S, `EXCEPTION_ERET_M:
+                    retirement_allowed = 1'b1;
+                default: retirement_allowed = 1'b0;
+            endcase
+        end
+    endfunction
+
+    task observe_retirement;
+        input [31:0] pc;
+        input [31:0] instruction;
+        input integer lane;
+        begin
+            retired_total = retired_total + 64'd1;
+            if (probe_enabled && pc >= probe_start && pc < probe_end)
+                probe_retired = probe_retired + 1;
+            if (trace_file != 0)
+                $fwrite(trace_file, "%0t %0d %08h %08h\n", $time, lane, pc, instruction);
+        end
+    endtask
+
+    always @(posedge clk) begin
+        if (!rst_ni) begin
+            retired_total = 64'd0;
+            retired_start = 64'd0;
+            retired_window = 64'd0;
+            cycle_start = 32'd0;
+            cycle_window = 32'd0;
+            cycle_reads = 0;
+            probe_retired = 0;
+        end else begin
+            // 读取0xc00的实际E1采样边沿，区间为[start,stop)。
+            if (u_dut.u_cpu.u_csr.u_csrfile.csr_ren_i &&
+                u_dut.u_cpu.u_csr.u_csrfile.csr_raddr_i == 12'hc00) begin
+                if (cycle_reads == 0) begin
+                    cycle_start = u_dut.u_cpu.u_csr.u_csrfile.csr_mcycle_q;
+                    retired_start = retired_total;
+                end else if (cycle_reads == 1) begin
+                    cycle_window = u_dut.u_cpu.u_csr.u_csrfile.csr_mcycle_q - cycle_start;
+                    retired_window = retired_total - retired_start;
+                end
+                cycle_reads = cycle_reads + 1;
+            end
+            if (u_dut.u_cpu.u_issue.pipe0_valid_wb_w &&
+                retirement_allowed(u_dut.u_cpu.u_issue.pipe0_exception_wb_w))
+                observe_retirement(u_dut.u_cpu.u_issue.pipe0_pc_wb_w,
+                                   u_dut.u_cpu.u_issue.pipe0_opc_wb_w, 0);
+            if (u_dut.u_cpu.u_issue.pipe1_valid_wb_w &&
+                retirement_allowed(u_dut.u_cpu.u_issue.pipe1_exception_wb_w))
+                observe_retirement(u_dut.u_cpu.u_issue.pipe1_pc_wb_w,
+                                   u_dut.u_cpu.u_issue.pipe1_opc_wb_w, 1);
+        end
+    end
+
     task write_word;
         input [31:0] address;
         input [31:0] value;
@@ -127,6 +200,22 @@ module tb_triha_core #(
         issued = 0;
         pairs = 0;
         exit_code = -1;
+        probe_start = 32'd0;
+        probe_end = 32'd0;
+        probe_expected = 14;
+        trace_file = 0;
+        probe_enabled = $value$plusargs("PROBE_START=%h", probe_start);
+        if (probe_enabled && !$value$plusargs("PROBE_END=%h", probe_end)) begin
+            $display("CPU_SMOKE_FAIL reason=missing_probe_end");
+            $finish;
+        end
+        ignored_plusarg = $value$plusargs("PROBE_EXPECTED=%d", probe_expected);
+        if ($test$plusargs("TRACE_RETIRE")) begin
+            if (DUAL_ISSUE == 0)
+                trace_file = $fopen("retire-single.log", "w");
+            else
+                trace_file = $fopen("retire-dual.log", "w");
+        end
         if (!$value$plusargs("MEM_IMAGE=%s", image_path)) begin
             $display("CPU_SMOKE_FAIL reason=missing_image");
             $finish;
@@ -190,13 +279,25 @@ module tb_triha_core #(
                     `CSR_SIM_CTRL_EXIT: begin
                         exit_code = u_dut.u_cpu.u_csr.u_csrfile.csr_wdata_i[7:0];
                         $display("CPU_PROGRAM_EXIT code=%0d", exit_code);
-                        if ((exit_code == 0) &&
+                        $display("CPU_MEASURE cycles=%0d retired=%0d reads=%0d",
+                                 cycle_window, retired_window, cycle_reads);
+                        if (probe_enabled)
+                            $display("CPU_RETIRE_PROBE count=%0d expected=%0d", probe_retired, probe_expected);
+                        if (probe_enabled && probe_retired != probe_expected) begin
+                            $display("CPU_SMOKE_FAIL reason=retire_count");
+                        end else if ((exit_code == 0) &&
                             ((DUAL_ISSUE == 0) || (pairs > 0))) begin
-                            $display("CPU_SMOKE_PASS dual=%0d cycles=%0d issued=%0d pairs=%0d",
-                                     DUAL_ISSUE, cycles, issued, pairs);
+                            if (FIRMWARE_MODE != 0)
+                                $display("CPU_FIRMWARE_PASS dual=%0d cycles=%0d issued=%0d pairs=%0d",
+                                         DUAL_ISSUE, cycles, issued, pairs);
+                            else
+                                $display("CPU_SMOKE_PASS dual=%0d cycles=%0d issued=%0d pairs=%0d",
+                                         DUAL_ISSUE, cycles, issued, pairs);
                         end else begin
                             $display("CPU_SMOKE_FAIL reason=program_exit_or_no_pair code=%0d", exit_code);
                         end
+                        if (trace_file != 0)
+                            $fclose(trace_file);
                         $finish;
                     end
                     default: begin end
