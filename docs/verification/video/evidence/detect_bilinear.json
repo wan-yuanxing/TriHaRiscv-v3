@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "active_RGB_component_simulation_and_synthesis_pass",
+  "plan_commit": "989462a",
+  "default_geometry": {
+    "source": [
+      800,
+      600
+    ],
+    "active_output": [
+      320,
+      240
+    ],
+    "channel_order": "RGB",
+    "bits_per_channel": 8
+  },
+  "parameter_limits": {
+    "min_axis": 5,
+    "max_axis": 2045,
+    "axis_multiple": 5,
+    "output_ratio": "2/5"
+  },
+  "full_suites": 29,
+  "full_inputs": 145,
+  "actual_pass_simulation_logs": 123,
+  "python_tests": 63,
+  "python_passed": 62,
+  "python_skipped": 1,
+  "directed_inputs": 47,
+  "directed_simulations": 10,
+  "directed_frames": 54,
+  "directed_legal_geometry_frames": 36,
+  "directed_fault_recovery_frames": 2,
+  "directed_fault_cases": 302,
+  "directed_cancel_and_recovery_frames": 16,
+  "full_size_golden_frames": 6,
+  "checker_reconstructed_tensor_bytes": 1843200,
+  "checker_padding_and_NCHW_is_software_only": true,
+  "parent_mutants_rejected": 4,
+  "independent_review": {
+    "status": "pass",
+    "checked": 158,
+    "review_sha256": "a058c3db06436d129d050682eb6f056dea61cd35b3e3602bd5291202f9ff9c41",
+    "base_result_sha256": "5eb2e55a6dfee5e8dbab67ce0f5ee8a435b0e2f91660245589ae2ae27df23748",
+    "coverage": {
+      "valid_geometries": 23,
+      "valid_frames": 67,
+      "checked_output_pixels": 137184,
+      "adjacent_input_handshakes": 667580,
+      "simultaneous_input_output_handshakes": 136643,
+      "held_output_cycles": 731659,
+      "fault_cancel_checks": 165,
+      "invalid_geometries_rejected_at_time_zero": 14,
+      "control_mutations_rejected": 4
+    },
+    "review_report_sha256": "b4ac61b4fd2add626571bf5e9ef27afa0d6a84e9a67f98a1abefb30d81010f1c",
+    "source_artifact_fixture_and_log_hashes_verified": true
+  },
+  "synthesis_estimates": {
+    "lut": 246,
+    "ordinary_registers": 134,
+    "drm18k": 1,
+    "drm36k_equivalent": 0.5,
+    "apm": 0,
+    "clock_ns": 8,
+    "setup_ns": 4.025,
+    "hold_ns": 0.706,
+    "setup_endpoints": 289
+  },
+  "routed_timing_verified": false,
+  "board_programmed": false,
+  "BGR_padding_NCHW_DMA_implemented": false,
+  "formal_three_branch_events_implemented": false,
+  "limits": [
+    "Active RGB scaler only; software rebuilds BGR, padding and NCHW for the frozen hash comparison.",
+    "Synthesis estimates are not placement/routing, external AC timing or board acceptance.",
+    "Existing HDMI/DDR targets, public configuration, 125MHz/6ns bundle constraints and five-second timeouts were not migrated in this batch.",
+    "Future NCHW DMA/public input-slot migration and three-branch ownership/completion remain separate work."
+  ],
+  "source_hashes": {
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "tb/video/tb_detect_bilinear.sv": "1ea879d42a8d5bfccaf4602a9f741b4a6fcc14db679d295a68e06911d80fc94e",
+    "tb/video/check_bilinear_dump.py": "34fcc6df12103c2f2ae108fe6cabc5b9a8ae9fc8fc85bada6f14dbf60cdcee84",
+    "scripts/video/run.py": "584bb5c2fbeb5be9c4839489cd351894ae037aabbfcf3514f15107bb97ff0f16",
+    "scripts/video/build_pds.py": "b0e84dc8175358a860662b80ed1c340c4f6d31a947f617724bca6e2bd9d557dd",
+    "scripts/video/yunet_input_reference.py": "02863b1e3ab55e46b2f351bfa4ce91a8e805554ab8ee9f9ef9d16e4ab64bb2ba",
+    "fpga/pg2l100h/project/video_detect_bilinear.json": "55c268fd86fdcb97541e0eaf7e42ee5dc36b595ebf8a9c9a94d80d98188a43cd",
+    "fpga/pg2l100h/constraints/video_detect_bilinear.fdc": "bdb20f5df853df451da31041c53ea418bf4cd38bec277d6880173fee55505a75"
+  },
+  "refs": {
+    "build/video/regression/20261018T095231_804185Z/result.json": "fcbc12b642a3a14ddafb272b0c91c287d58b6fa06215f8bbb439073be57994e6",
+    "build/video/regression/20261018T095033_934803Z/result.json": "f4ee62623ac26bdd90dfeda3579b17694c6fa2424bbbce09bcfab1d18547d514",
+    "build/video/pds/20261018T095033_909863Z/result.json": "a8a7ce857173f2d1695d824553c3367126da4a8899bfe92488a3446c6b258e13",
+    "build/video/bilinear_mutations/20261018T095129_055513Z/result.json": "b957e715137c8ee15cdc3d8f071d6430bdbac1e1f9a6672c9b63bbe1d333623c",
+    "build/video/bilinear_component_guard/20261018T095616_388789Z/result.json": "5e16ea79672e0b8314068fa2c3ea96ed57af56433506f14d95a1b7f5507f0b38",
+    "build/video/bilinear_red/20261018T094909_773617Z/result.json": "2d90ced02a57882ce9639a4a27ca73dfa5a1b4d7ff6c45b94aed4b3812c04cce",
+    "build/video/independent_bilinear_review/evidence.json": "a058c3db06436d129d050682eb6f056dea61cd35b3e3602bd5291202f9ff9c41",
+    "build/video/independent_bilinear_review/result.json": "5eb2e55a6dfee5e8dbab67ce0f5ee8a435b0e2f91660245589ae2ae27df23748",
+    "build/video/independent_bilinear_review/parent_hash_audit.json": "a5941ca44825171c05d9e99466c053c3df20bb6425b9089bc2580bffc529819d",
+    "build/video/pds/20261018T095033_909863Z/synthesize/detect_bilinear.snr": "5fb2a3416f6cccecc7dc49aecee0765a9bf58214076a52e1353fd5e11732ef6c",
+    "build/video/regression/20261018T095231_804185Z/python.log": "db94966d17d6af00fdd89e2fdf7c9558d5e5a7b9627c229b0ef4473b2a5c61f7",
+    "build/video/regression/20261018T095231_804185Z/bilinear_goldens.log": "f2838d66a1a067b03e60c7fb0b0d1cbecf89d3d975ba32d964a26cd43bffbd18",
+    "docs/verification/video/evidence/yunet320_reference.json": "8d497b51fa183ddf5f9049506891d906c4b52a2180c7a4fd9313758e48f13948",
+    "docs/superpowers/plans/2026-10-18-video-bilinear-rtl.md": "38c2b56ac2f4ac38536f727150c8215bd29b8c1b08107accd1a09de36cff9e9c",
+    "build/video/regression/20261018T095231_804185Z/bilinear_0.hex": "33253d5fa8722d1839e7d36355ab2be6613ab8dbf734731da526853d0c056487",
+    "build/video/regression/20261018T095231_804185Z/bilinear_1.hex": "1e2cb20037fae4ebbb981422286cb160503c082216c4d56c08860b15fefac6a2",
+    "build/video/regression/20261018T095231_804185Z/bilinear_2.hex": "afa8cdcd656b90f37a65421af6cb9eb2220bd406bff13a7372fe76d53e27f16f",
+    "build/video/regression/20261018T095231_804185Z/bilinear_3.hex": "9074aaaa62f2899e878e15e201385d345c601f7cd794cb53c85934760227bf85",
+    "build/video/regression/20261018T095231_804185Z/bilinear_4.hex": "cf9176ea834780ef2e1ecaa15a421305b988920569fdb15d2e39a9dba92966ed",
+    "build/video/regression/20261018T095231_804185Z/bilinear_5.hex": "4c0b335c68a3e5e6264abd6affb78158f47b1cab8e51f6232b3ae307d3641210",
+    "build/video/pds/20261018T095033_909863Z/synthesize/detect_bilinear_syn.vm": "ce7213e4a65a0722f002fec2638817dcca6dd1ed2f30228e2182ec63c4aa80ac",
+    "build/video/bilinear_red/20261018T094909_773617Z/compile.log": "92b234baf03b6621563f26a90e8af67766fe49ba9666fe665cdf0fa4eab3b362",
+    "build/video/independent_bilinear_review/REVIEW.md": "b4ac61b4fd2add626571bf5e9ef27afa0d6a84e9a67f98a1abefb30d81010f1c",
+    "build/video/independent_bilinear_review/control_mutations.json": "5274d6ee18c7bf8c4c2eca4f4f0df5935d0cb4c00cbc9da4708183906aa2d15b"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_detect_bilinear",
+  "top": "detect_bilinear",
+  "test_top": "tb_detect_bilinear",
+  "sources": ["rtl/video/detect_bilinear.sv"],
+  "tests": ["tb/video/tb_detect_bilinear.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_detect_bilinear.fdc"],
+  "scope": "fixed 5:2 uint8 INTER_LINEAR active RGB component; no BGR/padding/NCHW/DMA, board pins or physical timing approval"
+}

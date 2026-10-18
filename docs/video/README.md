@@ -65,7 +65,9 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 格式阶段新增量化前`detect_input_pad`和量化后`detect_c8_pack`：前者转换BGR并补足128行，后者接收外部量化BGR及显式零编码，产生C8/128bit流。`python scripts/video/run.py --suite input_format`运行两个组件、整数参考及现有DMA字节内存联测；测试量化映射不作为模型参数。`video_input_pad`、`video_c8_pack`仅支持组件synth。真实量化、正式三分支完成和板测仍单列，见[格式验证](../verification/video/input_format.md)。
 
-用户随后选择优先迎合已校准的NPU 320×320方案：后续采用800×600→320×240双线性、上下40行黑边、UINT8 BGR NCHW，保留0..255且不再额外有损量化。当前已实现无OpenCV运行依赖的整数参考，`python tb/video/test_yunet_input_reference.py`可验证；固定比例RTL、NCHW/DMA和公共配置/输入槽迁移另行验收，既有160/C8记录保留为原组件范围。见[320参考验证](../verification/video/yunet320_reference.md)。
+用户随后选择优先迎合已校准的NPU 320×320方案：后续采用800×600→320×240双线性、上下40行黑边、UINT8 BGR NCHW，保留0..255且不再额外有损量化。当前已实现无OpenCV运行依赖的整数参考，`python tb/video/test_yunet_input_reference.py`可验证；固定比例RTL见下文，NCHW/DMA和公共配置/输入槽迁移另行验收，既有160/C8记录保留为原组件范围。见[320参考验证](../verification/video/yunet320_reference.md)。
+
+固定比例RTL组件`detect_bilinear`现已实现默认800×600→320×240有效RGB和分步取整，后续再接BGR/补行/NCHW。`python scripts/video/run.py --suite detect_bilinear`运行尺寸、异常、取消及六幅全尺寸OpenCV哈希检查，独立套件不需要厂商包；`python scripts/video/build_pds.py --target video_detect_bilinear --stage synth`只做组件综合。证据与板测边界见[双线性验证](../verification/video/detect_bilinear.md)。
 
 ## 当前文件树
 
@@ -93,6 +95,7 @@ rtl/video/
   video_capture_engine.sv                单次raw写DMA、EOF/写结果汇合和读回CRC
   preview_downscale.sv                   RGB888四像素平均及同步行RAM
   detect_downscale.sv                    RGB888完整5×5块平均及累计RAM/算术流水
+  detect_bilinear.sv                     固定5:2 UINT8双线性、同步行RAM/分步取整
   detect_input_pad.sv                    量化前RGB→BGR、底部raw零及元数据
   detect_c8_pack.sv                      外部量化BGR和显式零值→C8/128bit
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
@@ -130,6 +133,8 @@ tb/video/
   tb_detect_input_dma.sv                 scaler到C8/DMA字节内存联测，测试量化独立标记
   test_input_format_reference.py         BGR/raw补行和外部量化C8布局参考测试
   test_yunet_input_reference.py          精确OpenCV4.11固定比例/NCHW哈希与边界
+  tb_detect_bilinear.sv                  四源点坐标oracle、全尺寸/异常/背压/取消
+  check_bilinear_dump.py                 六幅RTL RGB转储重建张量并比对冻结哈希
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   run_preview_display_test.py            独立显示仿真和不可变输入证据
@@ -167,6 +172,7 @@ fpga/pg2l100h/
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
   project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
+  project/video_detect_bilinear.json      独立5:2双线性组件显式源及测试
   project/video_input_pad.json / video_c8_pack.json 独立格式组件显式清单
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
@@ -175,6 +181,7 @@ fpga/pg2l100h/
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
+  constraints/video_detect_bilinear.fdc   双线性组件8ns时钟
   constraints/video_input_format.fdc     BGR/补行及C8组件8ns时钟
   ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
   rtl/video_clock_reset.sv               原有目标的PLL/各域复位/外设启动

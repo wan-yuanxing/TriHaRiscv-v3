@@ -12,7 +12,9 @@
 
 ## 检测输入格式组件
 
-后续集成目标已由用户选择适配外部NPU 4fc0fc8：固定800×600源按OpenCV4.11 UINT8双线性缩至320×240，上下各补40行，输出UINT8 BGR NCHW三平面307200B、scale=1/zero-point=0。数值参考见[yunet320_reference.md](../verification/video/yunet320_reference.md)。下面160×128/C8模块为已验收独立组件；新的RTL/DMA入口和公共配置/输入槽迁移尚待分批实现，不能将两套布局混用。
+后续集成目标已由用户选择适配外部NPU 4fc0fc8：固定800×600源按OpenCV4.11 UINT8双线性缩至320×240，上下各补40行，输出UINT8 BGR NCHW三平面307200B、scale=1/zero-point=0。数值参考见[yunet320_reference.md](../verification/video/yunet320_reference.md)。下面160×128/C8模块为已验收独立组件；新的板级RTL/DMA入口和公共配置/输入槽迁移尚待分批实现，不能将两套布局混用。
+
+`detect_bilinear`已提供有效RGB缩小组件，默认800×600→320×240；FRAME_WIDTH/HEIGHT为5..2045内5的倍数。端口与scaler同类：clk/reset_n/clear、s_valid/s_ready/s_rgb/s_row_last、m_valid/m_ready/m_rgb/m_row_last/fault。源行/列2号相位也检查未知RGB与行末；accepted错误及末输入后额外s_valid置sticky fault，blocked payload不解释。fault取消尚未公开流水，保持已公开VALID及数据至ready；clear/reset可协调取消并重新采一帧。RAM不清，top行覆盖后再读。输出仍为RGB有效图像，未包含BGR/40行补边/NCHW/DMA；验证见[detect_bilinear.md](../verification/video/detect_bilinear.md)。
 
 `detect_input_pad`处理量化前图像，输入s_rgb高/中/低字节为R/G/B，输出m_bgr高/中/低字节为B/G/R。默认160×120→160×128，底部生成raw零；输出伴随row_last/frame_last/padding。宽1..2048、有效高1..2048、存储高有效高..2048，支持零补行。单帧clear/reset，row_last不匹配或未知RGB在接纳时置fault，补行/完成后额外s_valid置fault。
 

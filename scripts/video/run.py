@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,7 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite not in ("timing", "detect_scale", "input_format"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -60,6 +60,21 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('detect_bilinear','all'):
+            paths=[ROOT/'rtl/video/detect_bilinear.sv',ROOT/'tb/video/tb_detect_bilinear.sv']
+            add_inputs(result,[*paths,ROOT/'tb/video/check_bilinear_dump.py',
+                ROOT/'scripts/video/yunet_input_reference.py',ROOT/'tb/video/test_yunet_input_reference.py',
+                ROOT/'fpga/pg2l100h/project/video_detect_bilinear.json',
+                ROOT/'fpga/pg2l100h/constraints/video_detect_bilinear.fdc'])
+            for width,height,case in ((5,5,0),(15,10,0),(25,15,0),(800,600,0),(2045,5,0),(5,2045,0),
+                                       (5,5,1),(15,10,1),(5,5,2),(15,10,2)):
+                dump=(f'+DUMP={(work/"bilinear").as_posix()}',) if (width,height,case)==(800,600,0) else ()
+                log=simulate(work,f'bilinear_{width}_{height}_{case}','tb_detect_bilinear',paths,
+                    parameters=(('W',width),('H',height),('CASE',case)),run_args=dump,timeout=600)
+                if 'DETECT_BILINEAR_PASS' not in log:raise RuntimeError('Missing bilinear component pass marker')
+            log=run_logged([sys.executable,ROOT/'tb/video/check_bilinear_dump.py','--prefix',work/'bilinear'],work/'bilinear_goldens.log')
+            if 'DETECT_BILINEAR_DUMP_PASS' not in log:raise RuntimeError('Missing bilinear OpenCV golden pass marker')
+            result['passed'].append('detect_bilinear')
         if args.suite in ('input_format','all'):
             units=('detect_input_pad','detect_c8_pack')
             paths=[ROOT/('rtl/video/'+n+'.sv') for n in units]
