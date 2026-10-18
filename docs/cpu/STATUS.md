@@ -141,6 +141,16 @@ CoreMark两模式仅各增加4周期：单1682259周期/观察IPC0.872543/短估
 
 第4轮冻结证据：`docs/verification/cpu/training_timing.json`。第3轮最优setup检查点保留在提交2370a20，主工程未合并本批CPU。当前不得把工具成功或局部控制链切断当作100MHz通过。
 
+## 末端取消诊断（第5轮）
+
+issue的类别/寄存器冒险检查先独立计算候选资格，取消/CSR重定向在末端统一关闭fire/accept；原IRQ inhibit选择保持不变。定向RED捕获旧版取消会改变类别，修改后确认数据/类别保持、最终六类执行有效位关闭。三种背压种子×单/双模式的逐周期事务/WB/预测/11项CSR状态对照、独立存储按序异常对照和IRQ自检通过；真实load/第二路写回错误负例正确拒绝。CoreMark仍1682259/1390197周期，WB/CRC相同，startup、14指令探针、validation和四项冒烟通过，没有额外性能代价。
+
+同完整I/O约束的CPU-only映射为7256 LUT/6084 FF/0 DRM/4 APM，较第4轮少1030 LUT；224 IO另计。但实际setup Slow/Fast **-10.564/-3.572ns**，hold +0.108/+0.103ns，脉宽 +4.346/+4.345ns，时序显著变差，不能称收敛。原生返回0，主详细布线429次迭代到0未布通；PNR8分41秒、完整流程603.513秒。
+
+最差仍从data_error_i进入异常/取消，再到LSU mem_wr_q[2]：13级逻辑、逻辑2.517ns/布线18.747ns（88.163%）。逻辑面积减少不能推导物理时序改善。证据索引`docs/verification/cpu/late_cancel_timing.json`保留实际输入/输出、测试、报告和最差路径；所有旧结果不回写。
+
+后续改为单因素物理布局诊断：相同RTL、时序FDC和seed1，只增加PDS官方PAP_REGION层次约束，尝试两个相邻时钟区域；运行入口`run_route.ps1 -Compact`。在工具转换绑定与实际最终时序核验前，不宣称区域约束生效或100MHz通过。规划见`docs/cpu/physical_compact_plan.md`。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

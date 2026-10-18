@@ -18,6 +18,8 @@ module tb_issue_payload;
                  u_dut.u_issue.opcode0_rd_idx_o,u_dut.u_issue.opcode0_ra_idx_o,u_dut.u_issue.opcode0_rb_idx_o}
                 !== {32'h00700293,32'h80000000,5'd5,5'd0,5'd7})
                 $fatal(1,"ISSUE_PAYLOAD_FAIL kill_changes_payload opcode=%h",u_dut.u_issue.opcode0_opcode_o);
+            if ({u_dut.u_issue.issue_a_exec_w,u_dut.u_issue.issue_a_lsu_w,u_dut.u_issue.issue_a_csr_w}!==3'b100)
+                $fatal(1,"ISSUE_PAYLOAD_FAIL kill_changes_schedule_class");
         end
     endtask
     initial begin
@@ -29,7 +31,13 @@ module tb_issue_payload;
         force u_dut.u_issue.fetch0_instr_i=32'h00700293;
         force u_dut.u_issue.fetch1_valid_i=1;
         force u_dut.u_issue.fetch1_pc_i=32'h80000004;
-        force u_dut.u_issue.fetch1_instr_i=32'h00000013;
+        force u_dut.u_issue.fetch1_instr_i=32'h00032383;
+        force u_dut.u_issue.fetch0_instr_exec_i=1;
+        force u_dut.u_issue.fetch0_instr_lsu_i=0;
+        force u_dut.u_issue.fetch0_instr_csr_i=0;
+        force u_dut.u_issue.fetch1_instr_exec_i=0;
+        force u_dut.u_issue.fetch1_instr_lsu_i=1;
+        force u_dut.u_issue.fetch1_instr_csr_i=0;
         force u_dut.u_issue.squash_w=0;
         force u_dut.u_issue.branch_csr_request_i=0;
         #1; check_data;
@@ -39,7 +47,14 @@ module tb_issue_payload;
         force u_dut.u_issue.squash_w=0;
         force u_dut.u_issue.branch_csr_request_i=1;
         #1; check_data;
-        if (u_dut.u_issue.exec0_opcode_valid_o!==0) $fatal(1,"ISSUE_PAYLOAD_FAIL csr_valid");
+        if ({u_dut.u_issue.exec0_opcode_valid_o,u_dut.u_issue.exec1_opcode_valid_o,
+             u_dut.u_issue.lsu_opcode_valid_o,u_dut.u_issue.mul_opcode_valid_o,
+             u_dut.u_issue.div_opcode_valid_o,u_dut.u_issue.csr_opcode_valid_o}!==6'b0)
+            $fatal(1,"ISSUE_PAYLOAD_FAIL csr_valid");
+        force u_dut.u_issue.fetch1_instr_csr_i=1;
+        #1;
+        if(u_dut.u_issue.interrupt_inhibit_o!==1)
+            $fatal(1,"ISSUE_PAYLOAD_FAIL legacy_irq_inhibit");
         $display("ISSUE_PAYLOAD_PASS squash_and_csr_gate_valid_only");
         $finish;
     end
