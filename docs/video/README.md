@@ -41,7 +41,7 @@ python scripts/video/package_board.py --target video_preview_board
 python scripts/video/program_board.py --target video_preview_board --start-server
 ```
 
-配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。当前只接受 v0.6 固定模式，修改规格后才扩展模式校验。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；DDR 板级集成测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
+配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。HDMI/preview保持v0.6固定模式；检测输入采用用户确认的320×320 UINT8 BGR NCHW覆盖项，三槽分配和RTL/C常量同源生成。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；DDR 板级集成测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
 
 彩条目标的管脚、LED、复位、下载与时序边界见 [板测说明](../verification/video/board_smoke.md)。
 
@@ -65,9 +65,11 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 格式阶段新增量化前`detect_input_pad`和量化后`detect_c8_pack`：前者转换BGR并补足128行，后者接收外部量化BGR及显式零编码，产生C8/128bit流。`python scripts/video/run.py --suite input_format`运行两个组件、整数参考及现有DMA字节内存联测；测试量化映射不作为模型参数。`video_input_pad`、`video_c8_pack`仅支持组件synth。真实量化、正式三分支完成和板测仍单列，见[格式验证](../verification/video/input_format.md)。
 
-用户随后选择优先迎合已校准的NPU 320×320方案：后续采用800×600→320×240双线性、上下40行黑边、UINT8 BGR NCHW，保留0..255且不再额外有损量化。当前已实现无OpenCV运行依赖的整数参考，`python tb/video/test_yunet_input_reference.py`可验证；固定比例RTL见下文，NCHW/DMA和公共配置/输入槽迁移另行验收，既有160/C8记录保留为原组件范围。见[320参考验证](../verification/video/yunet320_reference.md)。
+用户随后选择优先迎合已校准的NPU 320×320方案：后续采用800×600→320×240双线性、上下40行黑边、UINT8 BGR NCHW，保留0..255且不再额外有损量化。当前已实现无OpenCV运行依赖的整数参考，`python tb/video/test_yunet_input_reference.py`可验证；固定比例RTL见下文，NCHW/DMA及公共配置迁移见下文独立验收，既有160/C8记录保留为原组件范围。见[320参考验证](../verification/video/yunet320_reference.md)。
 
-固定比例RTL组件`detect_bilinear`现已实现默认800×600→320×240有效RGB和分步取整，后续再接BGR/补行/NCHW。`python scripts/video/run.py --suite detect_bilinear`运行尺寸、异常、取消及六幅全尺寸OpenCV哈希检查，独立套件不需要厂商包；`python scripts/video/build_pds.py --target video_detect_bilinear --stage synth`只做组件综合。证据与板测边界见[双线性验证](../verification/video/detect_bilinear.md)。
+固定比例RTL组件`detect_bilinear`现已实现默认800×600→320×240有效RGB和分步取整，其BGR/补行/NCHW写入由下述组件承接。`python scripts/video/run.py --suite detect_bilinear`运行尺寸、异常、取消及六幅全尺寸OpenCV哈希检查，独立套件不需要厂商包；`python scripts/video/build_pds.py --target video_detect_bilinear --stage synth`只做组件综合。证据与板测边界见[双线性验证](../verification/video/detect_bilinear.md)。
+
+`detect_nchw_dma`逐行缓存RGB并分B/G/R写入DDR，上下补零形成320×320/307200B张量；复用原DMA并等待全部B响应。`python scripts/video/run.py --suite nchw_dma`检查真实AXI字节内存和六幅缩放到张量的冻结哈希；`python scripts/video/build_pds.py --target video_nchw_dma --stage synth`仅作组件综合。公共配置同步迁移为320KiB/槽；CPU译码、三分支和板级入口仍独立验收，见[NCHW验证](../verification/video/nchw_dma.md)。
 
 ## 当前文件树
 
@@ -96,6 +98,7 @@ rtl/video/
   preview_downscale.sv                   RGB888四像素平均及同步行RAM
   detect_downscale.sv                    RGB888完整5×5块平均及累计RAM/算术流水
   detect_bilinear.sv                     固定5:2 UINT8双线性、同步行RAM/分步取整
+  detect_nchw_dma.sv                     单行RGB缓存、上下补零、BGR三平面行式DMA
   detect_input_pad.sv                    量化前RGB→BGR、底部raw零及元数据
   detect_c8_pack.sv                      外部量化BGR和显式零值→C8/128bit
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
@@ -105,7 +108,10 @@ rtl/video/
 sw/include/video_cfg.h                    同源生成的 C 常量
 tb/video/
   tb_timing.sv                           完整光栅/像素/复位自检
-  test_config.py                         固定模式、生成一致性、漂移拒绝
+  test_config.py                         固定模式/320布局/槽位、同源生成与漂移拒绝
+  tb_detect_nchw_dma.sv                  实际AXI字节内存、六帧黄金图/取消/响应/复用
+  tb_nchw_parameters.sv                  非法参数与高度溢出的启动拒绝
+  check_nchw_dump.py                     直接核对硬件NCHW字节与冻结OpenCV哈希
   test_references.py                     提取字节、哈希失败、目录越界检查
   test_pll.py / test_pds_messages.py     实际分频、生成器失败失效、PDS 消息拒绝
   test_package.py                       打包失败不能沿用旧成功状态

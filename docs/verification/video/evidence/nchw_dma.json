@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "status": "component_simulation_and_synthesis_pass",
+  "plan_commit": "c8bbaf6",
+  "default_geometry": {
+    "active_RGB": [
+      320,
+      240
+    ],
+    "padding_top_bottom": [
+      40,
+      40
+    ],
+    "tensor": [
+      1,
+      3,
+      320,
+      320
+    ],
+    "dtype": "UINT8",
+    "channel_order": "BGR",
+    "layout": "NCHW",
+    "row_bytes": 320,
+    "plane_bytes": 102400,
+    "bytes": 307200,
+    "scale": 1,
+    "zero_point": 0
+  },
+  "input_allocation": {
+    "slot_bytes": 327680,
+    "bases": [
+      "0x82800000",
+      "0x82850000",
+      "0x828A0000"
+    ],
+    "reserved_region_tail_bytes": 65536,
+    "RTL_C_generated_together": true,
+    "CPU_decode_verified": false
+  },
+  "full_suites": 30,
+  "full_inputs": 151,
+  "actual_pass_simulation_logs": 162,
+  "python_tests": 63,
+  "python_passed": 62,
+  "python_skipped": 1,
+  "nchw_simulations": 39,
+  "official_control_scenarios": 33,
+  "official_invalid_parameter_rejections": 13,
+  "hardware_golden_frames": 6,
+  "hardware_golden_tensor_bytes": 1843200,
+  "software_repacking_used_for_golden_comparison": false,
+  "independent_review": {
+    "status": "pass",
+    "checks": 79,
+    "control": 41,
+    "geometry": 14,
+    "invalid_parameters": 13,
+    "compiled_mutants_rejected": 4,
+    "extra_parameters": 7,
+    "parent_verified_hashes": 184
+  },
+  "synthesis_estimates": {
+    "lut": 1223,
+    "ordinary_ff": 791,
+    "distributed_ram_luts": 72,
+    "drm18k": 1,
+    "apm": 0,
+    "clock_ns": 8,
+    "setup_ns": 2.109,
+    "setup_endpoints": 2070,
+    "hold_ns": 0.428,
+    "hold_endpoints": 2070,
+    "ram_reset_ports_tied_low": true,
+    "snr": {
+      "path": "build/video/pds/20261018T110056_596580Z/synthesize/detect_nchw_dma.snr",
+      "sha256": "b3820c343f76a10dd0d144189ae6abf2ee0bfafe317582be25f26aaf3a099def"
+    },
+    "netlist": {
+      "path": "build/video/pds/20261018T110056_596580Z/synthesize/detect_nchw_dma_syn.vm",
+      "sha256": "5506e30aa2dbf4bb82eb508a4e45f88d9ed703e5616dfba26f4bed333d167edb"
+    }
+  },
+  "routed_timing_verified": false,
+  "board_programmed": false,
+  "formal_INPUT_READY_or_three_branch_completion_implemented": false,
+  "CPU_NPU_shared_DDR_visibility_verified": false,
+  "limits": [
+    "Backpressured core-domain component; no direct unstallable HDMI intake.",
+    "All successful B responses are included in local result; no HDMI good EOF or raw/preview join.",
+    "Failed requests require coordinated reset; successful requests require the old source to be flushed.",
+    "Synthesis estimates are not routed timing, external AC or board acceptance.",
+    "Public allocation constants migrated; CPU decode, ownership and fence remain integration work.",
+    "Historical RED artifacts bind their own earlier inputs, not the final test source."
+  ],
+  "source_hashes": {
+    "rtl/video/detect_nchw_dma.sv": "955ec07d6e805b79a3c37fd85ad4e26dd28af33016121d4a2d1e50345ee2045c",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "tb/video/tb_detect_nchw_dma.sv": "d340a6db53dc3a3bb6cbc8769ccbc5ab92fd70276f1a14e01af0d1f38665667a",
+    "config/video_cfg.json": "c972ed26525fe66ecaf815311100c5fca0625fbd81a641a090f5739049745b59",
+    "scripts/video/gen_config.py": "71b9e1973b017e076ec6de3dd610da8b46e766eb652c20c02f97c6dbca92a8bb",
+    "scripts/video/run.py": "329233dc7e621ee676c4275469525b1e3c2a23149808450525cc526f8a727a82",
+    "scripts/video/build_pds.py": "3b36beb041e4cd0cf71a4226c3103648120eba15d523cf938742ed6c052f76e2",
+    "tb/video/tb_nchw_parameters.sv": "7bf7febbc16826e986683f806f8441d53df502444c6947f667150b7d72fca316",
+    "tb/video/check_nchw_dump.py": "07277985a3d4e25794e3e7f78522df7964331f4e9df7fdcf80f4a52aceaa5c9c",
+    "fpga/pg2l100h/project/video_nchw_dma.json": "75987bda8d5ef95a77554a42493ebd2e8229246e1754bd93486ba92a94814aed",
+    "fpga/pg2l100h/constraints/video_nchw_dma.fdc": "c48a4ebf309e6df0529a4a157c3338027190b907f49d2aea28075a08d423c7d6",
+    "rtl/video/include/video_cfg.vh": "fc7c31a8348bab16dae53cb48c4a6f3ec7412943827994113b6087899a323d51",
+    "sw/include/video_cfg.h": "6df9968b066be8ebd851d16e77c82537a17a1126c1724538e60ea2b7ba4c966f",
+    "docs/superpowers/plans/2026-10-18-video-nchw-dma.md": "efd6c1ad34a0f8dbecec38e2819843b1525dd68e8c9e275ee4cf0e5796e697e8",
+    "docs/superpowers/specs/2026-10-18-video-yunet320-design.md": "2277c33e0a0ae01c4719d776b88fdb18e1669e8bee51a8656c505b93f0ef841f",
+    "tb/video/test_config.py": "74c26055d36f69b42e3b6477af5f173f21265ecee9a5eb4ed98af47714e1f0a0",
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "tb/video/check_bilinear_dump.py": "34fcc6df12103c2f2ae108fe6cabc5b9a8ae9fc8fc85bada6f14dbf60cdcee84"
+  },
+  "refs": {
+    "full": {
+      "path": "build/video/regression/20261018T110502_923511Z/result.json",
+      "sha256": "d49fc85e92c794d1831c503b1a60882c16967ebada588e8534d6a9d68dea99f8"
+    },
+    "pds": {
+      "path": "build/video/pds/20261018T110056_596580Z/result.json",
+      "sha256": "51af3d2ffd576fb379fc60111414dc6387c44c0c388b1a543d9180244ccfb814"
+    },
+    "independent_review": {
+      "path": "build/video/nchw_review/final_summary.json",
+      "sha256": "74b82a8ffb5b9b092a06fc2baa3bb2d58750134c28228b8f3fd6a43d4feefe98"
+    },
+    "parent_audit": {
+      "path": "build/video/nchw_review/parent_hash_audit.json",
+      "sha256": "fe621c4a541dbaa8e0de6705a62d7e9b4c991b178713c71ab02aa393ca2eabf1"
+    },
+    "synthesis_inspection": {
+      "path": "build/video/nchw_synthesis_inspection.json",
+      "sha256": "63dedaa005c4d40ed4883e3317de85316972a8f576264e218b1fe83cd93da210"
+    },
+    "component_guard": {
+      "path": "build/video/nchw_component_guard/20261018T110706_787474Z/result.json",
+      "sha256": "f5d5b297b80b5883b43dae41e50967755bf0a437b138301e27dddeaa3d3ee585"
+    },
+    "goldens": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_goldens.log",
+      "sha256": "f992d440d4aaa24ce0067fad4aad4f5cbd22e685167d53927673187446f46644"
+    },
+    "python": {
+      "path": "build/video/regression/20261018T110502_923511Z/python.log",
+      "sha256": "27b398b0be409adab58101c86367ba0790a6f80439583d4ec9aabf356e07b776"
+    },
+    "review_20261018T105931_551340Z_evidence": {
+      "path": "build/video/nchw_review/20261018T105931_551340Z/evidence.json",
+      "sha256": "a17549336e4897efc44a7fb8f1f98bb07c79f5905cbc083fd234b0e0e3b6b3f2"
+    },
+    "review_parameter_20261018T105948_364968Z_evidence": {
+      "path": "build/video/nchw_review/parameter_20261018T105948_364968Z/evidence.json",
+      "sha256": "d87160be997af6f2ec9301aaffda127457ef7a72ef965cc3e47cc115307a29d4"
+    },
+    "review_nchw_review_review_report": {
+      "path": "build/video/nchw_review/review_report.md",
+      "sha256": "32f6eb17ba05e730c4ec1433ff78a4ce0f1e4ad9a3e3d7ed0e2a2f540a00acaf"
+    },
+    "snr": {
+      "path": "build/video/pds/20261018T110056_596580Z/synthesize/detect_nchw_dma.snr",
+      "sha256": "b3820c343f76a10dd0d144189ae6abf2ee0bfafe317582be25f26aaf3a099def"
+    },
+    "netlist": {
+      "path": "build/video/pds/20261018T110056_596580Z/synthesize/detect_nchw_dma_syn.vm",
+      "sha256": "5506e30aa2dbf4bb82eb508a4e45f88d9ed703e5616dfba26f4bed333d167edb"
+    },
+    "hardware_tensor_0": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_0.hex",
+      "sha256": "dad14dfaff8b30760c35d289f399c4ef8f1a40e67a74aa0697f8f41f075a6813"
+    },
+    "hardware_tensor_1": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_1.hex",
+      "sha256": "9abd97bf586e2de09652ccffaa9cd2280ce44b33c7755f616547a1c2c498a3f8"
+    },
+    "hardware_tensor_2": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_2.hex",
+      "sha256": "caa66ac427d252a588e30873161da00d60434d0f1ad38e80141160d8a48bd59a"
+    },
+    "hardware_tensor_3": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_3.hex",
+      "sha256": "9b06ecc84a21e313a8f054ddd49cfb87080da3de4bc58ce038bac6ac01d1d5a0"
+    },
+    "hardware_tensor_4": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_4.hex",
+      "sha256": "8e026b95ad6e873ab48b508c21cacdc4908501b80fb5c515cc33ec997249fc3f"
+    },
+    "hardware_tensor_5": {
+      "path": "build/video/regression/20261018T110502_923511Z/nchw_5.hex",
+      "sha256": "42466d2a201fa1ed67e4d344f29f5272722c59024892d6940eca3b13add8807f"
+    },
+    "historical_red_0": {
+      "path": "build/video/nchw_red/20261018T103504_471333Z/result.json",
+      "sha256": "9b48cc0e1d80049149464e5c9478a55dc4143efb2078ccec3c60447260628258"
+    },
+    "historical_red_1": {
+      "path": "build/video/nchw_review_red/20261018T105236_097682Z/result.json",
+      "sha256": "00a75cfd5540a3333a9322144cce5d08f74be96555dedf9dab4d3782f5efeb5b"
+    },
+    "historical_red_2": {
+      "path": "build/video/nchw_failure_order_red/20261018T105716_189980Z/result.json",
+      "sha256": "2ab6a47b685dd88eb55ea715549eca0078379ccecd0beaec0c8ee5cde1aef87c"
+    },
+    "historical_red_3": {
+      "path": "build/video/nchw_stray_order_red/20261018T105858_626000Z/result.json",
+      "sha256": "3b1b3721fc047a85dd80a812f66af6b58b644d9ca1dbfcb24ed8f335e0821aa0"
+    }
+  }
+}

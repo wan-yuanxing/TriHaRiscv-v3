@@ -29,7 +29,14 @@ class VideoConfigTests(unittest.TestCase):
             for key, value in {"H_TOTAL": 1056, "V_TOTAL": 628,
                                "PIXEL_HZ": 40000000,
                                "PREVIEW_BYTES": 360000,
-                               "INPUT_BYTES": 163840}.items():
+                               "INPUT_BYTES": 307200, "INPUT_PLANE_BYTES": 102400,
+                               "INPUT_PAD_TOP": 40, "INPUT_PAD_BOTTOM": 40,
+                               "INPUT_WIDTH": 320, "INPUT_ACTIVE_HEIGHT": 240,
+                               "INPUT_HEIGHT": 320, "INPUT_ROW_STRIDE": 320,
+                               "INPUT_SLOT_BYTES": 327680,
+                               "INPUT_SLOT_A": 0x82800000,
+                               "INPUT_SLOT_B": 0x82850000,
+                               "INPUT_SLOT_C": 0x828A0000}.items():
                 self.assertIn(f"`define VIDEO_{key} {value}\n", rtl)
                 self.assertIn(f"#define VIDEO_{key} {value}u\n", c)
             self.assertEqual(self.invoke(root, check=True).returncode, 0)
@@ -60,7 +67,10 @@ class VideoConfigTests(unittest.TestCase):
 
     def test_rejects_changed_layout_or_boolean_integer(self):
         for section, key, value in [("preview", "right_x", 401),
-                                    ("detector", "storage_channels", 3),
+                                    ("detector", "storage_channels", 8),
+                                    ("detector", "pad_top", 0),
+                                    ("detector", "layout", "NHWC"),
+                                    ("input_slots", "slot_bytes", 262144),
                                     ("mode", "v_front", True)]:
             with self.subTest(key=key), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)

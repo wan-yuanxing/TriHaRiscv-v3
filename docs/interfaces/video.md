@@ -1,6 +1,6 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。本批新增独立检测缩小组件；CPU fabric/MMIO、量化input分支及SoC三槽生命周期尚未冻结，下述局部接口不替代共同契约。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。本批新增独立检测缩小组件；CPU fabric/MMIO、正式input三分支完成及SoC三槽生命周期尚未冻结，下述局部接口不替代共同契约。
 
 ## 独立检测缩小组件
 
@@ -12,9 +12,15 @@
 
 ## 检测输入格式组件
 
-后续集成目标已由用户选择适配外部NPU 4fc0fc8：固定800×600源按OpenCV4.11 UINT8双线性缩至320×240，上下各补40行，输出UINT8 BGR NCHW三平面307200B、scale=1/zero-point=0。数值参考见[yunet320_reference.md](../verification/video/yunet320_reference.md)。下面160×128/C8模块为已验收独立组件；新的板级RTL/DMA入口和公共配置/输入槽迁移尚待分批实现，不能将两套布局混用。
+后续集成目标已由用户选择适配外部NPU 4fc0fc8：固定800×600源按OpenCV4.11 UINT8双线性缩至320×240，上下各补40行，输出UINT8 BGR NCHW三平面307200B、scale=1/zero-point=0。数值参考见[yunet320_reference.md](../verification/video/yunet320_reference.md)。下面160×128/C8模块为已验收独立组件；新NCHW/DMA组件及公共配置已按下文迁移，板级input入口与CPU共享契约仍待接入，不能将两套布局混用。
 
 `detect_bilinear`已提供有效RGB缩小组件，默认800×600→320×240；FRAME_WIDTH/HEIGHT为5..2045内5的倍数。端口与scaler同类：clk/reset_n/clear、s_valid/s_ready/s_rgb/s_row_last、m_valid/m_ready/m_rgb/m_row_last/fault。源行/列2号相位也检查未知RGB与行末；accepted错误及末输入后额外s_valid置sticky fault，blocked payload不解释。fault取消尚未公开流水，保持已公开VALID及数据至ready；clear/reset可协调取消并重新采一帧。RAM不清，top行覆盖后再读。输出仍为RGB有效图像，未包含BGR/40行补边/NCHW/DMA；验证见[detect_bilinear.md](../verification/video/detect_bilinear.md)。
+
+`detect_nchw_dma`接收有效RGB并经既有`video_write_dma`写UINT8 BGR三平面，默认WIDTH=320、ACTIVE_HEIGHT=240、PAD_TOP/PAD_BOTTOM=40、ROW_STRIDE=320、PLANE_STRIDE=102400。req_valid/ready锁存已对齐的req_base和req_tag，完整张量的最终总线拍先验检查在逻辑DDR内；未知base/tag拒绝。输入s_rgb高/中/低字节为R/G/B，只有s_valid/s_ready时校验RGB和row_last，blocked数据不解释。一次请求只接纳固定有效高，调用方必须在后续请求前flush旧源；单行同步RAM先完整覆盖再分B/G/R读取，padding零直接生成。
+
+每行每平面是一个DMA请求，row_last按WIDTH有效字节生成，keep为低位连续1，stride/plane间隙不写。result_valid/ready保持result_success/code/tag/written_bytes；written_bytes只累加正确ID/OKAY B确认的字节，失败burst仍可能改写内存。code0成功、1描述符、2输入流、3取消、4离线、5响应ID、6总线错误、7无主B；先记录的故障不被排空期后续错误覆盖。abort不撤销已公开AW/W，排空后返回失败；失败后sticky fault要求协调复位，不能用局部clear丢掉总线事务。成功结果消费后可重用，RAM不依赖reset清零。已发布结果保持期间发生abort/online丢失不改写结果payload，fault可禁止后续请求。
+
+公共`video_cfg.json`及同源RTL/C已更新为320×320/307200B，输入槽A/B/C为0x82800000/0x82850000/0x828A0000，每槽320KiB。它们是统一分配定义，尚不是CPU译码/帧槽所有权验收。该组件的local result尚不检查HDMI good EOF、不汇合raw/preview，也不发布正式CAPTURE_DONE/INPUT_READY；接物理RX须经过可背压入口与三分支仲裁。验证见[nchw_dma.md](../verification/video/nchw_dma.md)。
 
 `detect_input_pad`处理量化前图像，输入s_rgb高/中/低字节为R/G/B，输出m_bgr高/中/低字节为B/G/R。默认160×120→160×128，底部生成raw零；输出伴随row_last/frame_last/padding。宽1..2048、有效高1..2048、存储高有效高..2048，支持零补行。单帧clear/reset，row_last不匹配或未知RGB在接纳时置fault，补行/完成后额外s_valid置fault。
 

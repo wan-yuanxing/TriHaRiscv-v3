@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,7 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -60,6 +60,45 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('nchw_dma','all'):
+            paths=[ROOT/p for p in ('rtl/video/detect_bilinear.sv','rtl/video/detect_nchw_dma.sv',
+                'rtl/video/video_write_dma.sv','tb/video/tb_detect_nchw_dma.sv')]
+            add_inputs(result,[*paths,ROOT/'tb/video/check_nchw_dump.py',ROOT/'tb/video/check_bilinear_dump.py',
+                ROOT/'tb/video/tb_nchw_parameters.sv',
+                ROOT/'fpga/pg2l100h/project/video_nchw_dma.json',
+                ROOT/'fpga/pg2l100h/constraints/video_nchw_dma.fdc'])
+            for width,active,top,bottom,gap in ((1,1,0,0,0),(3,2,1,3,16),(16,3,0,0,0),
+                                               (17,3,2,1,16),(320,240,40,40,0)):
+                log=simulate(work,f'nchw_{width}','tb_detect_nchw_dma',paths,
+                    parameters=(('W',width),('AH',active),('PT',top),('PB',bottom),('GAP',gap)),timeout=600)
+                if 'DETECT_NCHW_DMA_PASS' not in log:raise RuntimeError('Missing NCHW DMA pass marker')
+            for case in range(1,34):
+                log=simulate(work,f'nchw_case_{case}','tb_detect_nchw_dma',paths,
+                    run_args=(f'+CASE={case}',),timeout=600)
+                if 'DETECT_NCHW_DMA_PASS' not in log:raise RuntimeError('Missing NCHW failure/reuse pass marker')
+            invalid_parameters=({'W':0},{'W':2049},{'AH':0},{'PT':-1},{'PB':-1},
+                {'PT':2048},{'RS':1},{'RS':17},{'RS':65552},{'PS':0},{'PS':17},
+                {'PT':2147483647,'PS':0},{'PT':2147483647,'PB':2147483647,'AH':2,'PS':0})
+            for index,parameters in enumerate(invalid_parameters):
+                name=f'nchw_invalid_{index}'
+                binary=work/(name+'.vvp')
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s','tb_nchw_parameters',
+                    *[f'-Ptb_nchw_parameters.{key}={value}' for key,value in parameters.items()],
+                    '-o',binary,ROOT/'rtl/video/detect_nchw_dma.sv',ROOT/'rtl/video/video_write_dma.sv',
+                    ROOT/'tb/video/tb_nchw_parameters.sv'],work/(name+'_compile.log'))
+                try:
+                    run_logged([tool('vvp'),binary],work/(name+'_rejection.log'))
+                except RuntimeError:
+                    if 'invalid NCHW geometry/stride' not in (work/(name+'_rejection.log')).read_text(encoding='utf-8'):
+                        raise
+                else:raise RuntimeError('Invalid NCHW parameters accepted')
+            log=simulate(work,'nchw_bilinear','tb_detect_nchw_dma',paths,
+                parameters=(('W',320),('AH',240),('PT',40),('PB',40),('GAP',0),('BILINEAR',1)),
+                run_args=(f'+DUMP={(work/"nchw").as_posix()}',),timeout=600)
+            if 'DETECT_NCHW_DMA_PASS' not in log:raise RuntimeError('Missing bilinear NCHW chain pass marker')
+            log=run_logged([sys.executable,ROOT/'tb/video/check_nchw_dump.py','--prefix',work/'nchw'],work/'nchw_goldens.log')
+            if 'DETECT_NCHW_DUMP_PASS' not in log:raise RuntimeError('Missing hardware NCHW golden pass marker')
+            result['passed'].append('nchw_dma')
         if args.suite in ('detect_bilinear','all'):
             paths=[ROOT/'rtl/video/detect_bilinear.sv',ROOT/'tb/video/tb_detect_bilinear.sv']
             add_inputs(result,[*paths,ROOT/'tb/video/check_bilinear_dump.py',

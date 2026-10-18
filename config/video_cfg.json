@@ -23,12 +23,29 @@
     "bytes_per_pixel": 3
   },
   "detector": {
-    "active_width": 160,
-    "active_height": 120,
-    "storage_height": 128,
+    "active_width": 320,
+    "active_height": 240,
+    "storage_height": 320,
+    "pad_top": 40,
+    "pad_bottom": 40,
     "valid_channels": 3,
-    "storage_channels": 8,
+    "storage_channels": 3,
     "channel_order": "BGR",
-    "quantization_owner": "model/yunet/model_manifest"
+    "layout": "NCHW",
+    "dtype": "UINT8",
+    "scale": 1,
+    "zero_point": 0,
+    "preprocess_version": 1,
+    "reference_commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8"
+  },
+  "input_slots": {
+    "region_base": 2189426688,
+    "region_bytes": 1048576,
+    "slot_bytes": 327680,
+    "bases": [
+      2189426688,
+      2189754368,
+      2190082048
+    ]
   }
 }

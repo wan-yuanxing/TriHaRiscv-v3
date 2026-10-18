@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def validate(config):
-    # These are the v0.6 acceptance bounds, not a second editable mode table.
+    # Fixed HDMI/preview plus the user-approved external YuNet 320 profile.
     fixed = {
         "mode": {"pixel_hz": 40000000, "h_active": 800, "h_front": 40,
                  "h_sync": 128, "h_back": 88, "v_active": 600, "v_front": 1,
@@ -17,15 +17,20 @@ def validate(config):
                  "vsync_positive": True},
         "preview": {"width": 400, "height": 300, "left_x": 0,
                     "right_x": 400, "y": 150, "bytes_per_pixel": 3},
-        "detector": {"active_width": 160, "active_height": 120,
-                     "storage_height": 128, "valid_channels": 3,
-                     "storage_channels": 8, "channel_order": "BGR",
-                     "quantization_owner": "model/yunet/model_manifest"},
+        "detector": {"active_width": 320, "active_height": 240,
+                     "storage_height": 320, "pad_top": 40, "pad_bottom": 40,
+                     "valid_channels": 3, "storage_channels": 3,
+                     "channel_order": "BGR", "layout": "NCHW", "dtype": "UINT8",
+                     "scale": 1, "zero_point": 0, "preprocess_version": 1,
+                     "reference_commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8"},
+        "input_slots": {"region_base": 0x82800000, "region_bytes": 1048576,
+                        "slot_bytes": 327680,
+                        "bases": [0x82800000, 0x82850000, 0x828A0000]},
     }
     expected = {"schema_version": 1, "spec_version": "0.6", **fixed}
     # JSON type matters: Python otherwise considers True equal to 1.
     if json.dumps(config, sort_keys=True) != json.dumps(expected, sort_keys=True):
-        raise ValueError("configuration violates fixed v0.6 mode/layout contract")
+        raise ValueError("configuration violates fixed v0.6 HDMI / approved YuNet320 layout contract")
 
 
 def constants(config):
@@ -42,6 +47,20 @@ def constants(config):
     values["INPUT_BYTES"] = (config["detector"]["active_width"] *
                              config["detector"]["storage_height"] *
                              config["detector"]["storage_channels"])
+    detector = config["detector"]
+    slots = config["input_slots"]
+    values.update({"INPUT_WIDTH": detector["active_width"],
+                   "INPUT_ACTIVE_HEIGHT": detector["active_height"],
+                   "INPUT_HEIGHT": detector["storage_height"],
+                   "INPUT_PAD_TOP": detector["pad_top"], "INPUT_PAD_BOTTOM": detector["pad_bottom"],
+                   "INPUT_ROW_STRIDE": detector["active_width"],
+                   "INPUT_PLANE_BYTES": detector["active_width"] * detector["storage_height"],
+                   "INPUT_CHANNELS": detector["storage_channels"],
+                   "INPUT_SCALE": detector["scale"], "INPUT_ZERO_POINT": detector["zero_point"],
+                   "INPUT_PREPROCESS_VERSION": detector["preprocess_version"],
+                   "INPUT_REGION_BASE": slots["region_base"], "INPUT_REGION_BYTES": slots["region_bytes"],
+                   "INPUT_SLOT_BYTES": slots["slot_bytes"]})
+    values.update({"INPUT_SLOT_" + name: base for name, base in zip("ABC", slots["bases"])})
     return values
 
 
