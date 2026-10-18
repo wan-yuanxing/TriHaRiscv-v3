@@ -12,6 +12,8 @@
 
 ## 检测输入格式组件
 
+后续集成目标已由用户选择适配外部NPU 4fc0fc8：固定800×600源按OpenCV4.11 UINT8双线性缩至320×240，上下各补40行，输出UINT8 BGR NCHW三平面307200B、scale=1/zero-point=0。数值参考见[yunet320_reference.md](../verification/video/yunet320_reference.md)。下面160×128/C8模块为已验收独立组件；新的RTL/DMA入口和公共配置/输入槽迁移尚待分批实现，不能将两套布局混用。
+
 `detect_input_pad`处理量化前图像，输入s_rgb高/中/低字节为R/G/B，输出m_bgr高/中/低字节为B/G/R。默认160×120→160×128，底部生成raw零；输出伴随row_last/frame_last/padding。宽1..2048、有效高1..2048、存储高有效高..2048，支持零补行。单帧clear/reset，row_last不匹配或未知RGB在接纳时置fault，补行/完成后额外s_valid置fault。
 
 `detect_c8_pack`的req_valid/req_ready/req_zero锁存本帧外部模型所有者提供的量化零编码。s_q_bgr的高/中/低字节为已经量化的B/G/R；s_row_last/s_frame_last/s_padding必须匹配本帧坐标，padding三个有效通道必须等于req_zero。它不执行量化，不从raw补0推测量化零。输入字节以二补码编码原样搬运，未定义尺度、舍入或饱和。

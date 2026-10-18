@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "status": "fixed_ratio_numerical_reference_pass",
+  "design_commit": "ef591a6",
+  "upstream_repository": "https://github.com/keep-s/npu_zgtc",
+  "upstream_commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8",
+  "layout": {
+    "source_rgb": [
+      800,
+      600
+    ],
+    "active_bgr": [
+      320,
+      240
+    ],
+    "tensor_shape_nchw": [
+      1,
+      3,
+      320,
+      320
+    ],
+    "dtype": "UINT8",
+    "scale": 1,
+    "zero_point": 0,
+    "pad_top": 40,
+    "pad_bottom": 40,
+    "plane_offsets": [
+      0,
+      102400,
+      204800
+    ],
+    "bytes": 307200
+  },
+  "opencv_version": "4.11.0",
+  "wheel_sha256": "085ad9b77c18853ea66283e98affefe2de8cc4c1f43eda4c100cf9b2721142ec",
+  "phase_cases": 4169764,
+  "optimized_modes": [
+    false,
+    true
+  ],
+  "ordinary_rounding_counterexamples": 390152,
+  "golden_source_boundary": "Six 800x600 RGB source images passed through letterbox; not upstream already-filled canonical tensor cases.",
+  "full_source_cases": [
+    {
+      "name": "zero",
+      "seed": 0,
+      "source_rgb_sha256": "eda525bab6d74d439bd683b578242e87fd3146fc4d631b7c81d9f76dd4d47a2d",
+      "tensor_nchw_sha256": "7818f5542a0404157573be6cffc0e0c8e68ce3c0f5d17d07ccdd9313fb700baf",
+      "tensor_bytes": 307200
+    },
+    {
+      "name": "full255",
+      "seed": 0,
+      "source_rgb_sha256": "680a1c22a8e114ea0c637847e8cc506794073a55f4350364c8a0421e7dbcc8f0",
+      "tensor_nchw_sha256": "321dc1636cabdb68b9477a4bbe9f4e8e91183d1eccce293270f30dacfac8d6cd",
+      "tensor_bytes": 307200
+    },
+    {
+      "name": "solid_rgb",
+      "seed": 0,
+      "source_rgb_sha256": "58419c3eeb70853cdd9438e2e785004bdab905207c8237fa4ed7cdb39f943c49",
+      "tensor_nchw_sha256": "95c97819b1991ae6335d50fa9a643fe486db9dbecbe533978802c8c931103120",
+      "tensor_bytes": 307200
+    },
+    {
+      "name": "coordinate_0",
+      "seed": 0,
+      "source_rgb_sha256": "ba9e6a2481642c9075a22a2d9b63102d3ccf2d98dc9b00737ed0e50b2b515f41",
+      "tensor_nchw_sha256": "959f1f661aaccc3194e33a9b2916e87d477a6fe752287f004324977016733c09",
+      "tensor_bytes": 307200
+    },
+    {
+      "name": "coordinate_1",
+      "seed": 1,
+      "source_rgb_sha256": "1543cae98b2d2a3d30541ca11efc2c255b2fe4122c0733c64b5e707ebc2521c3",
+      "tensor_nchw_sha256": "bbf02f21a96ed72720741a212def1ba27aaa0908cff1aa1024695d44b3e483b7",
+      "tensor_bytes": 307200
+    },
+    {
+      "name": "coordinate_7",
+      "seed": 7,
+      "source_rgb_sha256": "7f71e21c3384c5c54fd24e6479b610e6f9a120d0dc3704879241ec1240dd4b3b",
+      "tensor_nchw_sha256": "f614cb89ede163e40624bbf116eefc0ea4540decfb7556f63780732c6f599f07",
+      "tensor_bytes": 307200
+    }
+  ],
+  "directed_unittests": 6,
+  "python_discovery_tests": 63,
+  "python_discovery_passed": 62,
+  "python_discovery_skipped": 1,
+  "commands_observed_passing": [
+    "python tb/video/test_yunet_input_reference.py",
+    "python -m unittest discover -s tb/video -p test_*.py",
+    "python scripts/video/gen_config.py --check"
+  ],
+  "parent_mutants_rejected": 4,
+  "independent_review": {
+    "findings": [],
+    "images": 19,
+    "compared_bytes": 11673600,
+    "mismatches": 0,
+    "invalid_inputs": 15,
+    "mutants_rejected": 4,
+    "independent_exhaustive_phase_cases": 4169764,
+    "production_reference_checked": true,
+    "parent_source_and_log_hash_checks": 22,
+    "parent_artifact_hash_checks": 14
+  },
+  "prior_video_source_hashes_unchanged": 20,
+  "rtl_implemented": false,
+  "dma_integrated": false,
+  "pds_run": false,
+  "board_programmed": false,
+  "public_config_migrated": false,
+  "limits": [
+    "Fixed 800x600 source only; no generic resize claim.",
+    "No full model inference or quality rerun.",
+    "Future RTL row RAM/pipeline resource and timing require synthesis/routing checks.",
+    "NCHW DMA, common address/config migration, three-branch completion and physical board acceptance remain separate implementation batches.",
+    "Draft mutation driver argv failure was corrected in ignored tooling only and does not count as mutation rejection."
+  ],
+  "source_hashes": {
+    "scripts/video/yunet_input_reference.py": "02863b1e3ab55e46b2f351bfa4ce91a8e805554ab8ee9f9ef9d16e4ab64bb2ba",
+    "tb/video/test_yunet_input_reference.py": "a80ae694909c3ef7789d33769cec2f9a191476e447c6dcea90aab3525d4a6077",
+    "docs/superpowers/specs/2026-10-18-video-yunet320-design.md": "2277c33e0a0ae01c4719d776b88fdb18e1669e8bee51a8656c505b93f0ef841f",
+    "docs/superpowers/plans/2026-10-18-video-yunet320-reference.md": "b28090263160db9245b30d4d4550f49acb2c84571a3e7c3d4ed5cb350790c07b"
+  },
+  "refs": {
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/result.json": "3e52a16af786e0cbc6b39b8d46ce336d811447a49f5a8311dbee8b5e94af2022",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/probe.py": "25ea124186c3a4943190d092d73b39ce9205fda96e782b76e3aa22111a956434",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/wheel.json": "e10b83a2f8c4e5819ad2328efde51f3beaec980cccb3c0c3038920c2a6755134",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/red.json": "30b2798c87cf9b81e0da05e472ae88d4652524ee9f7a712184c92180b183809a",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/reference_red.log": "62aab544562a4e83150094385b9419fd21e164bb634b7b6eca7fcfba97fbe219",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/mutation_result.json": "0f5fe5c2fc7131ccaaa09cd38ef6ee80934b34429911fbee16fbfdf999767f1b",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/mutations.py": "d79cbd17024b27a67e3090a1077376e3de087d30a33025e1df0140aaa2ef1692",
+    "build/video/yunet320_feasibility/20261018T091912_689589Z/mutations/harness_draft_argv_error.log": "c69b61013342aebb5d95e38bf16c360a736f562fe0d3322fa982f263e9e88563",
+    "build/video/yunet320_reference_review/report.json": "9fc1d4f18f7fbb84c462ecc11f28642c6e80529b85141973a4ba6b8d7d27d4f4",
+    "build/video/yunet320_reference_review/artifact_manifest.json": "d8b67e4b48fc39f2ce060a63ae2be331a837690631b45099c922a6592ed31ff7",
+    "build/video/yunet320_reference_review/parent_hash_audit.json": "cef691263359477aada59735588887eb3414f6b042e6500f814d71f8d2e80ddf",
+    "docs/verification/video/evidence/input_format.json": "12577f8c2d4f44392e360d2a3ec4476aae0ca56199d0a7838678661dee221aa1",
+    "docs/verification/video/evidence/npu_handoff_audit.json": "baaf2a96590d4c4b0795697a5d6e51f1a3532b2f81ecc25e717d8df80f414f25"
+  }
+}

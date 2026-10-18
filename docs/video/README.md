@@ -65,6 +65,8 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 格式阶段新增量化前`detect_input_pad`和量化后`detect_c8_pack`：前者转换BGR并补足128行，后者接收外部量化BGR及显式零编码，产生C8/128bit流。`python scripts/video/run.py --suite input_format`运行两个组件、整数参考及现有DMA字节内存联测；测试量化映射不作为模型参数。`video_input_pad`、`video_c8_pack`仅支持组件synth。真实量化、正式三分支完成和板测仍单列，见[格式验证](../verification/video/input_format.md)。
 
+用户随后选择优先迎合已校准的NPU 320×320方案：后续采用800×600→320×240双线性、上下40行黑边、UINT8 BGR NCHW，保留0..255且不再额外有损量化。当前已实现无OpenCV运行依赖的整数参考，`python tb/video/test_yunet_input_reference.py`可验证；固定比例RTL、NCHW/DMA和公共配置/输入槽迁移另行验收，既有160/C8记录保留为原组件范围。见[320参考验证](../verification/video/yunet320_reference.md)。
+
 ## 当前文件树
 
 ```text
@@ -127,6 +129,7 @@ tb/video/
   tb_detect_input_pad.sv / tb_detect_c8_pack.sv 通道/补行/元数据/打包及取消测试
   tb_detect_input_dma.sv                 scaler到C8/DMA字节内存联测，测试量化独立标记
   test_input_format_reference.py         BGR/raw补行和外部量化C8布局参考测试
+  test_yunet_input_reference.py          精确OpenCV4.11固定比例/NCHW哈希与边界
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   run_preview_display_test.py            独立显示仿真和不可变输入证据
@@ -146,6 +149,7 @@ scripts/video/
   run.py                                已实现的回归入口
   detect_reference.py                   规格定义的几何整数参考，不含模型量化
   input_format_reference.py             独立通道/补行/C8布局参考，不执行量化
+  yunet_input_reference.py              800×600 RGB→320×320 UINT8 BGR NCHW整数参考
   build_pds.py                          组件/板级综合、布局布线及位流入口
   scan_board.py                         只读 JTAG 线缆/器件扫描
   package_board.py                      核验哈希后打包板测位流和报告
