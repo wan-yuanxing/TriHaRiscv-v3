@@ -2,7 +2,7 @@
 
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-18。
 
-Windows ModelSim 基线、GCC裸机启动及CoreMark1.0短RTL测量已经建立；实现与证据见 [STATUS.md](STATUS.md)。正式SoC、完整ISA、资源和100MHz后布线仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
+Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量及CPU-only Pango综合/映射已经建立；实现与证据见 [STATUS.md](STATUS.md)。正式SoC、完整ISA和100MHz后布线仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
 
 ## 目录与旧工程风格
 
@@ -18,7 +18,7 @@ Windows ModelSim 基线、GCC裸机启动及CoreMark1.0短RTL测量已经建立�
 | `config/cpu_sources.f` | 显式仿真模块清单；不递归搜集所有 RTL |
 | `sw/runtime/`、`sw/tests/` | 测试TCM启动/链接/输出/退出、data/BSS自检和14指令计数探针 |
 | `sw/benchmarks/coremark/` | CoreMark1.0固定原始源码与独立平台适配；构建生成窄formatter适配 |
-| `fpga/pg2l100h/` | 后续 CPU 专用目标/约束及 Pango 适配；沿用一套板级/DDR实现 |
+| `fpga/pg2l100h/project/cpu_core.json`、`constraints/cpu_core.fdc` | CPU-only综合/映射清单及10ns目标；正式板级/DDR继续沿用一套实现 |
 | `docs/verification/cpu/` | 小型证据与原始结果索引 |
 | `build/cpu/` | BIN、ModelSim work库、日志、结果JSON及后续PDS产物，Git忽略 |
 
@@ -38,6 +38,9 @@ pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program runtime -Mode both
 pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program retire -Mode both
 pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode both -Iterations 5
 pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode single -RunKind validation -Iterations 1
+pwsh -NoProfile -File scripts/cpu/test_pds_reports.ps1
+pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode single -Stage map
+pwsh -NoProfile -File scripts/cpu/run_pds.ps1 -Mode dual -Stage map
 ```
 
 `-Case fail` 和 `-Case timeout` 是负例，单独执行预期返回1；`all`要求两个正例通过且两个负例被实际拒绝，才返回0。每次结果在输出显示的独立 `build/cpu/<case>-<UTC>/result.json`，日志与输入/输出哈希同行保存。ModelSim工具目录可用`-ModelSimBin`覆盖，单个原生进程默认墙钟上限60秒。
@@ -58,4 +61,6 @@ pwsh -NoProfile -File scripts/cpu/run_firmware.ps1 -Program coremark -Mode singl
 
 开发工作树共享主仓库Git历史，后续以小范围提交集成。新建工作树不自动包含主目录未提交的Video/DDR修改，跨线接入前需核对其版本。旧工程仅用于来源与历史证据，新构建不跨目录依赖旧CPU、库或生成产物。
 
-后续顺序：补齐ISA/CSR/异常/访存定向验证与退休观测 → CPU-only原生资源与Pango RAM/APM映射 → 实际100MHz双corner后布线 → 正式SoC/DDR/NPU集成。CoreMark在配置或硬件行为改变后按相同边界复测。每项分别记录证据。
+`run_pds.ps1`默认只综合，可用`-Stage map`继续器件映射；默认原生进程上限900秒。显式清单只包含核，冻结副本、日志、snr/dmr、实际参数和原语统计保存到`build/cpu/pds-<mode>-<UTC>/result.json`。可用`TRIHA_PDS_SHELL`或`-PdsShell`指定已安装工具。PDS Generics使用名称/数值对（`DUAL_ISSUE 1`），脚本必须从展开日志复核真实配置；综合和映射资源分别记录，因为工具可能在映射时继续优化。
+
+下一步先核对单发射配置中仍保留的第二执行相关逻辑，补齐ISA/CSR/异常/访存定向验证，再建立明确CPU总线I/O时序的隔离物理目标，运行实际100MHz双corner后布线。正式SoC/DDR/NPU集成另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。
