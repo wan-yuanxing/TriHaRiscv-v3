@@ -1,0 +1,111 @@
+{
+  "status": "audit_checks_pass",
+  "integration_ready": false,
+  "source": {
+    "repository": "https://github.com/keep-s/npu_zgtc",
+    "branch": "main",
+    "commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8",
+    "commit_time": "2026-10-16T07:58:23Z",
+    "commit_subject": "Record verified GitHub upload in project ledger",
+    "private": true,
+    "fetched_utc": "20261018T090831_980465Z"
+  },
+  "checks_passed": 433,
+  "git_blobs_verified": 167,
+  "declared_assets_verified": 5,
+  "npz_arrays_read_without_pickle": 241,
+  "reconstructed_golden_inputs": [
+    {
+      "name": "zero",
+      "bytes": 307200,
+      "sha256": "7818f5542a0404157573be6cffc0e0c8e68ce3c0f5d17d07ccdd9313fb700baf"
+    },
+    {
+      "name": "full255",
+      "bytes": 307200,
+      "sha256": "a682fa570213181c0f6fd50f7da5ef6f263c855222c8f7441f19227d925383a3"
+    },
+    {
+      "name": "pattern",
+      "bytes": 307200,
+      "sha256": "da243f6f3cb83334d928653b2e8eedc9f7633d5d36f8dcd00bb33626e0aae452"
+    }
+  ],
+  "preprocessing_probe": {
+    "transform": {
+      "frame_id": 42,
+      "contract_version": "yunet-processing-v1.0",
+      "source_width": 800,
+      "source_height": 600,
+      "resized_width": 320,
+      "resized_height": 240,
+      "pad_left": 0,
+      "pad_top": 40,
+      "pad_right": 0,
+      "pad_bottom": 40,
+      "scale_x": 0.4,
+      "scale_y": 0.4,
+      "nominal_scale": 0.4
+    },
+    "input_bytes_u8": 307200,
+    "cv2_version": "4.14.0",
+    "numpy_version": "2.4.6",
+    "upstream_cv2_reference_version_matches": false,
+    "scope": "Selected pure preprocessing functions on a constant 800x600 image; not full model/FP32-vs-INT8 validation."
+  },
+  "python_version": "3.13.13",
+  "contract_differences": [
+    "160x128 versus 320x320",
+    "5x5 block mean/bottom padding versus uint8 bilinear/centered padding",
+    "pixel-major C8 versus dense B/G/R NCHW planes",
+    "signed INT8 preference in system spec versus UINT8 raw scale=1 in NPU v1",
+    "256KiB allocated input slot versus 300KiB tensor",
+    "platform addresses/CDC/width adapter/fence still unbound"
+  ],
+  "limits": [
+    "No ONNX Runtime inference, WIDER AP rerun, full integer golden regeneration, RTL/PDS, or board validation.",
+    "Natural-image golden binaries and full derived audit model are under ignored upstream reports and absent from this snapshot.",
+    "Upstream quality/performance reports remain source-provided historical evidence, not locally reproduced results.",
+    "No authoritative model, Video configuration, address map or frame ownership contract was changed."
+  ],
+  "upstream_hashes": {
+    "yunet/models/face_detection_yunet_2023mar_original.onnx": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "yunet/models/yunet_2023mar_320_bbox.onnx": "e45e30516415fa880b940c46a3c4c04c687339be800633f507fd374beb2a20ce",
+    "yunet/models/processing_contract_v1.json": "9811d3d23c9810aa6e6e77e897b50dc5cf2d1398af826aaa3f9a4c89f2da0985",
+    "yunet/models/integer_numerics_v1.json": "8152d6bbf187bb7041d225f23f35f731d5e20ccc1be7410c46e000c9aeb060a2",
+    "yunet/models/yunet_int8_numeric_v1.npz": "ae0d727a2f416751e7ed37fca5d83751d2b9141b832ebe3baae799fc3dfa86aa",
+    "yunet/models/model_manifest.json": "1814004268b50bbd226efade36ff6d89b321445046d310a93480fddb39803bb5",
+    "yunet/baseline/ptq_selection_v1.json": "5aa35c161c8101f2eefe8398ee661e234aaa06c196a23917217287e1e92f80fc",
+    "yunet/baseline/ptq_integer_golden_summary_v1.json": "961bcf5a6b34a0c24a722a84022b0105f55bc70f029a4cddf62ea96407a9af46",
+    "yunet/baseline/task_abi_template_v0_1.json": "45c5381ab3c0b25d0d9984e65761d552e2621c8e724fb1bd0369e061d60a1469",
+    "yunet/baseline/program_package_manifest_v0_1.json": "3c0eba5b72f4db830e5c573058e955b8ca69539849d598b95dd966daf7a275d8",
+    "yunet/baseline/address_layout_v1.json": "f2f7abb9c755512477d8ae46705abbb1f9f3362b055d208733b1415c904c3eb6",
+    "yunet/python/yunet_pipeline.py": "afed18478c3a4d42cc643a931f5040930f3a93c31bf6f10b08a78b8b814e1d18",
+    "yunet/python/ptq_integer.py": "78454d13a2175379e3f12b8ae65f6eb101ed95961063a506d3bb92be8a56e42f",
+    "yunet/python/export_integer_golden.py": "3bff6c30013e2b820ed406b75f1dea31b4cf80959401fd31db6b12e400dc7dbe",
+    "yunet/python/verify_processing_contract.py": "6ecdafb587cee7ea978baadad542ad93474fee48c63844e533c051e71321fe8e",
+    "jiaoben/zgtc/address_config.json": "d94f986c8d3d3692cb16f396e4966b05c9fd19fe66da3ab5930f6b6e658e5a38",
+    "word/16_视频与NPU输入交接草案.md": "e5a279f7776dc1ca6de85510875ce22664333702ca972f7acd6b7d30607445b7",
+    "word/20_本地DDR接口契约.md": "ab59dd22ba63fee390aea52987c81f9a89ad629b93a23926175c4fbf81520dd7",
+    "word/24_INT8校准与整数数值方案.md": "e4a107ab7092dc9a3856360f1a75b43c520cdb08946cf08866156821d2f1de7f",
+    "word/31_NPU任务ABI与地址绑定草案.md": "a65cdcb438cdc45fc6d3494e689f9d5dce0a228926dec6b63dabec2b904b9709",
+    "word/32_NPU算子程序与参数编码草案.md": "87acdcc7204cf121214c4e23ccd3a271ebc7c03b86791ffe46360d7a98a10c10",
+    "word/33_NPU控制器DMA与平台包装层规格.md": "e6f6f150188768820c760df191ec24d7d9bcf0da1bd0f989c1b39590bc83e6a1"
+  },
+  "video_hashes": {
+    "config/video_cfg.json": "5ce88105fb7b6770146b2513c763c41d8075f4214e4e981acd9ad9bca86e892c",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "02b6b33d6ee0b5c72ff73220a167058b3e29f0a654b3b91415a9488228dcd0c5",
+    "rtl/video/detect_downscale.sv": "ee2044537c4858ba049d5a31178ca331209f6aade553e056cb7ca985a705b074",
+    "rtl/video/detect_input_pad.sv": "8f4867af07d306374f792c372c55cce6efb1b410a025d170b16308d94ab09163",
+    "rtl/video/detect_c8_pack.sv": "ded553459ceb72105cab46e83019b1b59db91ee9ade0ea1b374919b3202ee036"
+  },
+  "audit_script_sha256": "7a2c7643f3f626c09f2b92c4e0ab052e31efa7dcf28c469ba8efba01b7419a95",
+  "archive_sha256": "bcf0f8bb5fa64461fba8365f1dab9f70d819efcb01da4db8a3d9e5ccd2ed0dc8",
+  "snapshot_hashes_sha256": "423947817564812081cd2be0b90bcf1556efe3c0a59d0f49d1ffc980e42bd5c8",
+  "checks_sha256": "536fec40a3e9ca78f6ff5808b876132990aa5e0873f7bf318dd4250c21e204e6",
+  "raw_result": {
+    "path": "build/video/npu_handoff_audit/20261018T090831_980465Z/result.json",
+    "sha256": "479847e0e90dc7399de7e0e6c29cc678e2372ebb26779a4c02343bee3327093a"
+  },
+  "audit_script": "build/video/npu_handoff_audit/20261018T090831_980465Z/audit.py"
+}
