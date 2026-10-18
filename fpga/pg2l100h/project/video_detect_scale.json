@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_detect_scale",
+  "top": "detect_downscale",
+  "test_top": "tb_detect_downscale",
+  "sources": ["rtl/video/detect_downscale.sv"],
+  "tests": ["tb/video/tb_detect_downscale.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_detect_scale.fdc"],
+  "scope": "geometry-only RGB888 5x5 block mean component; no quantization, padding, DMA, board pins or physical timing approval"
+}

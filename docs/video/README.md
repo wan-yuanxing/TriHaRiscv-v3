@@ -61,6 +61,8 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`、`preview_clocks`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
 
+检测分支先落地独立`detect_downscale`：800×600 RGB888按5×5完整块平均成为160×120 RGB888，含全范围舍入、背压/复位及完整几何验证。`python scripts/video/run.py --suite detect_scale`运行组件测试和Python整数参考，`python scripts/video/build_pds.py --target video_detect_scale --stage synth`只作组件综合；不生成板测位流。NPU清单未提供，BGR/量化/补边/C8和第三路DMA继续按依赖推进，详见[检测缩小记录](../verification/video/detect_scale.md)。
+
 ## 当前文件树
 
 ```text
@@ -86,6 +88,7 @@ rtl/video/
   video_stream_register.sv               core域FIFO读口与引擎间的单词流寄存器
   video_capture_engine.sv                单次raw写DMA、EOF/写结果汇合和读回CRC
   preview_downscale.sv                   RGB888四像素平均及同步行RAM
+  detect_downscale.sv                    RGB888完整5×5块平均及累计RAM/算术流水
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
   video_frame_crc_reader.sv              行式有效字节CRC及读事务排空
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
@@ -115,6 +118,8 @@ tb/video/
   tb_video_capture_engine.sv             真正两域入口、byte-memory oracle及CRC故障
   tb_video_hdmi_capture_board.sv         联合目标UART、复位/停钟的数字替身
   tb_preview_downscale.sv                独立四像素数值oracle、受阻与X/Z拒绝
+  tb_detect_downscale.sv                 25坐标oracle、6376总和、全尺寸和异常/复位
+  test_detect_reference.py               独立Python整数参考和坐标/舍入检查
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   run_preview_display_test.py            独立显示仿真和不可变输入证据
@@ -132,6 +137,7 @@ scripts/video/
   gen_edid.py / gen_ddr.py               固定 EDID 和锁定来源的完整 HMIC IP
   prepare_reference.py                  只提取哈希匹配的参考文件
   run.py                                已实现的回归入口
+  detect_reference.py                   规格定义的几何整数参考，不含模型量化
   build_pds.py                          组件/板级综合、布局布线及位流入口
   scan_board.py                         只读 JTAG 线缆/器件扫描
   package_board.py                      核验哈希后打包板测位流和报告
@@ -148,12 +154,14 @@ fpga/pg2l100h/
   project/video_axi_capture.json          AXI/DMA 独立目标，共用 DDR FDC/RCF
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
   project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
+  project/video_detect_scale.json         独立5×5缩小组件显式源及测试
   constraints/video_board_smoke.fdc      官方 HDMI 管脚和内部时钟约束
   constraints/video_rx.fdc               输入监测组件时钟约束，无板级管脚
   constraints/video_rx_board.fdc         RX/TX 管脚、半周期采样与 CDC 约束
   constraints/video_ddr_bist.fdc / .rcf   完整 DDR 管脚/时钟/复位和官方位置约束
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
+  constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
   ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
   rtl/video_clock_reset.sv               原有目标的PLL/各域复位/外设启动
   rtl/video_preview_clock_reset.sv       预览专用KEY0重采与HDMI链路启动分离

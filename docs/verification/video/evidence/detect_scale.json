@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "digital_and_component_synthesis_pass",
+  "scope": "Independent RGB888 5x5 mean scaler only; no quantization, padding, DDR, board or SoC event acceptance.",
+  "design_plan_commit": "71c3e68",
+  "source_hashes": {
+    "rtl/video/detect_downscale.sv": "ee2044537c4858ba049d5a31178ca331209f6aade553e056cb7ca985a705b074",
+    "tb/video/tb_detect_downscale.sv": "b7fb2fbbfd860f44c63947d1caf88205940eb637d2d986ea0dc359fcf3bcb8b8",
+    "scripts/video/detect_reference.py": "9ac23706ab4d68f56e1030c4bade8abe3305cf5800f5e990832250ea6f334d7c",
+    "tb/video/test_detect_reference.py": "08d37756670a3be38f30ae96ab58c190d734af11cba35a16aecf41b3ca60108d",
+    "scripts/video/run.py": "72b95e83105a79d16ee3a26073fcde94f8319888f7da969a789e95acb3d8c2dc",
+    "scripts/video/build_pds.py": "286be55b3e3d32da2de2062a5f91981cfe701c29e218c0d1093af26750f75c68",
+    "fpga/pg2l100h/project/video_detect_scale.json": "43cde78c7a78ebabb1021fda7d52894e9deebb1b8dc461d0085da136f9aedb0d",
+    "fpga/pg2l100h/constraints/video_detect_scale.fdc": "35cd51aa4c4f25849f609f49250ad17afec13e9359ad1e27584546d8329b6cfe"
+  },
+  "full_regression_suites": 27,
+  "full_regression_inputs": 128,
+  "actual_pass_simulation_logs": 95,
+  "exhaustive_sums": 6376,
+  "independent_random_frames": 15,
+  "independent_fault_injections": 1350,
+  "independent_invalid_geometries": 12,
+  "independent_pipeline_cancellations": 4,
+  "mutations_rejected": 4,
+  "component_route_and_bitstream_rejected": true,
+  "synthesis_resources": {
+    "lut": 191,
+    "ordinary_registers": 88,
+    "drm36k": 1,
+    "apm_e2": 3
+  },
+  "synthesis_estimate": {
+    "core_period_ns": 8.0,
+    "estimated_mhz": 177.6199,
+    "setup_slack_ns": 2.37,
+    "hold_slack_ns": 0.758,
+    "setup_endpoints": 269,
+    "setup_failing_endpoints": 0
+  },
+  "routed_timing_verified": false,
+  "board_programmed": false,
+  "physical_capture_verified": false,
+  "model_quantization_frozen": false,
+  "formal_three_branch_events_implemented": false,
+  "initial_synthesis_performance": {
+    "setup_slack_ns": -3.157,
+    "estimated_mhz": 89.6298,
+    "superseded": true
+  },
+  "limits": [
+    "RGB output is 160x120x3 bytes, not the final BGR INT8 C8 160x128 tensor.",
+    "Three APMs contain arithmetic pipeline registers; ordinary FF count does not include them.",
+    "Synthesis timing estimates are not routed timing or board acceptance.",
+    "First RED used a pre-pipeline fixture; final test adds an explicit final-output latency allowance.",
+    "Historical stopped full regression is superseded_incomplete, not a PASS.",
+    "NPU-owned model manifest, input scale and integer preprocessing reference are still absent."
+  ],
+  "refs": {
+    "build/video/regression/20261018T075444_074239Z/result.json": "b030558f663609cf8e52ad651b2a73d28689b310cf8faa9269450b50ced3e8dc",
+    "build/video/regression/20261018T075320_675450Z/result.json": "29851b43b9bdecc49c522f64b58f90ca8b5ed57c86f8fc289073c59bf9a044bc",
+    "build/video/pds/20261018T075320_673987Z/result.json": "eff499c6ad0da4e7d0fc73434f30c47e5f5b3f1489a308ace9c475b67c1e834a",
+    "build/video/pds/20261018T075320_673987Z/synthesize/detect_downscale.snr": "6d7d1a6dbfb6f57d4db4ea3f77ddd67b4698c139b7b282655236501ba461bf0a",
+    "build/video/detect_scale_mutations/20261018T075422_207220Z/result.json": "599c5644f664a6713da98dd8ca5095f172948ff4b2ecb0765cd728355682a261",
+    "build/video/independent_detect_scale_review/20261018T075404Z/review_result.json": "1c1804ff9f19c2408cb2380924e3d9951f7b7dd25bee37d68089252b38b800c2",
+    "build/video/detect_scale_component_guard/20261018T081219_943552Z/result.json": "25b2e4fe5137f098c15fbd4e409bb158bcd96325c1a66de231c492ee5518a172",
+    "build/video/independent_detect_scale_review/20261018T075404Z/result.json": "e27a58155e0b8fb9a49b93a22949689c91110ec3231cd27a52f7536006d33959",
+    "build/video/detect_scale_mutations/20261018T075422_207220Z/reciprocal_proof.json": "08650c366eadd1a66cdd47737331f8d8ad05223a2a7f4ed08cd699ab634d5a61",
+    "build/video/detect_scale_red/20261018T074334_775769Z/result.json": "79775fe2085327557bb73ba042d853cdbe8c7b14dc0caaa2b9e1faf2470fb44a",
+    "build/video/pds/20261018T074541_300554Z/result.json": "9726958a45e457619058ca57df46845eaa4b4d938364b83affb113a20f6787d7",
+    "build/video/pds/20261018T074541_300554Z/synthesize/detect_downscale.snr": "a5dd5749c9a7466f4a48fa6df5b5f44d68a4eb1e232a3ef082032f02c4f6440d",
+    "build/video/regression/20261018T074723_041506Z/result.json": "055ea41cc8d178abec364fe401544a576fcb6c101c516678b381094e629dd51f",
+    "docs/superpowers/specs/2026-10-18-video-detect-scale-design.md": "6b1ef2384ea2f1f5a220b9fe5596180a2367ec30b8a03051be3874aeb8eb6074",
+    "docs/superpowers/specs/2026-10-18-video-detect-scale-pipeline-note.md": "09b7a5b42b91a9526ab886e25b7deb2be94831e7c16e3a7d3f811333227d5988",
+    "docs/superpowers/plans/2026-10-18-video-detect-scale.md": "d4353cea2cd703fc740cf63e321f03670d85388811aafad115d5543e28c61995",
+    "build/video/regression/20261018T075444_074239Z/python.log": "8c8e91274df08ada269137735ab3c13325f66593596680f02850fd094c0f7a54"
+  }
+}

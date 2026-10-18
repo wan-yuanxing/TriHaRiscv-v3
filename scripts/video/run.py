@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,7 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite != "timing":
+        if args.suite not in ("timing", "detect_scale"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -60,6 +60,19 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('detect_scale','all'):
+            paths=[ROOT/p for p in ('rtl/video/detect_downscale.sv','tb/video/tb_detect_downscale.sv')]
+            add_inputs(result,[*paths,ROOT/'fpga/pg2l100h/project/video_detect_scale.json',
+                ROOT/'fpga/pg2l100h/constraints/video_detect_scale.fdc',
+                ROOT/'scripts/video/detect_reference.py',ROOT/'tb/video/test_detect_reference.py'])
+            for width,height,case in ((5,5,0),(15,10,0),(25,15,0),(800,600,0),
+                                      (5,5,1),(15,10,2),(15,10,3)):
+                log=simulate(work,f'detect_scale_{width}_{height}_{case}','tb_detect_downscale',paths,
+                    parameters=(('W',width),('H',height),('CASE',case)),timeout=600)
+                if 'DETECT_DOWNSCALE_PASS' not in log:raise RuntimeError('Missing detector scaler pass marker')
+            log=run_logged([sys.executable,ROOT/'tb/video/test_detect_reference.py'],work/'detect_reference.log')
+            if 'OK' not in log:raise RuntimeError('Missing detector reference pass marker')
+            result['passed'].append('detect_scale')
         if args.suite in ('preview_clocks','all'):
             paths=[ROOT/p for p in ('fpga/pg2l100h/rtl/video_preview_clock_reset.sv',
                 'tb/video/models/video_pll_model.sv','tb/video/tb_video_preview_clock_reset.sv')]

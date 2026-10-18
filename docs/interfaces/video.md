@@ -1,6 +1,14 @@
 # Video 接口状态
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。本批同帧raw/preview的CRC/扫描/KEY0统计已有板测，但用户后续澄清窗口内容纯黑，图像正确性重新待验，证据见 `docs/verification/video/shared_preview.md`。CPU fabric/MMIO、检测input分支及SoC三槽生命周期尚未冻结；下述局部诊断接口不替代共同契约。
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。本批新增独立检测缩小组件；CPU fabric/MMIO、量化input分支及SoC三槽生命周期尚未冻结，下述局部接口不替代共同契约。
+
+## 独立检测缩小组件
+
+`detect_downscale`的`clk/reset_n/clear`、`s_valid/s_ready/s_rgb/s_row_last`和`m_valid/m_ready/m_rgb/m_row_last/fault`与preview scaler同类。宽高为5的倍数、5..2045，默认800×600；每个完整5×5块按各RGB通道`floor((sum+12)/25)`输出一个RGB888像素，默认160×120。帧只运行一次，下一帧需协调clear/reset。clear取消当前帧，RAM不清除，但第0行覆盖后才读累计，禁止调用方在取消时继续发送旧帧。
+
+输入未知RGB或错误/未知row_last置sticky fault并停止消费；完整帧后继续s_valid也置fault。已有输出在故障时保持至ready，不能把fault当作撤销公开VALID的许可。运算流水预留唯一输出槽，pending期间停止输入，输出消费可与下一源像素同拍。调用方必须处理ready背压，不能将此组件直接连到不可停顿的物理HDMI引脚。
+
+该组件不转换BGR、不量化、不补8行或C8无效通道，不发布三分支就绪。模型尺度和量化零值未冻结，不把RGB888输出称作可供NPU执行的正式输入。组件验证见[detect_scale.md](../verification/video/detect_scale.md)。
 
 ## 已实现：video_pattern_core
 
@@ -61,7 +69,7 @@ CRC数据通路使用正常R接纳拍预存后续地址候选，既有BYTES周�
 
 `video_preview_engine` 顺序完成capture→raw CRC→preview CRC→display；显示接管读口后保持所有权至协调reset，包括故障排空。source fault/overflow或DDR丢失会撤销诊断done；本目标仅一次frame_id1/slot0，KEY0使三域协调复位后重采。
 
-preview板级入口增加 `video_capture_startup_guard`，默认128个连续完整好帧之后才准入下一frame_start。只统计从frame_start起持续mode_good/rx_ready且good frame_end结束的完整区间；任意健康丢失或坏EOF清计数，饱和不回卷。RGB不参与判断，合法黑色帧仍可被选中。该稳定期针对已观察到的HDMI复位启动黑场；它不是通用的源内容就绪证明，也不改变入口FIFO/显示bank协调复位或既有5秒超时。当前物理复验未完成。
+preview板级入口增加 `video_capture_startup_guard`，默认128个连续完整好帧之后才准入下一frame_start。只统计从frame_start起持续mode_good/rx_ready且good frame_end结束的完整区间；任意健康丢失或坏EOF清计数，饱和不回卷。RGB不参与判断，合法黑色帧仍可被选中。该有限稳定期不是通用的源内容就绪证明，也不改变入口FIFO/显示bank协调复位或既有5秒超时。后续预览专用clock/reset模块将KEY0采集复位与HDMI初始化分离，d017092所绑定镜像已通过受控物理复验。
 
 preview板级FIFO读口与引擎之间另有 `video_stream_register`，在同一core域持有一个48bit词。无组合数据直通，空时增加一周期延迟，满时可在同一沿退休并替换；背压保持数据和valid。run/valid由既有core协调复位清零，数据存储不复位，取消不会独立丢弃所有权。FIFO RAM水位及EOF峰值字段仍排除core持有词；此级增加一个额外持有词，不改变原Gray指针或CDC束约束。
 

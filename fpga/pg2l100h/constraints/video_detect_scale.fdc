@@ -1,0 +1,2 @@
+# Standalone core component. An 8 ns declaration is not routed timing signoff.
+create_clock -name core_clk -period 8.000 [get_ports {clk}]
