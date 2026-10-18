@@ -1,0 +1,22 @@
+# Explicit portable CPU smoke inputs; no recursive RTL discovery.
+rtl/cpu/vendor/src/core/biriscv_alu.v
+rtl/cpu/vendor/src/core/biriscv_csr_regfile.v
+rtl/cpu/vendor/src/core/biriscv_csr.v
+rtl/cpu/vendor/src/core/biriscv_decode.v
+rtl/cpu/vendor/src/core/biriscv_decoder.v
+rtl/cpu/vendor/src/core/biriscv_divider.v
+rtl/cpu/vendor/src/core/biriscv_exec.v
+rtl/cpu/vendor/src/core/biriscv_fetch.v
+rtl/cpu/vendor/src/core/biriscv_frontend.v
+rtl/cpu/vendor/src/core/biriscv_issue.v
+rtl/cpu/vendor/src/core/biriscv_lsu.v
+rtl/cpu/vendor/src/core/biriscv_mmu.v
+rtl/cpu/vendor/src/core/biriscv_multiplier.v
+rtl/cpu/vendor/src/core/biriscv_npc.v
+rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v
+rtl/cpu/vendor/src/core/biriscv_regfile.v
+rtl/cpu/vendor/src/core/riscv_core.v
+rtl/cpu/triha_core.v
+rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem.v
+rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem_ram.v
+tb/cpu/tb_triha_core.v

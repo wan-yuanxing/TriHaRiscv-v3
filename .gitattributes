@@ -12,3 +12,7 @@
 
 # Preserve the official DDR placement constraints byte for byte.
 fpga/pg2l100h/constraints/video_ddr_bist.rcf -text whitespace=cr-at-eol
+
+# Preserve imported source bytes and its existing whitespace for hash receipts.
+rtl/cpu/vendor/** -text -whitespace
+sw/benchmarks/coremark/src/** -text -whitespace
