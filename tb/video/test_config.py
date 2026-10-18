@@ -36,7 +36,14 @@ class VideoConfigTests(unittest.TestCase):
                                "INPUT_SLOT_BYTES": 327680,
                                "INPUT_SLOT_A": 0x82800000,
                                "INPUT_SLOT_B": 0x82850000,
-                               "INPUT_SLOT_C": 0x828A0000}.items():
+                               "INPUT_SLOT_C": 0x828A0000,
+                               "FRAME_SLOT_A": 0x82000000,
+                               "FRAME_SLOT_B": 0x82200000,
+                               "FRAME_SLOT_C": 0x82400000,
+                               "FRAME_SLOT_BYTES": 0x200000,
+                               "FRAME_PREVIEW_OFFSET": 0x160000,
+                               "FRAME_RAW_STRIDE": 2400,
+                               "FRAME_PREVIEW_STRIDE": 1200}.items():
                 self.assertIn(f"`define VIDEO_{key} {value}\n", rtl)
                 self.assertIn(f"#define VIDEO_{key} {value}u\n", c)
             self.assertEqual(self.invoke(root, check=True).returncode, 0)
@@ -71,6 +78,8 @@ class VideoConfigTests(unittest.TestCase):
                                     ("detector", "pad_top", 0),
                                     ("detector", "layout", "NHWC"),
                                     ("input_slots", "slot_bytes", 262144),
+                                    ("frame_slots", "slot_bytes", 0x100000),
+                                    ("frame_slots", "preview_offset", 0),
                                     ("mode", "v_front", True)]:
             with self.subTest(key=key), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)

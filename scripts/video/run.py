@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,7 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -60,6 +60,39 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('three_capture','all'):
+            manifest_path=ROOT/'fpga/pg2l100h/project/video_three_capture.json'
+            three=json.loads(manifest_path.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in three['sources']]
+            tests=[ROOT/p for p in three['tests']]
+            includes=[ROOT/'rtl/video/include']
+            add_inputs(result,[manifest_path,*paths,*tests,ROOT/'tb/video/check_three_capture_dump.py',
+                ROOT/'tb/video/check_bilinear_dump.py',ROOT/'fpga/pg2l100h/constraints/video_three_capture.fdc'])
+            log=simulate(work,'three_arbiter','tb_axi_write_arbiter3',
+                [ROOT/'rtl/video/axi_write_arbiter3.sv',ROOT/'tb/video/tb_axi_write_arbiter3.sv'])
+            if 'PASS tb_axi_write_arbiter3' not in log:raise RuntimeError('Missing three-master arbiter pass')
+            for width,height,top,bottom in ((10,10,0,0),(30,20,2,1),(40,30,4,5)):
+                log=simulate(work,f'three_{width}_{height}','tb_video_three_branch_capture',paths+[tests[0]],includes,
+                    parameters=(('W',width),('H',height),('PT',top),('PB',bottom)),timeout=600)
+                if 'VIDEO_THREE_CAPTURE_PASS' not in log:raise RuntimeError('Missing same-frame three-branch pass')
+            for case in range(1,29):
+                log=simulate(work,f'three_case_{case}','tb_video_three_branch_capture',paths+[tests[0]],includes,
+                    run_args=(f'+CASE={case}',),timeout=120)
+                if 'VIDEO_THREE_CAPTURE_PASS' not in log:raise RuntimeError('Missing three-branch control pass')
+            invalid=({'W':0},{'W':5},{'W':810},{'W':2147483647},{'H':0},{'H':15},{'H':610},
+                {'PT':-1},{'PB':-1},{'PT':2147483647},{'PT':2147483647,'PB':2147483647},
+                {'W':800,'H':600,'PT':2048},{'TC':0},{'TC':-1})
+            for index,parameters in enumerate(invalid):
+                log=simulate(work,f'three_invalid_{index}','tb_three_capture_parameters',paths+[tests[2]],includes,
+                    parameters=tuple(parameters.items()))
+                if 'THREE_CAPTURE_PARAMETERS_PASS' not in log:raise RuntimeError('Missing safe parameter rejection')
+            log=simulate(work,'three_full','tb_video_three_branch_capture',paths+[tests[0]],includes,
+                parameters=(('W',800),('H',600),('PT',40),('PB',40)),
+                run_args=('+normal_only',f'+DUMP={(work/"three_input.hex").as_posix()}'),timeout=600)
+            if 'VIDEO_THREE_CAPTURE_PASS' not in log:raise RuntimeError('Missing full same-frame capture pass')
+            log=run_logged([sys.executable,ROOT/'tb/video/check_three_capture_dump.py','--path',work/'three_input.hex'],work/'three_golden.log')
+            if 'THREE_CAPTURE_DUMP_PASS' not in log:raise RuntimeError('Missing three-branch hardware golden pass')
+            result['passed'].append('three_capture')
         if args.suite in ('nchw_dma','all'):
             paths=[ROOT/p for p in ('rtl/video/detect_bilinear.sv','rtl/video/detect_nchw_dma.sv',
                 'rtl/video/video_write_dma.sv','tb/video/tb_detect_nchw_dma.sv')]

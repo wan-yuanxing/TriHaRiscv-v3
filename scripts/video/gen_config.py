@@ -23,6 +23,8 @@ def validate(config):
                      "channel_order": "BGR", "layout": "NCHW", "dtype": "UINT8",
                      "scale": 1, "zero_point": 0, "preprocess_version": 1,
                      "reference_commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8"},
+        "frame_slots": {"slot_bytes": 0x200000, "preview_offset": 0x160000,
+                        "bases": [0x82000000, 0x82200000, 0x82400000]},
         "input_slots": {"region_base": 0x82800000, "region_bytes": 1048576,
                         "slot_bytes": 327680,
                         "bases": [0x82800000, 0x82850000, 0x828A0000]},
@@ -61,6 +63,12 @@ def constants(config):
                    "INPUT_REGION_BASE": slots["region_base"], "INPUT_REGION_BYTES": slots["region_bytes"],
                    "INPUT_SLOT_BYTES": slots["slot_bytes"]})
     values.update({"INPUT_SLOT_" + name: base for name, base in zip("ABC", slots["bases"])})
+    frames = config["frame_slots"]
+    values.update({"FRAME_SLOT_BYTES": frames["slot_bytes"],
+                   "FRAME_PREVIEW_OFFSET": frames["preview_offset"],
+                   "FRAME_RAW_STRIDE": (mode["h_active"] * 3 + 15) // 16 * 16,
+                   "FRAME_PREVIEW_STRIDE": (config["preview"]["width"] * 3 + 15) // 16 * 16})
+    values.update({"FRAME_SLOT_" + name: base for name, base in zip("ABC", frames["bases"])})
     return values
 
 

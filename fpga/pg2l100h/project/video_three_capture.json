@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target": "video_three_capture",
+  "top": "video_three_branch_capture",
+  "test_top": "tb_video_three_branch_capture",
+  "sources": [
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv"
+  ],
+  "tests": ["tb/video/tb_video_three_branch_capture.sv", "tb/video/tb_axi_write_arbiter3.sv", "tb/video/tb_three_capture_parameters.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_three_capture.fdc"],
+  "scope": "one coordinated-reset same-frame raw/preview/YuNet input capture with held metadata events and AXI write retirement; no CPU MMIO/fabric visibility, slot allocator, board pins or physical timing acceptance"
+}

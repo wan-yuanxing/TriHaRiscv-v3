@@ -30,6 +30,16 @@
 
 两个模块均遵守背压保持，fault不撤销已公开VALID，clear/reset是协调取消。pack的半拍、未消费输出及done均在取消时清除；请求前不接纳数据，fault/完整帧后不再接纳新帧。验证见[input_format.md](../verification/video/input_format.md)。
 
+## 同帧三分支采集核心
+
+`video_three_branch_capture`为新的core域单次请求组件，保留旧`video_preview_capture`板级入口。req_valid/req_ready锁存req_slot[1:0]、req_frame_id和req_preprocess_version；三路descriptor接纳后arm，首个合法PIX原子分送后accepted_valid/accepted_ready保持对应记录。slot、frame_id、preprocess_version、raw_base/preview_base/input_base锁存至协调reset，不跟随后续请求线。slot0/1/2使用同源公共定义：帧槽0x82000000/0x82200000/0x82400000各2MiB，preview偏移0x160000，input为已迁移320KiB三槽；未知字段、slot3、错误版本或非法分配先验拒绝，无arm或写入。
+
+输入仍是48bit PIX/EOF，复用原RGB/preview/bilinear/NCHW流水。无故障PIX必须三路同时可接纳；good EOF还需与独立core raw CRC相符。completion_valid/ready保持success/code及锁存元数据，成功等待accepted消费、三路尺寸/行末和tag/bytes准确、全部成功B与good EOF。失败先锁存error/code并cancel，completion须等全部已请求writer及仲裁口排空。`port_drained`表示live端口，不能从error/busy或历史成功记录推断当前总线可复用；published事件不因后续错误撤销。5秒采集超时不覆盖已完成写入后等待accepted消费的时间，也不允许撤销已公开AXI。一次任务后必须协调reset源FIFO和所有流水/端口，不是三槽allocator或完整CPU MMIO实现。
+
+`axi_write_arbiter3`将三路AXI写主按AW至B为所有权单元round-robin仲裁；owner注册后才公开AW，早B不释放owner，B仅在合法phase路由。无主B消费并报错，响应ID/RESP严格四态检查。sticky fault不能阻止待选已公开AW继续获得仲裁并排空。DMA使用注册error取消以消除READY/错误校验组合反馈；故障检测沿既有合法缓冲字仍可进入DMA，故障帧必须丢弃。
+
+core错误码：01离线、09仲裁/响应、06 writer结果/端口、0c取消、02 overflow、03源、04 PIX、05 EOF/CRC、0a缩小输出/尺寸、07采集超时、08非法请求，保留首因。accepted在入口选中帧的首像素经流水到core时发布，不新增物理SOF时间戳。独立数值/控制、完整三路AXI字节内存、综合和未实现范围见[three_capture.md](../verification/video/three_capture.md)。
+
 ## 已实现：video_pattern_core
 
 | 信号 | 含义 |

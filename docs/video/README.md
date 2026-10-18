@@ -71,6 +71,8 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 `detect_nchw_dma`逐行缓存RGB并分B/G/R写入DDR，上下补零形成320×320/307200B张量；复用原DMA并等待全部B响应。`python scripts/video/run.py --suite nchw_dma`检查真实AXI字节内存和六幅缩放到张量的冻结哈希；`python scripts/video/build_pds.py --target video_nchw_dma --stage synth`仅作组件综合。公共配置同步迁移为320KiB/槽；CPU译码、三分支和板级入口仍独立验收，见[NCHW验证](../verification/video/nchw_dma.md)。
 
+`video_three_branch_capture`新增同帧raw/preview/input核心，锁存slot/frame_id/version，在good EOF、三路尺寸与全部写响应齐备后保持完成记录。三主AXI轮转仲裁不会在错误时撤销已公开事务。`python scripts/video/run.py --suite three_capture`运行三路真实字节内存/故障/事件/全尺寸黄金图；`python scripts/video/build_pds.py --target video_three_capture --stage synth`仅组件综合。旧板级预览目标保持原入口；CPU MMIO、共享fabric和板级三分支另验，见[三分支记录](../verification/video/three_capture.md)。
+
 ## 当前文件树
 
 ```text
@@ -89,6 +91,8 @@ rtl/video/
   rgb888_packer.sv                       R/G/B 内存字节序、跨拍 spill 和行尾 keep
                                         默认同拍传输，preview目标选择输入/输出分拍
   video_write_dma.sv                     单平面步长写入、burst 缓存和响应排空
+  axi_write_arbiter3.sv                   三主AW至B轮转所有权、早/无主响应故障
+  video_three_branch_capture.sv          同帧raw/preview/input、元数据事件和全写退休
   video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
   video_async_fifo.sv                    Gray指针双时钟RAM和受阻输出寄存器
   video_capture_ingress.sv               合法帧首接纳、PIX/EOF、源CRC及overflow
@@ -110,6 +114,10 @@ tb/video/
   tb_timing.sv                           完整光栅/像素/复位自检
   test_config.py                         固定模式/320布局/槽位、同源生成与漂移拒绝
   tb_detect_nchw_dma.sv                  实际AXI字节内存、六帧黄金图/取消/响应/复用
+  tb_axi_write_arbiter3.sv                RR/VALID/排空/早B及四态响应
+  tb_video_three_branch_capture.sv       三路字节内存、槽位/事件/EOF/CRC/故障
+  tb_three_capture_parameters.sv         非法几何请求先验拒绝、不提前子模块fatal
+  check_three_capture_dump.py            三分支实际input内存的冻结哈希
   tb_nchw_parameters.sv                  非法参数与高度溢出的启动拒绝
   check_nchw_dump.py                     直接核对硬件NCHW字节与冻结OpenCV哈希
   test_references.py                     提取字节、哈希失败、目录越界检查
