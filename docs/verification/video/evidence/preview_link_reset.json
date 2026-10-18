@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "status": "pass_scoped_physical_key0_and_desktop_recovery",
+  "scope": "Preview KEY0 preserves HDMI initialization; coordinated pipeline/DDR reset retained.",
+  "implementation_commit": "0d3cf8f",
+  "digital_suites": 26,
+  "digital_run_inputs": 122,
+  "independent_source_checks": 46,
+  "independent_source_inputs": 130,
+  "independent_regression_checks": 20,
+  "independent_regression_inputs": 362,
+  "physical_timing_verified": true,
+  "programmed_candidate": true,
+  "key0_image_recovery_verified": true,
+  "preview_image_acceptance": true,
+  "source_hashes": {
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv": "8768971f5be5afc421350dc2eb043e60c4d567d8526d7344336f73da8cccf8bc",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "6dd1131b1e42f54d7524c7cf2b2a2a2e6cfe8a56f2a23d37cdb3df1440f2d0a1",
+    "fpga/pg2l100h/project/video_preview_board.json": "735a9cb412f796359f3a43dd9a69043595e4f31540114adb377a45299d37ee6e",
+    "tb/video/tb_video_preview_clock_reset.sv": "81173d14100a6900ea78c792b2538456984e14a61c79754fb834826a6220da4a",
+    "tb/video/tb_video_preview_board.sv": "df65a8a742a87c7492a6dfbebe3d847f7cdcb5361fbd7027983fe5286a5ebb24",
+    "scripts/video/run.py": "a73a55a5475fe59f587f26acfc8a64de0ed7973e6193c934996c1f772b06349c"
+  },
+  "refs": {
+    "docs/superpowers/specs/2026-10-18-video-preview-link-reset-design.md": "c6648c79d2281ce364bc25fb53524eaa70bd5841987509cf2cdec6a5b497f5b5",
+    "docs/superpowers/plans/2026-10-18-video-preview-link-reset.md": "216e99e52be32a7d2d2e355a36c3f399e97047caa9bd6ba2c7d8fffe5e94af64",
+    "docs/verification/video/evidence/rx_image_probe_startup_transition.json": "69f8e05b7d8470e0512c427e205f7647893013c7c905b3bf6ff31f1b96b19b43",
+    "build/video/regression/20261018T040244_825780Z/result.json": "a726fe7a73d83721bcc3c887a818d63c00b5f0429fd19d98acd285e9e0c8e37b",
+    "build/video/independent_preview_link_reset_review/20261018T040453_701914Z/result.json": "486ac8973bcab2b94bbfcd1ac8d785de3c53d252aa456c8b3095617b9227d257",
+    "build/video/independent_preview_link_reset_regression_review/20261018T042631_537572Z/result.json": "3fa1347b7ab2ea3ab1d0e3327e224746611ff174e61b3356c2c538998b858ded",
+    "build/video/pds/20261018T040303_563396Z/result.json": "942b25951cce31dd23c75b20e16cc72be16897edcac676eeed83106aac60b904",
+    "build/video/build_preview_link_hold.py": "7ed07fed9fb21cb4e9f9d2a19f9d72e32cfe0caf703a1bb05347f64941260665",
+    "build/video/pds/20261018T042935_351118Z/result.json": "2b1d060bc5b99ebd84872adc37959cf8aa9b7af9979cdf8db32cc51ec4ca93da",
+    "build/video/build_preview_link_placements.py": "422bb89d8ee0ec33cd77e573c875521890e14ed0b7ca383bfd15b7d6c1a199f6",
+    "build/video/pds/20261018T043859_105620Z/result.json": "5b277ee8c9cf21ea61e70c10387c47f7f8435a1605a3a1e9cb5f81e907984b6b",
+    "build/video/preview_constraints_audit/20261018T043859_105620Z/result.json": "28c187b45874be15ecdb9447e6c64e2cd0721da6c102d512b7cd8bc452fab1d2",
+    "build/video/preview_link_reset_timing/20261018T043859_105620Z/clean_result.json": "6eda5d1ec53a76705a86590fdf518e7c90eaa7235d7a76921defc9cef3619fb8",
+    "build/video/pds_final_placement_archive/20261018T043859_105620Z/result.json": "466f425ba9e95ae7e69a913dfe5f3987fe3f6da4788f2818d2d8723df7c8ca6f",
+    "build/video/independent_preview_link_retry_review/20261018T044425_421885Z/result.json": "182fc13bd9955b5df40d53d45a6bc55e21c636cc8b344f8cfdd568a62f9e2e68",
+    "build/video/independent_preview_link_final_review/20261018T045739_125644Z/result.json": "5dbd641029cd9d2f33b575231ba1c1905ebd9a1a1ee57dee720967c729312199",
+    "build/video/board_program/20261018T050738_013474Z/result.json": "258b92dedd1d5b3913fbad40332ece727c37ec453125ce1a759d0150fe0902bb",
+    "build/video/preview_startup_trace/20261018T050414_986976Z/closed_validation.json": "dfb79d4eb1987e613ba0cf3baff822d475832a7e6cf948cd41e8d7cdfed8e440",
+    "build/video/preview_startup_trace/20261018T072758_303450Z/board_acceptance.json": "29c3efb35de44b87a93a3ac6fbcb0cc962a4d748565f5dff21f36b074945cd39"
+  },
+  "physical_attempts": [
+    {
+      "directory": "build/video/pds/20261018T040303_563396Z",
+      "status": "fail",
+      "seeds": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "best_setup_seed": 8,
+      "best_setup_ns": 0.069,
+      "same_seed_hold_ns": -0.011
+    },
+    {
+      "directory": "build/video/pds/20261018T042935_351118Z",
+      "status": "fail",
+      "seed": 8,
+      "hold_optimizer_target_ps": 50,
+      "rtl_and_constraint_bytes_unchanged": true,
+      "remaining_hold_ns": -0.011
+    },
+    {
+      "directory": "build/video/pds/20261018T043859_105620Z",
+      "status": "pass_internal_timing",
+      "seeds": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "parallel_runs": 2,
+      "hold_optimizer_target_ps": 50,
+      "rtl_and_constraint_bytes_unchanged": true,
+      "passing_completed_seeds": [
+        {
+          "seed": 10,
+          "slow_setup_ns": 0.028,
+          "slow_hold_ns": 0.001,
+          "fast_hold_ns": 0.0
+        },
+        {
+          "seed": 12,
+          "slow_setup_ns": 0.169,
+          "slow_hold_ns": 0.063,
+          "fast_hold_ns": 0.051
+        }
+      ],
+      "limits": "Passing individual seed is not final build/package/focused-route approval.",
+      "selected_seed": 14
+    }
+  ],
+  "limits": [
+    "Full regression is independent of physical timing or hardware acceptance.",
+    "KEY0 preserves sticky HDMI initialization errors; reconfigure/power/actual PLL loss to reinitialize converters.",
+    "Packed SRL internal pair and absent LOCK reset timing are not separate physical timing signoff.",
+    "Existing shared_preview/startup_guard evidence refers to earlier frozen implementation, not this working-tree source."
+  ],
+  "candidate_bitstream_sha256": "33e1b8242053694d7725b11522cf85a4f6d086534fcc47bc8acc0174d075d026",
+  "timing_scope": "Analyzed internal global8 and focused14+42 data endpoints only; reset arcs/SRL internal/analog/external AC excluded.",
+  "independent_final_checks": 84,
+  "independent_final_inputs": 882,
+  "board_observation": {
+    "trace_directory": "build/video/preview_startup_trace/20261018T050414_986976Z",
+    "trace_active": false,
+    "initial_reference_raw_crc": "33bac95a",
+    "initial_reference_preview_crc": "679ff89c",
+    "initial_pixel_counts": [
+      480000,
+      120000
+    ],
+    "initial_ddr_crc_matches": true,
+    "initial_image_user_confirmation": "both windows have four corners and full border",
+    "physical_key0_candidate_test": "pass_four_corner_and_desktop",
+    "flash_written": false,
+    "limits": "Two physical image confirmations plus raw UART transfer/statistics validation; single-frame preview, no external AC/analog or universal HDMI recovery claim.",
+    "active_key0_trace": null,
+    "accepted_trace": "build/video/preview_startup_trace/20261018T072758_303450Z",
+    "raw_redecode_exact": true,
+    "key0_tests": [
+      {
+        "kind": "physical_key0_four_corner",
+        "records": 96,
+        "healthy_records": 94,
+        "healthy_seconds": 93.00026299999999,
+        "first_elapsed_ms": 119872.435,
+        "first_healthy_elapsed_ms": 121872.673,
+        "last_elapsed_ms": 214872.936,
+        "heartbeat": [
+          1,
+          191
+        ],
+        "raw_crc": "33bac95a",
+        "preview_crc": "679ff89c",
+        "source_ddr_crc_match_all_samples": true,
+        "capture_pixels": 480000,
+        "preview_pixels": 120000,
+        "scans": [
+          109,
+          5658
+        ],
+        "read_lines": [
+          32719,
+          1697495
+        ],
+        "fifo_peak": 149,
+        "overflow": false,
+        "underflows": 0,
+        "all_scan_line_budgets_pass": true
+      },
+      {
+        "kind": "physical_key0_desktop",
+        "records": 84,
+        "healthy_records": 82,
+        "healthy_seconds": 81.00050600000003,
+        "first_elapsed_ms": 216341.747,
+        "first_healthy_elapsed_ms": 218341.878,
+        "last_elapsed_ms": 299342.384,
+        "heartbeat": [
+          1,
+          167
+        ],
+        "raw_crc": "a8809b95",
+        "preview_crc": "9a755661",
+        "source_ddr_crc_match_all_samples": true,
+        "capture_pixels": 480000,
+        "preview_pixels": 120000,
+        "scans": [
+          108,
+          4933
+        ],
+        "read_lines": [
+          32419,
+          1480122
+        ],
+        "fifo_peak": 145,
+        "overflow": false,
+        "underflows": 0,
+        "all_scan_line_budgets_pass": true
+      }
+    ],
+    "initial_trace_seconds": 1578.005931,
+    "user_key0_confirmations": [
+      "After one KEY0, both four-corner windows and borders still complete.",
+      "After one KEY0, both windows updated to the complete same desktop."
+    ]
+  },
+  "board_validation_records": 298,
+  "physical_key0_tests": 2,
+  "acceptance_scope": "Two controlled physical KEY0 tests on this candidate, four-corner static reference and real desktop; not universal cold-start/hotplug or continuous capture."
+}

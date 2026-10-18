@@ -39,3 +39,15 @@ UART 115200、TRV1、32字节payload、XOR，初版按type1/3/8/9循环。type8/
 复位分离的诊断恢复范围：KEY0不再清理HDMI控制器已锁存的NACK/初始化超时；此类错误需重新配置、断电上电或实际PLL失锁后重启链路，不能宣称KEY0能够恢复一切HDMI错误。KEY0仍清理原DDR、采集和显示任务错误。初次连接和源端热插拔的内容稳定时间仍不由CRC/颜色判定。
 
 当前完整数字回归 `regression/20261018T040244_825780Z` 已通过26套件，122项输入哈希全部匹配。初始独立复核 `independent_preview_link_reset_review/20261018T040453_701914Z` 的46检查/130哈希通过，无阻塞发现；包含额外22场景与实际生成GPLL冷启动模型。该复核不提前批准随后完成的全回归或活动PDS。综合17个链路状态在PNR中可能打包为16个物理资源，link_release两级合入gopSRL2，不能冒称两个独立FF路径；来自LOCK的未报告reset恢复时间也不能当作非空时序通过。新PDS仍在运行，实体画面未验。
+
+增量完整回归独立审查 `independent_preview_link_reset_regression_review/20261018T042631_537572Z` 的20检查/362证据哈希通过，核对89份实际仿真日志、49项Python测试（1项Windows符号链接权限跳过）。不扩大为独立RX诊断138帧组件/专用板级套件覆盖。
+
+第一轮新PDS `20261018T040303_563396Z` 六组布局全部未满足全部内部时序：seed4/5/6/7/9的slow setup为−0.038/−0.542/−0.072/−0.339/−0.219ns；seed8 setup+0.069ns但hold−0.011ns，故构建失败且未下载。该hold路径为raw_packer reservoir[81]到raw_dma data_buffer_40/DIH。工具清理其他seed时只及时归档了seed4..8的rtr/prr/log，seed9只保留总日志和CSV结果，不宣称六组完整归档。
+
+第二轮 `20261018T042935_351118Z` 在全新目录使用相同RTL/FDC字节，只取seed8并将PDS hold优化目标及clock-tree路由hold优化目标均设为50ps；这是优化参数，不放宽STA约束。实际命令和额外入口哈希保存在`implementation_flow_override.json`，失败首轮保持不变。当前证据入口为 [preview_link_reset.json](evidence/preview_link_reset.json)，后续仍须实际八类内部时序、束路径及新增链路复位路径复核，尚无新镜像板测。
+
+第二轮最终仍在同一raw_packer到DMA RAM短路径留下hold−0.011ns，构建失败且未下载。第三轮 `20261018T043859_105620Z` 继续使用同样RTL/FDC/50ps优化目标，只搜索新的10..15布局，每次并行两组；命令、额外入口及各完整seed报告/网表/数据库均单独保存。初始独立审查附带的seed4打包限度记录所引用原网表已被第一轮PDS清理，不能把该缺失原网表作为当前物理签核输入；主初始130哈希和完整回归362哈希未受影响。最终物理审查必须使用仍保存的实际最终网表重新确认打包及reset限度。
+
+第三轮最终选择seed14，位流SHA256为33e1b8242053694d7725b11522cf85a4f6d086534fcc47bc8acc0174d075d026。全部八类全局内部时序及原14组路径通过；新增启动逻辑的42个真实可见输入端点在四类setup/hold检查中共168路径通过。最终独立审查84项/882输入无发现。新的reset recovery/removal没有可报告路径，打包SRL内部级间未独立计时；这些项目及外部AC/模拟余量不在签核范围。新包已在board_program/20261018T050738_013474Z完成易失Program/Verify。连续trace/20261018T050414_986976Z首帧两平面计数正确、raw/preview精确匹配33bac95a/679ff89c，DDR读回相同；初始画面与实体KEY0恢复仍须用户观察。
+
+复位分离候选现已完成现场验证：用户先确认初始四角/边框完整；新连续记录`preview_startup_trace/20261018T072758_303450Z`中，两次单次KEY0分别验证四角图与普通桌面，均完整恢复。四角新帧CRC33bac95a/679ff89c，完成状态约93秒；桌面新帧a8809b95/9a755661，约81秒；源/DDR一致，无溢出/欠载。298条原始UART重新解码一致，记录已停止，中途无JTAG重编程。详见[共享预览当前验收](shared_preview.md)及[当前证据](evidence/preview_link_reset.json)。这关闭本次受控KEY0画面问题，原独立RX启动失败证据仍为历史；不据此保证任意源的冷启动/热插拔。

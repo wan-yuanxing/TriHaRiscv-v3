@@ -57,9 +57,9 @@ python scripts/video/program_board.py --target video_preview_board --start-serve
 
 `video_preview_board` 在同一入口帧原子生成raw和400×300 preview，写退休后分别读取DDR核验CRC，再显示左右两个同帧窗口。它按需采一帧，KEY0协调复位后重采；上下背景为深色。当前物理验收进度见 [共享预览记录](../verification/video/shared_preview.md)，不能以数字仿真替代实际画面确认。type6报告两路像素数及四个CRC，type7报告帧号、提交、扫描、欠载、行读和FIFO水位；两个包来自同一448bit原子快照，资格检查会丢弃重启/故障前的旧PASS。
 
-本单帧目标的CRC一致性、60秒扫描及实体KEY0复位统计有通过证据；相同位流也已显示真实源桌面。但随后KEY0再次锁存全黑帧，正确图像恢复验收失败，当前阶段重新打开。RX诊断在复位后期可恢复非零RGB，启动过程正在取证，不能将模式锁定或CRC一致直接视为内容就绪。连续采集、检测input及正式三槽/CPU fabric仍为后续任务。
+2026-10-18版本将KEY0采集/显示/DDR复位与HDMI初始化分离：按键重采保持已初始化的HDMI链路。当前位流33e1b8242053已通过四角测试图及普通桌面的两次实体KEY0完整画面验收，源/DDR CRC一致、无溢出/欠载；旧版黑帧与裁切失败保留历史。仍为静态单帧预览，连续采集、检测input及正式三槽/CPU fabric是后续任务。KEY0保留HDMI初始化sticky错误，重新初始化需重配/上电或实际PLL失锁；外部AC、新reset/SRL内部时序和模拟余量未签核。
 
-新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
+新增独立套件为 `preview_scale`、`preview_capture`、`preview_display`、`preview_crc`、`preview_board`、`preview_clocks`，均纳入 `--suite all`。显示套件另有独立入口 `python tb/video/run_preview_display_test.py`，为每次运行保留输入副本、哈希与逐像素结果。测试区地址和组件接口见 [Video接口](../interfaces/video.md)。
 
 ## 当前文件树
 
@@ -82,6 +82,8 @@ rtl/video/
   video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
   video_async_fifo.sv                    Gray指针双时钟RAM和受阻输出寄存器
   video_capture_ingress.sv               合法帧首接纳、PIX/EOF、源CRC及overflow
+  video_capture_startup_guard.sv         连续完整好帧门控，RGB/CRC不参与准入
+  video_stream_register.sv               core域FIFO读口与引擎间的单词流寄存器
   video_capture_engine.sv                单次raw写DMA、EOF/写结果汇合和读回CRC
   preview_downscale.sv                   RGB888四像素平均及同步行RAM
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
@@ -118,6 +120,7 @@ tb/video/
   run_preview_display_test.py            独立显示仿真和不可变输入证据
   tb_video_frame_crc_reader.sv           CRC、行尾/4KiB、错误与背压结果稳定
   tb_video_preview_board.sv              联合type6/7和复位/健康撤销数字替身
+  tb_video_preview_clock_reset.sv        预览KEY0链路保持、独立域释放及PLL失锁
   test_preview_packets.py                两路CRC/显示资格和旧PASS失效
   models/                               PLL、MS72xx 串行、native 内存和板级 IP 数字模型
     rgb888_packer_legacy_model.sv        冻结默认算法，仅作兼容性仿真参考
@@ -152,7 +155,8 @@ fpga/pg2l100h/
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   ip/video_ddr_manifest.json             保护源、wrapper、slice 和工具版本锁定
-  rtl/video_clock_reset.sv               PLL 和各时钟域复位/外设启动
+  rtl/video_clock_reset.sv               原有目标的PLL/各域复位/外设启动
+  rtl/video_preview_clock_reset.sv       预览专用KEY0重采与HDMI链路启动分离
   rtl/hdmi_tx_init.sv                    独立发送初始化及 ACK/超时错误
   rtl/video_board_smoke_top.sv           RGB888 彩条板级顶层
   rtl/hdmi_rx_init.sv                    RX 配置、EDID 和状态监测
