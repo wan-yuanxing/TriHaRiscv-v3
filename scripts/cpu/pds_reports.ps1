@@ -37,17 +37,22 @@ function Get-TrihaPdsCells([string] $Text) {
     return $cells
 }
 
-function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual) {
+function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual, [int] $RegisteredTraining=1) {
     $expected = [ordered]@{
         SUPPORT_BRANCH_PREDICTION=1;SUPPORT_MULDIV=1;SUPPORT_SUPER=0;SUPPORT_MMU=0
         REGISTER_REDIRECT=1
         SUPPORT_DUAL_ISSUE=$Dual;SUPPORT_LOAD_BYPASS=1;SUPPORT_MUL_BYPASS=1
         SUPPORT_REGFILE_XILINX=0;EXTRA_DECODE_STAGE=0
     }
+    $frontendExpected=[ordered]@{REGISTER_REDIRECT=1;SUPPORT_MMU=0}
+    if($RegisteredTraining -ge 0) {
+        $expected['REGISTER_TRAINING']=$RegisteredTraining
+        $frontendExpected['REGISTER_TRAINING']=$RegisteredTraining
+    }
     $scopes = [ordered]@{
         'triha_core' = [ordered]@{DUAL_ISSUE=$Dual}
         'triha_core/u_cpu' = $expected
-        'triha_core/u_cpu/u_frontend' = [ordered]@{REGISTER_REDIRECT=1;SUPPORT_MMU=0}
+        'triha_core/u_cpu/u_frontend' = $frontendExpected
         'triha_core/u_cpu/u_frontend/u_fetch' = [ordered]@{SUPPORT_MMU=1}
         'triha_core/u_cpu/u_mmu' = [ordered]@{SUPPORT_MMU=0}
     }

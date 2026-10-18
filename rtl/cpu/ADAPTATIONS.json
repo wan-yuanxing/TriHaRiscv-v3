@@ -5,14 +5,15 @@
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "187c81be2402bcb5dd570315d2cf229e2d5a1a9a4ad31b1eaa606ecaead9ec9e",
+      "derived_sha256": "ed08b97bcf1b28e23c1d3462774371ab6302b87b275ae9214d5c0526eec2107d",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
         "Keep original issue, CSR, exception and memory control connections.",
         "Connect maintained frontend and select registered redirect independently of outer MMU.",
         "Connect maintained issue module with payload selection independent of kill/exception controls.",
-        "Connect maintained multiplier/CSR data-register derivatives."
+        "Connect maintained multiplier/CSR data-register derivatives.",
+        "Select predictor training register independently from redirect timing."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -20,10 +21,11 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
       "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
       "derived": "rtl/cpu/triha_frontend.v",
-      "derived_sha256": "f515dbcf880bffc834f9a9960d37e04fd1e6b7725f289773f37968f8bb9fbc12",
+      "derived_sha256": "d0d2f9544889c17962e5f3dff92c1584f2764917ac65139c21d6bdfde86ce965",
       "changes": [
         "Rename integration module to triha_frontend.",
-        "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU."
+        "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
+        "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },

@@ -31,6 +31,7 @@ module triha_frontend
 #(
      parameter SUPPORT_BRANCH_PREDICTION = 1
     ,parameter REGISTER_REDIRECT = 1
+    ,parameter REGISTER_TRAINING = 1
     ,parameter SUPPORT_MULDIV   = 1
     ,parameter SUPPORT_MMU      = 1
     ,parameter EXTRA_DECODE_STAGE = 0
@@ -118,6 +119,35 @@ wire           fetch_fault_fetch_w;
 wire           fetch_pc_accept_w;
 
 
+// Keep training updates outside the redirect/fetch combinational feedback.
+// Capture all events, including taken/not-taken events without a miss request.
+wire [69:0] training_input_w = {branch_info_request_i, branch_info_is_taken_i,
+    branch_info_is_not_taken_i, branch_info_source_i, branch_info_is_call_i,
+    branch_info_is_ret_i, branch_info_is_jmp_i, branch_info_pc_i};
+wire [69:0] training_packet_w;
+wire training_request_w, training_taken_w, training_not_taken_w;
+wire training_call_w, training_ret_w, training_jmp_w;
+wire [31:0] training_source_w, training_pc_w;
+generate
+if (REGISTER_TRAINING)
+begin: g_training
+    reg [69:0] packet_q;
+    always @ (posedge clk_i or posedge rst_i)
+    if (rst_i)
+        packet_q <= 70'b0;
+    else
+        packet_q <= training_input_w;
+    assign training_packet_w = packet_q;
+end
+else
+begin: g_training_bypass
+    assign training_packet_w = training_input_w;
+end
+endgenerate
+assign {training_request_w, training_taken_w, training_not_taken_w,
+    training_source_w, training_call_w, training_ret_w, training_jmp_w,
+    training_pc_w} = training_packet_w;
+
 biriscv_npc
 #(
      .NUM_BTB_ENTRIES(NUM_BTB_ENTRIES)
@@ -137,14 +167,14 @@ u_npc
      .clk_i(clk_i)
     ,.rst_i(rst_i)
     ,.invalidate_i(1'b0)
-    ,.branch_request_i(branch_info_request_i)
-    ,.branch_is_taken_i(branch_info_is_taken_i)
-    ,.branch_is_not_taken_i(branch_info_is_not_taken_i)
-    ,.branch_source_i(branch_info_source_i)
-    ,.branch_is_call_i(branch_info_is_call_i)
-    ,.branch_is_ret_i(branch_info_is_ret_i)
-    ,.branch_is_jmp_i(branch_info_is_jmp_i)
-    ,.branch_pc_i(branch_info_pc_i)
+    ,.branch_request_i(training_request_w)
+    ,.branch_is_taken_i(training_taken_w)
+    ,.branch_is_not_taken_i(training_not_taken_w)
+    ,.branch_source_i(training_source_w)
+    ,.branch_is_call_i(training_call_w)
+    ,.branch_is_ret_i(training_ret_w)
+    ,.branch_is_jmp_i(training_jmp_w)
+    ,.branch_pc_i(training_pc_w)
     ,.pc_f_i(fetch_pc_f_w)
     ,.pc_accept_i(fetch_pc_accept_w)
 

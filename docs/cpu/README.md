@@ -69,7 +69,7 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 
 `run_pds.ps1`默认只综合，可用`-Stage map`继续器件映射；默认原生进程上限900秒。显式清单只包含核，冻结副本、日志、snr/dmr、实际参数和原语统计保存到`build/cpu/pds-<mode>-<UTC>/result.json`。可用`TRIHA_PDS_SHELL`或`-PdsShell`指定已安装工具。PDS Generics使用名称/数值对（`DUAL_ISSUE 1`），脚本必须从展开日志复核真实配置；综合和映射资源分别记录，因为工具可能在映射时继续优化。
 
-单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`显式选择旧重定向时序（REGISTER_REDIRECT=0），使用相同背压TCM作逐周期请求控制、有效/停顿中的总线载荷、WB、预测和11项CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。新增数据采样会改变没有请求时的空闲地址，`-CompareIdleBus`保留旧诊断且预期在第2085周期报告空闲地址差异，不能将它称为事务不一致。
+单发射已条件裁剪第二执行单元；原始连接仅在差分测试中作父版。`run_equivalence.ps1`显式选择旧重定向/训练时序（REGISTER_REDIRECT=0、REGISTER_TRAINING=0），使用相同背压TCM作逐周期请求控制、有效/停顿中的总线载荷、WB、预测和11项CSR状态比较，程序覆盖九类异常/中断；`-Mode dual -BrokenDual`故意破坏第二路写回，预期返回1。新增数据采样会改变没有请求时的空闲地址，`-CompareIdleBus`保留旧诊断且预期在第2085周期报告空闲地址差异，不能将它称为事务不一致。
 
 新默认寄存重定向有真实恢复延迟，使用`run_redirect.ps1 -Test ordered -Mode both -Seed 37`验证；另外复测1234567/271828种子。每个原核/候选执行均有独立镜像、随机接纳背压和0~3拍响应等待；同步异常模式比较完整按序WB载荷、store及异常轨迹，844次完成/91次store，不要求周期相同。`-Interrupt`单独运行IRQ/mret自检，异步IRQ入口不要求逐条轨迹相同；`-Broken`破坏真实load数据并要求拒绝。它们是定向差分仿真，均不是完整ISA或形式证明。
 
@@ -80,3 +80,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 `review_route.ps1 -RunDirectory <既有运行目录>`只读核验冻结源/输出、实际原生退出码、阶段标志、参数及最终时序，另存新收据，不回写旧result。PDS可能将逻辑表达式参数打印为`1'b1`；解析器同时接受正确的1位/32位值，并检查前端寄存选择和外层MMU仍关闭。
 
 后续以实际STA路径判断，完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。当前时序候选与逐轮结果见STATUS及`redirect_timing_plan.md`；不将局部改动或工具PASS称为100MHz通过。
+
+`run_redirect.ps1 -Test training`验证完整训练事件寄存，包含call/return/jump和没有miss请求的BHT更新。旧训练时序的物理运行只读复核须显式使用`review_route.ps1 -LegacyTraining`，正常新运行仍强制REGISTER_TRAINING=1。第4轮不作为已通过时序的部署版，原始结果见`training_timing.json`。

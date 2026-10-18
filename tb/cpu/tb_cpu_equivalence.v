@@ -82,7 +82,7 @@ module tb_cpu_equivalence #(parameter integer DUAL_ISSUE=0, parameter integer BR
         .mem_i_pc_o(old_mem_i_pc_o)
     );
     triha_cpu #(
-        .REGISTER_REDIRECT(0),
+        .REGISTER_REDIRECT(0), .REGISTER_TRAINING(0),
         .SUPPORT_DUAL_ISSUE(DUAL_ISSUE), .SUPPORT_BRANCH_PREDICTION(1),
         .SUPPORT_MULDIV(1), .SUPPORT_SUPER(0), .SUPPORT_MMU(0),
         .SUPPORT_LOAD_BYPASS(1), .SUPPORT_MUL_BYPASS(1),

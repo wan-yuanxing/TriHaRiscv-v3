@@ -16,7 +16,7 @@ $commands = [Collections.Generic.List[object]]::new()
 $result = [ordered]@{status='RUNNING';mode=$Mode;broken_dual=[bool]$BrokenDual;seed=$Seed
     directory=$work;input_hashes=[ordered]@{};output_hashes=[ordered]@{};native_commands=$commands
     source_unchanged=$false;executions=@();error=$null;runner_return_code=$null
-    register_redirect=0;compare_idle_bus=[bool]$CompareIdleBus
+    register_redirect=0;register_training=0;compare_idle_bus=[bool]$CompareIdleBus
     scope='legacy redirect request/control and active/stalled payload cycle differential simulation; registered redirect uses run_redirect.ps1; not complete ISA/formal proof'}
 $resultPath = Join-Path $work 'result.json'
 Save-TrihaJson $resultPath $result
