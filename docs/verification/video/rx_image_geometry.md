@@ -25,3 +25,9 @@ UART 115200、TRV1、32字节payload、XOR，初版按type1/3/8/9循环。type8/
 恢复后的记录为 `rx_image_probe_serial/20261018T033056_212008Z`。源端重新全屏前有内容变化，不能把这一阶段的128/129帧CRC797ee46c作为静态四角图故障证据。用户确认“四角图已全屏并保持不动”后，连续10组历史包和对应像素分布精确匹配33bac95a、462440及全边界，坏帧0。在218125.187ms处另设一次实体KEY0标记；记录继续，尚待按键后的历史结果。仍未改变任何采集门限或超时。
 
 本地提交前复跑 `python scripts/video/build_rx_image_probe.py --test`，新记录 `rx_image_probe_test/20261018T033545_534221Z` 通过：组件138帧、完整RX板级模型、5项解码测试。复核原独立审查的41项检查及117个输入哈希均保持一致；本次没有修改其绑定文件，也没有重新下载打断按键观察窗口。新增独立目标未纳入旧preview的25套件验收声明。
+
+实体KEY0随后确认已按一次。连续记录只出现一次序号回退；复位后16个模式包跨约75秒均为pixel_hz=0、good_frames=0、rx_boot_done=true、rx_configured=false，无TX/RX初始化错误。用户确认源端四角图仍全屏且Windows中HDMI屏幕仍在。没有完整新帧，因此crc128/129的0表示历史不可用，不能解释成黑帧，也不能用来判定窄条原因。该段983条记录已停止，原始UART重新解码与保存字段完全一致；证据入口为 [rx_image_probe_startup_key0.json](evidence/rx_image_probe_startup_key0.json)。
+
+保持源端与接线不变，随后相同诊断镜像再次Program/Verify（`rx_image_probe_program/20261018T034813_684485Z`）恢复40MHz、完整四角图，128/129与当前CRC均33bac95a、最后变化帧1。新连续记录 `rx_image_probe_serial/20261018T034758_212305Z` 在85404.051ms处标记下一次单次KEY0；这是JTAG对照后的独立实体按键请求，结果仍待记录，不能以这次Program恢复替代按键验收。
+
+参考路径进一步核对：固定厂商 `source/rtl/HDMI_IN_DDR3_HDMI_OUT_top.v` 的rstn_out只由PLL locked及1ms计数产生；KEY0的rst_in只写入未被使用的rst_reg，并未连接HDMI或DDR复位。当前工程 `video_clock_reset` 则让rst_in重新复位HDMI和重跑EDID/初始化。这是待验证的复位架构差异，尚未认定芯片内部具体失败原因，也未修改复位策略。

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "key0_input_recovery_failed",
+  "scope": "Independent RX-only diagnostic; no preview image acceptance.",
+  "diagnostic_commit": "defaa36",
+  "physical_key0_confirmed": true,
+  "reset_count_after_marker": 1,
+  "record_count": 983,
+  "raw_decode_exact": true,
+  "pre_key0_crc": "33bac95a",
+  "post_key0_frame_sequence": 0,
+  "post_key0_mode_samples": 16,
+  "observed_no_clock_span_ms": 74998.64600000007,
+  "post_key0_pixel_hz": 0,
+  "post_key0_rx_boot_done": true,
+  "post_key0_rx_configured": false,
+  "post_key0_initialization_error": false,
+  "crc128_129_available": false,
+  "user_source_report": "Four-corner page remains fullscreen and HDMI display remains present in Windows.",
+  "control_same_image_program_verify_pass": true,
+  "control_before_next_key0": {
+    "elapsed_ms": 81403.893,
+    "type": 10,
+    "flags": 245,
+    "version": 1,
+    "frame_sequence": 2808,
+    "crc_frame128": "33bac95a",
+    "crc_frame129": "33bac95a",
+    "last_change_frame": 1,
+    "crc_before_change": "00000000",
+    "crc32": "33bac95a",
+    "mode_good": true
+  },
+  "preview_image_acceptance": false,
+  "refs": {
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/result.json": "a9d09306b324fa3c9687c4de998a55da77949fd5112b495dd261f9f5fb7ff6e5",
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/uart.bin": "cc5bc2c0a4479f19554e38064fdc657adeb8c3dced8fd4a2f2404614c68a48ad",
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/chunks.ndjson": "57deb37c92aa99e4e658f4a947adad11924143699e8c7c5381f9794bf25809df",
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/records.ndjson": "b82eaf295bff4b78209c19ee49e971de7e83b527fcd02b1d93c37a970784bdb0",
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/history_key0_annotations.json": "be59bbdfdb9f43d31084f829e545bb8be18b68d24d60aef6d4426a784a7686ab",
+    "build/video/rx_image_probe_serial/20261018T033056_212008Z/history_analysis.json": "545d302310aa077befd5364e98ae0f2f58ca855f401a93b028d9b458973bc852",
+    "build/video/rx_image_probe_program/20261018T034813_684485Z/result.json": "b37c9553aeb4c62248b9e0f532361bb35831e565ce1c0a0b92d89fa76ac7b1b7",
+    "build/video/rx_image_probe_pds/20261018T032124_418528Z/result.json": "50405afa00e92882145101f4a05dba5f31a64d7e21c0407641a9e233d08a0ce9",
+    "build/video/rx_image_probe_test/20261018T033545_534221Z/result.json": "e16c244919ec70ca7948045ca1fb6a3d5e61aeabe61c51291b6c6bd41b92d470",
+    "build/video/independent_rx_startup_history_review/20261018T032255_874054Z/result.json": "5858c1aa77e24e040cc8abdb42f50032ab0bb00af6e4a5b181649afd758dbff4"
+  },
+  "limits": [
+    "No post-reset complete frame exists; zero CRC history is unavailable, not a black image.",
+    "Same-image JTAG recovery does not constitute physical KEY0 recovery.",
+    "Source UI report does not prove live HDMI wire pixels.",
+    "No definitive cause assigned; reference HDMI reset is independent of KEY0."
+  ]
+}
