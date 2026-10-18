@@ -7,6 +7,14 @@
 - 用户当前已授权开始 Video 路线实施，优先 Windows 原生开发、参考例程复用和尽快上板。旧 README 的“暂不迁移”历史状态已结束；复用仍须逐项验证。
 - 现有 `docs/technical-report/` 修改属于独立工作，遵守其局部 AGENTS，不覆盖、不连带提交。
 
+## CPU 路线最新约束（2026-10-18）
+
+- 用户已将本目录确认为当前主工程；CPU 选型与维护位置见 `docs/cpu/README.md`。旧 `TriHaRiscv-v3-cpu-dualissue` 不属于本仓库工作树，只作源码来源、备份和历史证据，不能继续作为正式 CPU 维护主线。
+- CPU 当前硬件要求为 Pango、RV32I，另要求直接维护 Verilog 实现，开发环境集中在 Windows + Codex + ModelSim + PDS + RISC-V GCC；不引入 Scala/Spinal/Chisel/Bluespec 或 HDL 降低工具链，不把 WSL 设为新 CPU 流程前提。复用已安装 Windows 工具和本工程已有脚本能力，不另建环境。
+- CPU 仍需评估 CoreMark、退休 IPC、CPU-only 资源及实际 100MHz 后布线时序。M/C/PMP/Cache/发射宽度按实际需求选择；v0.6/旧 README 中 CPU 固定功能清单与这些最新指示冲突时，以用户指示为准。系统地址、MMIO、DDR、帧所有权等独立契约不能随 CPU 选型擅自改变。
+- biRISC-V 为目前首选准入候选，尚未导入或确认交付配置。CPU 源码及适配放 `rtl/cpu/`，SoC 互连放 `rtl/soc/`，板级适配遵守本仓库 `fpga/pg2l100h/` 结构；不复制旧 SoC、旧地址表或旧 `targets/pango676` 工程覆盖新主工程。
+- 共享目录当前承载 Video 工作。需要独立 CPU 分支时，从本仓库建立独立 Git 工作树，使用相同相对目录，避免在共享目录切换分支或复制成另一套长期独立工程。选型/目录评估不等于已建立 CPU 工作树或已执行实现。
+
 ## 目录与责任
 
 - CPU：`rtl/cpu/`、`rtl/soc/`、`sw/drivers/`、`sw/runtime/`，负责正式互连、地址属性、固件和统一帧状态。
