@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target": "video_rx_image_probe",
+  "top": "video_rx_image_probe_top",
+  "test_top": "tb_video_rx_image_probe",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "rtl/video/video_test_pattern.sv",
+    "rtl/video/video_pattern_core.sv",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "rtl/video/video_rx.sv",
+    "rtl/video/video_rx_measure.sv",
+    "rtl/video/video_rx_probe.sv",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "fpga/pg2l100h/rtl/video_rx_image_probe_top.sv",
+    "rtl/video/video_rx_image_probe.sv"
+  ],
+  "vendor_sources": [
+    "source/hdmi/ms7210_ctl.v",
+    "source/hdmi/iic_dri.v",
+    "source/hdmi/ms7200_ctl.v"
+  ],
+  "tests": [
+    "tb/video/tb_video_rx_image_probe.sv",
+    "tb/video/tb_video_rx_image_probe_board.sv",
+    "tb/video/test_rx_image_probe.py"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_rx_board.fdc"
+  ],
+  "scope": "Independent continuous RX image distribution observer; TX colorbars, no DDR/preview. No claim of external AC or image recovery."
+}
