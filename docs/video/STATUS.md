@@ -7,7 +7,7 @@
 2026-10-19 用户确认正式输出采用 800×600 raw 原分辨率全屏，独立 MODE 功能键
 循环 RAW/BOX/AVATAR，在安全输出帧边界生效；KEY0 保留协调复位/重采。新设计
 及主规格已修订，既有双窗 RTL、公共 preview 配置和已验收双窗位流继续作为诊断基线。
-已新增F1 raw扫描组件及F2独立全屏板级目标；F2最终布线与物理验收进行中，
+已完成F1 raw扫描组件及F2独立全屏板级目标，最终内部布线时序和实体板级验收通过，
 MODE/叠加仍未实施，设计见
 [全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 
@@ -29,9 +29,16 @@ ed8a779完整回归基线36套件/190输入/311份仿真PASS日志、Python85通
 保持寄存后，当前受影响套件28份仿真日志及独立14场景通过。其余187项完整基线
 输入哈希一致、run.py仅改用例数；不冒称修订后完整重跑。父核验53来源/725日志
 哈希及35项保留文件。第三轮仅raw_engine一项构建RTL变化、保持8ns/6ns约束，
-布线及物理板测仍待关闭。见[板级记录](../verification/video/raw_board.md)。
+最终slow setup/hold为+0.112/+0.026ns，fast为+2.966/+0.020ns；15组专项CDC报告
+及全部端点核验通过。镜像0cd4a546804b已易失Program/Verify，串口三路读回及
+raw扫描合格、欠载0。首轮源图不符后重新Program/Verify，三路CRC均匹配四角黄金值，
+用户确认单幅全屏四角/边框完整，单次实体KEY0后仍完整且三路CRC匹配黄金值。
+普通桌面换源后再次单次KEY0，用户确认完整全屏桌面恢复。最终三段验收epoch
+共495包，连续健康288.002/121.001/77.000秒，均无溢出或欠载；UART已正常停止，
+板卡保持全屏桌面镜像。F2独立静态单帧板级验收完成，外部HDMI AC仍未签核。
+见[板级记录](../verification/video/raw_board.md)。
 
-下一批关闭 F2 全屏独立板级验收，随后 F3 人工框/头像和按键模式，
+下一批执行 F3 人工框/头像和按键模式，
 再接 F4 共享 DDR/正式显示 ABI 与 F5 真实 NPU。当前 raw/preview/input 三分支及
 320×320 BGR NCHW 保留；24fps采集、固定扫描率下基础读写约137.43MB/s，NPU/
 头像/协议另计。早期检测原始输出64KiB/槽草案不足以容纳320输入的16bit完整输出，
@@ -73,7 +80,7 @@ ed8a779完整回归基线36套件/190输入/311份仿真PASS日志、Python85通
 | V020h-three | 同帧三分支采集核心 | 已实现slot/frame_id/version锁存、原子三路分送、good EOF/raw CRC及三路B退休、保持事件和显式排空；完整回归31套件/159输入、209份仿真PASS日志；独立88条命令/5突变、仲裁7突变及224项哈希复核通过。综合3959LUT/2825FF/3DRM18K/2APM，8ns估计setup+0.596ns。见[验证记录](../verification/video/three_capture.md)。CPU MMIO/fabric/三槽调度及板测未完成。 |
 | V020i-three-board | 三分支板级接入及实体KEY0 | 独立目标/串行三路读回/双窗及type8诊断已通过。完整回归32套件/167输入/235份仿真PASS日志，Python67通过/1权限跳过，规格/质量审查通过。第二轮种子14在原8ns/6ns约束下通过内部时序及路径审计，125MHz slow setup/hold为0.000/+0.066ns，16713LUT/17029寄存器/9.5DRM。Program/Verify成功；正式279包中按键前后约116/159秒持续健康，三路CRC均匹配四角图，欠载0，用户确认单次KEY0前后双窗完整。见[集成记录](../verification/video/three_board.md)及[证据](../verification/video/evidence/three_board.json)。 |
 
-已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。同帧raw/preview目标保留工作镜像33e1b8242053；新增三分支独立镜像89c2e860fde4已通过四角图三路CRC及单次实体KEY0验收，当前板卡保持该镜像，串口已正常停止。旧版黑帧、裁切及本轮错误源图记录均保留。V021a采帧MMIO及V021b-control原生CPU控制桥/数字联测已完成；生产SoC接入/共享fabric、三槽所有权、跨master可见性、NPU推理、外部AC签核及连续采集仍未完成。
+已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。同帧raw/preview目标保留工作镜像33e1b8242053；三分支独立镜像89c2e860fde4已通过四角图三路CRC及单次实体KEY0验收，保留为双窗诊断基线。当前板卡运行全屏镜像0cd4a546804b，详见顶部F2记录。旧版黑帧、裁切及错误源图记录均保留。V021a采帧MMIO及V021b-control原生CPU控制桥/数字联测已完成；生产SoC接入/共享fabric、三槽所有权、跨master可见性、NPU推理、外部AC签核及连续采集仍未完成。
 
 本轮 RX/DDR 的独立说明见 [rx_ddr_bringup.md](../verification/video/rx_ddr_bringup.md)。当前用户确认电脑活动信号为 800×600、60.32 Hz，实测 VS 原始高电平为 4224 个像素时钟、场周期 663168；没有将 HS 边沿歧义读出的 VS=3 放宽为可接受模式。最终 RX 位流 SHA256 为 `406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c`，DDR 位流为 `9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4`；两者已连同各自同名校验掩码打包。
 
@@ -92,7 +99,7 @@ ed8a779完整回归基线36套件/190输入/311份仿真PASS日志、Python85通
 | V020 | 检测input与正式三分支采集 | 同帧三分支独立板测和实体KEY0已通过，采帧MMIO组件已冻结；下一步接CPU总线/fabric，验收正式就绪事件/槽状态/提交契约及跨master写后读可见性，再扩展连续采集。 |
 | V020e-input | 320输入RTL与正式输入集成 | 320数值参考、双线性及NCHW/DMA已实现，公共配置和RTL/C统一300KiB张量、320KiB槽；独立板级三分支的已知图CRC与KEY0已通过。下一步完成CPU地址/版本/MMIO/可见性和槽生命周期，再对接实际NPU推理。 |
 | V021b-fabric | 共享DDR与正式CPU SoC | 原生控制桥及固定CPU数字联测见V021b-control；继续实现生产ROM/SRAM、共享DDR不可缓存属性/跨master写后读、PLIC/CDC、协调复位及统一槽状态。采帧MMIO不提供槽allocator或多帧rearm。 |
-| V022-fullscreen | 原分辨率全屏与功能键 | F1 raw扫描组件已实现，组件仿真/综合见顶部；继续F2独立板级、F3人工叠加/模式，再接共享DDR与真实NPU。旧双窗位流仍为板测诊断基线。 |
+| V022-fullscreen | 原分辨率全屏与功能键 | F1组件和F2独立全屏板级验收完成；四角图及普通桌面单次KEY0恢复、三段至少60秒健康扫描通过。下一阶段F3人工叠加/MODE，再接共享DDR与真实NPU。旧双窗位流保留为诊断基线。 |
 | V030 | 检测预处理＋人工框/头像 | NPU 量化清单、素材清单；真实张量与像素参考一致 |
 | V040 | 三槽/CDC/压力与错误恢复 | 延迟/相位扫描、在途读写及释放 ACK、实际模拟 NPU DDR 流量 |
 | V050 | CPU/Video/NPU 两两集成 | 对应路线接口与可运行产物 |

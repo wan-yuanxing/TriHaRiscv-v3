@@ -2,15 +2,15 @@
   "schema_version": 1,
   "base_head": "d9933ddf46249c20ed224809341d3d6446fafec0",
   "scope": "One physical HDMI frame writes slotA raw/preview/320 UINT8 BGR NCHW input; all writes retire before raw/preview CRC and input checksum readback, then full-resolution 800x600 raw RGB888 scanout. UART6/9/8. No MODE/overlay/CPU MMIO/fabric or slot allocator; external AC signoff separate.",
-  "status": "aw_retiming_verified_pending_route_and_board",
+  "status": "physical_acceptance_pass",
   "inputs": {
     "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
     "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
-    "docs/superpowers/plans/2026-10-19-raw-board-timing.md": "c2c500c82f2cd089c5106937b198b6ac9d399f853100b084e923a64cc03cae09",
-    "docs/superpowers/plans/2026-10-19-raw-board.md": "5906712a22ef801cae26a168c8c8c052eb5c490e478d8ecb6f6c01b3fb780d0f",
-    "docs/verification/video/raw_board.md": "4f4f059b76bba9a3b862209ffb5cd6931e9c68e489338469d5f9e0f5719062a3",
+    "docs/superpowers/plans/2026-10-19-raw-board-timing.md": "b0e322eb360d68f3c3c7830953e6f813eb0db9e5ab02f90dd9a3f4f099577e95",
+    "docs/superpowers/plans/2026-10-19-raw-board.md": "b0d92eca059212cd491c5cbcb5d2cd6e9f07918de14d4d809f9fb395b61447ad",
+    "docs/verification/video/raw_board.md": "838b1dc6447e47c808a092de745e15c462efa8d80b75ce1bff1294c5acac7f1f",
     "docs/video/README.md": "7977739ed5e1e736dad715f7cdfacf54815eb09a44e19c31c4ddd92363cbc2a4",
-    "docs/video/STATUS.md": "913254a18c50d8bfcf023511bfe9da3173d0c687b8188e3c1c64cd249d352a80",
+    "docs/video/STATUS.md": "d2c01042d2da4bf18f606e2c4520f3eedbb30cb00354bf59ff25393f7bc68c0b",
     "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
     "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
     "fpga/pg2l100h/constraints/video_hdmi_capture.fdc": "2df24e663a5fbadface0e93217b624d222f616dcf320ca4f2248d3290a69b69b",
@@ -67,6 +67,10 @@
       "path": "build/video/regression/20261019T114928_708124Z/result.json",
       "sha256": "b867e3556578b352616846fb188f9aba43197bc0b4de3d5fbe1010bd4ac3f70d"
     },
+    "pds": {
+      "path": "build/video/pds/20261019T124544_168568Z/result.json",
+      "sha256": "c5e0ae8f207244b6531f558f39b72dd8e8d667fd8dbe5b9a9d8344198d6ae006"
+    },
     "review": {
       "path": "build/video/raw_board_review/review.json",
       "sha256": "b1bf00dd0635eb2bd224ad9d498d2dc0ec19760098dbb794e5bdbe32555478af"
@@ -86,6 +90,26 @@
     "pds_second": {
       "path": "build/video/pds/20261019T121653_530529Z/result.json",
       "sha256": "625916989dcc7afbc9b00764e30d4fdbd2ecf63e014474405d74d1d526a980eb"
+    },
+    "timing_checkpoint": {
+      "path": "build/video/raw_board_timing_checkpoint.json",
+      "sha256": "bbcf24d4f6b7868d97bbee8466bff6c73ff1e21131928a892f5d3a85ea88be89"
+    },
+    "routed_constraints": {
+      "path": "build/video/raw_board_timing_audit/constraints/20261019T124544_168568Z/result.json",
+      "sha256": "d5e1c75e30c2df9fb13380cecdaf8692da0b5749af748431c0141e749662c3d0"
+    },
+    "initial_program": {
+      "path": "build/video/board_program/20261019T131415_938437Z/result.json",
+      "sha256": "c978123dcd3250deda4e2eb1a2878300b5e2ae36225a342f8962395a5b7d8b85"
+    },
+    "program": {
+      "path": "build/video/board_program/20261019T131755_236742Z/result.json",
+      "sha256": "8178233a3619e03b9fd047e97b3e6905a686ef2e13f64864076e4ae10f18c532"
+    },
+    "acceptance": {
+      "path": "build/video/raw_board_acceptance/result.json",
+      "sha256": "af2c70c40688943d1e476bdd83e04b8c25a6313b81811972e1dd9c934da05af7"
     },
     "log_hashes": {
       "path": "build/video/raw_board_log_hashes.json",
@@ -111,6 +135,10 @@
   "log_hash_count": 725,
   "review_open_material_findings": [],
   "retiming_review_open_findings": [],
+  "review_plan_completion_only_changes": [
+    "docs/superpowers/plans/2026-10-19-raw-board.md",
+    "docs/superpowers/plans/2026-10-19-raw-board-timing.md"
+  ],
   "full_baseline_changed_inputs": {
     "scripts/video/run.py": {
       "baseline": "7689476c21a3053cba5cc55a36ed4f72a1f976313ec64ab60084483dd7af1312",
@@ -147,8 +175,65 @@
     "docs/verification/video/raw_board.md",
     "docs/verification/video/evidence/raw_board.json"
   ],
-  "physical_board_verified": false,
-  "physical_visual_verified": false,
-  "physical_key0_verified": false,
+  "internal_routed_timing_verified": true,
+  "volatile_program_verify_passed": true,
+  "physical_board_verified": true,
+  "physical_visual_verified": true,
+  "physical_key0_verified": true,
+  "physical_raw_fullscreen_readback_verified": true,
+  "physical_golden_pattern_crc_verified": true,
+  "physical_acceptance_epochs": {
+    "initial_pattern": {
+      "epoch": 3,
+      "records": 291,
+      "healthy_records": 289,
+      "healthy_duration_seconds": 288.002,
+      "heartbeat_first": 1,
+      "heartbeat_last": 581,
+      "first_capture_crc": 867879258,
+      "preview_crc": 1738537116,
+      "input_crc": 525794334,
+      "completed_scans_first": 142,
+      "completed_scans_last": 17332,
+      "underflows": 0,
+      "user_reply": "\u5355\u5e45\u5168\u5c4f\uff0c\u56db\u89d2\u548c\u8fb9\u6846\u5b8c\u6574",
+      "observation": "One 800x600 fullscreen pattern, TL/TR/BL/BR and complete white border"
+    },
+    "key0_pattern": {
+      "epoch": 4,
+      "records": 124,
+      "healthy_records": 122,
+      "healthy_duration_seconds": 121.001,
+      "heartbeat_first": 1,
+      "heartbeat_last": 247,
+      "first_capture_crc": 867879258,
+      "preview_crc": 1738537116,
+      "input_crc": 525794334,
+      "completed_scans_first": 168,
+      "completed_scans_last": 7225,
+      "underflows": 0,
+      "user_reply": "\u5df2\u6309\u4e00\u6b21\uff0c\u5168\u5c4f\u56db\u89d2\u548c\u8fb9\u6846\u4ecd\u5b8c\u6574",
+      "observation": "Exactly one physical KEY0 press, one complete fullscreen pattern restored"
+    },
+    "key0_desktop": {
+      "epoch": 5,
+      "records": 80,
+      "healthy_records": 78,
+      "healthy_duration_seconds": 77.0,
+      "heartbeat_first": 1,
+      "heartbeat_last": 159,
+      "first_capture_crc": 96519206,
+      "preview_crc": 4246580747,
+      "input_crc": 3352062062,
+      "completed_scans_first": 167,
+      "completed_scans_last": 4691,
+      "underflows": 0,
+      "user_reply": "\u5df2\u6309\u4e00\u6b21\uff0c\u5b8c\u6574\u5168\u5c4f\u684c\u9762\u5df2\u6062\u590d",
+      "observation": "Exactly one physical KEY0 press, one complete source desktop restored without black image, narrow strip or crop"
+    }
+  },
+  "continuous_capture_verified": false,
+  "mode_or_overlay_implemented": false,
+  "flash_written": false,
   "external_io_timing_verified": false
 }

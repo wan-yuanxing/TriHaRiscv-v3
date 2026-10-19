@@ -77,5 +77,39 @@ PASS日志；独立14场景另核对49bit字段、AW/W/B所有权、响应数量
 第二轮采用10–15及50ps保持优化，保留43项输入和8ns/6ns约束，仍全部失败。
 根据两轮最佳路径同为DMA burst_beats→bridge base_q/CE，新增AW保持寄存；RED
 测试已在未加寄存的实现上复现不能隔离接纳。第三轮仅改这一RTL及布局设置，保持
-其余42项原构建输入和全部8ns/6ns约束，当前在种子4–9并行布线。
-下载及现场验收尚未开始，不以综合网表结构检查代替布线时序或物理板测。
+其余42项原构建输入和全部8ns/6ns约束，第三轮种子4已满足最终内部时序，
+种子4–9的最终报告和数据库均已归档。最终slow setup/hold为+0.112/+0.026ns，
+fast setup/hold为+2.966/+0.020ns；16704LUT、17059寄存器、9.5DRM、7APM。
+
+最终布线的15组只读专项报告与结构审计均通过：139管脚、68同步链，所有束端点
+覆盖、slow/fast最大延迟及本地同步链setup/hold均合格，原设计与报告哈希不变。
+工具未输出独立max-skew表，仅记录派生arrival spread，不宣称独立skew签核。
+原始结果为`build/video/pds/20261019T124544_168568Z/result.json`，专项核验为
+`build/video/raw_board_timing_audit/constraints/20261019T124544_168568Z/result.json`。
+
+镜像`0cd4a546804b`已于2026-10-19通过PG2L100H/00602899识别及易失JTAG
+Program/Verify；未写Flash。串口6/9/8已确认三路读回合格、raw全屏扫描增长且欠载0。
+持续记录位于`build/video/raw_board_trace/20261019T130620_474086Z`。首轮源图CRC与
+四角黄金图不同，用户要求重新采帧，该轮不计入图像验收。随后用同一镜像重新
+Program/Verify，新raw/preview/input CRC分别为33bac95a/679ff89c/1f56fc1e，
+均匹配既存四角黄金值。用户确认单幅800×600全屏、四角和白边框完整；实体KEY0
+后heartbeat从581归1，三路CRC再次匹配黄金值，用户确认全屏四角及白边框仍完整。
+随后源端换普通桌面，第二次单次KEY0后heartbeat从247归1，用户确认完整全屏桌面
+已恢复，无黑屏、窄条或裁切。
+
+最终持续记录共706个有效包，其中验收采用相邻epoch3/4/5，共495包，489个健康
+完成状态。三个阶段分别连续稳定288.002/121.001/77.000秒，均超过60秒；三路
+读回保持一致，input全部307200B校验完成，type9扫描和读行数增长、欠载0。
+
+| 阶段 | raw CRC | preview CRC | input CRC | 完成扫描数增长 |
+| --- | --- | --- | --- | --- |
+| 四角图基线 | 33bac95a | 679ff89c | 1f56fc1e | 142→17332 |
+| 四角图KEY0后 | 33bac95a | 679ff89c | 1f56fc1e | 168→7225 |
+| 普通桌面KEY0后 | 05c0c426 | fd1dae0b | c7cc686e | 167→4691 |
+
+接收记录已正常关闭，板卡保留全屏桌面镜像。机器验收结果为
+`build/video/raw_board_acceptance/result.json`，关联原始UART、时间戳、用户回答、
+实际Program/Verify、最终布线和黄金图；父证据见[evidence/raw_board.json](evidence/raw_board.json)。
+F2独立全屏静态单帧板级验收完成。CRC比较不代表逐字节转储，也不替代任意桌面的
+独立数值oracle；MODE、叠加、正式CPU ABI/共享fabric、连续采帧和外部HDMI AC
+签核仍未完成。下一阶段为F3人工框/头像及MODE功能键。
