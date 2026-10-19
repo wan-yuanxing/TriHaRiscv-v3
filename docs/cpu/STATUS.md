@@ -463,4 +463,6 @@ CPU综合层次6080LUT/5205FF/32distributedRAM/0DRM/4APM；系统额外136LUT/88
 
 以上板级数字版本作独立Git检查点，尚未生成可交付板级位流、未Program/Verify或板测。下一步只对预测器读目标数据的组合结构做等价调整：两个原优先掩码分别复用现有独热MUX，再按原if优先级选择完整payload；策略、状态、表规模和周期不变，先验证完整预测器/整核/CoreMark，实际100MHz报告仍为唯一物理准入。
 
+预测组合实验已完成：并行payload、LUT6平衡归约与标量valid两版均通过完整预测器状态/输出、三seed单/双有序执行、IRQ/mret、SRAM CoreMark与板级两次启动，CoreMark保持1685831/1467843。第一版CPU6264LUT/5172FF、后布线−0.678ns；第二版6404LUT/5172FF、−0.408ns，均未优于原网表最佳−0.096ns。验证与实际时序分别见board_payload_{late,balanced}_{validation,route}.json。实验作Git诊断检查点，尚未准入；随后恢复a9034b5的CPU源和清单，针对实际PC扇出作纯综合诊断，保持原版本作为部署候选。
+
 板卡只读识别PG2L100H/00602899、DONE1，COM12可见；当前Video配置未替换。历史成功的video_raw_board_0cd4a546804b及同名smsk已核对恢复哈希。详情board_system_design.md、board_system_plan.md及docs/verification/cpu/board_system.md。主工程独立Video/技术报告工作不改动，未合入、未push。

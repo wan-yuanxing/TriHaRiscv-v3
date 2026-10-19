@@ -280,36 +280,26 @@ always @* begin
     end
 end
 
-reg [NUM_BTB_ENTRIES-1:0] match_read_r;
+reg btb_valid_r;
 reg btb_upper_r;
 always @* begin
-    match_read_r = match_pc_r;
+    btb_valid_r = |match_pc_r;
     btb_upper_r = 1'b0;
     if (|match_pc_r)
         btb_upper_r = pc_f_i[2];
     else if (~pc_f_i[2]) begin
-        match_read_r = match_upper_r;
+        btb_valid_r = |match_upper_r;
         if (|match_upper_r)
             btb_upper_r = 1'b1;
     end
 end
 
-wire [NUM_BTB_ENTRIES-1:0] select_read_w;
 wire [NUM_BTB_ENTRIES-1:0] select_write_w;
 // Rank both lookup alternatives in parallel. Applying the upper-word fallback
 // before priority selection serializes the all-entry hit reduction, a vector
 // mux and another all-entry priority reduction on the next-PC feedback path.
 (* syn_keep = 1 *) wire [NUM_BTB_ENTRIES-1:0] select_pc_w;
 (* syn_keep = 1 *) wire [NUM_BTB_ENTRIES-1:0] select_upper_w;
-reg [NUM_BTB_ENTRIES-1:0] select_read_r;
-always @* begin
-    select_read_r = select_pc_w;
-    if (|match_pc_r)
-        select_read_r = select_pc_w;
-    else if (~pc_f_i[2])
-        select_read_r = select_upper_w;
-end
-assign select_read_w = select_read_r;
 localparam BTB_PAYLOAD_W = 35 + NUM_BTB_ENTRIES_W;
 wire [NUM_BTB_ENTRIES*BTB_PAYLOAD_W-1:0] btb_payload_w;
 genvar entry;
@@ -327,7 +317,6 @@ for (entry=0; entry<NUM_BTB_ENTRIES; entry=entry+1) begin: g_btb_select
         {ENTRY,btb_is_call_q[entry],btb_is_ret_q[entry],btb_is_jmp_q[entry],btb_target_q[entry]};
 end
 
-wire btb_valid_r = |match_read_r;
 wire btb_is_call_r;
 wire btb_is_ret_r;
 wire btb_is_jmp_r;
@@ -335,10 +324,27 @@ wire [NUM_BTB_ENTRIES_W-1:0] btb_entry_r;
 wire [31:0] btb_selected_pc_w;
 wire [31:0] btb_next_pc_r = btb_valid_r ? btb_selected_pc_w :
     ({pc_f_i[31:3],3'b0} + 32'd8);
-triha_npc_select #(.WIDTH(BTB_PAYLOAD_W),.INPUTS(NUM_BTB_ENTRIES)) u_btb_select (
-    .data_i(btb_payload_w),.select_i(select_read_w),
-    .data_o({btb_entry_r,btb_is_call_r,btb_is_ret_r,btb_is_jmp_r,btb_selected_pc_w})
+// Select both complete payloads before the late exact-hit/fallback decision.
+// Keep this boundary so the global hit reduction does not steer every input
+// of the wide one-hot mux. No state, priority, or prediction cycle changes.
+(* syn_keep = 1 *) wire [BTB_PAYLOAD_W-1:0] btb_pc_payload_w;
+(* syn_keep = 1 *) wire [BTB_PAYLOAD_W-1:0] btb_upper_payload_w;
+reg [BTB_PAYLOAD_W-1:0] btb_selected_payload_r;
+triha_npc_select #(.WIDTH(BTB_PAYLOAD_W),.INPUTS(NUM_BTB_ENTRIES)) u_btb_pc_select (
+    .data_i(btb_payload_w),.select_i(select_pc_w),.data_o(btb_pc_payload_w)
 );
+triha_npc_select #(.WIDTH(BTB_PAYLOAD_W),.INPUTS(NUM_BTB_ENTRIES)) u_btb_upper_select (
+    .data_i(btb_payload_w),.select_i(select_upper_w),.data_o(btb_upper_payload_w)
+);
+always @* begin
+    btb_selected_payload_r = btb_pc_payload_w;
+    if (|match_pc_r)
+        btb_selected_payload_r = btb_pc_payload_w;
+    else if (~pc_f_i[2])
+        btb_selected_payload_r = btb_upper_payload_w;
+end
+assign {btb_entry_r,btb_is_call_r,btb_is_ret_r,btb_is_jmp_r,btb_selected_pc_w} =
+    btb_selected_payload_r;
 
 wire [NUM_BTB_ENTRIES_W-1:0] btb_wr_alloc_w;
 wire btb_hit_r = |match_write_r;
@@ -351,7 +357,8 @@ end
 
 // synthesis translate_off
 always @(posedge clk_i) begin
-    if (!rst_i && (((select_read_w & (select_read_w-1'b1)) != 0) ||
+    if (!rst_i && (((select_pc_w & (select_pc_w-1'b1)) != 0) ||
+                  ((select_upper_w & (select_upper_w-1'b1)) != 0) ||
                    ((select_write_w & (select_write_w-1'b1)) != 0)))
         $fatal(1,"PREDICTOR_SELECT_FAIL non_onehot_selection");
 end
@@ -530,14 +537,40 @@ module triha_npc_select #(
     input [INPUTS-1:0] select_i,
     output [WIDTH-1:0] data_o
 );
-    genvar bit_index,input_index;
+    localparam GROUPS = (INPUTS + 2) / 3;
+    localparam REDUCTIONS = (GROUPS + 5) / 6;
+    genvar bit_index,group_index,input_index,reduction_index;
     generate
     for (bit_index=0; bit_index<WIDTH; bit_index=bit_index+1) begin: g_bit
-        wire [INPUTS-1:0] masked_w;
-        for (input_index=0; input_index<INPUTS; input_index=input_index+1) begin: g_input
-            assign masked_w[input_index] = data_i[input_index*WIDTH+bit_index] & select_i[input_index];
+        // Three two-input AND terms fit one LUT6. Keep their group results
+        // before six-input OR reductions to prevent a serial accumulator.
+        (* syn_keep = 1 *) wire [GROUPS-1:0] grouped_w;
+        (* syn_keep = 1 *) wire [REDUCTIONS-1:0] reduced_w;
+        for (group_index=0; group_index<GROUPS; group_index=group_index+1) begin: g_group
+            wire [2:0] terms_w;
+            for (input_index=0; input_index<3; input_index=input_index+1) begin: g_term
+                if (group_index*3+input_index < INPUTS) begin: g_used
+                    assign terms_w[input_index] =
+                        data_i[(group_index*3+input_index)*WIDTH+bit_index] &
+                        select_i[group_index*3+input_index];
+                end else begin: g_padding
+                    assign terms_w[input_index] = 1'b0;
+                end
+            end
+            assign grouped_w[group_index] = |terms_w;
         end
-        assign data_o[bit_index] = |masked_w;
+        for (reduction_index=0; reduction_index<REDUCTIONS; reduction_index=reduction_index+1) begin: g_reduce
+            wire [5:0] terms_w;
+            for (input_index=0; input_index<6; input_index=input_index+1) begin: g_term
+                if (reduction_index*6+input_index < GROUPS) begin: g_used
+                    assign terms_w[input_index] = grouped_w[reduction_index*6+input_index];
+                end else begin: g_padding
+                    assign terms_w[input_index] = 1'b0;
+                end
+            end
+            assign reduced_w[reduction_index] = |terms_w;
+        end
+        assign data_o[bit_index] = |reduced_w;
     end
     endgenerate
 endmodule

@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "scope": "Equivalent combinational predictor change; RTL checks and short CoreMark, not physical acceptance",
+  "source_base_commit": "a9034b5",
+  "source_sha256": "8ab0a42b12b529038b50a3e0783e14ded1cac54613e4bcc60ff60c7e9a3db14e",
+  "adaptation_manifest_sha256": "275581b4a3886982c6d5869ce3c5fed193c1772cb54cc3f0880033aac210d67a",
+  "records": {
+    "predictor": {
+      "directory": "build/cpu/redirect-predictorselect-20261019T1453178783027Z",
+      "result_sha256": "43353f2d8fd46f278e2a81f17abe5f9e5038349066ec2bb4bd93d90f83d2b9cb",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "predictor_negative": {
+      "directory": "build/cpu/redirect-predictorselect-20261019T1453204084020Z",
+      "result_sha256": "dfd62415468f7349cabe0ba45f0d64f6f48a681a991916aaf9d46731683626c1",
+      "status": "FAIL",
+      "runner_return_code": 1
+    },
+    "ordered37": {
+      "directory": "build/cpu/redirect-ordered-20261019T1453227292846Z",
+      "result_sha256": "5f0cf3ff87bd8b65291e211b77d8e74c59ab1d41315a4ac760031f898230f9e6",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "ordered1234567": {
+      "directory": "build/cpu/redirect-ordered-20261019T1455516437703Z",
+      "result_sha256": "ea2b23fd1f8190a3b6b8c06eeb92104577b1d05eb719cc005294dcb0dfb30ad7",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "ordered271828": {
+      "directory": "build/cpu/redirect-ordered-20261019T1456002902396Z",
+      "result_sha256": "94ee2d218f24e04e33e5291dbaa26bb80f85d029ab9b2faafc4171c590a77a35",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "irq37": {
+      "directory": "build/cpu/redirect-ordered-20261019T1456085213433Z",
+      "result_sha256": "10946a2995ef3a5d9a880e088340789e1bce20111819513711fa36ba4066fafa",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "coremark": {
+      "directory": "build/soc/coremark-20261019T145616475937Z",
+      "result_sha256": "9bf84d26545b833ab744236aa6f8f66b285baa78ded084c87c6f48db74a58a30",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "board": {
+      "directory": "build/soc/board-system-20261019T145746633718Z",
+      "result_sha256": "26cb5b612735e8ed10ebd0fdf8386aa815d7500a018e7122d05a67a77ddda8a2",
+      "status": "PASS",
+      "runner_return_code": 0
+    },
+    "board_negative": {
+      "directory": "build/soc/board-system-20261019T145859692819Z",
+      "result_sha256": "16536593285d8e4b28f34c9ff1e59a7a260a9210af603e36a054a81d37b0c3ce",
+      "status": "FAIL",
+      "runner_return_code": 1
+    }
+  },
+  "measurement": {
+    "cycles": 1685831,
+    "wb_completed": 1467843,
+    "observed_ipc": 0.8706940375399432,
+    "coremark_per_mhz_short_estimate": 2.965896344295484,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "prediction_tables": "BTB32/BHT512/RAS8, ordinary BHT, unchanged",
+  "new_pipeline_state": false,
+  "programmed": false
+}

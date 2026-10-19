@@ -10,7 +10,7 @@
   "slack_prior_in_global_router": true,
   "placement_trials": 1,
   "placement_parallelism": 2,
-  "route_constraint_iterations": 3,
+  "route_constraint_iterations": 0,
   "period_ns": 10,
   "pnr_action_minutes": 20,
   "outer_seconds": 1500,
