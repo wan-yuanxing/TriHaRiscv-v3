@@ -1,5 +1,10 @@
 # Video 接口状态
 
+2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
+同帧只改模式不释放当前槽。新 raw 显示记录与 MODE 状态/提交接口尚未实现；下文
+`preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
+边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
+
 依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。后续已实现320预处理、同帧三分支核心及独立板级诊断入口；CPU fabric/MMIO与SoC三槽生命周期仍待集成，下述局部接口不替代共同契约。
 
 ## 独立检测缩小组件
@@ -195,7 +200,8 @@ DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和
 - CAPTURE_REQUEST：保存请求；在下一合法完整输入帧边界发布带 slot/frame_id 的 CAPTURE_ACCEPTED。
 - CAPTURE_DONE/INPUT_READY：同一逻辑事件，raw、preview、input 三分支及对应写响应完成，尺寸检查通过后发布。
 - DISPLAY_SUBMIT：接纳完整影子记录；接纳与实际提交是不同事件，不直接修改活动寄存器。
-- DISPLAY_COMMIT：安全输出帧边界原子切换 preview、框、头像、状态和 frame_id。
+- DISPLAY_COMMIT：正式全屏设计在安全输出帧边界原子切换 raw、模式、同帧框/头像/状态及 frame_id；现有诊断组件仍提交 preview。
+- MODE_REQUEST/MODE_COMMIT：独立记录请求/实际模式及序号；同帧模式更新不触发重新采帧/推理，不增加有效输出帧数，不产生当前槽释放。
 - DISPLAY_RELEASE_ACK：旧槽所有 DMA、预取与像素缓存引用结束后确认，不能等同于 DISPLAY_COMMIT。
 - 地址、slot、frame_id、预处理版本必须校验；状态/事件保留到软件消费，旧事件不能推进新任务。
 - CPU 统一维护槽状态与 graph_active/frame_owner；Video 只管理自己持有的引用和握手。共享 DMA 数据不可缓存。

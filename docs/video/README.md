@@ -2,6 +2,12 @@
 
 本路线使用 Windows 原生 Python、Icarus、ModelSim、PDS。总范围见 [路线计划](../superpowers/plans/2026-10-16-video-route.md)，实际完成情况以 [STATUS](STATUS.md) 为准。
 
+2026-10-19 用户确认正式显示改为 800×600 raw 原分辨率全屏，MODE 功能键循环
+RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
+[全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。当前可运行
+工程、公共 preview 配置和已验收位流仍为双窗诊断版本；新显示将先实现 raw 行扫描，
+再接人工叠加/模式及共享 DDR，不将设计状态写作已完成板测。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
