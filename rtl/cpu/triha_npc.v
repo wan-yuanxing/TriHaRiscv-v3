@@ -465,7 +465,23 @@ module triha_npc_equal #(
         assign group_equal_w[group_index] = left_i[FIRST +: BITS] == right_i[FIRST +: BITS];
     end
     endgenerate
-    assign equal_o = &group_equal_w;
+    localparam integer REDUCTIONS = (GROUPS + 5) / 6;
+    (* syn_keep = 1 *) wire [REDUCTIONS-1:0] reduced_w;
+    genvar reduction_index, term_index;
+    generate
+    for (reduction_index=0; reduction_index<REDUCTIONS; reduction_index=reduction_index+1) begin: g_reduce
+        wire [5:0] terms_w;
+        for (term_index=0; term_index<6; term_index=term_index+1) begin: g_term
+            if (reduction_index*6+term_index < GROUPS) begin: g_used
+                assign terms_w[term_index] = group_equal_w[reduction_index*6+term_index];
+            end else begin: g_padding
+                assign terms_w[term_index] = 1'b1;
+            end
+        end
+        assign reduced_w[reduction_index] = &terms_w;
+    end
+    endgenerate
+    assign equal_o = &reduced_w;
 endmodule
 
 module triha_npc_lfsr
@@ -530,14 +546,40 @@ module triha_npc_select #(
     input [INPUTS-1:0] select_i,
     output [WIDTH-1:0] data_o
 );
-    genvar bit_index,input_index;
+    localparam GROUPS = (INPUTS + 2) / 3;
+    localparam REDUCTIONS = (GROUPS + 5) / 6;
+    genvar bit_index,group_index,input_index,reduction_index;
     generate
     for (bit_index=0; bit_index<WIDTH; bit_index=bit_index+1) begin: g_bit
-        wire [INPUTS-1:0] masked_w;
-        for (input_index=0; input_index<INPUTS; input_index=input_index+1) begin: g_input
-            assign masked_w[input_index] = data_i[input_index*WIDTH+bit_index] & select_i[input_index];
+        // Three two-input AND terms fit one LUT6. Keep their group results
+        // before six-input OR reductions to prevent a serial accumulator.
+        (* syn_keep = 1 *) wire [GROUPS-1:0] grouped_w;
+        (* syn_keep = 1 *) wire [REDUCTIONS-1:0] reduced_w;
+        for (group_index=0; group_index<GROUPS; group_index=group_index+1) begin: g_group
+            wire [2:0] terms_w;
+            for (input_index=0; input_index<3; input_index=input_index+1) begin: g_term
+                if (group_index*3+input_index < INPUTS) begin: g_used
+                    assign terms_w[input_index] =
+                        data_i[(group_index*3+input_index)*WIDTH+bit_index] &
+                        select_i[group_index*3+input_index];
+                end else begin: g_padding
+                    assign terms_w[input_index] = 1'b0;
+                end
+            end
+            assign grouped_w[group_index] = |terms_w;
         end
-        assign data_o[bit_index] = |masked_w;
+        for (reduction_index=0; reduction_index<REDUCTIONS; reduction_index=reduction_index+1) begin: g_reduce
+            wire [5:0] terms_w;
+            for (input_index=0; input_index<6; input_index=input_index+1) begin: g_term
+                if (reduction_index*6+input_index < GROUPS) begin: g_used
+                    assign terms_w[input_index] = grouped_w[reduction_index*6+input_index];
+                end else begin: g_padding
+                    assign terms_w[input_index] = 1'b0;
+                end
+            end
+            assign reduced_w[reduction_index] = |terms_w;
+        end
+        assign data_o[bit_index] = |reduced_w;
     end
     endgenerate
 endmodule
