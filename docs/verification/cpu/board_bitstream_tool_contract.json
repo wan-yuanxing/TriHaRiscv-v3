@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "scope": "Standalone bitstream CLI test on a copy of unpinned system; not board deployment",
+  "source_directory": "build\\soc\\route-20261019T1301015447457Z",
+  "source_result_sha256": "d389ee3e9ed13ff3168a3230f9b2a2464d68c6ea3247add355ba4cdb9d74fb0a",
+  "source_outputs_unchanged": true,
+  "input_pnr_db_sha256": "f5eae9ea5a04e821fe70a8d3e9396f1467440be00344870b66699ecd4b0cb7a0",
+  "bitstream_sha256": "b2663d077a785dbf12ea2929e722ec68143371c4593f139fb3196962aa407c4c",
+  "verify_mask_sha256": "926eae17a1e4d9f2cd52f388010135b076edb998fea25359d0cabc0bcae5364e",
+  "standalone_requires_arch_and_explicit_routed_database": true,
+  "programmed": false
+}

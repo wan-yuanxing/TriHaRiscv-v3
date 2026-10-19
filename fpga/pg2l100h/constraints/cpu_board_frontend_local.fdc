@@ -1,0 +1,5 @@
+# Measured board feedback: 10 logic levels, 1.482ns logic and 8.358ns route.
+# Bound the 3654-LUT / 3811-FF frontend near the center of the CPU region.
+# No added state, smaller predictor, or timing exception.
+# The 32x32 trial failed PDS region-capacity checks; allow a 40x40 region.
+define_attribute {i:u_soc/u_core/u_cpu/u_frontend} {PAP_REGION} {soc_board_frontend(8,47,154,193)}

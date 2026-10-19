@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Digital board preparation; no physical execution",
+  "source_base_commit": "5c4229a",
+  "records": {
+    "clocks": {
+      "directory": "build\\soc\\board-clocks-20261019T134603015872Z",
+      "result_sha256": "757efc6edd768b324a14e8738d7ab6bbff935fb463745079be1c61d933516211",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "simulation_log_sha256": "10403bbde858195bf3e8eff63c66deaf7e69b998aad7de6e141eb6fafe82d146"
+    },
+    "system": {
+      "directory": "build\\soc\\board-system-20261019T134606298225Z",
+      "result_sha256": "fa22663e4cc472b0694b781119f65e5b61fd63c28a8f8b9cc18ad86fd400713e",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "simulation_log_sha256": "bab0070e352294426ec97d3a6f00170ddfe5bff81bee04601715727b5692b7fc"
+    },
+    "memory_negative": {
+      "directory": "build\\soc\\board-system-20261019T134559208677Z",
+      "result_sha256": "9780071de50e7be85c9191677513529a7ab7f25ce669ac23e8a40c80b901bb99",
+      "status": "FAIL",
+      "runner_return_code": 1,
+      "simulation_log_sha256": "6a63182f548b5f51a6f252b4d3239586d29365199560ca28de45973b0c80ff67"
+    }
+  },
+  "clock_checks": 111,
+  "boots": 2,
+  "scratch_bytes_per_boot": 8192,
+  "negative_same_elf_load_image": true,
+  "negative_elf_identity_note": "ELF symbol strings differ by temporary object names; PT_LOAD contents identical before fault",
+  "negative_xor_byte": 1,
+  "negative_sram_address": "0x00010640",
+  "negative_differing_image_bytes": 1,
+  "programmed": false,
+  "board_validated": false
+}

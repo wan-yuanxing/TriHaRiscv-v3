@@ -1,0 +1,50 @@
+{
+  "status": "FAIL",
+  "host_return_code": 1,
+  "pds_native_return_code": 0,
+  "tool_errors": "Report was read during PDS Tcl parse before queued stages created it",
+  "timing_closed": false,
+  "actual_corners": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": -0.661,
+      "failing_endpoints": 29
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.129,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 1.746,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.065,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "failing_endpoints": 0
+    }
+  ],
+  "route_directory": "build\\soc\\board-route-20261019T1346585243566Z",
+  "raw_result_sha256": "a8d45eb5fe6309b6b6738dd9b00e7f18149202ab38875b50b260d15a3e19db2c",
+  "final_report_sha256": "bbefac3e0e44ca0e25bb0368363b99d5ee3a04f00e51804f78af9b6e508d70dd",
+  "source_unchanged_at_terminal": true,
+  "scope": "Historical failed board route, frozen snapshots retained; not deployment acceptance"
+}

@@ -1,0 +1,3 @@
+# The first board route placed the ROM read return outside the CPU region.
+# Keep the 0.5-DRM boot ROM near its LSU/bypass consumers. No timing exceptions.
+define_attribute {i:u_soc/u_memory/u_rom} {PAP_REGION} {soc_cpu_clock(0,64,150,199)}

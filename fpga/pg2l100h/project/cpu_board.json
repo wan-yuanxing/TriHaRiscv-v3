@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target": "cpu_board",
+  "top": "triha_cpu_board_top",
+  "core_manifest": "fpga/pg2l100h/project/cpu_core.json",
+  "soc_manifest": "fpga/pg2l100h/project/cpu_minimal_soc_compact.json",
+  "sources": ["fpga/pg2l100h/rtl/triha_cpu_clock_reset.v", "fpga/pg2l100h/rtl/triha_cpu_board_top.v"],
+  "constraints": "fpga/pg2l100h/constraints/cpu_board.fdc",
+  "physical_constraints": ["fpga/pg2l100h/constraints/cpu_board_rom_local.fdc"],
+  "slack_prior_in_global_router": true,
+  "placement_trials": 1,
+  "placement_parallelism": 2,
+  "route_constraint_iterations": 3,
+  "period_ns": 10,
+  "pnr_action_minutes": 20,
+  "outer_seconds": 1500,
+  "scope": "Actual CPU board pins and 125->100MHz PLL; local SRAM/UART; no DDR or Video; physical programming separate"
+}

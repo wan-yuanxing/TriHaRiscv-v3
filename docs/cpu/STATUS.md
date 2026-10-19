@@ -448,3 +448,19 @@ SRAM已命中时只用本地有效性检查控制写入及I/D碰撞，通用ROM/
 CPU综合层次6080LUT/5205FF/32distributedRAM/0DRM/4APM；系统额外136LUT/88FF/16.5DRM。系统dev_map6216LUT/5292CLM FF/16.5DRM/4APM，13IO及10OREGIS另列。综合FF合计5293，dev_map优化1个，不能跨阶段混加。CPU源RTL未在最后一步改变，层次统计受整合及综合归属影响，不把跨层次FF转移当状态减少。
 
 验收摘要minimal_soc_100mhz.md；绑定minimal_soc_acceptance.json；独立复核minimal_soc_local_decode_route.json；功能性能minimal_soc_local_decode_validation.json。原生SRAM综合网表12296项与损坏拒绝复用且同RTL/同镜像哈希绑定。没有完整系统门级仿真、板级PLL/管脚绑定、bitstream或板测，没有自动合入主工程。下一步正式板级最小系统，再接入DDR/Video/NPU。
+
+## 2026-10-19 板级最小系统推进中
+
+保留5c4229a及cpu-soc-100mhz-sta-20261019，通过基线不改写。本批新增板级Verilog封装、125MHz差分参考→100MHz真实PLL、KEY0协调复位、固定UART/LED管脚和8KiB软件自检；没有修改CPU RTL、发射/预测规模或片上总线周期。Windows原生环境不变。
+
+数字前置通过：真实Pango PLL模型111项、相同固件两次整核启动和8KiB自检/串口/KEY0仿真、真实单字节初始化损坏被固件code1拒绝、配置工具8项、物理串口解析器6项。board_digital_validation.json重新核验全部源/工具/输出绑定，正负例PT_LOAD相同、故障镜像只差指定字节。尚未运行物理串口捕获。
+
+板级后布线仍未通过：首轮−0.661ns并有Tcl报告提前读取错误；ROM区域seed1改善至−0.303ns/13端点，seed2−0.781ns；前端32×32容量失败，40×40布通但−0.897ns；关键路径优先路由单seed仍−0.303ns。均完整保留，未生成可交付位流。真实PLL报告总setup uncertainty0.250ns，原外供时钟为0.150ns；FDC预算未降低。
+
+两组6候选已终态：build/soc/board-route-20261019T1421275069880Z选择seed8，最差−0.096ns、仅3端点；1431073056262Z选择seed13，−0.217ns。原网表最佳仍seed8。原100MHz/IO/hold约束、实际PLL不确定度均不降低。
+
+随后1440308216288Z执行PDS定向布线迭代，最多3轮、前20路径、目标+0.2ns，实际最终−0.267ns/12端点，未选用；独立复核board_route_constraint_iteration.json。已在原通过设计的隔离副本上验证独立位流生成CLI：必须显式set_arch和传入完整路由ADF，生成bitstream+smsk成功，原通过目录全部输出哈希未变；此CLI测试不是板级位流或板测。
+
+以上板级数字版本作独立Git检查点，尚未生成可交付板级位流、未Program/Verify或板测。下一步只对预测器读目标数据的组合结构做等价调整：两个原优先掩码分别复用现有独热MUX，再按原if优先级选择完整payload；策略、状态、表规模和周期不变，先验证完整预测器/整核/CoreMark，实际100MHz报告仍为唯一物理准入。
+
+板卡只读识别PG2L100H/00602899、DONE1，COM12可见；当前Video配置未替换。历史成功的video_raw_board_0cd4a546804b及同名smsk已核对恢复哈希。详情board_system_design.md、board_system_plan.md及docs/verification/cpu/board_system.md。主工程独立Video/技术报告工作不改动，未合入、未push。
