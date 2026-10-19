@@ -371,3 +371,14 @@ performance一致，**100MHz仍未通过**，全局setup较最佳第16轮恶化0
 固定224个裸核总线管脚及有效电气值与第16轮一致；完整PDS返回0，独立review判TIMING_FAIL。Slow/Fast setup −3.788/+0.152ns，hold +0.112/+0.100ns，脉宽 +4.346/+4.345ns。CPU-only 6484 LUT/5207 FF/32 distributed RAM/0 DRM/4 APM，224个IO另计。最差inst_rdata_i[3]到FIFO csr_history_q；内部预测反馈另有−3.247ns，不能全部归因于IO。首轮缺电气约束的native1失败保留。证据：`docs/verification/cpu/fixed_io_timing.json`。
 
 用户已选择接入SRAM/总线后按实际系统边界验收。使用正式8KiB ROM（0x0）和32KiB SRAM（0x10000）、内部CPU总线。旧裸核记录保持失败；系统通过不能回写旧记录。CPU与SoC额外资源分开，100MHz、hold、多corner不降低，未做板测。
+
+
+## 2026-10-19 最小ROM/SRAM系统首轮
+
+新增显式triha_minimal_soc：CPU宽总线内部连接，8KiB启动窗口0x0跳至32KiB SRAM 0x10000；UART TX 0x10000000和调试系统寄存器0x20020000，未实现区域错误完成。未接DDR/Video/NPU/Timer，不是完整SoC或板级下载目标。地址由config/soc_map.json生成，--check与非法ELF/旧TCM地址拒绝检查通过。旧测试TCM保留。
+
+ModelSim 301项总线检查、ROM启动SRAM固件、CoreMark四项CRC通过。坏读数据、timeout和真实CRC错误均拒绝。旧runtime在单/双模式回归PASS。CoreMark5次短RTL：2186751周期、1467843 WB事件、观察IPC0.671244、短测2.286497 CoreMark/MHz，比旧TCM多29.989%。输出中TCM stack文字为沿用的错误标签，实际32KiB SRAM地址和镜像已核验；非官方分数或板测。索引minimal_soc_simulation.json。
+
+完整系统PDS原生返回0，宿主TIMING_FAIL；独立复核全部冻结哈希、阶段标记和报告。Slow/Fast setup −1.206/+1.480ns，hold +0.024/+0.006ns，MPW +3.655/+4.202ns。无例外，100MHz未通过。最差UART busy计数到TX端口−1.206ns；核内BTB[29][16]到fetch PC[3]−1.202ns（逻辑2.030ns/布线8.806ns）。不能仅归因于IO。
+
+综合层次CPU6481LUT/5205FF/32distributedRAM/4APM；额外140LUT/122FF/16.5DRM36K等效。映射系统6621LUT/5327FF/16.5DRM/4APM/13IO，不能称CPU-only。DRM含16个36K和1个18K，SRAM因读口复制占16DRM；原生RAM映射/读前写参数已查，尚未执行原生模型RAM功能仿真。证据minimal_soc_route.json。下一步先处理实际UART输出组合门和预测长连线；本轮原始结果不改写。

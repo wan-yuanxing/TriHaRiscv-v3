@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "phase": "initial one-outstanding local fabric",
+  "records": [
+    {
+      "result": "build\\soc\\memory-20261019T114109163707Z\\result.json",
+      "sha256": "23900d73fc25faf634c64271fa6ac856cdc34ba34606e301b051f739a5c13edf",
+      "status": "PASS",
+      "fault": "none",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T114206620215Z\\result.json",
+      "sha256": "5c804e153cf1fba308be69ddeb856946978969a21b942d3dc8d5aeb3197979fd",
+      "status": "PASS",
+      "fault": "none",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T114216562904Z\\result.json",
+      "sha256": "22527b903c166fc7e2eb6fcc74c981628df48fd09de04fb2926e4b57843ffc02",
+      "status": "PASS",
+      "fault": "none",
+      "measurement": {
+        "cycles": 2186751,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.671243776726294,
+        "coremark_per_mhz_short_estimate": 2.2864971823495224,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      }
+    },
+    {
+      "result": "build\\soc\\memory-20261019T114111265641Z\\result.json",
+      "sha256": "7734ec6ed17274f2936d90172c22d343bd4082887e57f83b71ac12fbdb1c1269",
+      "status": "FAIL",
+      "fault": "read",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T114216569478Z\\result.json",
+      "sha256": "8bd6cceac7c8c740aabc6b6663b66e63bfc5ebcbc7ad72fe84c41d46d1dab638",
+      "status": "FAIL",
+      "fault": "read",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T114219252311Z\\result.json",
+      "sha256": "230f8529f0d089e17684a2b4f2501f6a502cca6b7c62e622e285c7c5c465731b",
+      "status": "FAIL",
+      "fault": "timeout",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T114450853596Z\\result.json",
+      "sha256": "9df10d8cc44764673c9e4034f3030f73d40324b6f0c00018286f48e92c67d708",
+      "status": "FAIL",
+      "fault": "crc",
+      "measurement": null
+    }
+  ],
+  "component_checks": 301,
+  "model": "RTL synchronous SRAM; native primitive mapping verified separately; not native RAM model simulation",
+  "cpu_source_changed": false,
+  "old_cpu_runtime_regression": "build/cpu/firmware-runtime-20261019T1142220523023Z/result.json",
+  "limitations": [
+    "No board execution, PLL or pin binding",
+    "5 iterations is not an official CoreMark score",
+    "WB observations are not a complete architectural retirement proof",
+    "Printed CoreMark memory label TCM stack is inherited and inaccurate for this SRAM run; actual image/address are verified"
+  ],
+  "memory_map": "config/soc_map.json"
+}

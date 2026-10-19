@@ -1,0 +1,9 @@
+# Actual local CPU+ROM+SRAM+MMIO system boundary; no board pins/PLL yet.
+# Same 100MHz and IO/hold/uncertainty budgets as the CPU isolation target.
+create_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]
+set_clock_uncertainty 0.100 -from [get_clocks {cpu_clk}] -to [get_clocks {cpu_clk}] -setup
+set_clock_uncertainty 0.050 -from [get_clocks {cpu_clk}] -to [get_clocks {cpu_clk}] -hold
+set_input_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {rst_ni external_irq_i}]
+set_input_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {rst_ni external_irq_i}]
+set_output_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {uart_tx_o done_o exit_code_o*}]
+set_output_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {uart_tx_o done_o exit_code_o*}]

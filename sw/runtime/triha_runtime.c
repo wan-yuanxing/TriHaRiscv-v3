@@ -1,11 +1,18 @@
-/* TriHa simulation transport. A board port will replace this CSR transport. */
+/* TriHa runtime: test CSR transport or explicitly selected SoC MMIO port. */
 #include "triha_runtime.h"
 #include <stddef.h>
+#if TRIHA_SOC_MMIO
+#include "soc_map.h"
+#endif
 
 void uart_send_char(char value)
 {
+#if TRIHA_SOC_MMIO
+    *(volatile uint32_t *)(TRIHA_UART_BASE) = (uint8_t)value;
+#else
     uint32_t command = 0x01000000u | (uint8_t)value;
     __asm__ volatile ("csrw 0x8b2, %0" : : "r" (command) : "memory");
+#endif
 }
 
 void triha_puts(const char *text)
@@ -24,7 +31,11 @@ void triha_put_hex32(uint32_t value)
 void triha_exit(uint32_t status)
 {
     status &= 255u;
+#if TRIHA_SOC_MMIO
+    *(volatile uint32_t *)(TRIHA_SYSTEM_BASE + 4u) = status;
+#else
     __asm__ volatile ("csrw 0x8b2, %0" : : "r" (status) : "memory");
+#endif
     for (;;) {}
 }
 

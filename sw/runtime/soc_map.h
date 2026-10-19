@@ -1,0 +1,12 @@
+/* Generated from config/soc_map.json; do not edit. */
+#pragma once
+#define TRIHA_CLOCK_HZ 0x05f5e100u
+#define TRIHA_UART_BAUD 0x0001c200u
+#define TRIHA_ROM_BASE 0x00000000u
+#define TRIHA_ROM_BYTES 0x00002000u
+#define TRIHA_SRAM_BASE 0x00010000u
+#define TRIHA_SRAM_BYTES 0x00008000u
+#define TRIHA_UART_BASE 0x10000000u
+#define TRIHA_SYSTEM_BASE 0x20020000u
+#define TRIHA_SYSTEM_ID 0x54524801u
+#define TRIHA_STACK_BYTES 0x00001000u
