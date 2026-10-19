@@ -171,9 +171,9 @@ begin
     mem_wr_r        = 4'b0;
     mem_rd_r        = 1'b0;
 
-    if (opcode_valid_i && ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW))
+    if ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW)
         mem_addr_r = opcode_ra_operand_i;
-    else if (opcode_valid_i && load_inst_w)
+    else if (load_inst_w)
         mem_addr_r = opcode_ra_operand_i + {{20{opcode_opcode_i[31]}}, opcode_opcode_i[31:20]};
     else
         mem_addr_r = opcode_ra_operand_i + {{20{opcode_opcode_i[31]}}, opcode_opcode_i[31:25], opcode_opcode_i[11:7]};
@@ -185,12 +185,12 @@ begin
 
     mem_rd_r = (opcode_valid_i && load_inst_w && !mem_unaligned_r);
 
-    if (opcode_valid_i && ((opcode_opcode_i & `INST_SW_MASK) == `INST_SW) && !mem_unaligned_r)
+    if ((opcode_opcode_i & `INST_SW_MASK) == `INST_SW)
     begin
         mem_data_r  = opcode_rb_operand_i;
         mem_wr_r    = 4'hF;
     end
-    else if (opcode_valid_i && ((opcode_opcode_i & `INST_SH_MASK) == `INST_SH) && !mem_unaligned_r)
+    else if ((opcode_opcode_i & `INST_SH_MASK) == `INST_SH)
     begin
         case (mem_addr_r[1:0])
         2'h2 :
@@ -205,7 +205,7 @@ begin
         end
         endcase
     end
-    else if (opcode_valid_i && ((opcode_opcode_i & `INST_SB_MASK) == `INST_SB))
+    else if ((opcode_opcode_i & `INST_SB_MASK) == `INST_SB)
     begin
         case (mem_addr_r[1:0])
         2'h3 :
@@ -234,6 +234,10 @@ begin
     end
     else
         mem_wr_r    = 4'b0;
+    // Late validity qualifies strobes, not payload computation.
+    if (!opcode_valid_i || mem_unaligned_r)
+        mem_wr_r = 4'b0;
+
 end
 
 wire dcache_flush_w      = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DFLUSH);
@@ -244,14 +248,38 @@ wire dcache_invalidate_w = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW)
 // Sequential
 //-----------------------------------------------------------------
 
+// Wide request payload holds while waiting for a response or for acceptance.
+// Late fault/issue-valid signals affect controls, not these data flops.
+wire payload_wait_w = pending_lsu_e2_q && !mem_ack_i;
+wire payload_request_w = mem_rd_q || (|mem_wr_q) || mem_writeback_q ||
+                         mem_invalidate_q || mem_flush_q;
+wire payload_hold_w = ((mem_rd_q || (|mem_wr_q) || mem_unaligned_e1_q) && payload_wait_w) ||
+                      (payload_request_w && !mem_accept_i);
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
 begin
-    mem_addr_q         <= 32'b0;
-    mem_data_wr_q      <= 32'b0;
+    mem_addr_q      <= 32'b0;
+    mem_data_wr_q   <= 32'b0;
+    mem_cacheable_q <= 1'b0;
+end
+else if (!payload_hold_w)
+begin
+    mem_addr_q      <= mem_addr_r;
+    mem_data_wr_q   <= mem_data_r;
+/* verilator lint_off UNSIGNED */
+/* verilator lint_off CMPCONST */
+    mem_cacheable_q <= (mem_addr_r >= MEM_CACHE_ADDR_MIN && mem_addr_r <= MEM_CACHE_ADDR_MAX) ||
+                      dcache_invalidate_w || dcache_writeback_w || dcache_flush_w;
+/* verilator lint_on CMPCONST */
+/* verilator lint_on UNSIGNED */
+end
+
+// Original request-control cancellation and response sequencing.
+always @ (posedge clk_i or posedge rst_i)
+if (rst_i)
+begin
     mem_rd_q           <= 1'b0;
     mem_wr_q           <= 4'b0;
-    mem_cacheable_q    <= 1'b0;
     mem_invalidate_q   <= 1'b0;
     mem_writeback_q    <= 1'b0;
     mem_flush_q        <= 1'b0;
@@ -264,11 +292,8 @@ end
 // Memory access fault - squash next operation (exception coming...)
 else if (complete_err_e2_w || mem_unaligned_e2_q)
 begin
-    mem_addr_q         <= 32'b0;
-    mem_data_wr_q      <= 32'b0;
     mem_rd_q           <= 1'b0;
     mem_wr_q           <= 4'b0;
-    mem_cacheable_q    <= 1'b0;
     mem_invalidate_q   <= 1'b0;
     mem_writeback_q    <= 1'b0;
     mem_flush_q        <= 1'b0;
@@ -282,11 +307,8 @@ else if ((mem_rd_q || (|mem_wr_q) || mem_unaligned_e1_q) && delay_lsu_e2_w)
     ;
 else if (!((mem_writeback_o || mem_invalidate_o || mem_flush_o || mem_rd_o || mem_wr_o != 4'b0) && !mem_accept_i))
 begin
-    mem_addr_q         <= 32'b0;
-    mem_data_wr_q      <= mem_data_r;
     mem_rd_q           <= mem_rd_r;
     mem_wr_q           <= mem_wr_r;
-    mem_cacheable_q    <= 1'b0;
     mem_invalidate_q   <= 1'b0;
     mem_writeback_q    <= 1'b0;
     mem_flush_q        <= 1'b0;
@@ -296,17 +318,9 @@ begin
     mem_xh_q           <= req_lh_w | req_sh_w;
     mem_ls_q           <= load_signed_inst_w;
 
-/* verilator lint_off UNSIGNED */
-/* verilator lint_off CMPCONST */
-    mem_cacheable_q  <= (mem_addr_r >= MEM_CACHE_ADDR_MIN && mem_addr_r <= MEM_CACHE_ADDR_MAX) ||
-                        (opcode_valid_i && (dcache_invalidate_w || dcache_writeback_w || dcache_flush_w));
-/* verilator lint_on CMPCONST */
-/* verilator lint_on UNSIGNED */
-
     mem_invalidate_q <= opcode_valid_i & dcache_invalidate_w;
     mem_writeback_q  <= opcode_valid_i & dcache_writeback_w;
     mem_flush_q      <= opcode_valid_i & dcache_flush_w;
-    mem_addr_q       <= mem_addr_r;
 end
 
 assign mem_addr_o       = {mem_addr_q[31:2], 2'b0};

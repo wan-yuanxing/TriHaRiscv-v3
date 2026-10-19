@@ -159,7 +159,7 @@ issue的类别/寄存器冒险检查先独立计算候选资格，取消/CSR重�
 
 新最差路径从data_error_i经LSU返回值选择、E2旁路，进入除法器输入比较与初始减法，19级逻辑、逻辑3.569ns/布线14.204ns。源码确认LSU将fault地址和正常load数据复用同一个writeback总线，导致错误控制进入并不应消费的旁路数据。下一步分离旁路数据与fault提交载荷，保留原badaddr/mtval路径，不增加load返回寄存级。证据`docs/verification/cpu/compact_region_timing.json`绑定第5轮同RTL及实际区域转换/报告。
 
-## Load旁路与fault载荷分离（第7轮，当前最优setup）
+## Load旁路与fault载荷分离（第7轮）
 
 LSU额外导出纯load数据，仅用于E2旁路；原writeback完成总线继续在fault时传badaddr，WB捕获、异常编码和mtval路径不变。旁路数据选择使用已注册E2有效位，目的tag、stall和提交门控仍按原逻辑工作；没有新增寄存级或load延迟。定向测试保留fault、ack、stall三类RED；修改后在错误数据为X时也确认WB无效/目的寄存器关闭、badaddr与mtval精确。三种种子×两模式逐周期事务/WB/预测/11项CSR状态、独立存储按序异常及IRQ通过，真实错误负例正确拒绝。
 
@@ -168,6 +168,20 @@ LSU额外导出纯load数据，仅用于E2旁路；原writeback完成总线继�
 CoreMark、WB事件数和CRC完全不变：单1682259/观察IPC0.872543/短估算2.972194，双1390197/1.055853/3.596613。startup、14指令探针、validation、冒烟与故障注入均符合预期；均为RTL测试。
 
 新最差从data_error_i经过异常/取消和发射有效位，进入LSU地址格式选择及32位加法，终止于mem_addr_q[28]；17级逻辑、逻辑2.835ns/布线12.701ns。源码中地址格式由opcode_valid_i参与选择，宽请求数据也在错误时清零。下一步将请求地址/数据/属性与有效控制分开，仍须保持所有有效及停顿中的事务载荷，保持fault取消和精确异常。证据`docs/verification/cpu/load_bypass_timing.json`。
+
+## LSU请求载荷与有效控制分离（第8轮，当前最优setup）
+
+地址格式和store数据仅由原始opcode决定，晚到的issue valid只限定最终读写控制。地址、写数据、cacheable使用原有65位寄存器独立采样；响应等待及未接纳请求继续hold，fault仍关闭原请求控制，FIFO badaddr/异常提交保持原路。没有新增寄存器级或load延迟。定向RED先捕获无效LW错误选用S型立即数；GREEN覆盖无效store无写使能、未接纳载荷保持及load fault取消/精确badaddr。三组背压种子×单/双模式的逐周期事务/WB/预测/CSR和按序同步异常对照、IRQ及实际故障注入均符合预期；15项正例和4项预期拒绝的实际输入/输出哈希均已核验。
+
+CoreMark保持单1682259/双1390197周期、1467843次WB完成与标准CRC不变；单模式观察IPC0.872543、CoreMark/MHz短RTL估算2.972194。startup、14指令计数探针、validation和冒烟通过。仍非官方分数、完整ISA证明或板级结果。
+
+同10ns、原完整IO/hold/multicorner和区域约束重新完整实现，原生PDS返回0，主详细布线139次迭代到0未布通，完整324.514秒；宿主正确记录return2/TIMING_FAIL。冻结29项输入、360项输出和独立只读复核一致。实际setup Slow/Fast **-4.631/-0.097ns**，hold +0.109/+0.122ns，脉宽 +4.346/+4.345ns；performance slack与最差setup一致。最差setup较第7轮改善0.287ns，但Fast角稍差，Slow违例端点2649→3991，**100MHz仍未通过**。
+
+CPU-only映射8346 LUT/6084 FF/0 DRM/4 APM，224 IO另计；较父版LUT增加1057（14.5013%）、FF不变，不能称面积优化。层次归属中LSU为178→150 LUT、issue为1148→2243 LUT，其余模块也重新映射，不能把整个增量解释成LSU直接新增硬件。
+
+新的全局最差为纯核内：译码FIFO rd_ptr_q[0]→完整PC匹配/载荷选择→寄存器读取→分支比较→issue pc_x_q[29]；23级逻辑，逻辑3.599ns/布线10.684ns。payload1_selected_w有1554负载，且路径包含3.364ns的专用线段。之前data_error→LSU地址格式链不再是本轮首要路径，不据此宣称它的所有路径都已通过。下一步将载荷lane选择与完整PC命中分开；依据现有FIFO固定pc0低三位000、pc1为100的契约，用已寄存期望PC的bit2选择数据，完整PC/valid/取消继续限定发射和accept。需先建立错PC、空lane、取消及奇偶lane的RED/GREEN，再做同样的事务/异常/CoreMark和实际STA核验，不新增主流水级、不降低约束。
+
+证据索引：`docs/verification/cpu/request_payload_timing.json`，包含原始最终报告、实际退出码和独立复核路径。本批未合并主工程、未生成bitstream或编程板卡。
 
 ## 仍需完成
 

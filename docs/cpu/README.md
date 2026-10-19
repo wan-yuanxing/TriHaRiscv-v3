@@ -1,6 +1,6 @@
 # TriHa CPU 开发与维护
 
-主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-18。
+主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-19。
 
 Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pango综合/映射已经建立，并完成首轮隔离后布线；100MHz setup尚未收敛，详见 [STATUS.md](STATUS.md)。正式SoC、完整ISA及板测仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
 
@@ -14,7 +14,7 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pa
 | `rtl/cpu/triha_cpu.v`、`ADAPTATIONS.json` | 直接维护的内部连接派生Verilog及多文件差异哈希；单发射不生成第二执行单元，保留共享CSR/异常控制 |
 | `rtl/cpu/triha_frontend.v`、`triha_issue.v` | 寄存重定向及issue数据/有效控制分离，六个主流水级不变 |
 | `rtl/cpu/triha_multiplier.v`、`triha_csr.v` | 宽数据寄存器独立采样；原有效、hold、异常及提交写控制继续生效 |
-| `rtl/cpu/triha_lsu.v`、`triha_pipe_ctrl.v` | 纯load旁路与fault提交载荷分离，保留精确badaddr/mtval和所有提交/停顿门控 |
+| `rtl/cpu/triha_lsu.v`、`triha_pipe_ctrl.v` | 纯load旁路、fault提交与请求宽数据分离，保留精确badaddr/mtval和请求保持/取消门控 |
 | `rtl/cpu/vendor/` | 固定来源源码、LICENSE、UPSTREAM.json、原始测试映像；保留原文件，不批量改名或重排 |
 | `rtl/soc/` | 后续正式互连、外设、IRQ和系统集成；以新主工程接口为准 |
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |
@@ -83,3 +83,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 后续以实际STA路径判断，完整ISA/异常、正式SoC/DDR/NPU集成与板测另行验收。CoreMark在配置或硬件行为改变后按相同边界复测。当前时序候选与逐轮结果见STATUS及`redirect_timing_plan.md`；不将局部改动或工具PASS称为100MHz通过。
 
 `run_redirect.ps1 -Test training`验证完整训练事件寄存，包含call/return/jump和没有miss请求的BHT更新。旧训练时序的物理运行只读复核须显式使用`review_route.ps1 -LegacyTraining`，正常新运行仍强制REGISTER_TRAINING=1。第4轮不作为已通过时序的部署版，原始结果见`training_timing.json`。
+
+`run_redirect.ps1 -Test requestdata`检查请求地址格式/store数据不依赖晚到valid、有效控制关闭、未接纳请求载荷保持及fault取消/badaddr；`-Test loadbypass`保留返回数据与精确异常的分离检查。第8轮实际100MHz仍TIMING_FAIL，详见STATUS和`request_payload_timing.json`。

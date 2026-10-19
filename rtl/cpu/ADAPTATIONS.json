@@ -73,10 +73,12 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
       "base_sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
       "derived": "rtl/cpu/triha_lsu.v",
-      "derived_sha256": "960382a9eb85591fc4838f06d90e3a1fddc580ff01f043984726a7b494281c12",
+      "derived_sha256": "fc9df1a744a25ffca8c03bb199b84a1af2b558a36d4712d337121cf8fd764480",
       "changes": [
         "Rename integration/helper modules to triha_lsu/triha_lsu_fifo.",
-        "Export pure load payload for bypass without response ack/error selection; preserve the original completion/fault address bus and all request/exception controls."
+        "Export pure load payload for bypass without response ack/error selection; preserve the original completion/fault address bus and all request/exception controls.",
+        "Decode address format and store data without late issue valid; retain final request/unaligned strobe qualification.",
+        "Keep address/data/cacheability payload in separate registers with response-wait and unaccepted-request holds, excluding late fault cancellation from wide data."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
