@@ -235,6 +235,20 @@ CoreMark性能测量区间仍为单1682259/双1390197周期、1467843次WB完成
 
 证据`docs/verification/cpu/divider_input_timing.json`。旧物理结果用新复核脚本读取时，入口寄存引入前须加`-LegacyDivider`；新运行默认严格要求寄存开启。未合并主工程或编程板卡。
 
+## FIFO空槽宽载荷采样（第12轮）
+
+复用原FIFO控制，只让wr_ptr指向的空槽在非满时采样PC/指令宽数据，独立于晚到push/flush；满队列和有效数据保持原行为。计数、指针、valid和fault/分类metadata仍按原控制更新。六级配置会在valid=0时对残留opcode输出原始CSR类别，原IRQ inhibit会读取此值；因此另存每word/entry一位历史CSR分类（共4位），只在原非flush入队时更新，保留原始decoder的分类，不让推测空槽数据改变中断行为。未新增主流水或FIFO延迟。
+
+同一最终测试对原FIFO RED、新FIFO GREEN；2023个周期比较原全部控制/metadata、所有有效PC/数据和残留CSR类别，覆盖满/部分pop/flush及无效X载荷，真实损坏被拒绝。三种背压×单/双模式逐周期旧时序、按序同步异常和IRQ自检均通过；共21项正例/6项预期拒绝的输入输出核验通过，原始28文件保持不变。CoreMark周期/WB/CRC、startup、retire、validation和冒烟均与第11轮相同，非官方或板级结果。
+
+同100MHz/IO/hold/multicorner和区域约束完整重新实现，CPU-only6690 LUT/5209 FF/32分布式RAM单元/0 DRM/4 APM，224 IO另计；比第11轮多69 LUT/4 FF。原生返回0、宿主return2/TIMING_FAIL，主详细布线93次到0未布通，完整226.471秒；冻结31项输入/270项输出及独立核验一致。
+
+实际setup Slow/Fast **-6.770/-1.270ns**，hold +0.110/+0.100ns，脉宽 +4.346/+4.345ns。全局setup比父版变差，**100MHz仍未通过**，不将FIFO逻辑路径分离或布线耗时当收益。第9轮仍为最优WNS检查点；本轮为新网表和布局。
+
+新的最差data_ack→stall→WB目的tag→操作数旁路→分支比较→issue pc_x_q[30]：24级逻辑，逻辑4.060ns/布线13.444ns。stall控制274负载，WB tag一位50负载。源码确认rd_wb/rd_e2同时用于实际提交/冒险及数据旁路，且包含当前stall/issue_stall限定。下一步仅为数据旁路导出由已注册valid/rd-valid/opcode决定的tag，提交、RF写口、scoreboard及stall/squash原控制不变；在可实际发射时两种tag必须相等，停顿/取消时不能借数据采样触发新事务。先做此不变量的定向验证，再运行整核回归与实际STA。
+
+证据`docs/verification/cpu/fifo_payload_timing.json`。未合并主工程或编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

@@ -91,3 +91,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 单发射寄存器堆在`triha_regfile.v`使用两份原生异步读分布式RAM及同步复位可见标记，次写口必须为0；双发射保留原实现。`run_regfile.ps1 -Backend candidate`运行独立组件oracle，`-Stage map`核对真实分布式RAM/FF资源，`-Broken`要求拒绝输出损坏。原语模型路径与哈希见`config/cpu_primitives.json`，由仿真公共入口绑定。最新整核6833 LUT/5123 FF，100MHz Slow setup仍-4.659ns，证据`distributed_regfile_timing.json`。
 
 `triha_divider.v`默认为原除法器增加一拍完整输入寄存，DIV/REM完成流延后一周期，原算法/缓存/重启不变；`run_redirect.ps1 -Test divarith`验证独立数值及对原模块的一拍输出流关系，`-LegacyDivider`应触发延迟契约RED，`-Broken`必须拒绝。旧逐周期整核miter显式关闭此寄存，新默认用按序回归。旧物理结果复核另加`-LegacyDivider`，需要时与`-LegacyTraining`组合；新PDS运行必须核对CPU/wrapper寄存参数均1。第11轮实际100MHz仍TIMING_FAIL，见`divider_input_timing.json`。
+
+`triha_decode.v`维护FIFO空槽宽载荷采样，计数/指针/有效/fault控制不变，并保留无效槽的原始CSR历史分类，避免影响IRQ inhibit。`run_redirect.ps1 -Test fifodata`比较2023周期的控制、有效载荷和CSR历史，覆盖X数据；`-LegacyFifo`是原连接RED，`-Broken`注入真实损坏。第12轮实际100MHz仍失败，见`fifo_payload_timing.json`。

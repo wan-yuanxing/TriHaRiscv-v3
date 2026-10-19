@@ -184,7 +184,7 @@ u_npc
 );
 
 
-biriscv_decode
+triha_decode
 #(
      .EXTRA_DECODE_STAGE(EXTRA_DECODE_STAGE)
     ,.SUPPORT_MULDIV(SUPPORT_MULDIV)

@@ -23,11 +23,12 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
       "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
       "derived": "rtl/cpu/triha_frontend.v",
-      "derived_sha256": "d0d2f9544889c17962e5f3dff92c1584f2764917ac65139c21d6bdfde86ce965",
+      "derived_sha256": "54a73db1a16774595a97af9333b0be6a3e307c99b6b0e15ca98cd5a697b3d046",
       "changes": [
         "Rename integration module to triha_frontend.",
         "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
-        "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request."
+        "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request.",
+        "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -121,6 +122,18 @@
         "Register the complete 144-bit divider input tuple and one valid bit, sampling payload independently of validity.",
         "Instantiate the original divider unchanged, including its iterative algorithm, cache and restart behavior; output stream is exactly one cycle later when enabled.",
         "Provide REGISTER_INPUT=0 only for explicit legacy timing comparison."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_decode.v",
+      "base_sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+      "derived": "rtl/cpu/triha_decode.v",
+      "derived_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "changes": [
+        "Rename integration decode/FIFO modules without changing original vendor bytes.",
+        "Sample wide PC/instruction data only into the free write slot whenever not full, independently of push/flush; original count/pointers/valid/fault metadata control unchanged.",
+        "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     }

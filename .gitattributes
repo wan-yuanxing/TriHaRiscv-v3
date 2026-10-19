@@ -25,6 +25,7 @@ rtl/cpu/triha_lsu.v -whitespace
 rtl/cpu/triha_pipe_ctrl.v -whitespace
 rtl/cpu/triha_regfile.v -whitespace
 rtl/cpu/triha_divider.v -whitespace
+rtl/cpu/triha_decode.v -whitespace
 # Preserve measured Windows test/provenance bytes in frozen receipts.
 rtl/cpu/ADAPTATIONS.json -text whitespace=cr-at-eol
 tb/cpu/tb_cpu_equivalence.v -text whitespace=cr-at-eol

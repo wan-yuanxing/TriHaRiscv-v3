@@ -11,7 +11,7 @@
     "rtl/cpu/vendor/src/core/biriscv_alu.v",
     "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
     "rtl/cpu/triha_csr.v",
-    "rtl/cpu/vendor/src/core/biriscv_decode.v",
+    "rtl/cpu/triha_decode.v",
     "rtl/cpu/vendor/src/core/biriscv_decoder.v",
     "rtl/cpu/vendor/src/core/biriscv_divider.v",
     "rtl/cpu/vendor/src/core/biriscv_exec.v",
