@@ -287,6 +287,24 @@ performance slack一致，**100MHz仍未通过**。最差setup较父版改善0.2
 
 新最差为LSU请求队列rd_ptr→返回half选择→load旁路→下一次store地址/数据lane→mem_data_wr_q[27]，9级逻辑、逻辑1.590ns/布线11.297ns。下一步检查在原队列push/pop边界预计算完整队首寄存输出，消除读指针mux；必须保持包括无效残留值在内的原逐周期队列语义和load延迟，先做组件oracle再复核整核与实际STA。证据`docs/verification/cpu/pc_increment_timing.json`。未合并主工程、未编程板卡。
 
+## LSU两表项队首寄存存储坐标（第15轮，物理回退）
+
+复用原环形队列的接纳/pop/计数规则，仅在深度2时将两份36位存储改为相对于读头的head/tail，pop交换两份物理内容；移除读写指针，输出直接来自head FF。实际full时push仍拒绝、empty时pop仍忽略，空队列残留值也保留，其他深度保持原实现。没有增加payload状态、主流水级或load延迟。
+
+对原固定FIFO的全部控制/36位输出（含无效残留）及独立有效流oracle，深度2/4各10001周期通过；覆盖reset、满/空同时push/pop和无效X输入。相同最终测试对原实现通过，真实输出错误注入被拒绝；实际ADS网表的36位输出由父版组合mux变为直接FF。整核/固件/组件24项正例和6项预期拒绝，全部实际输入/外部原语/输出哈希一致。CoreMark单1682259/双1390197周期、1467843次WB及CRC仍相同，短RTL估算与观察IPC不变，非官方或板级结果。
+
+同100MHz/原IO/hold/multicorner和两区域约束完整重新实现，CPU-only **6806 LUT/5207 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计；比第14轮+93 LUT/-2 FF，FIFO层次8→58 LUT、76→74 FF。不能将状态减少概括为面积优化。原生返回0，宿主return2/TIMING_FAIL，230次主详细迭代到0未布通，完整505.554秒，其中hold修复182秒。31项冻结输入/544项输出及独立复核一致。
+
+| 实际检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| setup | **-4.936** | **-0.103** |
+| hold | +0.116 | +0.101 |
+| 脉宽 | +4.346 | +4.345 |
+
+performance一致，**100MHz仍未通过，且全局setup较父版恶化1.689ns**。Slow违例端点2262→2718、Fast新增1个setup违例；第9轮仍为历史最优WNS。本轮保留为有完整证据的诊断检查点，不把组合mux消除或功能通过当时序收益。
+
+新最差data_rdata_i[23]→load格式/旁路→下次地址加法→mem_cacheable_q，15级逻辑、逻辑2.891ns/布线12.610ns；相关操作数连接两段2.665/3.466ns。下一步停止叠加RTL，冻结同一源码，单因素比较完整单时钟区域布局，原100MHz与所有IO/hold预算不变，单独核验实际报告。证据`docs/verification/cpu/lsu_head_timing.json`。未合并主工程、未编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

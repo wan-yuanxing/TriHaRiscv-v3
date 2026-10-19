@@ -469,6 +469,52 @@ module triha_lsu_fifo
     ,output              valid_o
 );
 
+generate
+if (DEPTH == 2 && ADDR_W == 1) begin: g_head
+    // Same circular storage in read-relative coordinates:
+    // head = ram[rd_ptr], tail = ram[~rd_ptr]. On a pop the banks rotate.
+    // Retaining the old head as tail also preserves data_out while empty.
+    reg [WIDTH-1:0] head_q;
+    reg [WIDTH-1:0] tail_q;
+    reg [1:0] count_q;
+    wire push_w = push_i && accept_o;
+    wire pop_w = pop_i && valid_o;
+
+    assign valid_o = count_q != 2'd0;
+    assign accept_o = count_q != 2'd2;
+    assign data_out_o = head_q;
+
+    always @(posedge clk_i or posedge rst_i)
+    if (rst_i) begin
+        head_q <= {WIDTH{1'b0}};
+        tail_q <= {WIDTH{1'b0}};
+        count_q <= 2'd0;
+    end else begin
+        case ({pop_w,push_w})
+            2'b01: begin
+                if (count_q == 2'd0)
+                    head_q <= data_in_i;
+                else
+                    tail_q <= data_in_i;
+            end
+            2'b10: begin
+                head_q <= tail_q;
+                tail_q <= head_q;
+            end
+            2'b11: begin
+                // Only count=1 can accept both: replace the next head.
+                head_q <= data_in_i;
+                tail_q <= head_q;
+            end
+            default: ;
+        endcase
+        if (push_w && !pop_w)
+            count_q <= count_q + 2'd1;
+        else if (!push_w && pop_w)
+            count_q <= count_q - 2'd1;
+    end
+end else begin: g_ring
+
 //-----------------------------------------------------------------
 // Local Params
 //-----------------------------------------------------------------
@@ -530,6 +576,7 @@ assign accept_o      = (count_q != DEPTH);
 
 assign data_out_o    = ram_q[rd_ptr_q];
 
-
+end
+endgenerate
 
 endmodule
