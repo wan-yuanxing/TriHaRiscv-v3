@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "stage": "native synthesis",
+  "scope": "Actual triha_issue PC bit 2 only; excludes identically named execution-unit registers",
+  "netlist_sha256": "67c1cad1647d623ee9501b6705ce2c71162fb59a60d0d339b9f79399fef36182",
+  "original_and_copies": 8,
+  "additional_flip_flops": 7,
+  "same_type_data_clock_ce_reset_init": true,
+  "cells": {
+    "pc_x_q_1_copy[2]": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_2"
+    },
+    "pc_x_q_1_copy[2]_1": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_3"
+    },
+    "pc_x_q_1_copy[2]_2": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_4"
+    },
+    "pc_x_q_1_copy[2]_3": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_5"
+    },
+    "pc_x_q_1_copy[2]_4": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_6"
+    },
+    "pc_x_q_1_copy[2]_5": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_7"
+    },
+    "pc_x_q_1_copy[2]_6": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q_8"
+    },
+    "pc_x_q[2]_1": {
+      "type": "GTP_DFF_CE",
+      "pins_except_q": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0",
+        "C": "rst_i",
+        "CE": "N579",
+        "CLK": "clk_i",
+        "D": "N580[2]"
+      },
+      "q": "pc_x_q[2]"
+    }
+  }
+}

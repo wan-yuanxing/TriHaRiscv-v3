@@ -5,7 +5,7 @@
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "83bdf98bfc54137fbaa83f623cf5ca2cf361699e6041dbb6fb1feb8ba223f4a8",
+      "derived_sha256": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
@@ -15,8 +15,7 @@
         "Connect maintained multiplier/CSR data-register derivatives.",
         "Select predictor training register independently from redirect timing.",
         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
-        "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
-        "Connect cycle-equivalent maintained execution unit with independent PC-result addition."
+        "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -169,17 +168,6 @@
         }
       ],
       "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
-    },
-    {
-      "base": "rtl/cpu/vendor/src/core/biriscv_exec.v",
-      "base_sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
-      "derived": "rtl/cpu/triha_exec.v",
-      "derived_sha256": "e4ee78e7e4c98a9aa867e722c1f2230e32592610e8db8a075b97c04acad3d4db",
-      "changes": [
-        "Rename maintained module to triha_exec.",
-        "Compute AUIPC and JAL/JALR PC results in a kept separate adder, bypassing the generic ALU operand/shift network; preserve original decode priority, output register, hold/reset, every branch output and cycle."
-      ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     }
   ]
 }

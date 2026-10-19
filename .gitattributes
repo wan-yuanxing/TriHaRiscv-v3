@@ -31,4 +31,3 @@ rtl/cpu/triha_npc.v -whitespace
 rtl/cpu/ADAPTATIONS.json -text whitespace=cr-at-eol
 tb/cpu/tb_cpu_equivalence.v -text whitespace=cr-at-eol
 sw/benchmarks/coremark/src/** -text -whitespace
-rtl/cpu/triha_exec.v -whitespace

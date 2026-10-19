@@ -26,7 +26,6 @@ rtl/cpu/triha_multiplier.v
 rtl/cpu/triha_csr.v
 rtl/cpu/triha_lsu.v
 rtl/cpu/triha_pipe_ctrl.v
-rtl/cpu/triha_exec.v
 rtl/cpu/triha_cpu.v
 rtl/cpu/triha_core.v
 rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem.v

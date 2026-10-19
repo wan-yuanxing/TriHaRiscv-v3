@@ -696,7 +696,7 @@ u_issue
 );
 
 
-triha_exec
+biriscv_exec
 u_exec0
 (
     // Inputs
@@ -733,7 +733,7 @@ u_exec0
 // Keep the shared issue/CSR/exception control intact; only specialize EX1.
 generate
 if (SUPPORT_DUAL_ISSUE) begin : gen_dual_exec
-triha_exec
+biriscv_exec
 u_exec1
 (
     // Inputs
