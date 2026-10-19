@@ -134,34 +134,44 @@ begin
         ras_index_r = ras_index_q - 1;
 end
 
-integer i3;
-always @ (posedge clk_i or posedge rst_i)
-if (rst_i)
-begin
-    for (i3 = 0; i3 < NUM_RAS_ENTRIES; i3 = i3 + 1) 
-    begin
-        ras_stack_q[i3] <= RAS_INVALID;
+// Decode known index candidates before the late prediction controls arrive.
+// A confirmed return overlapping a speculative call uses the confirmed
+// return index, as in the original ras_index_r priority chain.
+wire [NUM_RAS_ENTRIES_W-1:0] ras_actual_push_index_w = ras_index_real_q + 1'b1;
+reg [NUM_RAS_ENTRIES_W-1:0] ras_spec_push_index_r;
+reg ras_actual_push_r, ras_spec_push_r;
+always @* begin
+    ras_spec_push_index_r = ras_index_q + 1'b1;
+    if (branch_request_i & branch_is_ret_i)
+        ras_spec_push_index_r = ras_index_real_q - 1'b1;
+    ras_actual_push_r = 1'b0;
+    ras_spec_push_r = 1'b0;
+    if (branch_request_i & branch_is_call_i)
+        ras_actual_push_r = 1'b1;
+    else if (ras_call_pred_w & pc_accept_i)
+        ras_spec_push_r = 1'b1;
+end
+genvar ras_entry;
+for (ras_entry=0; ras_entry<NUM_RAS_ENTRIES; ras_entry=ras_entry+1) begin: g_ras_write
+    localparam [NUM_RAS_ENTRIES_W-1:0] ENTRY = ras_entry;
+    always @(posedge clk_i or posedge rst_i) begin
+        if (rst_i)
+            ras_stack_q[ras_entry] <= RAS_INVALID;
+        else if (ras_actual_push_r && ras_actual_push_index_w == ENTRY)
+            ras_stack_q[ras_entry] <= branch_source_i + 32'd4;
+        else if (ras_spec_push_r && ras_spec_push_index_r == ENTRY)
+            ras_stack_q[ras_entry] <= (btb_upper_w ? (pc_f_i | 32'd4) : pc_f_i) + 32'd4;
     end
-
+end
+always @(posedge clk_i or posedge rst_i)
+if (rst_i)
     ras_index_q <= {NUM_RAS_ENTRIES_W{1'b0}};
-end
-// On a call push return address onto RAS stack (current PC + 4)
 else if (branch_request_i & branch_is_call_i)
-begin
-    ras_stack_q[ras_index_r] <= branch_source_i + 32'd4;
-    ras_index_q              <= ras_index_r;
-end
-// On a call push return address onto RAS stack (current PC + 4)
+    ras_index_q <= ras_index_r;
 else if (ras_call_pred_w & pc_accept_i)
-begin
-    ras_stack_q[ras_index_r] <= (btb_upper_w ? (pc_f_i | 32'd4) : pc_f_i) + 32'd4;
-    ras_index_q              <= ras_index_r;
-end
-// Return - pop item from stack
+    ras_index_q <= ras_index_r;
 else if ((ras_ret_pred_w & pc_accept_i) || (branch_request_i & branch_is_ret_i))
-begin
-    ras_index_q              <= ras_index_r;
-end
+    ras_index_q <= ras_index_r;
 
 //-----------------------------------------------------------------
 // Global history register (actual history)
@@ -238,15 +248,16 @@ reg         btb_is_jmp_q[NUM_BTB_ENTRIES-1:0];
 reg [NUM_BTB_ENTRIES-1:0] match_pc_r;
 reg [NUM_BTB_ENTRIES-1:0] match_upper_r;
 reg [NUM_BTB_ENTRIES-1:0] match_write_r;
-wire [NUM_BTB_ENTRIES-1:0] match_high_w;
+wire [NUM_BTB_ENTRIES-1:0] match_common_w;
 wire [NUM_BTB_ENTRIES-1:0] match_source_w;
 genvar compare_entry;
 for (compare_entry=0; compare_entry<NUM_BTB_ENTRIES; compare_entry=compare_entry+1) begin: g_tag_compare
-    // Exact-PC and upper-word queries share all bits except bit two.
-    // Keep the common high tag out of two separate full-width carry chains.
-    triha_npc_equal #(.WIDTH(29)) u_query (
-        .left_i(btb_pc_q[compare_entry][31:3]), .right_i(pc_f_i[31:3]),
-        .equal_o(match_high_w[compare_entry])
+    // Only bit two differs between exact-PC and upper-word queries.
+    // Share both the high tag and low alignment bits; retain every tag bit.
+    triha_npc_equal #(.WIDTH(31)) u_query (
+        .left_i({btb_pc_q[compare_entry][31:3],btb_pc_q[compare_entry][1:0]}),
+        .right_i({pc_f_i[31:3],pc_f_i[1:0]}),
+        .equal_o(match_common_w[compare_entry])
     );
     triha_npc_equal #(.WIDTH(32)) u_source (
         .left_i(btb_pc_q[compare_entry]), .right_i(branch_source_i),
@@ -259,9 +270,9 @@ always @* begin
     match_upper_r = {NUM_BTB_ENTRIES{1'b0}};
     match_write_r = {NUM_BTB_ENTRIES{1'b0}};
     for (i0=0; i0<NUM_BTB_ENTRIES; i0=i0+1) begin
-        if (match_high_w[i0] && btb_pc_q[i0][2:0] == pc_f_i[2:0])
+        if (match_common_w[i0] && btb_pc_q[i0][2] == pc_f_i[2])
             match_pc_r[i0] = 1'b1;
-        if (match_high_w[i0] && btb_pc_q[i0][2:0] == (pc_f_i[2:0] | 3'b100))
+        if (match_common_w[i0] && btb_pc_q[i0][2])
             match_upper_r[i0] = 1'b1;
         if (branch_request_i)
             if (match_source_w[i0])

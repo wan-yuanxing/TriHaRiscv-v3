@@ -101,6 +101,16 @@ module predictor_select_case #(
     endtask
     initial begin
         @(negedge clk);step;rst=0;
+        // A confirmed return may overlap a predicted call. Preserve the
+        // original priority: speculative payload, confirmed-return index.
+        request=1;is_call=1;is_ret=0;source=32'h81000000;target=32'h81000100;accept=0;
+        pc=32'h81000000;step;
+        is_call=0;is_ret=1;accept=1;
+        #1;
+        if(u_candidate.BRANCH_PREDICTION.ras_call_pred_w !== 1'b1)
+            $fatal(1,"PREDICTOR_SELECT_FAIL overlapping_RAS_case_missing");
+        step;
+        request=0;is_call=0;is_ret=0;accept=0;pc=0;rst=1;#1;step;rst=0;
         // Populate all entries with duplicate tags and different data. This
         // covers states not reached by well-behaved training, including reset's
         // multiple PC=0 matches; no unique-tag assumption is permitted.
@@ -144,14 +154,16 @@ module predictor_select_case #(
 endmodule
 module predictor_tag_case(output reg done=0);
     reg [31:0] left=0, right=0;
-    wire eq32, eq29;
+    wire eq32, eq29, eq31;
     integer bit_number, checks=0;
     triha_npc_equal #(.WIDTH(32)) u_full(.left_i(left),.right_i(right),.equal_o(eq32));
     triha_npc_equal #(.WIDTH(29)) u_high(.left_i(left[31:3]),.right_i(right[31:3]),.equal_o(eq29));
+    triha_npc_equal #(.WIDTH(31)) u_common(.left_i({left[31:3],left[1:0]}),.right_i({right[31:3],right[1:0]}),.equal_o(eq31));
     task check;
         begin
             #1;
-            if(eq32 !== (left==right) || eq29 !== (left[31:3]==right[31:3]))
+            if(eq32 !== (left==right) || eq29 !== (left[31:3]==right[31:3]) ||
+                eq31 !== ({left[31:3],left[1:0]}=={right[31:3],right[1:0]}))
                 $fatal(1,"PREDICTOR_SELECT_FAIL grouped_tag_4state bit=%0d",bit_number);
             checks=checks+1;
         end
@@ -164,7 +176,7 @@ module predictor_tag_case(output reg done=0);
             right=left;right[bit_number]=1'bz;check;
             right=left^(32'b1<<((bit_number+1)%32));right[bit_number]=1'bx;check;
         end
-        $display("PREDICTOR_TAG_PASS cases=%0d widths=29,32",checks);
+        $display("PREDICTOR_TAG_PASS cases=%0d widths=29,31,32",checks);
         done=1;
     end
 endmodule

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "cpu_sha256": "dd69acd7d5ea1057c6f25be5dcda2f766ede482585d3d94e2bbd73f40094d804",
+  "phase": "shared31bit query and RAS per-entry early write index",
+  "fresh_cpu_records": [
+    {
+      "result": "build\\cpu\\equivalence-20261019T1247389078402Z\\result.json",
+      "sha256": "c4b72cda4f4cd8753b988b14030498b63645415c9cd0d3b0a707b0a9357c6914",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1247525201988Z\\result.json",
+      "sha256": "1f0bcf35ecbea97687ff58a788bf2c129497ab291cf9254fe93f784958674dee",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 1234567
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1248074698532Z\\result.json",
+      "sha256": "b9132f1f47fed6aa4b5941da170877b223414990771d4ef02d8789a543968b52",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 271828
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1247440003644Z\\result.json",
+      "sha256": "98ab4b3a2b16773ccfd4c54a96529219f5789e007fd709218c1c1ac4d723eca5",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1247574238345Z\\result.json",
+      "sha256": "c12e8cf9b50d9df09a3c4256c715317f5afb86a63180f578513c499a1a2c6626",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 1234567
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1248125325342Z\\result.json",
+      "sha256": "9a177336d10c2ff423478c8385e66fd90c0cc031265dd163ec47bdfd01a568f3",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 271828
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1248220948526Z\\result.json",
+      "sha256": "ee82e47c526f43fc9dc3d52d46ec00b774adcb3e3ac00445c181c626a162a44c",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1248308013030Z\\result.json",
+      "sha256": "a1e3351037ea667ccb0ee71812a5744154989c73c7c12cf9d923a511f94e0c02",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1247147390039Z\\result.json",
+      "sha256": "472136b2d61a684797c3a2c393c94cbead9bfce900109c0dd733cae25809bde8",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "predictorselect",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1247174837225Z\\result.json",
+      "sha256": "f49c62be514b03bbc4bd68e855eb4d77975e8da1c759437cb3693b017041818e",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "predictorselect",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1248382195617Z\\result.json",
+      "sha256": "d485518e57e26f6e213d94765d87615d5e32b20f7d1cd4f928b2cec875ed0403",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "predictorselect",
+      "seed": 37
+    }
+  ],
+  "fresh_soc_records": [
+    {
+      "result": "build\\soc\\memory-20261019T124738662900Z\\result.json",
+      "sha256": "0b7e5856ca90a15a5613012a6010c330c64623d15210c469852fd38a005c1bb1",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T124740639716Z\\result.json",
+      "sha256": "ba87bc70e5a34ae15f333fbb338480bc5742dd861de10467a375ab88e6cef70f",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T124743288051Z\\result.json",
+      "sha256": "1d748a399ffc83e110de6fc2064f8f3ba9552c970038c07077b7322de03ea6f9",
+      "measurement": {
+        "cycles": 1685831,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8706940375399432,
+        "coremark_per_mhz_short_estimate": 2.965896344295484,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      }
+    },
+    {
+      "result": "build\\soc\\access-faults-20261019T124949395981Z\\result.json",
+      "sha256": "ebf458b7984bbc88f7bd333c69345f4d7c028ca2526077c9126a7a03fe33e32f",
+      "measurement": null
+    }
+  ],
+  "tag_oracle_input_cases": 160,
+  "tag_oracle_output_checks": 480,
+  "confirmed_return_predicted_call_overlap_checked": true,
+  "parent_regression": "docs/verification/cpu/minimal_soc_tag_tree_validation.json",
+  "official_score": false,
+  "board_validated": false
+}

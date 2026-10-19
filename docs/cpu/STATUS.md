@@ -428,3 +428,12 @@ UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到�
 高29bit共享及三bit分组比较的逐拍NPC对照、320项四态原始等值oracle、三seed×两模式整核/按序store/异常、IRQ/mret、系统CoreMark与4类真实访问异常通过。SRAM CoreMark仍1685831周期/1467843WB、2.965896短估算/MHz。原vendor不变。CPU层次降为6175LUT/5173FF，系统6347LUT/5292CLM FF/10IO FF/16.5DRM/4APM；系统较前版少482LUT、FF不变。功能索引minimal_soc_tag_tree_validation.json。
 
 实际新布局Slow setup−0.582ns/426端点/TNS−130.114ns，Fast+2.608ns、hold+0.116/+0.102ns、脉宽+3.655/+4.202ns，未通过。不能以资源下降声称时序收益。最差PC[0]→RAS动态地址→stack CE，11级、逻辑2.032/布线8.097ns；索引minimal_soc_tag_tree_route.json。后续共享两种查询相同的低两位tag，并将RAS动态地址写入改逐条目早期选择，保持原状态/周期与优先顺序。
+
+
+## 2026-10-19 31bit公共查询/RAS条目写入终态
+
+共享除bit2外全部31个tag位，RAS按候选早期索引逐条目写入；原指针优先顺序和payload表达式保留，新增确认return与预测call重叠定向用例及480项四态等值输出检查。NPC全状态、三seed×两模式整核/按序store/同步异常、IRQ/mret、4类系统访问异常、CoreMark均通过；SRAM短测仍1685831cycles/1467843WB、2.965896/MHz、观察IPC0.870694。功能索引minimal_soc_ras_entry_validation.json。
+
+CPU层次6111LUT/5173FF/32distributedRAM/4APM；额外169LUT/120FF/16.5DRM。系统映射6280LUT/5292CLM FF/10IO FF/16.5DRM/4APM。完整物理Slow setup−0.017ns，仅2端点/TNS−0.034ns，Fast+2.820ns、hold+0.108/+0.100ns、MPW+3.655/+4.202ns，100MHz仍未通过。全部哈希/实际报告独立核验见minimal_soc_ras_entry_route.json。
+
+最后路径LSU address→通用d_bad译码→取指stall→RAS条目CE；下一步仅在已命中SRAM时用等价本地写有效性检查，避免把ROM/MMIO/未映射译码串入碰撞抑制，不改变写入/error/响应/周期。
