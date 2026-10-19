@@ -23,5 +23,5 @@
   "refineplacement_iterations": 40,
   "lut6d_packing_strategy": 3,
   "route_mode": "performance",
-  "placement_decongestion": 0
+  "placement_decongestion": 1
 }

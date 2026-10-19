@@ -1,0 +1,106 @@
+{
+  "status": "PASS",
+  "scope": "Cycle-preserving PC-result execution derivative; directed and short RTL checks, not complete ISA/formal or board validation",
+  "runs": [
+    {
+      "test": "unit",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\exec-pc-20261019T163004512101Z",
+      "result_sha256": "919d59a9598df9b0009b6d00811a309071aa696bbcd06d94b8c91a8d9713dda9",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 7,
+      "output_count": 35
+    },
+    {
+      "test": "unit_bad_output",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\exec-pc-20261019T163006424567Z",
+      "result_sha256": "31eeb169680a1c3dffec2eecb3b3720c44aa43dc3be6d4c6a5a417d318d51d1e",
+      "actual_status": "FAIL",
+      "expected_rejection": true,
+      "input_count": 7,
+      "output_count": 35
+    },
+    {
+      "test": "ordered37",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1630573479055Z",
+      "result_sha256": "dfa6c3f0cb77e6392551715dfd7cc1343d3616b17863e995302f2d95d26c989f",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 46,
+      "output_count": 38
+    },
+    {
+      "test": "ordered1234567",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1631166833186Z",
+      "result_sha256": "5d9c0fd568498ef148aa7484c8ee22456a856e7c806e2447f47a961382ec8fc5",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 46,
+      "output_count": 38
+    },
+    {
+      "test": "ordered271828",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1631167057461Z",
+      "result_sha256": "19bc4ef72c3a861f2d4cbf62c328af20afb6a04429aa1ca1fee077ed79ffa73d",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 46,
+      "output_count": 38
+    },
+    {
+      "test": "irq37",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1631166832431Z",
+      "result_sha256": "3536980ab1e613a8083b130a25ac2cfc5d1c33dfcd62b361ffb780e8ebf3649b",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 46,
+      "output_count": 38
+    },
+    {
+      "test": "coremark",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\coremark-20261019T163057066962Z",
+      "result_sha256": "2c70445d0838c1a4adb274e207ba0d0f6a1df25c24bfa2c9f2f6494ebdfe0344",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 75,
+      "output_count": 115
+    },
+    {
+      "test": "clocks",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-clocks-20261019T163057096150Z",
+      "result_sha256": "ceed3c682133e439352c3cebb9e218f0a596547f9fad9535da8db05b60f19131",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 11,
+      "output_count": 50
+    },
+    {
+      "test": "board",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T163100182801Z",
+      "result_sha256": "f333c8bb93aafe87b002ece20ef0dfb41f18944d4568a9b291e489533cf0d517",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 73,
+      "output_count": 109
+    },
+    {
+      "test": "board_bad_memory",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T163136855183Z",
+      "result_sha256": "f3e958b06e7cb310d062004ffad5e7afa893f74f1103fd4cc2ec8771aefa1407",
+      "actual_status": "FAIL",
+      "expected_rejection": true,
+      "input_count": 73,
+      "output_count": 110
+    }
+  ],
+  "coremark": {
+    "cycles": 1685831,
+    "wb_completion_observations": 1467843,
+    "observed_ipc": 0.8706940375399432,
+    "short_coremark_per_mhz": 2.965896344295484,
+    "official_score": false,
+    "board_result": false
+  },
+  "all_vendor_files_unchanged": true,
+  "source_unchanged": true
+}
