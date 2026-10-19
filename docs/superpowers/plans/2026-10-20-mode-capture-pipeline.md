@@ -66,6 +66,6 @@ end
 
 ## Task 4：实际实现和现场
 
-- [ ] 原约束实际综合/布线；依据新报告检查路径，完成140管脚、素材RAM、77同步链和13束的结构/物理端点审计。全部setup/hold/recovery/removal通过才打包。
+- [x] 原约束实际综合/布线；依据新报告检查路径，完成140管脚、素材RAM、77同步链和13束的结构/物理端点审计。全部setup/hold/recovery/removal通过才打包。
 - [ ] 易失Program/Verify，绑定Program会话记录UART。实际RAW、三次KEY1及KEY0桌面重采、60秒稳定性仍按原F3c验收，不由仿真或旧日志替代。
 - [ ] 更新 `docs/video/STATUS.md`、`docs/verification/video/mode_board.md` 及来源/位流/现场证据；精确本地提交，不push/merge/Flash。

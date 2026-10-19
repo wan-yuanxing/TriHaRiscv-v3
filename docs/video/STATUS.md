@@ -43,7 +43,7 @@ F3a当前24场景已通过，20ms去抖与模式控制已分别综合为30LUT/26
 误判，独立dirty/覆盖状态和case14/15/16验证通过；当前完整回归37套件/198输入/337份仿真PASS日志通过，
 Python85通过/1权限跳过。修复后独立77检查及针对性突变通过，11项审查来源/529项
 审查产物与40项保留文件核对一致。本批F3a控制组件验收完成；
-当前板卡仍为F2静态全屏，尚不能通过MODE键切换。见[控制组件验证](../verification/video/mode_control.md)。
+F3a阶段板卡仍为F2静态全屏，当时尚不能通过MODE键切换。见[控制组件验证](../verification/video/mode_control.md)。
 
 F3b已完成独立最多16框/可选五点与单张256×256 RGBA像素组件，9级精确最近邻
 寻址和13级像素/身份/同步/标志对齐，素材错误逐像素退回原图并锁存fault。最终
@@ -53,7 +53,7 @@ RGBA未知污染，foreground隔离后父RED/GREEN及5319像素/3679请求复核
 8项突变全部被检测，当前无未解决实质问题。最终综合10637LUT/1645FF/0DRM/6APM，
 25ns及同钟边界约束下估计setup+15.961ns；hold估计-2.470ns，尚无布线闭合。
 93项既有dirty/冻结来源保持，F3a完整37套件198输入中196项字节相同，两项runner
-只新增组件入口；本批仅重跑三个受影响套件，不冒称完整all。当前板卡仍为F2镜像，
+只新增组件入口；本批仅重跑三个受影响套件，不冒称完整all。F3b阶段板卡仍为F2镜像，
 素材DDR缓存、像素CDC/原子提交及MODE实体接线尚未接入。见[像素验证](../verification/video/overlay.md)。
 
 F3c前置已实现模式单事务CDC及单bank RGBA封存缓存：pixel接纳与实际提交分开，
@@ -63,9 +63,14 @@ core反馈保持至消费；素材65536字全部写入后才可见，封存后�
 官方手册与例程已交叉确认KEY1=C23、低有效，后续作为MODE。见[资源组件验证](../verification/video/mode_resources.md)。
 
 F3c独立 `video_mode_board` 已接KEY1/C23三模式及封存测试纹理，默认RAW，KEY0回默认并重采；框/五点/纹理是人工诊断输入。MODE不改采集/raw身份或重启HDMI/DDR。组合3场景、板级6健康/故障/复位场景和349光栅/34900像素通过；Python102项中101通过、1权限跳过。800×600组件另通过1920021像素，独立板级审查核对42894像素。
-公共CRC和writer的三轮等价优化均单独记录；writer新增2499200组算术/四态用例，独立228872检查及3个错误替身通过，当前write_dma/raw/mode板级回归通过。桥缓存修改前的流水版综合17275LUT/18748FF/73.5DRM/16APM，140管脚/64素材RAM/77同步链/13束结构检查通过。
-原8ns/25ns/跨域约束未放宽，7次构建共15个布局仍未闭合setup，最新流水版seed6为-0.202ns/92端点，hold slow/fast +0.038/+0.029ns；最差路径转至桥的WLAST校验到收集缓存使能。未打包或下载三模式镜像，板卡仍是已验收F2全屏。按[流水计划](../superpowers/plans/2026-10-20-mode-capture-pipeline.md)新增第一故障码寄存边界，pending立即隔离请求、cancel和子DMA，成功发布保留当拍故障检查。定向7项、三个错误替身、three_capture/raw_board/mode_board回归均通过；完整800×600及307200字节NCHW黄金一致。独立审查88条命令、12组48次采集、三种几何正常逐拍对照及10个错误替身通过，无剩余问题。流水检查点已本地提交`1709d2a`，第7次构建失败证据已保存，未打包/下载。下一步按[桥缓存计划](../superpowers/plans/2026-10-20-mode-bridge-cache.md)移除失败事务的无用私有写使能依赖；候选1343场景/111496次全公共输出对照通过；独立native模型13739场景/556402周期、23公共输出及1782560字节数据/guard检查、4个错误替身通过，观察到941次私有缓存差异但无公共差异。已精确采用候选，axi_bridge/raw_board/mode_board回归及来源绑定均通过；准备按原约束第8次实际构建。
-现场验收器的3项记录绑定问题已修复，18项独立检查通过，但实体KEY1/KEY0与三模式稳定性尚未验收。见[三模式板级记录](../verification/video/mode_board.md)。
+
+第8次实际构建在原core8ns、pixel25ns及跨域约束下闭合内部时序：slow/fast setup为+0.334/+2.627ns、hold为+0.135/+0.101ns，recovery/removal亦通过。当前综合17252LUT/18747FF/73.5DRM/16APM；140管脚、64素材RAM、77同步链、13束结构审计及18份报告/50项严格端点核验全部通过。7次旧失败构建和15个失败布局完整保留。
+
+公共CRC/writer等价优化、[capture第一故障码流水](../superpowers/plans/2026-10-20-mode-capture-pipeline.md)及[桥私有缓存写使能简化](../superpowers/plans/2026-10-20-mode-bridge-cache.md)分别验证。流水正常路径三种几何逐拍一致；桥候选1343场景/111496次全公共输出对照及独立13739场景/556402周期、1782560字节数据/guard检查通过，941次实际私有缓存差异未造成公共输出变化。当前axi_bridge/raw_board/mode_board及来源绑定通过；数字检查点本地提交`1709d2a`、`4c16b31`，其余路线修改保留。
+
+镜像`8274194d1c69`已易失Program/Verify，当前板卡为F3c默认RAW，未写Flash。冻结的120.993秒/122包自动记录中，RAW/preview源与DDR CRC一致、input完整读回307200字节，扫描2615→9612、欠载0，素材就绪、mode_state=0x190、请求数0/提交数1。当前首帧尚未经用户确认，CRC也不是四角图黄金值，不能关闭已知图数值验收或现场视觉验收。持续串口记录已开启，等现场确认源图后继续RAW→BOX→AVATAR→RAW及KEY0桌面重采。
+
+现场验收器的3项记录绑定问题已修复，18项独立检查通过；实体KEY1/KEY0及三模式稳定性仍待实际操作和观察。详见[三模式板级记录](../verification/video/mode_board.md)及[机器证据](../verification/video/evidence/mode_board.json)。
 
 后续F4通用显示记录/多帧所有者、共享DDR及F5真实NPU集成仍待推进。当前 raw/preview/input 三分支及
 320×320 BGR NCHW 保留；24fps采集、固定扫描率下基础读写约137.43MB/s，NPU/
@@ -108,7 +113,7 @@ F3c独立 `video_mode_board` 已接KEY1/C23三模式及封存测试纹理，默�
 | V020h-three | 同帧三分支采集核心 | 已实现slot/frame_id/version锁存、原子三路分送、good EOF/raw CRC及三路B退休、保持事件和显式排空；完整回归31套件/159输入、209份仿真PASS日志；独立88条命令/5突变、仲裁7突变及224项哈希复核通过。综合3959LUT/2825FF/3DRM18K/2APM，8ns估计setup+0.596ns。见[验证记录](../verification/video/three_capture.md)。CPU MMIO/fabric/三槽调度及板测未完成。 |
 | V020i-three-board | 三分支板级接入及实体KEY0 | 独立目标/串行三路读回/双窗及type8诊断已通过。完整回归32套件/167输入/235份仿真PASS日志，Python67通过/1权限跳过，规格/质量审查通过。第二轮种子14在原8ns/6ns约束下通过内部时序及路径审计，125MHz slow setup/hold为0.000/+0.066ns，16713LUT/17029寄存器/9.5DRM。Program/Verify成功；正式279包中按键前后约116/159秒持续健康，三路CRC均匹配四角图，欠载0，用户确认单次KEY0前后双窗完整。见[集成记录](../verification/video/three_board.md)及[证据](../verification/video/evidence/three_board.json)。 |
 
-已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。同帧raw/preview目标保留工作镜像33e1b8242053；三分支独立镜像89c2e860fde4已通过四角图三路CRC及单次实体KEY0验收，保留为双窗诊断基线。当前板卡运行全屏镜像0cd4a546804b，详见顶部F2记录。旧版黑帧、裁切及错误源图记录均保留。V021a采帧MMIO及V021b-control原生CPU控制桥/数字联测已完成；生产SoC接入/共享fabric、三槽所有权、跨master可见性、NPU推理、外部AC签核及连续采集仍未完成。
+已获得P1的稳定彩条、合法HDMI输入时序、DDR校准及复位后自检证据。同帧raw/preview目标保留工作镜像33e1b8242053；三分支独立镜像89c2e860fde4已通过四角图三路CRC及单次实体KEY0验收，保留为双窗诊断基线。F2验收镜像为0cd4a546804b，详见顶部F2记录；当前板卡状态见顶部F3c。旧版黑帧、裁切及错误源图记录均保留。V021a采帧MMIO及V021b-control原生CPU控制桥/数字联测已完成；生产SoC接入/共享fabric、三槽所有权、跨master可见性、NPU推理、外部AC签核及连续采集仍未完成。
 
 本轮 RX/DDR 的独立说明见 [rx_ddr_bringup.md](../verification/video/rx_ddr_bringup.md)。当前用户确认电脑活动信号为 800×600、60.32 Hz，实测 VS 原始高电平为 4224 个像素时钟、场周期 663168；没有将 HS 边沿歧义读出的 VS=3 放宽为可接受模式。最终 RX 位流 SHA256 为 `406edfee9a218bb63b61f3e8a972c671f78e6466692fa67f7666da9154dae50c`，DDR 位流为 `9617217b476b659a51923b06f3338e80b89c41d0cf981ad9436e4ed5ac6666f4`；两者已连同各自同名校验掩码打包。
 
@@ -127,7 +132,7 @@ F3c独立 `video_mode_board` 已接KEY1/C23三模式及封存测试纹理，默�
 | V020 | 检测input与正式三分支采集 | 同帧三分支独立板测和实体KEY0已通过，采帧MMIO组件已冻结；下一步接CPU总线/fabric，验收正式就绪事件/槽状态/提交契约及跨master写后读可见性，再扩展连续采集。 |
 | V020e-input | 320输入RTL与正式输入集成 | 320数值参考、双线性及NCHW/DMA已实现，公共配置和RTL/C统一300KiB张量、320KiB槽；独立板级三分支的已知图CRC与KEY0已通过。下一步完成CPU地址/版本/MMIO/可见性和槽生命周期，再对接实际NPU推理。 |
 | V021b-fabric | 共享DDR与正式CPU SoC | 原生控制桥及固定CPU数字联测见V021b-control；继续实现生产ROM/SRAM、共享DDR不可缓存属性/跨master写后读、PLIC/CDC、协调复位及统一槽状态。采帧MMIO不提供槽allocator或多帧rearm。 |
-| V022-fullscreen | 原分辨率全屏与功能键 | F1组件和F2独立全屏板级验收完成；四角图及普通桌面单次KEY0恢复、三段至少60秒健康扫描通过。F3a控制/F3b叠加及F3c独立三模式数字接入已完成，布线与实体KEY1验收进行中；再接共享DDR与真实NPU。旧双窗位流保留为诊断基线。 |
+| V022-fullscreen | 原分辨率全屏与功能键 | F1组件和F2独立全屏板级验收完成；四角图及普通桌面单次KEY0恢复、三段至少60秒健康扫描通过。F3a控制/F3b叠加及F3c独立三模式数字接入已完成，内部时序及Program/Verify通过，实体KEY1验收待现场确认；再接共享DDR与真实NPU。旧双窗位流保留为诊断基线。 |
 | V030 | 检测预处理＋人工框/头像 | NPU 量化清单、素材清单；真实张量与像素参考一致 |
 | V040 | 三槽/CDC/压力与错误恢复 | 延迟/相位扫描、在途读写及释放 ACK、实际模拟 NPU DDR 流量 |
 | V050 | CPU/Video/NPU 两两集成 | 对应路线接口与可运行产物 |

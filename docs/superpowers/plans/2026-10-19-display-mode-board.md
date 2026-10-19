@@ -64,11 +64,11 @@ assert (sample_valid == previously_sampled_request);
 - [x] 派生冻结F2顶层保持已有层级/复位结构；对齐raw RGB对应的x/y/SOF，再接F3b和缓存。MODE记录经CDC原子应用，first-pixel retire marker触发实际反馈。
 - [x] 人工框/点/测试头像可观察，默认RAW；KEY1两级同步+20ms去抖。数字联测验证三模式全光栅、首末像素、快速请求合并、模式变化不触发采集/raw提交/HDMI或DDR复位，KEY0后重新装载和重采。
 - [x] 新UART模式记录包含request/active/seq/commit/asset/error状态；不能以旧type9健康条件替代叠加健康；包解析/epoch测试覆盖新类型。
-- [ ] 保留原8ns core/6ns CDC束约束，审计所有新增/存活同步端点，实际综合/布线通过后才生成和打包位流。
+- [x] 保留原8ns core/6ns CDC束约束，审计所有新增/存活同步端点，实际综合/布线通过后才生成和打包位流。
 
 ## Task 6：现场验收
 
-- [ ] 合格包在同一下载会话识别ID后易失Program/Verify；保持旧合格包可恢复，不写Flash。
+- [x] 合格包在同一下载会话识别ID后易失Program/Verify；保持旧合格包可恢复，不写Flash。
 - [ ] 逐项记录RAW完整四角、KEY1到BOX框/点、KEY1到AVATAR及回RAW；mode request/commit推进而raw提交/采集CRC/帧ID不变，60秒无欠载/叠加故障。
 - [ ] KEY0后素材重装/重新校准重采、完整桌面恢复；需用户实际操作和观察才能关闭，不能用数字测试代替。
 - [ ] 更新状态/来源/位流与现场证据并精确本地提交，无push或merge。
@@ -77,4 +77,4 @@ assert (sample_valid == previously_sampled_request);
 
 normal六种子与performance单种子均未闭合setup。仅对公共CRC reader作阶段条件等价优化，作为上述全部来源冻结约定的有记录例外；F2顶层/FDC/IP仍保留。旧/新逐拍和四态等价、受影响回归及新物理构建见[时序优化计划](2026-10-20-mode-board-timing.md)。本页现场验收勾选条件不变。
 
-当前公共CRC两步及writer算术改写的数字等价检查通过，最新实际setup仍-0.225ns/18端点；改由[core控制流水计划](2026-10-20-mode-capture-pipeline.md)推进。F2顶层/FDC/IP仍保留，原Task5/6物理勾选条件不变。
+公共CRC/writer等价检查点后，经[core控制流水](2026-10-20-mode-capture-pipeline.md)及[桥缓存写使能简化](2026-10-20-mode-bridge-cache.md)，第8次构建setup+0.334ns，全部内部时序和50项结构/物理端点检查通过。合格镜像8274194d1c69已Program/Verify，默认RAW自动检查120.993秒通过；实体KEY1、KEY0及已知四角图/视觉确认仍待现场，按Task6逐项关闭。F2顶层/FDC/IP仍保留。

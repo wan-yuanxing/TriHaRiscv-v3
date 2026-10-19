@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "current_pipeline_digital_verified; current_source_physical_implementation_pending",
+  "status": "routed_internal_timing_verified; physical board acceptance pending",
   "base_head": "1f8be69f1c749430763e9bc98f8745585743fbac",
   "owned": [
     "fpga/pg2l100h/rtl/video_demo_mode_output.sv",
@@ -57,17 +57,17 @@
     "rtl/video/video_three_branch_capture.sv": "d77bd530035c1c6e5c8e6d30137455d6a0a509386b52bd0a7aafe06ed0ccb5cd",
     "tb/video/tb_video_three_branch_capture.sv": "9ecf593dd1e5585f94dc8291c305a1c2b2dc20a8712da3eb5ca5e2a0d3f7188a",
     "docs/superpowers/plans/2026-10-20-mode-board-timing.md": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da",
-    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "338eec4938433e082919116944123280fe7a6601c6082edfc0a81f5179fdaa00",
+    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "8ff96010f5a2c9edc4507c7c759d4870a7d5dc7e458eebad938d685c4c1f93d3",
     "scripts/video/run.py": "91870c2f6a6adaf7d3bc7702f2f7e54cae37c0cdaf93fb687a92b26599165e90",
     "scripts/video/build_pds.py": "ec6494009f9c68e0ca531906f33f46039262de29568d66124eaeb4141c95e151",
     "scripts/video/read_board.py": "1b6f2287303875e096a671b395405b84a8de24283d45d164cde541416373dcf9",
     "scripts/video/package_board.py": "5740b7311ac0223cec67d18878a5d23259ac2c129843a9e978f6159981e1f11f",
     "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
-    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "fa50e17cc5a5cb30106020a7d4aa2b0c7a462498b3856e7b3fa4d0b7e5075966",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "a7c4dfb328b7f9672d5c556878c308761f39371226f3d1c13f7fcd2fad1e9bdf",
     "docs/video/README.md": "91aa1a13de0c50805c720c7c59387e3bc012ccf09a794bfbfb920f809b7a6061",
-    "docs/video/STATUS.md": "908366d3f08a4e6ba268c703edf6cec8d4f7df3c52bde1fd9b0ad537380f876c",
+    "docs/video/STATUS.md": "5031e65fa5bbd649ff789a051949bb8fbbe4a434bfe75be6171107ec40dc34d0",
     "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
-    "docs/verification/video/mode_board.md": "08fb4046d5faac9086e748c598d64761b22f8af2c3e4a782d3e0f6be56f9bad7"
+    "docs/verification/video/mode_board.md": "a5cdcd15cd2f49598f451e7ce6993776e609d480d71d7beb2786aaac13151e17"
   },
   "refs": {
     "mode_output": {
@@ -254,9 +254,33 @@
       "path": "build/video/regression/20261019T184638_969982Z/result.json",
       "sha256": "eaf38005c0b737d1c62bafa8328df9db541345dc44ccab69fc20ad4d0791822b"
     },
+    "current_build": {
+      "path": "build/video/pds/20261019T191756_225568Z/result.json",
+      "sha256": "6b01a8a722dcf4743c4157eeb41604bf2ccc0e53369dc9998a7f3ffacd41697a"
+    },
+    "current_structure": {
+      "path": "build/video/mode_board_timing_audit/constraints/20261019T191756_225568Z/structural.json",
+      "sha256": "125b0cfe02e97f2ee3f13a38b5456dadedadbccd7c45aab4e86f14f858889aee"
+    },
+    "route": {
+      "path": "build/video/mode_board_timing_audit/constraints/20261019T191756_225568Z/result.json",
+      "sha256": "ef0e3a685083707c5b8cb76c57ca51203cf503109ac69ff6672d8d6e2ad5556b"
+    },
+    "pds": {
+      "path": "build/video/pds/20261019T191756_225568Z/result.json",
+      "sha256": "6b01a8a722dcf4743c4157eeb41604bf2ccc0e53369dc9998a7f3ffacd41697a"
+    },
+    "program": {
+      "path": "build/video/board_program/20261019T193232_105390Z/result.json",
+      "sha256": "204516f2e5397c69860c78e24d1ce98e247f7f43e56ff4b76bf619a476e4f6fc"
+    },
     "artifacts": {
       "path": "build/video/mode_board_artifact_hashes.json",
       "sha256": "0e653757bfbe0b0798ed3bd6a66b56bdbdd8b558b976a527eea8d9f70fba743b"
+    },
+    "automatic_raw_uart": {
+      "path": "build/video/mode_board_automatic_check/result.json",
+      "sha256": "3c37332f53db341fa8ea61c221a68f8b557ad31e631ba5bc97504de767c67f31"
     }
   },
   "preserved_files": 226,
@@ -297,11 +321,21 @@
     "scripts/video/run.py",
     "scripts/video/build_pds.py"
   ],
-  "source_snapshot_verified": false,
-  "resources": null,
-  "structural": null,
-  "routed_internal_timing_verified": false,
-  "physical_program_and_verify": false,
+  "source_snapshot_verified": true,
+  "resources": {
+    "lut": 17252.0,
+    "registers": 18747.0,
+    "drm": 73.5,
+    "apm": 16.0
+  },
+  "structural": {
+    "pins": 140,
+    "synchronizer_pairs": 77,
+    "texture_drms": 64,
+    "bundles": 13
+  },
+  "routed_internal_timing_verified": true,
+  "physical_program_and_verify": true,
   "physical_acceptance": null,
   "full_all_rerun": false,
   "formal_display_mmio_implemented": false,
@@ -469,6 +503,47 @@
       "sha256": "d0ba69c5885b84d7e887a98c79704611a6f7e472c1e765e7acc41930477224d8"
     }
   },
+  "automatic_raw_uart": {
+    "status": "automatic_raw_uart_check_pass",
+    "program_bitstream_sha256": "8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43",
+    "scope": "Program/Verify and one static RAW transport epoch; raw/preview source-versus-DDR CRC, complete input readback and scan health only.",
+    "trace_directory": "build/video/mode_board_trace/20261019T193331_403299Z",
+    "packet_count": 122,
+    "elapsed_ms": 120993.11,
+    "packet_counts": {
+      "6": 31,
+      "9": 30,
+      "8": 30,
+      "10": 31
+    },
+    "completed_scans": [
+      2615,
+      9612
+    ],
+    "crc32_hex": {
+      "raw": "cf904ad2",
+      "preview": "748dffe5",
+      "input": "fdf5d86f"
+    },
+    "raw_frame_id": 1,
+    "raw_commits": 1,
+    "underflows": 0,
+    "mode_state": "0x190",
+    "visual_confirmed": false,
+    "key1_confirmed": false,
+    "key0_confirmed": false,
+    "golden_pattern_verified": false,
+    "input_reference_crc_verified": false,
+    "flash_written": false,
+    "refs": {
+      "build/video/board_program/20261019T193232_105390Z/result.json": "204516f2e5397c69860c78e24d1ce98e247f7f43e56ff4b76bf619a476e4f6fc",
+      "build/video/mode_board_trace/20261019T193331_403299Z/program.json": "204516f2e5397c69860c78e24d1ce98e247f7f43e56ff4b76bf619a476e4f6fc",
+      "build/video/mode_board_automatic_check/chunks.log": "f8eb6b63fa186c1b21b8325e142b57f7490b1dc0146c01403a695640fc468fe7",
+      "build/video/mode_board_automatic_check/uart.bin": "a30e5396b37c295d6c6b3626b8d1bfc1dc39ed22aac983ef626d5e9657f9bdc6",
+      "build/video/mode_board_automatic_check/records.json": "3130e2435fd1015fa19e8410135164f40e6133a8ccffb04656ea7a5c5191fb82",
+      "build/video/save_mode_automatic_check.py": "05b1c135ecb0f67e871753a4ab6d29c844e5a81c6c9375f22eac2c0867d4f9bc"
+    }
+  },
   "bridge_cache_exception": {
     "path": "rtl/video/axi128_hmic256.sv",
     "before_sha256": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
@@ -495,20 +570,5 @@
       "guard_bytes_checked": 1782560
     },
     "independent_mutations": 4
-  },
-  "historical_synthesis_reference": {
-    "resources": {
-      "lut": 17522.0,
-      "registers": 18738.0,
-      "drm": 73.5,
-      "apm": 16.0
-    },
-    "structural": {
-      "pins": 140,
-      "synchronizer_pairs": 77,
-      "texture_drms": 64,
-      "bundles": 13
-    },
-    "scope": "Historical source synthesis only; not the current registered-fault pipeline"
   }
 }
