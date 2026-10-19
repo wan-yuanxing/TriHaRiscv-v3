@@ -11,7 +11,8 @@
   "constraints": "fpga/pg2l100h/constraints/cpu_board.fdc",
   "physical_constraints": [
     "fpga/pg2l100h/constraints/cpu_board_core_clock.fdc",
-    "fpga/pg2l100h/constraints/cpu_board_sram_local.fdc"
+    "fpga/pg2l100h/constraints/cpu_board_sram_local.fdc",
+    "fpga/pg2l100h/constraints/cpu_board_fifo_fanout.fdc"
   ],
   "slack_prior_in_global_router": true,
   "placement_trials": 1,

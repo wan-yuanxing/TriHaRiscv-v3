@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "scope": "Audit the actual ADS read-pointer copies; not a complete netlist proof or STA.",
+  "netlist": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1812181122360Z\\synthesize\\triha_cpu_board_top_syn.vm",
+  "netlist_sha256": "53aef2e0132d4f16d674c028008fec0d1f5e278ab6b597b6dba38afb923aa7c0",
+  "checker_sha256": "5029fb0ef9208d8fdaefce9f5d5eddd6b860efc9ed48bbe20026fc94ac7cc7cc",
+  "original": "rd_ptr_q[0]",
+  "copy_ffs": 6,
+  "cells": {
+    "rd_ptr_q[0]": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q[0]"
+    },
+    "rd_ptr_q_copy[0]": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_0"
+    },
+    "rd_ptr_q_copy[0]_1": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_1"
+    },
+    "rd_ptr_q_copy[0]_2": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_2"
+    },
+    "rd_ptr_q_copy[0]_3": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_3"
+    },
+    "rd_ptr_q_copy[0]_4": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_4"
+    },
+    "rd_ptr_q_copy[0]_5": {
+      "type": "GTP_DFF_C",
+      "parameters": {
+        "GRS_EN": "\"TRUE\"",
+        "INIT": "1'b0"
+      },
+      "state_inputs": {
+        "C": "rst_i",
+        "CLK": "clk_i",
+        "D": "_N55406"
+      },
+      "output": "rd_ptr_q_5"
+    }
+  },
+  "identical_type_d_clk_ce_reset_init": true,
+  "functional_rtl_unchanged": true,
+  "complete_semantic_proof": false
+}
