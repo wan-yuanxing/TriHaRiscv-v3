@@ -1,6 +1,8 @@
 # CPU板级最小系统设计（2026-10-20）
 
-本阶段沿用用户已批准的部署顺序：实际片上系统100MHz通过后，接板级时钟、复位、管脚和UART，随后再接DDR/Video/NPU。执行在现有CPU工作树，保留`cpu-soc-100mhz-sta-20261019`和原验收目录，不改已通过CPU RTL或原报告。
+本阶段沿用用户已批准的部署顺序：实际片上系统100MHz通过后，接板级时钟、复位、管脚和UART，随后再接DDR/Video/NPU。执行在现有CPU工作树，保留`cpu-soc-100mhz-sta-20261019`及其源码和原验收目录。后续等价RF/预测器/旁路组合调整均另存验证与备份，不改写原通过记录。
+
+2026-10-20终态：真实板级PLL/管脚100MHz后布线全部通过，位流/掩码及cpu_board_5f5eb8c89efd下载包已核验；详见`docs/verification/cpu/board_system_100mhz.md`。CPU仍六级单发射，CoreMark周期不变，未Program/Verify或板测。以下保留设计边界和物理诊断过程。
 
 使用板卡已验证的N3/N2差分125MHz参考输入，`GTP_INBUFDS`后连接PDS生成的PLL。当前I=1、M=1、F=8、O=10，PFD=125MHz、VCO=1GHz、输出精确100MHz，均在安装工具的GPLL范围内。不用27MHz近似输出冒充100MHz。原始IDF从板卡参考包按已有清单哈希提取，只在build中生成新实例。
 

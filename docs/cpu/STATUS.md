@@ -1,8 +1,10 @@
 # TriHa CPU 状态
 
-更新：2026-10-19。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-当前主线已接入正式地址的ROM/SRAM和总线，实际系统100MHz后布线已通过：最差setup+0.232ns，两角hold/脉宽无违例。CoreMark短RTL 2.965896/MHz、观察IPC0.870694；CPU层次6080LUT/5205FF/32distributedRAM/4APM。不是板测或官方分数。详见 `docs/verification/cpu/minimal_soc_100mhz.md`。以下保留逐阶段历史，旧失败不改写。
+当前六级单发射CPU已通过真实板级PLL/管脚边界的100MHz后布线，并生成下载包cpu_board_5f5eb8c89efd。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例；不是布局估计。CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。CoreMark短RTL仍2.965896/MHz、WB观察IPC0.870694；非官方分数或板测。尚未Program/Verify或物理UART/KEY0验收。
+
+最新验收见`docs/verification/cpu/board_system_100mhz.md`及board_system_acceptance.json。原外供100MHz片上系统5c4229a/cpu-soc-100mhz-sta-20261019及385项输出保持不变。独立CPU分支和工作树保留，不自动合入主工程、push或修改Video。以下为逐阶段历史，旧失败不改写。
 
 ## 本批交付
 
@@ -492,3 +494,11 @@ PC加法等价实验通过完整执行单元/整核/CoreMark，但实际-0.442ns
 新板级运行board-route-20261019T1806550427178Z完整布通，独立review PASS而timing_closed=false。Slow/Fast setup -0.212/+1.752ns、hold +0.154/+0.101ns、MPW +3.655/+4.202ns；Slow仅3个违例端点，TNS -0.442ns。CPU-only5934LUT/5172FF/64分布式RAM/0DRM/4APM。与BHT父版-0.586ns相比为新网表/新布局的整体结果，仍未超过原网表最佳-0.096ns。
 
 最新路径FIFO读指针→rs2/旁路→ALU结果，读指针扇出141、首段0.990ns，三条违例同源。下一步只对该指针作有界官方syn_maxfan复制诊断，核对实际复制状态连接后重新STA；原100MHz/IO/hold/uncertainty保持。board_sequential_pc_validation.json及board_sequential_pc_route.json为本批证据。未生成CPU板级包，未Program/Verify，未修改主工程Video或技术报告。
+
+## 2026-10-20 板级100MHz闭合及下载包
+
+FIFO复制实际增加6FF，首段布线虽缩短，整体setup -0.438ns，已归档6bbf059/cpu-board-fifo-fanout-diagnostic-20261020并退出默认recipe。随后仅将六路旁路数据覆盖改为标签并行比较、独占优先级和case传递payload，保持x0、X/Z、状态和周期。扩展独立oracle至24448项，原版通过、坏输出拒绝、候选通过；三seed单/双有序WB/store/异常、IRQ/mret、完整预测器/训练、板级正负例和CoreMark通过。15项运行绑定、vendor28/派生11/安装模型5均核验。
+
+首次实际STA已全通过，但位流生成命令因PowerShell数组内拼接缺括号被拆行而失败，原记录完整保留。回归测试真实复现4行而非2行，修复后5项发布检查通过；未改写旧FAIL。完整复跑board-route-20261019T1825066711298Z的compile/synthesize/dev_map/pnr/report_timing/gen_bit_stream均成功，宿主和3个原生调用均返回0、source_unchanged，46项输入、328项输出及实际管脚/PLL/最终STA独立复核通过。最差路径已为SRAM块RAM→执行结果，setup +0.023ns；不据此声称高于100MHz。
+
+下载包build/soc/releases/cpu_board_5f5eb8c89efd包含位流、校验掩码、ELF/map、ROM/SRAM、最终报告及review/manifest/README，10项文件哈希通过。验收/备份标签cpu-board-100mhz-sta-20261020。下一步在获得临时替换当前Video配置的确认后，执行volatile Program/Verify、UART两次完整启动/ALIVE及KEY0现场验收，并恢复用户指定的Video包；不写Flash。当前不自动下载或宣称板测成功。

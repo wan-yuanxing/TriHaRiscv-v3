@@ -806,12 +806,27 @@ function [31:0] forward_raw_operand;
     input [29:0] tags;
     input [191:0] values;
     reg [31:0] value;
+    reg [5:0] hit;
+    reg [5:0] select;
     integer source;
     begin
-        value = rf_data;
+        hit = 6'b0;
         for (source=0; source<6; source=source+1)
             if (tags[source*5 +: 5] == index)
-                value = values[source*32 +: 32];
+                hit[source] = 1'b1;
+        for (source=0; source<6; source=source+1)
+            select[source] = hit[source] & ~(|(hit & (6'b111111 << (source+1))));
+        // At most one known select bit is set. A case transfers X/Z data
+        // unchanged, including when an earlier matching source contains Z.
+        case (select)
+            6'b000001: value = values[31:0];
+            6'b000010: value = values[63:32];
+            6'b000100: value = values[95:64];
+            6'b001000: value = values[127:96];
+            6'b010000: value = values[159:128];
+            6'b100000: value = values[191:160];
+            default: value = rf_data;
+        endcase
         if (index == 5'b0)
             value = 32'b0;
         forward_raw_operand = value;

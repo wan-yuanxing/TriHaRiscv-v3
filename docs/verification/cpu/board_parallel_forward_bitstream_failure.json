@@ -1,0 +1,76 @@
+{
+  "status": "FAIL",
+  "scope": "Historical frozen evidence audit; physical STA passed, bitstream command serialization failed; no release or board execution",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1820068182209Z",
+  "result_sha256": "8d43ce0acef11ff215776fc418bb40bfc9610973edeeecb60d1ff9263dbc3d79",
+  "source_unchanged_at_finish": true,
+  "frozen_inputs_verified": 46,
+  "frozen_outputs_verified": 323,
+  "timing": {
+    "met": true,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.023,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.155,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4394
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.752,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.1,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4394
+      }
+    ],
+    "performance_slack_ns": 0.023,
+    "worst_setup_ns": 0.023,
+    "performance_consistent": true,
+    "all_constraints_met": true
+  },
+  "native_return_codes": [
+    0,
+    0,
+    1
+  ],
+  "error": "pds-bitstream returned 1; inspect its logs.",
+  "current_root_drift": [
+    "scripts/soc/run_board_route.ps1"
+  ],
+  "programmed": false
+}

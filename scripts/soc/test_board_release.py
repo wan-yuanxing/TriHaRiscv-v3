@@ -1,5 +1,9 @@
 """Release identity checks: matching bytes alone cannot identify the routed run."""
 from pathlib import Path
+import json
+import re
+import shutil
+import subprocess
 import tempfile
 import unittest
 
@@ -48,6 +52,24 @@ class RoutedDatabaseBinding(unittest.TestCase):
         other.write_bytes(b"routed-database-test-fixture")
         with self.assertRaisesRegex(ValueError, "selected routed"):
             review_board.review_routed_database(self.work, self.result(other), 8, False)
+
+
+class BitstreamCommand(unittest.TestCase):
+    def test_actual_generator_keeps_command_and_database_on_one_line(self):
+        source = (Path(__file__).parent / 'run_board_route.ps1').read_text(encoding='utf-8')
+        assignment = re.search(r'(?ms)^        \$bitLines=@\(.*?(?=^        \[IO.File\])', source)
+        self.assertIsNotNone(assignment)
+        script = r'''
+function TclPath([string] $Path) { '{'+$Path.Replace('\','/')+'}' }
+$core=[pscustomobject]@{family='Logos2';device='PG2L100H';speedgrade='-6';package='FBG676'}
+$routedDb='D:\FPGA\CPU test\place_route\triha_cpu_board_top_pnr.adf'
+''' + assignment[0] + '\nConvertTo-Json -InputObject @($bitLines) -Compress\n'
+        completed = subprocess.run([shutil.which('pwsh'), '-NoProfile', '-NonInteractive', '-Command', script],
+                                   capture_output=True, text=True, check=True)
+        lines = json.loads(completed.stdout)
+        self.assertEqual(len(lines), 2, 'PDS must receive one complete gen_bit_stream command')
+        self.assertEqual(lines[1], 'gen_bit_stream -force_to_run -input_db_file '
+                         '{D:/FPGA/CPU test/place_route/triha_cpu_board_top_pnr.adf} -scbv {High Voltage}')
 
 
 if __name__ == "__main__":

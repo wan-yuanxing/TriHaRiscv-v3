@@ -1,0 +1,167 @@
+{
+  "status": "PASS",
+  "timing_closed": true,
+  "scope": "Independently verified board post-route; no physical execution",
+  "review_tool_sha256": "cde007ce01808203522de23fd0b3fb2d544a69aeb24f2c35b19355a03a393b29",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1825066711298Z",
+  "route_result_sha256": "78e6f2ffa2aba5166ed20a2b9f6954bcdb9326f8b6dae638e6ba66c0a3b31ad0",
+  "selected_seed": 8,
+  "selected_physical_report_sha256": "c8e6631690180a0f34f1637bf4f0bf2f869230a84bcdd7238004a196f932ef0c",
+  "corners": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": 0.023,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.155,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 1.752,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.1,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    }
+  ],
+  "reset_checks": [
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "slack_ns": 2.056,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "slack_ns": 0.739,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "slack_ns": 4.164,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "slack_ns": 0.499,
+      "failing_endpoints": 0
+    }
+  ],
+  "worst_setup_ns": 0.023,
+  "cpu_hierarchy_resources": {
+    "lut": 5977,
+    "ff": 5172,
+    "distributed_ram": 64,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "pc_replication": null,
+  "actual_pins": {
+    "ref_clk_pi": {
+      "location": "N3",
+      "direction": "INPUT",
+      "vccio": "1.5",
+      "standard": "SSTL15D_I"
+    },
+    "ref_clk_ni": {
+      "location": "N2",
+      "direction": "INPUT",
+      "vccio": "1.5",
+      "standard": "SSTL15D_I"
+    },
+    "rst_ni": {
+      "location": "C22",
+      "direction": "INPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    },
+    "uart_tx_o": {
+      "location": "C24",
+      "direction": "OUTPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    },
+    "led_o[0]": {
+      "location": "A20",
+      "direction": "OUTPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    },
+    "led_o[1]": {
+      "location": "C18",
+      "direction": "OUTPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    },
+    "led_o[2]": {
+      "location": "C19",
+      "direction": "OUTPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    },
+    "led_o[3]": {
+      "location": "E18",
+      "direction": "OUTPUT",
+      "vccio": "3.3",
+      "standard": "LVCMOS33"
+    }
+  },
+  "pll": {
+    "status": "PASS",
+    "configuration_sha256": "7bb7aa2dd61bba58b4aa4e8ef71f818fc3e0c59ceb4d131c8e92a1d8b8116efb",
+    "reference_manifest_sha256": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+    "source_idf_sha256": "b0401ee91e562ebd466e7e533eed2cbb6c6d1bb26064a1e91b0a6268706528ee",
+    "archive_sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b",
+    "generated_idf_sha256": "c0849ecf9d42947a5854723628646170a42af338ee146655433e30d2095493e7",
+    "wrapper_sha256": "cf9a0921268b6c5e08c1435affa8095c0ca65d0001dcd83df65c7769416c895a",
+    "actual_parameters": {
+      "CLKIN_FREQ": 125.0,
+      "STATIC_RATIOI": 1,
+      "STATIC_RATIOM": 1,
+      "STATIC_RATIOF": 8,
+      "STATIC_RATIO0": 10
+    },
+    "pfd_hz": 125000000,
+    "vco_hz": 1000000000,
+    "cpu_hz": 100000000,
+    "scope": "Generated IP, not physical clock or board validation"
+  },
+  "programmed": false,
+  "board_validated": false
+}

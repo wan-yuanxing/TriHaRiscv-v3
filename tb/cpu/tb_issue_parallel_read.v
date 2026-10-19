@@ -18,7 +18,7 @@ module tb_issue_parallel_read #(parameter BROKEN=0);
     reg [31:0] wr_data=0, values[0:5];
     reg [31:0] instruction0=0, instruction1=0, selected_pc=32'h80000000;
     reg [31:0] random_q=32'h27182818;
-    integer checks=0, n, j;
+    integer checks=0, n, j, index, mask;
     function [31:0] next_random;
         input [31:0] old;
         begin next_random=old*32'd1664525+32'd1013904223;end
@@ -112,6 +112,25 @@ module tb_issue_parallel_read #(parameter BROKEN=0);
                     @(posedge clk);#1;model[j]=wr_data;@(negedge clk);
                 end
                 wr=0;
+            end
+        end
+        // Exhaust all six-source hit masks for every architectural nonzero
+        // index. The sequential oracle remains independent of implementation.
+        for(index=1;index<32;index=index+1)begin
+            instruction0=0;instruction1=0;
+            instruction0[19:15]=index;instruction0[24:20]=index;
+            instruction1[19:15]=index;instruction1[24:20]=index;
+            for(mask=0;mask<64;mask=mask+1)begin
+                for(j=0;j<6;j=j+1)begin
+                    tags[j]=((mask>>j)&1) ? index : (index==31 ? 30 : 31);
+                    values[j]=32'h9e3779b9*(j+1)^mask;
+                end
+                // A masked earlier X/Z payload must not contaminate a
+                // selected later payload; selected Z must remain Z in RTL.
+                values[0][3]=1'bx;values[1][7]=1'bz;
+                wr_data=values[0];
+                selected_pc=32'h80000000;#1;check;
+                selected_pc=32'h80000004;#1;check;
             end
         end
         $display("PARALLEL_READ_PASS checks=%0d native_RF_forward_priority_zero_reset_fourstate",checks);$finish;

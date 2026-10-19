@@ -1,0 +1,135 @@
+{
+  "status": "PASS",
+  "scope": "Board PLL/pins 100MHz post-route and downloadable package; not programmed or physically validated",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1825066711298Z",
+  "route_result_sha256": "78e6f2ffa2aba5166ed20a2b9f6954bcdb9326f8b6dae638e6ba66c0a3b31ad0",
+  "review_file": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\board_parallel_forward_route.json",
+  "review_sha256": "5fe701392d1b1d1ad37cdef156e3e6a576acc2e56cc8be014159a30cd9de8327",
+  "frozen_inputs": 46,
+  "frozen_outputs": 328,
+  "native_return_codes": [
+    0,
+    0,
+    0
+  ],
+  "corners": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": 0.023,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.155,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 1.752,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.1,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    }
+  ],
+  "reset_checks": [
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "slack_ns": 2.056,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "slack_ns": 0.739,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "slack_ns": 4.164,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "slack_ns": 0.499,
+      "failing_endpoints": 0
+    }
+  ],
+  "cpu_only_resources": {
+    "lut": 5977,
+    "ff": 5172,
+    "distributed_ram": 64,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "package_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_board_5f5eb8c89efd",
+  "package_manifest_sha256": "f9ca98437b32ba9801466cfee04cae21d945c371675193a84a0888e5b24ad379",
+  "package_files_verified": 10,
+  "bitstream_sha256": "5f5eb8c89efd95e57f97bfb5b07fda514ad7948bf8d7160335ec24c2cd17df9d",
+  "verify_mask_sha256": "7b5a71319c9d4e2b8cf1e46bcf76137d98f6b4ac33ddbdc5d517b44616891a65",
+  "rtl_validation_file": "docs/verification/cpu/board_parallel_forward_validation.json",
+  "rtl_validation_sha256": "22e6447fa971a18e403f7ed800643f25e95e4b6f0da43e480bed39264563b6b4",
+  "generator_regression": [
+    {
+      "phase": "red",
+      "return_code": 1,
+      "log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\release-command-regression-red.log",
+      "log_sha256": "74642de40bb209763cb58ed31a3f1858499491d27bd964f5e1ac148ddd8b3ec0",
+      "test_sha256": "c2730eb135db1db331f52a3d489540a775f3d4051e459799ad2153b2569e1ca4",
+      "generator_sha256": "05dcd5b9ff7a819f959b3036afc774cb47c9aa0dbd12b8898f5e22cef5914a3c"
+    },
+    {
+      "phase": "green",
+      "return_code": 0,
+      "log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\release-command-regression-green.log",
+      "log_sha256": "9927011790c306a8055ca82fa65353638327cb79437464199a44e53426bdb0fb",
+      "test_sha256": "c2730eb135db1db331f52a3d489540a775f3d4051e459799ad2153b2569e1ca4",
+      "generator_sha256": "a7f181a8d3fdd1e982cf63cd4fa94ba7bf9ca873098eabfeaf02d671fa5a8b4e"
+    }
+  ],
+  "prior_100mhz_system_outputs_unchanged": 385,
+  "pipeline_stages": 6,
+  "issue_width": 1,
+  "isa": "RV32IM_Zicsr",
+  "btb_entries": 32,
+  "bht_entries": 512,
+  "ras_entries": 8,
+  "gshare": false,
+  "instruction_cache": false,
+  "data_cache": false,
+  "programmed": false,
+  "board_validated": false
+}

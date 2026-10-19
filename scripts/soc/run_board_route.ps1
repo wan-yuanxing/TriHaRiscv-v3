@@ -145,7 +145,7 @@ try {
         $result['bitstream_input_db']=$routedDb
         $result['bitstream_input_db_sha256']=Get-TrihaHash $routedDb
         $bitLines=@("set_arch -family $($core.family) -device $($core.device) -speedgrade $($core.speedgrade) -package $($core.package)",
-            'gen_bit_stream -force_to_run -input_db_file '+(TclPath $routedDb)+' -scbv {High Voltage}')
+            ('gen_bit_stream -force_to_run -input_db_file '+(TclPath $routedDb)+' -scbv {High Voltage}'))
         [IO.File]::WriteAllText($bitScript,($bitLines -join "`n")+"`n",[Text.UTF8Encoding]::new($false))
         $bitOutput=Invoke-TrihaNative -Executable $PdsShell -CommandArguments @('-file',$bitScript,'-work_dir',$work,'-project_name','cpu_board') -RunDirectory $work -Label 'pds-bitstream' -Records $commands -TimeoutSeconds 180
         if($bitOutput -match '(?im)^\s*(E:|ERROR[: ]|FATAL[: ])' -or $bitOutput -notmatch '(?m)^Executing : gen_bit_stream(?: [^\r\n]*)? successfully\.\s*$'){throw 'Bitstream tool error or missing success.'}

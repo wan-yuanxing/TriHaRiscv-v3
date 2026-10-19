@@ -10,9 +10,10 @@
 - [x] `scripts/soc/test_board_tools.py`先实际RED；实现`gen_board.py`和板级配置，验证真实PLL分频、管脚唯一性、配置漂移和IDF/工具哈希。当前9项通过，包含实际PLL参数、Windows符号行尾与重复符号拒绝。
 - [x] `tb/soc/tb_cpu_board_clock.v`先实际RED；实现板级时钟复位封装，以真实Pango模型核对100MHz周期、三拍释放、按键保持及失锁。111项通过。
 - [x] 新增`sw/tests/cpu_board.c`、`tb/soc/tb_cpu_board.v`和独立入口，整核验证8KiB自检、串口、KEY0重启及真实损坏拒绝。两次启动通过；真实SRAM初始化字节损坏报告code1并被拒绝。
-- [ ] 添加显式板级PDS目标、独立完整运行及报告复核入口；检查六项实际STA、CPU配置、PLL及管脚，时序通过后生成位流/掩码。
-- [ ] 打包位流、掩码、固件/报告/哈希/恢复说明；更新CPU STATUS与证据，精确标明未Program/未板测。
+- [x] 添加显式板级PDS目标、独立完整运行及报告复核入口；检查六项实际STA、CPU配置、PLL及管脚，时序通过后生成位流/掩码。
+- [x] 打包位流、掩码、固件/报告/哈希/恢复说明；更新CPU STATUS与证据，精确标明未Program/未板测。
+- [ ] 用户确认临时替换当前Video配置后，volatile Program/Verify、UART/KEY0现场验收及恢复Video；不写Flash，不自动合入主工程。
 
 验证命令：`python scripts/soc/test_board_tools.py`；`python scripts/soc/gen_board.py --check`；`python scripts/soc/run_board.py --test clocks`；`python scripts/soc/run_board.py --test system`；`python scripts/soc/run_board.py --test system --fault memory`；`pwsh -NoProfile -File scripts/soc/run_board_route.ps1 -FirmwareRunDirectory <system运行目录> -ClockRunDirectory <clocks运行目录>`。失败记录保留、返回非零，不重写原100MHz通过记录。
 
-2026-10-20推进：原CPU已从诊断标签恢复；真实高PFD PLL的111项模型检查、两次整核启动及单字节真实损坏拒绝通过。板级STA仍未通过，当前核验Performance模式，禁止提前生成/交付包。已补4项选定路由数据库绑定测试；串口解析6项，配置工具9项。
+2026-10-20终态：并行RF、分组预测器、提前顺序PC与独占旁路选择保持六级单发射和原CoreMark周期。真实高PFD PLL模型111项、两次整核启动及单字节损坏拒绝通过；15项当前运行/哈希核验。实际板级100MHz全部STA通过，完整工具/宿主返回0并成功生成位流/掩码。下载包cpu_board_5f5eb8c89efd已核验，见board_system_100mhz.md和board_system_acceptance.json。发布检查5项含真实拆行回归，串口解析6项、配置9项。尚未Program/Verify或板测。

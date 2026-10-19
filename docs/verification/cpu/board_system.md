@@ -1,6 +1,8 @@
 # CPU板级最小系统验收
 
-更新时间：2026-10-20。原100MHz系统基线`5c4229a`和标签`cpu-soc-100mhz-sta-20261019`保留，本批CPU RTL未改。板级顶层为`triha_cpu_board_top`，六级单发射、RV32IM/CSR、BTB32/BHT512/RAS8开启、无I/D Cache，8KiB ROM、32KiB SRAM和UART TX地址不变。
+更新时间：2026-10-20。板级PLL/管脚100MHz已通过实际后布线，下载包`cpu_board_5f5eb8c89efd`已生成并核验，详见[最终验收](board_system_100mhz.md)和[哈希索引](board_system_acceptance.json)。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，未Program/Verify或板测。以下保留初版及各轮历史。
+
+原100MHz系统基线`5c4229a`和标签`cpu-soc-100mhz-sta-20261019`保留，385项输出未变；后续CPU只做等价组合结构调整及原生RF提前读取，CoreMark周期不变。板级顶层为`triha_cpu_board_top`，六级单发射、RV32IM/CSR、BTB32/BHT512/RAS8开启、无I/D Cache，8KiB ROM、32KiB SRAM和UART TX地址不变。
 
 ## 板级边界
 
