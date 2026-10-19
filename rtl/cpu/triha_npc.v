@@ -76,6 +76,8 @@ begin: BRANCH_PREDICTION
 
 wire        pred_taken_w;
 wire        pred_ntaken_w;
+// Compute sequential PC before late prediction metadata reaches selection.
+(* syn_keep = 1 *) wire [31:0] sequential_pc_w = {pc_f_i[31:3],3'b0} + 32'd8;
 
 // Info from BTB
 wire        btb_valid_w;
@@ -353,7 +355,7 @@ wire btb_is_jmp_r;
 wire [NUM_BTB_ENTRIES_W-1:0] btb_entry_r;
 wire [31:0] btb_selected_pc_w;
 wire [31:0] btb_next_pc_r = btb_valid_r ? btb_selected_pc_w :
-    ({pc_f_i[31:3],3'b0} + 32'd8);
+    (sequential_pc_w);
 triha_npc_select #(.WIDTH(BTB_PAYLOAD_W),.INPUTS(NUM_BTB_ENTRIES)) u_btb_select (
     .data_i(btb_payload_w),.select_i(select_read_w),
     .data_o({btb_entry_r,btb_is_call_r,btb_is_ret_r,btb_is_jmp_r,btb_selected_pc_w})
@@ -439,7 +441,7 @@ assign btb_is_call_w = btb_is_call_r;
 assign btb_is_ret_w  = btb_is_ret_r;
 assign next_pc_f_o   = ras_ret_pred_w      ? ras_pc_pred_w : 
                        (bht_predict_taken_w | btb_is_jmp_r) ? btb_next_pc_r :
-                       {pc_f_i[31:3],3'b0} + 32'd8;
+                       sequential_pc_w;
 
 assign next_taken_f_o = (btb_valid_w & (ras_ret_pred_w | bht_predict_taken_w | btb_is_jmp_r)) ? 
                         pc_f_i[2] ? {btb_upper_r, 1'b0} :

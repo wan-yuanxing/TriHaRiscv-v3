@@ -147,7 +147,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "582ae4e2f6030158c5b23e6808b1e3ec34795f85e2fc31b759e87371201e01ad",
+      "derived_sha256": "55b90f3218f306c8cdec2931a5df2ad67fa268982f63243cfe1a1f0d1f49039a",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
@@ -159,7 +159,8 @@
         "Extend lookup sharing to every bit except bit two, retaining low alignment bits; decode RAS actual/speculative write indices per entry before late prediction enables, preserving original confirmed-return/speculative-call overlap priority and all state/cycles.",
         "Keep six-input partial AND reductions for the full tag equality and reuse the verified three-term/six-input balanced AND-OR implementation in the existing single payload selector; same four-state Boolean values, table state, priority and cycles.",
         "Implement unchanged highest-entry priority with six-entry local/global lookahead in installed Pango LUT6 primitives; OR6 INIT fffffffffffffffe and own-match/no-higher INIT 2, same bitwise four-state function and no state. Larger optional tables retain original expression.",
-        "Reuse native group hit reductions for PC/upper/write hits; choose valid directly with original procedural priority. Read even/odd BHT word banks in parallel before the late index LSB, preserving >=2 comparison and explicit X for unknown low address; no state or cycle change."
+        "Reuse native group hit reductions for PC/upper/write hits; choose valid directly with original procedural priority. Read even/odd BHT word banks in parallel before the late index LSB, preserving >=2 comparison and explicit X for unknown low address; no state or cycle change.",
+        "Keep a shared sequential PC+8 sum before both late prediction selections, preventing late control from entering the increment carry; same arithmetic and cycles."
       ],
       "references": [
         {

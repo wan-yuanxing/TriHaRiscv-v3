@@ -484,3 +484,11 @@ PC加法等价实验通过完整执行单元/整核/CoreMark，但实际-0.442ns
 只复制该选择位的物理对照实际增加7FF；8个状态的D/CLK/CE/reset/init逐项一致，但全局setup恶化至-0.800ns，不选用。最后补齐种子3/16为-0.329/-0.233ns，原版最佳仍seed8的-0.096ns。所有约束保持、无bitstream/上板。
 
 下一步复用两个既有原生2读口单写寄存器堆，分别固定读取两个取指槽，旁路优先级分别计算后再选择实际操作数。每拍仍只发射一条指令，不增加CPU状态级/周期或改变预测器。预计额外32个分布式RAM单元，实际CPU-only资源与后布线另测；不能提前声称频率收益。
+
+## 2026-10-20 顺序PC计算与板级实际终态
+
+上述并行RF、tag/payload归约、原生优先级、BHT双槽提前读已分别保留验证和物理记录；它们均未通过板级100MHz。本批在2eb3c34及cpu-board-pre-sequential-pc-20261020备份后，只保留共享PC+8早期组合结果，未增CPU状态或周期。14项运行/28个vendor/11项派生/5个安装模型哈希均核验，预测器与优先级坏输出及真正单字节损坏均被拒绝。CoreMark仍1685831周期/1467843WB观察、IPC0.870694、短测2.965896/MHz，非官方分数或板测。
+
+新板级运行board-route-20261019T1806550427178Z完整布通，独立review PASS而timing_closed=false。Slow/Fast setup -0.212/+1.752ns、hold +0.154/+0.101ns、MPW +3.655/+4.202ns；Slow仅3个违例端点，TNS -0.442ns。CPU-only5934LUT/5172FF/64分布式RAM/0DRM/4APM。与BHT父版-0.586ns相比为新网表/新布局的整体结果，仍未超过原网表最佳-0.096ns。
+
+最新路径FIFO读指针→rs2/旁路→ALU结果，读指针扇出141、首段0.990ns，三条违例同源。下一步只对该指针作有界官方syn_maxfan复制诊断，核对实际复制状态连接后重新STA；原100MHz/IO/hold/uncertainty保持。board_sequential_pc_validation.json及board_sequential_pc_route.json为本批证据。未生成CPU板级包，未Program/Verify，未修改主工程Video或技术报告。
