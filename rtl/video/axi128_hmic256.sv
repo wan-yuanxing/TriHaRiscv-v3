@@ -138,10 +138,11 @@ module axi128_hmic256 #(
      (((h_rvalid!==1'b0 && h_rvalid!==1'b1)||
        (h_arvalid && h_arready!==1'b0 && h_arready!==1'b1))===1'b1);
 
- // Only COLLECT writes the expected/mask cache. Native readback faults
- // cannot be active here; preserve immediate invalid-control suppression.
+ // Only COLLECT writes the private expected/mask cache. A bad AXI LAST
+ // still faults and drains via collect_phase_poisoned, without publishing a
+ // native command. Its unused scratch write need not gate this wide cache.
+ // Keep the existing online, sticky-fault and unexpected-R guards.
  wire collect_poisoned=fault||(seen_online && init_done!==1'b1)||
-                       (w_take && wlast!==(up_q==beats_q-1))||
                        (h_rvalid!==1'b0);
  // Read and write native phases are exclusive. Factor the write-mask guard
  // from that phase's faults so the 256-bit readback comparison cannot feed

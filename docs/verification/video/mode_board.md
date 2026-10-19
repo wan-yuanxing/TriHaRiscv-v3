@@ -1,10 +1,10 @@
 # F3c 独立静态全屏三模式
 
-状态：2026-10-20，core错误控制流水的定向、回归和独立数字审查通过；流水版第7次实际构建正在进行。此前最新布线setup为-0.225ns/18端点，三模式镜像尚未下载。见[流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)。机器摘要见[mode_board.json](evidence/mode_board.json)。
+状态：2026-10-20，core错误控制流水的定向、回归和独立数字审查通过；流水版第7次实际构建setup为-0.202ns/92端点，hold全部通过；三模式镜像尚未下载。下一步处理桥收集缓存的WLAST使能依赖。见[流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)。机器摘要见[mode_board.json](evidence/mode_board.json)。
 
 ## 行为与边界
 
-独立目标 `video_mode_board` 从冻结 F2 顶层派生，F2 顶层、管脚、时钟、DDR IP 及四份原有约束保持原字节；公共CRC reader、writer及其测试的等价优化，以及capture第一故障码流水及其测试作为有记录例外，详见下文。默认原分辨率 800×600 RAW；KEY1/C23 低有效，经两级同步和 20ms 去抖，依次切 RAW → BOX → AVATAR → RAW。长按只产生一次请求。KEY0/C22 保留协调复位、DDR 重校准和单帧重采，MODE 与素材回到初始状态；沿用 F2 的 HDMI 初始化保持方式。
+独立目标 `video_mode_board` 从冻结 F2 顶层派生，F2 顶层、管脚、时钟、DDR IP 及四份原有约束保持原字节；公共CRC reader、writer及其测试的等价优化，capture第一故障码流水及其测试，以及bridge私有缓存写使能等价简化作为有记录例外，详见下文。默认原分辨率 800×600 RAW；KEY1/C23 低有效，经两级同步和 20ms 去抖，依次切 RAW → BOX → AVATAR → RAW。长按只产生一次请求。KEY0/C22 保留协调复位、DDR 重校准和单帧重采，MODE 与素材回到初始状态；沿用 F2 的 HDMI 初始化保持方式。
 
 BOX 使用人工常量：主人脸红框 `[200,600)×[150,450)`，次框绿色 `[100,400)×[100,300)`；主人脸五点黄色。AVATAR 在主框区域显示本地算术生成的 256×256 RGBA 测试纹理，按非预乘 Alpha 混合。框、点及纹理均是诊断素材，不是 NPU 检测或真实人脸头像。缓存完整写入 65536 字后封存；无 DDR 素材 DMA、CPU 上传或运行中替换。
 
@@ -24,7 +24,7 @@ BOX 使用人工常量：主人脸红框 `[200,600)×[150,450)`，次框绿色 `
 
 ## 构建、约束及物理检查
 
-当前综合为17365 LUT、18737 FF、73.5 DRM36K、16 APM，包含完整HDMI/DDR、三分支和素材缓存。实际网表检查140个管脚无缺失/碰撞、64素材双钟RAM、77同步链及13组存活束，未发现未覆盖跨域或内部组合环。ASYNC_REG属性被本版PDS忽略，以实际网表/物理路径为依据。
+桥缓存修改前的流水版综合为17275 LUT、18748 FF、73.5 DRM36K、16 APM，包含完整HDMI/DDR、三分支和素材缓存。实际网表检查140个管脚无缺失/碰撞、64素材双钟RAM、77同步链及13组存活束，未发现未覆盖跨域或内部组合环。ASYNC_REG属性被本版PDS忽略，以实际网表/物理路径为依据。
 
 所有构建保留core8ns、pixel25ns和原跨域约束。完成的布线结果如下；表中多种子列出最佳结果，全部hold通过。
 
@@ -36,14 +36,17 @@ BOX 使用人工常量：主人脸红框 `[200,600)×[150,450)`，次框绿色 `
 | 同上 | normal4..7，最佳6 | -0.140 | 10 |
 | CRC接收私有暂存优化 | normal6 | -0.205 | 4 |
 | writer先饱和再低位取整 | normal6 | -0.225 | 18 |
+| capture第一故障码流水 | normal6 | -0.202 | 92 |
 
-CRC两个改动均已逐拍比较公共输出并独立检查四态；停止首因、公开事务排空和结果保持不变。writer只改burst算术，函数之外原字节保持，2499200组数值/四态及19动态场景公开输出一致；另有228872组独立检查及3个错误替身通过。最新write_dma/raw_board/mode_board回归通过。历史全量37套件的198项输入中188项相同，10项差异由当前定向证据覆盖，不冒称完整all重跑。
+CRC两个改动均已逐拍比较公共输出并独立检查四态；停止首因、公开事务排空和结果保持不变。writer只改burst算术，函数之外原字节保持，2499200组数值/四态及19动态场景公开输出一致；另有228872组独立检查及3个错误替身通过。最新write_dma/raw_board/mode_board回归通过。历史全量37套件的198项输入中187项相同，11项差异由当前定向证据覆盖，不冒称完整all重跑。
 
-最新slow/fast hold为+0.124/+0.089ns，但setup仍失败，最差路径是preview DMA的结果字节数校验到缩放器使能。6次完成的构建均未打包/下载。三轮局部等价优化之后转向[控制流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)，允许内部故障响应增加一个core周期，同时保护第一错误、AXI排空和成功发布边界。等价检查点与失败来源见[时序记录](../../superpowers/plans/2026-10-20-mode-board-timing.md)。
+流水前slow/fast hold为+0.124/+0.089ns，但setup仍失败，最差路径是preview DMA的结果字节数校验到缩放器使能。前6次完成的构建均未打包/下载。三轮局部等价优化之后转向[控制流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)，允许内部故障响应增加一个core周期，同时保护第一错误、AXI排空和成功发布边界。等价检查点与失败来源见[时序记录](../../superpowers/plans/2026-10-20-mode-board-timing.md)。
 
 新增capture流水只将故障分类跨一个core寄存边界；pending立即阻止请求、驱动cancel及三个子DMA abort，第一错误不被后续offline替换。WAIT_EVENT单独检查新标量故障，防止发布成功的同拍竞态；非法/未知像素和EOF不更新摘要。正常成功的数据、事务和CRC周期保持，失败帧允许多计入一次检测边沿的合法接纳，仍须排空全部已公开AW/W/B且不能发布成功。已发布且背压的完成记录仍保持不变。
 
-CASE28定向7项通过，原源RED及三个删除保护的替身均按预期失败。当前three_capture/raw_board/mode_board回归通过，包含800×600及307200字节NCHW黄金检查；原有故障场景保留。独立审查88条命令、12组48次采集、10×10零padding故障复跑、100×50多burst/4KiB三槽正常采集、三种尺寸逐周期原版对照及10个关键guard替身均通过。报告位于`build/video/capture_fault_pipeline_review/review.json`，来源和全部产物由父审计绑定；不代表实际DDR、时序或现场验收。流水版PDS正在原约束下重新实现，板上保留已验收F2。
+CASE28定向7项通过，原源RED及三个删除保护的替身均按预期失败。当前three_capture/raw_board/mode_board回归通过，包含800×600及307200字节NCHW黄金检查；原有故障场景保留。独立审查88条命令、12组48次采集、10×10零padding故障复跑、100×50多burst/4KiB三槽正常采集、三种尺寸逐周期原版对照及10个关键guard替身均通过。报告位于`build/video/capture_fault_pipeline_review/review.json`，来源和全部产物由父审计绑定；不代表实际DDR、时序或现场验收。流水版PDS完成后setup为-0.202ns/92端点，slow/fast hold为+0.038/+0.029ns，recovery/removal亦通过。最差路径转至preview DMA burst_beats→WLAST→仲裁器→bridge expected缓存CE，逻辑1.035ns/布线6.390ns，中间控制扇出1881。第7次失败镜像未打包或下载，结构审计仍通过，板上保留已验收F2。
+
+按[桥缓存计划](../../superpowers/plans/2026-10-20-mode-bridge-cache.md)准备最小候选：保留公共WLAST诊断和COLLECT失败排空，仅从未使用的私有缓存写使能去掉当拍WLAST。原桥自校验加1088个故障/复位后恢复用例共1343场景、111496次全部23公共输出对照通过；删去公共LAST诊断的替身被检出。独立native字节模型另完成13739场景、556402有效core周期，全部23公共输出逐半周期一致；其中6656失败写、6951成功写、32成功读。6528核心坏LAST组合及连续全掩码脏缓存、上下半字覆盖、各阶段协调reset均已覆盖，检查1782560字节数据和邻接guard；941次实际私有缓存差异未泄漏到公共接口。4个变异被检出，两种半字漏清零变异关闭原版对照后也被独立native oracle检出。独立报告`build/video/bridge_collect_cache_review/review.json`已由父任务逐项核对哈希。已精确采用候选c3d3f04b，原桥f898c468按字节保存；当前axi_bridge/raw_board/mode_board回归通过，准备原约束第8次构建，尚无该候选的物理结论。
 
 构建器新增seed/mode参数，默认保持4..9/normal；非法值先于构建退出。现场验收器修复了未观察复位沿用、旧Program日志沿用及物理产物绑定三类问题，18项独立检查通过。当前仍未产生三模式实体验收记录。外部HDMI AC、连续视频、共享fabric/三槽所有权及真实NPU不在本次签核内。
 

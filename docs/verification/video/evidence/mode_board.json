@@ -15,6 +15,8 @@
     "tb/video/test_mode_board_packets.py",
     "tb/video/test_mode_key.py",
     "tb/video/test_pds_route_options.py",
+    "rtl/video/axi128_hmic256.sv",
+    "docs/superpowers/plans/2026-10-20-mode-bridge-cache.md",
     "rtl/video/video_frame_crc_reader.sv",
     "rtl/video/video_write_dma.sv",
     "tb/video/tb_write_dma.sv",
@@ -47,6 +49,8 @@
     "tb/video/test_mode_board_packets.py": "f37d84fa1650b8386d1f9da901a9052aa4ab1952f0794196038bfdc77b3f7721",
     "tb/video/test_mode_key.py": "659bc77c5cb24152600ac60da2c5456625af8778fd98f202df911b261eefb4d9",
     "tb/video/test_pds_route_options.py": "839a9a9decc58d167e9231415073ed6ebd4b8f3d0c88d7bbc9677c16554908fb",
+    "rtl/video/axi128_hmic256.sv": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+    "docs/superpowers/plans/2026-10-20-mode-bridge-cache.md": "684722b74cd1c4ec10b7d36d01519e3ac1417707185b4faa57d42b0ab3b6e393",
     "rtl/video/video_frame_crc_reader.sv": "324e2c947f65a49717bf744eb2aff3b1ac73b3d5b544def474c2d4cce6f8bdda",
     "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
     "tb/video/tb_write_dma.sv": "be66fbb5228ce7cb0748d6aca89ce7c568b320ad10847646afc392183dbd05f1",
@@ -61,9 +65,9 @@
     "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
     "docs/superpowers/plans/2026-10-19-display-mode-board.md": "fa50e17cc5a5cb30106020a7d4aa2b0c7a462498b3856e7b3fa4d0b7e5075966",
     "docs/video/README.md": "91aa1a13de0c50805c720c7c59387e3bc012ccf09a794bfbfb920f809b7a6061",
-    "docs/video/STATUS.md": "b319c3f874c419ba2b53b98dd7ac4eb073797fc397632afb4332e97d8050790d",
+    "docs/video/STATUS.md": "908366d3f08a4e6ba268c703edf6cec8d4f7df3c52bde1fd9b0ad537380f876c",
     "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
-    "docs/verification/video/mode_board.md": "4224d4eb8129aa861ad7aa2f4963b61ffc68de706c706bb4e2215ab67e7c5815"
+    "docs/verification/video/mode_board.md": "08fb4046d5faac9086e748c598d64761b22f8af2c3e4a782d3e0f6be56f9bad7"
   },
   "refs": {
     "mode_output": {
@@ -71,8 +75,8 @@
       "sha256": "8ae731ae0571766df187728747c69f7f52ec5202a738724d2a5a02979e1e44f7"
     },
     "mode_board": {
-      "path": "build/video/regression/20261019T184638_991260Z/result.json",
-      "sha256": "436692ffa4007415abde6ad0f830bc9ef0a53f0eeade815fcf324ed1225b08a1"
+      "path": "build/video/regression/20261019T191543_851430Z/result.json",
+      "sha256": "0466e375bc92ea6874d73f68e4d88ab2bb9f16abcb4d521f1284a628381e95aa"
     },
     "python": {
       "path": "build/video/mode_board_python/result.json",
@@ -195,12 +199,40 @@
       "sha256": "1524ce2d1a3c8ec78462b0e6c7d48ec863dcb1d2fe4db0b7a320b0b8df0fe992"
     },
     "raw_regression": {
-      "path": "build/video/regression/20261019T184638_983212Z/result.json",
-      "sha256": "2ef2316d6fdf90a2daec11b567d7971e0cb7efe6eddde7b997802c630f28ee0f"
+      "path": "build/video/regression/20261019T191543_832663Z/result.json",
+      "sha256": "0b95b85a436725e966b6e3ed059b739bef3f1aaf5c84cb5ded32b08f327c1b6a"
     },
     "timing_plan": {
       "path": "docs/superpowers/plans/2026-10-20-mode-board-timing.md",
       "sha256": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da"
+    },
+    "writer_seed6_build": {
+      "path": "build/video/pds/20261019T182101_599588Z/result.json",
+      "sha256": "4b4225a203b65d613ed9eb7fee240bdb595beb44bd6ff33424de9d77393d0592"
+    },
+    "writer_route_failure": {
+      "path": "build/video/mode_board_timing_audit/writer_route_failure.json",
+      "sha256": "7c47eb63b3e6755df567441fbf7abeabadb58b5f1049b475a64b985aa6145e79"
+    },
+    "capture_pipeline_failed_build": {
+      "path": "build/video/pds/20261019T185344_840850Z/result.json",
+      "sha256": "b6d9d1d2228efbcd85a156bd11ca7b3d78f2c955e4bb6177cb0223078fe6b74d"
+    },
+    "capture_pipeline_route_failure": {
+      "path": "build/video/mode_board_timing_audit/capture_pipeline_route_failure.json",
+      "sha256": "6451892ec067b1ad7036dc2e0fdb74c3b9fbc6acb39311fdfab9cbf04d060814"
+    },
+    "bridge_equivalence": {
+      "path": "build/video/bridge_collect_cache/result.json",
+      "sha256": "2fa6f50323bd9c4d2a1c4fe8f62961867fc9b3b976e85b1b9a41822bc59a56c1"
+    },
+    "bridge_review": {
+      "path": "build/video/bridge_collect_cache_review/review.json",
+      "sha256": "bf49a3abc8e7c73b76bffee19ebb7c174ec8b4279b36434b13c474ca37654979"
+    },
+    "bridge_regression": {
+      "path": "build/video/regression/20261019T191543_831644Z/result.json",
+      "sha256": "5c2358cbf1384d0dde25714cc341ea76983abf85ffd14cdeccc243573be70b44"
     },
     "capture_directed": {
       "path": "build/video/capture_fault_pipeline/directed_result.json",
@@ -224,10 +256,10 @@
     },
     "artifacts": {
       "path": "build/video/mode_board_artifact_hashes.json",
-      "sha256": "b1a6510f93a9c485feca87dd873338ef645ebf4be848d9999ffef32a4db286a6"
+      "sha256": "0e653757bfbe0b0798ed3bd6a66b56bdbdd8b558b976a527eea8d9f70fba743b"
     }
   },
-  "preserved_files": 227,
+  "preserved_files": 226,
   "simulations": {
     "mode_output": 3,
     "mode_board_fault_reset": 6,
@@ -282,7 +314,7 @@
   "historical_all_comparison": {
     "suites": 37,
     "inputs": 198,
-    "unchanged_inputs": 188,
+    "unchanged_inputs": 187,
     "changed_entry_points": [
       "scripts/video/build_pds.py",
       "scripts/video/package_board.py",
@@ -293,7 +325,8 @@
       "tb/video/tb_write_dma.sv",
       "rtl/video/video_three_branch_capture.sv",
       "rtl/video/video_write_dma.sv",
-      "rtl/video/video_frame_crc_reader.sv"
+      "rtl/video/video_frame_crc_reader.sv",
+      "rtl/video/axi128_hmic256.sv"
     ],
     "scope": "Historical complete baseline; new F3b/F3c components and current entry-point behavior covered by separate targeted evidence"
   },
@@ -309,6 +342,7 @@
   },
   "placement_followup": {
     "historical_synthesis_entrypoint_deltas": [
+      "rtl/video/axi128_hmic256.sv",
       "rtl/video/video_frame_crc_reader.sv",
       "rtl/video/video_three_branch_capture.sv",
       "rtl/video/video_write_dma.sv",
@@ -331,8 +365,17 @@
     "crc_seeds4to7_hold_all_met": true,
     "crc_scratch_seed6_status": "fail",
     "crc_scratch_setup_ns": -0.205,
-    "current_configuration": "seed6/count1/normal; equivalent CRC/narrow writer burst and capture fault register boundary; unchanged FDC; strict full timing and packaging gates retained",
-    "independent_builder_addendum_verified": true
+    "current_configuration": "seed6/count1/normal; equivalent CRC/narrow writer burst and capture fault register boundary and private bridge cache guard; unchanged FDC; strict full timing and packaging gates retained",
+    "independent_builder_addendum_verified": true,
+    "writer_seed6_status": "fail",
+    "writer_setup_ns": -0.225,
+    "writer_failing_setup_endpoints": 18,
+    "capture_pipeline_seed6_status": "fail",
+    "capture_pipeline_setup_ns": -0.202,
+    "capture_pipeline_failing_setup_endpoints": 92,
+    "capture_pipeline_hold_slow_ns": 0.038,
+    "capture_pipeline_hold_fast_ns": 0.029,
+    "capture_pipeline_hold_recovery_removal_all_met": true
   },
   "preservation_exception": {
     "path": "rtl/video/video_frame_crc_reader.sv",
@@ -425,6 +468,33 @@
       "path": "build/video/capture_fault_pipeline_review/review.json",
       "sha256": "d0ba69c5885b84d7e887a98c79704611a6f7e472c1e765e7acc41930477224d8"
     }
+  },
+  "bridge_cache_exception": {
+    "path": "rtl/video/axi128_hmic256.sv",
+    "before_sha256": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
+    "after_sha256": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+    "all_public_outputs_cycle_equivalent": true,
+    "public_output_signals": 23,
+    "canonical_and_extended_cases": 1343,
+    "extra_fault_cases": 1088,
+    "public_compares": 111496,
+    "public_last_error_and_drain_unchanged": true,
+    "mutation_detected": true,
+    "review_ref": {
+      "path": "build/video/bridge_collect_cache_review/review.json",
+      "sha256": "bf49a3abc8e7c73b76bffee19ebb7c174ec8b4279b36434b13c474ca37654979"
+    },
+    "independent_coverage": {
+      "shots": 13739,
+      "bad": 6656,
+      "good": 6951,
+      "reads": 32,
+      "control": 103,
+      "cycles": 556402,
+      "cache_differences": 941,
+      "guard_bytes_checked": 1782560
+    },
+    "independent_mutations": 4
   },
   "historical_synthesis_reference": {
     "resources": {
