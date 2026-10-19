@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_mode_control",
+  "top": "display_mode_control",
+  "test_top": "tb_display_mode_control",
+  "sources": ["rtl/video/display_mode_control.sv"],
+  "tests": ["tb/video/tb_display_mode_control.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_mode_control.fdc"],
+  "scope": "Core-domain MODE request/qualification/coalescing and actual-commit feedback; immutable parameterized context. Component synthesis only; no pixel CDC, overlays, raw slot release, formal display MMIO, board MODE pin or physical mode switching."
+}

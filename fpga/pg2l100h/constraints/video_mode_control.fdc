@@ -1,0 +1,2 @@
+# Component 125MHz estimate only. No board pins, pixel CDC or external AC claim.
+create_clock -name clk -period 8.000 [get_ports {clk}]

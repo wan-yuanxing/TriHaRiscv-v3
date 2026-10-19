@@ -11,6 +11,11 @@ RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
 `python scripts/video/run.py --suite raw_display`，综合目标`video_raw_display`仅支持synth；
 实际范围见[全屏组件验证](../verification/video/raw_display.md)。
 
+F3a新增去抖和模式请求控制两个独立组件，仿真入口为`--suite mode_control`，综合
+目标为`video_button_debounce`、`video_mode_control`，均仅支持synth。模式命令保持
+完整上下文，只有实际提交反馈才更新active；尚未接入像素CDC、叠加或板卡MODE。
+接口见[Video接口](../interfaces/video.md)，证据见[组件验证](../verification/video/mode_control.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -48,6 +53,9 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
 python scripts/video/run.py --suite raw_display
 python scripts/video/run.py --suite raw_board
+python scripts/video/run.py --suite mode_control
+python scripts/video/build_pds.py --target video_button_debounce --stage synth
+python scripts/video/build_pds.py --target video_mode_control --stage synth
 python scripts/video/build_pds.py --target video_raw_board --stage bitstream
 python scripts/video/package_board.py --target video_raw_board
 python scripts/video/program_board.py --target video_raw_board --start-server
@@ -147,6 +155,7 @@ rtl/video/
   axi_write_arbiter3.sv                   三主AW至B轮转所有权、早/无主响应故障
   video_three_branch_capture.sv          同帧raw/preview/input、元数据事件和全写退休
   video_three_engine.sv                  三路完成、串行CRC/张量读回后提交显示
+  video_raw_engine.sv                    F2三分支读回后提交raw全屏，注册AW保持
   video_axi_capture_bist.sv               合成 raw 图样、lane/mask probes 和独立检查
   video_async_fifo.sv                    Gray指针双时钟RAM和受阻输出寄存器
   video_capture_ingress.sv               合法帧首接纳、PIX/EOF、源CRC及overflow
@@ -163,6 +172,8 @@ rtl/video/
   video_frame_crc_reader.sv              行式有效字节CRC及读事务排空
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
   raw_display.sv                         原分辨率全屏、完整首像素及独立描述符拒绝
+  video_button_debounce.sv               两级同步、20ms按下/释放资格和单次事件
+  display_mode_control.sv                请求/合并/冻结上下文/实际提交，独立回绕完成性
   video_preview_engine.sv                双平面CRC检查到显示读口的阶段所有权
 sw/include/video_cfg.h                    同源生成的 C 常量
 sw/include/video_regs.h                   同源生成的采帧MMIO C定义
@@ -215,6 +226,11 @@ tb/video/
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   tb_raw_display.sv                      整光栅像素/首行/旧槽及非致命拒绝检查
+  tb_video_raw_engine.sv                 F2三路读回、AW/显示故障和事务排空
+  tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
+  test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
+  tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
+  tb_display_mode_control.sv             同帧资格/背压/合并/错反馈及回绕别名
   run_preview_display_test.py            独立显示仿真和不可变输入证据
   tb_video_frame_crc_reader.sv           CRC、行尾/4KiB、错误与背压结果稳定
   tb_video_preview_board.sv              联合type6/7和复位/健康撤销数字替身
@@ -251,6 +267,9 @@ fpga/pg2l100h/
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
   project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
   project/video_raw_display.json         F1原分辨率全屏组件显式源/测试
+  project/video_raw_board.json           F2独立全屏、三分支读回的板级目标
+  project/video_button_debounce.json     F3a独立按键资格组件显式源/测试
+  project/video_mode_control.json        F3a独立请求/实际提交控制组件
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
   project/video_detect_bilinear.json      独立5:2双线性组件显式源及测试
   project/video_input_pad.json / video_c8_pack.json 独立格式组件显式清单
@@ -261,6 +280,9 @@ fpga/pg2l100h/
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   constraints/video_raw_display.fdc      core8ns/pixel25ns组件及6ns束约束
+  constraints/video_raw_board.fdc        F2实际存活CDC端点与6ns束约束
+  constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
+  constraints/video_mode_control.fdc     F3a单core域8ns组件约束
   constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
   constraints/video_detect_bilinear.fdc   双线性组件8ns时钟
   constraints/video_input_format.fdc     BGR/补行及C8组件8ns时钟
@@ -269,6 +291,7 @@ fpga/pg2l100h/
   rtl/video_preview_clock_reset.sv       预览专用KEY0重采与HDMI链路启动分离
   rtl/hdmi_tx_init.sv                    独立发送初始化及 ACK/超时错误
   rtl/video_board_smoke_top.sv           RGB888 彩条板级顶层
+  rtl/video_raw_board_top.sv             F2全屏静态采帧、保留HDMI初始化的KEY0
   rtl/hdmi_rx_init.sv                    RX 配置、EDID 和状态监测
   rtl/video_rx_telemetry.sv              计频、快照握手和新鲜度
   rtl/video_diag_uart.sv                 整包锁存的诊断 UART

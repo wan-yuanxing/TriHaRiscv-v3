@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_button_debounce",
+  "top": "video_button_debounce",
+  "test_top": "tb_video_button_debounce",
+  "sources": ["rtl/video/video_button_debounce.sv"],
+  "tests": ["tb/video/tb_video_button_debounce.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_button_debounce.fdc"],
+  "scope": "Two-stage asynchronous button synchronization and ceil(clock_hz*20ms) press/release qualification; one event per long press. Component synthesis only; board MODE pin and actual polarity must be verified before board integration."
+}

@@ -1,7 +1,8 @@
 # Video 接口状态
 
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
-同帧只改模式不释放当前槽。F1已新增raw扫描组件记录握手，正式显示MMIO及MODE接口尚未实现；下文
+同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a新增独立MODE控制/去抖组件；
+正式显示MMIO、像素域MODE接入及叠加尚未实现；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 
@@ -16,6 +17,48 @@ AXI错误/超时/DDR失效/欠载为sticky扫描故障，公开事务排空；co
 不包含显示MMIO/叠加或板级接口。验证及综合范围见[raw_display](../verification/video/raw_display.md)。
 
 依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。后续已实现320预处理、同帧三分支核心及独立板级诊断入口；采帧MMIO/原生CPU控制已完成数字联测，正式fabric与SoC三槽生命周期仍待集成，下述局部接口不替代共同契约。
+
+## F3a 去抖与模式请求组件
+
+`video_button_debounce`接收`clk/reset_n/button_async`，输出去抖状态`pressed`和
+单拍`press_pulse`。参数默认125MHz、20ms、低有效，门槛为时钟和毫秒乘积除1000
+向上取整；按下/释放均须两级同步后连续满足门槛。长按只触发一次；reset视为释放，
+复位时按住的键重新资格满后可触发一次。未知样本清累计、不更改稳定状态。
+模块没有假定板级KEY1或MODE管脚；板测接入前仍须核对原理图和实际时钟。
+
+`display_mode_control`只在core域工作。`request_valid/ready/mode`接纳模式0/1/2，
+每次合法请求增加32bit模数序号；3经`reject_valid/ready/rejected_mode`拒绝并计数，
+事件背压期间不接纳新请求。独立本地控制器可将合格按键事件映射成
+`requested_mode==2 ? 0 : requested_mode+1`；正式CPU所有者由F4接入。
+
+调用方提供已验证的`context_valid/frame_id/slot/generation/data`，frame_id非零、
+slot为0..2。`CONTEXT_WIDTH`默认128，只定义不透明完整上下文的数据宽度，不是
+正式显示ABI；同一frame/slot/generation的数据和结果资格必须不可变，数据变化须
+更换generation。调用方须持有所有原图/结果/素材引用，直到对应命令实际退休。
+命令暴露后即使输入上下文、能力或就绪资格改变，原命令仍须完成；这些输入变化
+只影响下一命令，不能作为取消公开valid的手段。
+
+`capabilities[2:0]`分别表示AVATAR/BOX/RAW。缺少目标模式能力置`unavailable`；
+BOX/AVATAR要求`result_valid && result_frame_id==context_frame_id`，非空AVATAR另
+要求`avatar_ready`。`result_empty`表示已知有效无脸，此时AVATAR不要求素材就绪。
+未就绪时置pending并保留活动记录，不借用其他帧结果。所有资格信号必须与上下文
+数据对应；此组件不解析或验证raw地址、框和素材字节。
+
+`cmd_valid/ready`公开mode/seq/frame_id/slot/generation/data，背压期间保持全部字段；
+接纳后只有一个在途命令。后续请求更新最后期望值并合并尚未发出的中间请求，
+已冻结命令不计合并。`commit_valid/ready`反馈同一mode/seq/frame/slot/generation，
+只有匹配反馈才更新active/committed_seq，接纳命令不会提前更新活动状态。
+不匹配反馈被消费，增加`protocol_errors`并置sticky `protocol_error`，仍等待正确反馈。
+空闲时反馈ready为0；反馈生产者必须遵守握手，不能发送无所属命令的事件。
+
+请求、命令接纳、实际提交、合并和拒绝各有独立32bit计数。
+完成性由独立dirty和命令覆盖标记追踪，不依赖请求/提交序号相等；完整回绕后的
+新请求仍须自身实际提交，新请求与旧反馈同拍时保留新请求。
+请求/活动/命令/拒绝/反馈状态均由reset清除，跨域消费者须参与系统协调reset，
+不能独立清除一端保留旧事务。
+本组件没有DDR或槽释放端口。下游必须将raw、同帧叠加及模式在安全帧边界一起
+提交，再返实际反馈；不能把cmd接纳当作帧边界或直接驱动像素mux。本批不证明
+像素CDC、同槽原子更新、叠加或实体MODE切换，见[组件验证](../verification/video/mode_control.md)。
 
 ## 独立检测缩小组件
 

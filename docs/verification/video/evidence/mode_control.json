@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "status": "component_verified",
+  "base_head": "31e19363497d22079252f59fe76eba99308f4ecb",
+  "scope": "F3a debounce and core request/commit control only. Consumer owns pixel CDC/atomic boundary and raw references.",
+  "owned": [
+    "docs/superpowers/plans/2026-10-19-display-mode-control.md",
+    "rtl/video/video_button_debounce.sv",
+    "rtl/video/display_mode_control.sv",
+    "tb/video/tb_video_button_debounce.sv",
+    "tb/video/tb_display_mode_control.sv",
+    "fpga/pg2l100h/project/video_button_debounce.json",
+    "fpga/pg2l100h/project/video_mode_control.json",
+    "fpga/pg2l100h/constraints/video_button_debounce.fdc",
+    "fpga/pg2l100h/constraints/video_mode_control.fdc",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "docs/interfaces/video.md",
+    "docs/video/README.md",
+    "docs/video/STATUS.md",
+    "docs/verification/video/mode_control.md",
+    "docs/verification/video/evidence/mode_control.json"
+  ],
+  "source_hashes": {
+    "docs/superpowers/plans/2026-10-19-display-mode-control.md": "04dda5d92c2a9d92268cc1d0bc99ca756953aea74738651f79fc4c8fc6879adc",
+    "rtl/video/video_button_debounce.sv": "1cf1b6eb03e5b6e49a7d91d1b62757889974f8f9f09230080a25abe6368abb29",
+    "rtl/video/display_mode_control.sv": "ff5782e9505cf46702efdefaba0400dfe28c4a78fe1166a91954ea038eb9a969",
+    "tb/video/tb_video_button_debounce.sv": "322bee1378c9aed3138ce082fa97dacfddf83bf8065a4a7eb489bcd3c7e96590",
+    "tb/video/tb_display_mode_control.sv": "6d11d192fc893217d73baea2b5817c9b29ecea35ab887af9d4e24b656b1b2893",
+    "fpga/pg2l100h/project/video_button_debounce.json": "d37c57614dd3267747332284205e766169e77c5a8e9b7424c0b6fbb51ec99f11",
+    "fpga/pg2l100h/project/video_mode_control.json": "c6956e1e97e96b127bac5fc676e516102f221225469abc95984f9ee9e787e020",
+    "fpga/pg2l100h/constraints/video_button_debounce.fdc": "a0f28eebdf055d7c387d45682a5e5647dcbeb0ff4d418463d1a180d158beb934",
+    "fpga/pg2l100h/constraints/video_mode_control.fdc": "f00e19273798b4b236726c4cdb4010d6d1e00f59906707ea3ec73c04fa867eaa",
+    "scripts/video/run.py": "3ef6cb3e51e414ff9f4de27316efcdfe4f4de2a0f0b1748cc995e40f5d9d0876",
+    "scripts/video/build_pds.py": "16f77448263ab1c9e4639aa94da8df79142b660c1d6d812f8ec65a2efce6c0a6",
+    "docs/interfaces/video.md": "b70c07fd4db6038bace97ac805b08978f34948cd863430b272068fcb9021336c",
+    "docs/video/README.md": "d280537cbc2b7bdf54a652e1f854edf6513444385bf05811957530d9147eae1e",
+    "docs/video/STATUS.md": "adee630717fbe859a3a9c825112d08b32d8bc181ec902e95ae43b69ade0a994b",
+    "docs/verification/video/mode_control.md": "c57f9e763f1e54215965e9cb02a7613c747e077460cd0733d9d03a685975424d"
+  },
+  "refs": {
+    "full": {
+      "path": "build/video/regression/20261019T134922_419299Z/result.json",
+      "sha256": "a0a18559fe4c539a350a58faba8655fbb99e35bbfe8af7ab2dbf54e664259cd1"
+    },
+    "red": {
+      "path": "build/video/mode_control_red/result.json",
+      "sha256": "bc2948a19a6fdbdd3f6b9a54d517cc2c7c610c758da2317508cb2bf2acfb12d2"
+    },
+    "alias_red": {
+      "path": "build/video/mode_control_alias_red/result.json",
+      "sha256": "22c6ee47b3f45502e73ae43624132b48541a3e54a5772e89055b0a3be37a014b"
+    },
+    "review": {
+      "path": "build/video/mode_control_review/review.json",
+      "sha256": "fe518165307b01ef33c0edb92b34455ffc347fcdc241142da5f115de4570d447"
+    },
+    "python": {
+      "path": "build/video/mode_control_python/result.json",
+      "sha256": "d9bc948ab2685ecde2d9f116b7dfe58636b2227c636b679d17205530c25f3dfa"
+    },
+    "video_button_debounce": {
+      "path": "build/video/pds/20261019T133921_671749Z/result.json",
+      "sha256": "dd4effb771511f67443eaeea79db27f2fd58e2f057b27b4b8b0ecfdcfbd0530e"
+    },
+    "video_mode_control": {
+      "path": "build/video/pds/20261019T134902_222523Z/result.json",
+      "sha256": "afbfca45d4902702fc30a29b0b7f3854340e4e4abb79576bf15b803dd42528c8"
+    },
+    "video_button_debounce_synthesis_report": {
+      "path": "build/video/pds/20261019T133921_671749Z/synthesize/video_button_debounce.snr",
+      "sha256": "8953639c5be21ed16f2a16c66da4de3796224e35608803c4622bd0fdcf6cd3f7"
+    },
+    "button_netlist": {
+      "path": "build/video/pds/20261019T133921_671749Z/synthesize/video_button_debounce_syn.vm",
+      "sha256": "219610d8d29bc7eccac18e447cca5d242665efb88baaf1761bb45d376df35ec4"
+    },
+    "video_mode_control_synthesis_report": {
+      "path": "build/video/pds/20261019T134902_222523Z/synthesize/display_mode_control.snr",
+      "sha256": "3d9cc139f7f52ed3cc3f9163c496ad29db169bbe1d6db0f40261e03f5cbf8199"
+    },
+    "full_log_hashes": {
+      "path": "build/video/mode_control_log_hashes.json",
+      "sha256": "d06151d42b3f1bcb17d3186d51d554ea46cdb5c7c28d3d2b5130b7e623e7ed1b"
+    }
+  },
+  "full_regression": {
+    "suites": 37,
+    "inputs": 198,
+    "simulation_logs": 337,
+    "log_hashes": 720
+  },
+  "resources": {
+    "video_button_debounce": {
+      "lut": 30.0,
+      "registers": 26.0,
+      "drm": 0.0,
+      "apm": 0,
+      "estimated_slow_setup_ns": 5.131
+    },
+    "video_mode_control": {
+      "lut": 317.0,
+      "registers": 658.0,
+      "drm": 0.0,
+      "apm": 0,
+      "estimated_slow_setup_ns": 4.08
+    }
+  },
+  "preserved_file_count": 40,
+  "digital_current_inputs_verified": true,
+  "standalone_synthesis_verified": true,
+  "routed_timing_verified": false,
+  "physical_mode_switch_verified": false,
+  "pixel_cdc_or_atomic_update_verified": false,
+  "overlay_implemented": false,
+  "formal_display_mmio_implemented": false,
+  "external_io_timing_verified": false,
+  "flash_written": false
+}
