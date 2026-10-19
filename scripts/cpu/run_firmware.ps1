@@ -11,6 +11,7 @@ param(
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'simulation_common.ps1')
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
 $root = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $runRoot = Join-Path $root ('build/cpu/firmware-' + $Program + '-' +
@@ -37,6 +38,8 @@ function Native([string] $Exe, [string[]] $Arguments, [string] $Label, [int] $Ti
 }
 
 try {
+    $result['external_input_hashes']=[ordered]@{}
+    $primitiveSources=@(Get-TrihaPrimitiveModels -Root $root -LocalHashes $result.input_hashes -ExternalHashes $result.external_input_hashes)
     Assert-TrihaAdaptation $root
     if (($Fault -eq 'crc' -and $Program -ne 'coremark') -or
         ($Fault -eq 'count' -and $Program -ne 'retire') -or
@@ -139,7 +142,7 @@ try {
     Native (Join-Path $ModelSimBin 'vmap.exe') @('-c') 'vmap' | Out-Null
     Native (Join-Path $ModelSimBin 'vlib.exe') @('work') 'vlib' | Out-Null
     $vlogArguments = @('-work','work',('+incdir+' + (Join-Path $root 'rtl/cpu/vendor/src/core'))) +
-        @($filelist | ForEach-Object { Join-Path $root $_ })
+        @($filelist | ForEach-Object { Join-Path $root $_ }) + $primitiveSources
     Native (Join-Path $ModelSimBin 'vlog.exe') $vlogArguments 'rtl-build' | Out-Null
     $modes = if ($Mode -eq 'both') { @('single','dual') } else { @($Mode) }
     foreach ($selected in $modes) {
@@ -221,6 +224,7 @@ try {
             $unchanged = $false
         }
     }
+    if('external_input_hashes' -in $result.Keys -and -not (Test-TrihaPrimitiveHashes $result.external_input_hashes)){$unchanged=$false}
     $result.source_unchanged = $unchanged
     if (-not $unchanged) { $result.status='FAIL';$result.error='Inputs changed during the run.' }
     foreach ($file in Get-ChildItem -LiteralPath $runRoot -File) {

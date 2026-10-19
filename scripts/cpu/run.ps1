@@ -14,6 +14,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'simulation_common.ps1')
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $vendorRoot = Join-Path $projectRoot 'rtl/cpu/vendor'
 $buildRoot = Join-Path $projectRoot 'build/cpu'
@@ -135,6 +136,8 @@ function Invoke-CpuCase([string] $Name) {
             if ($actual -ne $entry.Value) { throw "Upstream hash mismatch: $relative" }
             $result.input_hashes[$relative] = $actual
         }
+        $result['external_input_hashes']=[ordered]@{}
+        $primitiveSources=@(Get-TrihaPrimitiveModels -Root $projectRoot -LocalHashes $result.input_hashes -ExternalHashes $result.external_input_hashes)
         $filelistPath = Join-Path $projectRoot 'config/cpu_sources.f'
         $sources = @(Get-Content -LiteralPath $filelistPath | ForEach-Object { $_.Trim() } |
             Where-Object { $_ -and -not $_.StartsWith('#') })
@@ -153,7 +156,7 @@ function Invoke-CpuCase([string] $Name) {
         Invoke-Native 'vlib' @('work') 'vlib' | Out-Null
         $compileArguments = @('-work', 'work',
             ('+incdir+' + (Join-Path $vendorRoot 'src/core')))
-        $compileArguments += @($sources | ForEach-Object { Join-Path $projectRoot $_ })
+        $compileArguments += @($sources | ForEach-Object { Join-Path $projectRoot $_ }) + $primitiveSources
         Invoke-Native 'vlog' $compileArguments 'compile' | Out-Null
         $dual = if ($Name -eq 'dual') { 1 } else { 0 }
         $programFail = if ($Name -eq 'fail') { 1 } else { 0 }
@@ -208,6 +211,7 @@ function Invoke-CpuCase([string] $Name) {
                 $unchanged = $false
             }
         }
+        if('external_input_hashes' -in $result.Keys -and -not (Test-TrihaPrimitiveHashes $result.external_input_hashes)){$unchanged=$false}
         $result.source_unchanged = $unchanged
         if (-not $unchanged) { $result.status = 'FAIL'; $result.error = 'Inputs changed during run.' }
         foreach ($file in Get-ChildItem -LiteralPath $runRoot -File -Filter '*.log') {

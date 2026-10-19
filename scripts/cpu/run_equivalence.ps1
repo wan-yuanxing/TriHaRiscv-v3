@@ -8,6 +8,7 @@ param(
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'simulation_common.ps1')
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
 $root = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $work = Join-Path $root ('build/cpu/equivalence-' + [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))
@@ -25,6 +26,8 @@ function Native([string] $Exe,[string[]] $Arguments,[string] $Label) {
     Invoke-TrihaNative -Executable $Exe -CommandArguments $Arguments -RunDirectory $work -Label $Label -Records $commands -TimeoutSeconds 90
 }
 try {
+    $result['external_input_hashes']=[ordered]@{}
+    $primitiveSources=@(Get-TrihaPrimitiveModels -Root $root -LocalHashes $result.input_hashes -ExternalHashes $result.external_input_hashes)
     Assert-TrihaAdaptation $root
     if ($BrokenDual -and $Mode -ne 'dual') { throw 'BrokenDual is a dual-mode negative only.' }
     $sources = @(Get-Content (Join-Path $root 'config/cpu_sources.f') |
@@ -55,7 +58,7 @@ try {
     Native (Join-Path $modelsim 'vmap.exe') @('-c') 'vmap' | Out-Null
     Native (Join-Path $modelsim 'vlib.exe') @('work') 'vlib' | Out-Null
     Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+' + (Join-Path $root 'rtl/cpu/vendor/src/core'))) +
-        @($sources | ForEach-Object { Join-Path $root $_ })) 'compile' | Out-Null
+        @($sources | ForEach-Object { Join-Path $root $_ })+$primitiveSources) 'compile' | Out-Null
     foreach ($selected in $(if ($Mode -eq 'both') { @('single','dual') } else { @($Mode) })) {
         $dual = [int]($selected -eq 'dual')
         $output = Native (Join-Path $modelsim 'vsim.exe') @('-c','-onfinish','exit','-t','1ps','-voptargs=+acc',
@@ -75,6 +78,7 @@ finally {
     foreach ($name in $result.input_hashes.Keys) {
         if ((Get-TrihaHash (Join-Path $root $name)) -ne $result.input_hashes[$name]) { $result.source_unchanged=$false }
     }
+    if('external_input_hashes' -in $result.Keys -and -not (Test-TrihaPrimitiveHashes $result.external_input_hashes)){$result.source_unchanged=$false}
     if (-not $result.source_unchanged) { $result.status='FAIL';$result.error='Inputs changed.' }
     foreach ($file in Get-ChildItem -LiteralPath $work -File) {
         if ($file.FullName -ne $resultPath) { $result.output_hashes[$file.Name] = Get-TrihaHash $file.FullName }

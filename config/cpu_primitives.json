@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "simulation_models": [
+    {
+      "module": "GTP_RAM32X2DP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
+      "sha256": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307"
+    }
+  ],
+  "scope": "Read installed PDS simulation models without copying or modifying vendor tool files; synthesis uses native primitives."
+}

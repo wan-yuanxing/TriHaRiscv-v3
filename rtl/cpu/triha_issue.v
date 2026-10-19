@@ -753,7 +753,7 @@ wire [31:0] issue_b_ra_value_w;
 wire [31:0] issue_b_rb_value_w;
 
 // Register file: 2W4R
-biriscv_regfile
+triha_regfile
 #(
      .SUPPORT_REGFILE_XILINX(SUPPORT_REGFILE_XILINX)
     ,.SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)

@@ -6,6 +6,7 @@ param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training
     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'simulation_common.ps1')
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $work=Join-Path $root ('build/cpu/redirect-'+$Test+'-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))
@@ -23,6 +24,8 @@ function Native([string] $Exe,[string[]] $Arguments,[string] $Label) {
     Invoke-TrihaNative -Executable $Exe -CommandArguments $Arguments -RunDirectory $work -Label $Label -Records $commands -TimeoutSeconds 90
 }
 try {
+    $result['external_input_hashes']=[ordered]@{}
+    $primitiveSources=@(Get-TrihaPrimitiveModels -Root $root -LocalHashes $result.input_hashes -ExternalHashes $result.external_input_hashes)
     Assert-TrihaAdaptation $root
     $sources=@(Get-Content (Join-Path $root 'config/cpu_sources.f') | ForEach-Object {$_.Trim()} |
         Where-Object {$_ -and -not $_.StartsWith('#') -and $_ -ne 'tb/cpu/tb_triha_core.v'})
@@ -47,7 +50,7 @@ try {
         Native (Join-Path $modelsim 'vlib.exe') @('work') 'vlib'|Out-Null
         $module=if($LegacyFrontend){'biriscv_frontend'}else{'triha_frontend'}
         $defines=@("+define+CPU_FRONTEND_MODULE=$module")
-        Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})) 'compile'|Out-Null
+        Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
         $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} default{'work.tb_unit_payload'}}
         $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} default{'UNIT_PAYLOAD_PASS'}}
         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
@@ -72,7 +75,7 @@ try {
             Native (Join-Path $modelsim 'vlib.exe') @($kind) "vlib-$kind"|Out-Null
             $module=if($kind -eq 'golden'){'riscv_core'}else{'triha_cpu'}
             Native (Join-Path $modelsim 'vlog.exe') (@('-work',$kind,("+define+CPU_TEST_MODULE=$module"),
-                ('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+@($sources|ForEach-Object{Join-Path $root $_})) "compile-$kind"|Out-Null
+                ('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) "compile-$kind"|Out-Null
             foreach($selected in $(if($Mode -eq 'both'){@('single','dual')}else{@($Mode)})) {
                 $dual=[int]($selected -eq 'dual')
                 $prefix="$kind-$selected"
@@ -102,6 +105,7 @@ try {
 finally {
     $result.source_unchanged=$true
     foreach($name in $result.input_hashes.Keys){if((Get-TrihaHash (Join-Path $root $name)) -ne $result.input_hashes[$name]){$result.source_unchanged=$false}}
+    if('external_input_hashes' -in $result.Keys -and -not (Test-TrihaPrimitiveHashes $result.external_input_hashes)){$result.source_unchanged=$false}
     if(-not $result.source_unchanged){$result.status='FAIL';$result.error='Inputs changed.'}
     foreach($file in Get-ChildItem -LiteralPath $work -File){if($file.FullName -ne $resultPath){$result.output_hashes[$file.Name]=Get-TrihaHash $file.FullName}}
     $result.runner_return_code=if($result.status -eq 'PASS'){0}else{1}

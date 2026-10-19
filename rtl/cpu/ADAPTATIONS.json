@@ -34,15 +34,15 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
       "derived": "rtl/cpu/triha_issue.v",
-      "derived_sha256": "dfa7ee470b53310f42ff54b6d03a47d336a52c1b2088d13d94613da20d1caa30",
+      "derived_sha256": "a9a466d5444d19f5557eeece7478541c5f04bc1fb47bf87ad9e0e59c0bdfe6ee",
       "changes": [
         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
         "Rename integration module to triha_issue.",
-        "Choose opcode/PC/fault payload from fetch validity and expected PC independently of squash/CSR redirect; retain original slot validity and all issue enables.",
         "Select CSR invalid-instruction payload flag independently of late kill controls; CSR side-effect enable unchanged.",
         "Choose scheduling class and prospective eligibility without late cancellation; apply original squash/CSR cancellation to final fire/accept strobes.",
         "Keep original IRQ inhibit classification on cancellation cycles.",
-        "Pass independent load bypass payload to both pipeline controllers, retaining original completion/fault payload."
+        "Pass independent load bypass payload to both pipeline controllers, retaining original completion/fault payload.",
+        "Connect the maintained register-file wrapper: native zero-latency distributed RAM for single issue; existing generic implementation for dual issue."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -94,6 +94,22 @@
         "Forwarding payload selection uses registered E2 valid rather than stall-gated valid; destination tag and all commit/stall enables retain original gating."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
+      "base_sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+      "derived": "rtl/cpu/triha_regfile.v",
+      "derived_sha256": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+      "changes": [
+        "Reuse the existing FPGA two-copy asynchronous-read register-file structure with native GTP_RAM32X2DP primitives for single issue.",
+        "Preserve synchronous zero-on-reset visibility with 31 written flags; x0 stays zero; no read register or added latency.",
+        "Single-issue secondary write must be zero and is checked by simulation; dual issue retains original register-file behavior."
+      ],
+      "reference_files": [
+        "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
+        "config/cpu_primitives.json"
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged; installed tool models referenced without copying."
     }
   ]
 }

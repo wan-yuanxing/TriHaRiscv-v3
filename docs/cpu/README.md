@@ -87,3 +87,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 `run_redirect.ps1 -Test requestdata`检查请求地址格式/store数据不依赖晚到valid、有效控制关闭、未接纳请求载荷保持及fault取消/badaddr；`-Test loadbypass`保留返回数据与精确异常的分离检查。第8轮实际100MHz仍TIMING_FAIL，详见STATUS和`request_payload_timing.json`。
 
 `run_redirect.ps1 -Test lanedata`检查对齐fetch packet的原始lane选择独立于完整PC/valid，而错PC/空lane仍关闭发射和消费；该契约依赖当前FIFO的pc0/pc1固定word位置。第9轮CPU-only7175 LUT/6084 FF，实际100MHz setup仍为-3.064ns，证据`lane_payload_timing.json`。
+
+单发射寄存器堆在`triha_regfile.v`使用两份原生异步读分布式RAM及同步复位可见标记，次写口必须为0；双发射保留原实现。`run_regfile.ps1 -Backend candidate`运行独立组件oracle，`-Stage map`核对真实分布式RAM/FF资源，`-Broken`要求拒绝输出损坏。原语模型路径与哈希见`config/cpu_primitives.json`，由仿真公共入口绑定。最新整核6833 LUT/5123 FF，100MHz Slow setup仍-4.659ns，证据`distributed_regfile_timing.json`。
