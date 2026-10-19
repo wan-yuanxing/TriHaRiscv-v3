@@ -66,9 +66,9 @@ features. Fixed geometry/address values remain from `video_cfg.json`.
 | 118/11c/120 | RAW/PREVIEW/INPUT_STRIDE | RO fixed configured strides |
 | 124/128 | FRAME_WIDTH/HEIGHT | RO configured geometry |
 | 12c/130 | INPUT_WIDTH/HEIGHT | RO configured storage dimensions |
-| 140/144/148 | ACCEPTED_SLOT/FRAME_ID/VERSION | RO held accepted identity |
+| 140/144/148 | ACCEPTED_SLOT / ACCEPTED_FRAME_ID_RECORD / ACCEPTED_VERSION | RO held accepted identity; frame alias at028 |
 | 14c/150/154 | ACCEPTED_RAW/PREVIEW/INPUT_BASE | RO held addresses |
-| 180/184/188 | COMPLETED_SLOT/FRAME_ID/VERSION | RO held completion identity |
+| 180/184/188 | COMPLETED_SLOT / COMPLETED_FRAME_ID_RECORD / COMPLETED_VERSION | RO held completion identity; frame alias at02c |
 | 18c | COMPLETED_RESULT | RO bit0 success; bits15:8 error_code |
 | 190/194/198 | COMPLETED_RAW/PREVIEW/INPUT_BASE | RO held addresses |
 | 19c/1a0/1a4 | COMPLETED_RAW/PREVIEW/INPUT_PIXELS | RO held counts |
@@ -92,9 +92,11 @@ Accept the capture core's held accepted/completion ports into separate one-entry
 mailboxes. READY depends only on the corresponding mailbox being empty; a full
 mailbox backpressures its producer. New events win over same-edge W1C. Accepted
 record is published at the existing first-core-PIX event, not a newly claimed
-physical SOF timestamp. Completion requires matching accepted identity (including
-a valid accepted event on the same edge), success/code consistency and known
-payload. Success is the producer's three-branch/good-EOF/all-B result, not an
+physical SOF timestamp. Completion always requires matching locked request
+identity, success/code consistency and known payload. Successful completion also
+requires accepted identity (including a valid accepted event on the same edge).
+A legitimate failed completion may precede the first accepted PIX and retains
+its known nonzero producer code. Success is the producer's three-branch/good-EOF/all-B result, not an
 independent numerical or shared-master visibility proof.
 
 Validate slot/frame/version and computed bases against the locked request.

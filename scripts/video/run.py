@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -40,7 +40,9 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture"):
+        if args.suite in ('config','capture_mmio','all'):
+            run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -50,6 +52,9 @@ def main():
                   ROOT / "rtl/video/include/video_cfg.vh", ROOT / "sw/include/video_cfg.h"]
         paths += list((ROOT / "scripts/video").glob("*.py"))
         paths += list((ROOT / "tb/video").glob("test_*.py"))
+        if args.suite in ('config','capture_mmio','all'):
+            paths += [ROOT/'config/video_regs.json',ROOT/'rtl/video/include/video_regs.vh',
+                      ROOT/'sw/include/video_regs.h']
         if args.suite in ("clocks", "board", "tx_init", "tx_init_full", "rx", "rx_init", "rx_measure", "rx_board", "all"):
             paths += list((ROOT / "fpga/pg2l100h/rtl").glob("*.sv"))
             paths += list((ROOT / "tb/video").glob("*.sv"))
@@ -60,6 +65,19 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('capture_mmio','all'):
+            mmio_path=ROOT/'fpga/pg2l100h/project/video_capture_mmio.json'
+            mmio=json.loads(mmio_path.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in mmio['sources']+mmio['tests']]
+            add_inputs(result,[mmio_path,*paths,ROOT/'config/video_regs.json',
+                              ROOT/'rtl/video/include/video_regs.vh',ROOT/'sw/include/video_regs.h'])
+            for name,top,marker in [('capture_mmio',mmio['test_top'],'VIDEO_CAPTURE_MMIO_PASS'),
+                                    ('capture_mmio_core',mmio['integration_test_top'],'VIDEO_CAPTURE_MMIO_CORE_PASS')]:
+                log=simulate(work,name,top,paths,[ROOT/'rtl/video/include'],timeout=600)
+                if marker not in log:raise RuntimeError('Missing '+marker)
+            run_logged([sys.executable,'-m','unittest','discover','-s',ROOT/'tb/video',
+                        '-p','test_video_regs.py','-v'],work/'regs_python.log')
+            result['passed'].append('capture_mmio')
         if args.suite in ('three_capture','all'):
             manifest_path=ROOT/'fpga/pg2l100h/project/video_three_capture.json'
             three=json.loads(manifest_path.read_text(encoding='utf-8'))

@@ -1,0 +1,2 @@
+# Standalone core-domain endpoint; synthesis only, no board or I/O signoff.
+create_clock -name core_clk -period 8.000 [get_ports {clk_i}]

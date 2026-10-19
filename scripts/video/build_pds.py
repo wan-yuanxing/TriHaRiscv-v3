@@ -33,9 +33,22 @@ def review_messages(log, verified_fdc=""):
     return reviewed, rejected
 
 
+def verify_build_inputs(work, result):
+    """Bind the source bytes, copied compile inputs and generated vendor inputs."""
+    for name, expected in result['inputs'].items():
+        if sha256(ROOT/name) != expected:
+            raise ValueError('Build input changed since hashing: '+name)
+    for name, expected in result.get('snapshot_inputs', {}).items():
+        if sha256(work/'src'/name) != expected:
+            raise ValueError('Build source snapshot differs from hashed input: '+name)
+    for name, expected in result.get('vendor_inputs', {}).items():
+        if sha256(work/name) != expected:
+            raise ValueError('Generated vendor input changed during build: '+name)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
     hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board")
@@ -65,7 +78,11 @@ def main():
             raise ValueError("Invalid top module")
         names = manifest["sources"] + manifest["constraints"] + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
-            str(manifest_path.relative_to(ROOT))]
+            manifest_path.relative_to(ROOT).as_posix()]
+        if args.target=='video_capture_mmio':
+            run_logged([sys.executable,ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
+            names += ['config/video_regs.json','rtl/video/include/video_regs.vh',
+                      'sw/include/video_regs.h','scripts/video/gen_regs.py']
         if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board"):
             run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
             names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
@@ -75,10 +92,14 @@ def main():
         result["inputs"] = input_hashes([ROOT / name for name in names] +
             [ROOT / "scripts/video" / name for name in
              ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py")])
+        result['snapshot_inputs'] = {}
         for name in names:
             destination = work / "src" / name
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, destination)
+            if sha256(destination) != result['inputs'][name]:
+                raise ValueError('Build source snapshot differs from hashed input: '+name)
+            result['snapshot_inputs'][name] = result['inputs'][name]
         vendor_sources = []
         if hdmi:
             _, wrapper = generate_pll(work / "ip/video_pll")
@@ -128,9 +149,11 @@ def main():
             lines += ["gen_bit_stream -scbv {High Voltage}"]
         script = work / "build.tcl"
         script.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        verify_build_inputs(work, result)
         executable = tool("pds_shell")
         result["pds_version"] = run_logged(
             [executable, "-version"], work / "version.log").strip()
+        verify_build_inputs(work, result)
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
                          cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board") else 1800 if ddr else 900)
@@ -172,6 +195,8 @@ def main():
             verify_mask = bitstream.with_suffix(".smsk")
             result["verify_mask"] = str(verify_mask.relative_to(ROOT))
             result["verify_mask_sha256"] = sha256(verify_mask)
+        verify_build_inputs(work, result)
+        result['input_snapshot_verified_before_and_after_build'] = True
     except Exception as error:
         result.update(status="fail", error=str(error))
         print(str(error), file=sys.stderr)

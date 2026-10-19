@@ -118,6 +118,41 @@ flags bit0..7为init_done、busy、done、error、all_pll_lock、rx_mode_good、
 
 ## 后续 CPU–Video 协议准入
 
+### 采帧控制端点 ABI1
+
+`video_capture_mmio`提供同core域的32bit AXI4-Lite端点，基址`0x20010000`、
+版本`0x00010000`。寄存器唯一来源为`config/video_regs.json`，经
+`scripts/video/gen_regs.py`生成`video_regs.vh`及`sw/include/video_regs.h`。
+版本、能力和全部偏移受兼容性指纹保护；同版本不能悄悄移动字段。完整位表见
+[端点设计](../superpowers/specs/2026-10-19-video-capture-mmio-design.md)。
+
+该端点已定义独立AW/W缓存、B/R背压保持、AR握手时快照、WSTRB合并及W1C。
+未映射/未对齐/越界地址返回DECERR；RO写、非法字段或忙时修改返回SLVERR。
+读写同拍观察旧寄存器值。不支持的DISPLAY_SUBMIT和计数器不伪造成功响应。
+SoC须负责32bit CPU总线适配、访问属性及AXI-Lite CDC；本端点不隐含跨域同步。
+
+软件写CONTROL.enable、REQUEST_SLOT/FRAME_ID/VERSION后，全字写CAPTURE_REQUEST=1。
+请求锁存后保持VALID/身份至capture_req_ready；此后shadow、CONTROL和第二次提交
+锁定至协调复位，不提供局部reset或重采命令。每个slot的raw/preview/input地址由
+既有video_cfg同源定义计算，软件不能在请求中另写任意DDR指针。软件自行保证槽可写。
+
+accepted与completion分别进入单项事件邮箱。IRQ_PENDING位0/1/2为accepted、
+completion、fault；IRQ_MASK只屏蔽中断线，不丢事件。W1C位0/1消费邮箱valid，
+记录内容仍保留，新事件优先于同拍ACK。帧号摘要在0x28/2c，完整记录的frame_id
+别名在0x144/184；全部数据跨多次读保持一致。合法失败可以发生在首像素之前；
+成功必须已有同身份accepted（或与其同拍）。未知/过期/重复/错身份事件置E1，
+错误首因保持，置capture_abort_o，已公开事务仍由采集核排空。
+
+历史完成记录和实时健康分开：晚到live fault不会篡改完成数据，但STATUS.sticky_fault
+保持并撤销实时健康。ACK不清错误、不解除abort、不释放槽。当前CAPABILITIES=7
+仅声明采集端点、保持事件和IRQ；不声明显示、allocator、连续采集或共享可见性。
+此批的完成邮箱来自既有三分支good EOF/全B结果，正式SoC INPUT_READY仍须接入
+统一fabric/所有权协议后联合验收。accepted时间仍为首个合法core PIX，非新SOF时间戳。
+
+端点、采集核、入口及在途DMA必须协调复位。CPU统一三槽状态、跨master写后读可见性、
+Cache/fence、显示提交及释放ACK均不由这个邮箱替代。组件/联测/综合证据见
+[capture_mmio.md](../verification/video/capture_mmio.md)。
+
 单平面组件 `rgb888_packer` 与 `video_write_dma` 以core域ready/valid流连接，物理HDMI的不可背压像素由既有FIFO/CDC和帧接纳器接入。内存递增地址按R、G、B保存，`WDATA[8*k+:8]` 对应字节地址 `AWADDR+k`，不能直接把 `24'hRRGGBB` 低字节优先解释为同一格式。
 
 packer默认 `ALLOW_SIMULTANEOUS_TRANSFER=1` 保留同拍出入；共享预览的两个实例选择0，使输入和输出传输互斥，输入字节只按注册count定位，避免下游READY经占用更新参与输入字节位置选择。容量仍为18字节，17/18字节行尾分为完整拍及1/2字节尾拍。固定800/400像素行在无下游停顿时需950/475个core周期，125MHz下理论峰值约105.263Mpixel/s；这是组件上限，实际FIFO水位和端到端表现由板测另验。
@@ -132,7 +167,9 @@ DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和
 
 联合目标 `video_hdmi_capture` 的type5 UART报告原始源单帧数据一致性，本地输出仍是独立彩条。物理结果和CRC碰撞边界见 `docs/verification/video/hdmi_raw_capture.md`；该本地done不具有SoC三分支CAPTURE_DONE或CPU槽所有权语义。
 
-保留规格的控制基址 `0x2001_0000` 与寄存器区间；当前不生成可误用的完整 `video_regs.h`，待详细位定义、复位值、W1C 和忙时规则形成一致版本后一起生成 RTL/C。
+保留规格的控制基址 `0x2001_0000` 与寄存器区间；本批ABI1生成采帧端点子集的
+`video_regs.h`，包含详细位定义、复位值、W1C和忙时规则。显示/性能部分尚未发布，
+不能把这个子集头文件当作完整SoC Video寄存器已实现。
 
 - CAPTURE_REQUEST：保存请求；在下一合法完整输入帧边界发布带 slot/frame_id 的 CAPTURE_ACCEPTED。
 - CAPTURE_DONE/INPUT_READY：同一逻辑事件，raw、preview、input 三分支及对应写响应完成，尺寸检查通过后发布。
