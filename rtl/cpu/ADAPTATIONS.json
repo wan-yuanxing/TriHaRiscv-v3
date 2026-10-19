@@ -23,12 +23,13 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
       "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
       "derived": "rtl/cpu/triha_frontend.v",
-      "derived_sha256": "54a73db1a16774595a97af9333b0be6a3e307c99b6b0e15ca98cd5a697b3d046",
+      "derived_sha256": "f6dbf6b6123dbf2a83865aefadc49bfa80b5d306d64cfd98eb1e575bec0263b0",
       "changes": [
         "Rename integration module to triha_frontend.",
         "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
         "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request.",
-        "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history."
+        "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history.",
+        "Connect the equivalent parallel-priority prediction-table derivative; prediction/training cycles and table sizes remain unchanged."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -140,6 +141,29 @@
         "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
+      "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+      "derived": "rtl/cpu/triha_npc.v",
+      "derived_sha256": "e2300bcf858825d2366d2426ea8fa1145c1a4179836960ca607dc4678745722d",
+      "changes": [
+        "Rename integration predictor and its unchanged local LFSR helper.",
+        "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
+        "Write each BTB entry directly using its highest-priority one-hot hit or the original miss-allocation index; BHT/RAS/training/LFSR state and cycles unchanged.",
+        "Adapt the fixed OpenTitan one-hot mux to flat Verilog ports; no additional compiler or runtime dependency."
+      ],
+      "references": [
+        {
+          "url": "https://github.com/lowRISC/opentitan",
+          "revision": "9060587f8b00deae60575e645c6c77ee9ce4f2ec",
+          "path": "hw/ip/prim/rtl/prim_onehot_mux.sv",
+          "sha256": "adf35f6708fd04cf2a01138033de3f5b23674685c213bcfc39fc3819d04cfa7c",
+          "license": "Apache-2.0",
+          "copyright": "lowRISC contributors (OpenTitan project)"
+        }
+      ],
+      "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
     }
   ]
 }

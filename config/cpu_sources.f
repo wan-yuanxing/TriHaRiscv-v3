@@ -17,6 +17,7 @@ rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v
 rtl/cpu/vendor/src/core/biriscv_regfile.v
 rtl/cpu/vendor/src/core/riscv_core.v
 rtl/cpu/triha_frontend.v
+rtl/cpu/triha_npc.v
 rtl/cpu/triha_decode.v
 rtl/cpu/triha_issue.v
 rtl/cpu/triha_regfile.v

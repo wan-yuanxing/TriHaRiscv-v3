@@ -1,0 +1,1000 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-19T11:04:25.454561+00:00",
+  "production_hashes": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "f6dbf6b6123dbf2a83865aefadc49bfa80b5d306d64cfd98eb1e575bec0263b0",
+    "rtl/cpu/triha_issue.v": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+    "rtl/cpu/triha_regfile.v": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+    "rtl/cpu/triha_npc.v": "e2300bcf858825d2366d2426ea8fa1145c1a4179836960ca607dc4678745722d",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+    "rtl/cpu/triha_core.v": "bbe0012f1a5292f72f28093f068a840f009e1c6d90388512c03930f9bab406a3",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "08578447a1185b1ee693b0a9b40acb1639d0318560ab42685c98a56f695dc42e"
+  },
+  "positive_tests": {
+    "smoke_dual": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\dual-20261019T1100471905126Z\\result.json",
+      "sha256": "6deb434e10c6b56096e4cc84ec715b9820f45f9b3c9c1e919951f01f5dd935d3",
+      "status": "PASS",
+      "verified_inputs": 47,
+      "verified_external_inputs": 1,
+      "verified_outputs": 11,
+      "executions": []
+    },
+    "legacy_cycle_37_both_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261019T1055533513927Z\\result.json",
+      "sha256": "579bb3bc8a4b29ae39d6dab4103c93061292e238cbcb14a897938446b244c9d7",
+      "status": "PASS",
+      "verified_inputs": 44,
+      "verified_external_inputs": 1,
+      "verified_outputs": 18,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2387,
+          "trap_mask": 511,
+          "i_stalls": 180,
+          "d_stalls": 72
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2361,
+          "trap_mask": 511,
+          "i_stalls": 184,
+          "d_stalls": 87
+        }
+      ]
+    },
+    "legacy_cycle_1234567_both_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261019T1056075617652Z\\result.json",
+      "sha256": "16226bbdec87936e52891b1f2fc4ff2d5690ac3a3b80facc014fde9aaa7b26d2",
+      "status": "PASS",
+      "verified_inputs": 44,
+      "verified_external_inputs": 1,
+      "verified_outputs": 18,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2403,
+          "trap_mask": 511,
+          "i_stalls": 192,
+          "d_stalls": 75
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2382,
+          "trap_mask": 511,
+          "i_stalls": 206,
+          "d_stalls": 96
+        }
+      ]
+    },
+    "legacy_cycle_271828_both_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261019T1056206614904Z\\result.json",
+      "sha256": "3d0abad8abbe6e8cd6f80666fe7b9b704920d1069ebc0464b4f84594575e5b22",
+      "status": "PASS",
+      "verified_inputs": 44,
+      "verified_external_inputs": 1,
+      "verified_outputs": 18,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2440,
+          "trap_mask": 511,
+          "i_stalls": 190,
+          "d_stalls": 101
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2367,
+          "trap_mask": 511,
+          "i_stalls": 218,
+          "d_stalls": 78
+        }
+      ]
+    },
+    "firmware_coremark_performance_both": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261019T1057221635209Z\\result.json",
+      "sha256": "cd17143840020d6f1633bd72692b51ea0aa82c441f898b9dbb230d9eb209a175",
+      "status": "PASS",
+      "verified_inputs": 68,
+      "verified_external_inputs": 1,
+      "verified_outputs": 29,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1682259,
+            "wb_completed": 1467843,
+            "observed_ipc": 0.8725428129675633,
+            "coremark_per_mhz_short_estimate": 2.9721939368432566,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1729043,
+            "issued": 1505912,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1390197,
+            "wb_completed": 1467843,
+            "observed_ipc": 1.0558525158664562,
+            "coremark_per_mhz_short_estimate": 3.5966125664204425,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1431270,
+            "issued": 1505912,
+            "paired_cycles": 335901,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    "firmware_coremark_validation_single": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-coremark-20261019T1100212057824Z\\result.json",
+      "sha256": "3ea4f66b35432b920a70a0c6785a4863b5dd33a3f4f2f5ad48a085947821bccc",
+      "status": "PASS",
+      "verified_inputs": 68,
+      "verified_external_inputs": 1,
+      "verified_outputs": 27,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 337690,
+            "wb_completed": 294349,
+            "observed_ipc": 0.871654475998697,
+            "coremark_per_mhz_short_estimate": 2.9612958630696795,
+            "crc": [
+              "18f2",
+              "e3c1",
+              "0747",
+              "8d84"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 384421,
+            "issued": 332451,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    "firmware_retire_performance_both": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-retire-20261019T1100161860388Z\\result.json",
+      "sha256": "3bb21ee6e764dfe3883cc32cd482c7889d58669c8c95150a9bf90caa5bc77ccb",
+      "status": "PASS",
+      "verified_inputs": 68,
+      "verified_external_inputs": 1,
+      "verified_outputs": 31,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 45,
+            "issued": 22,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 41,
+            "issued": 22,
+            "paired_cycles": 4,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    "firmware_runtime_performance_both": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\firmware-runtime-20261019T1100109855014Z\\result.json",
+      "sha256": "b202738422a45680c03e3efa52cc03f2dbb5c78fd1386b6c845504869df787f1",
+      "status": "PASS",
+      "verified_inputs": 68,
+      "verified_external_inputs": 1,
+      "verified_outputs": 27,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 634,
+            "issued": 464,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 578,
+            "issued": 464,
+            "paired_cycles": 89,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    "component_bypasstag_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-bypasstag-20261019T1056591909009Z\\result.json",
+      "sha256": "e0ef5b851cafb431da61189a715ee2dafac87d8f556460b88b2aff88d399edc7",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "bypasstag"
+        }
+      ]
+    },
+    "component_divarith_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T1056534183420Z\\result.json",
+      "sha256": "17afe1b606310d2bcd09060d963d5458e57ccfec530f67f826f139a4642e7cfb",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "test": "divarith",
+          "status": "PASS"
+        }
+      ]
+    },
+    "component_fifodata_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-fifodata-20261019T1056559187139Z\\result.json",
+      "sha256": "6ab6d2f9e85c879c04f9f9592da09eac9679e59a1e5bc207de62360171332bde",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "fifodata"
+        }
+      ]
+    },
+    "component_lanedata_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-lanedata-20261019T1056430205830Z\\result.json",
+      "sha256": "67be078bbadaa13dac025fb0fc4f4caf80966d7d18f3933677ccd95c9a77bd36",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "lanedata"
+        }
+      ]
+    },
+    "component_loadbypass_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-loadbypass-20261019T1056508728843Z\\result.json",
+      "sha256": "4dd3b788b0f329686787bf4b8b65a27a21f172534b43b653c7e511b1cc0a1130",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "test": "loadbypass",
+          "status": "PASS"
+        }
+      ]
+    },
+    "component_lsuqueue_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-lsuqueue-20261019T1057046493869Z\\result.json",
+      "sha256": "0a7a32cfe938d1ec39fa4b77a500f622d96326c4f76f4c12bc7ea042dc66846a",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "lsuqueue"
+        }
+      ]
+    },
+    "ordered_37_False_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1055590801056Z\\result.json",
+      "sha256": "167b9906a51d049e95af6420945e0bd1f4e2d6592c3f862e6664b10538933837",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 38,
+      "executions": [
+        {
+          "mode": "single",
+          "trap_mask": 255,
+          "delayed": 1161,
+          "stores": 91,
+          "kind": "golden",
+          "status": "PASS",
+          "retired": 844,
+          "cycles": 3652
+        },
+        {
+          "mode": "dual",
+          "trap_mask": 255,
+          "delayed": 1114,
+          "stores": 91,
+          "kind": "golden",
+          "status": "PASS",
+          "retired": 844,
+          "cycles": 3601
+        },
+        {
+          "mode": "single",
+          "trap_mask": 255,
+          "delayed": 1098,
+          "stores": 91,
+          "kind": "candidate",
+          "status": "PASS",
+          "retired": 844,
+          "cycles": 3587
+        },
+        {
+          "mode": "dual",
+          "trap_mask": 255,
+          "delayed": 1100,
+          "stores": 91,
+          "kind": "candidate",
+          "status": "PASS",
+          "retired": 844,
+          "cycles": 3530
+        }
+      ]
+    },
+    "ordered_1234567_False_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1056123899615Z\\result.json",
+      "sha256": "7985700bc3706d82060c2f09cd4f0ad1c453c19684b9d3a914a1a7c0b4b25966",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 38,
+      "executions": [
+        {
+          "stores": 91,
+          "mode": "single",
+          "delayed": 1211,
+          "status": "PASS",
+          "trap_mask": 255,
+          "retired": 844,
+          "cycles": 3603,
+          "kind": "golden"
+        },
+        {
+          "stores": 91,
+          "mode": "dual",
+          "delayed": 1225,
+          "status": "PASS",
+          "trap_mask": 255,
+          "retired": 844,
+          "cycles": 3603,
+          "kind": "golden"
+        },
+        {
+          "stores": 91,
+          "mode": "single",
+          "delayed": 1092,
+          "status": "PASS",
+          "trap_mask": 255,
+          "retired": 844,
+          "cycles": 3560,
+          "kind": "candidate"
+        },
+        {
+          "stores": 91,
+          "mode": "dual",
+          "delayed": 1137,
+          "status": "PASS",
+          "trap_mask": 255,
+          "retired": 844,
+          "cycles": 3560,
+          "kind": "candidate"
+        }
+      ]
+    },
+    "ordered_271828_False_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1056258150522Z\\result.json",
+      "sha256": "2c78edb99c26258ff13b6d7caf4d232c3c7fdc2e072a3b2607cd463628100781",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 38,
+      "executions": [
+        {
+          "mode": "single",
+          "stores": 91,
+          "kind": "golden",
+          "trap_mask": 255,
+          "delayed": 1147,
+          "cycles": 3558,
+          "retired": 844,
+          "status": "PASS"
+        },
+        {
+          "mode": "dual",
+          "stores": 91,
+          "kind": "golden",
+          "trap_mask": 255,
+          "delayed": 1117,
+          "cycles": 3501,
+          "retired": 844,
+          "status": "PASS"
+        },
+        {
+          "mode": "single",
+          "stores": 91,
+          "kind": "candidate",
+          "trap_mask": 255,
+          "delayed": 1134,
+          "cycles": 3526,
+          "retired": 844,
+          "status": "PASS"
+        },
+        {
+          "mode": "dual",
+          "stores": 91,
+          "kind": "candidate",
+          "trap_mask": 255,
+          "delayed": 1105,
+          "cycles": 3482,
+          "retired": 844,
+          "status": "PASS"
+        }
+      ]
+    },
+    "ordered_37_True_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1056345689695Z\\result.json",
+      "sha256": "02782176e43615c6d6db21a578cb35752ba0382713701376dc0cc52c63c1c321",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 38,
+      "executions": [
+        {
+          "trap_mask": 511,
+          "cycles": 3735,
+          "stores": 92,
+          "delayed": 1197,
+          "status": "PASS",
+          "mode": "single",
+          "retired": 865,
+          "kind": "golden"
+        },
+        {
+          "trap_mask": 511,
+          "cycles": 3730,
+          "stores": 92,
+          "delayed": 1168,
+          "status": "PASS",
+          "mode": "dual",
+          "retired": 865,
+          "kind": "golden"
+        },
+        {
+          "trap_mask": 511,
+          "cycles": 3688,
+          "stores": 92,
+          "delayed": 1137,
+          "status": "PASS",
+          "mode": "single",
+          "retired": 865,
+          "kind": "candidate"
+        },
+        {
+          "trap_mask": 511,
+          "cycles": 3610,
+          "stores": 92,
+          "delayed": 1131,
+          "status": "PASS",
+          "mode": "dual",
+          "retired": 864,
+          "kind": "candidate"
+        }
+      ]
+    },
+    "component_payload_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-payload-20261019T1056455856589Z\\result.json",
+      "sha256": "2f03e79d573ade4c2d0d6f128d938d26542671d18f0496f1d804d6fee0ff8fa1",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "payload"
+        }
+      ]
+    },
+    "component_pcupdate_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-pcupdate-20261019T1057019973556Z\\result.json",
+      "sha256": "9e651979cefeecd2818648e1f62f6d0f4f162835f8647e3bcb043aae8483f3be",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "pcupdate"
+        }
+      ]
+    },
+    "component_predictorselect_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-predictorselect-20261019T1057072734376Z\\result.json",
+      "sha256": "76f643ee4a815fbf801d17b3e5172a271bae104aa1adf6f468665806ea6fecce",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "predictorselect"
+        }
+      ]
+    },
+    "component_requestdata_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-requestdata-20261019T1056482601115Z\\result.json",
+      "sha256": "9456e2e24e43b404bd93ffb7f48be08f43dab7322ae2c6f3d1fef5fa7fe18a7b",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "test": "requestdata",
+          "status": "PASS"
+        }
+      ]
+    },
+    "component_training_False": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-training-20261019T1057099383336Z\\result.json",
+      "sha256": "50d8aa5aa7d1cc502caa3b4ec6d8b6fede87fd4790f5ebfc2db225325d48a0e6",
+      "status": "PASS",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": [
+        {
+          "test": "training",
+          "status": "PASS"
+        }
+      ]
+    },
+    "smoke_single": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\single-20261019T1100446959503Z\\result.json",
+      "sha256": "da132dc7d00d9893456f5df0d7f7447eab8e5551c14adb619e88f39734621866",
+      "status": "PASS",
+      "verified_inputs": 47,
+      "verified_external_inputs": 1,
+      "verified_outputs": 11,
+      "executions": []
+    },
+    "regfile_simulation": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\regfile-candidate-simulation-20261019T0901559372185Z\\result.json",
+      "sha256": "c06673e876ebec8cd7598fcb0ea130b0e2f0d78a9f424e62551f2eb3a29c85ac",
+      "status": "PASS",
+      "verified_inputs": 9,
+      "verified_external_inputs": 1,
+      "verified_outputs": 32,
+      "executions": []
+    },
+    "regfile_map": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\regfile-candidate-map-20261019T0902004617416Z\\result.json",
+      "sha256": "515583e93313362d17f3cd4a34756f21efaaaca8e07a062f2520e408c55e8f21",
+      "status": "PASS",
+      "verified_inputs": 9,
+      "verified_external_inputs": 0,
+      "verified_outputs": 33,
+      "executions": []
+    }
+  },
+  "expected_rejections": {
+    "legacy_cycle_37_dual_True": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\equivalence-20261019T1057191241500Z\\result.json",
+      "sha256": "2d2d1cd5d5362f192305bcc2eb1ce65023f0dbc53c99b994bd8e8d21441e9adf",
+      "status": "FAIL",
+      "verified_inputs": 44,
+      "verified_external_inputs": 1,
+      "verified_outputs": 16,
+      "executions": []
+    },
+    "smoke_fail": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\fail-20261019T1100495596026Z\\result.json",
+      "sha256": "780d23f8429c0d4cdcec1942b1e5767e225823a840ca1bd04d1917c4599486c8",
+      "status": "FAIL",
+      "verified_inputs": 47,
+      "verified_external_inputs": 1,
+      "verified_outputs": 11,
+      "executions": []
+    },
+    "ordered_37_False_True": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1057125431608Z\\result.json",
+      "sha256": "52089a52af56c62694fa0883043471aec62e3a5adb2438b469b6afe6d09c62df",
+      "status": "FAIL",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 33,
+      "executions": [
+        {
+          "status": "PASS",
+          "kind": "golden",
+          "cycles": 3652,
+          "trap_mask": 255,
+          "retired": 844,
+          "delayed": 1161,
+          "stores": 91,
+          "mode": "single"
+        },
+        {
+          "status": "PASS",
+          "kind": "golden",
+          "cycles": 3601,
+          "trap_mask": 255,
+          "retired": 844,
+          "delayed": 1114,
+          "stores": 91,
+          "mode": "dual"
+        }
+      ]
+    },
+    "component_predictorselect_True": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-predictorselect-20261019T1055496881861Z\\result.json",
+      "sha256": "030cb9a97fa17f0e7cb1533d072266163bd0c6fa7879234cdb93dcb377caf189",
+      "status": "FAIL",
+      "verified_inputs": 45,
+      "verified_external_inputs": 1,
+      "verified_outputs": 10,
+      "executions": []
+    },
+    "smoke_timeout": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\timeout-20261019T1100522314612Z\\result.json",
+      "sha256": "f902a5eef217966f4c02e7c54d324a0f8585593eb10a521a69e695841131a216",
+      "status": "FAIL",
+      "verified_inputs": 47,
+      "verified_external_inputs": 1,
+      "verified_outputs": 11,
+      "executions": []
+    },
+    "bad_regfile_output": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\regfile-candidate-simulation-20261019T0901585058268Z\\result.json",
+      "sha256": "67c0d48c4da1aeadd9fec57e66ed79aa6ab51b1d5e9003a105027233be5922ee",
+      "status": "FAIL",
+      "verified_inputs": 9,
+      "verified_external_inputs": 1,
+      "verified_outputs": 32,
+      "executions": []
+    }
+  },
+  "coremark_measurement_unchanged": true,
+  "coremark_image": {
+    "elf_sha256": "2e6be1b1fea573d111916046fda9fb4ecdc04a2141795d5eec3e930209ae8dd0",
+    "tcm_sha256": "af7368276174ea11d052963271a805cbb2457a77b34fdf7521845ead6df038c9",
+    "loaded_image_identical": true
+  },
+  "parent_component_fixture_baseline": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-predictorselect-20261019T1054169605199Z\\result.json",
+    "sha256": "376a7f3516c87e5c5e4e6888d197f08d12aab81a2608217b798b9f04c817bf76",
+    "status": "PASS",
+    "verified_inputs": 44,
+    "verified_external_inputs": 1,
+    "verified_outputs": 10,
+    "executions": [
+      {
+        "test": "predictorselect",
+        "status": "PASS"
+      }
+    ]
+  },
+  "baseline_and_candidate_identical_test_and_runner": true,
+  "status": "TIMING_FAIL",
+  "scope": "Equivalent parallel-priority BTB read and per-entry writes; unchanged BHT/RAS/LFSR and prediction/training cycles; same six stages and original 100MHz/IO/hold/multicorner/single clock region",
+  "primary_pipeline_stages": 6,
+  "additional_pipeline_latency_cycles": 0,
+  "new_rtl_mapping_and_placement": true,
+  "board_validated": false,
+  "official_coremark": false,
+  "route": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1056376104602Z\\result.json",
+    "sha256": "5a230db060cefb71205c9099da710a32332816de0b33c268c05e42bec56e3742",
+    "status": "TIMING_FAIL",
+    "verified_inputs": 31,
+    "verified_external_inputs": 0,
+    "verified_outputs": 232,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -2.756,
+          "total_negative_slack_ns": -2679.729,
+          "failing_endpoints": 3171,
+          "endpoints": 17127
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.109,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 17127
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.346,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4841
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": -0.054,
+          "total_negative_slack_ns": -0.054,
+          "failing_endpoints": 1,
+          "endpoints": 17127
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.109,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 17127
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.345,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4841
+        }
+      ],
+      "performance_slack_ns": -2.756,
+      "worst_setup_ns": -2.756,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "resources": {
+      "lut": 6505.0,
+      "registers": 5207.0,
+      "drm": 0.0,
+      "apm": 4.0,
+      "io": 224.0,
+      "distributed_ram": 32
+    },
+    "elapsed_seconds": 229.631,
+    "native_return_code": 0,
+    "runner_return_code": 2,
+    "main_detailed": {
+      "iteration": 74,
+      "unrouted": 0
+    },
+    "report": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1056376104602Z\\report_timing\\triha_core.rtr",
+      "sha256": "3799b4764e6a4469633ce535fcea8b1ab3d83030ab2bf5dba333baf52c9dcf17"
+    },
+    "worst_path": {
+      "start": "data_ack_i (port)",
+      "end": "data_wstrb_o[3] (port)",
+      "logic_levels": 5,
+      "logic_ns": 4.052,
+      "route_ns": 4.554
+    },
+    "internal_violations_present_in_first_20_paths": [
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[2][24]/opit_0_inv_L6Q_perm/I4",
+        "logic_levels": 18,
+        "logic_ns": 2.408,
+        "route_ns": 9.793,
+        "slack_ns": -2.539
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[43]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.bht_sat_q[286][0]/opit_0_inv/CE",
+        "logic_levels": 6,
+        "logic_ns": 1.425,
+        "route_ns": 10.549,
+        "slack_ns": -2.428
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[43]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.bht_sat_q[286][1]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 6,
+        "logic_ns": 1.425,
+        "route_ns": 10.549,
+        "slack_ns": -2.428
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_fetch/pc_f_q[29]/opit_0_inv_L6QL5Q_perm/I4",
+        "logic_levels": 23,
+        "logic_ns": 3.137,
+        "route_ns": 8.906,
+        "slack_ns": -2.389
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[2][22]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.366,
+        "route_ns": 9.552,
+        "slack_ns": -2.346
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][12]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.608,
+        "slack_ns": -2.345
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][15]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.608,
+        "slack_ns": -2.345
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][24]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.608,
+        "slack_ns": -2.345
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][30]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.608,
+        "slack_ns": -2.345
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][9]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.595,
+        "slack_ns": -2.331
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][11]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.595,
+        "slack_ns": -2.331
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][26]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 17,
+        "logic_ns": 2.307,
+        "route_ns": 9.595,
+        "slack_ns": -2.331
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_fetch/pc_f_q[19]/opit_0_inv_L6QL5Q_perm/I3",
+        "logic_levels": 20,
+        "logic_ns": 2.961,
+        "route_ns": 9.039,
+        "slack_ns": -2.319
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_fetch/pc_f_q[27]/opit_0_inv_L6QL5Q_perm/I4",
+        "logic_levels": 23,
+        "logic_ns": 3.07,
+        "route_ns": 8.93,
+        "slack_ns": -2.309
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[5][22]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 16,
+        "logic_ns": 2.407,
+        "route_ns": 9.477,
+        "slack_ns": -2.309
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[2]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[5][23]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 16,
+        "logic_ns": 2.407,
+        "route_ns": 9.477,
+        "slack_ns": -2.309
+      }
+    ],
+    "independent_review": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-review-20261019T1103145130920Z.json",
+      "sha256": "de5c8a0fe6906532a198d4580a9dcf4465c31f11ec3ec351c71c20aa3df8641e",
+      "status": "TIMING_FAIL",
+      "verified_inputs": 31,
+      "verified_outputs": 232
+    }
+  },
+  "parent": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\single_clock_region_timing.json",
+    "sha256": "68bcde44c233a20fa13f4b80bfa1e13c126cad3634ceec49481219ab0160a09e",
+    "worst_setup_ns": -2.277
+  },
+  "setup_delta_ns": -0.479
+}

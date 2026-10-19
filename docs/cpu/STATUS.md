@@ -329,6 +329,24 @@ performance一致，**100MHz仍未通过**。Slow较同RTL两区域第15轮改�
 
 新最差训练packet_q[38]→BTB匹配/优先写入选择→btb_target_q[5][13] CE，15级逻辑、逻辑2.264ns/布线12.105ns。结合第16轮也存在的BTB读选择→RAS CE -1.929ns，下一步检验预测器读写优先选择链；须保持原最高表项优先级、重复tag、训练/RAS/BHT行为及周期，先组件/整核/CoreMark验证，再以最佳单区域物理配置复核。功能记录仍为同RTL24正例/6预期拒绝哈希复用，不宣称新仿真或板测。证据`docs/verification/cpu/io_register_timing.json`、`io_register_diagnostic.md`。
 
+## BTB独热并行选择和表项写入（第18轮，面积改善）
+
+直接维护`triha_npc.v`，只改BTB读/写选择结构：精确PC优先、upper-word回退和最高表项优先独热mask，使用扁平Verilog AND/OR数据选择；命中直接写选中表项，miss仍按原LFSR分配。BTB32/BHT512/RAS8规模、预测与训练周期、全部状态机不变，无新流水。独热数据结构来源/版本及Apache/lowRISC通知保留在源码与清单，原始28文件不变，适配清单11项；正式filelist不再同时编入原NPC，仿真保留它作oracle。
+
+组件32项普通BHT与4项GShare配置各4003周期，完整比较BTB/BHT/RAS/LFSR及输出；独立最高索引oracle覆盖重复tag、upper-word、无命中和X输入，真实预测输出错误被拒绝。整核/组件共26项唯一正例组和6项预期拒绝，输入/外部原语/输出核验一致。CoreMark实际TCM镜像、单1682259/双1390197周期、1467843 WB/CRC和其他固件结果与父版相同；观察IPC及短估算不变，非官方/板测/完整ISA证明。
+
+同第16轮单区域和原100MHz/IO/hold/multicorner，完整新实现，CPU-only **6505 LUT/5207 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计，较同区域父版少301 LUT（4.423%），FF不变。原生返回0、宿主return2/TIMING_FAIL，74次主详细迭代到0未布通，完整229.631秒。31项输入/232项输出和独立复核一致。
+
+| 实际检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| setup | **-2.756** | **-0.054** |
+| hold | +0.109 | +0.109 |
+| 脉宽 | +4.346 | +4.345 |
+
+performance一致，**100MHz仍未通过**，全局setup较最佳第16轮恶化0.479ns；Slow违例端点2446→3171。新网表/布局，面积改善不能冒充频率收益。历史最佳仍保留第16轮-2.277ns，当前为另一个完整可复核的候选。
+
+全局最差data_ack_i→data_wstrb_o[3]为外部组合控制；前20条仍有RAS数据路径-2.539ns和BHT CE -2.428ns。下一步只局部化各BHT表项的饱和转移，消除动态读计数再写使能的反馈链，保留规模、2bit状态、reset、taken优先级及周期，再用完整预测器miter/整核/CoreMark和原实际STA核验。证据`docs/verification/cpu/predictor_select_timing.json`。未合并主工程、未编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

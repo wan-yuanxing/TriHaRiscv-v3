@@ -23,7 +23,7 @@
     "rtl/cpu/triha_lsu.v",
     "rtl/cpu/vendor/src/core/biriscv_mmu.v",
     "rtl/cpu/triha_multiplier.v",
-    "rtl/cpu/vendor/src/core/biriscv_npc.v",
+    "rtl/cpu/triha_npc.v",
     "rtl/cpu/triha_pipe_ctrl.v",
     "rtl/cpu/vendor/src/core/biriscv_regfile.v",
     "rtl/cpu/triha_cpu.v",

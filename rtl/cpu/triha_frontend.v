@@ -148,7 +148,7 @@ assign {training_request_w, training_taken_w, training_not_taken_w,
     training_source_w, training_call_w, training_ret_w, training_jmp_w,
     training_pc_w} = training_packet_w;
 
-biriscv_npc
+triha_npc
 #(
      .NUM_BTB_ENTRIES(NUM_BTB_ENTRIES)
     ,.SUPPORT_BRANCH_PREDICTION(SUPPORT_BRANCH_PREDICTION)
