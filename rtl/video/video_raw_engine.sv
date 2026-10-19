@@ -140,9 +140,20 @@ module video_raw_engine #(
     assign crc_arready=arready&&read_owner==CHECKED_OWNER;
     assign input_arready=arready&&read_owner==INPUT_OWNER;
     assign display_arready=arready&&read_owner==DISPLAY_OWNER;
+    // Isolate capture's burst/arbiter logic from the bridge's descriptor
+    // registers. Once accepted here the AW is owned until bridge handshake;
+    // sticky engine faults never clear it. Only coordinated reset may do so.
+    wire [48:0] write_request_data;
+    wire write_request_valid,write_request_ready;
+    video_stream_register #(.DATA_WIDTH(49)) write_request(
+        .clk(clk),.reset_n(reset_n),.s_valid(awvalid),.s_ready(awready),
+        .s_data({awid,awaddr,awlen,awsize,awburst}),
+        .m_valid(write_request_valid),.m_ready(write_request_ready),.m_data(write_request_data));
     axi128_hmic256 #(.NATIVE_TIMEOUT_CYCLES(TIMEOUT_CYCLES)) bridge(
         .clk(clk),.rst_n(reset_n),.init_done(init_done),
-        .awid(awid),.awaddr(awaddr),.awlen(awlen),.awsize(awsize),.awburst(awburst),.awvalid(awvalid),.awready(awready),
+        .awid(write_request_data[48:45]),.awaddr(write_request_data[44:13]),.awlen(write_request_data[12:5]),
+        .awsize(write_request_data[4:2]),.awburst(write_request_data[1:0]),
+        .awvalid(write_request_valid),.awready(write_request_ready),
         .wdata(wdata),.wstrb(wstrb),.wlast(wlast),.wvalid(wvalid),.wready(wready),.bid(bid),.bresp(bresp),.bvalid(bvalid),.bready(bready),
         .arid(arid),.araddr(araddr),.arlen(arlen),.arsize(arsize),.arburst(arburst),.arvalid(arvalid),.arready(arready),
         .rid(rid),.rdata(rdata),.rresp(rresp),.rlast(rlast),.rvalid(rvalid),.rready(rready),.fault(bridge_fault),.fault_code(bridge_code),

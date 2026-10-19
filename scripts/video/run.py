@@ -326,7 +326,7 @@ def main():
             extra=[ROOT/'tb/video/tb_video_raw_engine.sv',ROOT/'tb/video/models/axi_bridge_native_model.sv']
             add_inputs(result,[target,*paths,*vendor,*extra,ROOT/'config/video_edid.hex',ROOT/'rtl/video/include/video_edid.vh'])
             engine_sources=[ROOT/p for p in board['sources'] if p.startswith('rtl/video/')]
-            for case in range(25):
+            for case in range(27):
                 log=simulate(work,f'raw_engine_{case}','tb_video_raw_engine',engine_sources+extra,
                     [ROOT/'rtl/video/include'],timeout=600,run_args=(f'+CASE={case}',))
                 if 'VIDEO_RAW_ENGINE_PASS' not in log:raise RuntimeError('Missing raw engine pass marker')

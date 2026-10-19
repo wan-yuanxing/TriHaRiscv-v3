@@ -157,6 +157,8 @@ module tb_video_raw_engine #(parameter integer W=30,H=20,PT=2,PB=1);
         end
     endtask
     reg [35:0] held_command;
+    reg [48:0] held_axi_aw;
+    integer blocked;
     initial begin
         raw_oracle=oracle(0);preview_oracle=oracle(1);input_oracle=oracle(2);
         if($value$plusargs("CASE=%d",case_id))begin end
@@ -213,6 +215,28 @@ module tb_video_raw_engine #(parameter integer W=30,H=20,PT=2,PB=1);
                 wait(memory.reading&&dut.read_owner==2);@(negedge clk);source_fault=1;
                 repeat(20)@(negedge clk);if(!memory.reading)$fatal(1,"display fault retired stalled native read");
                 hold_r=0;failed(3,1);wait(!memory.reading);
+            end
+            25,26:begin
+                @(negedge clk);force dut.bridge.awready=0;
+                blocked=0;
+                while(!(dut.awvalid&&dut.awready)&&blocked<512)begin @(negedge clk);blocked=blocked+1;end
+                if(blocked==512)$fatal(1,"No isolated write request entry while bridge is blocked");
+                @(posedge clk);#1;
+                held_axi_aw={dut.bridge.awid,dut.bridge.awaddr,dut.bridge.awlen,dut.bridge.awsize,dut.bridge.awburst};
+                if(!dut.bridge.awvalid)$fatal(1,"accepted write request not published at bridge");
+                @(negedge clk);if(case_id==25)source_fault=1;else init_done=0;
+                repeat(20)begin
+                    @(negedge clk);
+                    if(!dut.bridge.awvalid||{dut.bridge.awid,dut.bridge.awaddr,dut.bridge.awlen,dut.bridge.awsize,dut.bridge.awburst}!==held_axi_aw)
+                        $fatal(1,"fault withdrew or changed buffered AW");
+                end
+                release dut.bridge.awready;
+                failed(case_id==25?3:1,0);
+                if(case_id==25)wait(!dut.bridge.awvalid&&!memory.writing&&!memory.reading&&dut.capture.port_drained);
+                else begin
+                    if(!dut.bridge.awvalid)$fatal(1,"init loss cleared buffered AW without coordinated reset");
+                    restart();healthy();
+                end
             end
             default:$fatal(1,"unknown engine case");
         endcase
