@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "phase": "shared high tag and grouped full-width equality",
+  "cpu_source_sha256": "a6fb640483c77e9e5d2865959a336d53d19fc4ff959576e15b6b762c598609d1",
+  "adaptations_sha256": "27789c45c7e9a2425bc4308ee4629d79e331825cd45aa037b7086eedcb474440",
+  "fresh_cpu_checks": [
+    {
+      "result": "build\\cpu\\equivalence-20261019T1236260970046Z\\result.json",
+      "sha256": "a3d0fffc461479b45e605a8ebd7655da2ca8e101a3c82d3d7275b7b6f745fab9",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1236398868734Z\\result.json",
+      "sha256": "8df7e3e6f54e72c7d2e587b4f03028b01e423a4ddd5e122849421d4b3f1c99c1",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 1234567
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1236545785951Z\\result.json",
+      "sha256": "5548289db242dfe373e1b7c8f922c0f47acf39ae1567feeec9e52737a7da4f21",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 271828
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1236313006594Z\\result.json",
+      "sha256": "11e91e321a759996bb3dacd7c80877496cab2ab43bda38dc18ce5e09567c0946",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1236455521248Z\\result.json",
+      "sha256": "5b9ef0269d8420d9f783155e514e1ed394eb1b564cf9f953fe501d5f8cfbc18b",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 1234567
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1236598815026Z\\result.json",
+      "sha256": "0edc3ac56b4579a648f38b49ee3420696ab6f45efb66a1ff5a6cb6f897e2d6c2",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 271828
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1237088712755Z\\result.json",
+      "sha256": "559fb7c5f61c350c36b56ff6c191b0ad4748c8b0b51932e0e29ef81a80e1299a",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1237182385975Z\\result.json",
+      "sha256": "8e4493a2e981d1fafcf13a63070efaa32182ce1aae9b4c96b91b7753a39b4e0a",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "ordered",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1235519997484Z\\result.json",
+      "sha256": "a74f1f1cebf7b7edc21366353a3a132191f16d0033d559ec0a414fa7a60e8884",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "predictorselect",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1235546619635Z\\result.json",
+      "sha256": "6ce88ed8343c5d80753c9e921f934c9f6f4fa6614f54a7eb92bcf955eba86c6f",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "predictorselect",
+      "seed": 37
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1237249352525Z\\result.json",
+      "sha256": "e302c3a58003400fde5ed51dc5d713609e57a665d62f5d274f6d0fb084802f89",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "predictorselect",
+      "seed": 37
+    }
+  ],
+  "fresh_soc_checks": [
+    {
+      "result": "build\\soc\\memory-20261019T123625739733Z\\result.json",
+      "sha256": "36057bd909d466c306563165551db7669e0323e16126b0c394b7cf226198f823",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T123627935547Z\\result.json",
+      "sha256": "d9890453b2528ef2cf58d92c5dad5800c345ebd746983380de4bb39d8162ba7d",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T123630621519Z\\result.json",
+      "sha256": "1e7422317791eaeb876d53a4422a84c834d1e784f6f76f416cd803bc177e85cc",
+      "measurement": {
+        "cycles": 1685831,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8706940375399432,
+        "coremark_per_mhz_short_estimate": 2.965896344295484,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      }
+    },
+    {
+      "result": "build\\soc\\access-faults-20261019T123928998587Z\\result.json",
+      "sha256": "f97407e51a265d68e37b97ff65c06865c6954532b4227f379ede36cd86ad3656",
+      "measurement": null
+    }
+  ],
+  "tag_oracle": {
+    "input_cases": 160,
+    "output_checks": 320,
+    "widths": [
+      29,
+      32
+    ],
+    "full_bit_and_x_z_coverage": true
+  },
+  "parent_full_regression": "docs/verification/cpu/minimal_soc_parallel_validation.json",
+  "parent_component_tests_reused_because_unchanged": [
+    "divider",
+    "register file",
+    "payload",
+    "FIFO",
+    "LSU queues",
+    "arithmetic"
+  ],
+  "native_sram_component": "build/soc/native-sram-20261019T1202051473914Z/result.json",
+  "official_score": false,
+  "board_test": false
+}

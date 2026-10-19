@@ -238,18 +238,33 @@ reg         btb_is_jmp_q[NUM_BTB_ENTRIES-1:0];
 reg [NUM_BTB_ENTRIES-1:0] match_pc_r;
 reg [NUM_BTB_ENTRIES-1:0] match_upper_r;
 reg [NUM_BTB_ENTRIES-1:0] match_write_r;
+wire [NUM_BTB_ENTRIES-1:0] match_high_w;
+wire [NUM_BTB_ENTRIES-1:0] match_source_w;
+genvar compare_entry;
+for (compare_entry=0; compare_entry<NUM_BTB_ENTRIES; compare_entry=compare_entry+1) begin: g_tag_compare
+    // Exact-PC and upper-word queries share all bits except bit two.
+    // Keep the common high tag out of two separate full-width carry chains.
+    triha_npc_equal #(.WIDTH(29)) u_query (
+        .left_i(btb_pc_q[compare_entry][31:3]), .right_i(pc_f_i[31:3]),
+        .equal_o(match_high_w[compare_entry])
+    );
+    triha_npc_equal #(.WIDTH(32)) u_source (
+        .left_i(btb_pc_q[compare_entry]), .right_i(branch_source_i),
+        .equal_o(match_source_w[compare_entry])
+    );
+end
 integer i0;
 always @* begin
     match_pc_r = {NUM_BTB_ENTRIES{1'b0}};
     match_upper_r = {NUM_BTB_ENTRIES{1'b0}};
     match_write_r = {NUM_BTB_ENTRIES{1'b0}};
     for (i0=0; i0<NUM_BTB_ENTRIES; i0=i0+1) begin
-        if (btb_pc_q[i0] == pc_f_i)
+        if (match_high_w[i0] && btb_pc_q[i0][2:0] == pc_f_i[2:0])
             match_pc_r[i0] = 1'b1;
-        if (btb_pc_q[i0] == (pc_f_i | 32'd4))
+        if (match_high_w[i0] && btb_pc_q[i0][2:0] == (pc_f_i[2:0] | 3'b100))
             match_upper_r[i0] = 1'b1;
         if (branch_request_i)
-            if (btb_pc_q[i0] == branch_source_i)
+            if (match_source_w[i0])
                 match_write_r[i0] = 1'b1;
     end
 end
@@ -419,6 +434,28 @@ endgenerate
 
 endmodule
 
+
+// Balanced full-width equality. Three bits per group fit a six-input LUT;
+// explicit group boundaries avoid serial carry-chain tag comparisons.
+module triha_npc_equal #(
+    parameter integer WIDTH = 32
+) (
+    input  wire [WIDTH-1:0] left_i,
+    input  wire [WIDTH-1:0] right_i,
+    output wire equal_o
+);
+    localparam integer GROUPS = (WIDTH + 2) / 3;
+    (* syn_keep = 1 *) wire [GROUPS-1:0] group_equal_w;
+    genvar group_index;
+    generate
+    for (group_index=0; group_index<GROUPS; group_index=group_index+1) begin: g_group
+        localparam integer FIRST = group_index * 3;
+        localparam integer BITS = WIDTH - FIRST >= 3 ? 3 : WIDTH - FIRST;
+        assign group_equal_w[group_index] = left_i[FIRST +: BITS] == right_i[FIRST +: BITS];
+    end
+    endgenerate
+    assign equal_o = &group_equal_w;
+endmodule
 
 module triha_npc_lfsr
 //-----------------------------------------------------------------

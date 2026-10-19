@@ -421,3 +421,10 @@ UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到�
 ## 2026-10-19 seed2终态
 
 仅更换placement seed2，实际Slow setup−0.184ns、23端点/TNS−2.148ns；Fast+2.660ns、hold+0.142/+0.105ns、脉宽+3.655/+4.202ns，未通过。最差LSU pending到SRAM CE/WE，同时前端RAS仍−0.170ns；不选seed2。较好检查点仍compact seed1的−0.183ns/4端点。独立核验见minimal_soc_seed2_route.json。布局/扇出对照已结束，下一步对原预测器全32位tag比较做等价共享/分组，并重测实际周期和时序。
+
+
+## 2026-10-19 共享高tag/比较树终态
+
+高29bit共享及三bit分组比较的逐拍NPC对照、320项四态原始等值oracle、三seed×两模式整核/按序store/异常、IRQ/mret、系统CoreMark与4类真实访问异常通过。SRAM CoreMark仍1685831周期/1467843WB、2.965896短估算/MHz。原vendor不变。CPU层次降为6175LUT/5173FF，系统6347LUT/5292CLM FF/10IO FF/16.5DRM/4APM；系统较前版少482LUT、FF不变。功能索引minimal_soc_tag_tree_validation.json。
+
+实际新布局Slow setup−0.582ns/426端点/TNS−130.114ns，Fast+2.608ns、hold+0.116/+0.102ns、脉宽+3.655/+4.202ns，未通过。不能以资源下降声称时序收益。最差PC[0]→RAS动态地址→stack CE，11级、逻辑2.032/布线8.097ns；索引minimal_soc_tag_tree_route.json。后续共享两种查询相同的低两位tag，并将RAS动态地址写入改逐条目早期选择，保持原状态/周期与优先顺序。

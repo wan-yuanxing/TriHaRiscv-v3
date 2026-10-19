@@ -146,14 +146,15 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "d54047b87e30b334d36e1f3b21735af9dd1394b01718d60b3f6a869a8b00dad5",
+      "derived_sha256": "a6fb640483c77e9e5d2865959a336d53d19fc4ff959576e15b6b762c598609d1",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
         "Write each BTB entry directly using its highest-priority one-hot hit or the original miss-allocation index; BHT/RAS/training/LFSR state and cycles unchanged.",
         "Adapt the fixed OpenTitan one-hot mux to flat Verilog ports; no additional compiler or runtime dependency.",
         "Localize each BHT entry saturation transition after its address match, preserving counter/reset/condition priority and all cycles while avoiding a dynamic write-side counter read.",
-        "Compute exact-PC and upper-word highest-index priority masks in parallel before selecting the existing fallback; preserve original procedural if/X handling and all state/cycles. Keep the parallel masks as synthesis boundaries."
+        "Compute exact-PC and upper-word highest-index priority masks in parallel before selecting the existing fallback; preserve original procedural if/X handling and all state/cycles. Keep the parallel masks as synthesis boundaries.",
+        "Share the 29 high tag bits between exact-PC and upper-word lookups; use kept three-bit equality groups for the complete query and write tags, preserving all 32 bits and procedural if/X semantics without state or cycle changes."
       ],
       "references": [
         {

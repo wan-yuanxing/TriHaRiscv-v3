@@ -142,12 +142,39 @@ module predictor_select_case #(
         done=1;
     end
 endmodule
+module predictor_tag_case(output reg done=0);
+    reg [31:0] left=0, right=0;
+    wire eq32, eq29;
+    integer bit_number, checks=0;
+    triha_npc_equal #(.WIDTH(32)) u_full(.left_i(left),.right_i(right),.equal_o(eq32));
+    triha_npc_equal #(.WIDTH(29)) u_high(.left_i(left[31:3]),.right_i(right[31:3]),.equal_o(eq29));
+    task check;
+        begin
+            #1;
+            if(eq32 !== (left==right) || eq29 !== (left[31:3]==right[31:3]))
+                $fatal(1,"PREDICTOR_SELECT_FAIL grouped_tag_4state bit=%0d",bit_number);
+            checks=checks+1;
+        end
+    endtask
+    initial begin
+        for(bit_number=0;bit_number<32;bit_number=bit_number+1) begin
+            left=32'hb5713a29;right=left;check;
+            right=left^(32'b1<<bit_number);check;
+            right=left;right[bit_number]=1'bx;check;
+            right=left;right[bit_number]=1'bz;check;
+            right=left^(32'b1<<((bit_number+1)%32));right[bit_number]=1'bx;check;
+        end
+        $display("PREDICTOR_TAG_PASS cases=%0d widths=29,32",checks);
+        done=1;
+    end
+endmodule
 module tb_predictor_select #(parameter BROKEN=0);
-    wire full_done,small_done;
+    wire full_done,small_done,tag_done;
     predictor_select_case #(.BROKEN(BROKEN)) u_full(.done(full_done));
     predictor_select_case #(.ENTRIES(4),.ENTRY_W(2),.BHT_ENTRIES(16),.BHT_W(4),.RAS_ENTRIES(4),.RAS_W(2),.GSHARE(1)) u_small(.done(small_done));
+    predictor_tag_case u_tag(.done(tag_done));
     initial begin
-        wait(full_done&&small_done);
+        wait(full_done&&small_done&&tag_done);
         $display("PREDICTOR_SELECT_PASS complete_outputs_BTB_BHT_RAS_LFSR_and_priority");
         $finish;
     end
