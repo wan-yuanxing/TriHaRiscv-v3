@@ -1,0 +1,6 @@
+# The measured final violations are PC/BTB/RAS and training controls.
+# Keep the frontend in the left three quarters of the CPU clock region.
+# 4264 frontend LUTs fit within approximately 8400 LUT capacity; execution
+# remains free within the enclosing CPU region, near the SRAM-facing edge.
+# Order: Xmin,Xmax,Ymin,Ymax. Same RTL, firmware and timing constraints.
+define_attribute {i:u_core/u_cpu/u_frontend} {PAP_REGION} {soc_frontend(0,47,150,199)}

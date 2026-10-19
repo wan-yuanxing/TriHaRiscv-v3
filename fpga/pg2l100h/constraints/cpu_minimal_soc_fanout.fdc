@@ -1,0 +1,33 @@
+# ADS Synthesis User Guide 5.13 syn_maxfan.
+# Bound the measured high-fanout PC query nets; no RTL or timing changes.
+# Use the previously best full CPU clock region, without the frontend subregion.
+define_attribute {n:inst_addr[2]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[3]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[4]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[5]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[6]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[7]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[8]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[9]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[10]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[11]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[12]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[13]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[14]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[15]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[16]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[17]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[18]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[19]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[20]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[21]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[22]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[23]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[24]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[25]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[26]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[27]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[28]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[29]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[30]} {syn_maxfan} {24}
+define_attribute {n:inst_addr[31]} {syn_maxfan} {24}

@@ -3,7 +3,8 @@
 param(
     [Parameter(Mandatory)][string] $FirmwareRunDirectory,
     [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe',
-    [ValidateSet('default','compact')][string] $PhysicalProfile='default'
+    [ValidateSet('default','compact','frontend','fanout')][string] $PhysicalProfile='default',
+    [ValidateRange(1,16)][int] $PlacementSeed=1
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
@@ -19,7 +20,7 @@ $result=[ordered]@{schema_version=1;status='RUNNING';flow_status='RUNNING';timin
     directory=$work;started_utc=[DateTime]::UtcNow.ToString('o');input_hashes=[ordered]@{};output_hashes=[ordered]@{}
     firmware_hashes=[ordered]@{};native_commands=$commands;source_unchanged=$false;error=$null;timing=$null;runner_return_code=$null
     scope='Actual local CPU+ROM+SRAM+MMIO system boundary; no board pins or PLL; not board acceptance'
-    board_validated=$false;bitstream_generated=$false}
+    placement_seed=$PlacementSeed;board_validated=$false;bitstream_generated=$false}
 $resultPath=Join-Path $work 'result.json'
 Save-TrihaJson $resultPath $result
 $timer=[Diagnostics.Stopwatch]::StartNew()
@@ -42,7 +43,12 @@ try {
         [IO.File]::Copy($path,(Join-Path $work $(if($name -eq 'result.json'){'firmware-result.json'}else{$name})))
     }
     $result['firmware_directory']=$firmware
-    $recipeName=if($PhysicalProfile -eq 'compact'){'fpga/pg2l100h/project/cpu_minimal_soc_compact.json'}else{'fpga/pg2l100h/project/cpu_minimal_soc.json'}
+    $recipeName=switch($PhysicalProfile){
+        'compact' {'fpga/pg2l100h/project/cpu_minimal_soc_compact.json'}
+        'frontend' {'fpga/pg2l100h/project/cpu_minimal_soc_frontend.json'}
+        'fanout' {'fpga/pg2l100h/project/cpu_minimal_soc_fanout.json'}
+        default {'fpga/pg2l100h/project/cpu_minimal_soc.json'}
+    }
     $recipe=Get-Content (Join-Path $root $recipeName) -Raw|ConvertFrom-Json
     $core=Get-Content (Join-Path $root $recipe.core_manifest) -Raw|ConvertFrom-Json
     if($recipe.period_ns -ne 10 -or $recipe.top -ne 'triha_minimal_soc'){throw 'Wrong system route configuration.'}
@@ -68,7 +74,7 @@ try {
     $lines+='compile -top_module triha_minimal_soc -include_path {'+($includes -join ' ')+'}'
     $lines+='synthesize -ads -write_verilog TRUE'
     $lines+='dev_map -detail'
-    $lines+="pnr -action_timeout $($recipe.pnr_action_minutes) -optimize_multi_corner_timing -fix_hold_violation -gplace_seed 1 -dump_router_congestion_plot TRUE"
+    $lines+="pnr -action_timeout $($recipe.pnr_action_minutes) -optimize_multi_corner_timing -fix_hold_violation -gplace_seed $PlacementSeed -dump_router_congestion_plot TRUE"
     $lines+='report_timing -max_path 20'
     $script=Join-Path $work 'build.tcl'
     [IO.File]::WriteAllText($script,($lines -join "`n")+"`n",[Text.UTF8Encoding]::new($false))

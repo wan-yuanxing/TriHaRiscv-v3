@@ -2,7 +2,7 @@
 
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-19。
 
-Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pango综合/映射已经建立，并完成首轮隔离后布线；100MHz setup尚未收敛，详见 [STATUS.md](STATUS.md)。正式SoC、完整ISA及板测仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。
+当前已实现六级单发射CPU＋8KiB启动只读窗口＋32KiB片上SRAM＋本地总线＋UART TX。正式地址为ROM 0x0/SRAM 0x10000，CPU宽总线内部连接。实际系统CoreMark短RTL为1685831周期、观察IPC0.870694、估算2.965896 CoreMark/MHz；非官方分数或板测。100MHz系统后布线当前较好setup为−0.183ns，仍未通过，详见 [STATUS.md](STATUS.md) 与 [接口](../interfaces/cpu_local_bus.md)。DDR/Video/NPU、完整ISA及板级PLL/管脚/下载另行验收，主目录Video分支未自动合入。
 
 ## 目录与旧工程风格
 
@@ -16,7 +16,7 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pa
 | `rtl/cpu/triha_multiplier.v`、`triha_csr.v` | 宽数据寄存器独立采样；原有效、hold、异常及提交写控制继续生效 |
 | `rtl/cpu/triha_lsu.v`、`triha_pipe_ctrl.v` | 纯load旁路、fault提交与请求宽数据分离，保留精确badaddr/mtval和请求保持/取消门控 |
 | `rtl/cpu/vendor/` | 固定来源源码、LICENSE、UPSTREAM.json、原始测试映像；保留原文件，不批量改名或重排 |
-| `rtl/soc/` | 后续正式互连、外设、IRQ和系统集成；以新主工程接口为准 |
+| `rtl/soc/` | 最小CPU系统、同步ROM/SRAM、本地总线、UART TX；保留正式地址，未实现区域错误完成 |
 | `tb/cpu/tb_triha_core.v` | CPU 自校验 Verilog；软件退出、发射配置、配对依赖与超时检查 |
 | `scripts/cpu/run.ps1`、`run_modelsim.do` | Windows 原生入口及 ModelSim 执行；每次独立运行目录 |
 | `config/cpu_sources.f` | 显式仿真模块清单；不递归搜集所有 RTL |
@@ -24,7 +24,7 @@ Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pa
 | `sw/benchmarks/coremark/` | CoreMark1.0固定原始源码与独立平台适配；构建生成窄formatter适配 |
 | `fpga/pg2l100h/project/cpu_core.json`、`constraints/cpu_core.fdc` | CPU-only综合/映射清单及10ns目标；正式板级/DDR继续沿用一套实现 |
 | `docs/verification/cpu/` | 小型证据与原始结果索引 |
-| `build/cpu/` | BIN、ModelSim work库、日志、结果JSON及后续PDS产物，Git忽略 |
+| `build/cpu/`、`build/soc/` | 固件、初始化镜像、ModelSim/PDS日志与冻结结果，Git忽略 |
 
 新写 RTL 使用四空格缩进、ANSI端口、`clk_i/rst_ni`、`*_i/*_o`、`u_*` 实例、定宽常量和说明职责的文件头；时序逻辑非阻塞赋值，组合逻辑完整默认值。保持原工程 ctrl/pipeline/mmu 等职责划分习惯，需要实现时再建目录，不复制旧五级模块来凑六级，也不预建空目录。产品工程/目标/分支/提示统一使用 TriHa/CPU 命名，来源只在许可证与独立清单中维护。
 
@@ -105,3 +105,16 @@ LSU深度2请求队列按head/tail寄存存储，保持原全部有效及无效�
 `triha_npc.v`以独热AND/OR选择和直接表项写入保持原BTB优先级/全部预测状态，仍为BTB32/BHT512/RAS8。`run_redirect.ps1 -Test predictorselect`完整比较两种配置的表状态和输出，含重复tag及独立最高索引oracle；`-LegacyPredictor`验证原模块fixture，`-Broken`必须拒绝预测输出错误。第18轮6505 LUT/5207 FF，CoreMark等周期；实际setup -2.756/-0.054ns，未通过100MHz，见`predictor_select_timing.json`。
 
 BHT饱和转移进一步局部化到各表项，原512项/2bit/reset和全部周期保持；组件测试已覆盖完整写地址扫描。第19轮6484 LUT/5207 FF，CoreMark等周期，但实际setup -4.375/-0.602ns仍失败，见`predictor_counter_local_timing.json`。固定最佳轮IO位置的物理对照另存独立recipe，不作为板级管脚。
+
+
+## 当前片上系统入口
+
+```powershell
+python scripts/soc/gen_config.py --check
+python scripts/soc/run.py --test memory
+python scripts/soc/run.py --test runtime
+python scripts/soc/run.py --test coremark
+pwsh -NoProfile -File scripts/soc/run_route.ps1 -FirmwareRunDirectory <本机PASS固件目录> -PhysicalProfile compact
+```
+
+系统入口与旧128KiB测试TCM严格分开；正式32KiB SRAM链接脚本由地址配置生成。只有六项Slow/Fast setup/hold/MPW全部无违例且performance一致才称100MHz通过。`-PhysicalProfile frontend/fanout`是失败物理对照，保留用于复现，不作为当前推荐配置。板级时钟/管脚和实际下载不包含在本目标内。

@@ -36,3 +36,8 @@ PDS完整compile/synthesize/dev_map/pnr/report_timing，保留源/镜像/工具/
 第二轮真实核内最差路径PC[7]→BTB比较→全表命中归约→fallback向量选择→全表最高优先掩码→数据选择→PC[24]，Slow setup −0.478ns，15级，逻辑2.362ns/布线7.782ns。改为两个匹配集合分别求最高优先掩码，再按原if条件选择结果，避免在命中归约之后串接另一套优先归约。仍复用同一独热AND/OR数据选择器，不增加预测流水级/历史状态/CPU周期，也不缩小表。
 
 等价关系：任意二态匹配集合E/U，原highest(E if any(E) else U if upper-allowed else E)等于highest(E) if any(E) else highest(U) if upper-allowed else highest(E)。匹配由原过程if产生，未知比较仍按非命中；fallback仍为过程if，保持PC[2]的原X语义。reset/重复tag/最高编号优先/upper-word/BHT/RAS/LFSR逐拍组件对照与真实坏输出负例必须通过；整核按序WB/store/异常与三seed、CoreMark两模式回归后才能用于物理验收。syn_keep仅保留两个组合掩码的边界，无新增状态。原vendor保持字节，派生清单更新SHA。
+
+
+## 第四轮仅局部前端布局
+
+第三轮仅剩三个RAS index CE和一个BTB训练CE违例，WNS−0.183ns。前端综合4264LUT/3811FF，无DRM/APM；将其放在同一CPU时钟区左侧48/64列（0,47,150,199），名义LUT容量约8400，保留约一半余量。执行部分仍受原完整CPU区域约束且不排斥与前端共用剩余容量，RAM/ROM保持可用区域。原生报告需确认子区域展开，实际最终setup/hold/MPW判定；不能用容量估计或布局估计代替时序。该轮RTL、初始化镜像、10ns时序预算及PDS seed1与第三轮一致，仅改变局部区域约束，不预先声称频率收益。

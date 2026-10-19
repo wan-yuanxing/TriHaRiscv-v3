@@ -71,6 +71,30 @@ def review(work, native_sram=None):
             if columns[-1] == "OREGIS":
                 io_register_ports.append(columns[0])
     region_applied = "PAP_REGION" in (work / "device_map/triha_minimal_soc.dmr").read_text(encoding="utf-8")
+    # Inspect bounded cell blocks rather than a large unbounded netlist regex.
+    # Synthesis may replicate PC registers for syn_maxfan. Check that each
+    # copy has the original bit's exact init, clock, reset, enable and D nets.
+    cell_lines = (work / "synthesize/triha_minimal_soc_syn.vm").read_text(encoding="utf-8").splitlines()
+    pc_cells = {}
+    for index, line in enumerate(cell_lines):
+        match = re.search(r"(GTP_DFF_\w+)\s+/\*\s*\\(pc_f_q(?:_copy)?\[(\d+)\](?:_\d+)?)", line)
+        if not match:
+            continue
+        block = []
+        for following in cell_lines[index:index + 30]:
+            block.append(following)
+            if ");" in following:
+                break
+        pins = {name: value.strip() for name, value in re.findall(r"\.(\w+)\s*\(([^()]*)\)", "\n".join(block))}
+        assert "Q" in pins and "D" in pins and "CLK" in pins
+        pins.pop("Q")
+        pc_cells[match[2]] = (match[1], pins)
+    copies = [name for name in pc_cells if "_copy" in name]
+    for name in copies:
+        bit = re.search(r"\[(\d+)\]", name)[1]
+        assert pc_cells[name] == pc_cells[f"pc_f_q[{bit}]"], name
+    if any("fanout.fdc" in name for name in result["input_hashes"]):
+        assert len(copies) > 0, "No actual PC replication from the requested fanout constraint"
     native_evidence = None
     if native_sram:
         native_result = json.loads((native_sram / "result.json").read_text(encoding="utf-8"))
@@ -94,6 +118,7 @@ def review(work, native_sram=None):
                 physical_io_register_ports=io_register_ports, physical_io_register_count=len(io_register_ports),
                 mapped_ff_scope="CLM FF reported by dev_map; IO registers listed separately; not an architectural state count",
                 cpu_region_constraint_expanded_in_native_report=region_applied,
+                synthesis_pc_register_copies=len(copies), pc_copy_init_and_data_control_pins_verified=True,
                 worst_reported_startpoint=starts[0] if starts else None, worst_reported_endpoint=ends[0] if ends else None,
                 timing_report=str(work / "report_timing/triha_minimal_soc.rtr"),
                 log=str(work / "pds-route.stdout.log"), board_validated=False, official_coremark_score=False)

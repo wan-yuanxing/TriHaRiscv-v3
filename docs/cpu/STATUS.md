@@ -1,6 +1,8 @@
 # TriHa CPU 状态
 
-更新：2026-10-18。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+更新：2026-10-19。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+
+当前主线已接入正式地址的ROM/SRAM和总线；实际系统100MHz仍未通过，较好记录为−0.183ns。当前CoreMark短RTL 2.965896/MHz、观察IPC0.870694。以下保留逐阶段历史，最新证据在文末。
 
 ## 本批交付
 
@@ -400,3 +402,22 @@ UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到�
 精确PC和upper-word独热优先掩码并行计算，再走原fallback选择，避免连续的全表归约；不增加状态、周期或改变预测表尺寸。旧vendor28哈希保持，派生清单11项中只更新NPC记录。24组正例及5组预期拒绝的冻结哈希复核，三seed×两模式整核/按序store/同步异常、IRQ/mret、组件、CoreMark两模式、validation、runtime和14指令完成探针均通过。测试TCM仍single1682259/dual1390197cycles；系统SRAM仍1685831cycles/1467843WB、IPC0.870694、短测2.965896 CoreMark/MHz，均非官方分数/板测。4类系统访问异常再测PASS。索引minimal_soc_parallel_validation.json。
 
 第三轮实际系统后布线Slow setup −0.183ns，仅4个端点/TNS−0.575ns（上轮248端点/TNS−39.679ns）；Fast setup +2.660ns，hold +0.107/+0.067ns，脉宽 +3.655/+4.202ns，100MHz仍未通过。最差PC[5]→RAS index CE，11级、逻辑2.165ns/布线7.572ns；另BTB训练CE −0.026ns。系统6829LUT/5292CLM FF/10IO FF/16.5DRM/4APM；CPU层次6658LUT/5173FF/32distributedRAM/4APM，额外171LUT/120FF。CPU比上轮多52LUT，不宣称面积改善。独立核验全部哈希、native0/runner2、同10ns预算和native RAM组件证据，索引minimal_soc_parallel_route.json。后续按剩余前端热点做局部布局对照，不改CPU或固件。
+
+
+## 2026-10-19 局部前端布局对照
+
+同RTL/同固件下将4264LUT前端局部放置(0,47,150,199)，未改善：Slow setup −0.202ns/33端点/TNS−3.003ns，Fast +2.614ns、hold +0.118/+0.106ns、脉宽 +3.655/+4.202ns。保留第三轮−0.183ns/4端点为较好检查点。两轮同样呈PC→预测反馈，布线占主导；此次结果不选为发布。核验见minimal_soc_frontend_route.json。
+
+下一轮回到第三轮完整CPU时钟区，按ADS User Guide 5.13对实际PC查询inst_addr[2..31]施加syn_maxfan24，检查原生实际复制/缓冲及最终余量；仅工具物理/综合属性，RTL和10ns预算不改，不用布局估计声称通过。
+
+
+## 2026-10-19 PC扇出24物理对照
+
+原生PDS实际复制83个PC寄存器，各复制体INIT/CLK/C/CE/D与原位完全相同，独立网表审计通过；系统多35LUT/83FF。最终Slow setup−0.354ns/175端点/TNS−20.044ns，Fast+2.833ns、hold+0.145/+0.104ns、MPW+3.655/+4.202ns。工具0、宿主2，实际100MHz失败，不选此额外资源方案；证据minimal_soc_fanout_route.json。CPU层次6693LUT/5256FF，系统6864LUT/5375CLM FF/10IO FF/16.5DRM/4APM。
+
+现回到第三轮compact配置（无前端子区域、无PC复制约束），保留同RTL/固件/10ns，仅用placement seed2作一次有界布局对照。运行目录route-20261019T1226524843811Z，终态未定；较好检查点仍为seed1的−0.183ns，不声称100MHz通过。
+
+
+## 2026-10-19 seed2终态
+
+仅更换placement seed2，实际Slow setup−0.184ns、23端点/TNS−2.148ns；Fast+2.660ns、hold+0.142/+0.105ns、脉宽+3.655/+4.202ns，未通过。最差LSU pending到SRAM CE/WE，同时前端RAS仍−0.170ns；不选seed2。较好检查点仍compact seed1的−0.183ns/4端点。独立核验见minimal_soc_seed2_route.json。布局/扇出对照已结束，下一步对原预测器全32位tag比较做等价共享/分组，并重测实际周期和时序。

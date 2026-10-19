@@ -12,3 +12,14 @@
 主要命令：python scripts/soc/gen_config.py --check；python scripts/soc/run.py --test memory；python scripts/soc/run.py --test runtime；python scripts/soc/run.py --test coremark；pwsh -NoProfile -File scripts/soc/run_route.ps1。所有运行独立build/soc目录，失败非零。
 
 首轮完整物理结果TIMING_FAIL（Slow setup −1.206ns）。计划项完成表示完成实现和真实验收，不表示100MHz通过；保持原约束继续按实际路径优化。
+
+
+后续收敛检查点：
+
+- [x] 单拍本地存储返回，366项协议检查与CoreMark 1685831周期。
+- [x] 原生SRAM综合网表12296项与真实损坏拒绝；整核4类访问异常。
+- [x] 并行BTB fallback优先计算，整核/组件/两模式CoreMark完整回归，系统周期保持。
+- [x] 第三轮完整时序核验：Slow setup −0.183ns，仅4个端点，其余五项通过。
+- [ ] 同一RTL/固件下局部前端布局对照的最终后布线核验。
+- [ ] 实际100MHz六项setup/hold/MPW全部通过；失败记录不改写。
+- [ ] 交付当前通过配置、CPU-only资源与后续板级入口说明。

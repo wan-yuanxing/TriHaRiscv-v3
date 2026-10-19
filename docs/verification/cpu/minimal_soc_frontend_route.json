@@ -1,0 +1,113 @@
+{
+  "status": "TIMING_FAIL",
+  "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\route-20261019T1213538912526Z\\result.json",
+  "result_sha256": "fa6d5a02b113a378a791cd0d27aa8d5febdd6fb51c665a34be12c9d97d1f3621",
+  "reviewer_sha256": "a9e315b1dc6826aef16b34636d86d25ee19b2be327c4a2c3d55072bdae50dba4",
+  "all_recorded_hashes_verified": true,
+  "constraints_100mhz_no_exceptions": true,
+  "actual_native_return_code": 0,
+  "runner_return_code": 2,
+  "timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": -0.202,
+      "total_negative_slack_ns": -3.003,
+      "failing_endpoints": 33,
+      "endpoints": 16018
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.118,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16018
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4460
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 2.614,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16018
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.106,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16018
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4460
+    }
+  ],
+  "performance_slack_ns": -0.202,
+  "mapped_system_resources": {
+    "lut": 6829.0,
+    "registers": 5292.0,
+    "drm": 16.5,
+    "apm": 4.0,
+    "io": 13.0
+  },
+  "synthesis_hierarchy_resources": {
+    "u_core": {
+      "lut": 6658,
+      "ff": 5173,
+      "distributed_ram": 32,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "u_memory": {
+      "lut": 171,
+      "ff": 120,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm36k_equivalent": 16.5
+    }
+  },
+  "native_ram_mapping_checked": true,
+  "native_ram_component_functional_simulation": true,
+  "native_ram_component_evidence": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\native-sram-20261019T1202051473914Z\\result.json",
+    "sha256": "1247d1a23e35dca0a15021d8ef5658ede9be808f0ccfc3dc94834044a9134f6f",
+    "scope": "Standalone SRAM synthesis netlist with the same RTL and image; not full system gate simulation"
+  },
+  "full_system_gate_simulation": false,
+  "physical_io_register_ports": [
+    "done_o",
+    "exit_code_o[0]",
+    "exit_code_o[1]",
+    "exit_code_o[2]",
+    "exit_code_o[3]",
+    "exit_code_o[4]",
+    "exit_code_o[5]",
+    "exit_code_o[6]",
+    "exit_code_o[7]",
+    "uart_tx_o"
+  ],
+  "physical_io_register_count": 10,
+  "mapped_ff_scope": "CLM FF reported by dev_map; IO registers listed separately; not an architectural state count",
+  "cpu_region_constraint_expanded_in_native_report": true,
+  "worst_reported_startpoint": "u_core/u_cpu/u_frontend/u_fetch/pc_f_q[31]/opit_0_inv_L6QL5Q1_perm/CLK",
+  "worst_reported_endpoint": "u_core/u_cpu/u_frontend/u_fetch/pc_f_q[8]/opit_0_inv_L6Q_perm/I5",
+  "timing_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\route-20261019T1213538912526Z\\report_timing\\triha_minimal_soc.rtr",
+  "log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\route-20261019T1213538912526Z\\pds-route.stdout.log",
+  "board_validated": false,
+  "official_coremark_score": false
+}
