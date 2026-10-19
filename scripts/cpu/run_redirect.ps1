@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','ordered')][string] $Test='frontend',
+param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','ordered')][string] $Test='frontend',
     [ValidateSet('single','dual','both')][string] $Mode='both',
     [ValidateRange(1,2147483647)][int] $Seed=37,
     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken)
@@ -33,6 +33,7 @@ try {
     if($Test -eq 'training'){$sources+='tb/cpu/tb_predictor_training.v'}
     if($Test -eq 'loadbypass'){$sources+='tb/cpu/tb_load_bypass.v'}
     if($Test -eq 'requestdata'){$sources+='tb/cpu/tb_request_payload.v'}
+    if($Test -eq 'lanedata'){$sources+='tb/cpu/tb_issue_lane.v'}
     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
@@ -47,13 +48,13 @@ try {
         $module=if($LegacyFrontend){'biriscv_frontend'}else{'triha_frontend'}
         $defines=@("+define+CPU_FRONTEND_MODULE=$module")
         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})) 'compile'|Out-Null
-        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} default{'work.tb_unit_payload'}}
-        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} default{'work.tb_unit_payload'}}
+        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} default{'UNIT_PAYLOAD_PASS'}}
         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
-        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
         $result.executions+=@{test=$Test;status='PASS'}
     } else {
         $config=Get-Content (Join-Path $root 'config/cpu_toolchain.json') -Raw|ConvertFrom-Json

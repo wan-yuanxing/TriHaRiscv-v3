@@ -34,8 +34,9 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
       "derived": "rtl/cpu/triha_issue.v",
-      "derived_sha256": "444350f1f997a89eac9ef291cbe3474d68bccda88396dd0d41c725d4f056dcd4",
+      "derived_sha256": "dfa7ee470b53310f42ff54b6d03a47d336a52c1b2088d13d94613da20d1caa30",
       "changes": [
+        "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
         "Rename integration module to triha_issue.",
         "Choose opcode/PC/fault payload from fetch validity and expected PC independently of squash/CSR redirect; retain original slot validity and all issue enables.",
         "Select CSR invalid-instruction payload flag independently of late kill controls; CSR side-effect enable unchanged.",

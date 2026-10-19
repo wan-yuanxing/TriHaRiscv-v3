@@ -169,7 +169,7 @@ CoreMark、WB事件数和CRC完全不变：单1682259/观察IPC0.872543/短估�
 
 新最差从data_error_i经过异常/取消和发射有效位，进入LSU地址格式选择及32位加法，终止于mem_addr_q[28]；17级逻辑、逻辑2.835ns/布线12.701ns。源码中地址格式由opcode_valid_i参与选择，宽请求数据也在错误时清零。下一步将请求地址/数据/属性与有效控制分开，仍须保持所有有效及停顿中的事务载荷，保持fault取消和精确异常。证据`docs/verification/cpu/load_bypass_timing.json`。
 
-## LSU请求载荷与有效控制分离（第8轮，当前最优setup）
+## LSU请求载荷与有效控制分离（第8轮）
 
 地址格式和store数据仅由原始opcode决定，晚到的issue valid只限定最终读写控制。地址、写数据、cacheable使用原有65位寄存器独立采样；响应等待及未接纳请求继续hold，fault仍关闭原请求控制，FIFO badaddr/异常提交保持原路。没有新增寄存器级或load延迟。定向RED先捕获无效LW错误选用S型立即数；GREEN覆盖无效store无写使能、未接纳载荷保持及load fault取消/精确badaddr。三组背压种子×单/双模式的逐周期事务/WB/预测/CSR和按序同步异常对照、IRQ及实际故障注入均符合预期；15项正例和4项预期拒绝的实际输入/输出哈希均已核验。
 
@@ -182,6 +182,20 @@ CPU-only映射8346 LUT/6084 FF/0 DRM/4 APM，224 IO另计；较父版LUT增加10
 新的全局最差为纯核内：译码FIFO rd_ptr_q[0]→完整PC匹配/载荷选择→寄存器读取→分支比较→issue pc_x_q[29]；23级逻辑，逻辑3.599ns/布线10.684ns。payload1_selected_w有1554负载，且路径包含3.364ns的专用线段。之前data_error→LSU地址格式链不再是本轮首要路径，不据此宣称它的所有路径都已通过。下一步将载荷lane选择与完整PC命中分开；依据现有FIFO固定pc0低三位000、pc1为100的契约，用已寄存期望PC的bit2选择数据，完整PC/valid/取消继续限定发射和accept。需先建立错PC、空lane、取消及奇偶lane的RED/GREEN，再做同样的事务/异常/CoreMark和实际STA核验，不新增主流水级、不降低约束。
 
 证据索引：`docs/verification/cpu/request_payload_timing.json`，包含原始最终报告、实际退出码和独立复核路径。本批未合并主工程、未生成bitstream或编程板卡。
+
+## 指令载荷lane与PC命中分离（第9轮，当前最优setup）
+
+依据现有fetch FIFO固定pc0低三位000、pc1为100的对齐契约，直接由已注册期望PC的bit2选择opcode/PC/fault/分类数据；完整PC比较和fetch valid只限定发射资格及消费，原取消、IRQ inhibit和accept继续生效。去除三路宽数据零化选择和重复CSR invalid mux，没有新增寄存器级。最终同一测试/runner在冻结父版中RED，候选GREEN，覆盖错PC、空lane、取消、奇偶lane和完整fault载荷；三种背压×两模式逐周期及按序异常、IRQ、访存故障、17项正例与4项预期错误拒绝通过，输入输出哈希已核验。它们仍是定向仿真，不代替完整ISA证明。
+
+两模式CoreMark周期、WB及CRC仍与第8轮完全相同；单1682259周期、观察IPC0.872543、短RTL估算2.972194 CoreMark/MHz，双1390197/1.055853/3.596613，非官方或板级结果。
+
+同10ns及原IO/hold/multicorner、同区域约束完整重新实现，原生PDS返回0，宿主return2/TIMING_FAIL，主详细布线115次迭代达到0未布通，PNR2分52秒、完整247.215秒。冻结29项输入/312项输出及独立复核一致。setup Slow/Fast **-3.064/-0.045ns**，hold +0.106/+0.104ns，脉宽 +4.346/+4.345ns；performance一致，**100MHz仍未通过**。Slow最差比第8轮改善1.567ns，但违例端点3991→4156，不能把WNS改善概括为所有路径改善。
+
+CPU-only7175 LUT/6084 FF/0 DRM/4 APM，224 IO另计；较第8轮减少1171 LUT（14.0307%）、FF不变，较第7轮也少114 LUT。issue层次归属2243→1119 LUT，未靠减流水级、去M扩展或降低时钟实现。
+
+新的最差为FIFO指令源寄存器索引bit1→通用FF寄存器堆读出/旁路→JALR目标→issue pc_x_q[30]，10级逻辑、逻辑1.916ns/布线10.696ns（84.808%）。读地址位139负载/1.995ns，读选择网络39负载/1.280ns。下一步评估复用已有FPGA异步读分布式RAM结构及PDS原语，在单发射配置替代FF大mux，保留零读延迟、同步复位可见性、x0和写回/旁路语义；双发射保留已测实现。必须先用独立寄存器模型验证复位、连续写、同址读写及x0，并核对真实器件映射，不能把仿真模型当硬件映射证明。
+
+证据：`docs/verification/cpu/lane_payload_timing.json`。未合并主工程、未编程板卡。
 
 ## 仍需完成
 

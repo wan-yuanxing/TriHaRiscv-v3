@@ -85,3 +85,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 `run_redirect.ps1 -Test training`验证完整训练事件寄存，包含call/return/jump和没有miss请求的BHT更新。旧训练时序的物理运行只读复核须显式使用`review_route.ps1 -LegacyTraining`，正常新运行仍强制REGISTER_TRAINING=1。第4轮不作为已通过时序的部署版，原始结果见`training_timing.json`。
 
 `run_redirect.ps1 -Test requestdata`检查请求地址格式/store数据不依赖晚到valid、有效控制关闭、未接纳请求载荷保持及fault取消/badaddr；`-Test loadbypass`保留返回数据与精确异常的分离检查。第8轮实际100MHz仍TIMING_FAIL，详见STATUS和`request_payload_timing.json`。
+
+`run_redirect.ps1 -Test lanedata`检查对齐fetch packet的原始lane选择独立于完整PC/valid，而错PC/空lane仍关闭发射和消费；该契约依赖当前FIFO的pc0/pc1固定word位置。第9轮CPU-only7175 LUT/6084 FF，实际100MHz setup仍为-3.064ns，证据`lane_payload_timing.json`。

@@ -259,11 +259,13 @@ assign branch_priv_o             = branch_csr_request_i ? branch_csr_priv_i : pr
 //-------------------------------------------------------------
 // Instruction Decoder
 //-------------------------------------------------------------
-// Select packet data from registered PC/valid only. Kill/exception signals
-// still gate issue valids, but no longer traverse operand reads/comparators.
-wire payload0_selected_w = fetch0_valid_i &&
+// The fetch FIFO fixes lane PCs to {base,000}/{base,100}. Select wide
+// payload from registered PC bit 2, independently of the full PC-hit check.
+// Full PC/valid matches below still qualify issue, faults and consumption.
+wire payload0_selected_w = !pc_x_q[2];
+wire payload0_match_w = fetch0_valid_i &&
     {fetch0_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
-wire payload1_selected_w = fetch1_valid_i &&
+wire payload1_match_w = fetch1_valid_i &&
     {fetch1_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
 reg        opcode_a_valid_r;
 reg        opcode_b_valid_r;
@@ -276,39 +278,24 @@ reg [31:0] opcode_b_pc_r;
 
 always @ *
 begin
-    opcode_a_r       = 32'b0;
+    opcode_a_valid_r = payload0_match_w || payload1_match_w;
+    opcode_b_valid_r = payload0_match_w && fetch1_valid_i;
+    opcode_a_r       = fetch1_instr_i;
+    opcode_a_pc_r    = fetch1_pc_i;
+    opcode_a_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
     opcode_b_r       = 32'b0;
-    opcode_a_valid_r = 1'b0;
-    opcode_b_valid_r = 1'b0;
-    opcode_a_fault_r = 2'b0;
-    opcode_b_fault_r = 2'b0;
-    opcode_a_pc_r    = 32'b0;
     opcode_b_pc_r    = 32'b0;
+    opcode_b_fault_r = 2'b0;
 
-    // Word 0 (and possibly slot 1) are valid instructions
+    // Even word may issue together with lane 1; odd word uses slot 0 alone.
     if (payload0_selected_w)
     begin
-        opcode_a_valid_r = 1'b1;
-        opcode_b_valid_r = fetch1_valid_i;
         opcode_a_r       = fetch0_instr_i;
         opcode_a_pc_r    = fetch0_pc_i;
         opcode_a_fault_r = {fetch0_fault_page_i, fetch0_fault_fetch_i};
         opcode_b_r       = fetch1_instr_i;
         opcode_b_pc_r    = fetch1_pc_i;
         opcode_b_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
-    end
-    // Word 1 valid - mux to first issue slot
-    // Note: Some instruction types can only issue in slot0, hence this muxing
-    else if (payload1_selected_w)
-    begin
-        opcode_a_valid_r = 1'b1;
-        opcode_b_valid_r = 1'b0;
-        opcode_a_r       = fetch1_instr_i;
-        opcode_a_pc_r    = fetch1_pc_i;
-        opcode_a_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
-        opcode_b_r       = 32'b0;
-        opcode_b_pc_r    = 32'b0;
-        opcode_b_fault_r = 2'b0;
     end
 end
 
@@ -953,8 +940,7 @@ assign csr_opcode_ra_idx_o      = opcode0_ra_idx_o;
 assign csr_opcode_rb_idx_o      = opcode0_rb_idx_o;
 assign csr_opcode_ra_operand_o  = opcode0_ra_operand_o;
 assign csr_opcode_rb_operand_o  = opcode0_rb_operand_o;
-assign csr_opcode_invalid_o     = payload0_selected_w ? fetch0_instr_invalid_i :
-                                  payload1_selected_w ? fetch1_instr_invalid_i : 1'b0;
+assign csr_opcode_invalid_o     = issue_a_invalid_w;
 
 //-------------------------------------------------------------
 // Checker Interface
