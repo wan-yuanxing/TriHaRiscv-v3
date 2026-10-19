@@ -297,6 +297,44 @@ module tb_video_three_branch_capture #(parameter integer W=30,H=20,PT=2,PB=1);
                 28:begin
                     wait(dut.result_valid_vec[0]);@(negedge clk);force dut.result_tags[31:0]=32'hbad;
                     wait(error);@(negedge clk);release dut.result_tags[31:0];result_check(6);
+                    // A terminal metadata error and abort are sampled together.
+                    // Classification crosses one register; its first reason
+                    // must survive a later, normally higher-priority offline.
+                    restart();request();wait(dut.result_valid_vec[0]);
+                    @(negedge clk);force dut.result_tags[31:0]=32'hbad;abort=1;
+                    @(posedge clk);#1;
+                    if(error)$fatal(1,"CAPTURE_FAULT_PIPELINE_RED: terminal fault was not registered before public error");
+                    if(!cancel)$fatal(1,"pending terminal fault did not cancel data intake");
+                    @(negedge clk);release dut.result_tags[31:0];abort=0;init_done=0;
+                    @(posedge clk);#1;
+                    if(!error||error_code!=6)$fatal(1,"later offline replaced earlier metadata fault");
+                    result_check(6);
+                    // Once the source event is consumed, each fresh fast fault
+                    // must block success on that exact publication edge.
+                    for(t=0;t<4;t=t+1)begin
+                        restart();accepted_ready=0;request();
+                        wait(dut.eof_seen&&dut.retired==7&&port_drained);
+                        repeat(3)@(negedge clk);
+                        if(completion_valid||!accepted_valid)$fatal(1,"bad publication-window setup");
+                        accepted_ready=1;@(posedge clk);@(negedge clk);
+                        case(t)0:abort=1;1:source_fault=1;2:overflow=1;3:init_done=0;endcase
+                        @(posedge clk);#1;
+                        if(completion_valid&&completion_success)$fatal(1,"success raced a fresh publication-edge fault");
+                        wait(error);result_check(t==0?12:t==1?3:t==2?2:1);
+                    end
+                    // Health can fail while idle; after the detection edge its
+                    // pending interval must not advertise a new descriptor.
+                    restart();@(negedge clk);force dut.writer_fault=3'b001;
+                    @(posedge clk);#1;
+                    if(error||!cancel)$fatal(1,"idle health fault did not cross pending boundary");
+                    @(negedge clk);release dut.writer_fault;req_valid=1;
+                    #1;if(req_ready)$fatal(1,"pending idle fault advertised descriptor acceptance");
+                    @(posedge clk);@(negedge clk);req_valid=0;
+                    wait(completion_valid);@(negedge clk);
+                    if(completion_success||completion_code!=6||frame_id!=0||arm_toggle||!port_drained||
+                       bytes_by_branch[1]+bytes_by_branch[2]+bytes_by_branch[3]!=0)
+                        $fatal(1,"idle fault manufactured an owned frame or successful completion");
+                    tests=tests+1;
                 end
                 29:begin
                     wait(pending_b);repeat(50)@(negedge clk);

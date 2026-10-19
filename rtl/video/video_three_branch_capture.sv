@@ -73,19 +73,40 @@ module video_three_branch_capture #(
     wire packet_present=state==CAPTURE&&!eof_seen&&m_valid;
     wire count_good=captured_pixels===RPIX&&preview_pixels===PPIX&&input_pixels===IPIX&&preview_x===0&&input_x===0;
     reg [7:0] transport_fault,fault_now;
-    wire transport_stop=error||transport_fault!=0;
+    reg [7:0] fault_stage_code,commit_fast_fault;
+    wire fault_pending=fault_stage_code!=0;
+    wire transport_stop=error||fault_pending;
+    // Preserve the first sampled reason. Pending cancels producers before the
+    // public error/state update, keeping result validation off READY/CE paths.
+    always @(posedge clk or negedge reset_n)begin
+        if(!reset_n)fault_stage_code<=0;
+        else if(fault_stage_code==0&&fault_now!=0)fault_stage_code<=fault_now;
+    end
+    // WAIT_EVENT already has all result records retired. Fresh scalar faults
+    // must still block that exact success-publication edge.
+    always @* begin
+        commit_fast_fault=0;
+        if(seen_online&&!init_done)commit_fast_fault=8'h01;
+        else if(arb_fault)commit_fast_fault=8'h09;
+        else if(|writer_fault)commit_fast_fault=8'h06;
+        else if(state!=IDLE&&state!=DONE&&state!=DRAIN)begin
+            if(abort)commit_fast_fault=8'h0c;
+            else if(overflow)commit_fast_fault=8'h02;
+            else if(source_fault)commit_fast_fault=8'h03;
+        end
+    end
     assign m_ready=reset_n&&state==CAPTURE&&!eof_seen&&!transport_stop&&
         (pixel_kind&&captured_pixels<RPIX?all_pixels_ready:1'b1);
     wire packet_take=packet_present&&m_ready;
     wire preview_take=preview_valid&&preview_ready,input_take=input_valid&&input_ready;
     wire preview_legal=preview_pixels<PPIX&&(^preview_rgb)!==1'bx&&preview_last===(preview_x==SW/2-1);
     wire input_legal=input_pixels<IPIX&&(^input_rgb)!==1'bx&&input_last===(input_x==IW-1);
-    wire stopping=error||fault_now!=0;
+    wire stopping=error||fault_pending;
     wire pixel_offer=packet_present&&pixel_kind&&pixel_legal&&!stopping;
     assign preview_ready=preview_pixel_ready&&!transport_stop;
     assign input_ready=input_pixel_ready&&!transport_stop;
-    assign req_ready=reset_n&&state==IDLE&&init_done&&!abort&&!error&&!arb_fault&&!bvalid;
-    assign cancel=error;
+    assign req_ready=reset_n&&state==IDLE&&init_done&&!abort&&!error&&!fault_pending&&!(|writer_fault)&&!arb_fault&&!bvalid;
+    assign cancel=error||fault_pending;
     assign busy=state!=IDLE&&state!=DONE;
     assign port_drained=reset_n&&((requested&~retired)==0)&&arb_idle;
 
@@ -155,7 +176,7 @@ module video_three_branch_capture #(
             // Registered cancel breaks the READY -> payload validation ->
             // cancel -> READY feedback. Already buffered valid bytes may
             // enter a DMA on the detecting edge, then drain as a failed shot.
-            .clk(clk),.reset_n(reset_n),.online(init_done),.abort(error),
+            .clk(clk),.reset_n(reset_n),.online(init_done),.abort(error||fault_pending),
             .req_valid(state==DESCRIPTORS&&!requested[g]&&!stopping),.req_ready(req_ready_vec[g]),
             .req_base(g==0?raw_base:preview_base),.req_row_bytes(ROW),.req_stride(STRIDE),.req_rows(ROWS),.req_tag(frame_id),
             .s_valid(stream_valid[g]),.s_ready(stream_ready[g]),.s_data(stream_data[g*128+:128]),
@@ -170,7 +191,7 @@ module video_three_branch_capture #(
     end endgenerate
     detect_nchw_dma #(.WIDTH(IW),.ACTIVE_HEIGHT(AH),.PAD_TOP(TOP),.PAD_BOTTOM(BOTTOM),
         .ROW_STRIDE(ISTRIDE),.PLANE_STRIDE(IPLANE),.AXI_ID(4'd3)) u_input_dma(
-        .clk(clk),.reset_n(reset_n),.online(init_done),.abort(error),
+        .clk(clk),.reset_n(reset_n),.online(init_done),.abort(error||fault_pending),
         .req_valid(state==DESCRIPTORS&&!requested[2]&&!stopping),.req_ready(req_ready_vec[2]),.req_base(input_base),.req_tag(frame_id),
         .s_valid(input_valid&&!stopping),.s_ready(input_pixel_ready),.s_rgb(input_rgb),.s_row_last(input_last),
         .result_valid(result_valid_vec[2]),.result_ready(1'b1),.result_success(result_success_vec[2]),
@@ -217,8 +238,8 @@ module video_three_branch_capture #(
                     2:input_written_bytes<=result_bytes[64+:32];
                 endcase
             end
-            if(!error&&fault_now!=0)begin
-                error<=1;error_code<=fault_now;
+            if(!error&&fault_stage_code!=0)begin
+                error<=1;error_code<=fault_stage_code;
                 if(state!=DONE)state<=DRAIN;
             end else if(!error)case(state)
                 IDLE:if(req_valid&&req_ready)begin
@@ -236,22 +257,22 @@ module video_three_branch_capture #(
                     if(&(requested|req_ready_vec)&&input_pixel_ready)begin arm_toggle<=~arm_toggle;state<=CAPTURE;end
                 end
                 CAPTURE:if(eof_seen&&(&retired)&&port_drained&&count_good)state<=WAIT_EVENT;
-                WAIT_EVENT:if(accepted_consumed)begin completion_valid<=1;completion_success<=1;completion_code<=0;state<=DONE;end
+                WAIT_EVENT:if(accepted_consumed&&commit_fast_fault==0)begin completion_valid<=1;completion_success<=1;completion_code<=0;state<=DONE;end
                 default:begin end
             endcase
             if(state==DRAIN&&port_drained)begin completion_valid<=1;completion_success<=0;completion_code<=error_code;state<=DONE;end
-            if(packet_take&&!stopping)begin
+            if(packet_take&&!stopping&&(pixel_kind?pixel_legal:(eof_kind&&eof_legal)))begin
                 if(pixel_kind)begin
                     captured_pixels<=captured_pixels+1'b1;raw_crc_state<=raw_crc_next;
                     if(!accepted_started)begin accepted_started<=1;accepted_valid<=1;end
                     if(source_x==SW-1)begin source_x<=0;source_y<=source_y+1'b1;end else source_x<=source_x+1'b1;
                 end else begin eof_seen<=1;source_crc<=m_data[31:0];fifo_peak<={20'd0,m_data[43:32]};end
             end
-            if(preview_take&&!stopping)begin
+            if(preview_take&&!stopping&&preview_legal)begin
                 preview_pixels<=preview_pixels+1'b1;preview_crc_state<=preview_crc_next;preview_crc<=~preview_crc_next;
                 if(preview_x==SW/2-1)preview_x<=0;else preview_x<=preview_x+1'b1;
             end
-            if(input_take&&!stopping)begin
+            if(input_take&&!stopping&&input_legal)begin
                 input_pixels<=input_pixels+1'b1;if(input_x==IW-1)input_x<=0;else input_x<=input_x+1'b1;
             end
         end

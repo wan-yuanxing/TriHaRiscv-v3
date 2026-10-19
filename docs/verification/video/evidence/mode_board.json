@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "digital_and_synthesis_verified; physical routing and board acceptance pending",
+  "status": "current_pipeline_digital_verified; current_source_physical_implementation_pending",
   "base_head": "1f8be69f1c749430763e9bc98f8745585743fbac",
   "owned": [
     "fpga/pg2l100h/rtl/video_demo_mode_output.sv",
@@ -18,6 +18,8 @@
     "rtl/video/video_frame_crc_reader.sv",
     "rtl/video/video_write_dma.sv",
     "tb/video/tb_write_dma.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "tb/video/tb_video_three_branch_capture.sv",
     "docs/superpowers/plans/2026-10-20-mode-board-timing.md",
     "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md",
     "scripts/video/run.py",
@@ -48,8 +50,10 @@
     "rtl/video/video_frame_crc_reader.sv": "324e2c947f65a49717bf744eb2aff3b1ac73b3d5b544def474c2d4cce6f8bdda",
     "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
     "tb/video/tb_write_dma.sv": "be66fbb5228ce7cb0748d6aca89ce7c568b320ad10847646afc392183dbd05f1",
+    "rtl/video/video_three_branch_capture.sv": "d77bd530035c1c6e5c8e6d30137455d6a0a509386b52bd0a7aafe06ed0ccb5cd",
+    "tb/video/tb_video_three_branch_capture.sv": "9ecf593dd1e5585f94dc8291c305a1c2b2dc20a8712da3eb5ca5e2a0d3f7188a",
     "docs/superpowers/plans/2026-10-20-mode-board-timing.md": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da",
-    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "d1b2ffa8aa163d967222be733f54fde6347a67f102d5fe4fdf03796b12003cdd",
+    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "338eec4938433e082919116944123280fe7a6601c6082edfc0a81f5179fdaa00",
     "scripts/video/run.py": "91870c2f6a6adaf7d3bc7702f2f7e54cae37c0cdaf93fb687a92b26599165e90",
     "scripts/video/build_pds.py": "ec6494009f9c68e0ca531906f33f46039262de29568d66124eaeb4141c95e151",
     "scripts/video/read_board.py": "1b6f2287303875e096a671b395405b84a8de24283d45d164cde541416373dcf9",
@@ -57,9 +61,9 @@
     "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
     "docs/superpowers/plans/2026-10-19-display-mode-board.md": "fa50e17cc5a5cb30106020a7d4aa2b0c7a462498b3856e7b3fa4d0b7e5075966",
     "docs/video/README.md": "91aa1a13de0c50805c720c7c59387e3bc012ccf09a794bfbfb920f809b7a6061",
-    "docs/video/STATUS.md": "c7e2969d75b554d1ca8ba849f3f964108ef851b9d72d01e91744cafb0d064544",
+    "docs/video/STATUS.md": "b319c3f874c419ba2b53b98dd7ac4eb073797fc397632afb4332e97d8050790d",
     "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
-    "docs/verification/video/mode_board.md": "64b6b43afc0585846a39da2dca5ad8b695403dc7c82ddd7315fd21bbd1421e20"
+    "docs/verification/video/mode_board.md": "4224d4eb8129aa861ad7aa2f4963b61ffc68de706c706bb4e2215ab67e7c5815"
   },
   "refs": {
     "mode_output": {
@@ -67,8 +71,8 @@
       "sha256": "8ae731ae0571766df187728747c69f7f52ec5202a738724d2a5a02979e1e44f7"
     },
     "mode_board": {
-      "path": "build/video/regression/20261019T182101_640166Z/result.json",
-      "sha256": "96cc43af7188511ade424824ddec99b393b39dfec2178c3da19aa3ddfdff5894"
+      "path": "build/video/regression/20261019T184638_991260Z/result.json",
+      "sha256": "436692ffa4007415abde6ad0f830bc9ef0a53f0eeade815fcf324ed1225b08a1"
     },
     "python": {
       "path": "build/video/mode_board_python/result.json",
@@ -191,27 +195,39 @@
       "sha256": "1524ce2d1a3c8ec78462b0e6c7d48ec863dcb1d2fe4db0b7a320b0b8df0fe992"
     },
     "raw_regression": {
-      "path": "build/video/regression/20261019T182101_611862Z/result.json",
-      "sha256": "dc7be8a5af747b0c9f15a7c0799f950c7ab3c8c3ab7a55f6f9ff9e92b38c34af"
+      "path": "build/video/regression/20261019T184638_983212Z/result.json",
+      "sha256": "2ef2316d6fdf90a2daec11b567d7971e0cb7efe6eddde7b997802c630f28ee0f"
     },
     "timing_plan": {
       "path": "docs/superpowers/plans/2026-10-20-mode-board-timing.md",
       "sha256": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da"
     },
-    "current_build": {
-      "path": "build/video/pds/20261019T182101_599588Z/result.json",
-      "sha256": "4b4225a203b65d613ed9eb7fee240bdb595beb44bd6ff33424de9d77393d0592"
+    "capture_directed": {
+      "path": "build/video/capture_fault_pipeline/directed_result.json",
+      "sha256": "52632773d972b8690de5523fda7d13a02ff0712277efd09382c381e2ec97dd7a"
     },
-    "current_structure": {
-      "path": "build/video/mode_board_timing_audit/constraints/20261019T182101_599588Z/structural.json",
-      "sha256": "8e7f1d45f4b0704d9e57e4b27b1ca19e9149cee78c1412796290c3fde1543b10"
+    "capture_red": {
+      "path": "build/video/capture_fault_pipeline/red_directed_result.json",
+      "sha256": "995611a94aca2f585bbcfeda18e9c4532ed858c2079c294b33522d9a2280055b"
+    },
+    "capture_mutations": {
+      "path": "build/video/capture_fault_pipeline/mutations/result.json",
+      "sha256": "9b7e5ad6cd0e3b5d7cfa770edeb23b8b5dc9086c315b8436d53cd32da943c04c"
+    },
+    "capture_review": {
+      "path": "build/video/capture_fault_pipeline_review/review.json",
+      "sha256": "d0ba69c5885b84d7e887a98c79704611a6f7e472c1e765e7acc41930477224d8"
+    },
+    "capture_regression": {
+      "path": "build/video/regression/20261019T184638_969982Z/result.json",
+      "sha256": "eaf38005c0b737d1c62bafa8328df9db541345dc44ccab69fc20ad4d0791822b"
     },
     "artifacts": {
       "path": "build/video/mode_board_artifact_hashes.json",
-      "sha256": "30bac1cb87d97cc2bca7e17e78e4656350fdcad10f93ae5278af27b5864a9233"
+      "sha256": "b1a6510f93a9c485feca87dd873338ef645ebf4be848d9999ffef32a4db286a6"
     }
   },
-  "preserved_files": 229,
+  "preserved_files": 227,
   "simulations": {
     "mode_output": 3,
     "mode_board_fault_reset": 6,
@@ -249,19 +265,9 @@
     "scripts/video/run.py",
     "scripts/video/build_pds.py"
   ],
-  "source_snapshot_verified": true,
-  "resources": {
-    "lut": 17365.0,
-    "registers": 18737.0,
-    "drm": 73.5,
-    "apm": 16.0
-  },
-  "structural": {
-    "pins": 140,
-    "synchronizer_pairs": 77,
-    "texture_drms": 64,
-    "bundles": 13
-  },
+  "source_snapshot_verified": false,
+  "resources": null,
+  "structural": null,
   "routed_internal_timing_verified": false,
   "physical_program_and_verify": false,
   "physical_acceptance": null,
@@ -276,14 +282,16 @@
   "historical_all_comparison": {
     "suites": 37,
     "inputs": 198,
-    "unchanged_inputs": 190,
+    "unchanged_inputs": 188,
     "changed_entry_points": [
       "scripts/video/build_pds.py",
       "scripts/video/package_board.py",
       "scripts/video/program_board.py",
       "scripts/video/read_board.py",
       "scripts/video/run.py",
+      "tb/video/tb_video_three_branch_capture.sv",
       "tb/video/tb_write_dma.sv",
+      "rtl/video/video_three_branch_capture.sv",
       "rtl/video/video_write_dma.sv",
       "rtl/video/video_frame_crc_reader.sv"
     ],
@@ -302,6 +310,7 @@
   "placement_followup": {
     "historical_synthesis_entrypoint_deltas": [
       "rtl/video/video_frame_crc_reader.sv",
+      "rtl/video/video_three_branch_capture.sv",
       "rtl/video/video_write_dma.sv",
       "scripts/video/build_pds.py"
     ],
@@ -322,7 +331,7 @@
     "crc_seeds4to7_hold_all_met": true,
     "crc_scratch_seed6_status": "fail",
     "crc_scratch_setup_ns": -0.205,
-    "current_configuration": "seed6/count1/normal; equivalent CRC and narrow writer burst calculation; unchanged FDC; strict full timing and packaging gates retained",
+    "current_configuration": "seed6/count1/normal; equivalent CRC/narrow writer burst and capture fault register boundary; unchanged FDC; strict full timing and packaging gates retained",
     "independent_builder_addendum_verified": true
   },
   "preservation_exception": {
@@ -398,5 +407,38 @@
     "all_public_outputs_cycle_equivalent": true,
     "mutation_detected": true,
     "unchanged_transactions_and_constraints": true
+  },
+  "capture_pipeline_exception": {
+    "path": "rtl/video/video_three_branch_capture.sv",
+    "before_sha256": "2246cfc2688d82ca7a95abf26ed39cb2495997974e30de1a4b086cf0b649f5d0",
+    "after_sha256": "d77bd530035c1c6e5c8e6d30137455d6a0a509386b52bd0a7aafe06ed0ccb5cd",
+    "test_path": "tb/video/tb_video_three_branch_capture.sv",
+    "test_before_sha256": "bf151385abd73302d69393157f7ecb8e956284a7ea5dd086bb2fec4131ba323c",
+    "test_after_sha256": "9ecf593dd1e5585f94dc8291c305a1c2b2dc20a8712da3eb5ca5e2a0d3f7188a",
+    "error_latch_extra_core_cycles": 1,
+    "normal_public_cycle_equivalence_verified": true,
+    "pending_admission_cancel_and_dma_abort_verified": true,
+    "first_reason_and_publication_guard_verified": true,
+    "directed_cases": 7,
+    "mutation_variants": 3,
+    "independent_review_ref": {
+      "path": "build/video/capture_fault_pipeline_review/review.json",
+      "sha256": "d0ba69c5885b84d7e887a98c79704611a6f7e472c1e765e7acc41930477224d8"
+    }
+  },
+  "historical_synthesis_reference": {
+    "resources": {
+      "lut": 17522.0,
+      "registers": 18738.0,
+      "drm": 73.5,
+      "apm": 16.0
+    },
+    "structural": {
+      "pins": 140,
+      "synchronizer_pairs": 77,
+      "texture_drms": 64,
+      "bundles": 13
+    },
+    "scope": "Historical source synthesis only; not the current registered-fault pipeline"
   }
 }

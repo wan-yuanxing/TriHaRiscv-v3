@@ -18,9 +18,9 @@
 
 **Files:** 修改 `tb/video/tb_video_three_branch_capture.sv` 或新增其独立定向 bench；验证副本/日志放 `build/video/capture_fault_pipeline/`。保留改造前 `rtl/video/video_three_branch_capture.sv` 原字节及哈希。
 
-- [ ] 建立独立握手 scoreboard：descriptor只接纳一次；所有曝光AW/W/B必须排空；失败completion永不success；结果背压时保持；reset前后的帧上下文不能混用。
-- [ ] 覆盖终态result字节数/标签/成功位错误与abort同拍、下一拍online丢失、最后一项retire与故障同拍、WAIT_EVENT即将发布时abort/source_fault、pending时新descriptor、已公开AW/W/B各阶段故障、像素/EOF及缩小流错误。
-- [ ] 以预期不变量检查时序，不强制改造前后的故障锁存周期相等；正常成功数据/地址/CRC/提交仍须相等。漏pending隔离或漏成功边界guard的替身必须编译后失败。
+- [x] 建立独立握手 scoreboard：descriptor只接纳一次；所有曝光AW/W/B必须排空；失败completion永不success；结果背压时保持；reset前后的帧上下文不能混用。
+- [x] 覆盖终态result字节数/标签/成功位错误与abort同拍、下一拍online丢失、最后一项retire与故障同拍、WAIT_EVENT即将发布时abort/source_fault、pending时新descriptor、已公开AW/W/B各阶段故障、像素/EOF及缩小流错误。
+- [x] 以预期不变量检查时序，不强制改造前后的故障锁存周期相等；正常成功数据/地址/CRC/提交仍须相等。漏pending隔离或漏成功边界guard的替身必须编译后失败。
 
 ```systemverilog
 if (dut.fault_pending && dut.req_ready)
@@ -35,7 +35,7 @@ if (held_completion && !completion_ready && completion_bundle !== previous_bundl
 
 **Files:** 只修改 `rtl/video/video_three_branch_capture.sv`，原所有权/描述符/三分支AXI代码保留。
 
-- [ ] 新增第一故障码寄存器；只在为空时捕获原 `fault_now`，不覆盖较早原因。所有复位仍来自既有协调core reset。
+- [x] 新增第一故障码寄存器；只在为空时捕获原 `fault_now`，不覆盖较早原因。所有复位仍来自既有协调core reset。
 
 ```systemverilog
 reg [7:0] fault_stage_code;
@@ -46,9 +46,9 @@ always @(posedge clk or negedge reset_n)begin
 end
 ```
 
-- [ ] `transport_stop` 和 `stopping` 均使用 `error||fault_pending`。`req_ready` 加 `!fault_pending`；cancel和三个子DMA的abort使用 `error||fault_pending`。主状态机从 `fault_stage_code` 锁存公开错误码，保持原DRAIN/port_drained/held completion。
-- [ ] 合法像素计数/CRC更新额外以 `pixel_legal` 或 `eof_legal` 限定；preview/input更新分别以现有 `preview_legal/input_legal` 限定，避免未知/非法数据因控制流水进入摘要。不能把宽位result计数比较重新接回实时ready/valid。
-- [ ] 为WAIT_EVENT单独生成 `commit_fast_fault`：按原优先级检查online、arb_fault、writer_fault、abort、overflow、source_fault，排除已经retired的result payload比较。成功发布同时要求 `commit_fast_fault==0`。在WAIT_EVENT之前原条件已要求eof_seen、全部retired、port_drained及count_good，须以测试确认该阶段不存在未验证结果。
+- [x] `transport_stop` 和 `stopping` 均使用 `error||fault_pending`。`req_ready` 加 `!fault_pending`；cancel和三个子DMA的abort使用 `error||fault_pending`。主状态机从 `fault_stage_code` 锁存公开错误码，保持原DRAIN/port_drained/held completion。
+- [x] 合法像素计数/CRC更新额外以 `pixel_legal` 或 `eof_legal` 限定；preview/input更新分别以现有 `preview_legal/input_legal` 限定，避免未知/非法数据因控制流水进入摘要。不能把宽位result计数比较重新接回实时ready/valid。
+- [x] 为WAIT_EVENT单独生成 `commit_fast_fault`：按原优先级检查online、arb_fault、writer_fault、abort、overflow、source_fault，排除已经retired的result payload比较。成功发布同时要求 `commit_fast_fault==0`。在WAIT_EVENT之前原条件已要求eof_seen、全部retired、port_drained及count_good，须以测试确认该阶段不存在未验证结果。
 
 ```systemverilog
 WAIT_EVENT:if(accepted_consumed && commit_fast_fault==0)begin
@@ -56,13 +56,13 @@ WAIT_EVENT:if(accepted_consumed && commit_fast_fault==0)begin
 end
 ```
 
-- [ ] 核对 fault_now 原第一原因优先级、所有已发布AXI不撤回、first accepted帧事件以及held completion不变。失败帧不发布给raw扫描；MODE/SOF/pad流水不修改。
+- [x] 核对 fault_now 原第一原因优先级、所有已发布AXI不撤回、first accepted帧事件以及held completion不变。失败帧不发布给raw扫描；MODE/SOF/pad流水不修改。
 
 ## Task 3：回归与独立审查
 
-- [ ] 运行定向bench、`python scripts/video/run.py --suite three_capture`、`--suite raw_board`、`--suite mode_board`；按新语义对故障接纳/排空检查，不删除失败场景或放宽数据检查。
-- [ ] 独立审查 pending隔离、第一错误、WAIT_EVENT、超时、复位和所有权。更新父审计为有记录的capture例外，其余冻结输入逐项核对。
-- [ ] 数字通过后精确本地检查点提交，保留原位流；不得将数字通过标作时序或板测通过。
+- [x] 运行定向bench、`python scripts/video/run.py --suite three_capture`、`--suite raw_board`、`--suite mode_board`；按新语义对故障接纳/排空检查，不删除失败场景或放宽数据检查。
+- [x] 独立审查 pending隔离、第一错误、WAIT_EVENT、超时、复位和所有权。更新父审计为有记录的capture例外，其余冻结输入逐项核对。
+- [x] 数字通过后精确本地检查点提交，保留原位流；不得将数字通过标作时序或板测通过。
 
 ## Task 4：实际实现和现场
 
