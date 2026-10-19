@@ -393,3 +393,10 @@ UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到�
 系统映射6778LUT/5292 CLM FF/16.5DRM/4APM/13IO；10个IO FF另列，不把CLM FF净减当架构状态减少。综合层次CPU6606LUT/5173FF/32distributedRAM/4APM，存储总线172LUT/120FF/16.5DRM；CPU-only仍单列，映射变化不作RTL面积优化。
 
 原生SRAM功能另已通过：同一RTL/镜像重新ADS综合映射16个DRM36K，用实际安装GTP模型执行每个4096地址的初始化、两读口、byte masks、read-before-write、读使能保持，共12296项；真实强制损坏在第1个地址被拒绝。两次缺库依赖的工具失败保留，补齐安装模型的LUT/UDP依赖后通过，未修改工具模型。这是组件综合网表仿真，不是整核后布线仿真。索引minimal_soc_pipeline.json；第二轮时序索引minimal_soc_compact_route.json。
+
+
+## 2026-10-19 并行预测优先选择终态
+
+精确PC和upper-word独热优先掩码并行计算，再走原fallback选择，避免连续的全表归约；不增加状态、周期或改变预测表尺寸。旧vendor28哈希保持，派生清单11项中只更新NPC记录。24组正例及5组预期拒绝的冻结哈希复核，三seed×两模式整核/按序store/同步异常、IRQ/mret、组件、CoreMark两模式、validation、runtime和14指令完成探针均通过。测试TCM仍single1682259/dual1390197cycles；系统SRAM仍1685831cycles/1467843WB、IPC0.870694、短测2.965896 CoreMark/MHz，均非官方分数/板测。4类系统访问异常再测PASS。索引minimal_soc_parallel_validation.json。
+
+第三轮实际系统后布线Slow setup −0.183ns，仅4个端点/TNS−0.575ns（上轮248端点/TNS−39.679ns）；Fast setup +2.660ns，hold +0.107/+0.067ns，脉宽 +3.655/+4.202ns，100MHz仍未通过。最差PC[5]→RAS index CE，11级、逻辑2.165ns/布线7.572ns；另BTB训练CE −0.026ns。系统6829LUT/5292CLM FF/10IO FF/16.5DRM/4APM；CPU层次6658LUT/5173FF/32distributedRAM/4APM，额外171LUT/120FF。CPU比上轮多52LUT，不宣称面积改善。独立核验全部哈希、native0/runner2、同10ns预算和native RAM组件证据，索引minimal_soc_parallel_route.json。后续按剩余前端热点做局部布局对照，不改CPU或固件。

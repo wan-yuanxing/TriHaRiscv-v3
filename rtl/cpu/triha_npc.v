@@ -270,6 +270,20 @@ end
 
 wire [NUM_BTB_ENTRIES-1:0] select_read_w;
 wire [NUM_BTB_ENTRIES-1:0] select_write_w;
+// Rank both lookup alternatives in parallel. Applying the upper-word fallback
+// before priority selection serializes the all-entry hit reduction, a vector
+// mux and another all-entry priority reduction on the next-PC feedback path.
+(* syn_keep = 1 *) wire [NUM_BTB_ENTRIES-1:0] select_pc_w;
+(* syn_keep = 1 *) wire [NUM_BTB_ENTRIES-1:0] select_upper_w;
+reg [NUM_BTB_ENTRIES-1:0] select_read_r;
+always @* begin
+    select_read_r = select_pc_w;
+    if (|match_pc_r)
+        select_read_r = select_pc_w;
+    else if (~pc_f_i[2])
+        select_read_r = select_upper_w;
+end
+assign select_read_w = select_read_r;
 localparam BTB_PAYLOAD_W = 35 + NUM_BTB_ENTRIES_W;
 wire [NUM_BTB_ENTRIES*BTB_PAYLOAD_W-1:0] btb_payload_w;
 genvar entry;
@@ -277,8 +291,10 @@ for (entry=0; entry<NUM_BTB_ENTRIES; entry=entry+1) begin: g_btb_select
     localparam [NUM_BTB_ENTRIES_W-1:0] ENTRY = entry;
     // Preserve the original highest-numbered matching entry, even for
     // duplicate tags (including all PC=0 entries immediately after reset).
-    assign select_read_w[entry] = match_read_r[entry] &
-        ~(|(match_read_r >> (entry+1)));
+    assign select_pc_w[entry] = match_pc_r[entry] &
+        ~(|(match_pc_r >> (entry+1)));
+    assign select_upper_w[entry] = match_upper_r[entry] &
+        ~(|(match_upper_r >> (entry+1)));
     assign select_write_w[entry] = match_write_r[entry] &
         ~(|(match_write_r >> (entry+1)));
     assign btb_payload_w[entry*BTB_PAYLOAD_W +: BTB_PAYLOAD_W] =

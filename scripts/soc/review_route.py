@@ -13,7 +13,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def review(work):
+def review(work, native_sram=None):
     result = json.loads((work / "result.json").read_text(encoding="utf-8"))
     assert result["status"] in ("PASS", "TIMING_FAIL") and result["flow_status"] == "PASS"
     assert result["source_unchanged"]
@@ -63,11 +63,37 @@ def review(work):
     assert "READ_BEFORE_WRITE" in mapping and "GTP_DRM36K_E1" in mapping and resource_rows["u_core"]["drm36k_equivalent"] == 0
     starts = re.findall(r"(?m)^Startpoint\s*:\s*(.*)$", report)
     ends = re.findall(r"(?m)^Endpoint\s*:\s*(.*)$", report)
+    physical = (work / "place_route/triha_minimal_soc.prr").read_text(encoding="utf-8")
+    io_register_ports = []
+    for line in physical.splitlines():
+        if "LVCMOS33" in line:
+            columns = [cell.strip() for cell in line.split("|")][1:]
+            if columns[-1] == "OREGIS":
+                io_register_ports.append(columns[0])
+    region_applied = "PAP_REGION" in (work / "device_map/triha_minimal_soc.dmr").read_text(encoding="utf-8")
+    native_evidence = None
+    if native_sram:
+        native_result = json.loads((native_sram / "result.json").read_text(encoding="utf-8"))
+        assert native_result["status"] == "PASS" and native_result["source_unchanged"] and native_result["corruption_rejected"]
+        assert native_result["checks"] == 12296
+        assert native_result["input_hashes"]["rtl/soc/triha_sram.v"] == result["input_hashes"]["rtl/soc/triha_sram.v"]
+        assert native_result["image_sha256"] == sha(work / "sram.hex")
+        for name, digest in native_result["output_hashes"].items():
+            assert sha(native_sram / name) == digest, name
+        for name, digest in native_result["external_hashes"].items():
+            assert sha(Path(name)) == digest, name
+        native_evidence = dict(result=str(native_sram / "result.json"), sha256=sha(native_sram / "result.json"),
+                               scope="Standalone SRAM synthesis netlist with the same RTL and image; not full system gate simulation")
     return dict(status=result["status"], result=str(work / "result.json"), result_sha256=sha(work / "result.json"),
                 reviewer_sha256=sha(Path(__file__)), all_recorded_hashes_verified=True, constraints_100mhz_no_exceptions=True,
                 actual_native_return_code=0, runner_return_code=result["runner_return_code"], timing=rows,
                 performance_slack_ns=float(performance[1]), mapped_system_resources=result["mapped_system_resources"],
-                synthesis_hierarchy_resources=resource_rows, native_ram_mapping_checked=True, native_ram_functional_simulation=False,
+                synthesis_hierarchy_resources=resource_rows, native_ram_mapping_checked=True,
+                native_ram_component_functional_simulation=native_evidence is not None, native_ram_component_evidence=native_evidence,
+                full_system_gate_simulation=False,
+                physical_io_register_ports=io_register_ports, physical_io_register_count=len(io_register_ports),
+                mapped_ff_scope="CLM FF reported by dev_map; IO registers listed separately; not an architectural state count",
+                cpu_region_constraint_expanded_in_native_report=region_applied,
                 worst_reported_startpoint=starts[0] if starts else None, worst_reported_endpoint=ends[0] if ends else None,
                 timing_report=str(work / "report_timing/triha_minimal_soc.rtr"),
                 log=str(work / "pds-route.stdout.log"), board_validated=False, official_coremark_score=False)
@@ -77,9 +103,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--native-sram-directory", type=Path)
     args = parser.parse_args()
     try:
-        receipt = review(args.directory.resolve())
+        receipt = review(args.directory.resolve(), args.native_sram_directory.resolve() if args.native_sram_directory else None)
         if args.output:
             args.output.write_bytes((json.dumps(receipt, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
         print(json.dumps(receipt, ensure_ascii=False, indent=2))

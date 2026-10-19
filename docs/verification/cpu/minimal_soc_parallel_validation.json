@@ -1,0 +1,743 @@
+{
+  "schema_version": 1,
+  "phase": "parallel exact-PC/upper-word priority selection",
+  "cpu_source_sha256": "d54047b87e30b334d36e1f3b21735af9dd1394b01718d60b3f6a869a8b00dad5",
+  "adaptations_sha256": "ea51ea4ffd669d77c2e2ac7bc13eebf96b6a04aea5cc04c22ae2392e85b1779f",
+  "cpu_regression_records": [
+    {
+      "result": "build\\cpu\\dual-20261019T1209091071337Z\\result.json",
+      "sha256": "807d471e792d5a1aec12f1ceccf6babd7f41c6e49368a0725f90e8a43301748a",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "dual",
+      "seed": null,
+      "executions": null
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1204150124120Z\\result.json",
+      "sha256": "d289df2c83df44c8ac4215a196b2f4e7964e7f1a22e51f9b047b19497c4d2ff5",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 37,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2387,
+          "trap_mask": 511,
+          "i_stalls": 180,
+          "d_stalls": 72
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2361,
+          "trap_mask": 511,
+          "i_stalls": 184,
+          "d_stalls": 87
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1204300301798Z\\result.json",
+      "sha256": "c78b6be92abdbd2b8804a193c568d00bb1b3202281a1a956a65ca608c11417ca",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 1234567,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2403,
+          "trap_mask": 511,
+          "i_stalls": 192,
+          "d_stalls": 75
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2382,
+          "trap_mask": 511,
+          "i_stalls": 206,
+          "d_stalls": 96
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1204448067358Z\\result.json",
+      "sha256": "8fb75a430d9c893a9e0ed2b39ff3d4b93d0b7595778dad4d8820521b671507d5",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "equivalence",
+      "seed": 271828,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "cycles": 2440,
+          "trap_mask": 511,
+          "i_stalls": 190,
+          "d_stalls": 101
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "cycles": 2367,
+          "trap_mask": 511,
+          "i_stalls": 218,
+          "d_stalls": 78
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\equivalence-20261019T1205450957222Z\\result.json",
+      "sha256": "7fc3565b51c3204843bfa8a33c2d7b793362c285e532a0c0c2f91c3ab608c1fa",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "equivalence",
+      "seed": 37,
+      "executions": []
+    },
+    {
+      "result": "build\\cpu\\fail-20261019T1209114925449Z\\result.json",
+      "sha256": "03c0579fca3173cf094bdd037aee7f1c93bd0957246a0224a4d53115c7f99768",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "fail",
+      "seed": null,
+      "executions": null
+    },
+    {
+      "result": "build\\cpu\\firmware-coremark-20261019T1205482228410Z\\result.json",
+      "sha256": "6ed2efd075e30d060c4821cd9a762bfdf59d0534878b9dd07f9203406832ce17",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "coremark",
+      "seed": null,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1682259,
+            "wb_completed": 1467843,
+            "observed_ipc": 0.8725428129675633,
+            "coremark_per_mhz_short_estimate": 2.9721939368432566,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1729043,
+            "issued": 1505912,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 1390197,
+            "wb_completed": 1467843,
+            "observed_ipc": 1.0558525158664562,
+            "coremark_per_mhz_short_estimate": 3.5966125664204425,
+            "crc": [
+              "e9f5",
+              "e714",
+              "1fd7",
+              "8e3a"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 1431270,
+            "issued": 1505912,
+            "paired_cycles": 335901,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\firmware-coremark-20261019T1208412741989Z\\result.json",
+      "sha256": "2df5fe0bc6f45dd612888181c45063115d246e6b5e4f5869786191cc10a70a41",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "coremark",
+      "seed": null,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": {
+            "cycles": 337690,
+            "wb_completed": 294349,
+            "observed_ipc": 0.871654475998697,
+            "coremark_per_mhz_short_estimate": 2.9612958630696795,
+            "crc": [
+              "18f2",
+              "e3c1",
+              "0747",
+              "8d84"
+            ],
+            "short_duration_warning": true,
+            "official_score": false
+          },
+          "issue_observation": {
+            "total_cycles": 384421,
+            "issued": 332451,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\firmware-retire-20261019T1208357390185Z\\result.json",
+      "sha256": "1e41cc90c9de23629f2c8b195fcc50d869e148e820c45efc09c7f0838635ff0c",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "retire",
+      "seed": null,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 45,
+            "issued": 22,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 41,
+            "issued": 22,
+            "paired_cycles": 4,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\firmware-runtime-20261019T1208294300629Z\\result.json",
+      "sha256": "4470d1ed6e59847aad8ffae0b60dfb95f568be4cd696ef53964c70a3dc03c16a",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "runtime",
+      "seed": null,
+      "executions": [
+        {
+          "mode": "single",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 634,
+            "issued": 464,
+            "paired_cycles": 0,
+            "issued_is_not_instret": true
+          }
+        },
+        {
+          "mode": "dual",
+          "status": "PASS",
+          "program_exit_code": 0,
+          "measurement": null,
+          "issue_observation": {
+            "total_cycles": 578,
+            "issued": 464,
+            "paired_cycles": 89,
+            "issued_is_not_instret": true
+          }
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-bypasstag-20261019T1205240413319Z\\result.json",
+      "sha256": "af19e69e2ee1868c6fcca507a3f420d45eec092db39eec760f01a99c3778dc87",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "bypasstag",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "bypasstag"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-divarith-20261019T1205188077140Z\\result.json",
+      "sha256": "f05bd0b0ffc0b4b28f4a8bbe958ca4a78586dbded2db2f4e757a3f8da63edb3b",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "divarith",
+      "seed": 37,
+      "executions": [
+        {
+          "test": "divarith",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-fifodata-20261019T1205214290722Z\\result.json",
+      "sha256": "60e5eba4adf9c4bbaff7fc77cf75651c8eedcd238f675ff7a90fe47960241c60",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "fifodata",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "fifodata"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-lanedata-20261019T1205072233522Z\\result.json",
+      "sha256": "81dcde72d356b0401f0943359fcd9f684338d14752306e8f831aeb1139ca6b80",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "lanedata",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "lanedata"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-loadbypass-20261019T1205159786250Z\\result.json",
+      "sha256": "ae00f4a70f465bd4b2c48f3ddebaffd9a26e9774113294842786e5bec4ffc8a1",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "loadbypass",
+      "seed": 37,
+      "executions": [
+        {
+          "test": "loadbypass",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-lsuqueue-20261019T1205295068511Z\\result.json",
+      "sha256": "097e130cf29af992979e0bba420cbfa3d84402c903d45e8375f1a5824686f046",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "lsuqueue",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "lsuqueue"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1204204042257Z\\result.json",
+      "sha256": "c9aa89e074ca2443008abc32c61f6b7de163d499829741695e0501d9302c7e5d",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37,
+      "executions": [
+        {
+          "kind": "golden",
+          "trap_mask": 255,
+          "stores": 91,
+          "retired": 844,
+          "status": "PASS",
+          "delayed": 1161,
+          "mode": "single",
+          "cycles": 3652
+        },
+        {
+          "kind": "golden",
+          "trap_mask": 255,
+          "stores": 91,
+          "retired": 844,
+          "status": "PASS",
+          "delayed": 1114,
+          "mode": "dual",
+          "cycles": 3601
+        },
+        {
+          "kind": "candidate",
+          "trap_mask": 255,
+          "stores": 91,
+          "retired": 844,
+          "status": "PASS",
+          "delayed": 1098,
+          "mode": "single",
+          "cycles": 3587
+        },
+        {
+          "kind": "candidate",
+          "trap_mask": 255,
+          "stores": 91,
+          "retired": 844,
+          "status": "PASS",
+          "delayed": 1100,
+          "mode": "dual",
+          "cycles": 3530
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1204353765152Z\\result.json",
+      "sha256": "0ce142148761bb8d29ac8766fbb2047225b780001637ce95b0d5bc28a8588680",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 1234567,
+      "executions": [
+        {
+          "trap_mask": 255,
+          "cycles": 3603,
+          "mode": "single",
+          "stores": 91,
+          "delayed": 1211,
+          "status": "PASS",
+          "kind": "golden",
+          "retired": 844
+        },
+        {
+          "trap_mask": 255,
+          "cycles": 3603,
+          "mode": "dual",
+          "stores": 91,
+          "delayed": 1225,
+          "status": "PASS",
+          "kind": "golden",
+          "retired": 844
+        },
+        {
+          "trap_mask": 255,
+          "cycles": 3560,
+          "mode": "single",
+          "stores": 91,
+          "delayed": 1092,
+          "status": "PASS",
+          "kind": "candidate",
+          "retired": 844
+        },
+        {
+          "trap_mask": 255,
+          "cycles": 3560,
+          "mode": "dual",
+          "stores": 91,
+          "delayed": 1137,
+          "status": "PASS",
+          "kind": "candidate",
+          "retired": 844
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1204499053453Z\\result.json",
+      "sha256": "c1233b0806ca7397bf77b87bb5cc786d84a78ca2b0927f74d2dcbc368df28bb3",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 271828,
+      "executions": [
+        {
+          "mode": "single",
+          "kind": "golden",
+          "retired": 844,
+          "stores": 91,
+          "cycles": 3558,
+          "status": "PASS",
+          "trap_mask": 255,
+          "delayed": 1147
+        },
+        {
+          "mode": "dual",
+          "kind": "golden",
+          "retired": 844,
+          "stores": 91,
+          "cycles": 3501,
+          "status": "PASS",
+          "trap_mask": 255,
+          "delayed": 1117
+        },
+        {
+          "mode": "single",
+          "kind": "candidate",
+          "retired": 844,
+          "stores": 91,
+          "cycles": 3526,
+          "status": "PASS",
+          "trap_mask": 255,
+          "delayed": 1134
+        },
+        {
+          "mode": "dual",
+          "kind": "candidate",
+          "retired": 844,
+          "stores": 91,
+          "cycles": 3482,
+          "status": "PASS",
+          "trap_mask": 255,
+          "delayed": 1105
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1204585519146Z\\result.json",
+      "sha256": "5f884639d2b958ce79ae047673beefd97bdbe4f913e57962713d15a5bf63bff7",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "ordered",
+      "seed": 37,
+      "executions": [
+        {
+          "stores": 92,
+          "kind": "golden",
+          "retired": 865,
+          "status": "PASS",
+          "mode": "single",
+          "cycles": 3735,
+          "trap_mask": 511,
+          "delayed": 1197
+        },
+        {
+          "stores": 92,
+          "kind": "golden",
+          "retired": 865,
+          "status": "PASS",
+          "mode": "dual",
+          "cycles": 3730,
+          "trap_mask": 511,
+          "delayed": 1168
+        },
+        {
+          "stores": 92,
+          "kind": "candidate",
+          "retired": 865,
+          "status": "PASS",
+          "mode": "single",
+          "cycles": 3688,
+          "trap_mask": 511,
+          "delayed": 1137
+        },
+        {
+          "stores": 92,
+          "kind": "candidate",
+          "retired": 864,
+          "status": "PASS",
+          "mode": "dual",
+          "cycles": 3610,
+          "trap_mask": 511,
+          "delayed": 1131
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-ordered-20261019T1205376732147Z\\result.json",
+      "sha256": "ac9138d387b46d539fda214bdae090001c9522b8bd8efd5880514d945bf4dfd9",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "ordered",
+      "seed": 37,
+      "executions": [
+        {
+          "stores": 91,
+          "mode": "single",
+          "retired": 844,
+          "kind": "golden",
+          "cycles": 3652,
+          "status": "PASS",
+          "delayed": 1161,
+          "trap_mask": 255
+        },
+        {
+          "stores": 91,
+          "mode": "dual",
+          "retired": 844,
+          "kind": "golden",
+          "cycles": 3601,
+          "status": "PASS",
+          "delayed": 1114,
+          "trap_mask": 255
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-payload-20261019T1205104902654Z\\result.json",
+      "sha256": "c672cd32f3896f7eb13c4a00eff72d313f7825876ba384dacec522c3fbf4af6b",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "payload",
+      "seed": 37,
+      "executions": [
+        {
+          "test": "payload",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-pcupdate-20261019T1205267647409Z\\result.json",
+      "sha256": "b2bb194b91f38f2d6be8132bfa1474077509458f4ef5641987d565e871950329",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "pcupdate",
+      "seed": 37,
+      "executions": [
+        {
+          "test": "pcupdate",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1204005258486Z\\result.json",
+      "sha256": "ff6bb73a351f33b60bd151dbc771a874447ff5439b3943bd9afea9c405a399a9",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "predictorselect",
+      "seed": 37,
+      "executions": []
+    },
+    {
+      "result": "build\\cpu\\redirect-predictorselect-20261019T1205320433627Z\\result.json",
+      "sha256": "36dcd8a8488e8a69f01935cdc9b659f6495863ad49e5961003ab78b9fe38c639",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "predictorselect",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "predictorselect"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-requestdata-20261019T1205131832976Z\\result.json",
+      "sha256": "5fdb0a4928d2289d777673a007e39d1f8a9a98bd819b9e8cce419c1db376258c",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "requestdata",
+      "seed": 37,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "requestdata"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\redirect-training-20261019T1205348894672Z\\result.json",
+      "sha256": "eea1b7e00a38b98d0e4a9d74e8aa99e5b8aee81958839907259ecd4daa909835",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "training",
+      "seed": 37,
+      "executions": [
+        {
+          "test": "training",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "result": "build\\cpu\\single-20261019T1209066727093Z\\result.json",
+      "sha256": "1ebe04267e654aae28a46d5379762baa232c4213f57c806b6918c931ea01724e",
+      "status": "PASS",
+      "expected_rejection": false,
+      "test": "single",
+      "seed": null,
+      "executions": null
+    },
+    {
+      "result": "build\\cpu\\timeout-20261019T1209137058364Z\\result.json",
+      "sha256": "7200e632559ff0a789788b77791526bc00f08c5fa3b882fa7a26da38f7ad0416",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "test": "timeout",
+      "seed": null,
+      "executions": null
+    }
+  ],
+  "soc_records": [
+    {
+      "result": "build\\soc\\memory-20261019T120414472004Z\\result.json",
+      "sha256": "c03e1dacdc47b25a8a59c584430b771c4296e470ea2fbb780406abd9be662085",
+      "status": "PASS",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T120416572704Z\\result.json",
+      "sha256": "1e3547f3347b2a6168ccd17ac536ced4385e45702f21b6203988307fbafc8800",
+      "status": "PASS",
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T120419362565Z\\result.json",
+      "sha256": "2f5fbeeb1b27a614ca8bd025b7f08bed1a5180cf4443319ef54d8ce65ac25505",
+      "status": "PASS",
+      "measurement": {
+        "cycles": 1685831,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8706940375399432,
+        "coremark_per_mhz_short_estimate": 2.965896344295484,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      }
+    },
+    {
+      "result": "build\\soc\\access-faults-20261019T120744331580Z\\result.json",
+      "sha256": "edae1a5a50a2e8295b5d69f3dd51d5bf5e416e676f5ed46d9193cd998c027948",
+      "status": "PASS",
+      "measurement": null
+    }
+  ],
+  "same_old_tcm_coremark": {
+    "single_cycles": 1682259,
+    "dual_cycles": 1390197,
+    "wb_completed": 1467843
+  },
+  "same_sram_coremark": {
+    "cycles": 1685831,
+    "wb_completed": 1467843,
+    "observed_ipc": 0.8706940375399432,
+    "coremark_per_mhz_short_estimate": 2.965896344295484
+  },
+  "official_score": false,
+  "board_test": false,
+  "limitations": [
+    "Directed WB observation, not complete architectural minstret proof",
+    "5 iterations is a short RTL measurement",
+    "No full system gate or board execution"
+  ]
+}

@@ -29,3 +29,10 @@ PDS完整compile/synthesize/dev_map/pnr/report_timing，保留源/镜像/工具/
 ## 本地访存等待修正
 
 首版控制器在RAM输出之后另寄存返回数据并插入响应空泡，CoreMark多约30%周期。先加入单拍响应断言观察旧控制器RED，再复用同步RAM本身的输出寄存器，使data/tag/error对齐于接纳边沿；连续写/读32字独立oracle与tag检查通过。删除原32位地址、32位写数据、读状态/字节控制及三态FSM，仅为慢UART保留8位payload/等待位。没有给CPU新增流水级，没有改变存储地址或引入组合ack反馈。必须以新CoreMark和物理结果评估其实际收益。
+
+
+## 预测查询反馈的逻辑修正
+
+第二轮真实核内最差路径PC[7]→BTB比较→全表命中归约→fallback向量选择→全表最高优先掩码→数据选择→PC[24]，Slow setup −0.478ns，15级，逻辑2.362ns/布线7.782ns。改为两个匹配集合分别求最高优先掩码，再按原if条件选择结果，避免在命中归约之后串接另一套优先归约。仍复用同一独热AND/OR数据选择器，不增加预测流水级/历史状态/CPU周期，也不缩小表。
+
+等价关系：任意二态匹配集合E/U，原highest(E if any(E) else U if upper-allowed else E)等于highest(E) if any(E) else highest(U) if upper-allowed else highest(E)。匹配由原过程if产生，未知比较仍按非命中；fallback仍为过程if，保持PC[2]的原X语义。reset/重复tag/最高编号优先/upper-word/BHT/RAS/LFSR逐拍组件对照与真实坏输出负例必须通过；整核按序WB/store/异常与三seed、CoreMark两模式回归后才能用于物理验收。syn_keep仅保留两个组合掩码的边界，无新增状态。原vendor保持字节，派生清单更新SHA。
