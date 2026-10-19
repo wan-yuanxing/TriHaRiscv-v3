@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "status": "digital_and_synthesis_verified; physical routing and board acceptance pending",
+  "base_head": "1f8be69f1c749430763e9bc98f8745585743fbac",
+  "owned": [
+    "fpga/pg2l100h/rtl/video_demo_mode_output.sv",
+    "fpga/pg2l100h/rtl/video_mode_board_top.sv",
+    "fpga/pg2l100h/project/video_mode_output.json",
+    "fpga/pg2l100h/project/video_mode_board.json",
+    "fpga/pg2l100h/constraints/video_mode_output.fdc",
+    "fpga/pg2l100h/constraints/video_mode_board.fdc",
+    "fpga/pg2l100h/ip/video_mode_key_manifest.json",
+    "tb/video/tb_video_demo_mode_output.sv",
+    "tb/video/tb_video_mode_board.sv",
+    "tb/video/test_mode_board_packets.py",
+    "tb/video/test_mode_key.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "scripts/video/read_board.py",
+    "scripts/video/package_board.py",
+    "scripts/video/program_board.py",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md",
+    "docs/video/README.md",
+    "docs/video/STATUS.md",
+    "docs/interfaces/video.md",
+    "docs/verification/video/mode_board.md",
+    "docs/verification/video/evidence/mode_board.json"
+  ],
+  "source_hashes": {
+    "fpga/pg2l100h/rtl/video_demo_mode_output.sv": "09196a3549881bbdebdeb9353141145c6b9051c3f0a9c28e8a77091037446863",
+    "fpga/pg2l100h/rtl/video_mode_board_top.sv": "62cb3355895ed8f4177f512dc3143b4d04e44b679a0368325910d47988ef7185",
+    "fpga/pg2l100h/project/video_mode_output.json": "59b34d1b25b7a64754a64a8cee7c8ba12d7e48ff12a99e73aa04ce3b6482a0a0",
+    "fpga/pg2l100h/project/video_mode_board.json": "a11442cb9224b4df5ae66c871e8b00bff39a594c2031f0e0322ab3fcc86d32ec",
+    "fpga/pg2l100h/constraints/video_mode_output.fdc": "befc722f6df935edb1cdf5939357aa87606d4db4a2a0c3753a9440834021d52f",
+    "fpga/pg2l100h/constraints/video_mode_board.fdc": "897af3860d36b6f659bd7398d659d6dfda48d5f270bffe69a84c132c87117a03",
+    "fpga/pg2l100h/ip/video_mode_key_manifest.json": "b7bb33ebb89c161475b0e8feb92c516e84b254754c032492b20246ad816b9f48",
+    "tb/video/tb_video_demo_mode_output.sv": "183969cff35a3eadfbfbcb7298f388181f296d4b3695c42d8f208514a24db445",
+    "tb/video/tb_video_mode_board.sv": "89f9007f68504f49ba41faa4daa91e6310d2fdb7d1ec528df2e30201edc396b1",
+    "tb/video/test_mode_board_packets.py": "f37d84fa1650b8386d1f9da901a9052aa4ab1952f0794196038bfdc77b3f7721",
+    "tb/video/test_mode_key.py": "659bc77c5cb24152600ac60da2c5456625af8778fd98f202df911b261eefb4d9",
+    "scripts/video/run.py": "91870c2f6a6adaf7d3bc7702f2f7e54cae37c0cdaf93fb687a92b26599165e90",
+    "scripts/video/build_pds.py": "8a4b1670dbbbd3b4f8d7d2fe9d4b71e808c1d1252ec8b06a3cde7964d453f27f",
+    "scripts/video/read_board.py": "1b6f2287303875e096a671b395405b84a8de24283d45d164cde541416373dcf9",
+    "scripts/video/package_board.py": "5740b7311ac0223cec67d18878a5d23259ac2c129843a9e978f6159981e1f11f",
+    "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "4859eeb9b15e94068a6eb86385f9ac8cdb53c0ffd63a0e5099ff77abe657efe7",
+    "docs/video/README.md": "1bfba3fc0987812b30f814a80feccea4e0011ee8f1bf3db5daca2abc0c0d9bc9",
+    "docs/video/STATUS.md": "2e1c4395269d2cc3a7d2574ad33f9d3e05349a4a798bd1b5e39e9deddf62c02e",
+    "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
+    "docs/verification/video/mode_board.md": "5481a03a4259b6eab0cd1d84fa41bbf0f9edbf018b17fff456a598ba13ac689d"
+  },
+  "refs": {
+    "mode_output": {
+      "path": "build/video/regression/20261019T163228_911282Z/result.json",
+      "sha256": "f6a8baa5271ebfd75464c54eadcf173baae63a83580e6fc417237c9a911ab3ad"
+    },
+    "mode_board": {
+      "path": "build/video/regression/20261019T163228_926088Z/result.json",
+      "sha256": "360740e7a377496b4e8655359bb00bb3ceaa89cf624bee58bf82ae736af8e0e8"
+    },
+    "python": {
+      "path": "build/video/mode_board_python/result.json",
+      "sha256": "cc0a89a7a65dcd2c5c67c54118c9f3cbfa6672c64ee0e7264df90b8b02bc7c4e"
+    },
+    "review": {
+      "path": "build/video/mode_board_review/review.json",
+      "sha256": "99247b6a68d67f5e39533baad6d6798dd40d6b403fe5fdd07a21abc1dd528e8f"
+    },
+    "mode_output_review": {
+      "path": "build/video/mode_output_review/review.json",
+      "sha256": "f9034ed04207052124ab1edfa3917f82c2e98e6105eca4cd44288f21ecbdda6c"
+    },
+    "red_output": {
+      "path": "build/video/mode_output_red/result.json",
+      "sha256": "a0a12817757addf153b905dbec1b8f44e453687dfe3a5bc24a94c340b92174a5"
+    },
+    "red_board": {
+      "path": "build/video/mode_board_red/result.json",
+      "sha256": "cc89e738a9ce6846c0613c96817b9e7100ba849c022c46b14adf8bfce7857224"
+    },
+    "red_rotation": {
+      "path": "build/video/mode_packets_rotation_red/result.json",
+      "sha256": "afb594d21d4d238a4a8a4b49471e0f4f66ee655066d2cf121f56acf8c2a33258"
+    },
+    "key_mutation": {
+      "path": "build/video/mode_key_mutation/result.json",
+      "sha256": "2d0a842139b190a4308f488d1e686f566aed98f49d8468b37afc037d88ca07e6"
+    },
+    "key_document": {
+      "path": "build/video/mode_key_audit/result.json",
+      "sha256": "d1021cb22b06d0fcbb0355f212e3157f66fc850ec3fa8bce22cc85efcb93697f"
+    },
+    "historical_all": {
+      "path": "build/video/regression/20261019T134922_419299Z/result.json",
+      "sha256": "a0a18559fe4c539a350a58faba8655fbb99e35bbfe8af7ab2dbf54e664259cd1"
+    },
+    "synth": {
+      "path": "build/video/pds/20261019T163003_613183Z/result.json",
+      "sha256": "6465c28bd07cf685a3fd04a24c637c77996f96b09e44d7491a80fa76f2561c8c"
+    },
+    "synth_structure": {
+      "path": "build/video/mode_board_timing_audit/constraints/20261019T163003_613183Z/structural.json",
+      "sha256": "c51e378d4e4e2cb8d7daf5cf71d237437ed2c2ad3d91e649ad1d112b1e14eb39"
+    },
+    "artifacts": {
+      "path": "build/video/mode_board_artifact_hashes.json",
+      "sha256": "9e9fd8a973ecb6e9abc224989a81781d45abd0981ebf301fc410fab9cd5dd7c1"
+    }
+  },
+  "preserved_files": 232,
+  "simulations": {
+    "mode_output": 3,
+    "mode_board_fault_reset": 6,
+    "mode_board_rasters": 349,
+    "mode_board_pixels": 34900
+  },
+  "python": {
+    "tests": 99,
+    "passed": 98,
+    "skipped": 1
+  },
+  "independent_review": {
+    "files": 74,
+    "artifacts": 17,
+    "open_findings": 0,
+    "coverage": {
+      "independent_pad_pixels": 42894,
+      "independent_mode_pixels": [
+        42294,
+        300,
+        300
+      ],
+      "fixture_complete_rasters": 349,
+      "fixture_complete_raster_pixels": 34900,
+      "fixture_fault_reset_tests": 6,
+      "raw_phase_mutation": "One-stage raw coordinate/SOF substitute compiled successfully; independent metadata assertion failed at 1.0135 us with exit 1.",
+      "independent_python_tests": 11,
+      "independent_python_failures": 0,
+      "material_provenance": "Official manual and key example bytes hashed; key example independently parsed as C23/LVCMOS33.",
+      "script_safety": "No hardware calls. Packaging uses temporary mocked build roots inside review directory; program Tcl ID guard order and clean ID/program/verify completion classification inspected."
+    }
+  },
+  "prior_composition_review_unchanged_rtl": true,
+  "prior_runner_hashes_historical": [
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py"
+  ],
+  "source_snapshot_verified": true,
+  "resources": {
+    "lut": 17522.0,
+    "registers": 18738.0,
+    "drm": 73.5,
+    "apm": 16.0
+  },
+  "structural": {
+    "pins": 140,
+    "synchronizer_pairs": 77,
+    "texture_drms": 64,
+    "bundles": 13
+  },
+  "routed_internal_timing_verified": false,
+  "physical_program_and_verify": false,
+  "physical_acceptance": null,
+  "full_all_rerun": false,
+  "formal_display_mmio_implemented": false,
+  "general_multiframe_owner": false,
+  "ddr_material_fetch_implemented": false,
+  "live_material_replacement": false,
+  "true_npu_result": false,
+  "external_ac_signoff": false,
+  "flash_written": false,
+  "historical_all_comparison": {
+    "suites": 37,
+    "inputs": 198,
+    "unchanged_inputs": 193,
+    "changed_entry_points": [
+      "scripts/video/build_pds.py",
+      "scripts/video/package_board.py",
+      "scripts/video/program_board.py",
+      "scripts/video/read_board.py",
+      "scripts/video/run.py"
+    ],
+    "scope": "Historical complete baseline; new F3b/F3c components and current entry-point behavior covered by separate targeted evidence"
+  }
+}

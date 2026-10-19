@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target": "video_mode_output",
+  "top": "video_demo_mode_output",
+  "test_top": "tb_video_demo_mode_output",
+  "sources": [
+    "rtl/video/video_button_debounce.sv",
+    "rtl/video/display_mode_control.sv",
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/avatar_texture_cache.sv",
+    "rtl/video/avatar_sample_map.sv",
+    "rtl/video/display_overlay.sv",
+    "fpga/pg2l100h/rtl/video_demo_mode_output.sv"
+  ],
+  "tests": ["tb/video/tb_video_demo_mode_output.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_mode_output.fdc"],
+  "scope": "F3c standalone diagnostic composition: one immutable raw frame, artificial boxes/five points, deterministic locally loaded 256x256 test material; MODE applies only at raw-aligned SOF and ack waits for visible pad first pixel. No HDMI/DDR pins, general multi-frame owner, formal MMIO or physical acceptance."
+}

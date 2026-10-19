@@ -2,10 +2,30 @@
 
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
 同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a提供独立MODE控制/去抖组件，
-F3b提供独立框/五点/单头像像素组件；正式显示MMIO、像素域MODE与素材DDR接入
-尚未实现；下文
+F3b提供独立框/五点/单头像像素组件；F3c已接独立静态三模式诊断，布线及实体验收进行中。
+正式显示MMIO、通用多帧所有者与素材DDR接入尚未实现；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
+
+## F3c 独立三模式板级诊断
+
+`video_mode_board` 默认800×600 RAW；KEY1/C23低有效、两级同步与20ms去抖，循环
+RAW/BOX/AVATAR；KEY0协调reset后回RAW并重装素材、重采一帧，保留HDMI初始化。
+人工两框/主人脸五点和256×256 RGBA测试纹理用于观察，不接真实NPU结果。
+每次reset只锁存一个不可变raw上下文；无raw重新提交/释放端口，纯MODE不改变
+采集CRC/frame_id/raw commits。`video_demo_mode_output`在raw对齐SOF使用待提交
+完整命令，叠加13级+pad1级退休后才反馈；加上raw输出前两级共16级寄存。
+
+新增UART type10与6/9/8轮转，来自896bit冻结快照。六个uint32为mode_state、
+request_seq、committed_seq、request_count、commit_count、coalesced_count，末字heartbeat。
+mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7/8 core/pixel素材就绪，
+9控制错，10缓存错，11叠加错，12按下，13无上下文，14上下文错，15跨域错；高16位0。
+`read_board.py`要求最近两个完整有序6/9/8/10轮次，最多再跟一轮6/9/8有序前缀；
+各包可否定旧健康，不把raw-only或旧preview目标记录借作当前MODE成功。
+
+缓存仍是一次装好后封存，未增加DDR素材DMA或运行中替换。正式多帧/raw/素材引用
+与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
+[三模式板级记录](../verification/video/mode_board.md)。
 
 ## F3c 前置资源组件
 
@@ -33,7 +53,7 @@ pixel端ready两级同步并捕获稳定身份后发布`pixel_asset_ready`。每
 失效端口；DDR取数、CPU上传和一般素材引用寿命留给后续所有者实现。
 
 组件验证/来源与物理边界见[mode_resources](../verification/video/mode_resources.md)。
-本检查点没有把它们接到现有板卡；F3c板级任务仍在台账跟踪。
+前置检查点仅覆盖组件；新板级组合与物理验收单列上节，不能反向扩大前置证据。
 
 ## F3b 原图坐标像素叠加组件
 
@@ -321,7 +341,7 @@ DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和
 - CAPTURE_REQUEST：保存请求；在下一合法完整输入帧边界发布带 slot/frame_id 的 CAPTURE_ACCEPTED。
 - CAPTURE_DONE/INPUT_READY：同一逻辑事件，raw、preview、input 三分支及对应写响应完成，尺寸检查通过后发布。
 - DISPLAY_SUBMIT：接纳完整影子记录；接纳与实际提交是不同事件，不直接修改活动寄存器。
-- DISPLAY_COMMIT：正式全屏设计在安全输出帧边界原子切换 raw、模式、同帧框/头像/状态及 frame_id；现有诊断组件仍提交 preview。
+- DISPLAY_COMMIT：正式全屏设计在安全输出帧边界原子切换 raw、模式、同帧框/头像/状态及 frame_id；F1/F2诊断已提交raw，F3c在单帧上另提交MODE；正式整记录仍待F4。
 - MODE_REQUEST/MODE_COMMIT：独立记录请求/实际模式及序号；同帧模式更新不触发重新采帧/推理，不增加有效输出帧数，不产生当前槽释放。
 - DISPLAY_RELEASE_ACK：旧槽所有 DMA、预取与像素缓存引用结束后确认，不能等同于 DISPLAY_COMMIT。
 - 地址、slot、frame_id、预处理版本必须校验；状态/事件保留到软件消费，旧事件不能推进新任务。

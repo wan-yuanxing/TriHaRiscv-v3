@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "board": "MES2L676-100HP",
+  "port": "mode_button_n",
+  "board_label": "KEY1",
+  "pin": "C23",
+  "active_low": true,
+  "attributes": {
+    "PAP_IO_DIRECTION": "INPUT",
+    "PAP_IO_LOC": "C23",
+    "PAP_IO_VCCIO": "3.3",
+    "PAP_IO_STANDARD": "LVCMOS33",
+    "PAP_IO_NONE": "TRUE"
+  },
+  "manual": {
+    "path": "D:/FPGA/盘古100Pro+开发板（MES2L676-100HP）配套资料/1_Demo_document/实验例程说明篇/教程1_硬件实验指导手册_盘古676系列100Pro+开发板.pdf",
+    "sha256": "f2fb07625a0a31705d7e8477308f7bcb1aa5272b6b0754cfbf9daca20ebec114",
+    "physical_page": 50,
+    "printed_page": 46,
+    "section": "2.1.3.4.1"
+  },
+  "vendor_example_fdc": {
+    "path": "D:/FPGA/2_7_key_led_test/2_7_key_led_test/2_7_key_led_test/source/key_led_test.fdc",
+    "sha256": "9017debebe3dc3ea7dc076572b36324f901da40ead062f42ef40dbf18bce76ac"
+  },
+  "reviewed_mapping": "Vendor key -> mode_button_n; keep C23/LVCMOS33/3.3V unchanged"
+}

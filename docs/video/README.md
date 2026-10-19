@@ -7,7 +7,7 @@ RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
 [全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 旧板级工程及已验收双窗位流保留；F1已新增独立raw扫描组件，F2新增独立
 `video_raw_board`全屏板级目标，当前验证进度见[全屏板级记录](../verification/video/raw_board.md)。
-后续接人工叠加/模式及共享DDR。组件入口为
+F3c人工叠加/模式接入见下文，共享DDR仍属后续。raw组件入口为
 `python scripts/video/run.py --suite raw_display`，综合目标`video_raw_display`仅支持synth；
 实际范围见[全屏组件验证](../verification/video/raw_display.md)。
 
@@ -22,7 +22,11 @@ F3b新增框/五点/单头像像素组件，`--suite overlay`以独立数学参�
 
 F3c前置新增单事务模式CDC与256×256封存素材缓存，仿真`--suite mode_resources`，
 综合`video_mode_cdc`/`video_avatar_cache`；均只支持synth。缓存完整装载才可显示，
-pixel接纳后须另等实际提交反馈。尚未完成板级接入，见[资源组件验证](../verification/video/mode_resources.md)。
+pixel接纳后须另等实际提交反馈。组件记录见[资源组件验证](../verification/video/mode_resources.md)。
+
+F3c本批新增独立 `video_mode_board`：KEY1/C23切 RAW/BOX/AVATAR，KEY0回默认RAW并重采；
+框/五点/封存测试纹理为人工诊断输入。数字联测及板级综合通过，布线和实体验收进行中，
+见[三模式板级记录](../verification/video/mode_board.md)。正式多帧所有者/MMIO与真实NPU仍待接入。
 
 ## 目前可以运行
 
@@ -64,11 +68,17 @@ python scripts/video/run.py --suite raw_board
 python scripts/video/run.py --suite mode_control
 python scripts/video/run.py --suite overlay
 python scripts/video/run.py --suite mode_resources
+python scripts/video/run.py --suite mode_output
+python scripts/video/run.py --suite mode_board
 python scripts/video/build_pds.py --target video_button_debounce --stage synth
 python scripts/video/build_pds.py --target video_mode_control --stage synth
 python scripts/video/build_pds.py --target video_overlay --stage synth
 python scripts/video/build_pds.py --target video_mode_cdc --stage synth
 python scripts/video/build_pds.py --target video_avatar_cache --stage synth
+python scripts/video/build_pds.py --target video_mode_output --stage synth
+python scripts/video/build_pds.py --target video_mode_board --stage bitstream
+python scripts/video/package_board.py --target video_mode_board
+python scripts/video/program_board.py --target video_mode_board --start-server
 python scripts/video/build_pds.py --target video_raw_board --stage bitstream
 python scripts/video/package_board.py --target video_raw_board
 python scripts/video/program_board.py --target video_raw_board --start-server
@@ -244,6 +254,10 @@ tb/video/
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
   tb_raw_display.sv                      整光栅像素/首行/旧槽及非致命拒绝检查
   tb_video_raw_engine.sv                 F2三路读回、AW/显示故障和事务排空
+  tb_video_demo_mode_output.sv           F3c组合逐像素、帧边界和快速请求
+  tb_video_mode_board.sv                 F3c三模式及MODE不重采数字联测
+  test_mode_board_packets.py             type10/四包轮次及目标epoch隔离
+  test_mode_key.py                       KEY1管脚属性和PDS通知严格校验
   tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
   test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
@@ -292,6 +306,9 @@ fpga/pg2l100h/
   project/video_button_debounce.json     F3a独立按键资格组件显式源/测试
   project/video_mode_control.json        F3a独立请求/实际提交控制组件
   project/video_overlay.json             F3b像素叠加显式源/测试/独立oracle
+  project/video_mode_output.json         F3c组合组件综合目标
+  project/video_mode_board.json          F3c独立静态全屏三模式板级目标
+  ip/video_mode_key_manifest.json        官方手册/例程KEY1来源与电气属性
   project/video_mode_cdc.json            F3c前置模式命令/实际提交CDC
   project/video_avatar_cache.json        F3c前置单素材封存缓存
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
@@ -304,6 +321,8 @@ fpga/pg2l100h/
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
   constraints/video_raw_display.fdc      core8ns/pixel25ns组件及6ns束约束
+  constraints/video_mode_output.fdc      F3c组合core/pixel与跨域约束
+  constraints/video_mode_board.fdc       KEY1及新增第一阶段/6ns束约束
   constraints/video_raw_board.fdc        F2实际存活CDC端点与6ns束约束
   constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
   constraints/video_mode_control.fdc     F3a单core域8ns组件约束
@@ -318,6 +337,8 @@ fpga/pg2l100h/
   rtl/video_preview_clock_reset.sv       预览专用KEY0重采与HDMI链路启动分离
   rtl/hdmi_tx_init.sv                    独立发送初始化及 ACK/超时错误
   rtl/video_board_smoke_top.sv           RGB888 彩条板级顶层
+  rtl/video_demo_mode_output.sv          F3c原子MODE/封存缓存/人工叠加组合
+  rtl/video_mode_board_top.sv            F3c独立KEY1板级接入及四类UART
   rtl/video_raw_board_top.sv             F2全屏静态采帧、保留HDMI初始化的KEY0
   rtl/hdmi_rx_init.sv                    RX 配置、EDID 和状态监测
   rtl/video_rx_telemetry.sv              计频、快照握手和新鲜度

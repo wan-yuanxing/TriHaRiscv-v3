@@ -61,9 +61,9 @@ assert (sample_valid == previously_sampled_request);
 
 **Files:** `fpga/pg2l100h/rtl/video_mode_board_top.sv`、独立manifest/FDC、`tb/video/tb_video_mode_board.sv`、构建/打包/串口脚本与测试。
 
-- [ ] 派生冻结F2顶层保持已有层级/复位结构；对齐raw RGB对应的x/y/SOF，再接F3b和缓存。MODE记录经CDC原子应用，first-pixel retire marker触发实际反馈。
-- [ ] 人工框/点/测试头像可观察，默认RAW；KEY1两级同步+20ms去抖。数字联测验证三模式全光栅、首末像素、快速请求合并、模式变化不触发采集/raw提交/HDMI或DDR复位，KEY0后重新装载和重采。
-- [ ] 新UART模式记录包含request/active/seq/commit/asset/error状态；不能以旧type9健康条件替代叠加健康；包解析/epoch测试覆盖新类型。
+- [x] 派生冻结F2顶层保持已有层级/复位结构；对齐raw RGB对应的x/y/SOF，再接F3b和缓存。MODE记录经CDC原子应用，first-pixel retire marker触发实际反馈。
+- [x] 人工框/点/测试头像可观察，默认RAW；KEY1两级同步+20ms去抖。数字联测验证三模式全光栅、首末像素、快速请求合并、模式变化不触发采集/raw提交/HDMI或DDR复位，KEY0后重新装载和重采。
+- [x] 新UART模式记录包含request/active/seq/commit/asset/error状态；不能以旧type9健康条件替代叠加健康；包解析/epoch测试覆盖新类型。
 - [ ] 保留原8ns core/6ns CDC束约束，审计所有新增/存活同步端点，实际综合/布线通过后才生成和打包位流。
 
 ## Task 6：现场验收

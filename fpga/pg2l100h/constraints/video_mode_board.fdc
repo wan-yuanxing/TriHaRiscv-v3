@@ -1,0 +1,17 @@
+# F3c KEY1 and additional MODE/material CDC. Load existing F2 constraints first.
+define_attribute {p:mode_button_n} {PAP_IO_DIRECTION} {INPUT}
+define_attribute {p:mode_button_n} {PAP_IO_LOC} {C23}
+define_attribute {p:mode_button_n} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:mode_button_n} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:mode_button_n} {PAP_IO_NONE} {TRUE}
+set_false_path -from [get_ports {mode_button_n}] -to [get_cells {mode_output.mode_button.button_meta}]
+
+# First scalar stages only. Local meta->sync paths remain timed.
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {mode_output.mode_cdc.request_meta mode_output.avatar_cache.ready_meta mode_output.live_meta mode_output.context_fault_meta}]
+set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {mode_output.mode_cdc.ack_meta mode_output.mode_cdc.error_meta mode_output.overlay_fault_meta mode_output.cache_ready_meta}]
+set_max_delay 6.000 -datapath_only -from [get_cells {mode_output.mode_cdc.mailbox_payload*}] -to [get_cells {mode_output.mode_cdc.pixel_payload*}]
+set_max_delay 6.000 -datapath_only -from [get_cells {mode_output.avatar_cache.asset_id* mode_output.avatar_cache.asset_generation*}] -to [get_cells {mode_output.avatar_cache.pixel_asset_id* mode_output.avatar_cache.pixel_generation*}]
+
+# New logic resets use core_release[1]/display_pixel_release[1], both local
+# clocks. Their recovery/removal paths remain timed; there is no direct
+# free_clk-to-new-logic reset path requiring an additional false path.

@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,27 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('mode_output', 'all'):
+            from common import sha256
+            path = ROOT/'fpga/pg2l100h/project/video_mode_output.json'
+            component = json.loads(path.read_text(encoding='utf-8'))
+            sources = [ROOT/p for p in component['sources']+component['tests']]
+            add_inputs(result, [path, *sources, *[ROOT/p for p in component['constraints']]])
+            result['mode_output_tools'] = {}
+            artifacts = []
+            for name in ('iverilog', 'vvp'):
+                executable = tool(name)
+                log = work/('mode_output_'+name+'_version.log')
+                result['mode_output_tools'][name] = {'path': str(executable), 'sha256': sha256(executable)}
+                run_logged([executable, '-V'], log)
+                artifacts.append(log)
+            for case in range(3):
+                stem = f'mode_output_{case}'
+                log = simulate(work, stem, component['test_top'], sources, timeout=300, run_args=(f'+CASE={case}',))
+                if log.count('VIDEO_DEMO_MODE_OUTPUT_PASS') != 1:raise RuntimeError('Missing mode output PASS')
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp', '_compile.log', '_simulation.log')]
+            result['mode_output_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('mode_output')
         if args.suite in ('mode_resources', 'all'):
             from common import sha256
             artifacts = []
@@ -431,6 +452,37 @@ def main():
             log=simulate(work,'preview_crc','tb_video_frame_crc_reader',paths,timeout=600)
             if 'VIDEO_FRAME_CRC_READER_PASS' not in log:raise RuntimeError('Missing plane CRC pass marker')
             result['passed'].append('preview_crc')
+        if args.suite in ('mode_board', 'all'):
+            from common import sha256
+            path = ROOT/'fpga/pg2l100h/project/video_mode_board.json'
+            board = json.loads(path.read_text(encoding='utf-8'))
+            sources = [ROOT/p for p in board['sources']+board['tests']]
+            vendor = [ROOT/'build/video/vendor/hdmi'/p for p in board['vendor_sources']]
+            reference = ROOT/'fpga/pg2l100h/ip/video_reference_manifest.json'
+            provenance = json.loads(reference.read_text(encoding='utf-8'))
+            expected = {r['path']: r['sha256'] for r in provenance['references']['hdmi']['files']}
+            for relative, source in zip(board['vendor_sources'], vendor):
+                if sha256(source) != expected[relative]:raise ValueError('Vendor source hash mismatch: '+relative)
+            add_inputs(result, [path, *sources, *vendor, reference, ROOT/board['ddr_ip'], ROOT/board['pin_reference'],
+                *[ROOT/p for p in board['constraints']], ROOT/'config/video_edid.hex', ROOT/'rtl/video/include/video_edid.vh'])
+            result['mode_board_tools'] = {}
+            artifacts = []
+            for name in ('iverilog', 'vvp'):
+                executable = tool(name)
+                log = work/('mode_board_'+name+'_version.log')
+                result['mode_board_tools'][name] = {'path': str(executable), 'sha256': sha256(executable)}
+                run_logged([executable, '-V'], log)
+                artifacts.append(log)
+            log = simulate(work, 'mode_board', board['test_top'], sources+vendor,
+                           [ROOT/'rtl/video/include'], timeout=600)
+            if log.count('VIDEO_MODE_BOARD_PASS') != 1:raise RuntimeError('Missing mode board PASS')
+            artifacts += [work/('mode_board'+suffix) for suffix in ('.vvp', '_compile.log', '_simulation.log')]
+            log = work/'mode_board_packets.log'
+            run_logged([sys.executable, '-m', 'unittest', 'discover', '-s', ROOT/'tb/video',
+                        '-p', 'test_mode_board_packets.py'], log)
+            artifacts.append(log)
+            result['mode_board_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('mode_board')
         if args.suite in ('raw_board','all'):
             target=ROOT/'fpga/pg2l100h/project/video_raw_board.json'
             board=json.loads(target.read_text(encoding='utf-8'))
@@ -736,6 +788,18 @@ def main():
         for name, expected in result.get('mode_resources_artifacts', {}).items():
             if sha256(ROOT/name) != expected:
                 raise RuntimeError('MODE resource artifact changed during regression: '+name)
+        for name, record in result.get('mode_output_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Mode output simulation tool changed during regression: '+name)
+        for name, expected in result.get('mode_output_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:
+                raise RuntimeError('Mode output artifact changed during regression: '+name)
+        for name, record in result.get('mode_board_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Mode board simulation tool changed during regression: '+name)
+        for name, expected in result.get('mode_board_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:
+                raise RuntimeError('Mode board artifact changed during regression: '+name)
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

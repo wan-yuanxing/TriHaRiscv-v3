@@ -53,6 +53,12 @@ def decode_packets(data):
                     'input_pixels','input_written_bytes','input_checked_bytes','input_ddr_crc','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
+        elif packet[4]==10:
+            fields=('type','flags','phase','error_code','mode_state','request_seq','committed_seq',
+                    'request_count','commit_count','coalesced_count','heartbeat')
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            record.update(requested_mode=record['mode_state']&3,active_mode=(record['mode_state']>>2)&3)
+            flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
         elif packet[4] in (6,7,9):
             fields=(('type','flags','phase','error_code','captured_pixels','preview_pixels',
                      'source_crc','ddr_crc','preview_crc','preview_ddr_crc','heartbeat')
@@ -115,7 +121,7 @@ def _current_preview_records(records):
     # or restart of any type invalidates every earlier success sample.
     current=[]
     for row in reversed(records):
-        if row.get('type')==9:break  # A raw-display epoch is a distinct target.
+        if row.get('type') in (9,10):break  # Raw/MODE targets start a distinct epoch.
         if row.get('type') not in (6,7,8):continue
         if not _preview_healthy(row):break
         current.append(row)
@@ -197,6 +203,42 @@ def qualify_raw_board(records):
             and displays[1]['read_lines']>displays[0]['read_lines'])
 
 
+
+def _mode_record_healthy(row):
+    fields=('mode_state','request_seq','committed_seq','request_count','commit_count','coalesced_count')
+    if not (_preview_healthy(row) and all(type(row.get(k)) is int and 0<=row[k]<=0xffffffff for k in fields)):
+        return False
+    state=row['mode_state']
+    return (state<=0xffff and state&0xee60==0 and state&0x190==0x190
+            and state&3<3 and (state>>2)&3==state&3 and row['request_seq']==row['committed_seq'])
+
+
+def qualify_mode_board(records):
+    # Every kind can invalidate the current epoch. Do not discard a new MODE
+    # fault and then accidentally qualify the older raw-only packet history.
+    current=[]
+    for row in reversed(records):
+        if row.get('type') not in (6,8,9,10) or not _preview_healthy(row):break
+        if row.get('type')==10 and not _mode_record_healthy(row):break
+        current.append(row)
+    current.reverse()
+    if any(not 0<((b['heartbeat']-a['heartbeat'])&0xffffffff)<0x80000000
+           for a,b in zip(current,current[1:])):return False
+    positions=[i for i,r in enumerate(current) if r.get('type')==10][-2:]
+    if len(positions)!=2 or positions[0]<3:return False
+    # Two complete, ordered rotations must end at the latest MODE record.
+    # Accept only the next partial rotation; a raw-only target or missing
+    # type10 cannot borrow arbitrarily old MODE health from this suffix.
+    kinds=[r.get('type') for r in current[positions[0]-3:positions[1]+1]]
+    tail=[r.get('type') for r in current[positions[1]+1:]]
+    if kinds!=[6,9,8,10]*2 or tail!=[6,9,8][:len(tail)]:return False
+    modes=[current[i] for i in positions]
+    fields=('request_seq','committed_seq','request_count','commit_count','coalesced_count')
+    if any(modes[0][k]!=modes[1][k] for k in fields):return False
+    if (modes[0]['mode_state']&~0x1000)!=(modes[1]['mode_state']&~0x1000):return False
+    if modes[0]['heartbeat']==modes[1]['heartbeat']:return False
+    return qualify_raw_board([r for r in current if r.get('type')!=10])
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -260,6 +302,7 @@ try {
         result['physical_preview_display_verified']=qualify_preview_display(records)
         result['physical_three_branch_readback_verified']=qualify_three_readback(records)
         result['physical_raw_fullscreen_readback_verified']=qualify_raw_board(records)
+        result['physical_mode_fullscreen_readback_verified']=qualify_mode_board(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

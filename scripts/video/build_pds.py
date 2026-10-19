@@ -33,6 +33,20 @@ def review_messages(log, verified_fdc=""):
     return reviewed, rejected
 
 
+def verify_mode_key_reference(reference, fdc):
+    """Allow only the KEY1 mapping cross-checked against the official manual."""
+    expected = {'PAP_IO_DIRECTION': 'INPUT', 'PAP_IO_LOC': 'C23',
+                'PAP_IO_VCCIO': '3.3', 'PAP_IO_STANDARD': 'LVCMOS33', 'PAP_IO_NONE': 'TRUE'}
+    if (reference.get('port') != 'mode_button_n' or reference.get('board_label') != 'KEY1'
+            or reference.get('pin') != 'C23' or reference.get('active_low') is not True
+            or reference.get('attributes') != expected):
+        raise ValueError('MODE key reference differs from verified KEY1/C23 mapping')
+    attributes = re.findall(r'define_attribute \{p:mode_button_n\} \{([^}]+)\} \{([^}]+)\}', fdc)
+    if len(attributes) != len(expected) or dict(attributes) != expected:
+        raise ValueError('MODE key FDC differs from verified KEY1 electrical attributes')
+    return 'define_attribute {p:mode_button_n} {PAP_IO_LOC} {C23}\n'
+
+
 def verify_build_inputs(work, result):
     """Bind the source bytes, copied compile inputs and generated vendor inputs."""
     for name, expected in result['inputs'].items():
@@ -48,11 +62,11 @@ def verify_build_inputs(work, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
-    hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board")
-    ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board")
+    hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
+    ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
     board = hdmi or ddr
     if not board and args.stage != "synth":
         parser.error("Component targets have no board pins; only synth is supported")
@@ -83,9 +97,11 @@ def main():
             run_logged([sys.executable,ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
             names += ['config/video_regs.json','rtl/video/include/video_regs.vh',
                       'sw/include/video_regs.h','scripts/video/gen_regs.py']
-        if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board"):
+        if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board"):
             run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
             names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
+        if args.target == 'video_mode_board':
+            names += [manifest['pin_reference']]
         if ddr:
             names += [manifest['ddr_ip'], 'scripts/video/gen_ddr.py',
                       'fpga/pg2l100h/ip/video_reference_manifest.json']
@@ -138,7 +154,7 @@ def main():
             route="pnr -optimize_multi_corner_timing -fix_hold_violation"
             if ddr:
                 route += " -slack_prior_in_global_router TRUE"
-            if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board"):
+            if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board"):
                 # The combined HDMI/DDR target is route-limited. Try six
                 # deterministic placements (4..9) serially; the final report
                 # still has to meet every constraint before packaging.
@@ -159,7 +175,7 @@ def main():
         verify_build_inputs(work, result)
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
-                         cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board") else 1800 if ddr else 900)
+                         cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board") else 1800 if ddr else 900)
         reference_fdc = ""
         if board:
             reference = json.loads((ROOT / 'fpga/pg2l100h/ip/video_reference_manifest.json').read_text(encoding='utf-8'))
@@ -168,6 +184,14 @@ def main():
             if sha256(reference_path) != expected["HDMI_IN_DDR3_HDMI_OUT_top.fdc"]:
                 raise ValueError("Reference pin table hash mismatch")
             reference_fdc = reference_path.read_text(encoding="utf-8")
+        if args.target == 'video_mode_board':
+            key = json.loads((work/'src'/manifest['pin_reference']).read_text(encoding='utf-8'))
+            for field in ('manual', 'vendor_example_fdc'):
+                if sha256(key[field]['path']) != key[field]['sha256']:
+                    raise ValueError('MODE key official source hash mismatch: '+field)
+            fdc = (work/'src/fpga/pg2l100h/constraints/video_mode_board.fdc').read_text(encoding='utf-8')
+            reference_fdc += '\n'+verify_mode_key_reference(key, fdc)
+            result['mode_key_official_sources_verified'] = True
         reviewed, rejected = review_messages(log, reference_fdc)
         write_json(work / "message_review.json", {"reviewed_reference_pin_notices": reviewed,
                                                   "rejected": rejected})
