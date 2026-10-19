@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-19T11:27:06.478912+00:00",
+  "status": "TIMING_FAIL",
+  "scope": "CPU-only isolated single clock region with frozen phase-16 diagnostic I/O positions; unchanged timing budgets and RTL; no board acceptance",
+  "production_hashes": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "f6dbf6b6123dbf2a83865aefadc49bfa80b5d306d64cfd98eb1e575bec0263b0",
+    "rtl/cpu/triha_issue.v": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+    "rtl/cpu/triha_regfile.v": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+    "rtl/cpu/triha_npc.v": "aaa6c8e8502749c4dedcc0efcab70b5a741e64f7ec978f7b57c4dc80e5866822",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+    "rtl/cpu/triha_core.v": "bbe0012f1a5292f72f28093f068a840f009e1c6d90388512c03930f9bab406a3",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "594bc61b685b610c6c8663f4c6e773d812cd179c28a96ff689032f7e68df9b8a"
+  },
+  "reused_functional_evidence": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\predictor_counter_local_timing.json",
+    "sha256": "3b88b63ffc4c2d7b05471f7843a794f7f09544877f7af38c3e13fe349c8d8949",
+    "positive_count": 26,
+    "expected_rejection_count": 6,
+    "all_recorded_input_external_and_output_hashes_rechecked": true,
+    "new_simulations": false
+  },
+  "parent": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\predictor_counter_local_timing.json",
+    "sha256": "3b88b63ffc4c2d7b05471f7843a794f7f09544877f7af38c3e13fe349c8d8949",
+    "worst_setup_ns": -4.375
+  },
+  "same_rtl_inputs": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "f6dbf6b6123dbf2a83865aefadc49bfa80b5d306d64cfd98eb1e575bec0263b0",
+    "rtl/cpu/triha_issue.v": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+    "rtl/cpu/triha_regfile.v": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+    "rtl/cpu/triha_npc.v": "aaa6c8e8502749c4dedcc0efcab70b5a741e64f7ec978f7b57c4dc80e5866822",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+    "rtl/cpu/triha_core.v": "bbe0012f1a5292f72f28093f068a840f009e1c6d90388512c03930f9bab406a3",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "594bc61b685b610c6c8663f4c6e773d812cd179c28a96ff689032f7e68df9b8a",
+    "fpga/pg2l100h/project/cpu_core.json": "7d31c2a90cbf09ee9c71af565209520d9f79dbd8398927f78dd41c1ee08b8b2c"
+  },
+  "timing_fdc_identical_sha256": "baed7cd8dbe70dd39cbad80441a277db2e289b34c271455b2db20935230c2372",
+  "previous_setup_ns": -4.375,
+  "setup_delta_ns": 0.587,
+  "new_mapping_and_placement": true,
+  "board_validated": false,
+  "official_coremark": false,
+  "region_evidence": {
+    "pcf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1117460355859Z\\device_map\\triha_core.pcf",
+    "pcf_sha256": "4bb24a14bafe4dc4e9623a0bfedc09dff97f8a1a2e3a890700571a191c3d63b1",
+    "unique_cpu_leaf_bindings": 8844,
+    "clock_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1117460355859Z\\place_route\\clock_utilization.txt",
+    "clock_report_sha256": "a7dcc05d84da89d85f27241b2e9a457c3a192215dcfa3997da500c9ce0bc8f8c",
+    "placed_clock_row": "| clk_i_ibuf/opit_1     | DI_TO_CLK       | nt_clk_i              | CLK                  | clkbufg_0/gopclkbufg     | CLKOUT                | ntclkbufg_0         | USCM_215_576     |  ---                     | (4,63,150,199)               | 4514            | 0                   ",
+    "non_io_clock_load_bounds": [
+      4,
+      63,
+      150,
+      199
+    ],
+    "independent_per_cell_coordinate_audit": false
+  },
+  "route": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1117460355859Z\\result.json",
+    "sha256": "6a72e81a45cdc50f24c9221b999be307b96b3b5b559b7125185c904c0b1fef60",
+    "status": "TIMING_FAIL",
+    "verified_inputs": 32,
+    "verified_outputs": 267,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -3.788,
+          "total_negative_slack_ns": -1377.777,
+          "failing_endpoints": 1086,
+          "endpoints": 15094
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.112,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15094
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.346,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4334
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 0.152,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15094
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.1,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15094
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.345,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4334
+        }
+      ],
+      "performance_slack_ns": -3.788,
+      "worst_setup_ns": -3.788,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "resources": {
+      "lut": 6484.0,
+      "registers": 5207.0,
+      "drm": 0.0,
+      "apm": 4.0,
+      "io": 224.0,
+      "distributed_ram": 32
+    },
+    "elapsed_seconds": 215.43,
+    "native_return_code": 0,
+    "runner_return_code": 2,
+    "main_detailed": {
+      "iteration": 91,
+      "unrouted": 0
+    },
+    "report": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1117460355859Z\\report_timing\\triha_core.rtr",
+      "sha256": "9e84999d3c90a1a892d0c9a95f60ee3659c5708f4a5adada6b51cda2aa410753"
+    },
+    "worst_path": {
+      "start": "inst_rdata_i[3] (port)",
+      "end": "u_cpu/u_frontend/u_decode/genblk1.u_fifo/csr_history_q[1][0]/opit_0_inv/D",
+      "logic_levels": 9,
+      "logic_ns": 2.223,
+      "route_ns": 12.283
+    },
+    "internal_violations_present_in_first_20_paths": [
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][19]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.729,
+        "slack_ns": -3.247
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][22]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.574,
+        "slack_ns": -3.094
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][21]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.517,
+        "slack_ns": -3.032
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][13]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.509,
+        "slack_ns": -3.02
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][20]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.509,
+        "slack_ns": -3.02
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][31]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.058,
+        "route_ns": 10.509,
+        "slack_ns": -3.02
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[2][19]/opit_0_inv_L6Q_perm/I3",
+        "logic_levels": 14,
+        "logic_ns": 1.959,
+        "route_ns": 10.682,
+        "slack_ns": -3.002
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[6][24]/opit_0_inv_L6Q_perm/I3",
+        "logic_levels": 15,
+        "logic_ns": 2.084,
+        "route_ns": 10.501,
+        "slack_ns": -2.951
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[4][21]/opit_0_inv_L6Q_perm/I4",
+        "logic_levels": 14,
+        "logic_ns": 1.925,
+        "route_ns": 10.653,
+        "slack_ns": -2.948
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[1][18]/opit_0_inv/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.08,
+        "route_ns": 10.355,
+        "slack_ns": -2.897
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[1][27]/opit_0_inv/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.08,
+        "route_ns": 10.355,
+        "slack_ns": -2.897
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[2][5]/opit_0_inv_L6Q_perm/I4",
+        "logic_levels": 14,
+        "logic_ns": 1.959,
+        "route_ns": 10.579,
+        "slack_ns": -2.886
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[0][6]/opit_0_inv_L6Q_LUT6DQL5_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.03,
+        "route_ns": 10.362,
+        "slack_ns": -2.848
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[0][13]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.03,
+        "route_ns": 10.364,
+        "slack_ns": -2.847
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[0][19]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.03,
+        "route_ns": 10.364,
+        "slack_ns": -2.847
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[0][21]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.03,
+        "route_ns": 10.364,
+        "slack_ns": -2.847
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[5][19]/opit_0_inv_L6Q_perm/I5",
+        "logic_levels": 14,
+        "logic_ns": 1.959,
+        "route_ns": 10.544,
+        "slack_ns": -2.846
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[6][30]/opit_0_inv_L6Q_perm/I3",
+        "logic_levels": 14,
+        "logic_ns": 1.959,
+        "route_ns": 10.523,
+        "slack_ns": -2.846
+      },
+      {
+        "start": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[24][27]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.ras_stack_q[7][4]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 14,
+        "logic_ns": 2.08,
+        "route_ns": 10.304,
+        "slack_ns": -2.84
+      }
+    ],
+    "independent_review": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-review-20261019T1126530335365Z.json",
+      "sha256": "6fc4a29ab84ba787b0b4b1fe9cc98fd06d8dc47ce63478fbf63eb77b36a6d836",
+      "status": "TIMING_FAIL",
+      "verified_inputs": 32,
+      "verified_outputs": 267
+    }
+  }
+}
