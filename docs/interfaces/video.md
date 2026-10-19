@@ -1,10 +1,50 @@
 # Video 接口状态
 
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
-同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a新增独立MODE控制/去抖组件；
-正式显示MMIO、像素域MODE接入及叠加尚未实现；下文
+同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a提供独立MODE控制/去抖组件，
+F3b提供独立框/五点/单头像像素组件；正式显示MMIO、像素域MODE与素材DDR接入
+尚未实现；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
+
+## F3b 原图坐标像素叠加组件
+
+`display_overlay`固定800×600光栅、最多16框/每框5点、单张256×256 RGBA素材；
+配合`avatar_sample_map`精确最近邻寻址，不直接读取DDR。调用方提供同一像素时钟
+域已提交且稳定的记录，F3c再实现跨域/原子帧边界及raw引用寿命。此端口不是正式
+显示ABI，也不把人工结果当作真实NPU结果。
+
+- `pixel_frame_id[31:0]`、`pixel_x/y[10:0]`、`pixel_rgb[23:0]=RRGGBB`及
+  `pixel_de/hs/vs/sof`每拍接纳，无ready。输出同名`out_*`在输入边沿n后的n+12边沿
+  同步出现（13级寄存）。空白RGB也原样透传，DE低或坐标超出有效域不叠加。
+- `mode=0/1/2`分别RAW/BOX/AVATAR，3安全透传原图；只有`result_valid`、
+  `result_frame_id==pixel_frame_id`且`result_has_face`才叠加。有效无脸、错帧/失效
+  结果不使用残留框/素材。上层接纳/等待/拒绝语义仍由F3a与后续记录接收器负责。
+- 框为有符号16bit半开端点，`box_valid[15:0]`选lane，端点bus的`[i*16+:16]`
+  对应第i框。先裁到`[0,800)×[0,600)`，再绘制内侧边框；无面积框及其点删除。
+  `LINE_WIDTH`默认2、允许1..800。普通框绿、主人脸框红；主人脸由
+  `primary_valid/primary_index[3:0]`选定，重叠时优先。颜色为24bit参数。
+- `points_enable`独立开关；`point_valid[79:0]`和有符号16bit点坐标的lane
+  `i*5+j`对应第i框第j点。点为半径`POINT_RADIUS`（默认2、允许0..31）的实心方形，
+  直接裁到有效域；默认黄色且优先于框。BOX不画头像，AVATAR不画框/点。
+- `avatar_enable`和有符号16bit`avatar_x0/y0/x1/y1`给出未裁剪目标矩形，允许
+  最大65535跨度及跨四边覆盖。取`sx=floor((x-x0)*256/(x1-x0))`、y同理；
+  地址只在目标有效覆盖处产生，不把裁剪后的左上角当作源纹理原点。
+- `avatar_req_valid`及18bit`avatar_req_addr`在n+8边沿后输出，地址是4字节对齐
+  的素材字节偏移，范围0..262140。供数器在n+9采样请求并注册响应；组件在n+10
+  消费`sample_valid/error/rgba`。每个请求固定一个响应槽，无反压、不能滑动、重排或
+  用上次响应补缺。后续DDR行预取/缓存必须满足这个截止条件，当前只用测试同步供数器验证。
+- `sample_rgba[31:24/23:16/15:8/7:0]`为R/G/B/A；素材递增字节也是R、G、B、A，
+  从小端DDR字读出时须明确字节拼装，不能直接把低字节当作Alpha。使用非预乘Alpha，
+  `out=(a*fg+(255-a)*bg+127)//255`，0/255精确返回背景/素材。
+- 缺数或error仅让对应像素返回原图；无效素材槽可有未知数据，内部明确隔离。
+  `out_box/point/avatar`为最终选中路径标志（点覆盖框时box=0；alpha0的有效头像
+  路径仍avatar=1）。`out_fault`与故障像素同步，`overlay_fault`在该像素退休时
+  锁存至同步高有效`rst`；非请求响应忽略，后续健康素材仍可继续显示。控制有效且
+  成功的素材响应须提供已定义的RGBA。该故障扫描不能当作健康叠加样本。
+
+独立像素/故障/复位及组件综合证据见[overlay](../verification/video/overlay.md)。
+本批不修改当前板卡F2镜像或公共显示寄存器，尚无MODE实体三模式验收。
 
 ## F1 raw全屏组件
 

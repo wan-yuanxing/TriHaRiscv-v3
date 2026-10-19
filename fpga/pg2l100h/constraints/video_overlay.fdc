@@ -1,0 +1,9 @@
+# Pixel component estimate only. No board pins, CDC or external HDMI AC claim.
+create_clock -name clk -period 25.000 [get_ports {clk}]
+# Same-clock registered caller/provider contract, with zero boundary delay.
+# Include port-to-stage0 BOX/point logic in the component estimate. These are
+# component boundaries, not external FPGA pin or HDMI device AC requirements.
+set_input_delay 0.000 -clock [get_clocks {clk}] -max [get_ports {rst pixel_* mode* result_* primary_* points_enable box_* point_* avatar_enable avatar_x* avatar_y* sample_*}]
+set_input_delay 0.000 -clock [get_clocks {clk}] -min [get_ports {rst pixel_* mode* result_* primary_* points_enable box_* point_* avatar_enable avatar_x* avatar_y* sample_*}]
+set_output_delay 0.000 -clock [get_clocks {clk}] -max [get_ports {out_* overlay_fault avatar_req_*}]
+set_output_delay 0.000 -clock [get_clocks {clk}] -min [get_ports {out_* overlay_fault avatar_req_*}]

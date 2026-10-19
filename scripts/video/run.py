@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,49 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('overlay', 'all'):
+            from common import sha256
+            manifest_path = ROOT/'fpga/pg2l100h/project/video_overlay.json'
+            component = json.loads(manifest_path.read_text(encoding='utf-8'))
+            paths = [ROOT/p for p in component['sources']+component['tests']]
+            oracle = ROOT/component['reference']
+            add_inputs(result, [manifest_path, *paths, oracle,
+                                *[ROOT/p for p in component['constraints']]])
+            artifacts = []
+            result['overlay_tools'] = {}
+            for name in ('iverilog', 'vvp'):
+                executable = tool(name)
+                version_log = work/('overlay_'+name+'_version.log')
+                result['overlay_tools'][name] = {'path': str(executable), 'sha256': sha256(executable)}
+                run_logged([executable, '-V'], version_log)
+                artifacts.append(version_log)
+            from importlib.util import spec_from_file_location, module_from_spec
+            spec = spec_from_file_location('overlay_reference', oracle)
+            reference = module_from_spec(spec)
+            spec.loader.exec_module(reference)
+            scenarios = [(name, (), 2, 2) for name in reference.CASES]
+            scenarios += [('points', (('LINE_WIDTH', 1), ('POINT_RADIUS', 0)), 1, 0),
+                          ('boxes', (('LINE_WIDTH', 800), ('POINT_RADIUS', 31)), 800, 31)]
+            for index, (name, parameters, line_width, point_radius) in enumerate(scenarios):
+                stem = f'overlay_{index}_{name}'
+                vectors = work/stem
+                run_logged([sys.executable, oracle, 'generate', '--case', name,
+                            '--directory', vectors], work/(stem+'_vectors.log'))
+                log = simulate(work, stem, component['test_top'], paths, timeout=600,
+                               parameters=parameters, run_args=('+DIRECTORY='+vectors.as_posix(),))
+                if log.count('DISPLAY_OVERLAY_DRIVER_PASS') != 1:
+                    raise RuntimeError('Expected one overlay driver PASS: '+stem)
+                log = run_logged([sys.executable, oracle, 'check', '--directory', vectors,
+                                  '--line-width', line_width, '--point-radius', point_radius],
+                                 work/(stem+'_oracle.log'), timeout=120)
+                if log.count('DISPLAY_OVERLAY_ORACLE_PASS') != 1:
+                    raise RuntimeError('Expected one overlay oracle PASS: '+stem)
+                artifacts += [work/(stem+suffix) for suffix in
+                              ('.vvp', '_compile.log', '_simulation.log', '_vectors.log', '_oracle.log')]
+                artifacts += [vectors/name for name in
+                              ('configs.hex', 'events.hex', 'vectors.json', 'pixels.log', 'checked.json')]
+            result['overlay_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('overlay')
         if args.suite in ('mode_control', 'all'):
             from common import sha256
             artifacts = []
@@ -647,6 +690,12 @@ def main():
         for name, expected in result.get('mode_control_artifacts', {}).items():
             if sha256(ROOT/name) != expected:
                 raise RuntimeError('Mode control artifact changed during regression: '+name)
+        for name, record in result.get('overlay_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Overlay simulation tool changed during regression: '+name)
+        for name, expected in result.get('overlay_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:
+                raise RuntimeError('Overlay artifact changed during regression: '+name)
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

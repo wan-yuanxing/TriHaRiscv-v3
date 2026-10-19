@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "target": "video_overlay",
+  "top": "display_overlay",
+  "test_top": "tb_display_overlay",
+  "sources": ["rtl/video/avatar_sample_map.sv", "rtl/video/display_overlay.sv"],
+  "tests": ["tb/video/tb_display_overlay.sv"],
+  "reference": "tb/video/overlay_reference.py",
+  "constraints": ["fpga/pg2l100h/constraints/video_overlay.fdc"],
+  "scope": "F3b fixed-rate 800x600 BOX/five-point/single 256x256 RGBA pixel component, exact nearest neighbor and non-premultiplied alpha. External fixed-slot synchronous material provider required. Component synthesis only; no DDR texture cache, pixel CDC, atomic record commit, raw slot retirement, MODE board pin, display MMIO or board-mode acceptance."
+}
