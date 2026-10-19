@@ -46,14 +46,19 @@ module triha_soc_memory #(
     wire d_request = data_re_i || (|data_wstrb_i) || data_invalidate_i || data_writeback_i || data_flush_i;
     wire d_uart = data_addr_i == `TRIHA_UART_BASE || data_addr_i == `TRIHA_UART_BASE + 4;
     wire d_system = data_addr_i == `TRIHA_SYSTEM_BASE || data_addr_i == `TRIHA_SYSTEM_BASE + 4 || data_addr_i == `TRIHA_SYSTEM_BASE + 8;
-    wire d_bad = (data_addr_i[1:0] != 2'b00) || (data_re_i && (|data_wstrb_i)) || data_invalidate_i || data_writeback_i || data_flush_i ||
+    // Config generation verifies disjoint target windows. A known SRAM hit
+    // needs only these local checks; MMIO/ROM decode must not feed its write
+    // enable or the same-word instruction-collision backpressure path.
+    (* syn_keep = 1 *) wire d_local_bad = (data_addr_i[1:0] != 2'b00) ||
+                 (data_re_i && (|data_wstrb_i)) || data_invalidate_i || data_writeback_i || data_flush_i;
+    wire d_bad = d_local_bad ||
                  !(d_rom || d_sram || d_uart || d_system) ||
                  (d_rom && (|data_wstrb_i)) ||
                  (d_uart && ((data_addr_i == `TRIHA_UART_BASE && data_re_i) ||
                              (data_addr_i == `TRIHA_UART_BASE + 4 && (|data_wstrb_i)))) ||
                  (d_system && (|data_wstrb_i) && data_addr_i != `TRIHA_SYSTEM_BASE + 4);
     wire d_fire = data_accept_o && d_request;
-    wire d_write = d_fire && d_sram && !d_bad && (|data_wstrb_i);
+    wire d_write = d_fire && d_sram && !d_local_bad && (|data_wstrb_i);
     wire collision = d_write && i_sram && inst_addr_i[14:3] == data_addr_i[14:3];
     assign data_accept_o = rst_ni && !uart_pending_q;
     assign inst_accept_o = rst_ni && !collision;
@@ -62,7 +67,7 @@ module triha_soc_memory #(
     wire [7:0] ram_we = d_write ? (data_addr_i[2] ? {data_wstrb_i, 4'b0} : {4'b0, data_wstrb_i}) : 8'b0;
     triha_sram #(.INIT_FILE(SRAM_FILE)) u_sram (
         .clk_i(clk_i), .inst_en_i(i_fire && i_sram), .inst_addr_i(inst_addr_i[14:3]), .inst_rdata_o(ram_inst),
-        .data_en_i(d_fire && d_sram && !d_bad), .data_addr_i(data_addr_i[14:3]),
+        .data_en_i(d_fire && d_sram && !d_local_bad), .data_addr_i(data_addr_i[14:3]),
         .data_wdata_i({data_wdata_i, data_wdata_i}), .data_wstrb_i(ram_we), .data_rdata_o(ram_data)
     );
     triha_boot_rom #(.INIT_FILE(ROM_FILE)) u_rom (

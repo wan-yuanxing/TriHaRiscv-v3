@@ -2,7 +2,7 @@
 
 更新：2026-10-19。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-当前主线已接入正式地址的ROM/SRAM和总线；实际系统100MHz仍未通过，较好记录为−0.183ns。当前CoreMark短RTL 2.965896/MHz、观察IPC0.870694。以下保留逐阶段历史，最新证据在文末。
+当前主线已接入正式地址的ROM/SRAM和总线，实际系统100MHz后布线已通过：最差setup+0.232ns，两角hold/脉宽无违例。CoreMark短RTL 2.965896/MHz、观察IPC0.870694；CPU层次6080LUT/5205FF/32distributedRAM/4APM。不是板测或官方分数。详见 `docs/verification/cpu/minimal_soc_100mhz.md`。以下保留逐阶段历史，旧失败不改写。
 
 ## 本批交付
 
@@ -437,3 +437,14 @@ UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到�
 CPU层次6111LUT/5173FF/32distributedRAM/4APM；额外169LUT/120FF/16.5DRM。系统映射6280LUT/5292CLM FF/10IO FF/16.5DRM/4APM。完整物理Slow setup−0.017ns，仅2端点/TNS−0.034ns，Fast+2.820ns、hold+0.108/+0.100ns、MPW+3.655/+4.202ns，100MHz仍未通过。全部哈希/实际报告独立核验见minimal_soc_ras_entry_route.json。
 
 最后路径LSU address→通用d_bad译码→取指stall→RAS条目CE；下一步仅在已命中SRAM时用等价本地写有效性检查，避免把ROM/MMIO/未映射译码串入碰撞抑制，不改变写入/error/响应/周期。
+
+
+## 2026-10-19 100MHz片上系统最终PASS
+
+SRAM已命中时只用本地有效性检查控制写入及I/D碰撞，通用ROM/MMIO错误译码保留在注册error响应路径。相同CPU、相同固件下功能/周期保持：415项总线检查、7种maintenance伴非法写、4类真实CPU访问异常、6项工具契约测试及坏数据拒绝通过。地址生成器拒绝实现窗口重叠；改写前先观察该拒绝测试RED。CoreMark仍1685831cycles/1467843WB、观察IPC0.870694、短测2.965896/MHz，非官方/板测。
+
+实际PDS完整新流程返回0、宿主0、source_unchanged，全部输入/输出哈希和实际报告独立核验PASS。Slow/Fast setup+0.232/+2.833ns，hold+0.128/+0.104ns，MPW+3.655/+4.202ns，performance+0.232ns一致。100MHz与原IO/hold/uncertainty不变、无false path/MCP。冻结目录route-20261019T1301015447457Z，compact/seed1，无前端子区域和PC复制约束；最差ROM块RAM→CPU exec，已无违例。
+
+CPU综合层次6080LUT/5205FF/32distributedRAM/0DRM/4APM；系统额外136LUT/88FF/16.5DRM。系统dev_map6216LUT/5292CLM FF/16.5DRM/4APM，13IO及10OREGIS另列。综合FF合计5293，dev_map优化1个，不能跨阶段混加。CPU源RTL未在最后一步改变，层次统计受整合及综合归属影响，不把跨层次FF转移当状态减少。
+
+验收摘要minimal_soc_100mhz.md；绑定minimal_soc_acceptance.json；独立复核minimal_soc_local_decode_route.json；功能性能minimal_soc_local_decode_validation.json。原生SRAM综合网表12296项与损坏拒绝复用且同RTL/同镜像哈希绑定。没有完整系统门级仿真、板级PLL/管脚绑定、bitstream或板测，没有自动合入主工程。下一步正式板级最小系统，再接入DDR/Video/NPU。

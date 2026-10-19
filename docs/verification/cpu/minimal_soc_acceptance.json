@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "100MHz post-route STA of minimal on-chip CPU ROM SRAM bus UART system; no board acceptance",
+  "target": "triha_minimal_soc",
+  "physical_profile": "compact",
+  "placement_seed": 1,
+  "cpu_mode": "six main stages, single issue, in order",
+  "cpu_source_base_commit": "5c5015d",
+  "route_result": "build\\soc\\route-20261019T1301015447457Z\\result.json",
+  "route_result_sha256": "d389ee3e9ed13ff3168a3230f9b2a2464d68c6ea3247add355ba4cdb9d74fb0a",
+  "independent_review": "docs/verification/cpu/minimal_soc_local_decode_route.json",
+  "independent_review_sha256": "3cc595d1262b8423cf82021f4a1a81c8225b216d851416e23fe22ebb23e0932f",
+  "firmware_result": "build\\soc\\coremark-20261019T125836820370Z\\result.json",
+  "firmware_result_sha256": "df948b2771a82ddebf47bda977f31852fc6db966f70e3ceec8e391f15f95802b",
+  "rom_sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+  "sram_sha256": "cae08888cf86c95c4b902cad75531effc65adf89765e88a9690751b08948aa3f",
+  "elf_sha256": "665abb8e7f1571747f15924221c17632fe9060add84b8048572a9a62d773ea95",
+  "performance": {
+    "cycles": 1685831,
+    "wb_completed": 1467843,
+    "observed_ipc": 0.8706940375399432,
+    "coremark_per_mhz_short_estimate": 2.965896344295484,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "cpu_synthesis_hierarchy_resources": {
+    "lut": 6080,
+    "ff": 5205,
+    "distributed_ram": 32,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "additional_synthesis_hierarchy_resources": {
+    "lut": 136,
+    "ff": 88,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm36k_equivalent": 16.5
+  },
+  "mapped_system_resources": {
+    "lut": 6216.0,
+    "registers": 5292.0,
+    "drm": 16.5,
+    "apm": 4.0,
+    "io": 13.0
+  },
+  "io_registers": 10,
+  "timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": 0.232,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15337
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.128,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15337
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4344
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 2.833,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15337
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.104,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15337
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4344
+    }
+  ],
+  "performance_slack_ns": 0.232,
+  "native_sram_component": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\native-sram-20261019T1202051473914Z\\result.json",
+    "sha256": "1247d1a23e35dca0a15021d8ef5658ede9be808f0ccfc3dc94834044a9134f6f",
+    "scope": "Standalone SRAM synthesis netlist with the same RTL and image; not full system gate simulation"
+  },
+  "functional_evidence": [
+    "docs/verification/cpu/minimal_soc_local_decode_validation.json",
+    "docs/verification/cpu/minimal_soc_ras_entry_validation.json",
+    "docs/verification/cpu/minimal_soc_parallel_validation.json"
+  ],
+  "board_validated": false,
+  "bitstream_generated": false,
+  "official_coremark_score": false,
+  "complete_isa_or_architectural_minstret_proof": false,
+  "full_system_gate_simulation": false
+}

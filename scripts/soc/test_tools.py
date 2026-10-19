@@ -55,6 +55,20 @@ class ImageTests(unittest.TestCase):
             finally:
                 gen_config.ROOT = original
 
+    def test_overlapping_mmio_and_sram_rejected(self):
+        original = gen_config.ROOT
+        with tempfile.TemporaryDirectory() as directory:
+            try:
+                gen_config.ROOT = Path(directory)
+                (gen_config.ROOT / "config").mkdir()
+                content = json.loads((original / "config/soc_map.json").read_text(encoding="utf-8"))
+                content["uart_base"] = content["sram_base"]
+                (gen_config.ROOT / "config/soc_map.json").write_text(json.dumps(content), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "overlap"):
+                    gen_config.generate()
+            finally:
+                gen_config.ROOT = original
+
 
 if __name__ == "__main__":
     unittest.main()

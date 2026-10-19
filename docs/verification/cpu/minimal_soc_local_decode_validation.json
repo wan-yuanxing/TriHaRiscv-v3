@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "phase": "SRAM-local validity controls",
+  "cpu_rtl_unchanged_from": "5c5015d",
+  "cpu_validation": "docs/verification/cpu/minimal_soc_ras_entry_validation.json",
+  "fresh_soc_records": [
+    {
+      "result": "build\\soc\\memory-20261019T125832004622Z\\result.json",
+      "sha256": "761707bf8def0512a91074c0f95516e91e6f6db7eb0f64b38747aceac2df49d1",
+      "status": "PASS",
+      "expected_rejection": false,
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T125834165435Z\\result.json",
+      "sha256": "753899d9797db56bb8e143f5a5b908ef00bbfea73b4f758858b90961194d8aae",
+      "status": "PASS",
+      "expected_rejection": false,
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T125836820370Z\\result.json",
+      "sha256": "df948b2771a82ddebf47bda977f31852fc6db966f70e3ceec8e391f15f95802b",
+      "status": "PASS",
+      "expected_rejection": false,
+      "measurement": {
+        "cycles": 1685831,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8706940375399432,
+        "coremark_per_mhz_short_estimate": 2.965896344295484,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      }
+    },
+    {
+      "result": "build\\soc\\access-faults-20261019T125948156112Z\\result.json",
+      "sha256": "a3f386a2248723fecfa8f14ad856e1e66b90b8d550eff36932a22e28b6de8c34",
+      "status": "PASS",
+      "expected_rejection": false,
+      "measurement": null
+    },
+    {
+      "result": "build\\soc\\memory-20261019T130000373440Z\\result.json",
+      "sha256": "03d87cec0b3f1cb2a5a05835bc61458236ba4eefa15a7886aef78ae7a206c197",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "measurement": null
+    }
+  ],
+  "tool_contract_tests": 6,
+  "tool_test_log": "build/soc/local-decode-tools.log",
+  "tool_test_log_sha256": "08124153c60525393b678757862485fbc55ab87d08abe416edb1c38893a02e58",
+  "generated_address_map": "config/soc_map.json",
+  "maintenance_combinations_checked": 7,
+  "protocol_check_count": 415,
+  "official_score": false,
+  "board_validated": false
+}

@@ -13,6 +13,7 @@ module tb_soc_memory;
     reg [3:0] d_we = 0;
     reg [10:0] d_tag = 0;
     reg d_flush = 0;
+    reg d_invalidate = 0, d_writeback = 0;
     wire d_accept, d_ack, d_error;
     wire [31:0] d_data;
     wire [10:0] d_resp;
@@ -33,7 +34,7 @@ module tb_soc_memory;
         .inst_error_o(i_error), .inst_rdata_o(i_data),
         .data_addr_i(d_addr), .data_wdata_i(d_wdata),
         .data_re_i(d_re), .data_wstrb_i(d_we), .data_req_tag_i(d_tag),
-        .data_invalidate_i(1'b0), .data_writeback_i(1'b0), .data_flush_i(d_flush),
+        .data_invalidate_i(d_invalidate), .data_writeback_i(d_writeback), .data_flush_i(d_flush),
         .data_accept_o(d_accept), .data_ack_o(d_ack), .data_error_o(d_error),
         .data_rdata_o(d_data), .data_resp_tag_o(d_resp),
         .uart_tx_o(tx), .done_o(done), .exit_code_o(code)
@@ -162,6 +163,21 @@ module tb_soc_memory;
         while (!d_ack) @(negedge clk);
         check(d_error, "unsupported maintenance");
         @(negedge clk);
+        // Every maintenance combination forbids a simultaneous SRAM write.
+        // Rejected writes must not stall a same-word instruction fetch or
+        // alter any byte; verify both the I response and a subsequent D read.
+        for (n = 1; n < 8; n = n + 1) begin
+            @(negedge clk); while (!d_accept) @(negedge clk);
+            d_addr = 32'h10000; d_wdata = 32'hdeadbeef; d_we = 15;
+            d_invalidate = n[0]; d_writeback = n[1]; d_flush = n[2];
+            d_tag = 128 + n; i_req = 1; i_addr = 32'h10000;
+            #1; check(i_accept, "invalid SRAM write no collision stall");
+            @(posedge clk); #1;
+            check(d_ack && d_error && d_resp == 128 + n, "invalid SRAM write completed once");
+            check(i_valid && !i_error && i_data === {expected[1], expected[0]}, "invalid write I memory retained");
+            @(negedge clk); d_we = 0; d_invalidate = 0; d_writeback = 0; d_flush = 0; i_req = 0;
+            access(32'h10000, 0, 1, 0, 0, expected[0]);
+        end
         access(32'h10000004, 0, 1, 0, 0, 1);
         access(32'h10000000, 32'h41, 0, 1, 0, 0);
         access(32'h10000000, 32'h42, 0, 1, 0, 0);
