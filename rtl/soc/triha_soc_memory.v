@@ -1,5 +1,6 @@
-/* TriHa one-outstanding local data fabric and pipelined instruction port.
- * Only accepted requests have side effects. All responses are registered.
+/* TriHa synchronous local data fabric and pipelined instruction port.
+ * Only accepted requests have side effects. Local reads respond in one cycle;
+ * a slow UART write owns the port until its captured byte has been accepted.
  * Reset is coordinated with the CPU; memory contents survive reset. */
 `include "soc_map.vh"
 module triha_soc_memory #(
@@ -26,18 +27,16 @@ module triha_soc_memory #(
     output wire        data_accept_o,
     output reg         data_ack_o,
     output reg         data_error_o,
-    output reg  [31:0] data_rdata_o,
+    output wire [31:0] data_rdata_o,
     output reg  [10:0] data_resp_tag_o,
     output wire        uart_tx_o,
     output reg         done_o,
     output reg  [7:0]  exit_code_o
 );
-    localparam [1:0] IDLE = 0, EXECUTE = 1, RESPONSE = 2;
-    reg [1:0] state_q;
-    reg [31:0] addr_q, wdata_q;
-    reg [3:0] wstrb_q;
-    reg [10:0] tag_q;
-    reg read_q, error_q, sram_q, rom_q;
+    reg uart_pending_q;
+    reg [7:0] uart_byte_q;
+    reg [31:0] mmio_data_q;
+    reg upper_word_q, sram_q, rom_q;
     reg inst_sram_q, inst_rom_q;
     reg [31:0] cycle_q;
     wire i_rom = inst_addr_i >= `TRIHA_ROM_BASE && inst_addr_i < `TRIHA_ROM_BASE + `TRIHA_ROM_BYTES;
@@ -56,7 +55,7 @@ module triha_soc_memory #(
     wire d_fire = data_accept_o && d_request;
     wire d_write = d_fire && d_sram && !d_bad && (|data_wstrb_i);
     wire collision = d_write && i_sram && inst_addr_i[14:3] == data_addr_i[14:3];
-    assign data_accept_o = rst_ni && state_q == IDLE;
+    assign data_accept_o = rst_ni && !uart_pending_q;
     assign inst_accept_o = rst_ni && !collision;
     wire i_fire = inst_req_i && inst_accept_o;
     wire [63:0] ram_inst, ram_data, rom_inst, rom_data;
@@ -72,17 +71,21 @@ module triha_soc_memory #(
     );
     assign inst_rdata_o = inst_rom_q ? rom_inst : inst_sram_q ? ram_inst : 64'b0;
     wire uart_ready;
-    wire uart_valid = state_q == EXECUTE && !error_q && !read_q && addr_q == `TRIHA_UART_BASE && wstrb_q[0];
+    wire uart_write = d_fire && !d_bad && !data_re_i && data_addr_i == `TRIHA_UART_BASE && data_wstrb_i[0];
     triha_uart_tx #(.DIVISOR(UART_DIVISOR)) u_uart (
-        .clk_i(clk_i), .rst_ni(rst_ni), .valid_i(uart_valid), .data_i(wdata_q[7:0]),
+        .clk_i(clk_i), .rst_ni(rst_ni), .valid_i(uart_pending_q), .data_i(uart_byte_q),
         .ready_o(uart_ready), .tx_o(uart_tx_o)
     );
+    // SRAM and ROM outputs are clocked in the memory modules; these selects
+    // and the response-valid/tag are captured at that same acceptance edge.
+    assign data_rdata_o = sram_q ? (upper_word_q ? ram_data[63:32] : ram_data[31:0]) :
+                          rom_q ? (upper_word_q ? rom_data[63:32] : rom_data[31:0]) : mmio_data_q;
     always @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin
             inst_valid_o <= 0; inst_error_o <= 0; inst_rom_q <= 0; inst_sram_q <= 0;
-            state_q <= IDLE; data_ack_o <= 0; data_error_o <= 0; data_rdata_o <= 0; data_resp_tag_o <= 0;
-            addr_q <= 0; wdata_q <= 0; wstrb_q <= 0; tag_q <= 0;
-            read_q <= 0; error_q <= 0; sram_q <= 0; rom_q <= 0;
+            uart_pending_q <= 0; uart_byte_q <= 0;
+            data_ack_o <= 0; data_error_o <= 0; data_resp_tag_o <= 0;
+            mmio_data_q <= 0; upper_word_q <= 0; sram_q <= 0; rom_q <= 0;
             done_o <= 0; exit_code_o <= 0; cycle_q <= 0;
         end else begin
             cycle_q <= cycle_q + 1'b1;
@@ -91,31 +94,32 @@ module triha_soc_memory #(
             if (i_fire) begin inst_rom_q <= i_rom; inst_sram_q <= i_sram; end
             data_ack_o <= 0;
             data_error_o <= 0;
-            case (state_q)
-                IDLE: if (d_fire) begin
-                    addr_q <= data_addr_i; wdata_q <= data_wdata_i; wstrb_q <= data_wstrb_i;
-                    tag_q <= data_req_tag_i; read_q <= data_re_i; error_q <= d_bad;
-                    sram_q <= d_sram; rom_q <= d_rom; state_q <= EXECUTE;
+            if (d_fire) begin
+                data_ack_o <= !uart_write;
+                data_error_o <= d_bad;
+                data_resp_tag_o <= data_req_tag_i;
+                upper_word_q <= data_addr_i[2];
+                sram_q <= d_sram && data_re_i && !d_bad;
+                rom_q <= d_rom && data_re_i && !d_bad;
+                mmio_data_q <= 0;
+                if (!d_bad && data_re_i) begin
+                    if (data_addr_i == `TRIHA_UART_BASE + 4) mmio_data_q <= {31'b0, uart_ready};
+                    else if (data_addr_i == `TRIHA_SYSTEM_BASE) mmio_data_q <= `TRIHA_SYSTEM_ID;
+                    else if (data_addr_i == `TRIHA_SYSTEM_BASE + 4) mmio_data_q <= {23'b0, done_o, exit_code_o};
+                    else if (data_addr_i == `TRIHA_SYSTEM_BASE + 8) mmio_data_q <= cycle_q;
                 end
-                EXECUTE: if (!uart_valid || uart_ready) begin
-                    data_ack_o <= 1; data_error_o <= error_q; data_resp_tag_o <= tag_q;
-                    data_rdata_o <= 0;
-                    if (!error_q && read_q) begin
-                        if (sram_q) data_rdata_o <= addr_q[2] ? ram_data[63:32] : ram_data[31:0];
-                        else if (rom_q) data_rdata_o <= addr_q[2] ? rom_data[63:32] : rom_data[31:0];
-                        else if (addr_q == `TRIHA_UART_BASE + 4) data_rdata_o <= {31'b0, uart_ready};
-                        else if (addr_q == `TRIHA_SYSTEM_BASE) data_rdata_o <= `TRIHA_SYSTEM_ID;
-                        else if (addr_q == `TRIHA_SYSTEM_BASE + 4) data_rdata_o <= {23'b0, done_o, exit_code_o};
-                        else if (addr_q == `TRIHA_SYSTEM_BASE + 8) data_rdata_o <= cycle_q;
-                    end
-                    if (!error_q && !read_q && addr_q == `TRIHA_SYSTEM_BASE + 4 && wstrb_q[0]) begin
-                        done_o <= 1; exit_code_o <= wdata_q[7:0];
-                    end
-                    state_q <= RESPONSE;
+                if (!d_bad && !data_re_i && data_addr_i == `TRIHA_SYSTEM_BASE + 4 && data_wstrb_i[0]) begin
+                    done_o <= 1;
+                    exit_code_o <= data_wdata_i[7:0];
                 end
-                RESPONSE: state_q <= IDLE;
-                default: state_q <= IDLE;
-            endcase
+                if (uart_write) begin
+                    uart_pending_q <= 1;
+                    uart_byte_q <= data_wdata_i[7:0];
+                end
+            end else if (uart_pending_q && uart_ready) begin
+                data_ack_o <= 1;
+                uart_pending_q <= 0;
+            end
         end
     end
 endmodule

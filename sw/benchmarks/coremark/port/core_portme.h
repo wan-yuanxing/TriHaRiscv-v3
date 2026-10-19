@@ -18,7 +18,11 @@
 #define MAIN_HAS_NORETURN 0
 #define COMPILER_VERSION "GCC " __VERSION__
 #define COMPILER_FLAGS TRIHA_COMPILER_FLAGS
+#if TRIHA_SOC_MMIO
+#define MEM_LOCATION "SRAM stack"
+#else
 #define MEM_LOCATION "TCM stack"
+#endif
 
 typedef int16_t ee_s16;
 typedef uint16_t ee_u16;

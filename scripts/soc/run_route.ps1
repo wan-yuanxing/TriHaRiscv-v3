@@ -2,7 +2,8 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string] $FirmwareRunDirectory,
-    [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe'
+    [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe',
+    [ValidateSet('default','compact')][string] $PhysicalProfile='default'
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
@@ -41,12 +42,13 @@ try {
         [IO.File]::Copy($path,(Join-Path $work $(if($name -eq 'result.json'){'firmware-result.json'}else{$name})))
     }
     $result['firmware_directory']=$firmware
-    $recipeName='fpga/pg2l100h/project/cpu_minimal_soc.json'
+    $recipeName=if($PhysicalProfile -eq 'compact'){'fpga/pg2l100h/project/cpu_minimal_soc_compact.json'}else{'fpga/pg2l100h/project/cpu_minimal_soc.json'}
     $recipe=Get-Content (Join-Path $root $recipeName) -Raw|ConvertFrom-Json
     $core=Get-Content (Join-Path $root $recipe.core_manifest) -Raw|ConvertFrom-Json
     if($recipe.period_ns -ne 10 -or $recipe.top -ne 'triha_minimal_soc'){throw 'Wrong system route configuration.'}
     $result['boundary']=$recipe
-    $names=@($core.sources)+@($core.headers)+@($recipe.sources)+@($recipe.headers)+@($recipeName,$recipe.core_manifest,$recipe.constraints,
+    $physicalFiles=if('physical_constraints' -in $recipe.PSObject.Properties.Name){@($recipe.physical_constraints)}else{@()}
+    $names=@($core.sources)+@($core.headers)+@($recipe.sources)+@($recipe.headers)+$physicalFiles+@($recipeName,$recipe.core_manifest,$recipe.constraints,
         'config/soc_map.json','rtl/cpu/ADAPTATIONS.json','rtl/cpu/vendor/UPSTREAM.json','scripts/soc/run_route.ps1',
         'scripts/cpu/route_reports.ps1','scripts/cpu/pds_reports.ps1','scripts/cpu/firmware_common.ps1')
     foreach($name in $names) {
@@ -61,6 +63,7 @@ try {
     $lines=@("set_arch -family $($core.family) -device $($core.device) -speedgrade $($core.speedgrade) -package $($core.package)")
     foreach($name in @($core.sources)+@($recipe.sources)){$lines+='add_design '+(TclPath (Join-Path $work ('src/'+$name)))}
     $lines+='add_constraint '+(TclPath (Join-Path $work ('src/'+$recipe.constraints)))
+    foreach($name in $physicalFiles){$lines+='add_constraint '+(TclPath (Join-Path $work ('src/'+$name)))}
     $includes=@($core.include_directory,'rtl/soc/include')|ForEach-Object {TclPath (Join-Path $work ('src/'+$_))}
     $lines+='compile -top_module triha_minimal_soc -include_path {'+($includes -join ' ')+'}'
     $lines+='synthesize -ads -write_verilog TRUE'

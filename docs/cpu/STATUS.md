@@ -382,3 +382,14 @@ ModelSim 301项总线检查、ROM启动SRAM固件、CoreMark四项CRC通过。�
 完整系统PDS原生返回0，宿主TIMING_FAIL；独立复核全部冻结哈希、阶段标记和报告。Slow/Fast setup −1.206/+1.480ns，hold +0.024/+0.006ns，MPW +3.655/+4.202ns。无例外，100MHz未通过。最差UART busy计数到TX端口−1.206ns；核内BTB[29][16]到fetch PC[3]−1.202ns（逻辑2.030ns/布线8.806ns）。不能仅归因于IO。
 
 综合层次CPU6481LUT/5205FF/32distributedRAM/4APM；额外140LUT/122FF/16.5DRM36K等效。映射系统6621LUT/5327FF/16.5DRM/4APM/13IO，不能称CPU-only。DRM含16个36K和1个18K，SRAM因读口复制占16DRM；原生RAM映射/读前写参数已查，尚未执行原生模型RAM功能仿真。证据minimal_soc_route.json。下一步先处理实际UART输出组合门和预测长连线；本轮原始结果不改写。
+
+
+## 2026-10-19 单拍本地总线与第二轮系统物理
+
+删除额外返回数据寄存和响应空泡；同步RAM输出与tag/error直接逐拍对齐，UART单独锁存等待。协议检查366项，真实坏读和timeout拒绝，整核4类访问异常cause/address经UART核对。CoreMark 1685831cycles/1467843WB，观察IPC0.870694，短测2.965896 CoreMark/MHz；比旧TCM仅多0.212333%，四项CRC正确，非官方/板测。SRAM stack打印标签已更正。CPU流水与架构RTL不变。
+
+UART移位寄存最低位直接连TX，不再串接busy门；CPU物理集中到完整时钟区，10个实际外部输出采用原生OREGIS。新布局/新系统总线不能把余量变化全归因单一因素。Slow/Fast setup −0.478/+2.833ns，hold +0.118/+0.100ns，MPW +3.655/+4.202ns。100MHz尚未通过，核内PC[7]→预测→PC[24]为−0.478ns、15级、逻辑2.362/布线7.782ns；RAS CE有−0.466ns。完整PDS0、宿主2，全部冻结输入/输出与独立报告核验。
+
+系统映射6778LUT/5292 CLM FF/16.5DRM/4APM/13IO；10个IO FF另列，不把CLM FF净减当架构状态减少。综合层次CPU6606LUT/5173FF/32distributedRAM/4APM，存储总线172LUT/120FF/16.5DRM；CPU-only仍单列，映射变化不作RTL面积优化。
+
+原生SRAM功能另已通过：同一RTL/镜像重新ADS综合映射16个DRM36K，用实际安装GTP模型执行每个4096地址的初始化、两读口、byte masks、read-before-write、读使能保持，共12296项；真实强制损坏在第1个地址被拒绝。两次缺库依赖的工具失败保留，补齐安装模型的LUT/UDP依赖后通过，未修改工具模型。这是组件综合网表仿真，不是整核后布线仿真。索引minimal_soc_pipeline.json；第二轮时序索引minimal_soc_compact_route.json。

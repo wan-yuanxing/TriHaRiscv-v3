@@ -13,7 +13,9 @@ module triha_uart_tx #(
     reg [3:0] bits_q;
     reg [15:0] ticks_q;
     assign ready_o = bits_q == 0;
-    assign tx_o = bits_q == 0 ? 1'b1 : shift_q[0];
+    // The stop bit and fill bits leave shift_q[0] at one when idle.
+    // Drive the registered bit directly, removing the busy decode at the pad.
+    assign tx_o = shift_q[0];
     always @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin
             shift_q <= 10'h3ff;

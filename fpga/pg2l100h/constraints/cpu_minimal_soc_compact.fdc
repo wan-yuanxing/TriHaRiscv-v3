@@ -1,0 +1,6 @@
+# Confine the long BTB-to-PC CPU paths to a complete clock region.
+# Leave real SRAM/ROM and UART placement available outside the CPU region.
+# PAP_REGION order: Xmin,Xmax,Ymin,Ymax. No timing exceptions.
+define_attribute {i:u_core/u_cpu} {PAP_REGION} {soc_cpu_clock(0,64,150,199)}
+# Pack existing pad-connected output registers; no extra pipeline state.
+define_global_attribute {syn_useioff} {1}

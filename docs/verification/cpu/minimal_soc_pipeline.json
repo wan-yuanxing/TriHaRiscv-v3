@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "phase": "single-cycle local memory pipeline; direct registered UART TX; physical compact target",
+  "records": [
+    {
+      "result": "build\\soc\\memory-20261019T115448187722Z\\result.json",
+      "sha256": "67525a2dbdd55171e7ff06473084b9991f97f1844cc6adc7a011227068c5d592",
+      "status": "PASS",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\memory-20261019T115329439236Z\\result.json",
+      "sha256": "57f717dd51a7755bd68948e2dd8b8633df8658ec7f136889856af241fe993a15",
+      "status": "FAIL",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\memory-20261019T115450297696Z\\result.json",
+      "sha256": "10e3b5b52ae2c2db1afd57d80bbaf851677cd0716a9b4042b6b7cde4b4257772",
+      "status": "FAIL",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T115413150212Z\\result.json",
+      "sha256": "e62c8b5ae89dc3da803a86a3943254b913cfb764c1c8d75580b0cd5c5ac6faaa",
+      "status": "PASS",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T115452410585Z\\result.json",
+      "sha256": "b93736a2c16af03b333019c46e1204aa62a7ccb44b0b987c63527420cf3f84ba",
+      "status": "FAIL",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\runtime-20261019T115455114001Z\\result.json",
+      "sha256": "9fada87b9210963b8ad453fa5474df0b68a88c1a7237bf00c0ce9e0e6689e3de",
+      "status": "FAIL",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\coremark-20261019T115416285824Z\\result.json",
+      "sha256": "166fc1ab38eaa876ac6342cc77404b92f0e40b65c9a839cbd621d18d88537798",
+      "status": "PASS",
+      "measurement": {
+        "cycles": 1685831,
+        "wb_completed": 1467843,
+        "observed_ipc": 0.8706940375399432,
+        "coremark_per_mhz_short_estimate": 2.965896344295484,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\access-faults-20261019T115713862397Z\\result.json",
+      "sha256": "784ade9a2769e6654ef633b93b5ac90527bba40457e01db732720e1d4cb68cfe",
+      "status": "PASS",
+      "measurement": null,
+      "checks": null
+    },
+    {
+      "result": "build\\soc\\native-sram-20261019T1202051473914Z\\result.json",
+      "sha256": "1247d1a23e35dca0a15021d8ef5658ede9be808f0ccfc3dc94834044a9134f6f",
+      "status": "PASS",
+      "measurement": null,
+      "checks": 12296
+    }
+  ],
+  "component_protocol_checks": 366,
+  "native_sram_checks": 12296,
+  "native_sram_negative_detected": true,
+  "whole_cpu_gate_simulation": false,
+  "coremark_vs_old_tcm_cycle_percent": 0.21233353484808593,
+  "short_rtl_simulation_not_official_or_board": true,
+  "compact_route": "docs/verification/cpu/minimal_soc_compact_route.json",
+  "timing_closed": false
+}

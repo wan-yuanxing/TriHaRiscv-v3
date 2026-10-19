@@ -87,7 +87,7 @@ module tb_soc_memory;
             end
             check(d_ack && d_error === error && d_resp === d_tag, "completion/error/tag");
             if (read && !error) check(d_data === want, "read value");
-            check(!d_accept, "one outstanding during response");
+            check(d_accept, "next request allowed with registered response");
             @(negedge clk);
             check(!d_ack, "ack exactly once");
         end
@@ -110,6 +110,12 @@ module tb_soc_memory;
     initial begin
         if ($test$plusargs("FAULT_READ")) force u_dut.data_rdata_o = 32'b0;
         repeat (3) @(negedge clk); rst_n = 1;
+        // A local synchronous read must respond after the acceptance edge.
+        // The initial controller unnecessarily waited an additional cycle.
+        @(negedge clk); d_addr = 0; d_re = 1; d_tag = 11'd7;
+        @(posedge clk); #1;
+        check(d_ack && !d_error && d_data === 32'h000102b7, "local one-cycle response");
+        @(negedge clk); d_re = 0;
         fetch(0, 0, 64'h00028067000102b7);
         fetch(32'h2000, 1, 0);
         fetch(32'h18000, 1, 0);
@@ -123,6 +129,23 @@ module tb_soc_memory;
         expected[1] = (expected[1] & 32'hff00ff00) | 32'h00aa00bb;
         access(32'h10004, 0, 1, 0, 0, expected[1]);
         fetch(32'h10000, 0, {expected[1], expected[0]});
+        // Each accepted stream beat must have a matching response/tag;
+        // reads immediately following stores see the latest written values.
+        for (n = 0; n < 32; n = n + 1) begin
+            @(negedge clk);
+            expected[n] = 32'h591b4c00 ^ (n * 32'h125731);
+            d_addr = 32'h10000 + n * 4; d_wdata = expected[n];
+            d_we = 15; d_re = 0; d_tag = n;
+            @(posedge clk); #1;
+            check(d_accept && d_ack && !d_error && d_resp == n, "streamed store response");
+        end
+        for (n = 0; n < 32; n = n + 1) begin
+            @(negedge clk);
+            d_addr = 32'h10000 + n * 4; d_we = 0; d_re = 1; d_tag = 100 + n;
+            @(posedge clk); #1;
+            check(d_accept && d_ack && !d_error && d_resp == 100 + n && d_data === expected[n], "streamed read data/tag");
+        end
+        @(negedge clk); d_re = 0;
         access(32'h17ffc, 32'h5adbcafe, 0, 15, 0, 0);
         access(32'h17ffc, 0, 1, 0, 0, 32'h5adbcafe);
         access(32'h18000, 0, 1, 0, 1, 0);

@@ -10,7 +10,7 @@
 
 ## 协议与观测
 
-取指可连续接纳，每个接纳请求恰有下一周期valid/error。数据总线只保留一个未完成请求，accept独立于CPU请求strobes/ack；完整payload和tag接纳时锁存，响应期间不接纳第二请求。SRAM字节写仅在接纳边沿发生一次，ROM写/未映射/混合读写及维护请求返回错误。无缓存，cacheable属性不创建别名或缓存；不声明FENCE可替代未来DDR完成协议。复位必须同时作用CPU、存储桥和UART，清在途valid/ack，不清SRAM。
+取指可连续接纳，每个接纳请求恰有下一周期valid/error。数据总线本地ROM/SRAM访问为单拍同步响应流水，可连续接纳并逐拍返回data/tag/error；accept独立于CPU请求strobes/ack，响应无反压。UART写单独锁存字节与tag，等待发送器接纳时阻止后续请求，保持顺序。SRAM字节写仅在接纳边沿发生一次，ROM写/未映射/混合读写及维护请求返回错误。无缓存，cacheable属性不创建别名或缓存；不声明FENCE可替代未来DDR完成协议。复位必须同时作用CPU、存储桥和UART，清在途valid/ack，不清SRAM。
 
 UART仅实现TX：DATA+0低字节发送，STATUS+4 bit0可发送；写忙时在已接纳事务内等待，完成表示发送器接纳字节。100MHz/115200bps。系统ID+0只读，EXIT+4写完成状态/读回，CYCLE+8只读。EXIT为本阶段明确的调试接口，后续公共系统寄存器扩展须版本化。top只导出clk/reset/irq、串口TX、done和8位code，不导出CPU宽总线。输入输出仍max2/min0.5ns，setup/hold uncertainty 0.1/0.05ns；不加false path/MCP。此为实际片上系统边界物理验收，未带板级PLL/管脚，不能称板测或可直接烧录板卡。
 
@@ -19,3 +19,13 @@ UART仅实现TX：DATA+0低字节发送，STATUS+4 bit0可发送；写忙时在�
 先用自检总线测试观察RED，再实现。覆盖边界/字节/半字/高低64bit lane、背靠背取指、tag、ROM只读、未映射错误、UART忙等待、同时I/D、复位在途。独立期望值核对，不以DUT内部状态作oracle。固件从ROM实际启动并运行SRAM，包含data/BSS、栈、字节访问和错误trap；CoreMark同版本/编译参数重新测实际访存成本，非官方分数或板测。故意损坏数据应被拒绝。
 
 PDS完整compile/synthesize/dev_map/pnr/report_timing，保留源/镜像/工具/约束及输出哈希；检查实际单发射配置和DRM，Slow/Fast setup/hold/MPW及performance一致才称100MHz通过。CPU-only沿用独立核映射，系统总量和存储/总线额外用量分别报告，不能把系统资源称CPU资源。
+
+
+## 真实路径驱动的第二轮物理修正
+
+首轮最终Slow setup −1.206ns；UART busy解码到pad和核内BTB到PC分别为−1.206/−1.202ns。UART串行输出改为直接连接现有移位寄存器最低位：stop/移入1使idle自然为1，不新增周期；原独立线级接收器检查启动/数据/停止/忙等待保持正确。CPU RTL不改。依据核内8.806ns布线/2.030ns逻辑延迟，将CPU层次约束到已知容量足够的完整时钟区(0,64,150,199)，ROM/SRAM保留外部合法位置；启用现有端口寄存器打包。此为有实测依据的物理对照，不提前声称时序改善；时序FDC字节不变，必须重新运行全流程。
+
+
+## 本地访存等待修正
+
+首版控制器在RAM输出之后另寄存返回数据并插入响应空泡，CoreMark多约30%周期。先加入单拍响应断言观察旧控制器RED，再复用同步RAM本身的输出寄存器，使data/tag/error对齐于接纳边沿；连续写/读32字独立oracle与tag检查通过。删除原32位地址、32位写数据、读状态/字节控制及三态FSM，仅为慢UART保留8位payload/等待位。没有给CPU新增流水级，没有改变存储地址或引入组合ack反馈。必须以新CoreMark和物理结果评估其实际收益。
