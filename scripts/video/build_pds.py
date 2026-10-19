@@ -47,6 +47,16 @@ def verify_mode_key_reference(reference, fdc):
     return 'define_attribute {p:mode_button_n} {PAP_IO_LOC} {C23}\n'
 
 
+def combined_route_options(seed_start=4, seed_count=6, mode=None):
+    if (type(seed_start) is not int or type(seed_count) is not int
+            or seed_start<1 or not 1<=seed_count<=64 or seed_start+seed_count-1>2147483647
+            or mode not in (None, 'normal', 'performance')):
+        raise ValueError('Invalid placement seed range or mode')
+    options = (f' -gplace_seed {seed_start} -gplace_times {seed_count} -seed_step 1'
+               ' -saved_outcome 1 -parallel 1')
+    return options+((' -mode '+mode) if mode is not None else '')
+
+
 def verify_build_inputs(work, result):
     """Bind the source bytes, copied compile inputs and generated vendor inputs."""
     for name, expected in result['inputs'].items():
@@ -64,7 +74,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
+    parser.add_argument('--seed-start', type=int, default=4)
+    parser.add_argument('--seed-count', type=int, default=6)
+    parser.add_argument('--pnr-mode', choices=('normal', 'performance'))
     args = parser.parse_args()
+    try:
+        placement_options = combined_route_options(args.seed_start, args.seed_count, args.pnr_mode)
+    except ValueError as error:
+        parser.error(str(error))
     hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
     ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
     board = hdmi or ddr
@@ -156,10 +173,11 @@ def main():
                 route += " -slack_prior_in_global_router TRUE"
             if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board"):
                 # The combined HDMI/DDR target is route-limited. Try six
-                # deterministic placements (4..9) serially; the final report
-                # still has to meet every constraint before packaging.
-                route += (" -gplace_seed 4 -gplace_times 6 -seed_step 1"
-                          " -saved_outcome 1 -parallel 1")
+                # deterministic placements serially (default 4..9); the final
+                # report still has to meet every constraint before packaging.
+                route += placement_options
+                result['pnr_configuration'] = {'seed_start': args.seed_start, 'seed_count': args.seed_count,
+                                               'mode': args.pnr_mode or 'normal'}
             lines += ["dev_map",route,"report_timing"]
         if args.stage == "bitstream":
             lines += ["gen_bit_stream -scbv {High Voltage}"]

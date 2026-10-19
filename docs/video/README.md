@@ -25,7 +25,7 @@ F3c前置新增单事务模式CDC与256×256封存素材缓存，仿真`--suite 
 pixel接纳后须另等实际提交反馈。组件记录见[资源组件验证](../verification/video/mode_resources.md)。
 
 F3c本批新增独立 `video_mode_board`：KEY1/C23切 RAW/BOX/AVATAR，KEY0回默认RAW并重采；
-框/五点/封存测试纹理为人工诊断输入。数字联测及板级综合通过，布线和实体验收进行中，
+框/五点/封存测试纹理为人工诊断输入。数字联测及板级综合通过，布线尚未满足8ns；当前转向core控制流水，现场验收待时序通过，
 见[三模式板级记录](../verification/video/mode_board.md)。正式多帧所有者/MMIO与真实NPU仍待接入。
 
 ## 目前可以运行
@@ -76,7 +76,7 @@ python scripts/video/build_pds.py --target video_overlay --stage synth
 python scripts/video/build_pds.py --target video_mode_cdc --stage synth
 python scripts/video/build_pds.py --target video_avatar_cache --stage synth
 python scripts/video/build_pds.py --target video_mode_output --stage synth
-python scripts/video/build_pds.py --target video_mode_board --stage bitstream
+python scripts/video/build_pds.py --target video_mode_board --stage bitstream --seed-start 8 --seed-count 1 --pnr-mode normal
 python scripts/video/package_board.py --target video_mode_board
 python scripts/video/program_board.py --target video_mode_board --start-server
 python scripts/video/build_pds.py --target video_raw_board --stage bitstream
@@ -258,6 +258,7 @@ tb/video/
   tb_video_mode_board.sv                 F3c三模式及MODE不重采数字联测
   test_mode_board_packets.py             type10/四包轮次及目标epoch隔离
   test_mode_key.py                       KEY1管脚属性和PDS通知严格校验
+  test_pds_route_options.py              默认布局命令、单种子performance及非法参数拒绝
   tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
   test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本

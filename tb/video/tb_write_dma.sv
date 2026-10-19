@@ -119,8 +119,53 @@ module tb_write_dma;
             if(memory[offset+rows*stride]!==8'ha5)$fatal(1,"DMA end guard");
         end
     endtask
+    // Independent 64-bit arithmetic oracle: saturated row ceiling and
+    // every byte offset in a 4KiB page, including non-aligned function inputs.
+    task automatic check_burst(input [31:0] bytes_left,address);
+        reg [63:0] row_limit,page_limit;
+        reg [4:0] expected;
+        begin
+            row_limit=({32'd0,bytes_left}+64'd15)/64'd16;
+            page_limit=(64'd4096-{52'd0,address[11:0]})/64'd16;
+            if(row_limit>16)row_limit=16;
+            if(row_limit>page_limit)row_limit=page_limit;
+            expected=row_limit[4:0];
+            if(dut.choose_burst(bytes_left,address)!==expected)
+                $fatal(1,"DMA burst arithmetic bytes=%h address=%h expected=%h actual=%h",
+                    bytes_left,address,expected,dut.choose_burst(bytes_left,address));
+        end
+    endtask
+    task automatic burst_arithmetic;
+        integer n,a,bit_index,variant,count;
+        reg [31:0] value,random_value,random_address;
+        begin
+            count=0;
+            for(n=0;n<=512;n=n+1)for(a=0;a<4096;a=a+1)begin
+                check_burst(n,32'h80000000+a);count=count+1;
+            end
+            for(n=0;n<32;n=n+1)for(a=0;a<4096;a=a+1)begin
+                value=(32'd1<<n);check_burst(value,32'h80000000+a);
+                check_burst(value-1,32'h80000000+a);check_burst(32'hffffffff-value,32'h80000000+a);count=count+3;
+            end
+            random_value=32'h13579bdf;random_address=32'h87300ff0;
+            for(n=0;n<4096;n=n+1)begin
+                random_value={random_value[30:0],random_value[31]^random_value[21]^random_value[1]^random_value[0]};
+                random_address={random_address[30:0],random_address[31]^random_address[27]^random_address[4]^random_address[0]};
+                check_burst(random_value,random_address);count=count+1;
+            end
+            for(bit_index=0;bit_index<32;bit_index=bit_index+1)for(variant=0;variant<4;variant=variant+1)begin
+                value=variant<2?0:32'hffffffff;
+                value[bit_index]=variant[0]?1'bz:1'bx;
+                check_burst(value,32'h80000ff0);check_burst(value,32'h80000000);count=count+2;
+                value=32'h80000000;value[bit_index]=variant[0]?1'bz:1'bx;
+                check_burst(255,value);check_burst(256,value);check_burst(32'hffffffff,value);count=count+3;
+            end
+            $display("DMA_BURST_ARITHMETIC_PASS cases=%0d",count);
+        end
+    endtask
     integer saved_aw;
     initial begin
+        burst_arithmetic;
         reset_all;
         healthy(0,39,48,3,1);healthy(4080,272,288,3,2);
         healthy(32,16,16,1,3);healthy(64,240,240,2,4);healthy(1024,256,256,1,5);

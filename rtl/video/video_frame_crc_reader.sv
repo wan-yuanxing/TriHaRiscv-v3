@@ -68,6 +68,19 @@ module video_frame_crc_reader #(
         end
     end
     wire stopping=result_code!=0||fault_now!=0;
+    // In BYTES no R beat is accepted. Keep RECEIVE-only RID/RESP/LAST
+    // checking out of its address/CRC enable cone, without changing latency,
+    // error priority or drain behavior. Procedural-if preserves X handling.
+    reg byte_stopping;
+    always @* begin
+        byte_stopping=result_code!=0;
+        if(busy)begin
+            if(!online)byte_stopping=1;
+            else if(abort)byte_stopping=1;
+            else if(timer>=TIMEOUT_CYCLES-1)byte_stopping=1;
+        end
+    end
+
     assign req_ready=reset_n&&state==IDLE&&online&&!abort&&!fault&&!rvalid;
     assign result_valid=reset_n&&state==RESULT;
     assign result_success=result_code===8'd0;
@@ -83,11 +96,8 @@ module video_frame_crc_reader #(
         if(reset_n)begin
             if(state==RECEIVE)begin
                 if(rvalid)begin
-                    if(stopping)begin end
-                    else begin
-                        next_address_q<=address_q+32'd16;
-                        next_row_base_q<=row_base+stride_q;
-                    end
+                    next_address_q<=address_q+32'd16;
+                    next_row_base_q<=row_base+stride_q;
                 end
             end
         end
@@ -125,15 +135,16 @@ module video_frame_crc_reader #(
                     else begin burst_beats<=burst_length(row_remaining,address_q);beat_index<=0;state<=ADDRESS;end
                 ADDRESS:if(arready)state<=RECEIVE;
                 RECEIVE:if(rvalid)begin
+                    data_q<=rdata;
                     if(stopping)begin
                         if(beat_index==burst_beats-1)state<=RESULT;
                         else beat_index<=beat_index+1'b1;
                     end else begin
-                        data_q<=rdata;byte_index<=0;
+                        byte_index<=0;
                         byte_count<=row_remaining>=16?5'd16:row_remaining[4:0];state<=BYTES;
                     end
                 end
-                BYTES:if(stopping)begin
+                BYTES:if(byte_stopping)begin
                     if(beat_index==burst_beats-1)state<=RESULT;
                     else begin beat_index<=beat_index+1'b1;state<=RECEIVE;end
                 end else begin

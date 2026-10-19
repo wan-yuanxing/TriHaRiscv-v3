@@ -41,14 +41,17 @@ module video_write_dma #(
     wire [15:0] expected_keep=16'hffff>>(16-expected_bytes);
     wire stop_now=abort || !online;
     function automatic [4:0] choose_burst(input [31:0] bytes_left,input [31:0] address);
-        reg [32:0] beats;
+        reg [4:0] beats;
         reg [8:0] page_beats;
         begin
-            beats=({1'b0,bytes_left}+33'd15)>>4;
+            // Saturate before rounding so low row bits do not enter a 33-bit
+            // carry chain. Preserve unknown-input behavior in simulation.
+            if((^bytes_left)===1'bx)beats=5'bxxxxx;
+            else if(|bytes_left[31:8])beats=5'd16;
+            else beats={1'b0,bytes_left[7:4]}+{4'd0,(|bytes_left[3:0])};
             page_beats=(13'd4096-{1'b0,address[11:0]})>>4;
-            if(beats>16)beats=16;
-            if(beats>page_beats)beats=page_beats;
-            choose_burst=beats[4:0];
+            if(beats>page_beats)beats=page_beats[4:0];
+            choose_burst=beats;
         end
     endfunction
     function automatic descriptor_ok(input [31:0] base,bytes_per_row,stride,input [15:0] rows);

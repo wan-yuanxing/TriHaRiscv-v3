@@ -14,6 +14,12 @@
     "tb/video/tb_video_mode_board.sv",
     "tb/video/test_mode_board_packets.py",
     "tb/video/test_mode_key.py",
+    "tb/video/test_pds_route_options.py",
+    "rtl/video/video_frame_crc_reader.sv",
+    "rtl/video/video_write_dma.sv",
+    "tb/video/tb_write_dma.sv",
+    "docs/superpowers/plans/2026-10-20-mode-board-timing.md",
+    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md",
     "scripts/video/run.py",
     "scripts/video/build_pds.py",
     "scripts/video/read_board.py",
@@ -38,33 +44,51 @@
     "tb/video/tb_video_mode_board.sv": "89f9007f68504f49ba41faa4daa91e6310d2fdb7d1ec528df2e30201edc396b1",
     "tb/video/test_mode_board_packets.py": "f37d84fa1650b8386d1f9da901a9052aa4ab1952f0794196038bfdc77b3f7721",
     "tb/video/test_mode_key.py": "659bc77c5cb24152600ac60da2c5456625af8778fd98f202df911b261eefb4d9",
+    "tb/video/test_pds_route_options.py": "839a9a9decc58d167e9231415073ed6ebd4b8f3d0c88d7bbc9677c16554908fb",
+    "rtl/video/video_frame_crc_reader.sv": "324e2c947f65a49717bf744eb2aff3b1ac73b3d5b544def474c2d4cce6f8bdda",
+    "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+    "tb/video/tb_write_dma.sv": "be66fbb5228ce7cb0748d6aca89ce7c568b320ad10847646afc392183dbd05f1",
+    "docs/superpowers/plans/2026-10-20-mode-board-timing.md": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da",
+    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "d1b2ffa8aa163d967222be733f54fde6347a67f102d5fe4fdf03796b12003cdd",
     "scripts/video/run.py": "91870c2f6a6adaf7d3bc7702f2f7e54cae37c0cdaf93fb687a92b26599165e90",
-    "scripts/video/build_pds.py": "8a4b1670dbbbd3b4f8d7d2fe9d4b71e808c1d1252ec8b06a3cde7964d453f27f",
+    "scripts/video/build_pds.py": "ec6494009f9c68e0ca531906f33f46039262de29568d66124eaeb4141c95e151",
     "scripts/video/read_board.py": "1b6f2287303875e096a671b395405b84a8de24283d45d164cde541416373dcf9",
     "scripts/video/package_board.py": "5740b7311ac0223cec67d18878a5d23259ac2c129843a9e978f6159981e1f11f",
     "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
-    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "4859eeb9b15e94068a6eb86385f9ac8cdb53c0ffd63a0e5099ff77abe657efe7",
-    "docs/video/README.md": "1bfba3fc0987812b30f814a80feccea4e0011ee8f1bf3db5daca2abc0c0d9bc9",
-    "docs/video/STATUS.md": "2e1c4395269d2cc3a7d2574ad33f9d3e05349a4a798bd1b5e39e9deddf62c02e",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "fa50e17cc5a5cb30106020a7d4aa2b0c7a462498b3856e7b3fa4d0b7e5075966",
+    "docs/video/README.md": "91aa1a13de0c50805c720c7c59387e3bc012ccf09a794bfbfb920f809b7a6061",
+    "docs/video/STATUS.md": "c7e2969d75b554d1ca8ba849f3f964108ef851b9d72d01e91744cafb0d064544",
     "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
-    "docs/verification/video/mode_board.md": "5481a03a4259b6eab0cd1d84fa41bbf0f9edbf018b17fff456a598ba13ac689d"
+    "docs/verification/video/mode_board.md": "64b6b43afc0585846a39da2dca5ad8b695403dc7c82ddd7315fd21bbd1421e20"
   },
   "refs": {
     "mode_output": {
-      "path": "build/video/regression/20261019T163228_911282Z/result.json",
-      "sha256": "f6a8baa5271ebfd75464c54eadcf173baae63a83580e6fc417237c9a911ab3ad"
+      "path": "build/video/regression/20261019T171251_774841Z/result.json",
+      "sha256": "8ae731ae0571766df187728747c69f7f52ec5202a738724d2a5a02979e1e44f7"
     },
     "mode_board": {
-      "path": "build/video/regression/20261019T163228_926088Z/result.json",
-      "sha256": "360740e7a377496b4e8655359bb00bb3ceaa89cf624bee58bf82ae736af8e0e8"
+      "path": "build/video/regression/20261019T182101_640166Z/result.json",
+      "sha256": "96cc43af7188511ade424824ddec99b393b39dfec2178c3da19aa3ddfdff5894"
     },
     "python": {
       "path": "build/video/mode_board_python/result.json",
-      "sha256": "cc0a89a7a65dcd2c5c67c54118c9f3cbfa6672c64ee0e7264df90b8b02bc7c4e"
+      "sha256": "1f23b9b109b90d75311c1bd1e5d7e98a2711390ed9651f11bc676af57367724b"
+    },
+    "full_geometry": {
+      "path": "build/video/mode_full_rasters/20261019T165308_860426Z/result.json",
+      "sha256": "67866044a5fc3d183d07366281b40e5cb4a9a0d741260cd525173a0ed91031d1"
+    },
+    "full_geometry_long_attempt": {
+      "path": "build/video/mode_full_geometry/20261019T164204_947987Z/result.json",
+      "sha256": "b5bbfacdce751dc60514c5a43d72446bed53f67083956acc63f6104fc1b325d7"
     },
     "review": {
       "path": "build/video/mode_board_review/review.json",
       "sha256": "99247b6a68d67f5e39533baad6d6798dd40d6b403fe5fdd07a21abc1dd528e8f"
+    },
+    "review_addendum": {
+      "path": "build/video/mode_board_review/review_addendum.json",
+      "sha256": "18b295dda692c325d6554d8d809ec96d1351ae98a178b2ac3f38cf11b6d92273"
     },
     "mode_output_review": {
       "path": "build/video/mode_output_review/review.json",
@@ -84,7 +108,7 @@
     },
     "key_mutation": {
       "path": "build/video/mode_key_mutation/result.json",
-      "sha256": "2d0a842139b190a4308f488d1e686f566aed98f49d8468b37afc037d88ca07e6"
+      "sha256": "3d0dd12b5469fe7f32d950cc3b1087b8e07e36d3a6b45c7f4df57193cbdbf872"
     },
     "key_document": {
       "path": "build/video/mode_key_audit/result.json",
@@ -102,12 +126,92 @@
       "path": "build/video/mode_board_timing_audit/constraints/20261019T163003_613183Z/structural.json",
       "sha256": "c51e378d4e4e2cb8d7daf5cf71d237437ed2c2ad3d91e649ad1d112b1e14eb39"
     },
+    "normal_six_seed_build": {
+      "path": "build/video/pds/20261019T163314_973305Z/result.json",
+      "sha256": "12afec70db98df2464f000fde1daa44fd53207d2b686cf3db3c8407977500adf"
+    },
+    "normal_six_seed_summary": {
+      "path": "build/video/pds/20261019T163314_973305Z/multiseed_summary.csv",
+      "sha256": "46a4a04ea7f95612296f1355930870c9748e30bb9b50fcb940935b1b7b3877c4"
+    },
+    "performance_seed8_build": {
+      "path": "build/video/pds/20261019T171205_237360Z/result.json",
+      "sha256": "5f0b9e206ac3ceacd81e5d3c04c1a0cbc1a1be5e0fee7c1b8b9dc3d235f93856"
+    },
+    "crc_seed8_build": {
+      "path": "build/video/pds/20261019T172758_745521Z/result.json",
+      "sha256": "86c5da6faa21b7fbf22d263d70e783f4599080d2d295ed56efb97c82a2fb9a58"
+    },
+    "crc_seeds4to7_build": {
+      "path": "build/video/pds/20261019T173626_601118Z/result.json",
+      "sha256": "126c7fcb0fd370561e07b7de09055a47590732e852deff17e998e1d7d11a6f68"
+    },
+    "crc_seeds4to7_summary": {
+      "path": "build/video/pds/20261019T173626_601118Z/multiseed_summary.csv",
+      "sha256": "0108016bb2019cc7a598816a8e51a236562db10623d02bd3c4f5ad6ba55988f6"
+    },
+    "crc_scratch_seed6_build": {
+      "path": "build/video/pds/20261019T180036_890406Z/result.json",
+      "sha256": "75ed1473c2ac4dbb371aea8d0cdd0a96f9cfdb8d2dc71916da37656a68b5e715"
+    },
+    "writer_equivalence": {
+      "path": "build/video/write_burst_equivalence/result.json",
+      "sha256": "00583f32a092ae23bc49602ed22374a56c1433b084d0de657ee561cf60b1859a"
+    },
+    "writer_review": {
+      "path": "build/video/mode_board_review/review_write_burst_timing.json",
+      "sha256": "6a77078647bafb792ad5f6ab7abcac2865d6927e017dc0bbc334f1e8cfdc5199"
+    },
+    "writer_regression": {
+      "path": "build/video/regression/20261019T182101_613017Z/result.json",
+      "sha256": "f4bdf580639545157ddebdcafc878dbaead33b65e6fc26ebd41d46d6d8ade629"
+    },
+    "failed_route_summaries": {
+      "path": "build/video/mode_board_timing_audit/failed_builds.json",
+      "sha256": "8e572c4a597455fb2cc3b6c675bbffec3ad42fc003b21e89deb3508b52757cf9"
+    },
+    "crc_equivalence": {
+      "path": "build/video/crc_byte_guard_equivalence/result.json",
+      "sha256": "a28be68c1b84231cb8014fb060f04c1c3ff422aa6bdccbab52d8be2290dba14b"
+    },
+    "crc_scratch_equivalence": {
+      "path": "build/video/crc_receive_scratch_candidate/result.json",
+      "sha256": "b3775df26f85f78f68cab9521eea80a5fbfbcf948c865a1b9d9dd12f32cd588a"
+    },
+    "crc_review": {
+      "path": "build/video/mode_board_review/review_crc_timing.json",
+      "sha256": "2e8211e28609d4b370d81bb0a3d3b2f1e3a11e029ba0503c4fe2137c98de252c"
+    },
+    "acceptance_and_scratch_review": {
+      "path": "build/video/mode_board_review/review_acceptance_and_scratch_candidate.json",
+      "sha256": "eea4e2a5bdbd74ebdf8c47a6d4aeb3acf8a255ac30d20f405c4e94f4fa8ad890"
+    },
+    "crc_regression": {
+      "path": "build/video/regression/20261019T175940_611067Z/result.json",
+      "sha256": "1524ce2d1a3c8ec78462b0e6c7d48ec863dcb1d2fe4db0b7a320b0b8df0fe992"
+    },
+    "raw_regression": {
+      "path": "build/video/regression/20261019T182101_611862Z/result.json",
+      "sha256": "dc7be8a5af747b0c9f15a7c0799f950c7ab3c8c3ab7a55f6f9ff9e92b38c34af"
+    },
+    "timing_plan": {
+      "path": "docs/superpowers/plans/2026-10-20-mode-board-timing.md",
+      "sha256": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da"
+    },
+    "current_build": {
+      "path": "build/video/pds/20261019T182101_599588Z/result.json",
+      "sha256": "4b4225a203b65d613ed9eb7fee240bdb595beb44bd6ff33424de9d77393d0592"
+    },
+    "current_structure": {
+      "path": "build/video/mode_board_timing_audit/constraints/20261019T182101_599588Z/structural.json",
+      "sha256": "8e7f1d45f4b0704d9e57e4b27b1ca19e9149cee78c1412796290c3fde1543b10"
+    },
     "artifacts": {
       "path": "build/video/mode_board_artifact_hashes.json",
-      "sha256": "9e9fd8a973ecb6e9abc224989a81781d45abd0981ebf301fc410fab9cd5dd7c1"
+      "sha256": "30bac1cb87d97cc2bca7e17e78e4656350fdcad10f93ae5278af27b5864a9233"
     }
   },
-  "preserved_files": 232,
+  "preserved_files": 229,
   "simulations": {
     "mode_output": 3,
     "mode_board_fault_reset": 6,
@@ -115,8 +219,8 @@
     "mode_board_pixels": 34900
   },
   "python": {
-    "tests": 99,
-    "passed": 98,
+    "tests": 102,
+    "passed": 101,
     "skipped": 1
   },
   "independent_review": {
@@ -147,8 +251,8 @@
   ],
   "source_snapshot_verified": true,
   "resources": {
-    "lut": 17522.0,
-    "registers": 18738.0,
+    "lut": 17365.0,
+    "registers": 18737.0,
     "drm": 73.5,
     "apm": 16.0
   },
@@ -172,14 +276,127 @@
   "historical_all_comparison": {
     "suites": 37,
     "inputs": 198,
-    "unchanged_inputs": 193,
+    "unchanged_inputs": 190,
     "changed_entry_points": [
       "scripts/video/build_pds.py",
       "scripts/video/package_board.py",
       "scripts/video/program_board.py",
       "scripts/video/read_board.py",
-      "scripts/video/run.py"
+      "scripts/video/run.py",
+      "tb/video/tb_write_dma.sv",
+      "rtl/video/video_write_dma.sv",
+      "rtl/video/video_frame_crc_reader.sv"
     ],
     "scope": "Historical complete baseline; new F3b/F3c components and current entry-point behavior covered by separate targeted evidence"
+  },
+  "full_geometry_component": {
+    "width": 800,
+    "height": 600,
+    "raw_pixels": 480021,
+    "box_pixels": 480000,
+    "avatar_pixels": 480000,
+    "checked_pixels": 1920021,
+    "scope": "Component oracle and fixed latency only; not actual HDMI/DDR or board result",
+    "long_generic_scenario_status": "execution_timeout"
+  },
+  "placement_followup": {
+    "historical_synthesis_entrypoint_deltas": [
+      "rtl/video/video_frame_crc_reader.sv",
+      "rtl/video/video_write_dma.sv",
+      "scripts/video/build_pds.py"
+    ],
+    "normal_six_seed_status": "fail",
+    "normal_best_seed": 8,
+    "normal_best_setup_ns": -0.06,
+    "normal_hold_all_met": true,
+    "normal_build_not_packaged_or_programmed": true,
+    "performance_seed8_status": "fail",
+    "performance_setup_ns": -0.06,
+    "crc_seed8_status": "fail",
+    "crc_seed8_setup_ns": -0.247,
+    "crc_seed8_failing_setup_endpoints": 14,
+    "crc_seed8_hold_all_met": true,
+    "crc_seeds4to7_status": "fail",
+    "crc_seeds4to7_best_seed": 6,
+    "crc_seeds4to7_best_setup_ns": -0.14,
+    "crc_seeds4to7_hold_all_met": true,
+    "crc_scratch_seed6_status": "fail",
+    "crc_scratch_setup_ns": -0.205,
+    "current_configuration": "seed6/count1/normal; equivalent CRC and narrow writer burst calculation; unchanged FDC; strict full timing and packaging gates retained",
+    "independent_builder_addendum_verified": true
+  },
+  "preservation_exception": {
+    "path": "rtl/video/video_frame_crc_reader.sv",
+    "before_sha256": "fc269c51dd7f6ed825066228d0b1f21f39bc3ca597eadc498469d9afdf4aa4c7",
+    "after_sha256": "324e2c947f65a49717bf744eb2aff3b1ac73b3d5b544def474c2d4cce6f8bdda",
+    "equivalence_verified": true,
+    "independent_review_verified": true,
+    "canonical_tests": "15 base plus 56 extended; all public outputs compared at every clock",
+    "four_state_cases": 27648,
+    "independent_coverage": {
+      "independent_dynamic_cases": 14,
+      "public_output_bits_compared_each_clock": 160,
+      "clock_edges_compared": 3287,
+      "dynamic_geometry_bytes": [
+        1,
+        2,
+        15,
+        16,
+        17,
+        33,
+        129,
+        257
+      ],
+      "dynamic_rows": [
+        1,
+        2
+      ],
+      "independent_crc_oracle": "MSB polynomial 0x04c11db7 and final bit reversal; logical rows/bytes recomputed separately from AXI beat packing.",
+      "response_phase_ns": 1.3,
+      "request_phase_ns": 0.6,
+      "async_reset_offsets_ns": [
+        0.7,
+        1.1
+      ],
+      "targeted_cases": [
+        "minimum 1-byte image",
+        "unused final lanes contain X/Z",
+        "4KiB split and multirow stride",
+        "final R beat held across preceding BYTES processing",
+        "invalid/X/Z R fields during BYTES",
+        "simultaneous online loss / abort / invalid R priority",
+        "abort first cause survives later online loss",
+        "natural timeout while in BYTES",
+        "timeout preserves advertised AR and drains full burst",
+        "immutable held result under offline/abort / stray R",
+        "sticky fault blocks request reuse"
+      ],
+      "four_state_guard_cases": 524288,
+      "four_state_axes": "online 4 states x abort 4 states x timer 4^4 states x 8 result_code patterns x 16 R-field perturbations; reference uses explicit case-equality truth tests.",
+      "mutation": "Removing abort from the new byte guard compiled successfully and failed the independent oracle at online 1 / abort 1 / timer 0 / result_code 0, exit1."
+    },
+    "all_unlisted_preserved_files_unchanged": true,
+    "intermediate_sha256": "f3c9fc2cb2f09995757229abe30b0e9946f542e3a40904987b7402046124c969",
+    "scratch_step": {
+      "applied_exact_reviewed_candidate": true,
+      "canonical_tests": "15 base plus 56 extended",
+      "review_ref": {
+        "path": "build/video/mode_board_review/review_acceptance_and_scratch_candidate.json",
+        "sha256": "eea4e2a5bdbd74ebdf8c47a6d4aeb3acf8a255ac30d20f405c4e94f4fa8ad890"
+      },
+      "scope": "Public-output cycle equivalence; internal scratch contents on rejected beats may differ"
+    }
+  },
+  "writer_exception": {
+    "path": "rtl/video/video_write_dma.sv",
+    "before_sha256": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "after_sha256": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+    "test_path": "tb/video/tb_write_dma.sv",
+    "test_before_sha256": "c31010f6f55fd4f8f459b2049a41123cf937f553144582ef366585c083af27b4",
+    "test_after_sha256": "be66fbb5228ce7cb0748d6aca89ce7c568b320ad10847646afc392183dbd05f1",
+    "numerical_and_four_state_cases": 2499200,
+    "all_public_outputs_cycle_equivalent": true,
+    "mutation_detected": true,
+    "unchanged_transactions_and_constraints": true
   }
 }

@@ -72,3 +72,9 @@ assert (sample_valid == previously_sampled_request);
 - [ ] 逐项记录RAW完整四角、KEY1到BOX框/点、KEY1到AVATAR及回RAW；mode request/commit推进而raw提交/采集CRC/帧ID不变，60秒无欠载/叠加故障。
 - [ ] KEY0后素材重装/重新校准重采、完整桌面恢复；需用户实际操作和观察才能关闭，不能用数字测试代替。
 - [ ] 更新状态/来源/位流与现场证据并精确本地提交，无push或merge。
+
+## 时序后续
+
+normal六种子与performance单种子均未闭合setup。仅对公共CRC reader作阶段条件等价优化，作为上述全部来源冻结约定的有记录例外；F2顶层/FDC/IP仍保留。旧/新逐拍和四态等价、受影响回归及新物理构建见[时序优化计划](2026-10-20-mode-board-timing.md)。本页现场验收勾选条件不变。
+
+当前公共CRC两步及writer算术改写的数字等价检查通过，最新实际setup仍-0.225ns/18端点；改由[core控制流水计划](2026-10-20-mode-capture-pipeline.md)推进。F2顶层/FDC/IP仍保留，原Task5/6物理勾选条件不变。
