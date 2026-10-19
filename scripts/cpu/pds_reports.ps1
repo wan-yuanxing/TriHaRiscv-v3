@@ -37,7 +37,7 @@ function Get-TrihaPdsCells([string] $Text) {
     return $cells
 }
 
-function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual, [int] $RegisteredTraining=1) {
+function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual, [int] $RegisteredTraining=1, [int] $RegisteredDivider=-1) {
     $expected = [ordered]@{
         SUPPORT_BRANCH_PREDICTION=1;SUPPORT_MULDIV=1;SUPPORT_SUPER=0;SUPPORT_MMU=0
         REGISTER_REDIRECT=1
@@ -49,6 +49,7 @@ function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual, [int] $Regist
         $expected['REGISTER_TRAINING']=$RegisteredTraining
         $frontendExpected['REGISTER_TRAINING']=$RegisteredTraining
     }
+    if($RegisteredDivider -ge 0){$expected['REGISTER_DIVIDER_INPUT']=$RegisteredDivider}
     $scopes = [ordered]@{
         'triha_core' = [ordered]@{DUAL_ISSUE=$Dual}
         'triha_core/u_cpu' = $expected
@@ -56,6 +57,7 @@ function Assert-TrihaPdsConfiguration([string] $Text, [int] $Dual, [int] $Regist
         'triha_core/u_cpu/u_frontend/u_fetch' = [ordered]@{SUPPORT_MMU=1}
         'triha_core/u_cpu/u_mmu' = [ordered]@{SUPPORT_MMU=0}
     }
+    if($RegisteredDivider -ge 0){$scopes['triha_core/u_cpu/u_div']=[ordered]@{REGISTER_INPUT=$RegisteredDivider}}
     foreach ($scope in $scopes.Keys) {
         $pattern = '(?ms)^I: Module instance \{' + [regex]::Escape($scope) +
             '\} parameter value:\r?\n(.*?)(?=^I:|\z)'

@@ -219,6 +219,22 @@ Fast角setup已无违例，但Slow最差比第9轮变差1.595ns，100MHz仍未�
 
 证据`docs/verification/cpu/distributed_regfile_timing.json`；新组件/整核源码已处于同一CPU工作树，尚未合并主工程，未生成bitstream或编程板卡。
 
+## 复用原除法器的寄存入口（第11轮）
+
+原除法器存在重复运算缓存和忙碌中重启语义，本轮不改写其迭代状态或缓存tag：新增完整144位载荷及有效位入口寄存，数据每拍独立采样，原模块保持字节不变。输出流严格延后一周期，仅DIV/REM延迟增加一拍，六个主流水级和load时序不变。实际综合裁去原模块未用的字段，整核FF增加82。
+
+同一最终组件测试对原直接连接RED、对封装GREEN：308组四类整数运算（独立64位整数oracle，包含零除/溢出/负数）、16次缓存命中，加1000周期忙碌重启/连续有效和复位扰动，312次完成结果及完整valid流恰好移位一拍；真实输出损坏被拒绝。三种背压×单/双模式按序异常和IRQ、请求保持/fault、组件RF及整核20项正例/6项预期拒绝通过。旧逐周期miter明确REGISTER_REDIRECT/TRAINING/DIVIDER_INPUT均为0，只覆盖旧时序；不能把它称为新默认逐周期等价。新默认使用按序整核测试和除法器移位miter。
+
+CoreMark性能测量区间仍为单1682259/双1390197周期、1467843次WB完成、CRC相同；观察IPC/短RTL估算仍0.872543/2.972194及1.055853/3.596613。startup、retire探针、validation、冒烟也通过。该基准区间没有观察到新增周期，不代表所有含DIV/REM程序没有那一拍代价；仍非官方分数或板级结果。
+
+原100MHz、IO/hold/multicorner和区域约束完整新实现，展开日志及独立复核均确认CPU REGISTER_DIVIDER_INPUT=1、wrapper REGISTER_INPUT=1。CPU-only **6621 LUT/5205 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计；比第10轮少212 LUT、多82 FF。原生返回0，宿主return2/TIMING_FAIL，主详细布线129次到0未布通，完整255.994秒；冻结31项输入/342项输出及独立复核一致。
+
+实际setup Slow/Fast **-3.531/+0.622ns**，hold +0.101/+0.049ns，脉宽 +4.346/+4.345ns，performance一致。较第10轮Slow改善1.128ns（新网表/新布局），但仍比第9轮最优WNS差0.467ns，**100MHz未通过**。
+
+最差转到data_ack→异常取消→前端flush→译码FIFO的pc_q写使能，末端89负载；10级逻辑，逻辑1.999ns/布线12.140ns。原FIFO将宽PC/指令数据写入放在flush控制分支之后；下一步只让空闲槽的宽payload提前采样，实际push、计数、指针、valid和分类/fault元数据保持原逻辑。满队列必须保持所有有效payload，空闲时不能改变原IRQ inhibit所依赖的元数据，也不新增延迟。
+
+证据`docs/verification/cpu/divider_input_timing.json`。旧物理结果用新复核脚本读取时，入口寄存引入前须加`-LegacyDivider`；新运行默认严格要求寄存开启。未合并主工程或编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

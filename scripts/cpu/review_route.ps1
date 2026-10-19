@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([Parameter(Mandatory)][string] $RunDirectory, [switch] $LegacyTraining)
+param([Parameter(Mandatory)][string] $RunDirectory, [switch] $LegacyTraining, [switch] $LegacyDivider)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
@@ -10,7 +10,7 @@ $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $run=(Resolve-Path -LiteralPath $RunDirectory).Path
 $receipt=Join-Path $root ('build/cpu/route-review-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ')+'.json')
 $result=[ordered]@{status='FAIL';run=$run;frozen_result_sha256=$null;input_count=0;output_count=0
-    legacy_training=[bool]$LegacyTraining
+    legacy_training=[bool]$LegacyTraining;legacy_divider=[bool]$LegacyDivider
     flow_status='UNKNOWN';timing=$null;mapped_resources=$null;error=$null;reviewer_hashes=[ordered]@{}}
 try {
     $path=Join-Path $run 'result.json'
@@ -35,7 +35,7 @@ try {
     foreach($stage in @('pnr','report_timing')) {
         if($output -notmatch ('(?m)^Executing : '+$stage+'(?: [^\r\n]*)? successfully\.\s*$')){throw "Missing route stage: $stage"}
     }
-    $result['configuration']=Assert-TrihaPdsConfiguration ([IO.File]::ReadAllText((Join-Path $run 'compile/run.log'))) 0 $(if($LegacyTraining){-1}else{1})
+    $result['configuration']=Assert-TrihaPdsConfiguration ([IO.File]::ReadAllText((Join-Path $run 'compile/run.log'))) 0 $(if($LegacyTraining){-1}else{1}) $(if($LegacyDivider){-1}else{1})
     $unconstrained=@([regex]::Matches($output,"(?m)^W: Timing-408[67]: Port '([^']+)' is not constrained.*$")|
         Where-Object {$_.Groups[1].Value -ne 'clk_i'})
     if($unconstrained.Count -ne 0){throw 'Functional CPU port missing timing constraint.'}

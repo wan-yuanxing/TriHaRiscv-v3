@@ -82,7 +82,7 @@ foreach ($selected in $modes) {
             -RunDirectory $work -Label 'pds' -Records $commands -TimeoutSeconds $ProcessTimeoutSeconds
         Assert-TrihaPdsStages $output $Stage
         $compileText = [IO.File]::ReadAllText((Join-Path $work 'compile/run.log'))
-        $result['elaborated_configuration'] = Assert-TrihaPdsConfiguration $compileText $dual
+        $result['elaborated_configuration'] = Assert-TrihaPdsConfiguration $compileText $dual 1 1
         $report = Join-Path $work 'synthesize/triha_core.snr'
         $text = [IO.File]::ReadAllText($report)
         $result.resources = Get-TrihaPdsResources $text

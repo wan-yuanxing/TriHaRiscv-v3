@@ -35,6 +35,7 @@ module triha_cpu
     ,parameter SUPPORT_MMU      = 0
     ,parameter REGISTER_REDIRECT = 1
     ,parameter REGISTER_TRAINING = 1
+    ,parameter REGISTER_DIVIDER_INPUT = 1
     ,parameter SUPPORT_DUAL_ISSUE = 1
     ,parameter SUPPORT_LOAD_BYPASS = 1
     ,parameter SUPPORT_MUL_BYPASS = 1
@@ -519,7 +520,8 @@ u_mul
 );
 
 
-biriscv_divider
+triha_divider
+#(.REGISTER_INPUT(REGISTER_DIVIDER_INPUT))
 u_div
 (
     // Inputs

@@ -5,7 +5,7 @@
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "6f7f7cdcb5c117249ead671d0a0da8609748c883dd2873bfbdcbc23482dcd047",
+      "derived_sha256": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
@@ -14,7 +14,8 @@
         "Connect maintained issue module with payload selection independent of kill/exception controls.",
         "Connect maintained multiplier/CSR data-register derivatives.",
         "Select predictor training register independently from redirect timing.",
-        "Connect independent load bypass payload from maintained LSU to both pipeline controllers."
+        "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
+        "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -110,6 +111,18 @@
         "config/cpu_primitives.json"
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged; installed tool models referenced without copying."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_divider.v",
+      "base_sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+      "derived": "rtl/cpu/triha_divider.v",
+      "derived_sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "changes": [
+        "Register the complete 144-bit divider input tuple and one valid bit, sampling payload independently of validity.",
+        "Instantiate the original divider unchanged, including its iterative algorithm, cache and restart behavior; output stream is exactly one cycle later when enabled.",
+        "Provide REGISTER_INPUT=0 only for explicit legacy timing comparison."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     }
   ]
 }

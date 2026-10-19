@@ -59,7 +59,7 @@ try {
     foreach($stage in @('pnr','report_timing')) {
         if($output -notmatch ('(?m)^Executing : '+$stage+'(?: [^\r\n]*)? successfully\.\s*$')){throw "Missing actual route stage: $stage"}
     }
-    $result['elaborated_configuration']=Assert-TrihaPdsConfiguration ([IO.File]::ReadAllText((Join-Path $work 'compile/run.log'))) 0
+    $result['elaborated_configuration']=Assert-TrihaPdsConfiguration ([IO.File]::ReadAllText((Join-Path $work 'compile/run.log'))) 0 1 1
     $unconstrained=@([regex]::Matches($output,"(?m)^W: Timing-408[67]: Port '([^']+)' is not constrained.*$")|Where-Object {$_.Groups[1].Value -ne 'clk_i'})
     if($unconstrained.Count -ne 0){throw 'A functional CPU port is missing timing constraints.'}
     $report=Join-Path $work 'report_timing/triha_core.rtr'

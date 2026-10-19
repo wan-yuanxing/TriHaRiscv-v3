@@ -19,6 +19,7 @@ rtl/cpu/vendor/src/core/riscv_core.v
 rtl/cpu/triha_frontend.v
 rtl/cpu/triha_issue.v
 rtl/cpu/triha_regfile.v
+rtl/cpu/triha_divider.v
 rtl/cpu/triha_multiplier.v
 rtl/cpu/triha_csr.v
 rtl/cpu/triha_lsu.v

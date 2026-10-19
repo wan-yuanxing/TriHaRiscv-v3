@@ -59,3 +59,13 @@ $rejected = $false
 try { Get-TrihaPdsMappedResources '' | Out-Null } catch { $rejected = $true }
 if (-not $rejected) { throw 'Empty map report was accepted.' }
 Write-Host 'CPU_PDS_REPORT_TEST PASS resource_stage_configuration_checks'
+
+$dividerConfiguration=$logicalConfiguration.Replace("I: Module instance {triha_core/u_cpu/u_frontend} parameter value:", "    REGISTER_DIVIDER_INPUT = 1'b1`nI: Module instance {triha_core/u_cpu/u_frontend} parameter value:")
+$dividerConfiguration+="I: Module instance {triha_core/u_cpu/u_div} parameter value:`n    REGISTER_INPUT = 1'b1`n"
+Assert-TrihaPdsConfiguration $dividerConfiguration 0 1 1|Out-Null
+foreach($bad in @($dividerConfiguration.Replace("REGISTER_DIVIDER_INPUT = 1'b1","REGISTER_DIVIDER_INPUT = 1'b0"),$dividerConfiguration.Replace("REGISTER_INPUT = 1'b1","REGISTER_INPUT = 1'b0"))) {
+    $rejected=$false
+    try {Assert-TrihaPdsConfiguration $bad 0 1 1|Out-Null} catch {$rejected=$true}
+    if(-not $rejected){throw 'Unregistered divider input was accepted.'}
+}
+Write-Host 'CPU_DIVIDER_CONFIGURATION_TEST PASS'
