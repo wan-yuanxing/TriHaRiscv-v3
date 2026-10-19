@@ -54,6 +54,9 @@ module predictor_select_case #(
             for(j=0;j<BHT_ENTRIES;j=j+1)
                 if(u_candidate.BRANCH_PREDICTION.bht_sat_q[j]!==u_original.BRANCH_PREDICTION.bht_sat_q[j])
                     $fatal(1,"PREDICTOR_SELECT_FAIL BHT_state entry=%0d cycle=%0d",j,cycles);
+            if({u_candidate.BRANCH_PREDICTION.bht_rd_entry_w,u_candidate.BRANCH_PREDICTION.bht_predict_taken_w}!==
+               {u_original.BRANCH_PREDICTION.bht_rd_entry_w,u_original.BRANCH_PREDICTION.bht_predict_taken_w})
+                $fatal(1,"PREDICTOR_SELECT_FAIL BHT_read_fourstate entries=%0d cycle=%0d",ENTRIES,cycles);
             for(j=0;j<RAS_ENTRIES;j=j+1)
                 if(u_candidate.BRANCH_PREDICTION.ras_stack_q[j]!==u_original.BRANCH_PREDICTION.ras_stack_q[j])
                     $fatal(1,"PREDICTOR_SELECT_FAIL RAS_state entry=%0d cycle=%0d",j,cycles);

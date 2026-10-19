@@ -232,7 +232,22 @@ else begin
     end
 end
 
-wire bht_predict_taken_w = BHT_ENABLE && (bht_sat_q[bht_rd_entry_w] >= 2'd2);
+// Read both fetch-word banks before the late BTB upper-word decision.
+// Preserve relational comparison and unknown-address behavior in RTL.
+wire [NUM_BHT_ENTRIES_W-1:0] bht_even_index_w =
+    bht_rd_entry_w & ({NUM_BHT_ENTRIES_W{1'b1}} << 1);
+wire [NUM_BHT_ENTRIES_W-1:0] bht_odd_index_w = bht_even_index_w | 1'b1;
+(* syn_keep = 1 *) wire bht_even_taken_w = bht_sat_q[bht_even_index_w] >= 2'd2;
+(* syn_keep = 1 *) wire bht_odd_taken_w = bht_sat_q[bht_odd_index_w] >= 2'd2;
+reg bht_selected_taken_r;
+always @* begin
+    case (bht_rd_entry_w[0])
+        1'b0: bht_selected_taken_r = bht_even_taken_w;
+        1'b1: bht_selected_taken_r = bht_odd_taken_w;
+        default: bht_selected_taken_r = 1'bx;
+    endcase
+end
+wire bht_predict_taken_w = BHT_ENABLE && bht_selected_taken_r;
 
 //-----------------------------------------------------------------
 // Branch target buffer
@@ -280,16 +295,17 @@ always @* begin
     end
 end
 
-reg [NUM_BTB_ENTRIES-1:0] match_read_r;
+wire pc_hit_w, upper_hit_w, write_hit_w;
+reg btb_valid_r;
 reg btb_upper_r;
 always @* begin
-    match_read_r = match_pc_r;
+    btb_valid_r = pc_hit_w;
     btb_upper_r = 1'b0;
-    if (|match_pc_r)
+    if (pc_hit_w)
         btb_upper_r = pc_f_i[2];
     else if (~pc_f_i[2]) begin
-        match_read_r = match_upper_r;
-        if (|match_upper_r)
+        btb_valid_r = upper_hit_w;
+        if (upper_hit_w)
             btb_upper_r = 1'b1;
     end
 end
@@ -304,7 +320,7 @@ wire [NUM_BTB_ENTRIES-1:0] select_write_w;
 reg [NUM_BTB_ENTRIES-1:0] select_read_r;
 always @* begin
     select_read_r = select_pc_w;
-    if (|match_pc_r)
+    if (pc_hit_w)
         select_read_r = select_pc_w;
     else if (~pc_f_i[2])
         select_read_r = select_upper_w;
@@ -313,13 +329,13 @@ assign select_read_w = select_read_r;
 localparam BTB_PAYLOAD_W = 35 + NUM_BTB_ENTRIES_W;
 wire [NUM_BTB_ENTRIES*BTB_PAYLOAD_W-1:0] btb_payload_w;
 triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_pc (
-    .match_i(match_pc_r), .select_o(select_pc_w)
+    .match_i(match_pc_r), .select_o(select_pc_w), .hit_o(pc_hit_w)
 );
 triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_upper (
-    .match_i(match_upper_r), .select_o(select_upper_w)
+    .match_i(match_upper_r), .select_o(select_upper_w), .hit_o(upper_hit_w)
 );
 triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_write (
-    .match_i(match_write_r), .select_o(select_write_w)
+    .match_i(match_write_r), .select_o(select_write_w), .hit_o(write_hit_w)
 );
 
 genvar entry;
@@ -331,7 +347,6 @@ for (entry=0; entry<NUM_BTB_ENTRIES; entry=entry+1) begin: g_btb_select
         {ENTRY,btb_is_call_q[entry],btb_is_ret_q[entry],btb_is_jmp_q[entry],btb_target_q[entry]};
 end
 
-wire btb_valid_r = |match_read_r;
 wire btb_is_call_r;
 wire btb_is_ret_r;
 wire btb_is_jmp_r;
@@ -345,7 +360,7 @@ triha_npc_select #(.WIDTH(BTB_PAYLOAD_W),.INPUTS(NUM_BTB_ENTRIES)) u_btb_select 
 );
 
 wire [NUM_BTB_ENTRIES_W-1:0] btb_wr_alloc_w;
-wire btb_hit_r = |match_write_r;
+wire btb_hit_r = write_hit_w;
 reg btb_miss_r;
 always @* begin
     btb_miss_r = 1'b0;
@@ -594,7 +609,8 @@ module triha_npc_priority #(
     parameter integer INPUTS=32
 )(
     input wire [INPUTS-1:0] match_i,
-    output wire [INPUTS-1:0] select_o
+    output wire [INPUTS-1:0] select_o,
+    output wire hit_o
 );
     localparam integer GROUPS=(INPUTS+5)/6;
     genvar group_index,entry,term;
@@ -616,6 +632,18 @@ module triha_npc_priority #(
                 .I3(flags_w[3]),.I4(flags_w[4]),.I5(flags_w[5]),.Z(group_valid_w[group_index])
             );
         end
+        wire [5:0] hit_terms_w;
+        for(term=0;term<6;term=term+1) begin: g_hit_term
+            if(term<GROUPS) begin: g_used
+                assign hit_terms_w[term]=group_valid_w[term];
+            end else begin: g_padding
+                assign hit_terms_w[term]=1'b0;
+            end
+        end
+        GTP_LUT6 #(.INIT(64'hfffffffffffffffe)) u_hit (
+            .I0(hit_terms_w[0]),.I1(hit_terms_w[1]),.I2(hit_terms_w[2]),
+            .I3(hit_terms_w[3]),.I4(hit_terms_w[4]),.I5(hit_terms_w[5]),.Z(hit_o)
+        );
         for(entry=0;entry<INPUTS;entry=entry+1) begin: g_entry
             wire [5:0] local_w,global_w;
             assign local_w[0]=match_i[entry];
@@ -642,6 +670,7 @@ module triha_npc_priority #(
             );
         end
     end else begin: g_large_table
+        assign hit_o=|match_i;
         for(entry=0;entry<INPUTS;entry=entry+1) begin: g_entry
             assign select_o[entry]=match_i[entry] & ~(|(match_i>>(entry+1)));
         end

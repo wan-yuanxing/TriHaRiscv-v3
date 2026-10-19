@@ -4,12 +4,13 @@ module tb_npc_priority #(parameter BROKEN=0);
     reg [31:0] match=0, random_q=32'h31415926;
     wire [31:0] raw, actual;
     wire [7:0] actual8;
+    wire hit,hit8;
     integer checks=0, i, n, a, b;
     reg [31:0] expected, known_expected;
     reg [7:0] expected8;
     assign actual = BROKEN ? {raw[31:1],~raw[0]} : raw;
-    triha_npc_priority #(.INPUTS(32)) u_full(.match_i(match),.select_o(raw));
-    triha_npc_priority #(.INPUTS(8)) u_small(.match_i(match[7:0]),.select_o(actual8));
+    triha_npc_priority #(.INPUTS(32)) u_full(.match_i(match),.select_o(raw),.hit_o(hit));
+    triha_npc_priority #(.INPUTS(8)) u_small(.match_i(match[7:0]),.select_o(actual8),.hit_o(hit8));
     task check;
         begin
             #1;
@@ -18,7 +19,7 @@ module tb_npc_priority #(parameter BROKEN=0);
                 expected[i]=match[i] & ~(|(match>>(i+1)));
             for(i=0;i<8;i=i+1)
                 expected8[i]=match[i] & ~(|(match[7:0]>>(i+1)));
-            if(actual!==expected || actual8!==expected8)begin
+            if(actual!==expected || actual8!==expected8 || hit!==( |match) || hit8!==( |match[7:0]))begin
                 $display("NPC_PRIORITY_FAIL mask=%h actual=%h expected=%h small=%h expected8=%h",
                     match,actual,expected,actual8,expected8);$finish;
             end
@@ -31,7 +32,7 @@ module tb_npc_priority #(parameter BROKEN=0);
                     $display("NPC_PRIORITY_FAIL highest_entry");$finish;
                 end
             end
-            checks=checks+2;
+            checks=checks+4;
         end
     endtask
     initial begin
