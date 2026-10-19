@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,40 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('raw_display', 'all'):
+            from common import sha256
+            target_path = ROOT/'fpga/pg2l100h/project/video_raw_display.json'
+            display = json.loads(target_path.read_text(encoding='utf-8'))
+            paths = [ROOT/p for p in display['sources']+display['tests']]
+            add_inputs(result, [target_path, *paths, *[ROOT/p for p in display['constraints']]])
+            result['raw_display_tools'] = {}
+            artifacts = []
+            for name in ('iverilog', 'vvp'):
+                executable = tool(name)
+                version_log = work/('raw_'+name+'_version.log')
+                result['raw_display_tools'][name] = {
+                    'path': str(executable), 'sha256': sha256(executable),
+                    'version_log': version_log.relative_to(ROOT).as_posix()}
+                run_logged([executable, '-V'], version_log)
+                artifacts.append(version_log)
+            scenarios = [(f'case_{mode}', (), (f'+CASE={mode}',)) for mode in (*range(30), 31, 32, 33)]
+            scenarios += [(f'invalid_geometry_{value}', (('INVALID_GEOMETRY', value),), ())
+                          for value in range(1, 6)]
+            scenarios += [(f'geometry_{width}_{height}', (('TEST_WIDTH', width), ('TEST_HEIGHT', height)), ())
+                          for width, height in ((1, 1), (5, 3), (17, 5), (31, 2), (800, 1))]
+            scenarios += [('ratio_fast', (), ('+CORE_HALF=3', '+PIXEL_HALF=10.5')),
+                          ('ratio_slow', (), ('+CORE_HALF=5', '+PIXEL_HALF=16.5')),
+                          ('full', (('FULL', 1),), ())]
+            for name, parameters, options in scenarios:
+                stem = 'raw_display_'+name
+                log = simulate(work, stem, display['test_top'], paths, timeout=600,
+                               parameters=parameters, run_args=options)
+                if log.count('PASS raw_display') != 1:
+                    raise RuntimeError('Expected one raw display pass marker: '+name)
+                artifacts += [work/(stem+suffix) for suffix in
+                              ('.vvp', '_compile.log', '_simulation.log')]
+            result['raw_display_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('raw_display')
         if args.suite in ('cpu_axil', 'all'):
             from common import sha256
             result['cpu_axil_tools'] = {}
@@ -548,6 +582,12 @@ def main():
         for name, expected in result.get('cpu_axil_artifacts', {}).items():
             if sha256(ROOT/name) != expected:
                 raise RuntimeError('CPU AXI-Lite artifact changed during regression: '+name)
+        for name, record in result.get('raw_display_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Raw display simulation tool changed during regression: '+name)
+        for name, expected in result.get('raw_display_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:
+                raise RuntimeError('Raw display artifact changed during regression: '+name)
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

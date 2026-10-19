@@ -1,11 +1,21 @@
 # Video 接口状态
 
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
-同帧只改模式不释放当前槽。新 raw 显示记录与 MODE 状态/提交接口尚未实现；下文
+同帧只改模式不释放当前槽。F1已新增raw扫描组件记录握手，正式显示MMIO及MODE接口尚未实现；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 
-依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。后续已实现320预处理、同帧三分支核心及独立板级诊断入口；CPU fabric/MMIO与SoC三槽生命周期仍待集成，下述局部接口不替代共同契约。
+## F1 raw全屏组件
+
+`raw_display`默认800×600原分辨率、raw stride2400B，双bank行缓存各2400B；起扫拍
+同时发首像素，整行最后像素退休后才能归还bank。`record_valid/ready`消费新帧命令；
+合法记录经CDC在安全帧边界提交，commit/release事件保持至消费。非法描述符走独立
+`record_reject_valid/ready/code`，code1及`rejected_records`可观测，当前画面继续扫描。
+AXI错误/超时/DDR失效/欠载为sticky扫描故障，公开事务排空；core/pixel/从端复位须
+协调，不提供单独master复位后保留在途事务的保证。此组件还不接受同帧MODE更新，
+不包含显示MMIO/叠加或板级接口。验证及综合范围见[raw_display](../verification/video/raw_display.md)。
+
+依据：v0.6 第 3、8、9、11.3 节。固定800×600输入、彩条、DDR及真实HDMI raw单帧已有分别记录的物理证据。同帧raw/preview在d017092绑定的复位分离版本通过四角图和真实桌面的两次受控实体KEY0图像验收，历史黑帧/裁切失败仍保留，证据见 `docs/verification/video/shared_preview.md`。后续已实现320预处理、同帧三分支核心及独立板级诊断入口；采帧MMIO/原生CPU控制已完成数字联测，正式fabric与SoC三槽生命周期仍待集成，下述局部接口不替代共同契约。
 
 ## 独立检测缩小组件
 

@@ -1,0 +1,18 @@
+# Component estimate only: 125 MHz core, fixed 40 MHz raster.
+# No board pin, external I/O AC, routed CDC or complete SoC timing claim.
+create_clock -name core_clk -period 8.000 [get_ports {core_clk}]
+create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]
+
+# Only asynchronous scalar first stages; local stage-to-stage paths stay timed.
+set_false_path -from [get_clocks {core_clk}] -to [get_cells {record_sync1 done_sync1* commit_ack_sync1 release_ack_sync1 fault_sync1}]
+set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {request_sync1* commit_sync1 release_sync1 scan_sync1 underflow_sync1}]
+
+# Stable mailbox/request/result/event bundles, held through two-stage control.
+set_max_delay 6.0 -datapath_only -from [get_cells {mailbox_base* mailbox_stride* mailbox_frame* mailbox_slot*}] -to [get_cells {pending_base* pending_stride* pending_frame* pending_slot*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {req_base*}] -to [get_cells {dma_base_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {req_stride*}] -to [get_cells {dma_stride_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {req_row*}] -to [get_cells {dma_row_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {bank_success*}] -to [get_cells {bank_ready*}]
+# Synthesis may merge commit payloads with identical active-frame/slot Qs.
+set_max_delay 6.0 -datapath_only -from [get_cells {active_frame* active_slot*}] -to [get_cells {commit_frame_id* commit_slot*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {release_pixel_id* release_pixel_slot*}] -to [get_cells {release_frame_id* release_slot*}]

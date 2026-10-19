@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_raw_display",
+  "top": "raw_display",
+  "test_top": "tb_raw_display",
+  "sources": ["rtl/video/raw_display.sv"],
+  "tests": ["tb/video/tb_raw_display.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_raw_display.fdc"],
+  "scope": "800x600 RGB888 full-resolution raw scanout, dual-clock line banks, held commit/release and AXI read draining; standalone synthesis estimate only, no MODE/overlay, display MMIO, shared-master visibility, board pins or bitstream"
+}

@@ -5,8 +5,10 @@
 2026-10-19 用户确认正式显示改为 800×600 raw 原分辨率全屏，MODE 功能键循环
 RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
 [全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。当前可运行
-工程、公共 preview 配置和已验收位流仍为双窗诊断版本；新显示将先实现 raw 行扫描，
-再接人工叠加/模式及共享 DDR，不将设计状态写作已完成板测。
+板级工程、公共 preview 配置和已验收位流仍为双窗诊断版本；F1已新增独立raw扫描
+组件，后续接板级、人工叠加/模式及共享DDR。组件入口为
+`python scripts/video/run.py --suite raw_display`，综合目标`video_raw_display`仅支持synth；
+实际范围见[全屏组件验证](../verification/video/raw_display.md)。
 
 ## 目前可以运行
 
@@ -43,6 +45,7 @@ python scripts/video/build_pds.py --target video_hdmi_capture --stage bitstream
 python scripts/video/package_board.py --target video_hdmi_capture
 python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
+python scripts/video/run.py --suite raw_display
 python scripts/video/build_pds.py --target video_preview_board --stage bitstream
 python scripts/video/package_board.py --target video_preview_board
 python scripts/video/program_board.py --target video_preview_board --start-server
@@ -154,6 +157,7 @@ rtl/video/
   video_preview_capture.sv               同帧raw/preview原子分送和双DMA仲裁
   video_frame_crc_reader.sv              行式有效字节CRC及读事务排空
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
+  raw_display.sv                         原分辨率全屏、完整首像素及独立描述符拒绝
   video_preview_engine.sv                双平面CRC检查到显示读口的阶段所有权
 sw/include/video_cfg.h                    同源生成的 C 常量
 sw/include/video_regs.h                   同源生成的采帧MMIO C定义
@@ -205,6 +209,7 @@ tb/video/
   check_bilinear_dump.py                 六幅RTL RGB转储重建张量并比对冻结哈希
   tb_video_preview_capture.sv            双平面byte-memory oracle及异常排空
   tb_preview_display.sv                  异步时钟、逐像素/行读/所有权与事件受阻
+  tb_raw_display.sv                      整光栅像素/首行/旧槽及非致命拒绝检查
   run_preview_display_test.py            独立显示仿真和不可变输入证据
   tb_video_frame_crc_reader.sv           CRC、行尾/4KiB、错误与背压结果稳定
   tb_video_preview_board.sv              联合type6/7和复位/健康撤销数字替身
@@ -240,6 +245,7 @@ fpga/pg2l100h/
   project/video_axi_capture.json          AXI/DMA 独立目标，共用 DDR FDC/RCF
   project/video_hdmi_capture.json         真实HDMI raw联合目标，显式HDMI和DDR输入
   project/video_preview_board.json        同帧raw/preview、共享双窗口联合目标
+  project/video_raw_display.json         F1原分辨率全屏组件显式源/测试
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
   project/video_detect_bilinear.json      独立5:2双线性组件显式源及测试
   project/video_input_pad.json / video_c8_pack.json 独立格式组件显式清单
@@ -249,6 +255,7 @@ fpga/pg2l100h/
   constraints/video_ddr_bist.fdc / .rcf   完整 DDR 管脚/时钟/复位和官方位置约束
   constraints/video_hdmi_capture.fdc     额外HDMI管脚、生成时钟和帧入口CDC
   constraints/video_preview_board.fdc    显示标量CDC首级、6ns稳定bundle及reset
+  constraints/video_raw_display.fdc      core8ns/pixel25ns组件及6ns束约束
   constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
   constraints/video_detect_bilinear.fdc   双线性组件8ns时钟
   constraints/video_input_format.fdc     BGR/补行及C8组件8ns时钟

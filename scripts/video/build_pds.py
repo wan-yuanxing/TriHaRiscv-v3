@@ -48,7 +48,7 @@ def verify_build_inputs(work, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
     hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board")
@@ -151,7 +151,7 @@ def main():
         script.write_text("\n".join(lines) + "\n", encoding="utf-8")
         verify_build_inputs(work, result)
         executable = tool("pds_shell")
-        if args.target == 'cpu_native_axil':
+        if args.target in ('cpu_native_axil', 'video_raw_display'):
             result['pds_executable'] = str(executable)
             result['pds_executable_sha256'] = sha256(executable)
         result["pds_version"] = run_logged(
@@ -199,7 +199,7 @@ def main():
             result["verify_mask"] = str(verify_mask.relative_to(ROOT))
             result["verify_mask_sha256"] = sha256(verify_mask)
         verify_build_inputs(work, result)
-        if args.target == 'cpu_native_axil' and sha256(executable) != result['pds_executable_sha256']:
+        if args.target in ('cpu_native_axil', 'video_raw_display') and sha256(executable) != result['pds_executable_sha256']:
             raise ValueError('PDS executable changed during build')
         result['input_snapshot_verified_before_and_after_build'] = True
     except Exception as error:
