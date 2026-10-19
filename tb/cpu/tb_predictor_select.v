@@ -37,7 +37,7 @@ module predictor_select_case #(
     task compare;
         begin
             if({candidate_pc,candidate_taken}!=={original_pc,original_taken})
-                $fatal(1,"PREDICTOR_SELECT_FAIL output entries=%0d cycle=%0d pc=%h original=%h candidate=%h",ENTRIES,cycles,pc,original_pc,candidate_pc);
+                $fatal(1,"PREDICTOR_SELECT_FAIL output entries=%0d cycle=%0d pc=%h original=%h/%b candidate=%h/%b",ENTRIES,cycles,pc,original_pc,original_taken,candidate_pc,candidate_taken);
             if({u_candidate.BRANCH_PREDICTION.ras_index_q,u_candidate.BRANCH_PREDICTION.ras_index_real_q,
                 u_candidate.BRANCH_PREDICTION.global_history_q,u_candidate.BRANCH_PREDICTION.global_history_real_q,
                 u_candidate.BRANCH_PREDICTION.u_lru.lfsr_q}!==
@@ -113,12 +113,20 @@ module predictor_select_case #(
             u_candidate.BRANCH_PREDICTION.btb_is_ret_q[i]=~i[0];u_original.BRANCH_PREDICTION.btb_is_ret_q[i]=~i[0];
         end
         pc=32'h80000000;step;pc=32'h80000004;step;
+        // Exercise every physical BHT write index before random training.
+        // No BTB update or speculative RAS activity is needed for this sweep.
+        request=0;accept=0;taken=0;not_taken=1;
+        for(i=0;i<BHT_ENTRIES;i=i+1)begin source=32'h80000000+(i*4);step;end
+        for(i=0;i<BHT_ENTRIES;i=i+1)
+            if(u_candidate.BRANCH_PREDICTION.bht_sat_q[i]!==2'd2)
+                $fatal(1,"PREDICTOR_SELECT_FAIL full_BHT_write_sweep entry=%0d",i);
+        not_taken=0;
         for(i=0;i<4000;i=i+1) begin
             random_next;pc=32'h80000000+{25'b0,random_q[4:0],2'b0};
             request=random_q[17];accept=random_q[9];invalidate=random_q[25];
             is_call=random_q[6];is_ret=random_q[13];is_jmp=random_q[20];
             taken=random_q[14];not_taken=random_q[27];
-            random_next;source=32'h80000000+{25'b0,random_q[4:0],2'b0};
+            random_next;source=32'h80000000+{21'b0,random_q[8:0],2'b0};
             random_next;target={random_q[31:2],2'b0};
             if((i%31)==0) pc=32'h80000000;
             if((i%37)==0)pc=32'h80000004;

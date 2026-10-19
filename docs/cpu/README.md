@@ -103,3 +103,5 @@ LSU深度2请求队列按head/tail寄存存储，保持原全部有效及无效�
 `run_route.ps1 -SingleClockRegion`冻结同RTL并使用单时钟区域物理recipe，原时序预算不变；第16轮实际setup Slow/Fast -2.277/+0.318ns，是当前最优WNS，仍未通过100MHz，且前20条含核内-1.929ns。资源和CoreMark配置不变，功能证据经哈希复核后复用，见`single_clock_region_timing.json`。`-IoRegisters`为同区域官方现有FF/IO打包对照，另存独立运行；不能把端口映射或工具PASS当100MHz通过。
 
 `triha_npc.v`以独热AND/OR选择和直接表项写入保持原BTB优先级/全部预测状态，仍为BTB32/BHT512/RAS8。`run_redirect.ps1 -Test predictorselect`完整比较两种配置的表状态和输出，含重复tag及独立最高索引oracle；`-LegacyPredictor`验证原模块fixture，`-Broken`必须拒绝预测输出错误。第18轮6505 LUT/5207 FF，CoreMark等周期；实际setup -2.756/-0.054ns，未通过100MHz，见`predictor_select_timing.json`。
+
+BHT饱和转移进一步局部化到各表项，原512项/2bit/reset和全部周期保持；组件测试已覆盖完整写地址扫描。第19轮6484 LUT/5207 FF，CoreMark等周期，但实际setup -4.375/-0.602ns仍失败，见`predictor_counter_local_timing.json`。固定最佳轮IO位置的物理对照另存独立recipe，不作为板级管脚。

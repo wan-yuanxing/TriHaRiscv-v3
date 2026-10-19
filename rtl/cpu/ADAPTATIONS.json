@@ -146,12 +146,13 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "e2300bcf858825d2366d2426ea8fa1145c1a4179836960ca607dc4678745722d",
+      "derived_sha256": "aaa6c8e8502749c4dedcc0efcab70b5a741e64f7ec978f7b57c4dc80e5866822",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
         "Write each BTB entry directly using its highest-priority one-hot hit or the original miss-allocation index; BHT/RAS/training/LFSR state and cycles unchanged.",
-        "Adapt the fixed OpenTitan one-hot mux to flat Verilog ports; no additional compiler or runtime dependency."
+        "Adapt the fixed OpenTitan one-hot mux to flat Verilog ports; no additional compiler or runtime dependency.",
+        "Localize each BHT entry saturation transition after its address match, preserving counter/reset/condition priority and all cycles while avoiding a dynamic write-side counter read."
       ],
       "references": [
         {

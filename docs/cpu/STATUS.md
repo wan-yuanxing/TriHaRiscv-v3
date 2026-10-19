@@ -347,6 +347,16 @@ performance一致，**100MHz仍未通过**，全局setup较最佳第16轮恶化0
 
 全局最差data_ack_i→data_wstrb_o[3]为外部组合控制；前20条仍有RAS数据路径-2.539ns和BHT CE -2.428ns。下一步只局部化各BHT表项的饱和转移，消除动态读计数再写使能的反馈链，保留规模、2bit状态、reset、taken优先级及周期，再用完整预测器miter/整核/CoreMark和原实际STA核验。证据`docs/verification/cpu/predictor_select_timing.json`。未合并主工程、未编程板卡。
 
+## BHT表项本地饱和更新（第19轮）
+
+只将动态地址读计数→饱和判断→动态写入，展开为各BHT表项的本地2bit转移，地址比较、reset=3、条件优先级和全部512项/预测周期不变。组件测试补齐512个写地址扫描及随机9bit训练，正式配置4515周期、小GShare配置4019周期，全部表状态、输出和独立查找oracle一致；真实预测输出错误被拒绝。26项唯一正例组、6项预期拒绝，全部输入/外部原语/输出核验。CoreMark仍单1682259/双1390197周期、1467843 WB及CRC相同，短RTL估算/观察IPC不变，非官方或板测。
+
+同单区域、原100MHz/IO/hold/multicorner完整实现，CPU-only **6484 LUT/5207 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计；比第18轮少21 LUT、FF不变。原生返回0、宿主return2/TIMING_FAIL，98次主详细迭代到0未布通，完整224.628秒；31项输入/280项输出和独立复核一致。
+
+实际setup Slow/Fast **-4.375/-0.602ns**，hold +0.020/+0.004ns，脉宽 +4.346/+4.345ns，performance一致。100MHz仍未通过，全局最差比第18轮差1.619ns；Slow违例端点3171→2762并不能概括为时序收益。第16轮-2.277ns仍是历史最优。
+
+最差inst_rdata_i[12]→FIFO csr_history_q[1][0]，新前20条也有多个ACK/error→外部端口，未包含BHT；不将缺席前20条称为全部BHT通过。已观察到自动IO分配随各轮映射变化，下一步冻结第16轮224个已映射IO位置，固定时序预算和当前RTL作独立物理对照，再判断剩余关键路径。此管脚表仅为隔离诊断，不是板级管脚方案。证据`docs/verification/cpu/predictor_counter_local_timing.json`。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

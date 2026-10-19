@@ -209,10 +209,18 @@ begin
         bht_sat_q[i4] <= 2'd3;
     end
 end
-else if (branch_is_taken_i && bht_sat_q[bht_wr_entry_w] < 2'd3)
-    bht_sat_q[bht_wr_entry_w] <= bht_sat_q[bht_wr_entry_w] + 2'd1;
-else if (branch_is_not_taken_i && bht_sat_q[bht_wr_entry_w] > 2'd0)
-    bht_sat_q[bht_wr_entry_w] <= bht_sat_q[bht_wr_entry_w] - 2'd1;
+else begin
+    // Keep the two-bit saturation decision local to each entry; a write
+    // address must not first traverse a dynamic counter read multiplexer.
+    for (i4=0; i4<NUM_BHT_ENTRIES; i4=i4+1) begin
+        if (bht_wr_entry_w == i4) begin
+            if (branch_is_taken_i && bht_sat_q[i4] < 2'd3)
+                bht_sat_q[i4] <= bht_sat_q[i4] + 2'd1;
+            else if (branch_is_not_taken_i && bht_sat_q[i4] > 2'd0)
+                bht_sat_q[i4] <= bht_sat_q[i4] - 2'd1;
+        end
+    end
+end
 
 wire bht_predict_taken_w = BHT_ENABLE && (bht_sat_q[bht_rd_entry_w] >= 2'd2);
 
