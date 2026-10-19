@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','ordered')][string] $Test='frontend',
+param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','ordered')][string] $Test='frontend',
     [ValidateSet('single','dual','both')][string] $Mode='both',
     [ValidateRange(1,2147483647)][int] $Seed=37,
     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor)
@@ -43,6 +43,7 @@ try {
     if($Test -eq 'pcupdate'){$sources+='tb/cpu/tb_pc_update.v'}
     if($Test -eq 'lsuqueue'){$sources+='tb/cpu/tb_lsu_queue.v'}
     if($Test -eq 'predictorselect'){$sources+='tb/cpu/tb_predictor_select.v'}
+    if($Test -eq 'parallelread'){$sources+='tb/cpu/tb_issue_parallel_read.v'}
     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
@@ -60,14 +61,14 @@ try {
         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
-        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
-        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
+        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
-        if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+        if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect','parallelread')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
-        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
         $result.executions+=@{test=$Test;status='PASS'}
     } else {
         $config=Get-Content (Join-Path $root 'config/cpu_toolchain.json') -Raw|ConvertFrom-Json

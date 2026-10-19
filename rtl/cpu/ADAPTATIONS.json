@@ -37,7 +37,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
       "derived": "rtl/cpu/triha_issue.v",
-      "derived_sha256": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+      "derived_sha256": "d79aaefc7e8c712c0e1b8688357ea1118b5101a669e7801f161c9389eb058947",
       "changes": [
         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
         "Rename integration module to triha_issue.",
@@ -47,7 +47,8 @@
         "Pass independent load bypass payload to both pipeline controllers, retaining original completion/fault payload.",
         "Connect the maintained register-file wrapper: native zero-latency distributed RAM for single issue; existing generic implementation for dual issue.",
         "Use the registered E2/WB tags only for operand data selection; preserve all original commit/RF/scoreboard tags and assert equality on actual issue.",
-        "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior."
+        "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
+        "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },

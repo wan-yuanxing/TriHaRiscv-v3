@@ -1,0 +1,4 @@
+# Final STA: distant SRAM -> load forwarding -> branch -> issue PC CE.
+# Keep all SRAM banks at the CPU vertical band; allow enough DRM columns.
+# CPU and ROM retain their existing region. No timing exceptions.
+define_attribute {i:u_soc/u_memory/u_sram} {PAP_REGION} {soc_sram_local(0,96,150,199)}

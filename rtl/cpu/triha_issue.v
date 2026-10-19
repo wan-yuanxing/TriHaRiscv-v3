@@ -775,6 +775,62 @@ wire [31:0] issue_a_rb_value_w;
 wire [31:0] issue_b_ra_value_w;
 wire [31:0] issue_b_rb_value_w;
 
+// Speculative operand reads do not issue another instruction. Both fetch slots
+// are registered already; keep PC[2] out of the native RAM address path.
+localparam PARALLEL_OPERAND_READ = !SUPPORT_DUAL_ISSUE && !SUPPORT_REGFILE_XILINX;
+wire [4:0] rf_ra0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[19:15] : issue_a_ra_idx_w;
+wire [4:0] rf_rb0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[24:20] : issue_a_rb_idx_w;
+wire [31:0] raw_upper_ra_w, raw_upper_rb_w;
+generate
+if (PARALLEL_OPERAND_READ) begin: g_parallel_read
+    triha_regfile #(.SUPPORT_REGFILE_XILINX(0), .SUPPORT_DUAL_ISSUE(0)) u_upper (
+        .clk_i(clk_i), .rst_i(rst_i),
+        .rd0_i(pipe0_rd_wb_w), .rd0_value_i(pipe0_result_wb_w),
+        .rd1_i(pipe1_rd_wb_w), .rd1_value_i(pipe1_result_wb_w),
+        .ra0_i(fetch1_instr_i[19:15]), .rb0_i(fetch1_instr_i[24:20]),
+        .ra1_i(5'b0), .rb1_i(5'b0),
+        .ra0_value_o(raw_upper_ra_w), .rb0_value_o(raw_upper_rb_w),
+        .ra1_value_o(), .rb1_value_o()
+    );
+end else begin: g_no_parallel_read
+    assign raw_upper_ra_w = 32'b0;
+    assign raw_upper_rb_w = 32'b0;
+end
+endgenerate
+
+// Original priority: WB0, WB1, E2-0, E2-1, E1-0, E1-1, then architectural x0.
+// All dependencies are explicit function inputs for complete sensitivity.
+function [31:0] forward_raw_operand;
+    input [4:0] index;
+    input [31:0] rf_data;
+    input [29:0] tags;
+    input [191:0] values;
+    reg [31:0] value;
+    integer source;
+    begin
+        value = rf_data;
+        for (source=0; source<6; source=source+1)
+            if (tags[source*5 +: 5] == index)
+                value = values[source*32 +: 32];
+        if (index == 5'b0)
+            value = 32'b0;
+        forward_raw_operand = value;
+    end
+endfunction
+wire [29:0] raw_bypass_tags_w = {pipe1_rd_e1_w,pipe0_rd_e1_w,
+    pipe1_rd_bypass_e2_w,pipe0_rd_bypass_e2_w,pipe1_rd_bypass_wb_w,pipe0_rd_bypass_wb_w};
+wire [191:0] raw_bypass_values_w = {writeback_exec1_value_i,writeback_exec0_value_i,
+    pipe1_result_e2_w,pipe0_result_e2_w,pipe1_result_wb_w,pipe0_result_wb_w};
+wire [31:0] raw_lower_ra_w = forward_raw_operand(fetch0_instr_i[19:15],issue_a_ra_value_w,
+    raw_bypass_tags_w,raw_bypass_values_w);
+wire [31:0] raw_lower_rb_w = forward_raw_operand(fetch0_instr_i[24:20],issue_a_rb_value_w,
+    raw_bypass_tags_w,raw_bypass_values_w);
+wire [31:0] raw_upper_forward_ra_w = forward_raw_operand(fetch1_instr_i[19:15],raw_upper_ra_w,
+    raw_bypass_tags_w,raw_bypass_values_w);
+wire [31:0] raw_upper_forward_rb_w = forward_raw_operand(fetch1_instr_i[24:20],raw_upper_rb_w,
+    raw_bypass_tags_w,raw_bypass_values_w);
+
+
 // Register file: 2W4R
 triha_regfile
 #(
@@ -793,8 +849,8 @@ u_regfile
     .rd1_value_i(pipe1_result_wb_w),
 
     // Read ports
-    .ra0_i(issue_a_ra_idx_w),
-    .rb0_i(issue_a_rb_idx_w),
+    .ra0_i(rf_ra0_w),
+    .rb0_i(rf_rb0_w),
     .ra0_value_o(issue_a_ra_value_w),
     .rb0_value_o(issue_a_rb_value_w),
 
@@ -861,6 +917,14 @@ begin
         issue_a_ra_value_r = 32'b0;
     if (issue_a_rb_idx_w == 5'b0)
         issue_a_rb_value_r = 32'b0;
+    if (PARALLEL_OPERAND_READ) begin
+        issue_a_ra_value_r = raw_upper_forward_ra_w;
+        issue_a_rb_value_r = raw_upper_forward_rb_w;
+        if (payload0_selected_w) begin
+            issue_a_ra_value_r = raw_lower_ra_w;
+            issue_a_rb_value_r = raw_lower_rb_w;
+        end
+    end
 end
 
 assign opcode0_ra_operand_o = issue_a_ra_value_r;
