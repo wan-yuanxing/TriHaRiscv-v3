@@ -348,11 +348,13 @@ wire [31:0] pipe0_operand_rb_e1_w;
 wire        pipe0_load_e2_w;
 wire        pipe0_mul_e2_w;
 wire [4:0]  pipe0_rd_e2_w;
+wire [4:0]  pipe0_rd_bypass_e2_w;
 wire [31:0] pipe0_result_e2_w;
 
 wire        pipe0_valid_wb_w;
 wire        pipe0_csr_wb_w;
 wire [4:0]  pipe0_rd_wb_w;
+wire [4:0]  pipe0_rd_bypass_wb_w;
 wire [31:0] pipe0_result_wb_w;
 wire [31:0] pipe0_pc_wb_w;
 wire [31:0] pipe0_opc_wb_w;
@@ -422,6 +424,7 @@ u_pipe0_ctrl
     ,.load_e2_o(pipe0_load_e2_w)
     ,.mul_e2_o(pipe0_mul_e2_w)
     ,.rd_e2_o(pipe0_rd_e2_w)
+    ,.rd_bypass_e2_o(pipe0_rd_bypass_e2_w)
     ,.result_e2_o(pipe0_result_e2_w)
 
     ,.stall_o(pipe0_stall_raw_w)
@@ -437,6 +440,7 @@ u_pipe0_ctrl
     ,.valid_wb_o(pipe0_valid_wb_w)
     ,.csr_wb_o(pipe0_csr_wb_w)
     ,.rd_wb_o(pipe0_rd_wb_w)
+    ,.rd_bypass_wb_o(pipe0_rd_bypass_wb_w)
     ,.result_wb_o(pipe0_result_wb_w)
     ,.pc_wb_o(pipe0_pc_wb_w)
     ,.opcode_wb_o(pipe0_opc_wb_w)
@@ -472,10 +476,12 @@ wire [31:0] pipe1_operand_rb_e1_w;
 wire        pipe1_load_e2_w;
 wire        pipe1_mul_e2_w;
 wire [4:0]  pipe1_rd_e2_w;
+wire [4:0]  pipe1_rd_bypass_e2_w;
 wire [31:0] pipe1_result_e2_w;
 
 wire        pipe1_valid_wb_w;
 wire [4:0]  pipe1_rd_wb_w;
+wire [4:0]  pipe1_rd_bypass_wb_w;
 wire [31:0] pipe1_result_wb_w;
 wire [31:0] pipe1_pc_wb_w;
 wire [31:0] pipe1_opc_wb_w;
@@ -545,6 +551,7 @@ u_pipe1_ctrl
     ,.load_e2_o(pipe1_load_e2_w)
     ,.mul_e2_o(pipe1_mul_e2_w)
     ,.rd_e2_o(pipe1_rd_e2_w)
+    ,.rd_bypass_e2_o(pipe1_rd_bypass_e2_w)
     ,.result_e2_o(pipe1_result_e2_w)
 
     ,.stall_o(pipe1_stall_raw_w)
@@ -560,6 +567,7 @@ u_pipe1_ctrl
     ,.valid_wb_o(pipe1_valid_wb_w)
     ,.csr_wb_o()
     ,.rd_wb_o(pipe1_rd_wb_w)
+    ,.rd_bypass_wb_o(pipe1_rd_bypass_wb_w)
     ,.result_wb_o(pipe1_result_wb_w)
     ,.pc_wb_o(pipe1_pc_wb_w)
     ,.opcode_wb_o(pipe1_opc_wb_w)
@@ -801,25 +809,25 @@ begin
     issue_a_rb_value_r = issue_a_rb_value_w;
 
     // Bypass - WB
-    if (pipe0_rd_wb_w == issue_a_ra_idx_w)
+    if (pipe0_rd_bypass_wb_w == issue_a_ra_idx_w)
         issue_a_ra_value_r = pipe0_result_wb_w;
-    if (pipe0_rd_wb_w == issue_a_rb_idx_w)
+    if (pipe0_rd_bypass_wb_w == issue_a_rb_idx_w)
         issue_a_rb_value_r = pipe0_result_wb_w;
 
-    if (pipe1_rd_wb_w == issue_a_ra_idx_w)
+    if (pipe1_rd_bypass_wb_w == issue_a_ra_idx_w)
         issue_a_ra_value_r = pipe1_result_wb_w;
-    if (pipe1_rd_wb_w == issue_a_rb_idx_w)
+    if (pipe1_rd_bypass_wb_w == issue_a_rb_idx_w)
         issue_a_rb_value_r = pipe1_result_wb_w;
 
     // Bypass - E2
-    if (pipe0_rd_e2_w == issue_a_ra_idx_w)
+    if (pipe0_rd_bypass_e2_w == issue_a_ra_idx_w)
         issue_a_ra_value_r = pipe0_result_e2_w;
-    if (pipe0_rd_e2_w == issue_a_rb_idx_w)
+    if (pipe0_rd_bypass_e2_w == issue_a_rb_idx_w)
         issue_a_rb_value_r = pipe0_result_e2_w;
 
-    if (pipe1_rd_e2_w == issue_a_ra_idx_w)
+    if (pipe1_rd_bypass_e2_w == issue_a_ra_idx_w)
         issue_a_ra_value_r = pipe1_result_e2_w;
-    if (pipe1_rd_e2_w == issue_a_rb_idx_w)
+    if (pipe1_rd_bypass_e2_w == issue_a_rb_idx_w)
         issue_a_rb_value_r = pipe1_result_e2_w;
 
     // Bypass - E1
@@ -863,25 +871,25 @@ begin
     issue_b_rb_value_r = issue_b_rb_value_w;
 
     // Bypass - WB
-    if (pipe0_rd_wb_w == issue_b_ra_idx_w)
+    if (pipe0_rd_bypass_wb_w == issue_b_ra_idx_w)
         issue_b_ra_value_r = pipe0_result_wb_w;
-    if (pipe0_rd_wb_w == issue_b_rb_idx_w)
+    if (pipe0_rd_bypass_wb_w == issue_b_rb_idx_w)
         issue_b_rb_value_r = pipe0_result_wb_w;
 
-    if (pipe1_rd_wb_w == issue_b_ra_idx_w)
+    if (pipe1_rd_bypass_wb_w == issue_b_ra_idx_w)
         issue_b_ra_value_r = pipe1_result_wb_w;
-    if (pipe1_rd_wb_w == issue_b_rb_idx_w)
+    if (pipe1_rd_bypass_wb_w == issue_b_rb_idx_w)
         issue_b_rb_value_r = pipe1_result_wb_w;
 
     // Bypass - E2
-    if (pipe0_rd_e2_w == issue_b_ra_idx_w)
+    if (pipe0_rd_bypass_e2_w == issue_b_ra_idx_w)
         issue_b_ra_value_r = pipe0_result_e2_w;
-    if (pipe0_rd_e2_w == issue_b_rb_idx_w)
+    if (pipe0_rd_bypass_e2_w == issue_b_rb_idx_w)
         issue_b_rb_value_r = pipe0_result_e2_w;
 
-    if (pipe1_rd_e2_w == issue_b_ra_idx_w)
+    if (pipe1_rd_bypass_e2_w == issue_b_ra_idx_w)
         issue_b_ra_value_r = pipe1_result_e2_w;
-    if (pipe1_rd_e2_w == issue_b_rb_idx_w)
+    if (pipe1_rd_bypass_e2_w == issue_b_rb_idx_w)
         issue_b_rb_value_r = pipe1_result_e2_w;
 
     // Bypass - E1
@@ -904,6 +912,19 @@ end
 
 assign opcode1_ra_operand_o = issue_b_ra_value_r;
 assign opcode1_rb_operand_o = issue_b_rb_value_r;
+
+// synthesis translate_off
+// When an instruction can actually issue, speculative data tags must equal
+// the original control/commit tags. No control or write-port uses bypass tags.
+always @(posedge clk_i) begin
+    if (!rst_i && (opcode_a_issue_r || opcode_b_issue_r)) begin
+        if ({pipe0_rd_e2_w,pipe0_rd_wb_w,pipe1_rd_e2_w,pipe1_rd_wb_w} !==
+            {pipe0_rd_bypass_e2_w,pipe0_rd_bypass_wb_w,pipe1_rd_bypass_e2_w,pipe1_rd_bypass_wb_w})
+            $fatal(1,"BYPASS_TAG_FAIL actual_issue_tag_mismatch");
+    end
+end
+// synthesis translate_on
+
 
 //-------------------------------------------------------------
 // Load store unit

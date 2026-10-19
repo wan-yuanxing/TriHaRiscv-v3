@@ -1,6 +1,6 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','ordered')][string] $Test='frontend',
+param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','ordered')][string] $Test='frontend',
     [ValidateSet('single','dual','both')][string] $Mode='both',
     [ValidateRange(1,2147483647)][int] $Seed=37,
     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo)
@@ -39,6 +39,7 @@ try {
     if($Test -eq 'lanedata'){$sources+='tb/cpu/tb_issue_lane.v'}
     if($Test -eq 'divarith'){$sources+='tb/cpu/tb_divider_arithmetic.v'}
     if($Test -eq 'fifodata'){$sources+='tb/cpu/tb_fifo_payload.v'}
+    if($Test -eq 'bypasstag'){$sources+='tb/cpu/tb_bypass_tag.v'}
     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
@@ -55,14 +56,14 @@ try {
         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
-        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} default{'work.tb_unit_payload'}}
-        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+        $top=switch($Test){frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} default{'work.tb_unit_payload'}}
+        $marker=switch($Test){frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} default{'UNIT_PAYLOAD_PASS'}}
         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
         if($Test -in @('divarith','fifodata')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
-        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
         $result.executions+=@{test=$Test;status='PASS'}
     } else {
         $config=Get-Content (Join-Path $root 'config/cpu_toolchain.json') -Raw|ConvertFrom-Json

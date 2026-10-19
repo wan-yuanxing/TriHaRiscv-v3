@@ -89,6 +89,7 @@ module triha_pipe_ctrl
     ,output          load_e2_o
     ,output          mul_e2_o
     ,output [  4:0]  rd_e2_o
+    ,output [  4:0]  rd_bypass_e2_o
     ,output [31:0]   result_e2_o
 
     // Out of pipe: Divide Result
@@ -99,6 +100,7 @@ module triha_pipe_ctrl
     ,output          valid_wb_o
     ,output          csr_wb_o
     ,output [  4:0]  rd_wb_o
+    ,output [  4:0]  rd_bypass_wb_o
     ,output [31:0]   result_wb_o
     ,output [31:0]   pc_wb_o
     ,output [31:0]   opcode_wb_o
@@ -312,6 +314,8 @@ wire   load_store_e2_w = ctrl_e2_q[`PCINFO_LOAD] | ctrl_e2_q[`PCINFO_STORE];
 assign load_e2_o       = ctrl_e2_q[`PCINFO_LOAD];
 assign mul_e2_o        = ctrl_e2_q[`PCINFO_MUL];
 assign rd_e2_o         = {5{(valid_e2_w && ctrl_e2_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_e2_q[`RD_IDX_R];
+// Data selection uses registered stage metadata; late stall gates commit only.
+assign rd_bypass_e2_o = {5{valid_e2_q && ctrl_e2_q[`PCINFO_RD_VALID]}} & opcode_e2_q[`RD_IDX_R];
 assign result_e2_o     = result_e2_r;
 
 // Load store result not ready when reaching E2
@@ -430,6 +434,7 @@ wire complete_wb_w     = ctrl_wb_q[`PCINFO_COMPLETE] & ~issue_stall_i;
 assign valid_wb_o      = valid_wb_q & ~issue_stall_i;
 assign csr_wb_o        = ctrl_wb_q[`PCINFO_CSR] & ~issue_stall_i; // TODO: Fault disable???
 assign rd_wb_o         = {5{(valid_wb_o && ctrl_wb_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_wb_q[`RD_IDX_R];
+assign rd_bypass_wb_o = {5{valid_wb_q && ctrl_wb_q[`PCINFO_RD_VALID]}} & opcode_wb_q[`RD_IDX_R];
 assign result_wb_o     = result_wb_q;
 assign pc_wb_o         = pc_wb_q;
 assign opcode_wb_o     = opcode_wb_q;

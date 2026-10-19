@@ -249,6 +249,26 @@ CoreMark性能测量区间仍为单1682259/双1390197周期、1467843次WB完成
 
 证据`docs/verification/cpu/fifo_payload_timing.json`。未合并主工程或编程板卡。
 
+## 数据旁路tag与提交控制分离（第13轮）
+
+仅为E2/WB操作数数据选择导出由已寄存valid、rd-valid及opcode决定的目的tag，移除当前stall/issue_stall对宽旁路选择的影响；原RF写地址、提交tag、scoreboard、异常及issue控制不变。实际发射时新旧tag必须相等，仿真断言在全部整核测试中启用。没有新增状态、流水级或load/分支延迟。
+
+相同最终定向测试/runner在父版RED，候选GREEN，覆盖issue/memory stall、WB及E2 load旁路、恢复发射和fault取消。三种背压×两模式旧时序逐周期、新默认按序异常及IRQ、部件/固件/冒烟共22项正例、5项预期拒绝通过；RF部件复用输入仍匹配的既有结果，未将旧FIFO/DIV损坏负例计为本轮新执行。全部实际输入/外部原语/输出哈希核验通过。
+
+CoreMark实际加载TCM镜像与父版相同，单1682259/双1390197周期、1467843次WB及CRC不变；单观察IPC0.872543、CoreMark/MHz短RTL估算2.972194，双1.055853/3.596613。ELF文件哈希不同，证据分别记录，不称同一ELF。startup、14指令探针、validation和冒烟符合预期；非官方分数、完整ISA证明或板测。
+
+同10ns/原IO/hold/multicorner和区域约束完整实现，原生PDS返回0，宿主return2/TIMING_FAIL；252次主详细迭代到0未布通，完整250.952秒。31项冻结输入/588项输出及独立只读复核一致。CPU-only **6685 LUT/5209 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计；比父版少5 LUT，FF不变。
+
+| 实际检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| setup | **-3.486** | **+1.027** |
+| hold | +0.117 | +0.109 |
+| 脉宽 | +4.346 | +4.345 |
+
+performance slack一致，**100MHz仍未通过**。最差setup比第12轮改善3.284ns，但仍比第9轮最优-3.064ns差0.422ns；新网表/布局，不能将旁路控制分离概括为全局收益。Slow违例端点2779→2260，Fast本轮没有setup违例。
+
+新最差为LSU请求FIFO地址低位→load返回格式/旁路→分支比较→issue pc_x_q[30]，17级逻辑，逻辑3.177ns/布线9.976ns。旁路网一段4.227ns，末端晚到branch request进入PC进位链。下一步核对真实映射及PC更新结构，优先检验常量增量提前计算、重定向只作末端选择；不增加load/分支周期或放宽约束。证据`docs/verification/cpu/bypass_tag_timing.json`。未合并主工程、未编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。
