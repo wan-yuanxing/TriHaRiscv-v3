@@ -336,5 +336,18 @@
       "verified_inputs": 32,
       "verified_outputs": 267
     }
+  },
+  "fixed_io_audit": {
+    "ports": 224,
+    "same_locations_and_effective_electrical_values": true,
+    "parent_report": "build\\cpu\\route-single-20261019T1030094720052Z\\place_route\\triha_core.prr",
+    "actual_report": "build\\cpu\\route-single-20261019T1117460355859Z\\place_route\\triha_core.prr",
+    "sha256": "d90fe07e75f1ae61e6f15b115ad46add871204665e2c7002a20912b680a5dba1"
+  },
+  "initial_incomplete_io_constraint_failure": {
+    "result": "build\\cpu\\route-single-20261019T1115030020387Z\\result.json",
+    "sha256": "ecadd49e80d6effa7c5af9f1ab4dfe41ed9edfc7a8374df1e64805db25272728",
+    "native_return_code": 1,
+    "error": "ConstraintEditor-0040: explicit VCCIO and IOSTANDARD required"
   }
 }

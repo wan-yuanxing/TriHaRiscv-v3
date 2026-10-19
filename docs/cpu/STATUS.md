@@ -364,3 +364,10 @@ performance一致，**100MHz仍未通过**，全局setup较最佳第16轮恶化0
 - 新主工程地址/外设、DDR/AXI、NPU/Video集成和板级运行。
 
 主工程Video及技术报告修改保持原位；CPU实现尚未合入该分支。本批执行CPU原生综合/映射和隔离后布线，未生成bitstream或编程板卡。
+
+
+## 2026-10-19 固定I/O终态与系统验收转向
+
+固定224个裸核总线管脚及有效电气值与第16轮一致；完整PDS返回0，独立review判TIMING_FAIL。Slow/Fast setup −3.788/+0.152ns，hold +0.112/+0.100ns，脉宽 +4.346/+4.345ns。CPU-only 6484 LUT/5207 FF/32 distributed RAM/0 DRM/4 APM，224个IO另计。最差inst_rdata_i[3]到FIFO csr_history_q；内部预测反馈另有−3.247ns，不能全部归因于IO。首轮缺电气约束的native1失败保留。证据：`docs/verification/cpu/fixed_io_timing.json`。
+
+用户已选择接入SRAM/总线后按实际系统边界验收。使用正式8KiB ROM（0x0）和32KiB SRAM（0x10000）、内部CPU总线。旧裸核记录保持失败；系统通过不能回写旧记录。CPU与SoC额外资源分开，100MHz、hold、多corner不降低，未做板测。
