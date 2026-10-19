@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_mode_cdc",
+  "top": "display_mode_cdc",
+  "test_top": "tb_display_mode_cdc",
+  "sources": ["rtl/video/display_mode_cdc.sv"],
+  "tests": ["tb/video/tb_display_mode_cdc.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_mode_cdc.fdc"],
+  "scope": "One immutable MODE/context command across core/pixel clocks; distinct pixel acceptance and actual-commit ack, held core feedback. Coordinated reset only. Component synthesis; consumer owns atomic frame boundary and complete reference retirement, no raw release or board pins."
+}

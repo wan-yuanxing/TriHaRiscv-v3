@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "status": "component_verified",
+  "base_head": "248d538104743767d501b4dca3ac40ca4a6397d4",
+  "owned": [
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/avatar_texture_cache.sv",
+    "tb/video/tb_display_mode_cdc.sv",
+    "tb/video/tb_avatar_texture_cache.sv",
+    "fpga/pg2l100h/project/video_mode_cdc.json",
+    "fpga/pg2l100h/project/video_avatar_cache.json",
+    "fpga/pg2l100h/constraints/video_mode_cdc.fdc",
+    "fpga/pg2l100h/constraints/video_avatar_cache.fdc",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md",
+    "docs/interfaces/video.md",
+    "docs/video/README.md",
+    "docs/video/STATUS.md",
+    "docs/verification/video/mode_resources.md",
+    "docs/verification/video/evidence/mode_resources.json"
+  ],
+  "source_hashes": {
+    "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+    "rtl/video/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+    "tb/video/tb_display_mode_cdc.sv": "c958b7291602762c10bd626eedcd666e054a0ed66ec2f599547345f089dcc782",
+    "tb/video/tb_avatar_texture_cache.sv": "84a04c0fc2d32c8a5399fbc51c6e8bd91f7e6cc9e044a9bdbd6300228e7a5a6d",
+    "fpga/pg2l100h/project/video_mode_cdc.json": "96858b48c94cc223bb762d05cfac1818431d824f2094a710f39b168c56f1d40d",
+    "fpga/pg2l100h/project/video_avatar_cache.json": "a4556f332dc1d3692de50969ffa3299af6cc3299e019cab5b8b837392e5ed7df",
+    "fpga/pg2l100h/constraints/video_mode_cdc.fdc": "de8dfd2cda659a8bcc2d6d969480fe8cf77e57ddc61c4ec1eeeaf7e0f11f2832",
+    "fpga/pg2l100h/constraints/video_avatar_cache.fdc": "f06af8d814d7e3c964c50455b300a05287e53ddb499a6f884927c3202ca0bb0e",
+    "scripts/video/run.py": "0ddaafc1cf405a535583480ed91dec82890307c736908661d87f1e50763054af",
+    "scripts/video/build_pds.py": "2bc38adb617d4819f6b6d68c17ba2ab78cfca5d436342cd2d381db491d58fa92",
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "c5ccddf7cf74090bc1a2867701ee7df8e52ee62b684d7b2de781c2c58988fffe",
+    "docs/interfaces/video.md": "3eff43f447d85d0afb88f5be1f33d14059566229a2efa6c554abaf40036c268b",
+    "docs/video/README.md": "11fd9a40927d9ed9763ec140c8b20053307b532800afa893dc230bda1a8feba5",
+    "docs/video/STATUS.md": "f5093bc6b89b68801f65edaeac27edaf505fb24ce6eee761e1d9e22c56c81cdf",
+    "docs/verification/video/mode_resources.md": "db700f0a591cca65681ec9866d5c994e4b46adb3c2c9fc064d970c9e4076674e"
+  },
+  "refs": {
+    "mode_resources": {
+      "path": "build/video/regression/20261019T155516_569516Z/result.json",
+      "sha256": "52a537d668ce86634211f93fde7dbadb812c728cce8dca83e692fb1dd0c8313b"
+    },
+    "overlay": {
+      "path": "build/video/regression/20261019T155258_922381Z/result.json",
+      "sha256": "66f2847c4635198bd8a66f8e7b9e3c2d03fd40ca1d0cf691f9b4df72ba835432"
+    },
+    "mode_control": {
+      "path": "build/video/regression/20261019T155258_933360Z/result.json",
+      "sha256": "11e375f282619457460e54fafb568c20462d072cc95c0ec76df4134fe6c57ac2"
+    },
+    "python": {
+      "path": "build/video/mode_resources_python/result.json",
+      "sha256": "34303c6f3e96821c22829401e08675120257ba836968a831ef9053220a25f48c"
+    },
+    "review": {
+      "path": "build/video/mode_resources_review/review.json",
+      "sha256": "c8b9bb1ac330b27aed855f067cf3a69ab479fd3d4971ed31149dd133581f498e"
+    },
+    "red": {
+      "path": "build/video/mode_resources_red/result.json",
+      "sha256": "c6a34c2dd4e2a1887c0ef5ac101b587f8209e246123459cbd742e20d8bd4b43b"
+    },
+    "key": {
+      "path": "build/video/mode_key_audit/result.json",
+      "sha256": "d1021cb22b06d0fcbb0355f212e3157f66fc850ec3fa8bce22cc85efcb93697f"
+    },
+    "baseline_full": {
+      "path": "build/video/regression/20261019T134922_419299Z/result.json",
+      "sha256": "a0a18559fe4c539a350a58faba8655fbb99e35bbfe8af7ab2dbf54e664259cd1"
+    },
+    "video_mode_cdc": {
+      "path": "build/video/pds/20261019T155112_820782Z/result.json",
+      "sha256": "a9f9ae9d0e66b494df3bfe9004acb72034297b62924448eb2f2f3caf5d56cd17"
+    },
+    "video_avatar_cache": {
+      "path": "build/video/pds/20261019T155112_821634Z/result.json",
+      "sha256": "fe4be4fa6d7e97b6e67440fc9cd393b462ab1634c90a2967b2e7fde30ee14b2c"
+    },
+    "video_mode_cdc_report": {
+      "path": "build/video/pds/20261019T155112_820782Z/synthesize/display_mode_cdc.snr",
+      "sha256": "bd815fb00510cb6183a6b59299281d836861639a5df32646f50bd7016345fc39"
+    },
+    "video_avatar_cache_report": {
+      "path": "build/video/pds/20261019T155112_821634Z/synthesize/avatar_texture_cache.snr",
+      "sha256": "e9e569796ba535193a88d7ff10027f0ba9b5db581564f238a041ba8b159a1569"
+    },
+    "current_artifact_hashes": {
+      "path": "build/video/mode_resources_current_artifact_hashes.json",
+      "sha256": "b6aa88ea1e3362dcc8cebb72cac0931e9817271b11ae1d78af384b319c014579"
+    }
+  },
+  "simulations": {
+    "mode_resources": 16,
+    "overlay": 12,
+    "mode_control": 24
+  },
+  "total_simulations": 52,
+  "python": {
+    "passed": 85,
+    "skipped": 1
+  },
+  "resources": {
+    "video_mode_cdc": {
+      "lut": 9.0,
+      "registers": 470.0,
+      "drm": 0.0,
+      "apm": 0.0
+    },
+    "video_avatar_cache": {
+      "lut": 98.0,
+      "registers": 186.0,
+      "drm": 64.0,
+      "apm": 0.0
+    }
+  },
+  "estimates": {
+    "video_mode_cdc": {
+      "Setup Summary(Slow Corner):": [
+        {
+          "source": "core_clk",
+          "destination": "core_clk",
+          "wns_ns": 6.038,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 234
+        },
+        {
+          "source": "pixel_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 22.656,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 236
+        },
+        {
+          "source": "core_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 5.224,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 228
+        }
+      ],
+      "Hold Summary(Slow Corner):": [
+        {
+          "source": "core_clk",
+          "destination": "core_clk",
+          "wns_ns": 0.619,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 234
+        },
+        {
+          "source": "pixel_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 0.619,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 236
+        }
+      ]
+    },
+    "video_avatar_cache": {
+      "Setup Summary(Slow Corner):": [
+        {
+          "source": "core_clk",
+          "destination": "core_clk",
+          "wns_ns": 3.991,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 1252
+        },
+        {
+          "source": "core_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 5.224,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 64
+        },
+        {
+          "source": "pixel_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 21.793,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 131
+        }
+      ],
+      "Hold Summary(Slow Corner):": [
+        {
+          "source": "core_clk",
+          "destination": "core_clk",
+          "wns_ns": 0.788,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 1252
+        },
+        {
+          "source": "pixel_clk",
+          "destination": "pixel_clk",
+          "wns_ns": 0.619,
+          "tns_ns": 0.0,
+          "failing": 0,
+          "endpoints": 131
+        }
+      ]
+    }
+  },
+  "preserved_files": 224,
+  "review_files": 11,
+  "review_artifacts": 86,
+  "artifact_count": 246,
+  "baseline_unchanged_inputs": 196,
+  "baseline_changed_runner_inputs": [
+    "scripts/video/build_pds.py",
+    "scripts/video/run.py"
+  ],
+  "full_all_rerun": false,
+  "scalar_two_stage_and_bundled_constraints_present": true,
+  "physical_cdc_placement_verified": false,
+  "key1_document_crosschecked": true,
+  "physical_mode_or_key1_verified": false,
+  "mode_board_target_integrated": false,
+  "ddr_material_fetch_implemented": false,
+  "live_material_replacement_implemented": false,
+  "routed_timing_verified": false,
+  "formal_display_mmio_implemented": false,
+  "flash_written": false
+}

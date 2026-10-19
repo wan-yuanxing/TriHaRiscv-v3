@@ -20,6 +20,10 @@ F3b新增框/五点/单头像像素组件，`--suite overlay`以独立数学参�
 复位/故障回退，综合目标`video_overlay`只支持synth。固定周期素材响应端需要后续
 缓存接入；当前不是可下载三模式目标。见[叠加验证](../verification/video/overlay.md)。
 
+F3c前置新增单事务模式CDC与256×256封存素材缓存，仿真`--suite mode_resources`，
+综合`video_mode_cdc`/`video_avatar_cache`；均只支持synth。缓存完整装载才可显示，
+pixel接纳后须另等实际提交反馈。尚未完成板级接入，见[资源组件验证](../verification/video/mode_resources.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -59,9 +63,12 @@ python scripts/video/run.py --suite raw_display
 python scripts/video/run.py --suite raw_board
 python scripts/video/run.py --suite mode_control
 python scripts/video/run.py --suite overlay
+python scripts/video/run.py --suite mode_resources
 python scripts/video/build_pds.py --target video_button_debounce --stage synth
 python scripts/video/build_pds.py --target video_mode_control --stage synth
 python scripts/video/build_pds.py --target video_overlay --stage synth
+python scripts/video/build_pds.py --target video_mode_cdc --stage synth
+python scripts/video/build_pds.py --target video_avatar_cache --stage synth
 python scripts/video/build_pds.py --target video_raw_board --stage bitstream
 python scripts/video/package_board.py --target video_raw_board
 python scripts/video/program_board.py --target video_raw_board --start-server
@@ -182,6 +189,8 @@ rtl/video/
   display_mode_control.sv                请求/合并/冻结上下文/实际提交，独立回绕完成性
   avatar_sample_map.sv                   9级精确最近邻地址，保留未裁剪目标原点
   display_overlay.sv                     16框/可选五点/固定素材响应/Alpha像素流水
+  display_mode_cdc.sv                    单事务模式/context CDC，接纳与实际提交分离
+  avatar_texture_cache.sv                完整装载后封存的256×256 RGBA双钟缓存
   video_preview_engine.sv                双平面CRC检查到显示读口的阶段所有权
 sw/include/video_cfg.h                    同源生成的 C 常量
 sw/include/video_regs.h                   同源生成的采帧MMIO C定义
@@ -240,6 +249,8 @@ tb/video/
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
   tb_display_mode_control.sv             同帧资格/背压/合并/错反馈及回绕别名
   tb_display_overlay.sv                  固定周期纹理供数/未知注入/复位空泡/像素转储
+  tb_display_mode_cdc.sv                 双钟背压/实际提交/回绕及三阶段reset
+  tb_avatar_texture_cache.sv             装载封存/全字读回/同步槽与新epoch
   overlay_reference.py                   独立集合裁剪/直接整数缩放混合oracle与向量
   run_preview_display_test.py            独立显示仿真和不可变输入证据
   tb_video_frame_crc_reader.sv           CRC、行尾/4KiB、错误与背压结果稳定
@@ -281,6 +292,8 @@ fpga/pg2l100h/
   project/video_button_debounce.json     F3a独立按键资格组件显式源/测试
   project/video_mode_control.json        F3a独立请求/实际提交控制组件
   project/video_overlay.json             F3b像素叠加显式源/测试/独立oracle
+  project/video_mode_cdc.json            F3c前置模式命令/实际提交CDC
+  project/video_avatar_cache.json        F3c前置单素材封存缓存
   project/video_detect_scale.json         独立5×5缩小组件显式源及测试
   project/video_detect_bilinear.json      独立5:2双线性组件显式源及测试
   project/video_input_pad.json / video_c8_pack.json 独立格式组件显式清单
@@ -295,6 +308,8 @@ fpga/pg2l100h/
   constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
   constraints/video_mode_control.fdc     F3a单core域8ns组件约束
   constraints/video_overlay.fdc          F3b像素25ns及同钟组件边界估计
+  constraints/video_mode_cdc.fdc         双域8/25ns，mailbox bundle 6ns
+  constraints/video_avatar_cache.fdc     完整缓存身份CDC与本域约束
   constraints/video_detect_scale.fdc     组件8ns core时钟，无管脚/布线验收
   constraints/video_detect_bilinear.fdc   双线性组件8ns时钟
   constraints/video_input_format.fdc     BGR/补行及C8组件8ns时钟

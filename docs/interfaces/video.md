@@ -7,6 +7,34 @@ F3b提供独立框/五点/单头像像素组件；正式显示MMIO、像素域MO
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 
+## F3c 前置资源组件
+
+`display_mode_cdc`接F3a命令，core/pixel复位必须协调。`cmd_valid/ready`冻结mode、
+slot、seq、frame_id、generation及`CONTEXT_WIDTH`数据；pixel以同名`pixel_cmd_*`
+ready/valid接纳后进入`pixel_waiting_commit`。消费者须在安全帧边界应用完整记录，
+再等实际显示/流水退休后单独发`pixel_commit`脉冲；该脉冲不能与首次接纳同拍。
+没有等待事务时的脉冲锁存`pixel_protocol_error`，两级同步为core `protocol_error`。
+只有实际commit后才产生core `commit_valid`，完整反馈保持到`commit_ready`；包括
+`commit_data`在内的payload来自持续受保护的core mailbox。无槽释放接口；raw/素材
+引用与帧边界责任不由这个桥替代。单域reset或取消已公开命令不在保证内。
+
+`avatar_texture_cache`默认`TEXELS=65536`，测试可选1..65536。core端
+`load_valid/ready`先保存32bit `load_asset_id/load_generation`，再通过
+`s_valid/ready/rgba/last`顺序写入字0..TEXELS-1，RGBA高至低字节为R/G/B/A。全部
+合法写入后`asset_ready`置1，`asset_id/asset_generation/words_written`稳定，装载
+和写口封存直到协调reset；错last、未知身份/字置`load_fault`，不能继续发布。
+blocked输入不解释。未装好前不允许像素访问部分RAM，RAM不靠reset清零。
+
+pixel端ready两级同步并捕获稳定身份后发布`pixel_asset_ready`。每个
+`pixel_req_valid/addr/asset_id/generation`在该边沿采样，立即在边沿后注册
+`sample_valid/error/rgba`，供F3b下个边沿消费；边沿之间保持。addr为18bit字节
+偏移且4B对齐，身份必须与封存素材一致。失败仍返回一个固定error槽，RGBA可未知；
+非请求槽sample_valid=0。一次装载后内容不可变，因此该检查点无运行中替换或
+失效端口；DDR取数、CPU上传和一般素材引用寿命留给后续所有者实现。
+
+组件验证/来源与物理边界见[mode_resources](../verification/video/mode_resources.md)。
+本检查点没有把它们接到现有板卡；F3c板级任务仍在台账跟踪。
+
 ## F3b 原图坐标像素叠加组件
 
 `display_overlay`固定800×600光栅、最多16框/每框5点、单张256×256 RGBA素材；

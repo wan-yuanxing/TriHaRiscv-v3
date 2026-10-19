@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_avatar_cache",
+  "top": "avatar_texture_cache",
+  "test_top": "tb_avatar_texture_cache",
+  "sources": ["rtl/video/avatar_texture_cache.sv"],
+  "tests": ["tb/video/tb_avatar_texture_cache.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_avatar_cache.fdc"],
+  "scope": "One 256x256 RGBA material streamed into a dual-clock cache, sealed only after all 65536 words. Immutable until coordinated reset, fixed-slot synchronous pixel response. No DDR DMA, live material replacement, general reference manager, board pins or physical acceptance."
+}

@@ -56,6 +56,12 @@ RGBA未知污染，foreground隔离后父RED/GREEN及5319像素/3679请求复核
 只新增组件入口；本批仅重跑三个受影响套件，不冒称完整all。当前板卡仍为F2镜像，
 素材DDR缓存、像素CDC/原子提交及MODE实体接线尚未接入。见[像素验证](../verification/video/overlay.md)。
 
+F3c前置已实现模式单事务CDC及单bank RGBA封存缓存：pixel接纳与实际提交分开，
+core反馈保持至消费；素材65536字全部写入后才可见，封存后不改写直到协调reset。
+16个组件场景及overlay12/mode24重跑通过，Python85通过/1权限跳过。CDC综合
+9LUT/470FF/0DRM，缓存98LUT/186FF/64DRM，两者0APM；仍无物理布线。
+官方手册与例程已交叉确认KEY1=C23、低有效，后续作为MODE。见[资源组件验证](../verification/video/mode_resources.md)。
+
 随后执行 F3c 按键模式及素材缓存板级接入，
 再接 F4 共享 DDR/正式显示 ABI 与 F5 真实 NPU。当前 raw/preview/input 三分支及
 320×320 BGR NCHW 保留；24fps采集、固定扫描率下基础读写约137.43MB/s，NPU/
