@@ -269,6 +269,24 @@ performance slack一致，**100MHz仍未通过**。最差setup比第12轮改善3
 
 新最差为LSU请求FIFO地址低位→load返回格式/旁路→分支比较→issue pc_x_q[30]，17级逻辑，逻辑3.177ns/布线9.976ns。旁路网一段4.227ns，末端晚到branch request进入PC进位链。下一步核对真实映射及PC更新结构，优先检验常量增量提前计算、重定向只作末端选择；不增加load/分支周期或放宽约束。证据`docs/verification/cpu/bypass_tag_timing.json`。未合并主工程、未编程板卡。
 
+## PC常量增量与重定向选择分离（第14轮）
+
+实际ADS网表将重定向mux融合到PC常量加法每级carry，父版结构检查发现28个PC carry输出依赖branch/CSR request。提前计算PC+4并用ADS支持的syn_keep保留有实际用途的边界；PC+8只在双发射配置生成，避免属性保留单发射未用硬件。PC优先级、步长、寄存器与分支/load时序不变，不全局关闭资源共享。
+
+同一结构检查对新实际网表为0处依赖；此检查保守处理LUT依赖、显式列出未展开子模块输出边界，只覆盖本层PC数据组合锥，不代替STA或跨层形式证明。独立PC oracle完成4101周期（4096组随机更新），覆盖并发优先级、reset/hold、低位及32位回绕，真实PC错误注入被拒绝。23项功能正例和6项预期拒绝的实际输入/外部原语/输出哈希核验通过。CoreMark实际加载TCM镜像、周期/WB/CRC及其余固件结果与父版相同，单观察IPC0.872543、短估算2.972194 CoreMark/MHz，仍非官方或板级结果。
+
+同100MHz/原IO/hold/multicorner和区域约束重新完整实现，CPU-only **6713 LUT/5209 FF/32分布式RAM单元/0 DRM/4 APM**，224 IO另计；比第13轮多28 LUT、FF不变。原生返回0、宿主return2/TIMING_FAIL，159次主详细迭代到0未布通，完整252.369秒。31项冻结输入/402项输出和独立只读复核一致。
+
+| 实际检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| setup | **-3.247** | **+1.018** |
+| hold | +0.107 | +0.099 |
+| 脉宽 | +4.346 | +4.345 |
+
+performance slack一致，**100MHz仍未通过**。最差setup较父版改善0.239ns，但比第9轮最优-3.064ns差0.183ns；新网表/布局，不能把结构诊断PASS当频率收益或部署通过。Slow违例端点2260→2262，亦不能声称全局路径均改善。
+
+新最差为LSU请求队列rd_ptr→返回half选择→load旁路→下一次store地址/数据lane→mem_data_wr_q[27]，9级逻辑、逻辑1.590ns/布线11.297ns。下一步检查在原队列push/pop边界预计算完整队首寄存输出，消除读指针mux；必须保持包括无效残留值在内的原逐周期队列语义和load延迟，先做组件oracle再复核整核与实际STA。证据`docs/verification/cpu/pc_increment_timing.json`。未合并主工程、未编程板卡。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。

@@ -200,6 +200,21 @@ wire        dual_issue_w;
 reg  [31:0] pc_x_q;
 reg   [1:0] priv_x_q;
 
+// Finish constant increments before the late redirect selection. Keep these
+// used nets so ADS does not merge redirect controls into the carry chain.
+wire [31:0] pc_plus4_w /* synthesis syn_keep=1 */;
+wire [31:0] pc_plus8_w;
+assign pc_plus4_w = pc_x_q + 32'd4;
+generate
+if (SUPPORT_DUAL_ISSUE) begin: g_pc_dual
+    wire [31:0] increment_w /* synthesis syn_keep=1 */;
+    assign increment_w = pc_x_q + 32'd8;
+    assign pc_plus8_w = increment_w;
+end else begin: g_pc_single
+    assign pc_plus8_w = 32'b0;
+end
+endgenerate
+
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)
     pc_x_q <= 32'b0;
@@ -210,9 +225,9 @@ else if (branch_d_exec1_request_i)
 else if (branch_d_exec0_request_i)
     pc_x_q <= branch_d_exec0_pc_i;
 else if (dual_issue_w)
-    pc_x_q <= pc_x_q + 32'd8;
+    pc_x_q <= pc_plus8_w;
 else if (single_issue_w)
-    pc_x_q <= pc_x_q + 32'd4;
+    pc_x_q <= pc_plus4_w;
 
 always @ (posedge clk_i or posedge rst_i)
 if (rst_i)

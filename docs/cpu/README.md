@@ -95,3 +95,5 @@ pwsh -NoProfile -File scripts/cpu/run_route.ps1
 `triha_decode.v`维护FIFO空槽宽载荷采样，计数/指针/有效/fault控制不变，并保留无效槽的原始CSR历史分类，避免影响IRQ inhibit。`run_redirect.ps1 -Test fifodata`比较2023周期的控制、有效载荷和CSR历史，覆盖X数据；`-LegacyFifo`是原连接RED，`-Broken`注入真实损坏。第12轮实际100MHz仍失败，见`fifo_payload_timing.json`。
 
 E2/WB数据旁路使用独立于当前stall的已注册目的tag，提交/RF写口/scoreboard仍用原tag，实际发射时断言两者相等。`run_redirect.ps1 -Test bypasstag`覆盖停顿、返回恢复及fault取消；第13轮CPU-only6685 LUT/5209 FF/32分布式RAM单元，实际100MHz setup Slow/Fast -3.486/+1.027ns，仍未通过，见`bypass_tag_timing.json`。
+
+PC顺序增量提前计算，并保留有用组合边界，单发射不生成未用PC+8；`run_redirect.ps1 -Test pcupdate`检查原优先级和32位算术，`-Broken`必须拒绝。`check_pc_carry.py <ADS网表> --output <收据>`只检查本层PC数据锥的carry依赖，显式保留子模块边界，不是STA。第14轮CPU-only6713 LUT/5209 FF，实际100MHz setup Slow/Fast -3.247/+1.018ns，仍未通过，见`pc_increment_timing.json`。
