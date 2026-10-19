@@ -50,7 +50,8 @@ Read: hold AR payload/VALID until accepted, then accept one R. Write: independen
 hold AW and W payload/VALID until each handshake. Only enable BREADY after both
 have been accepted; RREADY only after AR acceptance. Responses cannot complete
 the CPU early. AXI response 00 is success; every other code or unknown response
-is an error. Read error data is zero. No timeout withdraws a published VALID.
+is an error. An OKAY read with unknown RDATA is also an error. Read error data is
+zero. No timeout withdraws a published VALID.
 
 Reject locally with one error ACK and no AXI VALID: outside Video window,
 unaligned native address, cacheable request, simultaneous read and write, any
@@ -82,6 +83,20 @@ The test ROM/SRAM use the spec's 0/0x10000 ranges but are simulation memories,
 not production Boot ROM/SRAM IP. No test exit MMIO is added; completion is an
 ordinary test signature in SRAM. IRQ directly connects Video level IRQ to the
 CPU external interrupt input for this one-source diagnostic, not a formal PLIC.
+This CPU revision latches external IRQ into MIP: firmware acknowledges Video
+before explicitly clearing MEIP/MIP (or masking it) before mret. Check both the
+producer level and CPU pending state to detect retrigger bugs. Its native LSU
+currently emits tag zero; exhaustive nonzero-tag checks belong to adapter TB.
+
+Independent runtime traces identified an additional pinned-CPU limitation:
+ordinary primary issue asserts CSR read enable; an instruction immediate0x144
+can select the SIP/MIP buffering path. The first MIP zero write may OR back the
+buffered MEIP. Diagnostic ISR therefore reads back Video W1C, writes MIP zero,
+executes a normal instruction gap, and writes zero again before confirming MIP0.
+The delivered test uses eight NOPs, verified single/dual; independent one-NOP
+tests confirm the buffer-drain mechanism. Reject pending0 retraps. This is a
+fixture accommodation, not a production generic interrupt-driver guarantee;
+CPU-side CSR-read qualification is a formal SoC prerequisite.
 
 Exercise polling success, interrupt/ACK success, failed capture before accepted,
 and load/store access fault from real MMIO error responses. Check actual native

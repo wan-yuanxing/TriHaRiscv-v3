@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "cpu_native_axil",
+  "top": "cpu_native_axil",
+  "test_top": "tb_cpu_native_axil",
+  "sources": ["rtl/soc/cpu_native_axil.v"],
+  "tests": ["tb/soc/tb_cpu_native_axil.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/cpu_native_axil.fdc"],
+  "scope": "same-clock CPU native 11-bit-tag to Video-window AXI4-Lite control adapter; standalone synthesis only, no CPU timing closure, shared DDR fabric, CDC, board pins or bitstream"
+}

@@ -153,6 +153,27 @@ completion、fault；IRQ_MASK只屏蔽中断线，不丢事件。W1C位0/1消费
 Cache/fence、显示提交及释放ACK均不由这个邮箱替代。组件/联测/综合证据见
 [capture_mmio.md](../verification/video/capture_mmio.md)。
 
+### 原生CPU控制适配边界
+
+`rtl/soc/cpu_native_axil.v`将CPU的32bit原生数据请求、4bit字节掩码和11bit tag接到
+Video窗口AXI4-Lite，保持一个未完成事务。同钟接入；全11位tag锁存并在单次注册ACK
+原样返回，AXI响应错误转换成同拍注册的CPU error。AW/W分别保持到接纳，全部写
+地址/数据接纳后才接收B；AR接纳后才接收R。AXI背压不会撤销已公开VALID或重发写。
+
+CPU LSU已将byte/half访问对齐并放置数据/掩码，适配器直接保留，不再次移位。
+窗口外、非字对齐、可缓存、混合读写和维护请求在本地错误完成，不触发Video寄存器。
+此适配器只处理选中Video端点的请求；正式fabric还须路由ROM/SRAM/DDR及全局维护。
+不将拒绝Video缓存维护解释为完整CPU系统不支持FENCE或维护操作。
+
+实际CPU固件数字联测使用冻结提交、测试ROM/SRAM和单源直连IRQ；不是正式PLIC、
+共享DDR或板级SoC。源对象前提、实际执行和接口边界见
+[CPU控制联测](../verification/video/cpu_video_control.md)。本端点的协调复位和单帧
+限制不变，ACK不释放槽，不构成跨master写后读或正式INPUT_READY保证。
+
+固定CPU的普通取数立即数0x144会进入其旧CSR挂起缓冲；诊断ISR采用W1C读回、
+分隔的两次MIP清位并检查最终0的明确序列。CPU侧CSR读使能资格仍须在正式SoC
+接入前处理；不能把本次单源中断联测当作完整CPU CSR/PLIC正确性签核。
+
 单平面组件 `rgb888_packer` 与 `video_write_dma` 以core域ready/valid流连接，物理HDMI的不可背压像素由既有FIFO/CDC和帧接纳器接入。内存递增地址按R、G、B保存，`WDATA[8*k+:8]` 对应字节地址 `AWADDR+k`，不能直接把 `24'hRRGGBB` 低字节优先解释为同一格式。
 
 packer默认 `ALLOW_SIMULTANEOUS_TRANSFER=1` 保留同拍出入；共享预览的两个实例选择0，使输入和输出传输互斥，输入字节只按注册count定位，避免下游READY经占用更新参与输入字节位置选择。容量仍为18字节，17/18字节行尾分为完整拍及1/2字节尾拍。固定800/400像素行在无下游停顿时需950/475个core周期，125MHz下理论峰值约105.263Mpixel/s；这是组件上限，实际FIFO水位和端到端表现由板测另验。

@@ -42,6 +42,9 @@ python scripts/video/package_board.py --target video_preview_board
 python scripts/video/program_board.py --target video_preview_board --start-server
 python scripts/video/run.py --suite capture_mmio
 python scripts/video/build_pds.py --target video_capture_mmio --stage synth
+python scripts/video/run.py --suite cpu_axil
+python scripts/soc/run_cpu_video.py --suite all
+python scripts/video/build_pds.py --target cpu_native_axil --stage synth
 ```
 
 配置更改后先执行 `python scripts/video/gen_config.py`，再执行 `--check`。HDMI/preview保持v0.6固定模式；检测输入采用用户确认的320×320 UINT8 BGR NCHW覆盖项，三槽分配和RTL/C常量同源生成。`--suite all` 运行配置/参考、彩条、实际 PLL/复位、收发串行初始化、输入几何/时序/探针、CDC/UART、RX 板级集成、native BIST，以及 AXI 桥、RGB888 打包、行式 DMA 和完整 800×600 合成帧写后读；DDR 板级集成测试使用明确标记的数字 IP 替身。物理结果见 STATUS。另用 `--suite tx_init_full` 保留真实约 320 ms 等待验证发送初始化。
@@ -89,14 +92,28 @@ NPU推理与连续采集另验。详见[证据摘要](../verification/video/evid
 `0x00010000`。46个寄存器由`config/video_regs.json`同源生成RTL/C，支持锁存请求、
 独立accepted/completion邮箱、W1C事件和电平IRQ。原三分支core保持一次协调复位采一帧；
 ACK只消费通知，软件仍须管理槽所有权。组件仿真、真实core数字联测和8ns组件综合见
-[采帧MMIO验证](../verification/video/capture_mmio.md)。正式CPU总线适配、共享DDR
+[采帧MMIO验证](../verification/video/capture_mmio.md)。生产SoC接入、共享DDR
 写后读可见性、连续采集和新板测另行验收。
+
+CPU控制接入另设`cpu_native_axil`组件和真实固件数字联测。前者把原生11bit tag
+接口接至Video AXI4-Lite，并纳入便携Video回归；后者固定CPU Git提交，从对象库
+导出到每次build，使用GCC/ModelSim运行轮询、中断和访存错误检查。运行固件诊断
+需要本地存在固定CPU对象，不读取CPU工作树的未提交RTL。范围及证据见
+[CPU控制验证](../verification/video/cpu_video_control.md)。正式CPU迁入、共享DDR
+可见性、PLIC和帧槽状态继续独立验收。六个真实CPU用例和两个负例已通过；完整
+Video回归34套件、239份仿真PASS日志，Python79通过/1项权限跳过。固定CPU的CSR
+读使能限制及诊断兼容序列已记录，正式SoC前须由CPU侧修正。
 
 ## 当前文件树
 
 ```text
 config/video_cfg.json                    固定模式与图像布局权威配置
 config/video_regs.json                   采帧MMIO ABI权威配置
+config/cpu_video_fixture.json            诊断用固定CPU提交与显式源/原语清单
+rtl/soc/cpu_native_axil.v                 原生11bit tag至Video AXI4-Lite
+scripts/soc/run_cpu_video.py              固定CPU导出、编译与实际固件数字联测
+tb/soc/                                  原生桥接及真实CPU控制联测
+sw/tests/video_control/                   测试启动、链接和轮询/中断/异常固件
 config/video_edid.hex                    固定 800×600 EDID
 rtl/video/
   include/video_cfg.vh                    生成的 RTL 常量
@@ -262,7 +279,9 @@ build/video/                            被忽略的运行结果、参考副本�
 - `build/video/latest_pds_video_hdmi_capture.json`、`latest_package_video_hdmi_capture.json`：真实HDMI单帧raw目标的联合构建与包入口。
 - `build/video/latest_pds_video_preview_board.json`、`latest_package_video_preview_board.json`：同帧共享预览目标的构建与包入口；验收必须另查Program/Verify、type6/7和现场记录。
 - `build/video/latest_pds_video_capture_mmio.json`：采帧MMIO组件综合；无管脚/位流。
+- `build/video/latest_pds_cpu_native_axil.json`：原生CPU控制桥组件综合；无CPU/SoC时序承诺。
 - `docs/verification/video/evidence/capture_mmio.json`：采帧MMIO源码、审查和最终验证绑定。
+- `docs/verification/video/evidence/cpu_video_control.json`：原生控制桥、真实CPU数字联测和完整回归的源码/产物绑定。
 - `build/video/latest_package.json`：通过哈希复核的板级位流包。
 - `build/video/latest_package_video_rx_board.json`、`latest_package_video_ddr_bist.json`：RX/DDR 各自最新发布包。
 - `build/video/latest_board_program.json`、`latest_board_serial.json`：实际下载/校验和串口采集；串口收包成功与 RX/native DDR/AXI-DMA 合格分别记录。

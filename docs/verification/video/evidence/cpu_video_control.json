@@ -1,0 +1,446 @@
+{
+  "status": "pass",
+  "timestamp": "2026-10-19T09:45:26.548686+00:00",
+  "baseline": "704b076",
+  "plan_commit": "c9efc5f",
+  "branch": "video/windows-bringup",
+  "scope": "Same-clock native CPU to Video AXI4-Lite control adapter, pinned real CPU firmware digital integration and standalone adapter synthesis.",
+  "cpu_revision": "8a2a07cf02ae758131a0235887ea244b16c5a1f4",
+  "native_adapter": {
+    "address_window": [
+      "0x20010000",
+      "0x2001ffff"
+    ],
+    "tag_bits": 11,
+    "outstanding": 1,
+    "registered_ack_and_error": true,
+    "portable_cases": 2120,
+    "tested_tags": 2048,
+    "nonzero_strobes": 15,
+    "coordinated_reset_cases": 8,
+    "quality_extended_cases": 2126,
+    "implementation_rejected_mutants": 12,
+    "spec_rejected_mutants": 6,
+    "quality_rejected_mutants": 4,
+    "mutation_counts_are_independent_runs": true
+  },
+  "firmware": {
+    "parent_result": "build/video/cpu_video_firmware/20261019T092739_970045Z/result.json",
+    "positive_runs": 6,
+    "negative_runs": 2,
+    "issue_modes": [
+      "single",
+      "dual"
+    ],
+    "cases": [
+      "polling",
+      "irq_w1c",
+      "preaccepted_capture_failure"
+    ],
+    "frozen_source_unit_tests": 7,
+    "production_source_files": 26,
+    "cpu_blobs": 33,
+    "tools_and_models": 9,
+    "run_artifacts": 110,
+    "success_payload_bytes": {
+      "raw": 1800,
+      "preview": 450,
+      "input_bgr_nchw": 396,
+      "total": 2646
+    },
+    "failed_frame": {
+      "accepted": 0,
+      "raw_bytes": 0,
+      "preview_bytes": 0,
+      "completed_input_prefill_bytes": 72,
+      "completion_after_all_b": true,
+      "error_code": "03"
+    },
+    "eof_hold_cycles": 101,
+    "final_input_b_hold_cycles": 161,
+    "precise_access_faults_per_run": 2,
+    "irq_cases": {
+      "entries_per_run": 2,
+      "mret_mip": 0,
+      "unexpected_pending_zero_reentry_rejected": true
+    },
+    "negative_tests": [
+      "disconnected_actual_control_path",
+      "corrupted_actual_dma_memory_byte"
+    ],
+    "additional_quality_negative": "Actual MMIO VERSION corruption rejected by real CPU firmware"
+  },
+  "independent_reviews": {
+    "spec": "SPEC_PASS",
+    "quality": "QUALITY_PASS",
+    "unresolved_material_findings_in_batch": [],
+    "external_actual_bytes": {
+      "raw": {
+        "bytes": 1800,
+        "sha256": "d9729f624b51fdbca98e8e929eea982fe3271de813ba0b5844d7e7b7417d0fee"
+      },
+      "preview": {
+        "bytes": 450,
+        "sha256": "2b8de91c32ef64d5e0f00bc79e15ac1bd85495462442531ab9560ca22c026d23"
+      },
+      "input_bgr_nchw": {
+        "bytes": 396,
+        "sha256": "241dcc3e4f96647920f543448f82671f5ee59a453a7b7f7186a7fcf5ac55ee00"
+      }
+    }
+  },
+  "full_regression": {
+    "suites": 34,
+    "input_files": 180,
+    "simulation_pass_logs": 239,
+    "python_tests": 80,
+    "python_passed": 79,
+    "python_skipped": 1
+  },
+  "synthesis": {
+    "target": "cpu_native_axil",
+    "stage": "synth",
+    "clock_ns": 8,
+    "resources": {
+      "lut": 64.0,
+      "registers": 132.0,
+      "drm": 0.0
+    },
+    "apm": 0,
+    "estimated_slow_setup_slack_ns": 5.87,
+    "routed": false,
+    "timing_closed": false,
+    "archived_native_artifacts": 7
+  },
+  "fixed_cpu_csr_limitation": {
+    "root_cause": "Ordinary lane0 issue qualifies a CSR read; lw immediate 0x144 aliases CSR_SIP, retaining stale 0x800 in the MIP update buffer.",
+    "diagnostic_sequence": "Video W1C and readback, clear MIP, eight NOPs, clear MIP again, require MIP zero.",
+    "scope": "Compatibility sequence for this pinned CPU diagnostic only. Correct/requalify CPU CSR-read eligibility before formal SoC integration. Not a general production interrupt driver or CSR signoff."
+  },
+  "not_completed_in_batch": [
+    "shared DDR fabric and cross-master write/read visibility",
+    "production ROM/SRAM, PLIC and CDC",
+    "slot allocator, display release ACK and controlled multiframe reuse",
+    "CPU or SoC routed timing closure",
+    "new physical board programming or validation",
+    "NPU RTL inference and SoC INPUT_READY visibility"
+  ],
+  "preservation": {
+    "unrelated_files_preserved": 31,
+    "owned_file_count": 19,
+    "board_source_baseline": "704b076",
+    "cpu_worktree_modified": false,
+    "local_commit_only": true
+  },
+  "source_hash_policy": "source_hashes bind actual tested working-tree bytes; git_clean_source_sha256 binds final tracked blobs with CRLF-to-LF normalization verified against git clean filters. This evidence file is excluded from self hashing.",
+  "source_hashes": {
+    "AGENTS.md": "8441615cccffc2201dcc1ca18682b693acd465f8033d4b1bcefa996b44af0fc3",
+    "build/video/vendor/hdmi/source/hdmi/iic_dri.v": "5f60bc8bcac110f0125a278c332065d2594874c465ec961c603662f92c16b13e",
+    "build/video/vendor/hdmi/source/hdmi/ms7200_ctl.v": "501521c4cceecd48de5741d3116eb7062c93a70a606a386682e1d8756a494199",
+    "build/video/vendor/hdmi/source/hdmi/ms7210_ctl.v": "c9b101e58f381ddf3c6d663d0003c18065302659424b8345022161413ccf09ae",
+    "config/cpu_video_fixture.json": "4fd0a3cd627d1b00d00151e17cb9c493484eacabe7156ed144134c51f5723533",
+    "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+    "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
+    "config/video_regs.json": "d4aca28cf52de0e8aaf8c4ef32080e96950e2be1cde351cae2020959ad8f980c",
+    "docs/interfaces/video.md": "3036811909bd3b27604678b0081f45aa7520ecc1dccc73833d6d6470937f21b7",
+    "docs/superpowers/plans/2026-10-19-cpu-video-control.md": "602d0d4cb1424e94da997a22b3575aae65834fd28e4a4a9ef186698e386347fe",
+    "docs/superpowers/specs/2026-10-19-cpu-video-control-design.md": "dc7e6a4be47a8439a1f957cdaecc71440bc7a62e308fbe295d0041d9c1ae201f",
+    "docs/verification/video/cpu_video_control.md": "8d503bf92e5b1641b8b7cb5aec346de032874ea6dffbc2fb43c1af1707a15bda",
+    "docs/video/README.md": "19cd00080855cf28cd78f3154570c4e1d71d8ca8c4cbbac84d630ab586f83605",
+    "docs/video/STATUS.md": "6401e6ef72cb20c2c3ef20c4e0eacc818be56cb816266cfe4e6b800176833cc4",
+    "fpga/pg2l100h/constraints/cpu_native_axil.fdc": "d17b28af0a65bc8db872e82813eface81ad105d70f09afed665b3d96b2a42c7f",
+    "fpga/pg2l100h/constraints/video_detect_bilinear.fdc": "bdb20f5df853df451da31041c53ea418bf4cd38bec277d6880173fee55505a75",
+    "fpga/pg2l100h/constraints/video_detect_scale.fdc": "35cd51aa4c4f25849f609f49250ad17afec13e9359ad1e27584546d8329b6cfe",
+    "fpga/pg2l100h/constraints/video_input_format.fdc": "a94b7f027a813678417c5f669b6f730745b33a50b1deceb52b2b0540ca54039c",
+    "fpga/pg2l100h/constraints/video_nchw_dma.fdc": "c48a4ebf309e6df0529a4a157c3338027190b907f49d2aea28075a08d423c7d6",
+    "fpga/pg2l100h/constraints/video_three_capture.fdc": "c48a4ebf309e6df0529a4a157c3338027190b907f49d2aea28075a08d423c7d6",
+    "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe",
+    "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+    "fpga/pg2l100h/project/cpu_native_axil.json": "09c76af3569ce38e0905d855ba5d0d72f6d388ca12d8de88179aa930267c04f8",
+    "fpga/pg2l100h/project/video_axi_capture.json": "4c4b4859b0c1892c2b68f14f2378164bb5ca2bb9fe4d7d1e2a84de617c2326fb",
+    "fpga/pg2l100h/project/video_board_smoke.json": "72f7738faf667447c13da2daecd2aa8fb760d0daad93efeb694bb549572a337f",
+    "fpga/pg2l100h/project/video_c8_pack.json": "41a92fbac42262eff1f20f18ec74053a7d94b7b359871935624f44cd9fb16bfa",
+    "fpga/pg2l100h/project/video_capture_mmio.json": "6f939dca47d2a08c9717954510182640b1bb4ff44d292bfc6aa374ec0ca80787",
+    "fpga/pg2l100h/project/video_ddr_bist.json": "bdb7e0c8e95454bb82468b76c49ff1ce9a1d05349d962c1dfe1df02cb65ced26",
+    "fpga/pg2l100h/project/video_detect_bilinear.json": "55c268fd86fdcb97541e0eaf7e42ee5dc36b595ebf8a9c9a94d80d98188a43cd",
+    "fpga/pg2l100h/project/video_detect_scale.json": "43cde78c7a78ebabb1021fda7d52894e9deebb1b8dc461d0085da136f9aedb0d",
+    "fpga/pg2l100h/project/video_hdmi_capture.json": "6c06b7e82282ca9066a9e4c3ea762924a3efdc2524ccac0a0ee1752b9d6979b1",
+    "fpga/pg2l100h/project/video_input_pad.json": "71b11c8275ea640113f8467dd9bec2c7c222d4c90b003f4885014a90917b0647",
+    "fpga/pg2l100h/project/video_nchw_dma.json": "75987bda8d5ef95a77554a42493ebd2e8229246e1754bd93486ba92a94814aed",
+    "fpga/pg2l100h/project/video_preview_board.json": "735a9cb412f796359f3a43dd9a69043595e4f31540114adb377a45299d37ee6e",
+    "fpga/pg2l100h/project/video_rx.json": "27640167c29b273cbbae21347d5ad315b2dd818c53e3003be944dd54894d32a5",
+    "fpga/pg2l100h/project/video_rx_board.json": "03b6f62181185c142e0c23ba303ae59e648b4427e428305c0d1de2f606e29e1d",
+    "fpga/pg2l100h/project/video_three_board.json": "b930d47d91ba8671c44ba4daf813043b5a55efa9e4e98236da3c570f4809ec26",
+    "fpga/pg2l100h/project/video_three_capture.json": "73661d28157c17c65e6b0b3ae637d08dcc14a779b8d3c127756d4199c00f318c",
+    "fpga/pg2l100h/project/video_timing.json": "0a90fb6d203314e22c9e6b271a8c30f368b0955b982f5d5bab2ff48c305227dd",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+    "fpga/pg2l100h/rtl/video_axi_capture_top.sv": "df7e883e362123219ee73eba53725e143bcbee502cfd72f9535430f6de77947d",
+    "fpga/pg2l100h/rtl/video_board_smoke_top.sv": "3fd349f0725e4fe69e144cda3dd14da012d0c199bb129e2dbb7e918f5f0127d0",
+    "fpga/pg2l100h/rtl/video_clock_reset.sv": "6fbd2fbdc9ce3c4682b187d5cf30700d5baf4d07028930e2adf75dd77d428b22",
+    "fpga/pg2l100h/rtl/video_ddr_bist_top.sv": "bff1de42940a6509b0e4d23e35c8e3e8d64650dfcf8879312e38a4ae3d42a18c",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+    "fpga/pg2l100h/rtl/video_hdmi_capture_top.sv": "cf5cda3c211e8a02e39d930022728f825fd346d34b6d96bf3c70f9c7f0ce6eda",
+    "fpga/pg2l100h/rtl/video_preview_board_top.sv": "6dd1131b1e42f54d7524c7cf2b2a2a2e6cfe8a56f2a23d37cdb3df1440f2d0a1",
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv": "8768971f5be5afc421350dc2eb043e60c4d567d8526d7344336f73da8cccf8bc",
+    "fpga/pg2l100h/rtl/video_rx_board_top.sv": "1204b9d7e979be2d32412d41520631a33762654806ba67f3644c6a846c4bc183",
+    "fpga/pg2l100h/rtl/video_rx_image_probe_top.sv": "e34dc9b451eff230b26867b7cc705753354a7349f1f20cf46f9f13753cd775b2",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+    "fpga/pg2l100h/rtl/video_three_board_top.sv": "9312b964e5ba81f3a99c97ebc2bf4e6f5b53fc0d81af70473a92a43a9addd793",
+    "rtl/soc/cpu_native_axil.v": "02d95863a55650fe4f2e1d9641cb570a5925fda7997661d3dd67209be31d5549",
+    "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
+    "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+    "rtl/video/ddr_native_bist.sv": "5fd4121580d93058d99407687a0dee206ee6a486224a9d784b5a2f8920a00e98",
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "rtl/video/detect_c8_pack.sv": "ded553459ceb72105cab46e83019b1b59db91ee9ade0ea1b374919b3202ee036",
+    "rtl/video/detect_downscale.sv": "ee2044537c4858ba049d5a31178ca331209f6aade553e056cb7ca985a705b074",
+    "rtl/video/detect_input_pad.sv": "8f4867af07d306374f792c372c55cce6efb1b410a025d170b16308d94ab09163",
+    "rtl/video/detect_nchw_dma.sv": "955ec07d6e805b79a3c37fd85ad4e26dd28af33016121d4a2d1e50345ee2045c",
+    "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/include/video_regs.vh": "e0a418d3e54445d1b61ef6488c0573922d26cc11cc7e9c7471ba4082ff7fe1e0",
+    "rtl/video/preview_display.sv": "40e345c23435757a84dbc3efba7abc8e28d463ebaf8ffba028ad6316373120a3",
+    "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+    "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "rtl/video/video_axi_capture_bist.sv": "7d4013d7c7f1b2dec1d08213b68e47b42405e828ccca94b1d255115c35db484a",
+    "rtl/video/video_capture_engine.sv": "f556f95048044d8aa15a709bd061d2e502f4b80593b17fd4ccadc1273f2f7451",
+    "rtl/video/video_capture_ingress.sv": "e4e462df5b0d6de6d11d2b7145eb5675dacc452886369023fb332ab175f8f806",
+    "rtl/video/video_capture_mmio.sv": "d65af5ad76cc5c1906c0ed929dcb50c0254059161c47b68335d4dfd4841393f1",
+    "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
+    "rtl/video/video_frame_crc_reader.sv": "fc269c51dd7f6ed825066228d0b1f21f39bc3ca597eadc498469d9afdf4aa4c7",
+    "rtl/video/video_pattern_core.sv": "cc02c902f23391109d147b29101ee165d3ad19686e42f34e527cda4979ed2c8f",
+    "rtl/video/video_preview_capture.sv": "e8454fe85bde0f9fbe3f57330c9fcc9ff3870bfb7f59ae6ce94860b24594326a",
+    "rtl/video/video_preview_engine.sv": "0cbf7b3bec734be0ba29da389d3ed044f00d7f7f4546f35e6478ccc7b6a7dc86",
+    "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+    "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+    "rtl/video/video_rx_probe.sv": "abefc3970f4fae39d098b5034ea3125161a77741ef23ce6de2e823760baceb04",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "rtl/video/video_test_pattern.sv": "17274da31e38afb04fd26f608709c1dbf13e178bfea9cde5a4c7a526d28eeca9",
+    "rtl/video/video_three_branch_capture.sv": "2246cfc2688d82ca7a95abf26ed39cb2495997974e30de1a4b086cf0b649f5d0",
+    "rtl/video/video_three_engine.sv": "99f1048d8840c99d077e8ca28e6119f3c8ad70ce92200141ce46f3a0f3a2c9ce",
+    "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "scripts/soc/run_cpu_video.py": "7f1d164392ed56cd8588d9053155761ea3a8a57f7b95a1cdf4fc15dd90a32438",
+    "scripts/video/build_pds.py": "29d3f537b45a9397552d72e25f951417a6cb01edf4e5252efe337523569f1b26",
+    "scripts/video/build_rx_image_probe.py": "7996d72d0190eb4df0b950edc8101dc1ce722f2290089e0779270ee1b99d7220",
+    "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+    "scripts/video/detect_reference.py": "9ac23706ab4d68f56e1030c4bade8abe3305cf5800f5e990832250ea6f334d7c",
+    "scripts/video/doctor.py": "93c8c5953b47bc064db65fbd7ebc695945a6483f203b86788c34569ab6e9f63f",
+    "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+    "scripts/video/gen_ddr.py": "8b4924d3e1513fc585e0f7d34cfb7e4598675f80018c799bd9d2199622e8dad2",
+    "scripts/video/gen_edid.py": "e8d089439adb24e9a983a61384a2c39d4bce699004c208a5a8ad0db5ea8df19a",
+    "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+    "scripts/video/gen_regs.py": "0a7d1e15cff625990d3abc6422bae0ed18f7a46c700446a49ce2653e6d84e730",
+    "scripts/video/input_format_reference.py": "62b45b09168185c84a141c21e4539bfbf44fe08b2cf5c4de5d4384600433c575",
+    "scripts/video/package_board.py": "4c3653c7d2e5443acc415dd4216207df98ad3ee3fce189de31843b95969d3b1f",
+    "scripts/video/prepare_reference.py": "69b84235d02b82837b942c8539c3b84724b2b14fab3f4799599347da70d44288",
+    "scripts/video/program_board.py": "bbc440fffcc453fb1cfa73914025de8c9f103abcb9b622a0dd4ea3df4f82ae9c",
+    "scripts/video/program_rx_image_probe.py": "63feae491c266d1e81bb133f01c0e789d016f8698ee07476ffa34c31e1348b1a",
+    "scripts/video/read_board.py": "9280018e0a788bc494b46d6133e119831ba5bd9d195e18d221a2f82764479f03",
+    "scripts/video/run.py": "d8bd4c93fba4f158969e52609689a5ed6418eec395d3c7a1cbc3ea5d8cff046e",
+    "scripts/video/rx_image_probe.py": "a0bb3a6f62c4e8fb97ceb9233f55452b1ebcb706afe35ede47c2439d83255f51",
+    "scripts/video/scan_board.py": "cc529568a71d14640b4a8f6f815cd7f2473b7a5d8d7d78472ea1515ed5481f1c",
+    "scripts/video/yunet_input_reference.py": "02863b1e3ab55e46b2f351bfa4ce91a8e805554ab8ee9f9ef9d16e4ab64bb2ba",
+    "sw/include/video_cfg.h": "0507f36a2c61eb674ef41d2f3eba2818402512c5e958fe04878f4e3733fa3e24",
+    "sw/include/video_regs.h": "4a328e45198868f901bcf011644825cd1789caff1051987f27966a6daf909d76",
+    "sw/tests/video_control/link.ld": "91b9fed757111cde71c15a1f1638d9ef17618a271f0f2b2a1180846b09cce69e",
+    "sw/tests/video_control/main.c": "f24e092384b07d63dd7cd92159ed4c7a9d8bd78cee57f15e4f06b52c66de2477",
+    "sw/tests/video_control/start.S": "2f7a571c5087fad08d7ad88e6c023106b299dca0131a52c1d78ac7becfd8fb52",
+    "tb/soc/tb_cpu_native_axil.sv": "36fe2fcbe4806286aee40b66f5c57d4d0cb17770576a403d631c1a4ac103afc0",
+    "tb/soc/tb_cpu_video_firmware.sv": "61d0f79089255a2528e02df14b83f327c2d7c5975ccda978a39f34552cabe470",
+    "tb/soc/test_cpu_video_runner.py": "5fef428d181f050bc5e12c3c5df9f390811ca4779e1ed66216afe5bf19d463d9",
+    "tb/video/check_bilinear_dump.py": "34fcc6df12103c2f2ae108fe6cabc5b9a8ae9fc8fc85bada6f14dbf60cdcee84",
+    "tb/video/check_nchw_dump.py": "07277985a3d4e25794e3e7f78522df7964331f4e9df7fdcf80f4a52aceaa5c9c",
+    "tb/video/check_three_capture_dump.py": "6d5aa50b6a92ee25a6ae9894222263632bf558ae35c96365e1b366cce117210d",
+    "tb/video/models/axi_bridge_native_model.sv": "7b202877281e2f58a46a2ca9a5b245027f468ace1e23d5d0784fa1efcccd3442",
+    "tb/video/models/ddr_board_ip_model.sv": "c3202ec87ead44c2c6d6dd49dbc04b4a133f2a30254b591cc09dbfb9a12331cd",
+    "tb/video/models/ddr_native_model.sv": "ae5944bd80164f7d848f6329496e42d72d0bab4f3350af619939661f0cbb8060",
+    "tb/video/models/ms7200_i2c_model.sv": "310650e529d254e5c9db685ad931eff9b6a4b580cc92644a7042110dc825bcd4",
+    "tb/video/models/ms7210_i2c_model.sv": "94db8036d6b887664d4e181f7b604f65d373965e971d5347ade30d9e2d2f5388",
+    "tb/video/models/rgb888_packer_legacy_model.sv": "b7bfce39f039895d3cf3dd38444e052963c1b919149aa7d202f68f5a4d88dd65",
+    "tb/video/models/video_pll_model.sv": "314099f94b6e866763c6067c2196a72a5e45319d1e7871790afdbe0b96b5868c",
+    "tb/video/tb_axi128_hmic256.sv": "a2eb32e78ca1f9a20345be9e54f8111227e8e4e7a149259208ad3c4739d39859",
+    "tb/video/tb_axi_capture_bist.sv": "fa743cc5bcf03bff140e78355f32b38f7b0675cefa76c3b178948c4415ca9cc8",
+    "tb/video/tb_axi_capture_board.sv": "2bbb51281e7f2fb990fbffa9547c061da26be430b9cfb147183e06c17226d706",
+    "tb/video/tb_axi_write_arbiter3.sv": "a47177d8a02071775bb635410fdf953ed55521cbd13f7735d848895254080504",
+    "tb/video/tb_board_smoke.sv": "e6cbe80e6706569cd1f9af8d6595b740dedcb194e26e45d715010be8c9775beb",
+    "tb/video/tb_clock_reset.sv": "19018b1ff08d77e63385c7fd67955ef5cd43f8ceb44dece83a02551a3b9fcc5c",
+    "tb/video/tb_ddr_board.sv": "188718389f4cf0bca4dd0b24c2b2721eefa15542b042c414734828acc53552dd",
+    "tb/video/tb_ddr_native_bist.sv": "aba93c5617c5ca81a4ca07be609544b11bed8e3363dcaa659cf70e1bb36e5881",
+    "tb/video/tb_detect_bilinear.sv": "1ea879d42a8d5bfccaf4602a9f741b4a6fcc14db679d295a68e06911d80fc94e",
+    "tb/video/tb_detect_c8_pack.sv": "a039623e3317308553728ce37d72cfefc2da05935da107995a239750da61d349",
+    "tb/video/tb_detect_downscale.sv": "b7fb2fbbfd860f44c63947d1caf88205940eb637d2d986ea0dc359fcf3bcb8b8",
+    "tb/video/tb_detect_input_dma.sv": "f7eaa3465f398189ef555ed77cbb1d83cba1932a371f81dd8ad4264b579a90bf",
+    "tb/video/tb_detect_input_pad.sv": "519a1f5f2ffde5521cb762ef92481fe9f7aa97cf75c876f3cb2cb0f1226c8029",
+    "tb/video/tb_detect_nchw_dma.sv": "d340a6db53dc3a3bb6cbc8769ccbc5ab92fd70276f1a14e01af0d1f38665667a",
+    "tb/video/tb_diag_uart.sv": "082dfe2a6f3280f584ef4e2bd164594d3ee1a8c6ab9233233eaa48b5bdab5e61",
+    "tb/video/tb_hdmi_rx_init.sv": "95e8f5722964f21df07c5854de07ac5ac68fc5e91d80ca6705d1c8e427b0233a",
+    "tb/video/tb_hdmi_tx_init.sv": "8cdfaa557354e4e5515852296afd15cf785e2394d718a30e8170d7a06ae90d63",
+    "tb/video/tb_nchw_parameters.sv": "7bf7febbc16826e986683f806f8441d53df502444c6947f667150b7d72fca316",
+    "tb/video/tb_pll.sv": "2f1bfe74835c9744bfadfd94db4521b8653ca0616eeba3db8de3f4a3bf36c19d",
+    "tb/video/tb_preview_display.sv": "87750d4c2de87b56091657b6b10c4e9b630379cc9a06cd44e0010bd5b6e031a5",
+    "tb/video/tb_preview_downscale.sv": "cf2b134b094f212e7552e76c284444f65946e0be6f69a76245d4170271bd28ea",
+    "tb/video/tb_rgb888_packer.sv": "bfd97bf92509d78c9954fab356368e57e96d7f3d6b825ec9153f33b8a0f6df05",
+    "tb/video/tb_rgb888_packer_serial.sv": "1f466e5577feab4c08e08bd412f8715e838c1d03ba2fcb2853458e856486ab7a",
+    "tb/video/tb_rx_board.sv": "c46aefb7d1171a3a5d120e28afe76854b649c278de480ef6ba6a845541eb2db0",
+    "tb/video/tb_rx_measure.sv": "b9372db5ca1ddb628e7325bb4e3e87efff93e87b169dcb90efbecfbbe0de3851",
+    "tb/video/tb_rx_probe.sv": "e4687243a1b535550099f5e268c82eb66e79fb613a16008beacf68e580f28ac0",
+    "tb/video/tb_rx_telemetry.sv": "78c5e7d1f746dd1582d27abd42c89b774ad12ab509dbfdf66981e258822eae12",
+    "tb/video/tb_three_capture_parameters.sv": "3f74f8f125ebca73011348daf424141a5c5a8e9d8fca5d5055b1a5a92b245a18",
+    "tb/video/tb_timing.sv": "4a52e62faced0029f9c6e47c7a71f0ee44b37109e62fc7f5a9964bc945676196",
+    "tb/video/tb_video_async_fifo.sv": "c4d71d68375b2d3422d7486975372bb0326d47471e452d03cee76865a0849886",
+    "tb/video/tb_video_capture_engine.sv": "454e5b8b2dfb19c52d3a03634311ff00fbcf6368a3b9cfdc0d9897b4c1a6bd29",
+    "tb/video/tb_video_capture_ingress.sv": "7d27392cc231d8cefcd8155faf62e2c52efa78f40e8f36136a9a66ac32df9701",
+    "tb/video/tb_video_capture_mmio.sv": "30623fe5fbb9978d08773387305a5a6b5979fac7cd86acea8feeb8d0c62d3db0",
+    "tb/video/tb_video_capture_mmio_core.sv": "c8d3f582986bb36b7387bc4294119dc69f0e3b89cf2019d14c8ef149a0d49f6f",
+    "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
+    "tb/video/tb_video_frame_crc_checksum.sv": "d62868b251f25fe2759562c11160346564b9b61120f40e74b71892f9c9262121",
+    "tb/video/tb_video_frame_crc_reader.sv": "0803366ff0a5d9cb3ad50f5614875cad8388a52ca3473d171dcd6ecbdc6330c8",
+    "tb/video/tb_video_hdmi_capture_board.sv": "c88f229b44714161f9e72c2f043cecdbdcb68cc7d0103fc58581d5ec6e9abfd4",
+    "tb/video/tb_video_preview_board.sv": "df65a8a742a87c7492a6dfbebe3d847f7cdcb5361fbd7027983fe5286a5ebb24",
+    "tb/video/tb_video_preview_capture.sv": "3393f504dbdc5077e457557d33ae68701d442cac74e0b42a1d2d311d3ab6f6e8",
+    "tb/video/tb_video_preview_clock_reset.sv": "81173d14100a6900ea78c792b2538456984e14a61c79754fb834826a6220da4a",
+    "tb/video/tb_video_rx.sv": "e88a25f504fd0d4bab16e931be481661597b0d80be57758060542ac5de4e3b74",
+    "tb/video/tb_video_rx_image_probe.sv": "20ae3296bd196004bb4dfe56a1d09d70fc8a7ffa3c439d22cd69a704dd4e6eb8",
+    "tb/video/tb_video_rx_image_probe_board.sv": "e0967d6743a0b5e51073183b6128157a75258a047c175242f22a3667f8b1dbc7",
+    "tb/video/tb_video_stream_register.sv": "89133fda354df8fdb09742d3cd5e830538957458c0a885be0b68346dbbd6f8f5",
+    "tb/video/tb_video_three_board.sv": "eadb8ebf8fdafde4ab6abbb6c6a6c76413ce712744f56789b19ddf1f284cca34",
+    "tb/video/tb_video_three_branch_capture.sv": "bf151385abd73302d69393157f7ecb8e956284a7ea5dd086bb2fec4131ba323c",
+    "tb/video/tb_video_three_engine.sv": "d6f255f4e8ab5f546061f90c31bf60abdcfcb5ed7507474dacc854ea1595f4ff",
+    "tb/video/tb_video_three_throughput.sv": "c00e8aadd5f3b5fcafa1d82466bf4190d315630fc24748393492add8139d50f8",
+    "tb/video/tb_write_dma.sv": "c31010f6f55fd4f8f459b2049a41123cf937f553144582ef366585c083af27b4",
+    "tb/video/test_board_packets.py": "caf821a9050bd1c3b8e5cff46fab43d401135d7cae5bf48efee303ae6a6905be",
+    "tb/video/test_config.py": "b5de2f8b39563363244df71c3c82c9b32ec876f5518d813a084bf831ab78e381",
+    "tb/video/test_ddr_generation.py": "1c96f0517d5ea6709bcc29e1ca9d4de165132eedb8edc011dbd5522ac6f611e2",
+    "tb/video/test_detect_reference.py": "08d37756670a3be38f30ae96ab58c190d734af11cba35a16aecf41b3ca60108d",
+    "tb/video/test_edid.py": "63a2df36e8c9e67ad7d4defa1eef1119ddb7aad7de5763aa8d379c4556d6bfcb",
+    "tb/video/test_input_format_reference.py": "31236f66be7f709c01eadb132ef087ef9c7d22ef26e1eb92af856b167a96c48b",
+    "tb/video/test_package.py": "c532a161ef430aaa7b4d790261f9f6c9a78b26671058e8103c9c8b6ed59f646d",
+    "tb/video/test_pds_messages.py": "b2d948f614887b13126b3cdda3f5e5632d8b8256c13a0d283194bba9a06dfffd",
+    "tb/video/test_pll.py": "1e7cef625b119d8c16db0d04ed0ac60c75404c0fe3607b6eeb3741d3f2263288",
+    "tb/video/test_preview_packets.py": "db33c1417c279d777aedcf514a1e1ae558bebe6003adf57c2bfa4ce892eaa4f1",
+    "tb/video/test_program_log.py": "8b29a4ea8fced88729d6e83bc27728ebf87ef6baaaeb8e59858440704080183a",
+    "tb/video/test_references.py": "121cc51366367a838a6d7a3596b36b71c80a10e9bb4028561143f9bd9abbcaad",
+    "tb/video/test_regression_inputs.py": "15c33fa94f0067e85fce27bf428818b92107b20c9e858b3f3e77ece60ec61d83",
+    "tb/video/test_rx_image_probe.py": "acd473660e3846bafd48389468a5e318161969f3b8c94d65bba82de7601ccc94",
+    "tb/video/test_three_board_packets.py": "2b7b97522682d8b222d524100cc284973df0c642437e2ec3daa6555ec72b58df",
+    "tb/video/test_video_regs.py": "b069f23dfd77661d2af7a2f02c78c85a3f61a87ac204f12b3f0b3edc091e38c0",
+    "tb/video/test_yunet_input_reference.py": "a80ae694909c3ef7789d33769cec2f9a191476e447c6dcea90aab3525d4a6077"
+  },
+  "git_clean_source_sha256": {
+    "config/cpu_video_fixture.json": "4fd0a3cd627d1b00d00151e17cb9c493484eacabe7156ed144134c51f5723533",
+    "docs/interfaces/video.md": "3036811909bd3b27604678b0081f45aa7520ecc1dccc73833d6d6470937f21b7",
+    "docs/superpowers/specs/2026-10-19-cpu-video-control-design.md": "dc7e6a4be47a8439a1f957cdaecc71440bc7a62e308fbe295d0041d9c1ae201f",
+    "docs/verification/video/cpu_video_control.md": "8d503bf92e5b1641b8b7cb5aec346de032874ea6dffbc2fb43c1af1707a15bda",
+    "docs/video/README.md": "19cd00080855cf28cd78f3154570c4e1d71d8ca8c4cbbac84d630ab586f83605",
+    "docs/video/STATUS.md": "6401e6ef72cb20c2c3ef20c4e0eacc818be56cb816266cfe4e6b800176833cc4",
+    "fpga/pg2l100h/constraints/cpu_native_axil.fdc": "d17b28af0a65bc8db872e82813eface81ad105d70f09afed665b3d96b2a42c7f",
+    "fpga/pg2l100h/project/cpu_native_axil.json": "09c76af3569ce38e0905d855ba5d0d72f6d388ca12d8de88179aa930267c04f8",
+    "rtl/soc/cpu_native_axil.v": "02d95863a55650fe4f2e1d9641cb570a5925fda7997661d3dd67209be31d5549",
+    "scripts/soc/run_cpu_video.py": "7f1d164392ed56cd8588d9053155761ea3a8a57f7b95a1cdf4fc15dd90a32438",
+    "scripts/video/build_pds.py": "29d3f537b45a9397552d72e25f951417a6cb01edf4e5252efe337523569f1b26",
+    "scripts/video/run.py": "d8bd4c93fba4f158969e52609689a5ed6418eec395d3c7a1cbc3ea5d8cff046e",
+    "sw/tests/video_control/start.S": "2f7a571c5087fad08d7ad88e6c023106b299dca0131a52c1d78ac7becfd8fb52",
+    "sw/tests/video_control/link.ld": "91b9fed757111cde71c15a1f1638d9ef17618a271f0f2b2a1180846b09cce69e",
+    "sw/tests/video_control/main.c": "f24e092384b07d63dd7cd92159ed4c7a9d8bd78cee57f15e4f06b52c66de2477",
+    "tb/soc/tb_cpu_native_axil.sv": "36fe2fcbe4806286aee40b66f5c57d4d0cb17770576a403d631c1a4ac103afc0",
+    "tb/soc/tb_cpu_video_firmware.sv": "9f432f658a9e0d77ae032abd01b84dac07d43954e4a5c34a727728c23d4ba3e8",
+    "tb/soc/test_cpu_video_runner.py": "5fef428d181f050bc5e12c3c5df9f390811ca4779e1ed66216afe5bf19d463d9"
+  },
+  "refs": {
+    "parent_ref_rules": {
+      "path": "build/video/cpu_video_delivery_refs.json",
+      "sha256": "e5f72575f96df281581481584dc7be2bd015d2c098e06fdb0af1a8f60714f90d"
+    },
+    "full": {
+      "path": "build/video/regression/20261019T090954_414639Z/result.json",
+      "sha256": "4b6b3732977c2eff1afedcc70197fde93859bf1706761e1a9f689500352daea3"
+    },
+    "pds": {
+      "path": "build/video/pds/20261019T090954_423039Z/result.json",
+      "sha256": "77e7bd0e9efade4bcc590e3c137c2b0cd22da180bd6462c676fa95ea749fe0e8"
+    },
+    "pds_archive": {
+      "path": "build/video/pds/20261019T090954_423039Z/parent_artifact_hashes.json",
+      "sha256": "6bda8331b1cfb34329626f1deccb2e3d5a6ef4417b11091d5397504f1257c783"
+    },
+    "firmware_parent": {
+      "path": "build/video/cpu_video_firmware/20261019T092739_970045Z/result.json",
+      "sha256": "482b20dd0dee771f27f434665eaab5d5d67ff7057c9670b1407ba7af2cf8a692"
+    },
+    "firmware_implementation": {
+      "path": "build/video/cpu_video_firmware/20261019T092506_731442Z/result.json",
+      "sha256": "486378cd028b629d48cbc29e626ffae0401e0b4d7c4988b76d328bba6d92ce00"
+    },
+    "firmware_spec_execution": {
+      "path": "build/video/cpu_video_firmware/20261019T092837_016704Z/result.json",
+      "sha256": "b0ddadc3db05c96f07639a2841c08aa5dc96bf4b15da1559a87d6304d8e79d32"
+    },
+    "adapter_implementation": {
+      "path": "build/video/cpu_axil_implement/result.json",
+      "sha256": "f360f0a49d60f306ba053d9f9f5427b56c912f8d1eac903b775da9bc27bc1e39"
+    },
+    "adapter_spec": {
+      "path": "build/video/cpu_control_spec_review/adapter_current/result.json",
+      "sha256": "bb7fd8ce1fda45196aa7ccc15ce2c70e2f32083bfaf86c9a16fdfaf957e49a37"
+    },
+    "quality": {
+      "path": "build/video/cpu_control_quality_review/quality_result.json",
+      "sha256": "3dfb4bd53a92fc04a80919076d4fd88fb81350ce8953c1a0a7cd5eb452f5a7f3"
+    },
+    "spec_firmware": {
+      "path": "build/video/cpu_control_spec_review/frozen/result.json",
+      "sha256": "d3a81c62753c383a016a487a546945fdfae682f47b09096f0f53c2b86292798f"
+    },
+    "irq_diagnosis": {
+      "path": "build/video/cpu_control_spec_review/irq_ordering_audit.json",
+      "sha256": "dca928ca93df6d74adc3dad22e2c3b477665b7e020c07b1ce02d36610305f3fe"
+    },
+    "runner_source_provenance_red": {
+      "path": "build/video/cpu_axil_provenance_fixture/20261019T090839_597631Z/result.json",
+      "sha256": "23e92005a8444bd0d95ff9c7dac2dbe48264ad29caaf10c207c561ecf5073c35"
+    },
+    "runner_source_provenance_green": {
+      "path": "build/video/cpu_axil_provenance_fixture/20261019T090857_853309Z/result.json",
+      "sha256": "de710a12e6b687e0d34fcc688bb1e59a411f9c3465bb21aabee507a3c9df4d54"
+    },
+    "firmware_copy_race_red": {
+      "path": "build/video/cpu_control_quality_review/firmware_race_red/review_result.json",
+      "sha256": "c9de8008ca723b98e0a86f103eb9d6b8bb1f8baca24037e9e8ad441de38f3dff"
+    },
+    "firmware_copy_race_green": {
+      "path": "build/video/cpu_control_quality_review/firmware_race_green/review_result.json",
+      "sha256": "d522b044748e7c62ba459d243dd0117f55bfdc3ecbc6507ddd96fc28fbe191cf"
+    },
+    "real_control_mutant": {
+      "path": "build/video/cpu_control_quality_review/firmware_control_mutant_20261019T092506_731442Z/review_result.json",
+      "sha256": "619b4946ed496fa7fb4fd7ee795bdb2c1eb9a55c925d39ec9413836847dbc589"
+    },
+    "preservation": {
+      "path": "build/video/cpu_video_concurrent_baseline.json",
+      "sha256": "933522e2146cf38d972df11a925c842acb76b4c46977f13880cba6eabca08526"
+    },
+    "parent_audit": {
+      "path": "build/video/audit_cpu_video.py",
+      "sha256": "f7353229a4c88e391826828cf2a1d77ee8d17c3e2c0b45d5cc16d91decbd812f"
+    },
+    "pds_archive_script": {
+      "path": "build/video/archive_cpu_pds.py",
+      "sha256": "076595a155632d099156f8979dee3d919af31ec4779b8acb92a1afcd775d2cdb"
+    },
+    "spec_overall": {
+      "path": "build/video/cpu_control_spec_review/result.json",
+      "sha256": "6a53bb6b2cb037145967b0cf8305d10d55a36fa7d125895c722511608fb8c7e3"
+    },
+    "spec_external_bytes": {
+      "path": "build/video/cpu_control_spec_review/external_bytes/result.json",
+      "sha256": "eb2ed2b0d496ebd9e2ecf47a1f2dfc24a2ef08223c8e30f8cd0d9cf932dcfa8f"
+    },
+    "full_logs": {
+      "path": "build/video/regression/20261019T090954_414639Z/parent_log_hashes.json",
+      "sha256": "418c2e22e8874c5f82952ee3bd87cf073950f286261d50140e73616f865a00ea"
+    }
+  }
+}
