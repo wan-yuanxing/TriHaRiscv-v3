@@ -1,6 +1,6 @@
 # CPU板级最小系统验收
 
-更新时间：2026-10-19。原100MHz系统基线`5c4229a`和标签`cpu-soc-100mhz-sta-20261019`保留，本批CPU RTL未改。板级顶层为`triha_cpu_board_top`，六级单发射、RV32IM/CSR、BTB32/BHT512/RAS8开启、无I/D Cache，8KiB ROM、32KiB SRAM和UART TX地址不变。
+更新时间：2026-10-20。原100MHz系统基线`5c4229a`和标签`cpu-soc-100mhz-sta-20261019`保留，本批CPU RTL未改。板级顶层为`triha_cpu_board_top`，六级单发射、RV32IM/CSR、BTB32/BHT512/RAS8开启、无I/D Cache，8KiB ROM、32KiB SRAM和UART TX地址不变。
 
 ## 板级边界
 
@@ -11,7 +11,7 @@
 | uart_tx_o | C24 | 115200/8N1，LVCMOS33 |
 | led_o[0..3] | A20/C18/C19/E18 | 硬件心跳、复位释放、软件成功、软件失败，按信号电平描述 |
 
-PLL I5/M4/F8/O8，PFD25MHz、VCO800MHz、CPU100MHz。来源IDF、实际生成wrapper、安装原语、工具和固件均按哈希绑定。板级不含DDR/Video/NPU；UART为固件MMIO输出，未添加独立硬件自报PASS通路。
+当前PLL I1/M1/F8/O10，PFD125MHz、VCO1GHz、CPU100MHz。来源IDF、实际生成wrapper、安装原语、工具和固件均按哈希绑定。板级不含DDR/Video/NPU；UART为固件MMIO输出，未添加独立硬件自报PASS通路。
 
 ## 已完成的数字验证
 
@@ -50,3 +50,12 @@ PLL I5/M4/F8/O8，PFD25MHz、VCO800MHz、CPU100MHz。来源IDF、实际生成wra
 恢复候选：主工程`build/video/releases/video_raw_board_0cd4a546804b/video_raw_board_top.sbit`与同名smsk，已对照`build/video/latest_board_program.json`的历史Program/Verify成功记录核对两者哈希。本轮未再次下载该文件，不以JTAG DONE=1推断板上当前位流身份。
 
 现场Program/Verify、UART实际接收、持续运行、实体KEY0及物理时钟仍未验收；当前Video配置保持在板上。
+
+
+## 2026-10-20 板级物理对照及下一步
+
+已恢复a9034b5的原CPU源/11项派生清单，28个vendor文件不变。PC复制未改善（-0.536ns），高PFD PLL I1/M1/F8/O10仍精确100MHz，实际PDS uncertainty仍0.250ns，最差-0.096ns。相邻区域(0,64,100,149)容量失败（native1）；恢复原CPU/ROM区域(0,64,150,199)。合法详细布局迭代40次、Performance模式均仍-0.096ns；LUT6D策略0/2分别-0.673/-0.500ns；布局扩散系数0为-0.205ns，均未收敛。无频率、IO或hold约束放宽，没有位流/上板。首次迭代参数8被工具拒绝，已保留并增加合法10..50前置检查。
+
+当前数字验证：实际PLL模型111项；整核两次启动/8KiB自检；真正损坏0x10640的一字节后固件code1拒绝，正负例ELF加载内容一致。配置9项、串口6项、选定路由DB绑定4项通过；见board_selected_digital_validation.json。
+
+工具选项对照不再扩大。下一步仅在维护派生中将AUIPC/JAL/JALR的PC加法从通用ALU输入选择链移出，保持六级单发射、预测器规模、状态/复位/hold和周期不变。先执行原执行单元全输出对照和负例，再做整核退休/store/异常、CoreMark及板级正负例，最后以实际100MHz STA判断。原版及所有失败证据保留；本检查点仍不是可交付板级版。

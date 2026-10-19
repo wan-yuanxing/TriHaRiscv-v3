@@ -466,3 +466,12 @@ CPU综合层次6080LUT/5205FF/32distributedRAM/0DRM/4APM；系统额外136LUT/88
 预测组合实验已完成：并行payload、LUT6平衡归约与标量valid两版均通过完整预测器状态/输出、三seed单/双有序执行、IRQ/mret、SRAM CoreMark与板级两次启动，CoreMark保持1685831/1467843。第一版CPU6264LUT/5172FF、后布线−0.678ns；第二版6404LUT/5172FF、−0.408ns，均未优于原网表最佳−0.096ns。验证与实际时序分别见board_payload_{late,balanced}_{validation,route}.json。实验作Git诊断检查点，尚未准入；随后恢复a9034b5的CPU源和清单，针对实际PC扇出作纯综合诊断，保持原版本作为部署候选。
 
 板卡只读识别PG2L100H/00602899、DONE1，COM12可见；当前Video配置未替换。历史成功的video_raw_board_0cd4a546804b及同名smsk已核对恢复哈希。详情board_system_design.md、board_system_plan.md及docs/verification/cpu/board_system.md。主工程独立Video/技术报告工作不改动，未合入、未push。
+
+
+## 2026-10-20 板级物理对照及下一步
+
+已恢复a9034b5的原CPU源/11项派生清单，28个vendor文件不变。PC复制未改善（-0.536ns），高PFD PLL I1/M1/F8/O10仍精确100MHz，实际PDS uncertainty仍0.250ns，最差-0.096ns。相邻区域(0,64,100,149)容量失败（native1）；恢复原CPU/ROM区域(0,64,150,199)。合法详细布局迭代40次、Performance模式均仍-0.096ns；LUT6D策略0/2分别-0.673/-0.500ns；布局扩散系数0为-0.205ns，均未收敛。无频率、IO或hold约束放宽，没有位流/上板。首次迭代参数8被工具拒绝，已保留并增加合法10..50前置检查。
+
+当前数字验证：实际PLL模型111项；整核两次启动/8KiB自检；真正损坏0x10640的一字节后固件code1拒绝，正负例ELF加载内容一致。配置9项、串口6项、选定路由DB绑定4项通过；见board_selected_digital_validation.json。
+
+工具选项对照不再扩大。下一步仅在维护派生中将AUIPC/JAL/JALR的PC加法从通用ALU输入选择链移出，保持六级单发射、预测器规模、状态/复位/hold和周期不变。先执行原执行单元全输出对照和负例，再做整核退休/store/异常、CoreMark及板级正负例，最后以实际100MHz STA判断。原版及所有失败证据保留；本检查点仍不是可交付板级版。

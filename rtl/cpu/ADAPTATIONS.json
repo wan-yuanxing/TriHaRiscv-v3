@@ -146,7 +146,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "0840fa657a69f579d5cab1ac6a8b15347b3391962218a8a7f3adbee2e82713a4",
+      "derived_sha256": "dd69acd7d5ea1057c6f25be5dcda2f766ede482585d3d94e2bbd73f40094d804",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
@@ -155,9 +155,7 @@
         "Localize each BHT entry saturation transition after its address match, preserving counter/reset/condition priority and all cycles while avoiding a dynamic write-side counter read.",
         "Compute exact-PC and upper-word highest-index priority masks in parallel before selecting the existing fallback; preserve original procedural if/X handling and all state/cycles. Keep the parallel masks as synthesis boundaries.",
         "Share the 29 high tag bits between exact-PC and upper-word lookups; use kept three-bit equality groups for the complete query and write tags, preserving all 32 bits and procedural if/X semantics without state or cycle changes.",
-        "Extend lookup sharing to every bit except bit two, retaining low alignment bits; decode RAS actual/speculative write indices per entry before late prediction enables, preserving original confirmed-return/speculative-call overlap priority and all state/cycles.",
-        "Compute complete exact-PC and upper-word payloads with the existing one-hot muxes before the late procedural fallback choice, preserving four-state priority, all tables/state and prediction cycles; remove the unused selected-mask mux.",
-        "Keep a LUT6-balanced one-hot AND/OR tree (three masked terms per leaf, six group terms per reduction) and select scalar validity directly; all four-state data/priority behavior remains unchanged without state or cycle changes."
+        "Extend lookup sharing to every bit except bit two, retaining low alignment bits; decode RAS actual/speculative write indices per entry before late prediction enables, preserving original confirmed-return/speculative-call overlap priority and all state/cycles."
       ],
       "references": [
         {

@@ -3,7 +3,7 @@
   "top": "triha_cpu_board_top",
   "reference_hz": 125000000,
   "cpu_hz": 100000000,
-  "pll": {"instance": "cpu_board_pll", "input_divider": 5, "multiplier": 4, "feedback_divider": 8, "output_divider": 8},
+  "pll": {"instance": "cpu_board_pll", "input_divider": 1, "multiplier": 1, "feedback_divider": 8, "output_divider": 10},
   "pins": {
     "ref_clk_pi": {"location": "N3", "direction": "INPUT", "vccio": "1.5", "standard": "SSTL15D_I"},
     "ref_clk_ni": {"location": "N2", "direction": "INPUT", "vccio": "1.5", "standard": "SSTL15D_I"},

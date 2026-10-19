@@ -61,6 +61,11 @@ try {
     $core=Get-Content (Join-Path $root $recipe.core_manifest) -Raw|ConvertFrom-Json
     $soc=Get-Content (Join-Path $root $recipe.soc_manifest) -Raw|ConvertFrom-Json
     if($recipe.period_ns -ne 10 -or $recipe.top -ne 'triha_cpu_board_top'){throw 'Wrong board route recipe.'}
+    if($recipe.PSObject.Properties.Name -contains 'refineplacement_iterations'){
+        if($recipe.refineplacement_iterations -lt 10 -or $recipe.refineplacement_iterations -gt 50){
+            throw 'PDS RefinePlacement Iteration must be within 10..50.'
+        }
+    }
     $names=@($core.sources)+@($core.headers)+@($soc.sources)+@($soc.headers)+@($recipe.sources)+@($recipe.physical_constraints)+@(
         $recipeName,$recipe.core_manifest,$recipe.soc_manifest,$recipe.constraints,'config/cpu_board.json','config/soc_map.json',
         'rtl/cpu/ADAPTATIONS.json','rtl/cpu/vendor/UPSTREAM.json','scripts/soc/run_board_route.ps1',
@@ -89,11 +94,26 @@ try {
     $lines+='dev_map -detail'
     $route="pnr -action_timeout $($recipe.pnr_action_minutes) -optimize_multi_corner_timing -fix_hold_violation -gplace_seed $PlacementSeed -dump_router_congestion_plot TRUE"
     if($recipe.slack_prior_in_global_router){$route+=' -slack_prior_in_global_router TRUE'}
+    if($recipe.PSObject.Properties.Name -contains 'refineplacement_iterations'){
+        $route+=" -refineplacement_iteration $($recipe.refineplacement_iterations)"
+    }
     if($recipe.placement_trials -gt 1){
         $route+=" -gplace_times $($recipe.placement_trials) -seed_step 1 -saved_outcome 1 -parallel $($recipe.placement_parallelism)"
     }
     if($recipe.route_constraint_iterations -gt 0){
         $route+=" -enable_route_constraint_iterate -route_constraint_iterate_times $($recipe.route_constraint_iterations) -route_constraint_slack 0.200 -route_constraint_max_timing_path 20"
+    }
+    if($recipe.PSObject.Properties.Name -contains 'lut6d_packing_strategy'){
+        if($recipe.lut6d_packing_strategy -lt 0 -or $recipe.lut6d_packing_strategy -gt 3){throw 'PDS LUT6D packing strategy must be within 0..3.'}
+        $route+=" -logic_optimize_lut6d_combing_strategy $($recipe.lut6d_packing_strategy)"
+    }
+    if($recipe.PSObject.Properties.Name -contains 'route_mode'){
+        if($recipe.route_mode -notin @('normal','performance')){throw 'Unsupported board routing mode.'}
+        $route+=" -mode $($recipe.route_mode)"
+    }
+    if($recipe.PSObject.Properties.Name -contains 'placement_decongestion'){
+        if($recipe.placement_decongestion -lt 0 -or $recipe.placement_decongestion -gt 9){throw 'PDS placement decongestion must be within 0..9.'}
+        $route+=" -plc_decongestion $($recipe.placement_decongestion)"
     }
     $lines+=$route
     $lines+='report_timing -max_path 20'

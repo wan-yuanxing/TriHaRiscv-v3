@@ -18,7 +18,17 @@ class BoardContracts(unittest.TestCase):
         self.config = json.loads((ROOT / "config/cpu_board.json").read_text(encoding="utf-8"))
 
     def test_exact_100mhz_recipe(self):
-        self.assertEqual(self.module.validate(self.config), (25_000_000, 800_000_000, 100_000_000))
+        self.assertEqual(self.module.validate(self.config)[2], 100_000_000)
+
+    def test_generated_high_pfd_pll_is_checked_from_actual_parameters(self):
+        import board_pll
+        self.assertTrue(hasattr(board_pll, "review_wrapper"), "generated divider review is missing")
+        self.config["pll"].update(input_divider=1, multiplier=1, feedback_divider=8, output_divider=10)
+        wrapper = "CLKIN_FREQ=125.0; STATIC_RATIOI=1; STATIC_RATIOM=1; STATIC_RATIOF=8; STATIC_RATIO0=10;"
+        result = board_pll.review_wrapper(self.config, wrapper)
+        self.assertEqual((result["pfd_hz"], result["vco_hz"], result["cpu_hz"]), (125_000_000, 1_000_000_000, 100_000_000))
+        with self.assertRaisesRegex(ValueError, "STATIC_RATIO0"):
+            board_pll.review_wrapper(self.config, wrapper.replace("STATIC_RATIO0=10", "STATIC_RATIO0=9"))
 
     def test_approximate_frequency_is_rejected(self):
         self.config["pll"]["output_divider"] = 9

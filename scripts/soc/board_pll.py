@@ -11,6 +11,21 @@ from run import sha, save
 PDS = Path("D:/pango/PDS_2022.2-SP6.4")
 
 
+def review_wrapper(config, text):
+    pfd, vco, cpu = validate(config)
+    pll = config["pll"]
+    expected = {"CLKIN_FREQ": config["reference_hz"] / 1_000_000,
+                "STATIC_RATIOI": pll["input_divider"], "STATIC_RATIOM": pll["multiplier"],
+                "STATIC_RATIOF": pll["feedback_divider"], "STATIC_RATIO0": pll["output_divider"]}
+    for key, value in expected.items():
+        match = re.search(r"\b" + key + r"\s*=\s*([\d.]+)", text)
+        if not match or float(match[1]) != value:
+            raise ValueError("actual generated PLL mismatch: " + key)
+    def number(value):
+        return int(value) if value.denominator == 1 else float(value)
+    return dict(actual_parameters=expected, pfd_hz=number(pfd), vco_hz=number(vco), cpu_hz=number(cpu))
+
+
 def create_idf(config, source, output):
     validate(config)
     tree = ET.parse(source)
@@ -67,17 +82,12 @@ def generate(work, native):
         raise RuntimeError("PLL generator did not report exact zero errors")
     wrapper = work / "cpu_board_pll.v"
     text = wrapper.read_text(encoding="utf-8")
-    expected = {"CLKIN_FREQ": 125, "STATIC_RATIOI": 5, "STATIC_RATIOM": 4,
-                "STATIC_RATIOF": 8, "STATIC_RATIO0": 8}
-    for key, value in expected.items():
-        match = re.search(r"\b" + key + r"\s*=\s*([\d.]+)", text)
-        if not match or float(match[1]) != value:
-            raise ValueError("actual generated PLL mismatch: " + key)
+    actual = review_wrapper(config, text)
     evidence = dict(status="PASS", configuration_sha256=sha(CONFIG),
                     reference_manifest_sha256=sha(manifest_path), source_idf_sha256=sha(source),
-                    archive_sha256=entry["sha256"], actual_parameters=expected,
+                    archive_sha256=entry["sha256"],
                     generated_idf_sha256=sha(idf), wrapper_sha256=sha(wrapper),
-                    pfd_hz=25_000_000, vco_hz=800_000_000, cpu_hz=100_000_000,
+                    **actual,
                     scope="Generated IP, not physical clock or board validation")
     save(work / "provenance.json", evidence)
     return wrapper

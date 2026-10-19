@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Actual vendor PLL model plus two-boot full CPU RTL and genuine image-corruption rejection; no physical execution",
+  "runs": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-clocks-20261019T155447556183Z",
+      "result_sha256": "79e19f8b3ff3e98559091c5d997cc3bc8ec9fa263d61df2e7dbee23ac624b2c5",
+      "test": "clocks",
+      "fault": "none",
+      "actual_status": "PASS",
+      "source_count": 11,
+      "output_count": 50,
+      "expected_marker": "CPU_BOARD_CLOCK_PASS checks=111"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T155450454223Z",
+      "result_sha256": "d1e29ab58953f9e5acdc40154f7ab7b87cdbc292daf0b4a1c61330d473d5d78b",
+      "test": "system",
+      "fault": "none",
+      "actual_status": "PASS",
+      "source_count": 72,
+      "output_count": 108,
+      "expected_marker": "CPU_BOARD_SYSTEM_PASS"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T160813338753Z",
+      "result_sha256": "1bf68fb9530f7d06b21599cfaa968bc67e5344d306d937a3859406d7760914e2",
+      "test": "system",
+      "fault": "memory",
+      "actual_status": "FAIL",
+      "source_count": 72,
+      "output_count": 109,
+      "expected_marker": "CPU_BOARD_FAIL code=00000001"
+    }
+  ],
+  "single_corrupted_sram_byte": {
+    "address": "0x10640",
+    "xor": 1
+  },
+  "elf_load_images_identical": true,
+  "programmed": false
+}

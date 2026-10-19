@@ -1,0 +1,783 @@
+{
+  "scope": "Historical frozen runs audited against their own snapshots and evidence; not current-source or board qualification",
+  "status": "PASS",
+  "runs": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1346585243566Z",
+      "result_sha256": "a8d45eb5fe6309b6b6738dd9b00e7f18149202ab38875b50b260d15a3e19db2c",
+      "status": "FAIL",
+      "flow_status": "RUNNING",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 44,
+      "output_count": 333,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 1,
+      "timing_corners": [],
+      "error": "PDS reported an error; inspect the actual tool log."
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1352504748462Z",
+      "result_sha256": "4ff395fe1c04f9d41159f6eb56bd6065a774f224651dfa9da93fbc9972c64c25",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 402,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 1,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.303,
+          "total_negative_slack_ns": -1.95,
+          "failing_endpoints": 13,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.166,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4348
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.746,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.107,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4348
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1358076128200Z",
+      "result_sha256": "65464610a5af02d479bd7989353a6d7bc9c9bee7420b90f90f4f427348d74979",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 342,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 2,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.781,
+          "total_negative_slack_ns": -46.908,
+          "failing_endpoints": 161,
+          "endpoints": 15304
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.152,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15304
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4327
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.752,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15304
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.1,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15304
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4327
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1403393645182Z",
+      "result_sha256": "80f034ac946e821cb14704b88e894ef086cea3e0e9ad5da6f0590fbe7d13cc51",
+      "status": "FAIL",
+      "flow_status": "RUNNING",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 46,
+      "output_count": 90,
+      "native_return_codes": [
+        0,
+        1
+      ],
+      "placement_seed": 1,
+      "timing_corners": [],
+      "error": "pds-board returned 1; inspect its logs."
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1407209697773Z",
+      "result_sha256": "77c623263902a428d1e855b756063d0817b0e36792d8f74b7472d46e8e31ca5f",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 46,
+      "output_count": 573,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 1,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.897,
+          "total_negative_slack_ns": -38.928,
+          "failing_endpoints": 160,
+          "endpoints": 15301
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.166,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15301
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4324
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.777,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15301
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.104,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15301
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4324
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1412486341257Z",
+      "result_sha256": "49273f915fb9a303ca60472a44142894ed5fcbcfefe5934206d93e948c6b10f7",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 402,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 1,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.303,
+          "total_negative_slack_ns": -1.95,
+          "failing_endpoints": 13,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.166,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4348
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.746,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.107,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15325
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4348
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1421275069880Z",
+      "result_sha256": "f665a75608f4e6d5344266f29ca20af2636a058c42abb20de4ba655bdc83e9ba",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 418,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 4,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.096,
+          "total_negative_slack_ns": -0.197,
+          "failing_endpoints": 3,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.169,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.752,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.108,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1431073056262Z",
+      "result_sha256": "90f43b4041f4a3e30f788911d880d9968f38c4658a20207ac64665a7136b0762",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 340,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 10,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.217,
+          "total_negative_slack_ns": -2.191,
+          "failing_endpoints": 34,
+          "endpoints": 15300
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.168,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15300
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4323
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.821,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15300
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.108,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15300
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4323
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1440308216288Z",
+      "result_sha256": "40468dc1e0a4995d4e076044464a770325fc47d2d27a3e62a52c12ca0980dac6",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 783,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 8,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.267,
+          "total_negative_slack_ns": -1.141,
+          "failing_endpoints": 12,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.087,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.752,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.045,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1500008653289Z",
+      "result_sha256": "c693c7c8c908d4de2d7545168303b7dcb003a6a1ebaf66cad24327a67979030a",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 326,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 8,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.678,
+          "total_negative_slack_ns": -12.412,
+          "failing_endpoints": 73,
+          "endpoints": 15316
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.169,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15316
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4322
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.777,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15316
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.11,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15316
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4322
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1525253030804Z",
+      "result_sha256": "5686811e0d52a3253a9c1264e057323f23820770904300f20f86ad5a0a711232",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 510,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 8,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.408,
+          "total_negative_slack_ns": -3.266,
+          "failing_endpoints": 21,
+          "endpoints": 15390
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.152,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15390
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4324
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.777,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15390
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.099,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15390
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4324
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1539438655831Z",
+      "result_sha256": "b8294b561f2f16fe6e638bcdc44cb3cf1d1a9ffea2177e0c46e8e5ad509fdf25",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 46,
+      "output_count": 357,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 8,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.536,
+          "total_negative_slack_ns": -4.562,
+          "failing_endpoints": 35,
+          "endpoints": 15471
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.162,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15471
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4412
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.777,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15471
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.1,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15471
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4412
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1549409183551Z",
+      "result_sha256": "0087cb9258c39c9571e33d45e524b7f3a373fc1ec4fcd4a75c3d8d99c5a7b8d3",
+      "status": "TIMING_FAIL",
+      "flow_status": "PASS",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 406,
+      "native_return_codes": [
+        0,
+        0
+      ],
+      "placement_seed": 8,
+      "timing_corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.096,
+          "total_negative_slack_ns": -0.197,
+          "failing_endpoints": 3,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.169,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.752,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.108,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15305
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4328
+        }
+      ],
+      "error": null
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1556517784311Z",
+      "result_sha256": "020cdc5d1e33f33b48a18e221eacf7a20db218f7af7d20aff98e16871bdf6321",
+      "status": "FAIL",
+      "flow_status": "FAIL",
+      "timing_closed": false,
+      "source_unchanged_at_finish": true,
+      "input_count": 45,
+      "output_count": 89,
+      "native_return_codes": [
+        0,
+        1
+      ],
+      "placement_seed": 8,
+      "timing_corners": [],
+      "error": "pds-board returned 1; inspect its logs."
+    }
+  ]
+}

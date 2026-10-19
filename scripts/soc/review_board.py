@@ -9,6 +9,18 @@ from gen_board import ROOT, validate
 from run import sha, save
 
 
+def review_routed_database(work, result, selected_seed, multiseed):
+    folder = Path(work).resolve() / "place_route"
+    if multiseed:
+        folder /= f"seed_{selected_seed}"
+    expected = folder / "triha_cpu_board_top_pnr.adf"
+    if Path(result["bitstream_input_db"]).resolve() != expected:
+        raise ValueError("bitstream input is not the selected routed database")
+    if sha(expected) != result["bitstream_input_db_sha256"]:
+        raise ValueError("selected routed database hash changed")
+    return expected
+
+
 def review(work):
     work = Path(work).resolve()
     result = json.loads((work / "result.json").read_text(encoding="utf-8"))
@@ -24,7 +36,7 @@ def review(work):
         assert native["return_code"] == 0 and not native["timed_out"]
         assert sha(Path(native["tool"])) == result["pds_shell_sha256"]
     config = json.loads((work / "src/config/cpu_board.json").read_text(encoding="utf-8"))
-    validate(config)
+    expected_pfd, expected_vco, expected_cpu = validate(config)
     for kind in ("clocks", "system"):
         directory = Path(result[kind + "_directory"])
         evidence = json.loads((directory / "result.json").read_text(encoding="utf-8"))
@@ -37,7 +49,8 @@ def review(work):
         for name in ("rom.hex", "sram.hex", "firmware.elf") if kind == "system" else ("ip/cpu_board_pll.v",):
             assert sha(work / name) == sha(directory / name)
     pll = json.loads((Path(result["clocks_directory"]) / "ip/provenance.json").read_text(encoding="utf-8"))
-    assert pll["cpu_hz"] == 100_000_000 and pll["pfd_hz"] == 25_000_000 and pll["vco_hz"] == 800_000_000
+    assert pll["cpu_hz"] == expected_cpu == 100_000_000
+    assert pll["pfd_hz"] == expected_pfd and pll["vco_hz"] == expected_vco
     assert sha(work / "ip/cpu_board_pll.v") == pll["wrapper_sha256"]
     log = (work / "pds-board.stdout.log").read_text(encoding="utf-8")
     assert not re.search(r"(?im)^\s*(E:|ERROR[: ]|FATAL[: ])", log)
@@ -102,7 +115,9 @@ def review(work):
     assert result["runner_return_code"] == (0 if met else 2)
     if met:
         assert result["bitstream_generated"]
-        assert sha(Path(result["bitstream_input_db"])) == result["bitstream_input_db_sha256"]
+        routed_db = review_routed_database(work, result, selected_seed, bool(chosen))
+        bit_script = (work / "bitstream.tcl").read_text(encoding="utf-8")
+        assert "-input_db_file {" + routed_db.as_posix() + "}" in bit_script
         bit_log = (work / "pds-bitstream.stdout.log").read_text(encoding="utf-8")
         assert not re.search(r"(?im)^\s*(E:|ERROR[: ]|FATAL[: ])", bit_log)
         assert re.search(r"(?m)^Executing : gen_bit_stream(?: [^\r\n]*)? successfully\.", bit_log)
@@ -113,11 +128,36 @@ def review(work):
     assert match, "missing CPU-only hierarchy resources"
     resources = dict(lut=int(match[1]), ff=int(match[2]), distributed_ram=int(match[3]), apm=int(match[4]), drm36k_equivalent=float(match[5]))
     assert resources["drm36k_equivalent"] == 0 and resources["apm"] == 4
+    replication = None
+    if any("cpu_board_pc_fanout.fdc" in name for name in result["input_hashes"]):
+        lines = (work / "synthesize/triha_cpu_board_top_syn.vm").read_text(encoding="utf-8").splitlines()
+        cells = {}
+        for i, line in enumerate(lines):
+            match = re.search(r"(GTP_DFF_\w+)\s+/\*\s*\\(pc_f_q(?:_copy)?\[(\d+)\](?:_\d+)?)", line)
+            if not match:
+                continue
+            block = []
+            for following in lines[i:i + 30]:
+                block.append(following)
+                if ");" in following:
+                    break
+            pins = {k: v.strip() for k, v in re.findall(r"\.(\w+)\s*\(([^()]*)\)", "\n".join(block))}
+            assert "Q" in pins and "D" in pins and "CLK" in pins
+            pins.pop("Q")
+            cells[match[2]] = (match[1], pins)
+        copies = [name for name in cells if "_copy" in name]
+        assert copies, "Requested PC fanout replication did not occur"
+        for name in copies:
+            bit = re.search(r"\[(\d+)\]", name)[1]
+            assert cells[name] == cells[f"pc_f_q[{bit}]"], name
+        replication = dict(stage="native synthesis", copy_ffs=len(copies), originals=len(cells) - len(copies),
+                           identical_type_d_clk_ce_reset_init=True, copied_bits=sorted({int(re.search(r"\[(\d+)\]", n)[1]) for n in copies}))
     return dict(status="PASS", timing_closed=met, scope="Independently verified board post-route; no physical execution",
                 review_tool_sha256=sha(Path(__file__)),
                 route_directory=str(work), route_result_sha256=sha(work / "result.json"),
                 selected_seed=selected_seed, selected_physical_report_sha256=sha(physical_path),
                 corners=rows, reset_checks=reset_checks, worst_setup_ns=worst, cpu_hierarchy_resources=resources,
+                pc_replication=replication,
                 actual_pins=config["pins"], pll=pll, programmed=False, board_validated=False)
 
 

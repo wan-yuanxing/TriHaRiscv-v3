@@ -1,0 +1,14 @@
+{
+  "status": "FAIL",
+  "failure_kind": "placement_region_capacity",
+  "native_return_code": 1,
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1556517784311Z",
+  "route_result_sha256": "020cdc5d1e33f33b48a18e221eacf7a20db218f7af7d20aff98e16871bdf6321",
+  "frozen_input_count": 45,
+  "verified_output_count": 89,
+  "source_unchanged_at_finish": true,
+  "actual_error": "E: ConstraintEditor-0070: [D:/FPGA/TriHaRiscv-cpu-windows/build/soc/board-route-20261019T1556517784311Z/device_map/triha_cpu_board_top.pcf(line number: 8083)] Region soc_cpu_center can't hold the design inst, try a bigger region. Region soc_cpu_center already has these instance constraints u_soc/u_core/u_cpu/u_csr/N134_10_2/gateop, u_soc/u_core/u_c",
+  "error_count": 142,
+  "timing_report_exists": false,
+  "programmed": false
+}

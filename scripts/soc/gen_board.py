@@ -56,7 +56,6 @@ def generate(config, output=OUTPUT, check=False):
         "set_input_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {rst_ni}]",
         "set_output_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {uart_tx_o led_o*}]",
         "set_output_delay 0.500 -clock [get_clocks {cpu_clk}] -min [get_ports {uart_tx_o led_o*}]",
-        "define_attribute {i:u_soc/u_core/u_cpu} {PAP_REGION} {soc_cpu_clock(0,64,150,199)}",
         "define_global_attribute {syn_useioff} {1}",
     ]
     data = ("\n".join(lines) + "\n").encode("utf-8")

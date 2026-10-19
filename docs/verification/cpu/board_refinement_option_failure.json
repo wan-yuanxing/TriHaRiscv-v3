@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "stage": "PDS PNR argument validation",
+  "error": "Flow-0186: RefinePlacement Iteration 8 outside legal 10..50; default is 20 per installed user guide",
+  "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261019T1601463261468Z",
+  "result_sha256": "247b468673d245253d4c2441ccd9d3b59e9f8a8ac31d8b77034763f7e4fbf0a5",
+  "native_return_code": 1,
+  "timing_report_exists": false,
+  "source_unchanged_at_finish": true,
+  "input_count": 45,
+  "output_count": 86,
+  "resolution": "Host now validates 10..50 before PDS and candidate uses 40. This failed run is retained."
+}
