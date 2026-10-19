@@ -1,0 +1,3 @@
+# ADS Synthesis User Guide 5.22: pack already existing port-connected FFs.
+# No additional pipeline state or timing exceptions are introduced.
+define_global_attribute {syn_useioff} {1}

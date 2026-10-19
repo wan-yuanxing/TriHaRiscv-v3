@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-19T10:47:40.495923+00:00",
+  "status": "TIMING_FAIL",
+  "scope": "CPU-only isolated single clock region plus existing I/O FF packing diagnostic; unchanged timing FDC and RTL; automatic pins, no board acceptance",
+  "production_hashes": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "54a73db1a16774595a97af9333b0be6a3e307c99b6b0e15ca98cd5a697b3d046",
+    "rtl/cpu/triha_issue.v": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+    "rtl/cpu/triha_regfile.v": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+    "rtl/cpu/vendor/src/core/biriscv_npc.v": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+    "rtl/cpu/triha_core.v": "bbe0012f1a5292f72f28093f068a840f009e1c6d90388512c03930f9bab406a3",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "ba6e38c40544877425d8c2d8faf271e1abe81b61ce58fe21ec5772f98b0ec169"
+  },
+  "reused_functional_evidence": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\lsu_head_timing.json",
+    "sha256": "eb75914bddaf56db12bd8172010a734ae3cff21416786e54db84fc9fd687a31f",
+    "positive_count": 24,
+    "expected_rejection_count": 6,
+    "all_recorded_input_external_and_output_hashes_rechecked": true,
+    "new_simulations": false
+  },
+  "parent": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\single_clock_region_timing.json",
+    "sha256": "68bcde44c233a20fa13f4b80bfa1e13c126cad3634ceec49481219ab0160a09e",
+    "worst_setup_ns": -2.277
+  },
+  "same_rtl_inputs": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "54a73db1a16774595a97af9333b0be6a3e307c99b6b0e15ca98cd5a697b3d046",
+    "rtl/cpu/triha_issue.v": "0070fd1cab91b0929d1da745cf17e26ec07d8ba3ee204c74c18fc3805df5c93f",
+    "rtl/cpu/triha_regfile.v": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+    "rtl/cpu/vendor/src/core/biriscv_npc.v": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+    "rtl/cpu/triha_core.v": "bbe0012f1a5292f72f28093f068a840f009e1c6d90388512c03930f9bab406a3",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "ba6e38c40544877425d8c2d8faf271e1abe81b61ce58fe21ec5772f98b0ec169",
+    "fpga/pg2l100h/project/cpu_core.json": "f713c673929a620fd2b0a737f055ae4ff630c90c4969e5787937a68d7bbc65ec"
+  },
+  "timing_fdc_identical_sha256": "baed7cd8dbe70dd39cbad80441a277db2e289b34c271455b2db20935230c2372",
+  "previous_setup_ns": -2.277,
+  "setup_delta_ns": -2.499,
+  "new_mapping_and_placement": true,
+  "board_validated": false,
+  "official_coremark": false,
+  "region_evidence": {
+    "pcf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1038595967077Z\\device_map\\triha_core.pcf",
+    "pcf_sha256": "21fc1385386624af1bfdefec7e3ad5263da44b5131c797b065e92682e32eaf4d",
+    "unique_cpu_leaf_bindings": 9584,
+    "clock_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1038595967077Z\\place_route\\clock_utilization.txt",
+    "clock_report_sha256": "7bbc91c119526eed95947b0c20da162fc261d3aa7822ee8f8f7199fb7416f032",
+    "placed_clock_row": "| clk_i_ibuf/opit_1     | DI_TO_CLK       | nt_clk_i              | CLK                  | clkbufg_0/gopclkbufg     | CLKOUT                | ntclkbufg_0         | USCM_215_576     | (2,114,62,199)           | (4,63,150,198)               | 5181            | 0                   ",
+    "non_io_clock_load_bounds": [
+      4,
+      63,
+      150,
+      198
+    ],
+    "independent_per_cell_coordinate_audit": false
+  },
+  "route": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1038595967077Z\\result.json",
+    "sha256": "8d5e51acce6b1f3b497e5b3c10d92833cb3da10af257255c3304595bbd21ac1c",
+    "status": "TIMING_FAIL",
+    "verified_inputs": 32,
+    "verified_outputs": 389,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -4.776,
+          "total_negative_slack_ns": -7216.058,
+          "failing_endpoints": 3042,
+          "endpoints": 17244
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.056,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 17244
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.346,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 5001
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": -0.552,
+          "total_negative_slack_ns": -1.655,
+          "failing_endpoints": 5,
+          "endpoints": 17244
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.026,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 17244
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.345,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 5001
+        }
+      ],
+      "performance_slack_ns": -4.776,
+      "worst_setup_ns": -4.776,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "resources": {
+      "lut": 6806.0,
+      "registers": 5173.0,
+      "drm": 0.0,
+      "apm": 4.0,
+      "io": 224.0,
+      "distributed_ram": 32
+    },
+    "elapsed_seconds": 338.229,
+    "native_return_code": 0,
+    "runner_return_code": 2,
+    "main_detailed": {
+      "iteration": 152,
+      "unrouted": 0
+    },
+    "report": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1038595967077Z\\report_timing\\triha_core.rtr",
+      "sha256": "9755e1e7dd947d139fcad8eaced86e91a1adf6752c978ee74c5d5f878978fb76"
+    },
+    "worst_path": {
+      "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+      "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_target_q[5][13]/opit_0_inv/CE",
+      "logic_levels": 15,
+      "logic_ns": 2.264,
+      "route_ns": 12.105
+    },
+    "internal_violations_present_in_first_20_paths": [
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_target_q[5][13]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.264,
+        "route_ns": 12.105,
+        "slack_ns": -4.776
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_is_call_q[6]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.39,
+        "route_ns": 11.929,
+        "slack_ns": -4.759
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_is_jmp_q[6]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.39,
+        "route_ns": 11.929,
+        "slack_ns": -4.759
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_is_ret_q[6]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.39,
+        "route_ns": 11.929,
+        "slack_ns": -4.759
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[26]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.525,
+        "slack_ns": -4.599
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_exec0/pc_x_q[30]/opit_0_inv_AQ_perm/CIN",
+        "logic_levels": 16,
+        "logic_ns": 2.355,
+        "route_ns": 11.866,
+        "slack_ns": -4.547
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_exec0/pc_x_q[26]/opit_0_inv_AQ_perm/CIN",
+        "logic_levels": 15,
+        "logic_ns": 2.27,
+        "route_ns": 11.866,
+        "slack_ns": -4.461
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[27]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.312,
+        "slack_ns": -4.395
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[29]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.312,
+        "slack_ns": -4.395
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[30]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.312,
+        "slack_ns": -4.395
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[31]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.312,
+        "slack_ns": -4.395
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[23]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.299,
+        "slack_ns": -4.381
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[24]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.299,
+        "slack_ns": -4.381
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[25]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.299,
+        "slack_ns": -4.381
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_issue/pc_x_q[28]/opit_0_inv_L6Q_perm/CE",
+        "logic_levels": 10,
+        "logic_ns": 1.646,
+        "route_ns": 12.299,
+        "slack_ns": -4.381
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[6][25]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.39,
+        "route_ns": 11.541,
+        "slack_ns": -4.379
+      },
+      {
+        "start": "u_cpu/u_frontend/g_training.packet_q[38]/opit_0_inv/CLK",
+        "end": "u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.btb_pc_q[6][26]/opit_0_inv/CE",
+        "logic_levels": 15,
+        "logic_ns": 2.39,
+        "route_ns": 11.541,
+        "slack_ns": -4.379
+      },
+      {
+        "start": "u_cpu/u_issue/u_pipe0_ctrl/ctrl_e2_q[1]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_cpu/u_exec0/pc_x_q[22]/opit_0_inv_AQ_perm/CIN",
+        "logic_levels": 14,
+        "logic_ns": 2.185,
+        "route_ns": 11.866,
+        "slack_ns": -4.375
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[13]/opit_0_inv_L6Q_perm/CLK",
+        "end": "inst_addr_o_obuf[17]/opit_1/TX_DATA[0]",
+        "logic_levels": 16,
+        "logic_ns": 3.357,
+        "route_ns": 10.183,
+        "slack_ns": -4.371
+      },
+      {
+        "start": "u_cpu/u_frontend/u_fetch/pc_f_q[13]/opit_0_inv_L6Q_perm/CLK",
+        "end": "inst_addr_o_obuf[30]/opit_1/TX_DATA[0]",
+        "logic_levels": 19,
+        "logic_ns": 3.614,
+        "route_ns": 9.909,
+        "slack_ns": -4.354
+      }
+    ],
+    "independent_review": {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-review-20261019T1047398143837Z.json",
+      "sha256": "f11e89bdc25d9ec55dbe8b55df7a478b13838d53e8783394953daea35febce7a",
+      "status": "TIMING_FAIL",
+      "verified_inputs": 32,
+      "verified_outputs": 389
+    }
+  },
+  "io_pack_evidence": {
+    "log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261019T1038595967077Z\\device_map\\run.log",
+    "sha256": "34af673f56e4ada6ea4f87cd6cb1a6483f2d93921a0c68a89c5223a6f56a2cad",
+    "successful_output_ff_packs": 96,
+    "additional_copied_ff": 62,
+    "mapped_clm_ff": 5173,
+    "mapped_io_ff": 96,
+    "total_ff_including_io": 5269,
+    "cpu_ff_before_physical_duplication": 5207,
+    "clm_count_change_is_not_cpu_area_saving": true
+  }
+}

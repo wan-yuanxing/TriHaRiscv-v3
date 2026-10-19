@@ -1,11 +1,12 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe', [switch] $Compact)
+param([string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe', [switch] $Compact, [switch] $SingleClockRegion, [switch] $IoRegisters)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'firmware_common.ps1')
 . (Join-Path $PSScriptRoot 'pds_reports.ps1')
 . (Join-Path $PSScriptRoot 'route_reports.ps1')
+if(([int][bool]$Compact+[int][bool]$SingleClockRegion+[int][bool]$IoRegisters) -gt 1){throw 'Choose only one physical recipe.'}
 $root=(Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 if($env:TRIHA_PDS_SHELL){$PdsShell=$env:TRIHA_PDS_SHELL}
 $work=Join-Path $root ('build/cpu/route-single-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))
@@ -22,7 +23,7 @@ $timer=[Diagnostics.Stopwatch]::StartNew()
 Write-Host "CPU_ROUTE_RUN directory=$work"
 try {
     Assert-TrihaAdaptation $root
-    $recipeName=if($Compact){'fpga/pg2l100h/project/cpu_route_compact.json'}else{'fpga/pg2l100h/project/cpu_route.json'}
+    $recipeName=if($IoRegisters){'fpga/pg2l100h/project/cpu_route_single_clock_io.json'}elseif($SingleClockRegion){'fpga/pg2l100h/project/cpu_route_single_clock.json'}elseif($Compact){'fpga/pg2l100h/project/cpu_route_compact.json'}else{'fpga/pg2l100h/project/cpu_route.json'}
     $recipe=Get-Content (Join-Path $root $recipeName) -Raw|ConvertFrom-Json
     $core=Get-Content (Join-Path $root $recipe.core_manifest) -Raw|ConvertFrom-Json
     if($recipe.dual_issue -ne 0 -or $recipe.period_ns -ne 10 -or $core.top -ne 'triha_core'){throw 'Unexpected route configuration.'}

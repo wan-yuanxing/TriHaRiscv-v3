@@ -1,0 +1,5 @@
+# Physical-only diagnostic: one complete clock region (X0,Y3).
+# Native device clock_utilization reports 1900 CLMA + 900 CLMS = 11200 LUT,
+# and 20 APM capacity here; the original timing FDC is a separate input.
+# PAP_REGION argument order is Xmin,Xmax,Ymin,Ymax.
+define_attribute {i:u_cpu} {PAP_REGION} {cpu_single_clock(0,64,150,199)}

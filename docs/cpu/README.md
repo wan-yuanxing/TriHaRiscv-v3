@@ -99,3 +99,5 @@ E2/WB数据旁路使用独立于当前stall的已注册目的tag，提交/RF写�
 PC顺序增量提前计算，并保留有用组合边界，单发射不生成未用PC+8；`run_redirect.ps1 -Test pcupdate`检查原优先级和32位算术，`-Broken`必须拒绝。`check_pc_carry.py <ADS网表> --output <收据>`只检查本层PC数据锥的carry依赖，显式保留子模块边界，不是STA。第14轮CPU-only6713 LUT/5209 FF，实际100MHz setup Slow/Fast -3.247/+1.018ns，仍未通过，见`pc_increment_timing.json`。
 
 LSU深度2请求队列按head/tail寄存存储，保持原全部有效及无效残留输出、接纳和pop规则；不增加load周期。`run_redirect.ps1 -Test lsuqueue`比较深度2/4各10001周期并使用独立有效流oracle，`-Broken`必须拒绝。`check_lsu_head.py`核对实际ADS网表36位输出直接来自FF，仅为本层结构检查。第15轮实际setup Slow/Fast -4.936/-0.103ns变差，CPU-only6806 LUT/5207 FF；保留为诊断检查点，非部署验收，见`lsu_head_timing.json`。
+
+`run_route.ps1 -SingleClockRegion`冻结同RTL并使用单时钟区域物理recipe，原时序预算不变；第16轮实际setup Slow/Fast -2.277/+0.318ns，是当前最优WNS，仍未通过100MHz，且前20条含核内-1.929ns。资源和CoreMark配置不变，功能证据经哈希复核后复用，见`single_clock_region_timing.json`。`-IoRegisters`为同区域官方现有FF/IO打包对照，另存独立运行；不能把端口映射或工具PASS当100MHz通过。

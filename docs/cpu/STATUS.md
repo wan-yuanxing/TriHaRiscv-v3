@@ -305,6 +305,30 @@ performance一致，**100MHz仍未通过，且全局setup较父版恶化1.689ns*
 
 新最差data_rdata_i[23]→load格式/旁路→下次地址加法→mem_cacheable_q，15级逻辑、逻辑2.891ns/布线12.610ns；相关操作数连接两段2.665/3.466ns。下一步停止叠加RTL，冻结同一源码，单因素比较完整单时钟区域布局，原100MHz与所有IO/hold预算不变，单独核验实际报告。证据`docs/verification/cpu/lsu_head_timing.json`。未合并主工程、未编程板卡。
 
+## 同RTL单时钟区域（第16轮，当前最优setup）
+
+冻结第15轮RTL，仅将两个时钟区域改为一个完整(X0,Y3)区域，PAP_REGION(0,64,150,199)。23项RTL/头文件/清单及原10ns/IO/hold/multicorner FDC逐项SHA256相同，seed1和预算也不变。复用第15轮24项正例/6项预期拒绝，全部实际输入/外部原语/输出哈希重新核验，没有将复用记录称为新仿真。CoreMark测量和CPU配置均相同。
+
+完整新实现，原生返回0，宿主return2/TIMING_FAIL，完整191.430秒。31项冻结输入/260项输出和独立复核一致；9359个唯一CPU叶节点区域绑定，原生clock report非IO时钟负载范围(4,63,150,198)位于目标区域内，没有独立逐单元坐标审计。CPU-only **6806 LUT/5207 FF/32分布式RAM单元/0 DRM/4 APM**与父版一致，224 IO另计。
+
+| 实际检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| setup | **-2.277** | **+0.318** |
+| hold | +0.107 | +0.083 |
+| 脉宽 | +4.346 | +4.345 |
+
+performance一致，**100MHz仍未通过**。Slow较同RTL两区域第15轮改善2.659ns，较旧第9轮最优改善0.787ns，是当前最优WNS；Slow违例端点2718→2446，不能称所有路径已改善。新映射和新布局，不能声称固定网表/固定placement等价。
+
+全局最差为地址寄存器→data_addr_o[25]外部pad，2级逻辑（主要包含IO buffer）、逻辑3.195ns/布线3.431ns；原2ns输出预算未变。前20条仍有PC→BTB选择→RAS CE核内setup -1.929ns，不称CPU核内部时序通过。下一步仅用PDS官方syn_useioff打包已有port连接FF，核对实际pack而不增加寄存级；同时保留核内预测路径为下一处RTL诊断目标。证据`docs/verification/cpu/single_clock_region_timing.json`。未合并主工程、未编程板卡。
+
+## 官方现有IO FF打包（第17轮，物理回退）
+
+同第16轮RTL/单时钟区域及全部时序预算，仅启用syn_useioff。实际map日志打包96个输出IO FF，其中62个复制原寄存器；CLM FF净减少34至5173，不是CPU面积节省。连同96个IO FF共5269 FF，比原CPU逻辑5207多62。LUT6806、32分布式RAM、0 DRM、4 APM及224 IO不变；资源口径明确区分CLM/IO，未把夹具资源混入CPU。
+
+原生PDS返回0、宿主return2/TIMING_FAIL，完整338.229秒；32项冻结输入/389项输出和独立复核一致。实际setup Slow/Fast **-4.776/-0.552ns**，hold +0.056/+0.026ns，脉宽 +4.346/+4.345ns，performance一致。Slow较第16轮恶化2.499ns，100MHz仍未通过。该物理开关仅保留作诊断，**当前最优配置仍是第16轮SingleClockRegion，最差setup -2.277ns**。
+
+新最差训练packet_q[38]→BTB匹配/优先写入选择→btb_target_q[5][13] CE，15级逻辑、逻辑2.264ns/布线12.105ns。结合第16轮也存在的BTB读选择→RAS CE -1.929ns，下一步检验预测器读写优先选择链；须保持原最高表项优先级、重复tag、训练/RAS/BHT行为及周期，先组件/整核/CoreMark验证，再以最佳单区域物理配置复核。功能记录仍为同RTL24正例/6预期拒绝哈希复用，不宣称新仿真或板测。证据`docs/verification/cpu/io_register_timing.json`、`io_register_diagnostic.md`。
+
 ## 仍需完成
 
 - 正式RV32I/ACT4、CSR/异常/IRQ、背压与访存错误、flush/取消及退休观测。
