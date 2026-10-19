@@ -312,17 +312,21 @@ end
 assign select_read_w = select_read_r;
 localparam BTB_PAYLOAD_W = 35 + NUM_BTB_ENTRIES_W;
 wire [NUM_BTB_ENTRIES*BTB_PAYLOAD_W-1:0] btb_payload_w;
+triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_pc (
+    .match_i(match_pc_r), .select_o(select_pc_w)
+);
+triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_upper (
+    .match_i(match_upper_r), .select_o(select_upper_w)
+);
+triha_npc_priority #(.INPUTS(NUM_BTB_ENTRIES)) u_priority_write (
+    .match_i(match_write_r), .select_o(select_write_w)
+);
+
 genvar entry;
 for (entry=0; entry<NUM_BTB_ENTRIES; entry=entry+1) begin: g_btb_select
     localparam [NUM_BTB_ENTRIES_W-1:0] ENTRY = entry;
     // Preserve the original highest-numbered matching entry, even for
     // duplicate tags (including all PC=0 entries immediately after reset).
-    assign select_pc_w[entry] = match_pc_r[entry] &
-        ~(|(match_pc_r >> (entry+1)));
-    assign select_upper_w[entry] = match_upper_r[entry] &
-        ~(|(match_upper_r >> (entry+1)));
-    assign select_write_w[entry] = match_write_r[entry] &
-        ~(|(match_write_r >> (entry+1)));
     assign btb_payload_w[entry*BTB_PAYLOAD_W +: BTB_PAYLOAD_W] =
         {ENTRY,btb_is_call_q[entry],btb_is_ret_q[entry],btb_is_jmp_q[entry],btb_target_q[entry]};
 end
@@ -580,6 +584,67 @@ module triha_npc_select #(
             assign reduced_w[reduction_index] = |terms_w;
         end
         assign data_o[bit_index] = |reduced_w;
+    end
+    endgenerate
+endmodule
+
+// Highest matching entry using bounded six-input lookahead groups.
+// Native LUT truth tables prevent area factoring from serializing the prefix.
+module triha_npc_priority #(
+    parameter integer INPUTS=32
+)(
+    input wire [INPUTS-1:0] match_i,
+    output wire [INPUTS-1:0] select_o
+);
+    localparam integer GROUPS=(INPUTS+5)/6;
+    genvar group_index,entry,term;
+    generate
+    if (INPUTS<=36) begin: g_native
+        (* syn_keep = 1 *) wire [GROUPS-1:0] group_valid_w;
+        (* syn_keep = 1 *) wire [INPUTS-1:0] local_rank_w;
+        for(group_index=0;group_index<GROUPS;group_index=group_index+1) begin: g_group
+            wire [5:0] flags_w;
+            for(term=0;term<6;term=term+1) begin: g_term
+                if(group_index*6+term<INPUTS) begin: g_used
+                    assign flags_w[term]=match_i[group_index*6+term];
+                end else begin: g_padding
+                    assign flags_w[term]=1'b0;
+                end
+            end
+            GTP_LUT6 #(.INIT(64'hfffffffffffffffe)) u_any (
+                .I0(flags_w[0]),.I1(flags_w[1]),.I2(flags_w[2]),
+                .I3(flags_w[3]),.I4(flags_w[4]),.I5(flags_w[5]),.Z(group_valid_w[group_index])
+            );
+        end
+        for(entry=0;entry<INPUTS;entry=entry+1) begin: g_entry
+            wire [5:0] local_w,global_w;
+            assign local_w[0]=match_i[entry];
+            assign global_w[0]=local_rank_w[entry];
+            for(term=1;term<6;term=term+1) begin: g_term
+                if((entry%6)+term<6 && entry+term<INPUTS) begin: g_local
+                    assign local_w[term]=match_i[entry+term];
+                end else begin: g_local_padding
+                    assign local_w[term]=1'b0;
+                end
+                if(entry/6+term<GROUPS) begin: g_global
+                    assign global_w[term]=group_valid_w[entry/6+term];
+                end else begin: g_global_padding
+                    assign global_w[term]=1'b0;
+                end
+            end
+            GTP_LUT6 #(.INIT(64'h0000000000000002)) u_local (
+                .I0(local_w[0]),.I1(local_w[1]),.I2(local_w[2]),
+                .I3(local_w[3]),.I4(local_w[4]),.I5(local_w[5]),.Z(local_rank_w[entry])
+            );
+            GTP_LUT6 #(.INIT(64'h0000000000000002)) u_global (
+                .I0(global_w[0]),.I1(global_w[1]),.I2(global_w[2]),
+                .I3(global_w[3]),.I4(global_w[4]),.I5(global_w[5]),.Z(select_o[entry])
+            );
+        end
+    end else begin: g_large_table
+        for(entry=0;entry<INPUTS;entry=entry+1) begin: g_entry
+            assign select_o[entry]=match_i[entry] & ~(|(match_i>>(entry+1)));
+        end
     end
     endgenerate
 endmodule

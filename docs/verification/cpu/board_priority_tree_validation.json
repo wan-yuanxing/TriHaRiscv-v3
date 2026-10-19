@@ -1,0 +1,147 @@
+{
+  "status": "PASS",
+  "scope": "Native LUT6 highest-entry lookahead, balanced tag/single payload reductions and parallel operand reads; simulation and directed equivalence, not complete ISA/formal or physical execution",
+  "runs": [
+    {
+      "test": "priority",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-priority-20261019T1728097008545Z",
+      "result_sha256": "a930048365290527f21a964a5e07eca6d78b68245723454afdc5efaf4c77d58e",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "priority_bad",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-priority-20261019T1728127643751Z",
+      "result_sha256": "0fff47832af02b717f4c0a4a3c704d8a7164a89f73108c21c5d95535733b8287",
+      "actual_status": "FAIL",
+      "expected_rejection": true,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "predictor",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-predictorselect-20261019T1728153868606Z",
+      "result_sha256": "c93b01638f6a8ece0c871da63ab9b30e77dfe7caa8af72b5eb9e10f63b0d4130",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "predictor_bad",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-predictorselect-20261019T1728190070007Z",
+      "result_sha256": "d7105343493b85780127d2c76d7b89eb337da9fe5fddfbb0755bc4956e89ce24",
+      "actual_status": "FAIL",
+      "expected_rejection": true,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "parallelread",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-parallelread-20261019T1728442686783Z",
+      "result_sha256": "18c29bc2e2fbf7e2ec35e2873fd782e487cf8ae55ed5324408e5acc91471a01b",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "training",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-training-20261019T1728479684006Z",
+      "result_sha256": "3be0da8adb8819f07a799a126e9918f012247a9baf1b6117597ddefd4ba88a24",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 10
+    },
+    {
+      "test": "ordered37",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1728442635298Z",
+      "result_sha256": "06294cda07206eee3b611dce13a1afaf841264cdc66c83d4dbe9f8a435f8cf5e",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 38
+    },
+    {
+      "test": "ordered1234567",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1728546382515Z",
+      "result_sha256": "cb0faab89009920b460894e41360af402a228b518ff1c98e730c47382f36d911",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 38
+    },
+    {
+      "test": "ordered271828",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1729037923749Z",
+      "result_sha256": "0bb34a3f11e6fb01c12d0ceccfde83616a8b98cf480af3d03fa9ca34e821827d",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 38
+    },
+    {
+      "test": "irq37",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261019T1729136794435Z",
+      "result_sha256": "eb6c9bcc158eb26b392c9fca4800a178b562d3abd6313b44345addef3d590424",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 45,
+      "output_count": 38
+    },
+    {
+      "test": "coremark",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\coremark-20261019T172843935694Z",
+      "result_sha256": "c17f991a310ae334b43c62fd6e6bdc00d39f299b5ce700e2c25c3bd9c372d3ab",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 74,
+      "output_count": 114
+    },
+    {
+      "test": "clocks",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-clocks-20261019T172843957203Z",
+      "result_sha256": "5577ad7b759b7438432f341cfa42fee5165c71ff84494ae758c37dcc6d768e94",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 11,
+      "output_count": 50
+    },
+    {
+      "test": "board",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T172847386710Z",
+      "result_sha256": "014735fa11cc269e836618f4a4054172bccdfeb17a8ac1dc1434471b6c6275d6",
+      "actual_status": "PASS",
+      "expected_rejection": false,
+      "input_count": 72,
+      "output_count": 111
+    },
+    {
+      "test": "board_bad_memory",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261019T172931461399Z",
+      "result_sha256": "cf146ef5272198b3dd23f40df5d2ad50cad34d477fe01e111e92aa0799fb6044",
+      "actual_status": "FAIL",
+      "expected_rejection": true,
+      "input_count": 72,
+      "output_count": 112
+    }
+  ],
+  "coremark": {
+    "cycles": 1685831,
+    "wb_completed": 1467843,
+    "observed_ipc": 0.8706940375399432,
+    "short_coremark_per_mhz": 2.965896344295484,
+    "official": false,
+    "physical": false
+  },
+  "vendor_files_unchanged": 28,
+  "verified_derivatives": 11,
+  "installed_primitive_models": 5,
+  "new_tools_installed": false,
+  "cpu_pipeline_stages": 6,
+  "issue_width": 1,
+  "programmed": false
+}

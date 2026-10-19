@@ -147,7 +147,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "3f144a718b5ce6bc363144d7a7e3f363e68b6be56be2ee2adec9b5d60f4832f9",
+      "derived_sha256": "8f0352dbd050b63480e685974ee94cfd2a9a82782e696ac45868c22686c8fcd8",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
@@ -157,7 +157,8 @@
         "Compute exact-PC and upper-word highest-index priority masks in parallel before selecting the existing fallback; preserve original procedural if/X handling and all state/cycles. Keep the parallel masks as synthesis boundaries.",
         "Share the 29 high tag bits between exact-PC and upper-word lookups; use kept three-bit equality groups for the complete query and write tags, preserving all 32 bits and procedural if/X semantics without state or cycle changes.",
         "Extend lookup sharing to every bit except bit two, retaining low alignment bits; decode RAS actual/speculative write indices per entry before late prediction enables, preserving original confirmed-return/speculative-call overlap priority and all state/cycles.",
-        "Keep six-input partial AND reductions for the full tag equality and reuse the verified three-term/six-input balanced AND-OR implementation in the existing single payload selector; same four-state Boolean values, table state, priority and cycles."
+        "Keep six-input partial AND reductions for the full tag equality and reuse the verified three-term/six-input balanced AND-OR implementation in the existing single payload selector; same four-state Boolean values, table state, priority and cycles.",
+        "Implement unchanged highest-entry priority with six-entry local/global lookahead in installed Pango LUT6 primitives; OR6 INIT fffffffffffffffe and own-match/no-higher INIT 2, same bitwise four-state function and no state. Larger optional tables retain original expression."
       ],
       "references": [
         {

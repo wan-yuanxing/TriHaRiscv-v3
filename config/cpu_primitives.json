@@ -5,6 +5,26 @@
       "module": "GTP_RAM32X2DP",
       "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
       "sha256": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307"
+    },
+    {
+      "module": "INT_LUTMUX2_UDP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v",
+      "sha256": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a"
+    },
+    {
+      "module": "INT_LUTMUX4_UDP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v",
+      "sha256": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841"
+    },
+    {
+      "module": "GTP_LUT5",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+      "sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9"
+    },
+    {
+      "module": "GTP_LUT6",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+      "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
     }
   ],
   "scope": "Read installed PDS simulation models without copying or modifying vendor tool files; synthesis uses native primitives."
