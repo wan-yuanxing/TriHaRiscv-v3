@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "base_head": "d9933ddf46249c20ed224809341d3d6446fafec0",
+  "scope": "One physical HDMI frame writes slotA raw/preview/320 UINT8 BGR NCHW input; all writes retire before raw/preview CRC and input checksum readback, then full-resolution 800x600 raw RGB888 scanout. UART6/9/8. No MODE/overlay/CPU MMIO/fabric or slot allocator; external AC signoff separate.",
+  "status": "implementation_verified_pending_route_and_board",
+  "inputs": {
+    "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+    "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
+    "docs/superpowers/plans/2026-10-19-raw-board.md": "5906712a22ef801cae26a168c8c8c052eb5c490e478d8ecb6f6c01b3fb780d0f",
+    "docs/verification/video/raw_board.md": "6ace443fe778e3ddb3f920ba68598135f0c4cd8bd02d99a52589591cb547eba0",
+    "docs/video/README.md": "7977739ed5e1e736dad715f7cdfacf54815eb09a44e19c31c4ddd92363cbc2a4",
+    "docs/video/STATUS.md": "2df48ae2a1f12728be407c0deea07415e934730d277a408b2fe0d31246288704",
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc": "2df24e663a5fbadface0e93217b624d222f616dcf320ca4f2248d3290a69b69b",
+    "fpga/pg2l100h/constraints/video_raw_board.fdc": "80e76e072d9e5e5688f93d771a80228b975efef5d9868c4c13daae6e97cf6b60",
+    "fpga/pg2l100h/project/video_raw_board.json": "8f134af490e25e78171e0b80b474c12e4c05bf9be8c50769fe52841c2a396812",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv": "8768971f5be5afc421350dc2eb043e60c4d567d8526d7344336f73da8cccf8bc",
+    "fpga/pg2l100h/rtl/video_raw_board_top.sv": "0ffc86b3800940ac2e28127fb706db38a8f95d253f06cd4dac707eeec17b61a3",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+    "rtl/video/axi128_hmic256.sv": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408",
+    "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "rtl/video/detect_nchw_dma.sv": "955ec07d6e805b79a3c37fd85ad4e26dd28af33016121d4a2d1e50345ee2045c",
+    "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+    "rtl/video/raw_display.sv": "ade5bc1acbc528dd14b48e11f8f19dd57e4c530df2d5421ee9ef0c62b2596c9c",
+    "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "rtl/video/video_capture_ingress.sv": "e4e462df5b0d6de6d11d2b7145eb5675dacc452886369023fb332ab175f8f806",
+    "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
+    "rtl/video/video_frame_crc_reader.sv": "fc269c51dd7f6ed825066228d0b1f21f39bc3ca597eadc498469d9afdf4aa4c7",
+    "rtl/video/video_raw_engine.sv": "f6834ba224f756e5118e1d00dc31c4b827553cdd2ce39535d7b426c56493c101",
+    "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+    "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "rtl/video/video_three_branch_capture.sv": "2246cfc2688d82ca7a95abf26ed39cb2495997974e30de1a4b086cf0b649f5d0",
+    "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+    "rtl/video/video_write_dma.sv": "3aae14293369932ff5ae5158c85bd5b82e4b395ee42477f2a154037c2ba43eba",
+    "scripts/video/build_pds.py": "fa075ad45ac528ccd922287269c743b2290bcba24bf4c62594ffaea280d44493",
+    "scripts/video/package_board.py": "b8ae1399f20e2e20a6a37bc4c3e2fa82bdd557698d65e649e9633158fd5d07b9",
+    "scripts/video/program_board.py": "16ff14974cf77006f9709fad90633ff1302b9f7a5d07c9339dac6903e042f470",
+    "scripts/video/read_board.py": "58742a7a57572ac988132f0a90e29cdb340a3f5e218fd40a005b4e9d4a0bddc2",
+    "scripts/video/run.py": "7689476c21a3053cba5cc55a36ed4f72a1f976313ec64ab60084483dd7af1312",
+    "tb/video/models/ddr_board_ip_model.sv": "c3202ec87ead44c2c6d6dd49dbc04b4a133f2a30254b591cc09dbfb9a12331cd",
+    "tb/video/models/ddr_native_model.sv": "ae5944bd80164f7d848f6329496e42d72d0bab4f3350af619939661f0cbb8060",
+    "tb/video/models/video_pll_model.sv": "314099f94b6e866763c6067c2196a72a5e45319d1e7871790afdbe0b96b5868c",
+    "tb/video/tb_video_capture_startup_guard.sv": "fb8c0d6543199d58358442a38400d4ec5df1a47d59f8330d8248c3ccd6926032",
+    "tb/video/tb_video_preview_clock_reset.sv": "81173d14100a6900ea78c792b2538456984e14a61c79754fb834826a6220da4a",
+    "tb/video/tb_video_raw_board.sv": "4b1146e37330e5d06c257602edaf776c4e2d2b7c37a940d449e17f33b97a73da",
+    "tb/video/tb_video_raw_engine.sv": "9ad0d41f4c0d25a6f56ebd63593ee717b248553cf600dc0d54b7001e85263f1e",
+    "tb/video/tb_video_stream_register.sv": "89133fda354df8fdb09742d3cd5e830538957458c0a885be0b68346dbbd6f8f5",
+    "tb/video/test_raw_board_packets.py": "ca8b31f8069ac07ac11f073229f86ae95997d2ad8cebc1fe378461a5113a6d2a"
+  },
+  "refs": {
+    "targeted": {
+      "path": "build/video/regression/20261019T114758_879844Z/result.json",
+      "sha256": "7f131add286f1410afd359628b37d2a0d9a3c7dbfbacde4d445d6b2d4f036bc5"
+    },
+    "full": {
+      "path": "build/video/regression/20261019T114928_708124Z/result.json",
+      "sha256": "b867e3556578b352616846fb188f9aba43197bc0b4de3d5fbe1010bd4ac3f70d"
+    },
+    "review": {
+      "path": "build/video/raw_board_review/review.json",
+      "sha256": "b1bf00dd0635eb2bd224ad9d498d2dc0ec19760098dbb794e5bdbe32555478af"
+    },
+    "pds_first": {
+      "path": "build/video/pds/20261019T114304_676527Z/result.json",
+      "sha256": "f6705ced505bdcba0ca9596eaf0bf24a175689dc4862e9c94167249816fe6a19"
+    },
+    "log_hashes": {
+      "path": "build/video/raw_board_log_hashes.json",
+      "sha256": "84ddcc5443efe0d10f7b614ba3b2778f462e4eb4d042d97dd56578c12f8b6217"
+    }
+  },
+  "regressions": {
+    "targeted": {
+      "status": "pass",
+      "suites": 1,
+      "inputs": 85,
+      "simulation_logs": 26
+    },
+    "full": {
+      "status": "pass",
+      "suites": 36,
+      "inputs": 190,
+      "simulation_logs": 311
+    }
+  },
+  "log_hash_count": 721,
+  "review_open_material_findings": [],
+  "preserved_file_count": 35,
+  "owned": [
+    "docs/superpowers/plans/2026-10-19-raw-board.md",
+    "rtl/video/video_raw_engine.sv",
+    "fpga/pg2l100h/rtl/video_raw_board_top.sv",
+    "fpga/pg2l100h/project/video_raw_board.json",
+    "fpga/pg2l100h/constraints/video_raw_board.fdc",
+    "tb/video/tb_video_raw_board.sv",
+    "tb/video/tb_video_raw_engine.sv",
+    "tb/video/test_raw_board_packets.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "scripts/video/package_board.py",
+    "scripts/video/program_board.py",
+    "scripts/video/read_board.py",
+    "docs/video/README.md",
+    "docs/video/STATUS.md",
+    "docs/verification/video/raw_board.md",
+    "docs/verification/video/evidence/raw_board.json"
+  ],
+  "physical_board_verified": false,
+  "physical_visual_verified": false,
+  "physical_key0_verified": false,
+  "external_io_timing_verified": false
+}

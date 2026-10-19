@@ -48,11 +48,11 @@ def verify_build_inputs(work, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_three_board", "video_capture_mmio", "cpu_native_axil", "video_raw_display", "video_raw_board"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     args = parser.parse_args()
-    hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board")
-    ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board")
+    hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board")
+    ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board")
     board = hdmi or ddr
     if not board and args.stage != "synth":
         parser.error("Component targets have no board pins; only synth is supported")
@@ -83,7 +83,7 @@ def main():
             run_logged([sys.executable,ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
             names += ['config/video_regs.json','rtl/video/include/video_regs.vh',
                       'sw/include/video_regs.h','scripts/video/gen_regs.py']
-        if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board"):
+        if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board"):
             run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
             names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
         if ddr:
@@ -138,7 +138,7 @@ def main():
             route="pnr -optimize_multi_corner_timing -fix_hold_violation"
             if ddr:
                 route += " -slack_prior_in_global_router TRUE"
-            if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board"):
+            if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board"):
                 # The combined HDMI/DDR target is route-limited. Try six
                 # deterministic placements (4..9) serially; the final report
                 # still has to meet every constraint before packaging.
@@ -159,7 +159,7 @@ def main():
         verify_build_inputs(work, result)
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
-                         cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board") else 1800 if ddr else 900)
+                         cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board") else 1800 if ddr else 900)
         reference_fdc = ""
         if board:
             reference = json.loads((ROOT / 'fpga/pg2l100h/ip/video_reference_manifest.json').read_text(encoding='utf-8'))

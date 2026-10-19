@@ -4,9 +4,10 @@
 
 2026-10-19 用户确认正式显示改为 800×600 raw 原分辨率全屏，MODE 功能键循环
 RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
-[全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。当前可运行
-板级工程、公共 preview 配置和已验收位流仍为双窗诊断版本；F1已新增独立raw扫描
-组件，后续接板级、人工叠加/模式及共享DDR。组件入口为
+[全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
+旧板级工程及已验收双窗位流保留；F1已新增独立raw扫描组件，F2新增独立
+`video_raw_board`全屏板级目标，当前验证进度见[全屏板级记录](../verification/video/raw_board.md)。
+后续接人工叠加/模式及共享DDR。组件入口为
 `python scripts/video/run.py --suite raw_display`，综合目标`video_raw_display`仅支持synth；
 实际范围见[全屏组件验证](../verification/video/raw_display.md)。
 
@@ -46,6 +47,10 @@ python scripts/video/package_board.py --target video_hdmi_capture
 python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
 python scripts/video/run.py --suite raw_display
+python scripts/video/run.py --suite raw_board
+python scripts/video/build_pds.py --target video_raw_board --stage bitstream
+python scripts/video/package_board.py --target video_raw_board
+python scripts/video/program_board.py --target video_raw_board --start-server
 python scripts/video/build_pds.py --target video_preview_board --stage bitstream
 python scripts/video/package_board.py --target video_preview_board
 python scripts/video/program_board.py --target video_preview_board --start-server

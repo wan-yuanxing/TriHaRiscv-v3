@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -318,6 +318,23 @@ def main():
             log=simulate(work,'preview_crc','tb_video_frame_crc_reader',paths,timeout=600)
             if 'VIDEO_FRAME_CRC_READER_PASS' not in log:raise RuntimeError('Missing plane CRC pass marker')
             result['passed'].append('preview_crc')
+        if args.suite in ('raw_board','all'):
+            target=ROOT/'fpga/pg2l100h/project/video_raw_board.json'
+            board=json.loads(target.read_text(encoding='utf-8'))
+            paths=[ROOT/p for p in board['sources']+board['tests']]
+            vendor=[ROOT/'build/video/vendor/hdmi'/p for p in board['vendor_sources']]
+            extra=[ROOT/'tb/video/tb_video_raw_engine.sv',ROOT/'tb/video/models/axi_bridge_native_model.sv']
+            add_inputs(result,[target,*paths,*vendor,*extra,ROOT/'config/video_edid.hex',ROOT/'rtl/video/include/video_edid.vh'])
+            engine_sources=[ROOT/p for p in board['sources'] if p.startswith('rtl/video/')]
+            for case in range(25):
+                log=simulate(work,f'raw_engine_{case}','tb_video_raw_engine',engine_sources+extra,
+                    [ROOT/'rtl/video/include'],timeout=600,run_args=(f'+CASE={case}',))
+                if 'VIDEO_RAW_ENGINE_PASS' not in log:raise RuntimeError('Missing raw engine pass marker')
+            log=simulate(work,'raw_board',board['test_top'],paths+vendor,[ROOT/'rtl/video/include'],timeout=600)
+            if 'VIDEO_RAW_BOARD_PASS' not in log:raise RuntimeError('Missing raw board pass marker')
+            run_logged([sys.executable,'-m','unittest','discover','-s',ROOT/'tb/video','-p','test_raw_board_packets.py'],
+                work/'raw_board_packets.log')
+            result['passed'].append('raw_board')
         if args.suite in ('three_board','all'):
             target=ROOT/'fpga/pg2l100h/project/video_three_board.json'
             board=json.loads(target.read_text(encoding='utf-8'))

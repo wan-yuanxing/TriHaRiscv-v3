@@ -53,7 +53,7 @@ def decode_packets(data):
                     'input_pixels','input_written_bytes','input_checked_bytes','input_ddr_crc','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
-        elif packet[4] in (6,7):
+        elif packet[4] in (6,7,9):
             fields=(('type','flags','phase','error_code','captured_pixels','preview_pixels',
                      'source_crc','ddr_crc','preview_crc','preview_ddr_crc','heartbeat')
                     if packet[4]==6 else
@@ -115,6 +115,7 @@ def _current_preview_records(records):
     # or restart of any type invalidates every earlier success sample.
     current=[]
     for row in reversed(records):
+        if row.get('type')==9:break  # A raw-display epoch is a distinct target.
         if row.get('type') not in (6,7,8):continue
         if not _preview_healthy(row):break
         current.append(row)
@@ -152,12 +153,7 @@ def qualify_preview_display(records):
 def qualify_three_readback(records):
     # One current suffix across ALL three packet types. A later input fault
     # must invalidate earlier capture/display samples in the same UART log.
-    current=[]
-    for row in reversed(records):
-        if row.get('type') not in (6,7,8):continue
-        if not _preview_healthy(row):break
-        current.append(row)
-    current.reverse()
+    current=_current_preview_records(records)
     rows=[row for row in current if row.get('type')==8][-2:]
     if len(rows)!=2 or not qualify_preview_display(current):return False
     captures=[row for row in current if row.get('type')==6][-2:]
@@ -174,6 +170,33 @@ def qualify_three_readback(records):
     return rows[0]['input_ddr_crc']==rows[1]['input_ddr_crc']
 
 
+def qualify_raw_board(records):
+    # Independent 6/9/8 suffix; old preview packets cannot prove raw scanning.
+    current=[]
+    for row in reversed(records):
+        if row.get('type') not in (6,8,9) or not _preview_healthy(row):break
+        current.append(row)
+    current.reverse()
+    if any(not 0<((b['heartbeat']-a['heartbeat'])&0xffffffff)<0x80000000
+           for a,b in zip(current,current[1:])):return False
+    captures=[r for r in current if r.get('type')==6][-2:]
+    displays=[r for r in current if r.get('type')==9][-2:]
+    inputs=[r for r in current if r.get('type')==8][-2:]
+    if any(len(rows)!=2 for rows in (captures,displays,inputs)):return False
+    # Reuse the established three-branch field checks using a local copy only.
+    # Raw row accounting is checked below before projecting to legacy 300 rows.
+    projected=[]
+    for row in current:
+        if row.get('type')==9:
+            scans=row.get('completed_scans');lines=row.get('read_lines')
+            if not (type(scans) is int and scans>=2 and type(lines) is int
+                    and 600*scans<=lines<=600*(scans+1)+2):return False
+            row=dict(row,type=7,read_lines=300*scans)
+        projected.append(row)
+    return (qualify_three_readback(projected)
+            and displays[1]['read_lines']>displays[0]['read_lines'])
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -187,7 +210,8 @@ def main():
             'physical_ddr_bist_verified':False,'physical_axi_dma_verified':False,
             'physical_hdmi_raw_capture_verified':False,
             'physical_preview_capture_verified':False,'physical_preview_display_verified':False,
-            'physical_three_branch_readback_verified':False,'physical_three_input_numerical_verified':False}
+            'physical_three_branch_readback_verified':False,'physical_three_input_numerical_verified':False,
+            'physical_raw_fullscreen_readback_verified':False}
     write_json(BUILD/'latest_board_serial.json',result)
     try:
         shell=shutil.which('powershell.exe')
@@ -235,6 +259,7 @@ try {
         result['physical_preview_capture_verified']=qualify_preview_capture(records)
         result['physical_preview_display_verified']=qualify_preview_display(records)
         result['physical_three_branch_readback_verified']=qualify_three_readback(records)
+        result['physical_raw_fullscreen_readback_verified']=qualify_raw_board(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)
