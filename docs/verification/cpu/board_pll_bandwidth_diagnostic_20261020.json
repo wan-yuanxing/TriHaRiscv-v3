@@ -1,0 +1,367 @@
+{
+  "status": "BANDWIDTH_HIGH_PHYSICALLY_LOCKED",
+  "scope": "PLL-only diagnostic comparison, not CPU board execution or frequency instrument calibration",
+  "root_rtl_unmodified": true,
+  "pll_dividers_unchanged": true,
+  "reference_hz": 125000000,
+  "expected_cpu_hz": 100000000,
+  "comparison": {
+    "clock-reset-program-20261020T025617490004Z": {
+      "program_result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\clock-reset-program-20261020T025617490004Z\\result.json",
+      "program_sha256": "7e35bb707bda495ddb1edfcd9d139c6a14187ab57de450d22042f8b3ab9b2863",
+      "uart_sha256": "0a34b99624b1a65ea2487d04af6c722af5d50ec7700f3021c58c4bcedea63e57",
+      "packets": [
+        {
+          "flags": 1,
+          "reference_edges": 3814,
+          "cpu_edges": 128,
+          "sequence": 0
+        },
+        {
+          "flags": 1,
+          "reference_edges": 7629,
+          "cpu_edges": 223,
+          "sequence": 1
+        },
+        {
+          "flags": 1,
+          "reference_edges": 11444,
+          "cpu_edges": 318,
+          "sequence": 2
+        },
+        {
+          "flags": 1,
+          "reference_edges": 15258,
+          "cpu_edges": 412,
+          "sequence": 3
+        },
+        {
+          "flags": 1,
+          "reference_edges": 19073,
+          "cpu_edges": 507,
+          "sequence": 4
+        },
+        {
+          "flags": 1,
+          "reference_edges": 22888,
+          "cpu_edges": 602,
+          "sequence": 5
+        },
+        {
+          "flags": 1,
+          "reference_edges": 26702,
+          "cpu_edges": 697,
+          "sequence": 6
+        },
+        {
+          "flags": 1,
+          "reference_edges": 30517,
+          "cpu_edges": 792,
+          "sequence": 7
+        },
+        {
+          "flags": 1,
+          "reference_edges": 34332,
+          "cpu_edges": 887,
+          "sequence": 8
+        },
+        {
+          "flags": 1,
+          "reference_edges": 38146,
+          "cpu_edges": 982,
+          "sequence": 9
+        },
+        {
+          "flags": 1,
+          "reference_edges": 41961,
+          "cpu_edges": 1077,
+          "sequence": 10
+        },
+        {
+          "flags": 1,
+          "reference_edges": 45776,
+          "cpu_edges": 1172,
+          "sequence": 11
+        },
+        {
+          "flags": 1,
+          "reference_edges": 49590,
+          "cpu_edges": 1267,
+          "sequence": 12
+        },
+        {
+          "flags": 1,
+          "reference_edges": 53405,
+          "cpu_edges": 1362,
+          "sequence": 13
+        },
+        {
+          "flags": 1,
+          "reference_edges": 57220,
+          "cpu_edges": 1457,
+          "sequence": 14
+        },
+        {
+          "flags": 1,
+          "reference_edges": 61035,
+          "cpu_edges": 1552,
+          "sequence": 15
+        },
+        {
+          "flags": 1,
+          "reference_edges": 64849,
+          "cpu_edges": 1647,
+          "sequence": 16
+        },
+        {
+          "flags": 1,
+          "reference_edges": 3128,
+          "cpu_edges": 1742,
+          "sequence": 17
+        },
+        {
+          "flags": 1,
+          "reference_edges": 6943,
+          "cpu_edges": 1837,
+          "sequence": 18
+        },
+        {
+          "flags": 1,
+          "reference_edges": 10757,
+          "cpu_edges": 1932,
+          "sequence": 19
+        },
+        {
+          "flags": 1,
+          "reference_edges": 14572,
+          "cpu_edges": 2027,
+          "sequence": 20
+        },
+        {
+          "flags": 1,
+          "reference_edges": 18387,
+          "cpu_edges": 2122,
+          "sequence": 21
+        },
+        {
+          "flags": 1,
+          "reference_edges": 22201,
+          "cpu_edges": 2217,
+          "sequence": 22
+        },
+        {
+          "flags": 1,
+          "reference_edges": 26016,
+          "cpu_edges": 2312,
+          "sequence": 23
+        },
+        {
+          "flags": 1,
+          "reference_edges": 29831,
+          "cpu_edges": 2407,
+          "sequence": 24
+        },
+        {
+          "flags": 1,
+          "reference_edges": 33645,
+          "cpu_edges": 2503,
+          "sequence": 25
+        },
+        {
+          "flags": 1,
+          "reference_edges": 37460,
+          "cpu_edges": 2598,
+          "sequence": 26
+        },
+        {
+          "flags": 1,
+          "reference_edges": 41275,
+          "cpu_edges": 2693,
+          "sequence": 27
+        }
+      ],
+      "programmed": true,
+      "verified": true
+    },
+    "clock-bandwidth-program-20261020T025847514977Z": {
+      "program_result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\clock-bandwidth-program-20261020T025847514977Z\\result.json",
+      "program_sha256": "2e961b95a71d4bc22116d0630ddfdf340ac20c27ac08455d39aa81a556302f85",
+      "uart_sha256": "e856fa2223c96fb3b2c5479b56ba7690f56083d4c9fedda3d9de6cc89e9389d7",
+      "packets": [
+        {
+          "flags": 7,
+          "reference_edges": 3814,
+          "cpu_edges": 3051,
+          "sequence": 0
+        },
+        {
+          "flags": 7,
+          "reference_edges": 7629,
+          "cpu_edges": 6103,
+          "sequence": 1
+        },
+        {
+          "flags": 7,
+          "reference_edges": 11444,
+          "cpu_edges": 9155,
+          "sequence": 2
+        },
+        {
+          "flags": 7,
+          "reference_edges": 15258,
+          "cpu_edges": 12207,
+          "sequence": 3
+        },
+        {
+          "flags": 7,
+          "reference_edges": 19073,
+          "cpu_edges": 15258,
+          "sequence": 4
+        },
+        {
+          "flags": 7,
+          "reference_edges": 22888,
+          "cpu_edges": 18310,
+          "sequence": 5
+        },
+        {
+          "flags": 7,
+          "reference_edges": 26702,
+          "cpu_edges": 21362,
+          "sequence": 6
+        },
+        {
+          "flags": 7,
+          "reference_edges": 30517,
+          "cpu_edges": 24414,
+          "sequence": 7
+        },
+        {
+          "flags": 7,
+          "reference_edges": 34332,
+          "cpu_edges": 27465,
+          "sequence": 8
+        },
+        {
+          "flags": 7,
+          "reference_edges": 38146,
+          "cpu_edges": 30517,
+          "sequence": 9
+        },
+        {
+          "flags": 7,
+          "reference_edges": 41961,
+          "cpu_edges": 33569,
+          "sequence": 10
+        },
+        {
+          "flags": 7,
+          "reference_edges": 45776,
+          "cpu_edges": 36621,
+          "sequence": 11
+        },
+        {
+          "flags": 7,
+          "reference_edges": 49590,
+          "cpu_edges": 39672,
+          "sequence": 12
+        },
+        {
+          "flags": 7,
+          "reference_edges": 53405,
+          "cpu_edges": 42724,
+          "sequence": 13
+        },
+        {
+          "flags": 7,
+          "reference_edges": 57220,
+          "cpu_edges": 45776,
+          "sequence": 14
+        },
+        {
+          "flags": 7,
+          "reference_edges": 61035,
+          "cpu_edges": 48828,
+          "sequence": 15
+        },
+        {
+          "flags": 7,
+          "reference_edges": 64849,
+          "cpu_edges": 51879,
+          "sequence": 16
+        },
+        {
+          "flags": 7,
+          "reference_edges": 3128,
+          "cpu_edges": 54931,
+          "sequence": 17
+        },
+        {
+          "flags": 7,
+          "reference_edges": 6943,
+          "cpu_edges": 57983,
+          "sequence": 18
+        },
+        {
+          "flags": 7,
+          "reference_edges": 10757,
+          "cpu_edges": 61035,
+          "sequence": 19
+        },
+        {
+          "flags": 7,
+          "reference_edges": 14572,
+          "cpu_edges": 64086,
+          "sequence": 20
+        },
+        {
+          "flags": 7,
+          "reference_edges": 18387,
+          "cpu_edges": 1602,
+          "sequence": 21
+        },
+        {
+          "flags": 7,
+          "reference_edges": 22201,
+          "cpu_edges": 4654,
+          "sequence": 22
+        },
+        {
+          "flags": 7,
+          "reference_edges": 26016,
+          "cpu_edges": 7706,
+          "sequence": 23
+        },
+        {
+          "flags": 7,
+          "reference_edges": 29831,
+          "cpu_edges": 10757,
+          "sequence": 24
+        },
+        {
+          "flags": 7,
+          "reference_edges": 33645,
+          "cpu_edges": 13809,
+          "sequence": 25
+        },
+        {
+          "flags": 7,
+          "reference_edges": 37460,
+          "cpu_edges": 16861,
+          "sequence": 26
+        },
+        {
+          "flags": 7,
+          "reference_edges": 41275,
+          "cpu_edges": 19913,
+          "sequence": 27
+        }
+      ],
+      "programmed": true,
+      "verified": true
+    }
+  },
+  "standard_real_model_111_checks_passed": true,
+  "missing_acc_diagnostic_model_attempt_retained": true,
+  "restore_video": false
+}

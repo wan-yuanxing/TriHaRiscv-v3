@@ -1,0 +1,16 @@
+{
+  "status": "FAIL",
+  "scope": "Actual CPU board startup attempt; Program/Verify PASS, physical software execution not observed",
+  "program_result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-program-20261020T024054192023Z\\result.json",
+  "program_result_sha256": "f21755df2acf19fe25f1866454bc9a6c38bda3df8c255c3a7f9489cf646cb0e2",
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "physical_key0_user_confirmed": true,
+  "key0_response": "已按",
+  "led_response": "LED全灭",
+  "cpu_uart_bytes": 0,
+  "preceding_video_uart_bytes": 296,
+  "observation_error": "no complete CPU board self-test banner captured",
+  "restore_video": false
+}

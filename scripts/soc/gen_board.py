@@ -20,6 +20,8 @@ def validate(config):
     if len(locations) != len(set(locations)):
         raise ValueError("duplicate board pin")
     pll = config["pll"]
+    if pll.get('bandwidth', 'OPTIMIZED') not in ('OPTIMIZED', 'LOW', 'HIGH'):
+        raise ValueError('invalid PLL bandwidth')
     for key in ("input_divider", "multiplier", "feedback_divider", "output_divider"):
         if type(pll[key]) is not int or not 1 <= pll[key] <= 128:
             raise ValueError("invalid integer PLL divider")

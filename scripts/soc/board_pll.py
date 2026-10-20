@@ -21,6 +21,11 @@ def review_wrapper(config, text):
         match = re.search(r"\b" + key + r"\s*=\s*([\d.]+)", text)
         if not match or float(match[1]) != value:
             raise ValueError("actual generated PLL mismatch: " + key)
+    bandwidth = pll.get('bandwidth', 'OPTIMIZED')
+    match = re.search(r'\bBANDWIDTH\s*=\s*"([A-Z]+)"', text)
+    if not match or match[1] != bandwidth:
+        raise ValueError('actual generated PLL mismatch: BANDWIDTH')
+    expected['BANDWIDTH'] = bandwidth
     def number(value):
         return int(value) if value.denominator == 1 else float(value)
     return dict(actual_parameters=expected, pfd_hz=number(pfd), vco_hz=number(vco), cpu_hz=number(cpu))
@@ -38,7 +43,9 @@ def create_idf(config, source, output):
               "STATIC_RATIOI": pll["input_divider"], "STATIC_RATIOM": pll["multiplier"],
               "STATIC_RATIO7": pll["feedback_divider"], "STATIC_RATIO0": pll["output_divider"],
               "STATIC_DUTY7": pll["feedback_divider"], "STATIC_DUTY0": pll["output_divider"],
-              "CLKOUT0_BUFG_EN": "true", "CLKOUT0_NOBUF_EN": "false"}
+              "CLKOUT0_BUFG_EN": "true", "CLKOUT0_NOBUF_EN": "false",
+              "BANDWIDTH": pll.get('bandwidth', 'OPTIMIZED'),
+              "BANDWIDTH_advancedPage": pll.get('bandwidth', 'OPTIMIZED')}
     for index in range(8):
         for suffix in ("", "_basicPage", "_advancedPage"):
             values[f"CLKOUT{index}_EN{suffix}"] = "true" if index == 0 else "false"

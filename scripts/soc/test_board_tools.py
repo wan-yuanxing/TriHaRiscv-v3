@@ -24,7 +24,7 @@ class BoardContracts(unittest.TestCase):
         import board_pll
         self.assertTrue(hasattr(board_pll, "review_wrapper"), "generated divider review is missing")
         self.config["pll"].update(input_divider=1, multiplier=1, feedback_divider=8, output_divider=10)
-        wrapper = "CLKIN_FREQ=125.0; STATIC_RATIOI=1; STATIC_RATIOM=1; STATIC_RATIOF=8; STATIC_RATIO0=10;"
+        wrapper = 'CLKIN_FREQ=125.0; STATIC_RATIOI=1; STATIC_RATIOM=1; STATIC_RATIOF=8; STATIC_RATIO0=10; BANDWIDTH="HIGH";'
         result = board_pll.review_wrapper(self.config, wrapper)
         self.assertEqual((result["pfd_hz"], result["vco_hz"], result["cpu_hz"]), (125_000_000, 1_000_000_000, 100_000_000))
         with self.assertRaisesRegex(ValueError, "STATIC_RATIO0"):
@@ -33,6 +33,21 @@ class BoardContracts(unittest.TestCase):
     def test_approximate_frequency_is_rejected(self):
         self.config["pll"]["output_divider"] = 9
         with self.assertRaisesRegex(ValueError, "100MHz"):
+            self.module.validate(self.config)
+
+    def test_generated_pll_bandwidth_must_match_requested_setting(self):
+        import board_pll
+        self.config['pll']['bandwidth'] = 'HIGH'
+        wrapper = ('CLKIN_FREQ=125.0; STATIC_RATIOI=1; STATIC_RATIOM=1; '
+                   'STATIC_RATIOF=8; STATIC_RATIO0=10; BANDWIDTH="OPTIMIZED";')
+        with self.assertRaisesRegex(ValueError, 'BANDWIDTH'):
+            board_pll.review_wrapper(self.config, wrapper)
+        checked = board_pll.review_wrapper(self.config, wrapper.replace('OPTIMIZED', 'HIGH'))
+        self.assertEqual(checked['actual_parameters']['BANDWIDTH'], 'HIGH')
+
+    def test_unknown_pll_bandwidth_is_rejected(self):
+        self.config['pll']['bandwidth'] = 'INVALID'
+        with self.assertRaisesRegex(ValueError, 'bandwidth'):
             self.module.validate(self.config)
 
     def test_out_of_range_pfd_is_rejected(self):
