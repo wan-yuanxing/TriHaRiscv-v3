@@ -13,19 +13,19 @@ F3c人工叠加/模式接入见下文，共享DDR仍属后续。raw组件入口�
 
 F3a新增去抖和模式请求控制两个独立组件，仿真入口为`--suite mode_control`，综合
 目标为`video_button_debounce`、`video_mode_control`，均仅支持synth。模式命令保持
-完整上下文，只有实际提交反馈才更新active；尚未接入像素CDC、叠加或板卡MODE。
+完整上下文，只有实际提交反馈才更新active；该独立组件不包含像素CDC/叠加，板级集成见F3c。
 接口见[Video接口](../interfaces/video.md)，证据见[组件验证](../verification/video/mode_control.md)。
 
 F3b新增框/五点/单头像像素组件，`--suite overlay`以独立数学参考检查像素、地址和
-复位/故障回退，综合目标`video_overlay`只支持synth。固定周期素材响应端需要后续
-缓存接入；当前不是可下载三模式目标。见[叠加验证](../verification/video/overlay.md)。
+复位/故障回退，综合目标`video_overlay`只支持synth。固定周期素材响应端在F3c中接入
+封存缓存；该组件综合目标本身不可下载。见[叠加验证](../verification/video/overlay.md)。
 
 F3c前置新增单事务模式CDC与256×256封存素材缓存，仿真`--suite mode_resources`，
 综合`video_mode_cdc`/`video_avatar_cache`；均只支持synth。缓存完整装载才可显示，
 pixel接纳后须另等实际提交反馈。组件记录见[资源组件验证](../verification/video/mode_resources.md)。
 
 F3c本批新增独立 `video_mode_board`：KEY1/C23切 RAW/BOX/AVATAR，KEY0回默认RAW并重采；
-框/五点/封存测试纹理为人工诊断输入。数字联测及板级综合通过，布线尚未满足8ns；当前转向core控制流水，现场验收待时序通过，
+框/五点/封存测试纹理为人工诊断输入。原8ns core/25ns pixel布线及50项端点核验通过，已Program/Verify；实体三次KEY1、四角图三CRC、模式不重采及普通桌面KEY0恢复均已验收，
 见[三模式板级记录](../verification/video/mode_board.md)。正式多帧所有者/MMIO与真实NPU仍待接入。
 
 ## 目前可以运行
@@ -76,7 +76,7 @@ python scripts/video/build_pds.py --target video_overlay --stage synth
 python scripts/video/build_pds.py --target video_mode_cdc --stage synth
 python scripts/video/build_pds.py --target video_avatar_cache --stage synth
 python scripts/video/build_pds.py --target video_mode_output --stage synth
-python scripts/video/build_pds.py --target video_mode_board --stage bitstream --seed-start 8 --seed-count 1 --pnr-mode normal
+python scripts/video/build_pds.py --target video_mode_board --stage bitstream --seed-start 6 --seed-count 1 --pnr-mode normal
 python scripts/video/package_board.py --target video_mode_board
 python scripts/video/program_board.py --target video_mode_board --start-server
 python scripts/video/build_pds.py --target video_raw_board --stage bitstream

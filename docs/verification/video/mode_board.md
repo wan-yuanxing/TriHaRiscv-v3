@@ -1,6 +1,6 @@
 # F3c 独立静态全屏三模式
 
-状态：2026-10-20，第8次实际构建内部时序及50项结构/端点核验通过，已易失Program/Verify；当前默认RAW的120.993秒自动串口检查通过。四角图数值对照、视觉及实体KEY1/KEY0验收仍未完成。见[流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)。机器摘要见[mode_board.json](evidence/mode_board.json)。
+状态：2026-10-20，独立静态全屏三模式的数字、内部布线/50项端点、Program/Verify及实体验收均通过。四角图三路数值、三次KEY1、返回RAW和普通桌面KEY0恢复已逐项完成。当前板卡保留完整桌面RAW。见[流水计划](../../superpowers/plans/2026-10-20-mode-capture-pipeline.md)。机器摘要见[mode_board.json](evidence/mode_board.json)。
 
 ## 行为与边界
 
@@ -49,7 +49,7 @@ CASE28定向7项通过，原源RED及三个删除保护的替身均按预期失�
 
 按[桥缓存计划](../../superpowers/plans/2026-10-20-mode-bridge-cache.md)准备最小候选：保留公共WLAST诊断和COLLECT失败排空，仅从未使用的私有缓存写使能去掉当拍WLAST。原桥自校验加1088个故障/复位后恢复用例共1343场景、111496次全部23公共输出对照通过；删去公共LAST诊断的替身被检出。独立native字节模型另完成13739场景、556402有效core周期，全部23公共输出逐半周期一致；其中6656失败写、6951成功写、32成功读。6528核心坏LAST组合及连续全掩码脏缓存、上下半字覆盖、各阶段协调reset均已覆盖，检查1782560字节数据和邻接guard；941次实际私有缓存差异未泄漏到公共接口。4个变异被检出，两种半字漏清零变异关闭原版对照后也被独立native oracle检出。独立报告`build/video/bridge_collect_cache_review/review.json`已由父任务逐项核对哈希。已精确采用候选c3d3f04b，原桥f898c468按字节保存；当前axi_bridge/raw_board/mode_board回归通过。第8次构建`20261019T191756_225568Z`在原约束下通过全部setup/hold/recovery/removal，slow/fast setup +0.334/+2.627ns、hold +0.135/+0.101ns。18份独立只读报告覆盖实际同步级和存活数据束，50项严格核验全部为true；原布局数据库、网表、工程和完整报告哈希未变。实际端点arrival范围及PDS未输出独立max-skew表的限制保留在审计JSON中，不扩大为外部AC签核。
 
-构建器新增seed/mode参数，默认保持4..9/normal；非法值先于构建退出。现场验收器修复了未观察复位沿用、旧Program日志沿用及物理产物绑定三类问题，18项独立检查通过。当前仍未产生三模式实体验收记录。外部HDMI AC、连续视频、共享fabric/三槽所有权及真实NPU不在本次签核内。
+构建器新增seed/mode参数，默认保持4..9/normal；非法值先于构建退出。现场验收器修复了未观察复位沿用、旧Program日志沿用及物理产物绑定三类问题，18项独立检查通过。正式三模式实体验收记录已生成并通过全部严格检查。外部HDMI AC、连续视频、共享fabric/三槽所有权及真实NPU不在本次签核内。
 
 ```powershell
 python scripts/video/run.py --suite mode_output
@@ -60,15 +60,29 @@ python scripts/video/program_board.py --target video_mode_board --start-server
 python scripts/video/read_board.py --port COM12 --seconds 60
 ```
 
-下载入口保留成功构建/当前来源哈希、同会话芯片 ID、匹配 `.sbit/.smsk` 与 Program/Verify 检查，仅做易失配置。现场 RAW/BOX/AVATAR、60 秒稳定性及 KEY0 后重采仍待真实操作与观察，不以组件测试关闭。
+下载入口保留成功构建/当前来源哈希、同会话芯片 ID、匹配 `.sbit/.smsk` 与 Program/Verify 检查，仅做易失配置。现场RAW/BOX/AVATAR/返回RAW和KEY0后新桌面均由用户实际操作并明确确认；按下表独立绑定串口时段，不以组件测试代替观察。
 
-## 当前自动上板记录与待验项
+## 上板与现场验收记录
 
 合格包为`build/video/releases/video_mode_board_8274194d1c69`，sbit SHA256为`8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43`，对应smsk SHA256为`cf8bf57d3366b28ccc56338bbeaba331d808d1d560d879b85f619bf89b88af2e`。`build/video/board_program/20261019T193232_105390Z`同一会话识别PG2L100H/0x00602899并成功Program/Verify，未写Flash，F2合格包保留可恢复。
 
-持续记录`build/video/mode_board_trace/20261019T193331_403299Z`已冻结当前Program会话。自动前缀证据`build/video/mode_board_automatic_check/result.json`保存120.993秒、122包及原始字节/时间记录：RAW/preview源与DDR CRC相等，input写入/检查均307200字节、CRC稳定，scan从2615到9612、欠载0；frame_id/raw commits均1，mode_state=0x190，模式请求0/提交1。三CRC分别cf904ad2/748dffe5/fdf5d86f。
+历史自动记录`build/video/mode_board_trace/20261019T193331_403299Z`冻结了当前Program会话。自动前缀证据`build/video/mode_board_automatic_check/result.json`保存120.993秒、122包及原始字节/时间记录：RAW/preview源与DDR CRC相等，input写入/检查均307200字节、CRC稳定，scan从2615到9612、欠载0；frame_id/raw commits均1，mode_state=0x190，模式请求0/提交1。三CRC分别cf904ad2/748dffe5/fdf5d86f。
 
-源画面尚待用户确认，当前CRC不等于四角图黄金值33bac95a/679ff89c/1f56fc1e。自动记录只证明该静态RAW上下文的传输和扫描健康，不是input独立数值参考、视觉、KEY1或KEY0验收；这些标志均为false，未生成正式mode_board_acceptance成功记录。下一步先确认四角测试页全屏并按记录重采，再逐项检查RAW→BOX→AVATAR→RAW及普通桌面KEY0恢复。先保持按键不动。
+上述历史自动前缀的首帧当时尚未经用户确认，CRC不等于四角图黄金值，因而只计传输/扫描健康。随后用户准备四角图并单次KEY0重采，本次正式记录才用于关闭数值、视觉和按键验收，历史自动字段仍保留false。
+
+正式记录为`build/video/mode_board_trace/20261020T020501_245661Z`，932个有效包中，五段观察共440包；验收器`build/video/accept_mode_board.py`与结果`build/video/mode_board_acceptance/result.json`均有哈希绑定。每段用户原话和观察内容、实际时间范围及完整UART前后文均保留。开始时的旧截图作为epoch0前置历史，不计四角图验收；四角图及三次MODE使用epoch1，桌面单次KEY0必须恰好进入最终epoch2。
+
+| 现场阶段 | epoch | 合格包数 | 稳定秒数 | 请求/提交 |
+|---|---:|---:|---:|---:|
+| RAW四角图 | 1 | 136 | 135.001 | 0/1 |
+| KEY1→BOX | 1 | 76 | 75.000 | 1/2 |
+| KEY1→AVATAR | 1 | 37 | 36.000 | 2/3 |
+| KEY1→RAW | 1 | 86 | 85.000 | 3/4 |
+| KEY0桌面重采 | 2 | 105 | 104.000 | 0/1 |
+
+前三次KEY1只改变模式请求/实际提交，frame_id/raw commits始终为1，三路CRC稳定为33bac95a/679ff89c/1f56fc1e。最终桌面KEY0后计数返回请求0/提交1，新三CRC为68777b0b/87a234ee/33018b9d；源/DDR相符、input完整读回300KiB，用户确认完整桌面且无叠加。所有合格段无硬件错误、溢出或欠载。素材就绪、模式和身份状态均满足四包健康条件，接收记录已正常关闭。任意桌面的input CRC未与独立像素参考逐字节比对，不扩展该项结论。
+
+首次正式验收在读取原始PDS日志时发现CP936进度条字形导致严格UTF-8解码失败；原日志SHA仍为334b35090eef36c3aa4a331a868ff741713893b7c71ee96f55f17a88f89f2097。验收器仅将该读取改为与`program_board.py`相同的UTF-8/replace，仍先核对原始字节哈希并严格分类芯片ID及Program/Verify成功命令。原版RED、修复后真实GREEN、编码与缺命令/错ID/错误行负例，以及独立复核见`build/video/mode_verifier_encoding/`和`build/video/mode_verifier_encoding_review/`。生产源码、位流和所有硬件记录未变。
 
 ## 串口
 

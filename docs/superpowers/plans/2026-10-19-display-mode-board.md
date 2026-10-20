@@ -69,12 +69,12 @@ assert (sample_valid == previously_sampled_request);
 ## Task 6：现场验收
 
 - [x] 合格包在同一下载会话识别ID后易失Program/Verify；保持旧合格包可恢复，不写Flash。
-- [ ] 逐项记录RAW完整四角、KEY1到BOX框/点、KEY1到AVATAR及回RAW；mode request/commit推进而raw提交/采集CRC/帧ID不变，60秒无欠载/叠加故障。
-- [ ] KEY0后素材重装/重新校准重采、完整桌面恢复；需用户实际操作和观察才能关闭，不能用数字测试代替。
-- [ ] 更新状态/来源/位流与现场证据并精确本地提交，无push或merge。
+- [x] 逐项记录RAW完整四角、KEY1到BOX框/点、KEY1到AVATAR及回RAW；mode request/commit推进而raw提交/采集CRC/帧ID不变，60秒无欠载/叠加故障。
+- [x] KEY0后素材重装/重新校准重采、完整桌面恢复；需用户实际操作和观察才能关闭，不能用数字测试代替。
+- [x] 更新状态/来源/位流与现场证据并精确本地提交，无push或merge。
 
 ## 时序后续
 
 normal六种子与performance单种子均未闭合setup。仅对公共CRC reader作阶段条件等价优化，作为上述全部来源冻结约定的有记录例外；F2顶层/FDC/IP仍保留。旧/新逐拍和四态等价、受影响回归及新物理构建见[时序优化计划](2026-10-20-mode-board-timing.md)。本页现场验收勾选条件不变。
 
-公共CRC/writer等价检查点后，经[core控制流水](2026-10-20-mode-capture-pipeline.md)及[桥缓存写使能简化](2026-10-20-mode-bridge-cache.md)，第8次构建setup+0.334ns，全部内部时序和50项结构/物理端点检查通过。合格镜像8274194d1c69已Program/Verify，默认RAW自动检查120.993秒通过；实体KEY1、KEY0及已知四角图/视觉确认仍待现场，按Task6逐项关闭。F2顶层/FDC/IP仍保留。
+公共CRC/writer等价检查点后，经[core控制流水](2026-10-20-mode-capture-pipeline.md)及[桥缓存写使能简化](2026-10-20-mode-bridge-cache.md)，第8次构建setup+0.334ns，全部内部时序和50项结构/物理端点检查通过。合格镜像8274194d1c69已Program/Verify。正式932包记录中五段观察共440包，RAW四角图、三次KEY1及普通桌面KEY0全部通过，用户逐项确认完整画面；原始日志/人工记录/严格验收已绑定，Task6现场条件已满足。F2顶层/FDC/IP仍保留。

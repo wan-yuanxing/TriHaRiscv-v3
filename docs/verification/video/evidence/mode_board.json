@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "routed_internal_timing_verified; physical board acceptance pending",
+  "status": "independent_static_three_mode_board_accepted",
   "base_head": "1f8be69f1c749430763e9bc98f8745585743fbac",
   "owned": [
     "fpga/pg2l100h/rtl/video_demo_mode_output.sv",
@@ -50,24 +50,24 @@
     "tb/video/test_mode_key.py": "659bc77c5cb24152600ac60da2c5456625af8778fd98f202df911b261eefb4d9",
     "tb/video/test_pds_route_options.py": "839a9a9decc58d167e9231415073ed6ebd4b8f3d0c88d7bbc9677c16554908fb",
     "rtl/video/axi128_hmic256.sv": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
-    "docs/superpowers/plans/2026-10-20-mode-bridge-cache.md": "684722b74cd1c4ec10b7d36d01519e3ac1417707185b4faa57d42b0ab3b6e393",
+    "docs/superpowers/plans/2026-10-20-mode-bridge-cache.md": "040ef730149c3c4b7d8907369ead22dbf34a98eeeac1880177fdcd2500ecb4cc",
     "rtl/video/video_frame_crc_reader.sv": "324e2c947f65a49717bf744eb2aff3b1ac73b3d5b544def474c2d4cce6f8bdda",
     "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
     "tb/video/tb_write_dma.sv": "be66fbb5228ce7cb0748d6aca89ce7c568b320ad10847646afc392183dbd05f1",
     "rtl/video/video_three_branch_capture.sv": "d77bd530035c1c6e5c8e6d30137455d6a0a509386b52bd0a7aafe06ed0ccb5cd",
     "tb/video/tb_video_three_branch_capture.sv": "9ecf593dd1e5585f94dc8291c305a1c2b2dc20a8712da3eb5ca5e2a0d3f7188a",
     "docs/superpowers/plans/2026-10-20-mode-board-timing.md": "46a3025c472bec0a894d6ee199da4494026b87c91a6ccea7cd9ef12e4a3c49da",
-    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "8ff96010f5a2c9edc4507c7c759d4870a7d5dc7e458eebad938d685c4c1f93d3",
+    "docs/superpowers/plans/2026-10-20-mode-capture-pipeline.md": "660bf21da3b8ba49bd894d1a6b009788b8b7d52dd68a351ed9aa8fed2522b2a2",
     "scripts/video/run.py": "91870c2f6a6adaf7d3bc7702f2f7e54cae37c0cdaf93fb687a92b26599165e90",
     "scripts/video/build_pds.py": "ec6494009f9c68e0ca531906f33f46039262de29568d66124eaeb4141c95e151",
     "scripts/video/read_board.py": "1b6f2287303875e096a671b395405b84a8de24283d45d164cde541416373dcf9",
     "scripts/video/package_board.py": "5740b7311ac0223cec67d18878a5d23259ac2c129843a9e978f6159981e1f11f",
     "scripts/video/program_board.py": "e49f37d6aee40b731e7e4cf1d4b0c0a263e922a8e917fe0e72faae5be8852559",
-    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "a7c4dfb328b7f9672d5c556878c308761f39371226f3d1c13f7fcd2fad1e9bdf",
-    "docs/video/README.md": "91aa1a13de0c50805c720c7c59387e3bc012ccf09a794bfbfb920f809b7a6061",
-    "docs/video/STATUS.md": "5031e65fa5bbd649ff789a051949bb8fbbe4a434bfe75be6171107ec40dc34d0",
-    "docs/interfaces/video.md": "96263f6922cd47c94bd40d9bd404887d44664bd3a1a2f75f5e3619b0af2d5a89",
-    "docs/verification/video/mode_board.md": "a5cdcd15cd2f49598f451e7ce6993776e609d480d71d7beb2786aaac13151e17"
+    "docs/superpowers/plans/2026-10-19-display-mode-board.md": "8791672a9a242816968e95a16cecdd59d94d0f9f2aaa9a9d5544e72b527c0516",
+    "docs/video/README.md": "3165b4a14acc5c9ab1d0646197c0f9add44db4ffa9d56fd4a8dcb62b8dc29fba",
+    "docs/video/STATUS.md": "4dcf96dbc02b891a61fe02f044f04ea53ca136933f1df349c9f86b8d22229ebb",
+    "docs/interfaces/video.md": "baf45fec13b393d6535ba13d86975d62f10ec36ae6dc73509f63be26f99938b2",
+    "docs/verification/video/mode_board.md": "daa11d6d52e719587c5cc799f3d5a430ccaec887ec2e8e1147319995f87ef813"
   },
   "refs": {
     "mode_output": {
@@ -254,6 +254,14 @@
       "path": "build/video/regression/20261019T184638_969982Z/result.json",
       "sha256": "eaf38005c0b737d1c62bafa8328df9db541345dc44ccab69fc20ad4d0791822b"
     },
+    "verifier_encoding_repair": {
+      "path": "build/video/mode_verifier_encoding/result.json",
+      "sha256": "89a841e2fa0f5f29608d77dcd8a186b6d091ac8f773e39460d35b0cd36066fd0"
+    },
+    "verifier_encoding_review": {
+      "path": "build/video/mode_verifier_encoding_review/review.json",
+      "sha256": "d459a985334fcfa54ec86a751e79cfe87929cc3397cc1a2393af738fbcc0dc5e"
+    },
     "current_build": {
       "path": "build/video/pds/20261019T191756_225568Z/result.json",
       "sha256": "6b01a8a722dcf4743c4157eeb41604bf2ccc0e53369dc9998a7f3ffacd41697a"
@@ -273,6 +281,10 @@
     "program": {
       "path": "build/video/board_program/20261019T193232_105390Z/result.json",
       "sha256": "204516f2e5397c69860c78e24d1ce98e247f7f43e56ff4b76bf619a476e4f6fc"
+    },
+    "acceptance": {
+      "path": "build/video/mode_board_acceptance/result.json",
+      "sha256": "4f0e668ba609932db84359087e316b7ffef538c44ab76c9840b742cba7233c22"
     },
     "artifacts": {
       "path": "build/video/mode_board_artifact_hashes.json",
@@ -336,7 +348,148 @@
   },
   "routed_internal_timing_verified": true,
   "physical_program_and_verify": true,
-  "physical_acceptance": null,
+  "physical_acceptance": {
+    "status": "pass",
+    "scope": "Static single-frame RAW/BOX/AVATAR diagnostic and one KEY0 desktop recapture",
+    "physical_mode_readback_verified": true,
+    "physical_visual_verified": true,
+    "physical_key1_verified": true,
+    "physical_key0_verified": true,
+    "program_bitstream_sha256": "8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43",
+    "pending_manual_checks": [],
+    "observations": {
+      "raw_pattern": {
+        "epoch": 1,
+        "records": 136,
+        "healthy_duration_seconds": 135.001,
+        "mode": 0,
+        "request_count": 0,
+        "commit_count": 1,
+        "raw_commits": 1,
+        "underflows": 0,
+        "source_crc": 867879258,
+        "preview_crc": 1738537116,
+        "input_crc": 525794334,
+        "completed_scans_first": 228,
+        "completed_scans_last": 8190,
+        "user_reply": "已按一次，四角和边框完整",
+        "observation": "KEY0重采后单幅全屏四角图，TL/TR/BL/BR和白边框完整。"
+      },
+      "box_pattern": {
+        "epoch": 1,
+        "records": 76,
+        "healthy_duration_seconds": 75.0,
+        "mode": 1,
+        "request_count": 1,
+        "commit_count": 2,
+        "raw_commits": 1,
+        "underflows": 0,
+        "source_crc": 867879258,
+        "preview_crc": 1738537116,
+        "input_crc": 525794334,
+        "completed_scans_first": 17600,
+        "completed_scans_last": 21942,
+        "user_reply": "已按一次，框和黄点正常",
+        "observation": "一次KEY1进入BOX，全屏四角图上红框、绿框和5个黄点正常，四角和白边框完整。"
+      },
+      "avatar_pattern": {
+        "epoch": 1,
+        "records": 37,
+        "healthy_duration_seconds": 36.0,
+        "mode": 2,
+        "request_count": 2,
+        "commit_count": 3,
+        "raw_commits": 1,
+        "underflows": 0,
+        "source_crc": 867879258,
+        "preview_crc": 1738537116,
+        "input_crc": 525794334,
+        "completed_scans_first": 23631,
+        "completed_scans_last": 25561,
+        "user_reply": "已按一次，测试贴图正常",
+        "observation": "第二次KEY1进入AVATAR，主框测试贴图正常，底层四角图、TL/TR/BL/BR和白边框完整。"
+      },
+      "raw_return": {
+        "epoch": 1,
+        "records": 86,
+        "healthy_duration_seconds": 85.0,
+        "mode": 0,
+        "request_count": 3,
+        "commit_count": 4,
+        "raw_commits": 1,
+        "underflows": 0,
+        "source_crc": 867879258,
+        "preview_crc": 1738537116,
+        "input_crc": 525794334,
+        "completed_scans_first": 27492,
+        "completed_scans_last": 32317,
+        "user_reply": "已按一次，恢复完整四角原图",
+        "observation": "第三次KEY1返回RAW，框、5个黄点和测试贴图均撤除，恢复完整全屏四角原图。"
+      },
+      "key0_desktop": {
+        "epoch": 2,
+        "records": 105,
+        "healthy_duration_seconds": 104.0,
+        "mode": 0,
+        "request_count": 0,
+        "commit_count": 1,
+        "raw_commits": 1,
+        "underflows": 0,
+        "source_crc": 1752660747,
+        "preview_crc": 2275554542,
+        "input_crc": 855739293,
+        "completed_scans_first": 227,
+        "completed_scans_last": 6259,
+        "user_reply": "已按一次，完整全屏桌面已恢复",
+        "observation": "切换明显窗口普通桌面后单次KEY0，恢复完整800×600桌面，框、黄点和测试贴图已撤除，无黑屏、窄条或裁切。"
+      }
+    },
+    "golden_pattern_three_branch_match": true,
+    "mode_preserves_raw_identity_and_crcs": true,
+    "true_npu_result": false,
+    "arbitrary_desktop_independent_numerical_verified": false,
+    "continuous_capture_verified": false,
+    "external_io_timing_verified": false,
+    "flash_written": false,
+    "refs": {
+      "manual": {
+        "path": "build/video/mode_board_acceptance/manual.json",
+        "sha256": "370b6a404b68e778d4a59e64b584804e2919c334ad718c7bc317bf10377b99f2"
+      },
+      "trace": {
+        "path": "build/video/mode_board_trace/20261020T020501_245661Z/result.json",
+        "sha256": "d0d6a9c907044837e236bc41fd340b04c0db117d93424045ed3b63b5c1215f93"
+      },
+      "uart": {
+        "path": "build/video/mode_board_trace/20261020T020501_245661Z/uart.bin",
+        "sha256": "b124f15b145a37c5a506727085216438f15ec809be17355d57310516479166c5"
+      },
+      "events": {
+        "path": "build/video/mode_board_trace/20261020T020501_245661Z/events.jsonl",
+        "sha256": "8a3c6c314cf46cd71a55fa4cb519bc48868088e3858dc68417622799de3421c1"
+      },
+      "timed_records": {
+        "path": "build/video/mode_board_trace/20261020T020501_245661Z/live_records.json",
+        "sha256": "f98d0da4846c6002d73c84d4ff9f311b3d1977b0bbf12a5a7c0403205d78a355"
+      },
+      "program": {
+        "path": "build/video/board_program/20261019T193232_105390Z/result.json",
+        "sha256": "204516f2e5397c69860c78e24d1ce98e247f7f43e56ff4b76bf619a476e4f6fc"
+      },
+      "constraints": {
+        "path": "build/video/mode_board_timing_audit/constraints/20261019T191756_225568Z/result.json",
+        "sha256": "ef0e3a685083707c5b8cb76c57ca51203cf503109ac69ff6672d8d6e2ad5556b"
+      },
+      "golden_pattern": {
+        "path": "build/video/three_board_pattern/20261018T130222_669017Z/expected.json",
+        "sha256": "463831bb6f9b7440f39f54a26dcb438ada60330fde2de1275f30df509bdd6204"
+      },
+      "verifier": {
+        "path": "build/video/accept_mode_board.py",
+        "sha256": "d16bb0cb794b1529b8d6349cf25d8a34d5148dee405ea2cb414aa198b5c9dbc0"
+      }
+    }
+  },
   "full_all_rerun": false,
   "formal_display_mmio_implemented": false,
   "general_multiframe_owner": false,
@@ -570,5 +723,140 @@
       "guard_bytes_checked": 1782560
     },
     "independent_mutations": 4
+  },
+  "verifier_encoding_exception": {
+    "path": "build/video/accept_mode_board.py",
+    "before_sha256": "8b9b8d57f78a94ad7e3f5a7c61b0efc3f1bcb819455038c6a2875c71994ef79e",
+    "after_sha256": "d16bb0cb794b1529b8d6349cf25d8a34d5148dee405ea2cb414aa198b5c9dbc0",
+    "exact_single_read_change_verified": true,
+    "raw_log_sha256": "334b35090eef36c3aa4a331a868ff741713893b7c71ee96f55f17a88f89f2097",
+    "real_red_exit": 1,
+    "real_green_exit": 0,
+    "production_and_original_evidence_unchanged": true,
+    "physical_gates_unchanged": true,
+    "review_coverage": {
+      "existing_fixture_tests": 18,
+      "independent_test_methods": 10,
+      "failures": 0,
+      "errors": 0,
+      "classification_cases": [
+        {
+          "name": "actual_cp936_progress",
+          "expected_pass": true,
+          "exit_code": 0
+        },
+        {
+          "name": "extra_invalid_progress",
+          "expected_pass": true,
+          "exit_code": 0
+        },
+        {
+          "name": "ascii_progress",
+          "expected_pass": true,
+          "exit_code": 0
+        },
+        {
+          "name": "missing_program",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "missing_verify",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "wrong_id",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "wrong_device",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "explicit_E_with_local_message",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "nonzero_process_exit",
+          "expected_pass": false,
+          "exit_code": 1
+        },
+        {
+          "name": "utf16_encoded_log",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "corrupt_program_marker",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "corrupt_verify_marker",
+          "expected_pass": false,
+          "exit_code": 0
+        },
+        {
+          "name": "invalid_prefix_program",
+          "expected_pass": false,
+          "exit_code": 0
+        }
+      ],
+      "per_timing_check_negative_cases": 250,
+      "unexpected_timing_check_negative_cases": 1,
+      "independent_negative_categories": [
+        "missing Program marker",
+        "missing Verify marker",
+        "wrong target ID",
+        "wrong device",
+        "explicit E: error with CP936 message",
+        "nonzero program process exit",
+        "UTF-16 bytes",
+        "invalid byte inside critical success strings",
+        "non-ASCII raw log hash mismatch",
+        "raw UART changed",
+        "timed decoded record changed",
+        "trace record changed",
+        "trace still running",
+        "trace unqualified",
+        "Program copy or session record changed",
+        "bitstream or mask changed",
+        "all four physical artifacts changed individually",
+        "full/structural/focused report changed",
+        "missing/false/non-Boolean/extra physical checks",
+        "false/integer/empty human confirmation fields"
+      ],
+      "encoding_fixture_policy": "All extra verifier negative cases first passed an ASCII control and then a correctly rebound CP936-log positive control. Only explicitly named synthetic fixture files in this review directory were mutated. Their returned physical flags stayed in RAM.",
+      "read_only_real_result": {
+        "individual_timing_gate_negatives": 250,
+        "unexpected_extra_check_rejected": true,
+        "invalid_utf8_offset": 1238,
+        "invalid_bytes_hex": "a884",
+        "non_ascii_progress_lines": 38,
+        "all_non_ascii_is_progress_glyph": true,
+        "real_before_error": "UnicodeDecodeError",
+        "real_after_status": "pass",
+        "observation_durations_seconds": [
+          135.001,
+          75.0,
+          36.0,
+          85.0,
+          104.0
+        ],
+        "trace_packets": 932
+      }
+    },
+    "repair_ref": {
+      "path": "build/video/mode_verifier_encoding/result.json",
+      "sha256": "89a841e2fa0f5f29608d77dcd8a186b6d091ac8f773e39460d35b0cd36066fd0"
+    },
+    "review_ref": {
+      "path": "build/video/mode_verifier_encoding_review/review.json",
+      "sha256": "d459a985334fcfa54ec86a751e79cfe87929cc3397cc1a2393af738fbcc0dc5e"
+    }
   }
 }

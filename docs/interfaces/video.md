@@ -2,7 +2,7 @@
 
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
 同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a提供独立MODE控制/去抖组件，
-F3b提供独立框/五点/单头像像素组件；F3c已接独立静态三模式诊断，布线及实体验收进行中。
+F3b提供独立框/五点/单头像像素组件；F3c独立静态三模式诊断的布线、易失Program/Verify及实体KEY1/KEY0验收已通过。
 正式显示MMIO、通用多帧所有者与素材DDR接入尚未实现；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
@@ -92,7 +92,7 @@ pixel端ready两级同步并捕获稳定身份后发布`pixel_asset_ready`。每
   成功的素材响应须提供已定义的RGBA。该故障扫描不能当作健康叠加样本。
 
 独立像素/故障/复位及组件综合证据见[overlay](../verification/video/overlay.md)。
-本批不修改当前板卡F2镜像或公共显示寄存器，尚无MODE实体三模式验收。
+F3b组件阶段未修改当时的F2镜像或公共显示寄存器；后续F3c已单独完成MODE三模式实体验收。
 
 ## F1 raw全屏组件
 
