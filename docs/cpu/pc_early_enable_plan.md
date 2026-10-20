@@ -1,0 +1,23 @@
+# CPU early PC enable implementation plan
+
+2026-10-20. Continue inline under the user's earlier decode/PC-enable authorization. Preserve the deployed dc00f80 and rejected ALU predecode replay. No agents, WSL, COM12, Flash, merge, push or main-tree changes.
+
+**Goal:** Remove the actual FIFO->bypass->branch comparator->issue PC CE path without changing PC contents, six stages, cycles, predictor or original100MHz constraints.
+
+**Architecture:** Use the installed Pango asynchronous-clear enabled FF for the existing32-bit expected PC. CE is CSR redirect or raw execution valid from either lane, which arrives before branch comparison. The D selection retains the exact CSR/ex1/ex0/dual/single/hold priority, including explicit feedback during raw-valid IRQ cycles with no advance. Branch request implies raw execution valid in the real CPU; do not confuse raw execution valid with interrupt-suppressed single_issue. This intentionally changes clock-enable activity while preserving state. All other registers and ALU stay at deployed baseline. Use GRS_EN=FALSE and the installed functional model; add only a simulation GRS scope if its static hierarchical binding requires one, no global-reset hardware.
+
+Alternatives: a different seed does not address the dependency; an inferred feedback mux lets ADS extract the same late CE again. Explicit native FF controls make the CE boundary reviewable. The additional feedback mux may move the bottleneck to D; actual mapping and STA must decide.
+
+- [x] Add `tb/cpu/tb_pc_early.v` using an independent PC priority oracle, both issue widths, held/no-advance raw valid, all branch priorities, reset, wrap and corruption rejection. The old RTL must fail the missing early-enable contract.
+- [x] Modify only `triha_issue.v`, primitive model config, adaptation hashes and the component runner/test. Reuse installed GTP_DFF_CE; no copied vendor model. Keep all32 PC states and exact reset/hold values. For known valid operating controls, prove by priority cases: CSR redirect enables; either execution redirect enables via raw valid; either advance enables via raw valid; otherwise explicit feedback holds.
+- [x] Run component single/dual positives and negative, three-seed ordered WB/store/exception comparisons and separate IRQ. Run two-boot system and fresh CPU-only native map. Inspect actual synthesized PC CE pins: all32 must depend on early raw-valid/CSR controls, with no branch comparator in their cone. Reject a re-extracted late CE before routing.
+- [x] Run metric-bound original-O2 CoreMark positive and CRC-negative; require1646428cycles and full timed WB/store hashes equal to deployed parent. Run one complete unchanged100MHz board implementation and independent review of all corners/reset/performance/input/output hashes. No seed sweep.
+- [x] Retain only a beneficial accepted candidate, otherwise freeze replay/evidence and restore production sources. Record the actual critical path and precise limitations; do not program a timing failure or claim frequency gain from synthesis estimates. Update status, verify vendor/benchmark origins and staged changes, commit a concrete result.
+
+## Bounded combination after independent physical results
+
+Standalone early CE passes all semantic/metric/native binding checks, with5970LUT/3528FF and unchanged1646428CoreMark cycles/complete timed traces. Its one actual route `board-route-20261020T1200002915652Z` fails only one Slow setup endpoint at-0.092ns:issue PC[2] -> opcode lane choice -> ALU classification/operand selection -> result_q[29]. Hold+0.122/+0.076ns and MPW+3.655/+4.202ns pass. The previous predecode-only worst was branch comparison -> issue PC CE at-0.088ns. Neither standalone candidate is accepted. Frozen standalone PC source/tests/runner, map truth-table review, independent route review and replay are retained in `build/soc/pc-early-prototype` and `docs/verification/cpu/pc_early_timing.json`/`pc_early_rejected.patch`.
+
+These independently measured complementary cones justify exactly one combined candidate, retaining the same native PC enable and adding the already tested FIFO ALU descriptor. No RAS, seed or constraint change. Rerun the whole functional/metric/native-map/actual-route chain on combined frozen inputs. If this final combination fails or provides no useful benefit, restore the deployed source and close the round. Do not continue more trials in this round.
+
+Final disposition: all planned gates and the bounded combination are complete. Combination physically passes100MHz but is not selected:6009LUT and+0.006ns versus deployed5933LUT and+0.113ns, with equal CoreMark cycles/traces. Production restored; no programming. See docs/verification/cpu/alu_pc_combined_timing.md.

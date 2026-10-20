@@ -2,7 +2,9 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-本轮分支/PC清理诊断已结束，**没有准入的新RTL或部署镜像**。仅分离PC算术的方案100MHz通过但增加12LUT、周期不变；共享比较器可将CPU降至5903LUT，但原约束下setup−0.029ns，板级LED寄存修复后的最终两组仍−0.292/−0.162ns。所有功能、CoreMark及轨迹检查通过不替代时序验收。已恢复生产RTL及板级文件至dc00f80，重新独立核对原部署版100MHz通过；板上仍是cpu_coremark_6ff82025b53d，未重新编程、未打开COM12。试验源码/报告保存在build，清单见docs/verification/cpu/branch_pc_timing.md和json，备份cpu-before-branch-pc-20261020。最终两组最差路径分别落在前端RAS使能和ALU，下一步需前移预译码及PC/RAS使能生成，预测算法和六级单发射规格保持不变。本轮未提高主频或实际跑分。
+最新预译码/PC使能优化已完成三组实际100MHz验证：预译码单独−0.088ns，提前PC使能单独−0.092ns，组合版setup+0.006/+1.752ns、hold+0.073/+0.038ns、脉宽+3.655/+4.202ns，全部corner与复位/冻结绑定独立复核通过。组合版CPU-only6009LUT/3564FF/688分布式RAM-LUT(包含在总数)/0DRM/4APM，CoreMark仍1646428周期、3.036877410/MHz，完整计时WB/store轨迹和停顿均与原版相同，CRC负例拒绝。它比原版5933LUT增加76、最差setup余量比+0.113ns更小，未带来性能收益，故不选用；全部生产源码/配置/测试/运行器已恢复dc00f80，原100MHz重新独立复核通过。板上镜像保持cpu_coremark_6ff82025b53d，没有访问COM12或重新编程。三个实验的原始结果、测试、完整复现补丁及绑定见docs/verification/cpu/alu_pc_combined_timing.md和配套JSON；备份cpu-before-alu-predecode-20261020。实际最终瓶颈回到SRAM返回→LSU格式/旁路→ALU结果。后续先研究真实load-use停顿与同步SRAM/LSU边界，不直接删除必要互锁，不继续堆叠译码或布局种子；本轮不再追加物理试验。所有CoreMark数为短RTL仿真，完整5000次实际串口分数仍待用户现场结果。
+
+上一轮分支/PC清理诊断已结束，**没有准入的新RTL或部署镜像**。仅分离PC算术的方案100MHz通过但增加12LUT、周期不变；共享比较器可将CPU降至5903LUT，但原约束下setup−0.029ns，板级LED寄存修复后的最终两组仍−0.292/−0.162ns。所有功能、CoreMark及轨迹检查通过不替代时序验收。已恢复生产RTL及板级文件至dc00f80，重新独立核对原部署版100MHz通过；板上仍是cpu_coremark_6ff82025b53d，未重新编程、未打开COM12。试验源码/报告保存在build，清单见docs/verification/cpu/branch_pc_timing.md和json，备份cpu-before-branch-pc-20261020。最终两组最差路径分别落在前端RAS使能和ALU，提出前移预译码及PC/RAS使能生成的后续方向，预测算法和六级单发射规格保持不变。该轮未提高主频或实际跑分。
 
 最新优化版已下载为`cpu_coremark_6ff82025b53d`，实际Program/Verify返回0，两项成功标记齐全，未写Flash、未打开COM12。六级单发射、RV32IM/CSR、BTB512/BHT512/RAS4及PC索引两位预测算法、GShare=0、GCC-O2/无LTO均不变。复用四个17位部分积，符合unsigned16×16条件的MUL可提前旁路，宽/高位乘法和双发射保留原等待策略；SRAM/ROM响应用预寄存独热字选择，仍为一周期，没有增加CPU状态级。
 

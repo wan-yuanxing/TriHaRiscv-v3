@@ -1,0 +1,1431 @@
+diff --git a/config/cpu_primitives.json b/config/cpu_primitives.json
+--- a/config/cpu_primitives.json
++++ b/config/cpu_primitives.json
+@@ -25,6 +25,11 @@
+       "module": "GTP_LUT6",
+       "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+       "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
++    },
++    {
++      "module": "GTP_DFF_CE",
++      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DFF_CE.v",
++      "sha256": "0bb065edebb4359a06146a2075ef0fe32b4466b7a12e674239552d9921a1a201"
+     }
+   ],
+   "scope": "Read installed PDS simulation models without copying or modifying vendor tool files; synthesis uses native primitives."
+diff --git a/config/cpu_sources.f b/config/cpu_sources.f
+--- a/config/cpu_sources.f
++++ b/config/cpu_sources.f
+@@ -19,6 +19,8 @@
+ rtl/cpu/triha_frontend.v
+ rtl/cpu/triha_npc.v
+ rtl/cpu/triha_btb.v
++rtl/cpu/triha_alu_decode.v
++rtl/cpu/triha_exec.v
+ rtl/cpu/triha_decode.v
+ rtl/cpu/triha_issue.v
+ rtl/cpu/triha_regfile.v
+diff --git a/fpga/pg2l100h/project/cpu_core.json b/fpga/pg2l100h/project/cpu_core.json
+--- a/fpga/pg2l100h/project/cpu_core.json
++++ b/fpga/pg2l100h/project/cpu_core.json
+@@ -11,6 +11,8 @@
+     "rtl/cpu/vendor/src/core/biriscv_alu.v",
+     "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+     "rtl/cpu/triha_csr.v",
++    "rtl/cpu/triha_alu_decode.v",
++    "rtl/cpu/triha_exec.v",
+     "rtl/cpu/triha_decode.v",
+     "rtl/cpu/vendor/src/core/biriscv_decoder.v",
+     "rtl/cpu/vendor/src/core/biriscv_divider.v",
+diff --git a/rtl/cpu/ADAPTATIONS.json b/rtl/cpu/ADAPTATIONS.json
+--- a/rtl/cpu/ADAPTATIONS.json
++++ b/rtl/cpu/ADAPTATIONS.json
+@@ -5,7 +5,7 @@
+       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
+       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+       "derived": "rtl/cpu/triha_cpu.v",
+-      "derived_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
++      "derived_sha256": "2732c914fe520c711e1f9b35dc2d08f8899177e48cf77eda1500778c1d862aab",
+       "changes": [
+         "Rename integration module to triha_cpu.",
+         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
+@@ -17,7 +17,8 @@
+         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
+         "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
+         "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
+-        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only."
++        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only.",
++        "Connect registered ALU descriptors from frontend through identical issue lane selection to both execution units; no latency change."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -25,14 +26,15 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
+       "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+       "derived": "rtl/cpu/triha_frontend.v",
+-      "derived_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
++      "derived_sha256": "baeab94cb2c705474040beea070a181902c544ab001ebb7acbac5c1293ebf2f2",
+       "changes": [
+         "Rename integration module to triha_frontend.",
+         "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
+         "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request.",
+         "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history.",
+         "Connect the equivalent parallel-priority prediction-table derivative; prediction/training cycles and table sizes remain unchanged.",
+-        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available."
++        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
++        "Forward ALU descriptors alongside both decoded instruction lanes."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -40,7 +42,7 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+       "derived": "rtl/cpu/triha_issue.v",
+-      "derived_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
++      "derived_sha256": "24b7f168e691c4185bff0fbc416ac5a487dfc7b234a196c5041b46d24e990a03",
+       "changes": [
+         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
+         "Rename integration module to triha_issue.",
+@@ -53,7 +55,9 @@
+         "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
+         "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle.",
+         "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles.",
+-        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates."
++        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates.",
++        "Select each nine-bit ALU descriptor with exactly the same procedural registered-PC lane choice and zero default as raw instruction payload, independent of validity/kill/interrupt.",
++        "Use existing32 PC bits in native asynchronous-clear enabled FF; CE from CSR redirect/raw execution valid before branch compare, D retains original redirect/advance/hold priority including raw-valid IRQ no-advance feedback. Installed model uses disabled global reset; simulation-only constant binding, no new CPU stage or PC state."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -148,11 +152,12 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_decode.v",
+       "base_sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+       "derived": "rtl/cpu/triha_decode.v",
+-      "derived_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
++      "derived_sha256": "2b5b0158c01d36aa1b1f149276c3b18cc313acaa523d598020b14de76d0d222f",
+       "changes": [
+         "Rename integration decode/FIFO modules without changing original vendor bytes.",
+         "Sample wide PC/instruction data only into the free write slot whenever not full, independently of push/flush; original count/pointers/valid/fault metadata control unchanged.",
+-        "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder."
++        "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder.",
++        "Predecode exact ALU function and operand sources before the existing FIFO in both latency modes; pack descriptors into the same free-slot payload as raw instructions, retaining reset/flush/stale-slot pairing."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -187,6 +192,26 @@
+         }
+       ],
+       "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
++    },
++    {
++      "base": "rtl/cpu/vendor/src/core/biriscv_exec.v",
++      "base_sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
++      "derived": "rtl/cpu/triha_exec.v",
++      "derived_sha256": "e19ae1ac6cc9efcf37907bf754c6afe94c6c6b2ba2d482102ac8194b05f5ef97",
++      "changes": [
++        "Replace ALU instruction comparisons by FIFO-registered nine-bit function/operand-source descriptor; preserve all original branch/state/hold behavior and selected X/Z operands."
++      ],
++      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
++    },
++    {
++      "base": "rtl/cpu/vendor/src/core/biriscv_exec.v",
++      "base_sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
++      "derived": "rtl/cpu/triha_alu_decode.v",
++      "derived_sha256": "79e13b31489528e1433b487beb0117317a23ffe27ce0ebb9cb292ce7955f060d",
++      "changes": [
++        "Extract exact original prioritized ALU mask classification into a pure nine-bit descriptor; no validity gating or broadened illegal instruction behavior."
++      ],
++      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     }
+   ]
+ }
+diff --git a/rtl/cpu/triha_cpu.v b/rtl/cpu/triha_cpu.v
+--- a/rtl/cpu/triha_cpu.v
++++ b/rtl/cpu/triha_cpu.v
+@@ -193,6 +193,7 @@
+ wire           fetch0_valid_w;
+ wire           csr_result_e1_write_w;
+ wire  [ 31:0]  csr_opcode_ra_operand_w;
++wire [8:0] opcode0_alu_w,fetch0_alu_w;
+ wire  [ 31:0]  opcode0_opcode_w;
+ wire  [  1:0]  branch_d_exec1_priv_w;
+ wire           branch_exec0_is_not_taken_w;
+@@ -204,6 +205,7 @@
+ wire           mmu_ifetch_rd_w;
+ wire           fetch0_fault_page_w;
+ wire           mmu_ifetch_flush_w;
++wire [8:0] opcode1_alu_w,fetch1_alu_w;
+ wire  [ 31:0]  opcode1_opcode_w;
+ wire  [  4:0]  lsu_opcode_rd_idx_w;
+ wire  [ 31:0]  lsu_opcode_opcode_w;
+@@ -314,6 +316,7 @@
+     ,.icache_priv_o(fetch_in_priv_w)
+     ,.fetch0_valid_o(fetch0_valid_w)
+     ,.fetch0_instr_o(fetch0_instr_w)
++    ,.fetch0_alu_o(fetch0_alu_w)
+     ,.fetch0_pc_o(fetch0_pc_w)
+     ,.fetch0_fault_fetch_o(fetch0_fault_fetch_w)
+     ,.fetch0_fault_page_o(fetch0_fault_page_w)
+@@ -327,6 +330,7 @@
+     ,.fetch0_instr_invalid_o(fetch0_instr_invalid_w)
+     ,.fetch1_valid_o(fetch1_valid_w)
+     ,.fetch1_instr_o(fetch1_instr_w)
++    ,.fetch1_alu_o(fetch1_alu_w)
+     ,.fetch1_pc_o(fetch1_pc_w)
+     ,.fetch1_fault_fetch_o(fetch1_fault_fetch_w)
+     ,.fetch1_fault_page_o(fetch1_fault_page_w)
+@@ -566,6 +570,7 @@
+     ,.rst_i(rst_i)
+     ,.fetch0_valid_i(fetch0_valid_w)
+     ,.fetch0_instr_i(fetch0_instr_w)
++    ,.fetch0_alu_i(fetch0_alu_w)
+     ,.fetch0_pc_i(fetch0_pc_w)
+     ,.fetch0_fault_fetch_i(fetch0_fault_fetch_w)
+     ,.fetch0_fault_page_i(fetch0_fault_page_w)
+@@ -579,6 +584,7 @@
+     ,.fetch0_instr_invalid_i(fetch0_instr_invalid_w)
+     ,.fetch1_valid_i(fetch1_valid_w)
+     ,.fetch1_instr_i(fetch1_instr_w)
++    ,.fetch1_alu_i(fetch1_alu_w)
+     ,.fetch1_pc_i(fetch1_pc_w)
+     ,.fetch1_fault_fetch_i(fetch1_fault_fetch_w)
+     ,.fetch1_fault_page_i(fetch1_fault_page_w)
+@@ -654,6 +660,7 @@
+     ,.mul_opcode_valid_o(mul_opcode_valid_w)
+     ,.div_opcode_valid_o(div_opcode_valid_w)
+     ,.opcode0_opcode_o(opcode0_opcode_w)
++    ,.opcode0_alu_o(opcode0_alu_w)
+     ,.opcode0_pc_o(opcode0_pc_w)
+     ,.opcode0_invalid_o(opcode0_invalid_w)
+     ,.opcode0_rd_idx_o(opcode0_rd_idx_w)
+@@ -662,6 +669,7 @@
+     ,.opcode0_ra_operand_o(opcode0_ra_operand_w)
+     ,.opcode0_rb_operand_o(opcode0_rb_operand_w)
+     ,.opcode1_opcode_o(opcode1_opcode_w)
++    ,.opcode1_alu_o(opcode1_alu_w)
+     ,.opcode1_pc_o(opcode1_pc_w)
+     ,.opcode1_invalid_o(opcode1_invalid_w)
+     ,.opcode1_rd_idx_o(opcode1_rd_idx_w)
+@@ -706,13 +714,14 @@
+ );
+ 
+ 
+-biriscv_exec
++triha_exec
+ u_exec0
+ (
+     // Inputs
+      .clk_i(clk_i)
+     ,.rst_i(rst_i)
+     ,.opcode_valid_i(exec0_opcode_valid_w)
++    ,.opcode_alu_i(opcode0_alu_w)
+     ,.opcode_opcode_i(opcode0_opcode_w)
+     ,.opcode_pc_i(opcode0_pc_w)
+     ,.opcode_invalid_i(opcode0_invalid_w)
+@@ -743,13 +752,14 @@
+ // Keep the shared issue/CSR/exception control intact; only specialize EX1.
+ generate
+ if (SUPPORT_DUAL_ISSUE) begin : gen_dual_exec
+-biriscv_exec
++triha_exec
+ u_exec1
+ (
+     // Inputs
+      .clk_i(clk_i)
+     ,.rst_i(rst_i)
+     ,.opcode_valid_i(exec1_opcode_valid_w)
++    ,.opcode_alu_i(opcode1_alu_w)
+     ,.opcode_opcode_i(opcode1_opcode_w)
+     ,.opcode_pc_i(opcode1_pc_w)
+     ,.opcode_invalid_i(opcode1_invalid_w)
+diff --git a/rtl/cpu/triha_decode.v b/rtl/cpu/triha_decode.v
+--- a/rtl/cpu/triha_decode.v
++++ b/rtl/cpu/triha_decode.v
+@@ -54,6 +54,7 @@
+     ,output          fetch_in_accept_o
+     ,output          fetch_out0_valid_o
+     ,output [ 31:0]  fetch_out0_instr_o
++    ,output [  8:0]  fetch_out0_alu_o
+     ,output [ 31:0]  fetch_out0_pc_o
+     ,output          fetch_out0_fault_fetch_o
+     ,output          fetch_out0_fault_page_o
+@@ -67,6 +68,7 @@
+     ,output          fetch_out0_instr_invalid_o
+     ,output          fetch_out1_valid_o
+     ,output [ 31:0]  fetch_out1_instr_o
++    ,output [  8:0]  fetch_out1_alu_o
+     ,output [ 31:0]  fetch_out1_pc_o
+     ,output          fetch_out1_fault_fetch_o
+     ,output          fetch_out1_fault_page_o
+@@ -159,8 +161,12 @@
+         ,.rd_valid_o(info1_in_w[0])
+     );
+ 
++    wire [8:0] alu0_in_w, alu1_in_w;
++    triha_alu_decode u_alu0 (.opcode_i(fetch_in_instr_w[31:0]),.control_o(alu0_in_w));
++    triha_alu_decode u_alu1 (.opcode_i(fetch_in_instr_w[63:32]),.control_o(alu1_in_w));
++
+     triha_fetch_fifo
+-    #( .OPC_INFO_W(10) )
++    #( .WIDTH(82), .OPC_INFO_W(10) )
+     u_fifo
+     (
+          .clk_i(clk_i)
+@@ -172,7 +178,7 @@
+         ,.push_i(fetch_in_valid_w)
+         ,.pc_in_i(fetch_in_pc_w)
+         ,.pred_in_i(fetch_in_pred_branch_w)
+-        ,.data_in_i(fetch_in_instr_w)
++        ,.data_in_i({alu1_in_w,fetch_in_instr_w[63:32],alu0_in_w,fetch_in_instr_w[31:0]})
+         ,.info0_in_i({info0_in_w, fetch_in_fault_page_w, fetch_in_fault_fetch_w})
+         ,.info1_in_i({info1_in_w, fetch_in_fault_page_w, fetch_in_fault_fetch_w})
+         ,.accept_o(fetch_in_accept_o)
+@@ -180,7 +186,7 @@
+         // Outputs
+         ,.valid0_o(fetch_out0_valid_o)
+         ,.pc0_out_o(fetch_out0_pc_o)
+-        ,.data0_out_o(fetch_out0_instr_o)
++        ,.data0_out_o({fetch_out0_alu_o,fetch_out0_instr_o})
+         ,.info0_out_o({fetch_out0_instr_invalid_o, fetch_out0_instr_exec_o,
+                        fetch_out0_instr_lsu_o,     fetch_out0_instr_branch_o,
+                        fetch_out0_instr_mul_o,     fetch_out0_instr_div_o,
+@@ -190,7 +196,7 @@
+ 
+         ,.valid1_o(fetch_out1_valid_o)
+         ,.pc1_out_o(fetch_out1_pc_o)
+-        ,.data1_out_o(fetch_out1_instr_o)
++        ,.data1_out_o({fetch_out1_alu_o,fetch_out1_instr_o})
+         ,.info1_out_o({fetch_out1_instr_invalid_o, fetch_out1_instr_exec_o,
+                        fetch_out1_instr_lsu_o,     fetch_out1_instr_branch_o,
+                        fetch_out1_instr_mul_o,     fetch_out1_instr_div_o,
+@@ -216,8 +222,12 @@
+         .valid_i(1'b0),.fetch_fault_i(1'b0),.enable_muldiv_i(enable_muldiv_w),.opcode_i(payload_in_w[63:32]),
+         .invalid_o(),.exec_o(),.lsu_o(),.branch_o(),.mul_o(),.div_o(),.csr_o(csr1_in_w),.rd_valid_o()
+     );
++    wire [8:0] alu0_in_w, alu1_in_w;
++    triha_alu_decode u_alu0 (.opcode_i(payload_in_w[31:0]),.control_o(alu0_in_w));
++    triha_alu_decode u_alu1 (.opcode_i(payload_in_w[63:32]),.control_o(alu1_in_w));
++
+     triha_fetch_fifo
+-    #( .OPC_INFO_W(2) )
++    #( .WIDTH(82), .OPC_INFO_W(2) )
+     u_fifo
+     (
+          .clk_i(clk_i)
+@@ -229,7 +239,7 @@
+         ,.push_i(fetch_in_valid_i)
+         ,.pc_in_i(fetch_in_pc_i)
+         ,.pred_in_i(fetch_in_pred_branch_i)
+-        ,.data_in_i(payload_in_w)
++        ,.data_in_i({alu1_in_w,payload_in_w[63:32],alu0_in_w,payload_in_w[31:0]})
+         ,.info0_in_i({fetch_in_fault_page_i, fetch_in_fault_fetch_i})
+         ,.info1_in_i({fetch_in_fault_page_i, fetch_in_fault_fetch_i})
+         ,.accept_o(fetch_in_accept_o)
+@@ -237,13 +247,13 @@
+         // Outputs
+         ,.valid0_o(fetch_out0_valid_o)
+         ,.pc0_out_o(fetch_out0_pc_o)
+-        ,.data0_out_o(fetch_out0_instr_o)
++        ,.data0_out_o({fetch_out0_alu_o,fetch_out0_instr_o})
+         ,.info0_out_o({fetch_out0_fault_page_o, fetch_out0_fault_fetch_o})
+         ,.pop0_i(fetch_out0_accept_i)
+ 
+         ,.valid1_o(fetch_out1_valid_o)
+         ,.pc1_out_o(fetch_out1_pc_o)
+-        ,.data1_out_o(fetch_out1_instr_o)
++        ,.data1_out_o({fetch_out1_alu_o,fetch_out1_instr_o})
+         ,.info1_out_o({fetch_out1_fault_page_o, fetch_out1_fault_fetch_o})
+         ,.pop1_i(fetch_out1_accept_i)
+         ,.csr0_in_i(csr0_in_w),.csr1_in_i(csr1_in_w)
+diff --git a/rtl/cpu/triha_frontend.v b/rtl/cpu/triha_frontend.v
+--- a/rtl/cpu/triha_frontend.v
++++ b/rtl/cpu/triha_frontend.v
+@@ -81,6 +81,7 @@
+     ,output [  1:0]  icache_priv_o
+     ,output          fetch0_valid_o
+     ,output [ 31:0]  fetch0_instr_o
++    ,output [  8:0]  fetch0_alu_o
+     ,output [ 31:0]  fetch0_pc_o
+     ,output          fetch0_fault_fetch_o
+     ,output          fetch0_fault_page_o
+@@ -94,6 +95,7 @@
+     ,output          fetch0_instr_invalid_o
+     ,output          fetch1_valid_o
+     ,output [ 31:0]  fetch1_instr_o
++    ,output [  8:0]  fetch1_alu_o
+     ,output [ 31:0]  fetch1_pc_o
+     ,output          fetch1_fault_fetch_o
+     ,output          fetch1_fault_page_o
+@@ -212,6 +214,7 @@
+     ,.fetch_in_accept_o(fetch_accept_w)
+     ,.fetch_out0_valid_o(fetch0_valid_o)
+     ,.fetch_out0_instr_o(fetch0_instr_o)
++    ,.fetch_out0_alu_o(fetch0_alu_o)
+     ,.fetch_out0_pc_o(fetch0_pc_o)
+     ,.fetch_out0_fault_fetch_o(fetch0_fault_fetch_o)
+     ,.fetch_out0_fault_page_o(fetch0_fault_page_o)
+@@ -225,6 +228,7 @@
+     ,.fetch_out0_instr_invalid_o(fetch0_instr_invalid_o)
+     ,.fetch_out1_valid_o(fetch1_valid_o)
+     ,.fetch_out1_instr_o(fetch1_instr_o)
++    ,.fetch_out1_alu_o(fetch1_alu_o)
+     ,.fetch_out1_pc_o(fetch1_pc_o)
+     ,.fetch_out1_fault_fetch_o(fetch1_fault_fetch_o)
+     ,.fetch_out1_fault_page_o(fetch1_fault_page_o)
+diff --git a/rtl/cpu/triha_issue.v b/rtl/cpu/triha_issue.v
+--- a/rtl/cpu/triha_issue.v
++++ b/rtl/cpu/triha_issue.v
+@@ -45,6 +45,7 @@
+     ,input           rst_i
+     ,input           fetch0_valid_i
+     ,input  [ 31:0]  fetch0_instr_i
++    ,input  [  8:0]  fetch0_alu_i
+     ,input  [ 31:0]  fetch0_pc_i
+     ,input           fetch0_fault_fetch_i
+     ,input           fetch0_fault_page_i
+@@ -58,6 +59,7 @@
+     ,input           fetch0_instr_invalid_i
+     ,input           fetch1_valid_i
+     ,input  [ 31:0]  fetch1_instr_i
++    ,input  [  8:0]  fetch1_alu_i
+     ,input  [ 31:0]  fetch1_pc_i
+     ,input           fetch1_fault_fetch_i
+     ,input           fetch1_fault_page_i
+@@ -133,6 +135,7 @@
+     ,output          mul_opcode_valid_o
+     ,output          div_opcode_valid_o
+     ,output [ 31:0]  opcode0_opcode_o
++    ,output [  8:0]  opcode0_alu_o
+     ,output [ 31:0]  opcode0_pc_o
+     ,output          opcode0_invalid_o
+     ,output [  4:0]  opcode0_rd_idx_o
+@@ -141,6 +144,7 @@
+     ,output [ 31:0]  opcode0_ra_operand_o
+     ,output [ 31:0]  opcode0_rb_operand_o
+     ,output [ 31:0]  opcode1_opcode_o
++    ,output [  8:0]  opcode1_alu_o
+     ,output [ 31:0]  opcode1_pc_o
+     ,output          opcode1_invalid_o
+     ,output [  4:0]  opcode1_rd_idx_o
+@@ -200,7 +204,7 @@
+ //-------------------------------------------------------------
+ wire        single_issue_w;
+ wire        dual_issue_w;
+-reg  [31:0] pc_x_q;
++wire [31:0] pc_x_q;
+ reg   [1:0] priv_x_q;
+ 
+ // Finish constant increments before the late redirect selection. Keep these
+@@ -218,19 +222,40 @@
+ end
+ endgenerate
+ 
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    pc_x_q <= 32'b0;
+-else if (branch_csr_request_i)
+-    pc_x_q <= branch_csr_pc_i;
+-else if (branch_d_exec1_request_i)
+-    pc_x_q <= branch_d_exec1_pc_i;
+-else if (branch_d_exec0_request_i)
+-    pc_x_q <= branch_d_exec0_pc_i;
+-else if (dual_issue_w)
+-    pc_x_q <= pc_plus8_w;
+-else if (single_issue_w)
+-    pc_x_q <= pc_plus4_w;
++// Raw execution validity precedes branch comparison. Interrupt suppression
++// may prevent advance while raw-valid remains asserted, so keep the original
++// priority including a real feedback value on those cycles.
++wire pc_update_enable_w = branch_csr_request_i |
++    exec0_opcode_valid_o | exec1_opcode_valid_o;
++reg [31:0] pc_next_r;
++always @* begin
++    pc_next_r = pc_x_q;
++    if (branch_csr_request_i)
++        pc_next_r = branch_csr_pc_i;
++    else if (branch_d_exec1_request_i)
++        pc_next_r = branch_d_exec1_pc_i;
++    else if (branch_d_exec0_request_i)
++        pc_next_r = branch_d_exec0_pc_i;
++    else if (dual_issue_w)
++        pc_next_r = pc_plus8_w;
++    else if (single_issue_w)
++        pc_next_r = pc_plus4_w;
++end
++
++// Bind the installed model's static global-reset reference while explicitly
++// disabling its global reset. This is simulation scope only, no hardware.
++// synthesis translate_off
++generate if (1) begin: GRS_INST
++    wire GRSNET = 1'b1;
++end endgenerate
++// synthesis translate_on
++genvar pc_bit;
++generate for (pc_bit=0;pc_bit<32;pc_bit=pc_bit+1) begin: g_pc_state
++    GTP_DFF_CE #(.GRS_EN("FALSE"),.INIT(1'b0)) u_pc (
++        .Q(pc_x_q[pc_bit]),.D(pc_next_r[pc_bit]),.CLK(clk_i),
++        .C(rst_i),.CE(pc_update_enable_w)
++    );
++end endgenerate
+ 
+ always @ (posedge clk_i or posedge rst_i)
+ if (rst_i)
+@@ -289,6 +314,8 @@
+ reg        opcode_b_valid_r;
+ reg [1:0]  opcode_a_fault_r;
+ reg [1:0]  opcode_b_fault_r;
++reg [8:0] opcode_a_alu_r;
++reg [8:0] opcode_b_alu_r;
+ reg [31:0] opcode_a_r;
+ reg [31:0] opcode_b_r;
+ reg [31:0] opcode_a_pc_r;
+@@ -298,6 +325,8 @@
+ begin
+     opcode_a_valid_r = payload0_match_w || payload1_match_w;
+     opcode_b_valid_r = payload0_match_w && fetch1_valid_i;
++    opcode_a_alu_r   = fetch1_alu_i;
++    opcode_b_alu_r   = 9'b0;
+     opcode_a_r       = fetch1_instr_i;
+     opcode_a_pc_r    = fetch1_pc_i;
+     opcode_a_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
+@@ -308,6 +337,8 @@
+     // Even word may issue together with lane 1; odd word uses slot 0 alone.
+     if (payload0_selected_w)
+     begin
++        opcode_a_alu_r   = fetch0_alu_i;
++        opcode_b_alu_r   = fetch1_alu_i;
+         opcode_a_r       = fetch0_instr_i;
+         opcode_a_pc_r    = fetch0_pc_i;
+         opcode_a_fault_r = {fetch0_fault_page_i, fetch0_fault_fetch_i};
+@@ -888,6 +919,7 @@
+ //-------------------------------------------------------------
+ // Issue Slot 0
+ //------------------------------------------------------------- 
++assign opcode0_alu_o = opcode_a_alu_r;
+ assign opcode0_opcode_o = opcode_a_r;
+ assign opcode0_pc_o     = opcode_a_pc_r;
+ assign opcode0_rd_idx_o = issue_a_rd_idx_w;
+@@ -958,6 +990,7 @@
+ //-------------------------------------------------------------
+ // Issue Slot 1
+ //------------------------------------------------------------- 
++assign opcode1_alu_o = opcode_b_alu_r;
+ assign opcode1_opcode_o = opcode_b_r;
+ assign opcode1_pc_o     = opcode_b_pc_r;
+ assign opcode1_rd_idx_o = issue_b_rd_idx_w;
+diff --git a/scripts/cpu/run_redirect.ps1 b/scripts/cpu/run_redirect.ps1
+--- a/scripts/cpu/run_redirect.ps1
++++ b/scripts/cpu/run_redirect.ps1
+@@ -1,10 +1,10 @@
+ #requires -Version 7.0
+ [CmdletBinding()]
+-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','ordered')][string] $Test='frontend',
++param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','pcearly','execdecode','fifodecode','ordered')][string] $Test='frontend',
+     [ValidateSet('single','dual','both')][string] $Mode='both',
+     [ValidateRange(1,2147483647)][int] $Seed=37,
+     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor,
+-    [string] $IssueSource='')
++    [string] $IssueSource='', [ValidateRange(0,1)][int] $DecodeStage=0)
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference='Stop'
+ . (Join-Path $PSScriptRoot 'simulation_common.ps1')
+@@ -14,7 +14,7 @@
+ [IO.Directory]::CreateDirectory($work)|Out-Null
+ $commands=[Collections.Generic.List[object]]::new()
+ $result=[ordered]@{status='RUNNING';test=$Test;mode=$Mode;seed=$Seed;interrupt=[bool]$Interrupt
+-    broken=[bool]$Broken;legacy_frontend=[bool]$LegacyFrontend;legacy_divider=[bool]$LegacyDivider;legacy_fifo=[bool]$LegacyFifo;legacy_predictor=[bool]$LegacyPredictor;directory=$work
++    broken=[bool]$Broken;decode_stage=$DecodeStage;legacy_frontend=[bool]$LegacyFrontend;legacy_divider=[bool]$LegacyDivider;legacy_fifo=[bool]$LegacyFifo;legacy_predictor=[bool]$LegacyPredictor;directory=$work
+     input_hashes=[ordered]@{};output_hashes=[ordered]@{};native_commands=$commands
+     source_unchanged=$false;executions=@();error=$null;runner_return_code=$null
+     scope='directed ordered WB/store/synchronous exception comparison; not full ISA/formal proof'}
+@@ -62,6 +62,9 @@
+     if($Test -eq 'indexedbtb'){$sources+='tb/cpu/tb_indexed_btb.v'}
+     if($Test -eq 'dependencies'){$sources+='tb/cpu/tb_issue_dependencies.v'}
+     if($Test -eq 'mulforward'){$sources+='tb/cpu/tb_issue_mul_forward.v'}
++    if($Test -eq 'execdecode'){$sources+='tb/cpu/tb_exec_decode.v'}
++    if($Test -eq 'fifodecode'){$sources+='tb/cpu/tb_fifo_alu_decode.v'}
++    if($Test -eq 'pcearly'){$sources+='tb/cpu/tb_pc_early.v'}
+     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
+     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
+         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
+@@ -80,16 +83,19 @@
+         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
+         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
+         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
+-        $top=switch($Test){mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
+-        $marker=switch($Test){mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
++        $top=switch($Test){execdecode{'work.tb_exec_decode'} fifodecode{'work.tb_fifo_alu_decode'} pcearly{'work.tb_pc_early'} mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
++        $marker=switch($Test){execdecode{'EXEC_DECODE_PASS'} fifodecode{'FIFO_ALU_DECODE_PASS'} pcearly{'PC_EARLY_PASS'} mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
+         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
+         if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
++        if($Test -in @('execdecode','fifodecode')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
++        if($Test -eq 'fifodecode'){$generics+=('-gDECODE_STAGE='+$DecodeStage)}
++        if($Test -eq 'pcearly'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -ne 'single')),('-gBROKEN='+[int][bool]$Broken))}
+         if($Test -eq 'mulforward'){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+         if($Test -eq 'dependencies'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -eq 'dual')),('-gBROKEN='+[int][bool]$Broken))}
+         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
+             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
+-        if($out -notmatch $marker -or $out -match '(MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
++        if($out -notmatch $marker -or $out -match '(EXEC_DECODE|FIFO_ALU_DECODE|PC_EARLY|MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+         if($Test -eq 'dependencies' -and $out -notmatch ('ISSUE_DEPENDENCIES_PASS dual='+[int]($Mode -eq 'dual')+' checks=')){throw 'Dependency test elaborated wrong issue mode.'}
+         $result.executions+=@{test=$Test;status='PASS'}
+     } else {
+diff --git a/tb/cpu/tb_pc_update.v b/tb/cpu/tb_pc_update.v
+--- a/tb/cpu/tb_pc_update.v
++++ b/tb/cpu/tb_pc_update.v
+@@ -4,6 +4,10 @@
+     reg clk=0, rst=1;
+     always #5 clk=~clk;
+     reg csr_req=0, ex0_req=0, ex1_req=0, single_step=0, dual_step=0;
++    // Model the integrated controller contract: redirect/advance requires
++    // raw execution validity, which is independent of IRQ-suppressed advance.
++    wire raw0=ex0_req | single_step | dual_step;
++    wire raw1=ex1_req | dual_step;
+     reg [31:0] csr_pc=0, ex0_pc=0, ex1_pc=0;
+     reg [1:0] csr_priv=0;
+     reg [31:0] expected_pc=0, random_q=32'h71a5c093, corrupt_pc=0;
+@@ -49,6 +53,8 @@
+         end
+     endtask
+     initial begin
++        force u_dut.u_issue.exec0_opcode_valid_o=raw0;
++        force u_dut.u_issue.exec1_opcode_valid_o=raw1;
+         force u_dut.u_issue.branch_csr_request_i=csr_req;
+         force u_dut.u_issue.branch_d_exec0_request_i=ex0_req;
+         force u_dut.u_issue.branch_d_exec1_request_i=ex1_req;
+diff --git a/rtl/cpu/triha_alu_decode.v b/rtl/cpu/triha_alu_decode.v
+new file mode 100644
+--- /dev/null
++++ b/rtl/cpu/triha_alu_decode.v
+@@ -0,0 +1,179 @@
++//-----------------------------------------------------------------
++//                         biRISC-V CPU
++//                            V0.8.1
++//                     Ultra-Embedded.com
++//                     Copyright 2019-2020
++//
++//                   admin@ultra-embedded.com
++//
++//                     License: Apache 2.0
++//-----------------------------------------------------------------
++// Copyright 2020 Ultra-Embedded.com
++// 
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++// 
++//     http://www.apache.org/licenses/LICENSE-2.0
++// 
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++//-----------------------------------------------------------------
++
++// Exact ALU mask priority, evaluated before the existing fetch FIFO.
++// control_o = {ALU function[3:0], A source[1:0], B source[2:0]}.
++// A:0=zero,1=RA,2=U-immediate,3=PC. B:0=zero,1=RB,2=I-immediate,
++// 3=shift amount,4=U-immediate,5=constant4. Zero opcode decodes to zero.
++module triha_alu_decode (
++    input wire [31:0] opcode_i,
++    output wire [8:0] control_o
++);
++`include "biriscv_defs.v"
++reg [3:0]  alu_func_r;
++reg [1:0] source_a_r;
++reg [2:0] source_b_r;
++
++always @ *
++begin
++    alu_func_r     = `ALU_NONE;
++    source_a_r = 2'd0;
++    source_b_r = 3'd0;
++
++    if ((opcode_i & `INST_ADD_MASK) == `INST_ADD) // add
++    begin
++        alu_func_r     = `ALU_ADD;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_AND_MASK) == `INST_AND) // and
++    begin
++        alu_func_r     = `ALU_AND;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_OR_MASK) == `INST_OR) // or
++    begin
++        alu_func_r     = `ALU_OR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SLL_MASK) == `INST_SLL) // sll
++    begin
++        alu_func_r     = `ALU_SHIFTL;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SRA_MASK) == `INST_SRA) // sra
++    begin
++        alu_func_r     = `ALU_SHIFTR_ARITH;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SRL_MASK) == `INST_SRL) // srl
++    begin
++        alu_func_r     = `ALU_SHIFTR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SUB_MASK) == `INST_SUB) // sub
++    begin
++        alu_func_r     = `ALU_SUB;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_XOR_MASK) == `INST_XOR) // xor
++    begin
++        alu_func_r     = `ALU_XOR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SLT_MASK) == `INST_SLT) // slt
++    begin
++        alu_func_r     = `ALU_LESS_THAN_SIGNED;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_SLTU_MASK) == `INST_SLTU) // sltu
++    begin
++        alu_func_r     = `ALU_LESS_THAN;
++        source_a_r = 2'd1;
++        source_b_r = 3'd1;
++    end
++    else if ((opcode_i & `INST_ADDI_MASK) == `INST_ADDI) // addi
++    begin
++        alu_func_r     = `ALU_ADD;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_ANDI_MASK) == `INST_ANDI) // andi
++    begin
++        alu_func_r     = `ALU_AND;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_SLTI_MASK) == `INST_SLTI) // slti
++    begin
++        alu_func_r     = `ALU_LESS_THAN_SIGNED;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_SLTIU_MASK) == `INST_SLTIU) // sltiu
++    begin
++        alu_func_r     = `ALU_LESS_THAN;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_ORI_MASK) == `INST_ORI) // ori
++    begin
++        alu_func_r     = `ALU_OR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_XORI_MASK) == `INST_XORI) // xori
++    begin
++        alu_func_r     = `ALU_XOR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd2;
++    end
++    else if ((opcode_i & `INST_SLLI_MASK) == `INST_SLLI) // slli
++    begin
++        alu_func_r     = `ALU_SHIFTL;
++        source_a_r = 2'd1;
++        source_b_r = 3'd3;
++    end
++    else if ((opcode_i & `INST_SRLI_MASK) == `INST_SRLI) // srli
++    begin
++        alu_func_r     = `ALU_SHIFTR;
++        source_a_r = 2'd1;
++        source_b_r = 3'd3;
++    end
++    else if ((opcode_i & `INST_SRAI_MASK) == `INST_SRAI) // srai
++    begin
++        alu_func_r     = `ALU_SHIFTR_ARITH;
++        source_a_r = 2'd1;
++        source_b_r = 3'd3;
++    end
++    else if ((opcode_i & `INST_LUI_MASK) == `INST_LUI) // lui
++    begin
++        source_a_r = 2'd2;
++    end
++    else if ((opcode_i & `INST_AUIPC_MASK) == `INST_AUIPC) // auipc
++    begin
++        alu_func_r     = `ALU_ADD;
++        source_a_r = 2'd3;
++        source_b_r = 3'd4;
++    end     
++    else if (((opcode_i & `INST_JAL_MASK) == `INST_JAL) || ((opcode_i & `INST_JALR_MASK) == `INST_JALR)) // jal, jalr
++    begin
++        alu_func_r     = `ALU_ADD;
++        source_a_r = 2'd3;
++        source_b_r = 3'd5;
++    end
++end
++
++
++assign control_o = {alu_func_r,source_a_r,source_b_r};
++endmodule
+diff --git a/rtl/cpu/triha_exec.v b/rtl/cpu/triha_exec.v
+new file mode 100644
+--- /dev/null
++++ b/rtl/cpu/triha_exec.v
+@@ -0,0 +1,285 @@
++//-----------------------------------------------------------------
++//                         biRISC-V CPU
++//                            V0.8.1
++//                     Ultra-Embedded.com
++//                     Copyright 2019-2020
++//
++//                   admin@ultra-embedded.com
++//
++//                     License: Apache 2.0
++//-----------------------------------------------------------------
++// Copyright 2020 Ultra-Embedded.com
++// 
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++// 
++//     http://www.apache.org/licenses/LICENSE-2.0
++// 
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++//-----------------------------------------------------------------
++
++// TriHa maintained execution derivative; see ADAPTATIONS.json.
++module triha_exec
++(
++    // Inputs
++     input           clk_i
++    ,input           rst_i
++    ,input           opcode_valid_i
++    ,input  [  8:0]  opcode_alu_i
++    ,input  [ 31:0]  opcode_opcode_i
++    ,input  [ 31:0]  opcode_pc_i
++    ,input           opcode_invalid_i
++    ,input  [  4:0]  opcode_rd_idx_i
++    ,input  [  4:0]  opcode_ra_idx_i
++    ,input  [  4:0]  opcode_rb_idx_i
++    ,input  [ 31:0]  opcode_ra_operand_i
++    ,input  [ 31:0]  opcode_rb_operand_i
++    ,input           hold_i
++
++    // Outputs
++    ,output          branch_request_o
++    ,output          branch_is_taken_o
++    ,output          branch_is_not_taken_o
++    ,output [ 31:0]  branch_source_o
++    ,output          branch_is_call_o
++    ,output          branch_is_ret_o
++    ,output          branch_is_jmp_o
++    ,output [ 31:0]  branch_pc_o
++    ,output          branch_d_request_o
++    ,output [ 31:0]  branch_d_pc_o
++    ,output [  1:0]  branch_d_priv_o
++    ,output [ 31:0]  writeback_value_o
++);
++
++
++
++//-----------------------------------------------------------------
++// Includes
++//-----------------------------------------------------------------
++`include "biriscv_defs.v"
++
++//-------------------------------------------------------------
++// Opcode decode
++//-------------------------------------------------------------
++reg [31:0]  imm20_r;
++reg [31:0]  imm12_r;
++reg [31:0]  bimm_r;
++reg [31:0]  jimm20_r;
++reg [4:0]   shamt_r;
++
++always @ *
++begin
++    imm20_r     = {opcode_opcode_i[31:12], 12'b0};
++    imm12_r     = {{20{opcode_opcode_i[31]}}, opcode_opcode_i[31:20]};
++    bimm_r      = {{19{opcode_opcode_i[31]}}, opcode_opcode_i[31], opcode_opcode_i[7], opcode_opcode_i[30:25], opcode_opcode_i[11:8], 1'b0};
++    jimm20_r    = {{12{opcode_opcode_i[31]}}, opcode_opcode_i[19:12], opcode_opcode_i[20], opcode_opcode_i[30:25], opcode_opcode_i[24:21], 1'b0};
++    shamt_r     = opcode_opcode_i[24:20];
++end
++
++//-------------------------------------------------------------
++// Execute - ALU operations
++//-------------------------------------------------------------
++wire [3:0] alu_func_r = opcode_alu_i[8:5];
++reg [31:0] alu_input_a_r;
++reg [31:0] alu_input_b_r;
++// Case selection preserves selected X/Z payload bits, including LUI data.
++always @* begin
++    case (opcode_alu_i[4:3])
++        2'd1: alu_input_a_r = opcode_ra_operand_i;
++        2'd2: alu_input_a_r = imm20_r;
++        2'd3: alu_input_a_r = opcode_pc_i;
++        default: alu_input_a_r = 32'b0;
++    endcase
++    case (opcode_alu_i[2:0])
++        3'd1: alu_input_b_r = opcode_rb_operand_i;
++        3'd2: alu_input_b_r = imm12_r;
++        3'd3: alu_input_b_r = {27'b0,shamt_r};
++        3'd4: alu_input_b_r = imm20_r;
++        3'd5: alu_input_b_r = 32'd4;
++        default: alu_input_b_r = 32'b0;
++    endcase
++end
++
++//-------------------------------------------------------------
++// ALU
++//-------------------------------------------------------------
++wire [31:0]  alu_p_w;
++biriscv_alu
++u_alu
++(
++    .alu_op_i(alu_func_r),
++    .alu_a_i(alu_input_a_r),
++    .alu_b_i(alu_input_b_r),
++    .alu_p_o(alu_p_w)
++);
++
++//-------------------------------------------------------------
++// Flop ALU output
++//-------------------------------------------------------------
++reg [31:0] result_q;
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    result_q  <= 32'b0;
++else if (~hold_i)
++    result_q <= alu_p_w;
++
++assign writeback_value_o  = result_q;
++
++//-----------------------------------------------------------------
++// less_than_signed: Less than operator (signed)
++// Inputs: x = left operand, y = right operand
++// Return: (int)x < (int)y
++//-----------------------------------------------------------------
++function [0:0] less_than_signed;
++    input  [31:0] x;
++    input  [31:0] y;
++    reg [31:0] v;
++begin
++    v = (x - y);
++    if (x[31] != y[31])
++        less_than_signed = x[31];
++    else
++        less_than_signed = v[31];
++end
++endfunction
++
++//-----------------------------------------------------------------
++// greater_than_signed: Greater than operator (signed)
++// Inputs: x = left operand, y = right operand
++// Return: (int)x > (int)y
++//-----------------------------------------------------------------
++function [0:0] greater_than_signed;
++    input  [31:0] x;
++    input  [31:0] y;
++    reg [31:0] v;
++begin
++    v = (y - x);
++    if (x[31] != y[31])
++        greater_than_signed = y[31];
++    else
++        greater_than_signed = v[31];
++end
++endfunction
++
++//-------------------------------------------------------------
++// Execute - Branch operations
++//-------------------------------------------------------------
++reg        branch_r;
++reg        branch_taken_r;
++reg [31:0] branch_target_r;
++reg        branch_call_r;
++reg        branch_ret_r;
++reg        branch_jmp_r;
++
++always @ *
++begin
++    branch_r        = 1'b0;
++    branch_taken_r  = 1'b0;
++    branch_call_r   = 1'b0;
++    branch_ret_r    = 1'b0;
++    branch_jmp_r    = 1'b0;
++
++    // Default branch_r target is relative to current PC
++    branch_target_r = opcode_pc_i + bimm_r;
++
++    if ((opcode_opcode_i & `INST_JAL_MASK) == `INST_JAL) // jal
++    begin
++        branch_r        = 1'b1;
++        branch_taken_r  = 1'b1;
++        branch_target_r = opcode_pc_i + jimm20_r;
++        branch_call_r   = (opcode_rd_idx_i == 5'd1); // RA
++        branch_jmp_r    = 1'b1;
++    end
++    else if ((opcode_opcode_i & `INST_JALR_MASK) == `INST_JALR) // jalr
++    begin
++        branch_r            = 1'b1;
++        branch_taken_r      = 1'b1;
++        branch_target_r     = opcode_ra_operand_i + imm12_r;
++        branch_target_r[0]  = 1'b0;
++        branch_ret_r        = (opcode_ra_idx_i == 5'd1 && imm12_r[11:0] == 12'b0); // RA
++        branch_call_r       = ~branch_ret_r && (opcode_rd_idx_i == 5'd1); // RA
++        branch_jmp_r        = ~(branch_call_r | branch_ret_r);
++    end
++    else if ((opcode_opcode_i & `INST_BEQ_MASK) == `INST_BEQ) // beq
++    begin
++        branch_r      = 1'b1;
++        branch_taken_r= (opcode_ra_operand_i == opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BNE_MASK) == `INST_BNE) // bne
++    begin
++        branch_r      = 1'b1;    
++        branch_taken_r= (opcode_ra_operand_i != opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BLT_MASK) == `INST_BLT) // blt
++    begin
++        branch_r      = 1'b1;
++        branch_taken_r= less_than_signed(opcode_ra_operand_i, opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BGE_MASK) == `INST_BGE) // bge
++    begin
++        branch_r      = 1'b1;    
++        branch_taken_r= greater_than_signed(opcode_ra_operand_i,opcode_rb_operand_i) | (opcode_ra_operand_i == opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BLTU_MASK) == `INST_BLTU) // bltu
++    begin
++        branch_r      = 1'b1;    
++        branch_taken_r= (opcode_ra_operand_i < opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BGEU_MASK) == `INST_BGEU) // bgeu
++    begin
++        branch_r      = 1'b1;
++        branch_taken_r= (opcode_ra_operand_i >= opcode_rb_operand_i);
++    end
++end
++
++reg        branch_taken_q;
++reg        branch_ntaken_q;
++reg [31:0] pc_x_q;
++reg [31:0] pc_m_q;
++reg        branch_call_q;
++reg        branch_ret_q;
++reg        branch_jmp_q;
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++begin
++    branch_taken_q   <= 1'b0;
++    branch_ntaken_q  <= 1'b0;
++    pc_x_q           <= 32'b0;
++    pc_m_q           <= 32'b0;
++    branch_call_q    <= 1'b0;
++    branch_ret_q     <= 1'b0;
++    branch_jmp_q     <= 1'b0;
++end
++else if (opcode_valid_i)
++begin
++    branch_taken_q   <= branch_r && opcode_valid_i & branch_taken_r;
++    branch_ntaken_q  <= branch_r && opcode_valid_i & ~branch_taken_r;
++    pc_x_q           <= branch_taken_r ? branch_target_r : opcode_pc_i + 32'd4;
++    branch_call_q    <= branch_r && opcode_valid_i && branch_call_r;
++    branch_ret_q     <= branch_r && opcode_valid_i && branch_ret_r;
++    branch_jmp_q     <= branch_r && opcode_valid_i && branch_jmp_r;
++    pc_m_q           <= opcode_pc_i;
++end
++
++assign branch_request_o   = branch_taken_q | branch_ntaken_q;
++assign branch_is_taken_o  = branch_taken_q;
++assign branch_is_not_taken_o = branch_ntaken_q;
++assign branch_source_o    = pc_m_q;
++assign branch_pc_o        = pc_x_q;
++assign branch_is_call_o   = branch_call_q;
++assign branch_is_ret_o    = branch_ret_q;
++assign branch_is_jmp_o    = branch_jmp_q;
++
++assign branch_d_request_o = (branch_r && opcode_valid_i && branch_taken_r);
++assign branch_d_pc_o      = branch_target_r;
++assign branch_d_priv_o    = 2'b0; // don't care
++
++
++
++endmodule
+diff --git a/tb/cpu/tb_exec_decode.v b/tb/cpu/tb_exec_decode.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_exec_decode.v
+@@ -0,0 +1,127 @@
++// Full execution interface miter; includes invalid-slot payload and X/Z data.
++`timescale 1ns / 1ps
++`ifndef CPU_EXEC_MODULE
++`define CPU_EXEC_MODULE biriscv_exec
++`endif
++module tb_exec_decode #(parameter BROKEN=0);
++    reg clk=0, rst=1, valid=0, invalid=0, hold=0;
++    always #5 clk=~clk;
++    reg [31:0] op=0, pc=0, ra=0, rb=0;
++    reg [4:0] rd_idx=0, ra_idx=0, rb_idx=0;
++    wire [136:0] reference_value, candidate_value;
++    reg [31:0] random_q=32'hc361f25a, corrupt_pc=0;
++    integer i, checks=0;
++
++    biriscv_exec u_reference (
++        .clk_i(clk),.rst_i(rst),.opcode_valid_i(valid),.opcode_opcode_i(op),
++        .opcode_pc_i(pc),.opcode_invalid_i(invalid),.opcode_rd_idx_i(rd_idx),
++        .opcode_ra_idx_i(ra_idx),.opcode_rb_idx_i(rb_idx),
++        .opcode_ra_operand_i(ra),.opcode_rb_operand_i(rb),.hold_i(hold),
++        .writeback_value_o(reference_value[136:105]),
++        .branch_pc_o(reference_value[104:73]),.branch_d_pc_o(reference_value[72:41]),
++        .branch_source_o(reference_value[40:9]),.branch_d_priv_o(reference_value[8:7]),
++        .branch_request_o(reference_value[6]),.branch_is_taken_o(reference_value[5]),
++        .branch_is_not_taken_o(reference_value[4]),.branch_is_call_o(reference_value[3]),
++        .branch_is_ret_o(reference_value[2]),.branch_is_jmp_o(reference_value[1]),
++        .branch_d_request_o(reference_value[0])
++    );
++    wire [8:0] ctrl;
++    triha_alu_decode u_decode (.opcode_i(op),.control_o(ctrl));
++    triha_exec u_candidate (
++        .opcode_alu_i(ctrl),
++        .clk_i(clk),.rst_i(rst),.opcode_valid_i(valid),.opcode_opcode_i(op),
++        .opcode_pc_i(pc),.opcode_invalid_i(invalid),.opcode_rd_idx_i(rd_idx),
++        .opcode_ra_idx_i(ra_idx),.opcode_rb_idx_i(rb_idx),
++        .opcode_ra_operand_i(ra),.opcode_rb_operand_i(rb),.hold_i(hold),
++        .writeback_value_o(candidate_value[136:105]),
++        .branch_pc_o(candidate_value[104:73]),.branch_d_pc_o(candidate_value[72:41]),
++        .branch_source_o(candidate_value[40:9]),.branch_d_priv_o(candidate_value[8:7]),
++        .branch_request_o(candidate_value[6]),.branch_is_taken_o(candidate_value[5]),
++        .branch_is_not_taken_o(candidate_value[4]),.branch_is_call_o(candidate_value[3]),
++        .branch_is_ret_o(candidate_value[2]),.branch_is_jmp_o(candidate_value[1]),
++        .branch_d_request_o(candidate_value[0])
++    );
++    task random_next;
++        begin
++            random_q=random_q^(random_q<<13);
++            random_q=random_q^(random_q>>17);
++            random_q=random_q^(random_q<<5);
++        end
++    endtask
++    task compare_outputs;
++        begin
++            if(reference_value !== candidate_value)
++                $fatal(1,"EXEC_DECODE_FAIL check=%0d op=%h pc=%h a=%h b=%h got=%h expected=%h",
++                    checks,op,pc,ra,rb,candidate_value,reference_value);
++        end
++    endtask
++    task step;
++        begin
++            #1; compare_outputs;
++            @(posedge clk); #1;
++            if(BROKEN && checks==100) begin
++                corrupt_pc=reference_value[104:73]^32'h80000000;
++                force u_candidate.pc_x_q=corrupt_pc;
++            end
++            compare_outputs;
++            checks=checks+1;
++            @(negedge clk);
++        end
++    endtask
++    initial begin
++        step;
++        for(i=0;i<211072;i=i+1) begin
++            random_next; op=random_q;
++            case(i%16)
++                0: op={op[31:15],3'b000,op[11:7],7'h63}; // BEQ
++                1: op={op[31:15],3'b001,op[11:7],7'h63}; // BNE
++                2: op={op[31:15],3'b100,op[11:7],7'h63}; // BLT
++                3: op={op[31:15],3'b101,op[11:7],7'h63}; // BGE
++                4: op={op[31:15],3'b110,op[11:7],7'h63}; // BLTU
++                5: op={op[31:15],3'b111,op[11:7],7'h63}; // BGEU
++                6: op={op[31:7],7'h6f}; // JAL
++                7: op={op[31:15],3'b000,op[11:7],7'h67}; // JALR
++                8: op={op[31:7],7'h17}; // AUIPC
++                9: op={op[31:7],7'h13}; // OP-IMM
++                10: op={7'b0,op[24:7],7'h33}; // OP
++                11: op={op[31:7],7'h37}; // LUI
++                default: op=op;
++            endcase
++            // Exhaust every opcode/funct3/funct7 combination before the
++            // structured branch/ALU sweep; other fields and operands vary.
++            if(i<131072) op={i[16:10],op[24:15],i[9:7],op[11:7],i[6:0]};
++            random_next; pc=random_q;
++            random_next; ra=random_q;
++            random_next; rb=random_q;
++            case((i/16)%8)
++                0: rb=ra;
++                1: begin ra=32'h80000000;rb=32'h7fffffff;end
++                2: begin ra=32'h7fffffff;rb=32'h80000000;end
++                3: begin ra=0;rb=32'hffffffff;end
++                4: begin ra=32'hffffffff;rb=0;end
++                5: begin pc=32'hfffffffc;ra=32'hffffffff;rb=1;end
++                default: rb=rb;
++            endcase
++            rd_idx=op[11:7];ra_idx=op[19:15];rb_idx=op[24:20];
++            valid=(i%7)!=0;invalid=(i%11)==0;hold=(i%5)==0;rst=(i%257)==0;
++            if(i>210072) begin
++                case(i%11)
++                    0: ra[15]=1'bx;
++                    1: rb[31]=1'bz;
++                    2: pc[6]=1'bx;
++                    3: op[14]=1'bx;
++                    4: op[0]=1'bz;
++                    5: valid=1'bx;
++                    6: hold=1'bz;
++                    7: rd_idx=5'bx;
++                    8: ra_idx=5'bz;
++                    9: invalid=1'bx;
++                    default: begin op=32'h12345037;op[19]=1'bz;end
++                endcase
++            end
++            step;
++        end
++        $display("EXEC_DECODE_PASS checks=%0d",checks);
++        $finish;
++    end
++endmodule
+diff --git a/tb/cpu/tb_fifo_alu_decode.v b/tb/cpu/tb_fifo_alu_decode.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_fifo_alu_decode.v
+@@ -0,0 +1,124 @@
++// Descriptor and raw instruction must stay aligned even in invalid FIFO slots.
++`timescale 1ns/1ps
++module tb_fifo_alu_decode #(parameter BROKEN=0, parameter DECODE_STAGE=0);
++    reg clk=0, rst=1, push=0, flush=0, pop0=0, pop1=0, hold=0;
++    reg fault_fetch=0, fault_page=0;
++    reg [63:0] data=0;
++    reg [31:0] pc=0, ra=0, rb=0, random_q=32'h51ca738d;
++    reg [1:0] pred=0;
++    wire [31:0] op[1:0], out_pc[1:0];
++    wire [8:0] ctrl[1:0];
++    wire [136:0] reference_value[1:0], candidate_value[1:0];
++    wire valid[1:0];
++    integer checks=0,n,lane;
++    always #5 clk=~clk;
++    triha_decode #(.EXTRA_DECODE_STAGE(DECODE_STAGE)) u_decode (
++        .clk_i(clk),.rst_i(rst),.fetch_in_valid_i(push),.fetch_in_instr_i(data),
++        .fetch_in_pred_branch_i(pred),.fetch_in_fault_fetch_i(fault_fetch),
++        .fetch_in_fault_page_i(fault_page),.fetch_in_pc_i(pc),
++        .fetch_out0_accept_i(pop0),.fetch_out1_accept_i(pop1),
++        .branch_request_i(flush),.branch_pc_i(32'b0),.branch_priv_i(2'b0),
++        .fetch_out0_valid_o(valid[0]),.fetch_out0_instr_o(op[0]),.fetch_out0_pc_o(out_pc[0]),
++        .fetch_out1_valid_o(valid[1]),.fetch_out1_instr_o(op[1]),.fetch_out1_pc_o(out_pc[1]),
++        .fetch_out0_alu_o(ctrl[0]),.fetch_out1_alu_o(ctrl[1])
++    );
++    genvar g;
++    generate for(g=0;g<2;g=g+1) begin: g_lane
++    biriscv_exec u_reference (
++        .clk_i(clk),.rst_i(rst),.opcode_valid_i(valid[g]),.opcode_opcode_i(op[g]),
++        .opcode_pc_i(out_pc[g]),.opcode_invalid_i(1'b0),.opcode_rd_idx_i(op[g][11:7]),
++        .opcode_ra_idx_i(op[g][19:15]),.opcode_rb_idx_i(op[g][24:20]),
++        .opcode_ra_operand_i(ra),.opcode_rb_operand_i(rb),.hold_i(hold),
++        .writeback_value_o(reference_value[g][136:105]),
++        .branch_pc_o(reference_value[g][104:73]),.branch_d_pc_o(reference_value[g][72:41]),
++        .branch_source_o(reference_value[g][40:9]),.branch_d_priv_o(reference_value[g][8:7]),
++        .branch_request_o(reference_value[g][6]),.branch_is_taken_o(reference_value[g][5]),
++        .branch_is_not_taken_o(reference_value[g][4]),.branch_is_call_o(reference_value[g][3]),
++        .branch_is_ret_o(reference_value[g][2]),.branch_is_jmp_o(reference_value[g][1]),
++        .branch_d_request_o(reference_value[g][0])
++    );
++    wire [8:0] selected_ctrl = ctrl[g] ^
++        ((BROKEN && checks>=100 && g==0 && op[g][6:0]==7'h13) ? 9'h008 : 9'b0);
++    triha_exec u_candidate (
++        .opcode_alu_i(selected_ctrl),
++        .clk_i(clk),.rst_i(rst),.opcode_valid_i(valid[g]),.opcode_opcode_i(op[g]),
++        .opcode_pc_i(out_pc[g]),.opcode_invalid_i(1'b0),.opcode_rd_idx_i(op[g][11:7]),
++        .opcode_ra_idx_i(op[g][19:15]),.opcode_rb_idx_i(op[g][24:20]),
++        .opcode_ra_operand_i(ra),.opcode_rb_operand_i(rb),.hold_i(hold),
++        .writeback_value_o(candidate_value[g][136:105]),
++        .branch_pc_o(candidate_value[g][104:73]),.branch_d_pc_o(candidate_value[g][72:41]),
++        .branch_source_o(candidate_value[g][40:9]),.branch_d_priv_o(candidate_value[g][8:7]),
++        .branch_request_o(candidate_value[g][6]),.branch_is_taken_o(candidate_value[g][5]),
++        .branch_is_not_taken_o(candidate_value[g][4]),.branch_is_call_o(candidate_value[g][3]),
++        .branch_is_ret_o(candidate_value[g][2]),.branch_is_jmp_o(candidate_value[g][1]),
++        .branch_d_request_o(candidate_value[g][0])
++    );
++    end endgenerate
++    task random_next;
++        begin
++            random_q=random_q^(random_q<<13);
++            random_q=random_q^(random_q>>17);
++            random_q=random_q^(random_q<<5);
++        end
++    endtask
++    task compare_outputs;
++        begin
++            for(lane=0;lane<2;lane=lane+1)
++                if(reference_value[lane] !== candidate_value[lane])
++                    $fatal(1,"FIFO_ALU_DECODE_FAIL check=%0d lane=%0d op=%h ctrl=%h got=%h expected=%h",
++                        checks,lane,op[lane],ctrl[lane],candidate_value[lane],reference_value[lane]);
++        end
++    endtask
++    task step;
++        begin
++            #1; compare_outputs;
++            @(posedge clk); #1; compare_outputs;
++            checks=checks+1; @(negedge clk);
++        end
++    endtask
++    initial begin
++        step;
++        for(n=0;n<12000;n=n+1) begin
++            random_next; data[31:0]=random_q;
++            // All ALU operation classes plus malformed/random words.
++            case(n%6)
++                0: data[6:0]=7'h13;
++                1: begin data[6:0]=7'h33;data[31:25]=0;end
++                2: data[6:0]=7'h37;
++                3: data[6:0]=7'h17;
++                4: begin data[6:0]=7'h67;data[14:12]=0;end
++            endcase
++            random_next; data[63:32]=random_q;
++            case(n%6)
++                0: begin data[38:32]=7'h33;data[63:57]=0;end
++                1: data[38:32]=7'h13;
++                2: data[38:32]=7'h6f;
++                3: data[38:32]=7'h37;
++            endcase
++            random_next; pc={random_q[31:3],3'b0}; ra=random_q;
++            random_next; rb=random_q;
++            push=random_q[0];pop0=random_q[1];pop1=random_q[2];pred=random_q[9:8];
++            flush=(n%37)==0;hold=(n%5)==0;rst=(n%257)==0;
++            fault_fetch=(n%51)==0;fault_page=(n%43)==0;
++            // Long empty, fill/full, partial-pop and flush-during-fill phases.
++            if(n<100) begin push=0;pop0=0;pop1=0;flush=0;end
++            if(n>=100 && n<130) begin push=1;pop0=0;pop1=0;end
++            if(n>=130 && n<140) begin push=0;pop0=1;pop1=0;end
++            if(n>=140 && n<150) begin push=1;pop0=1;pop1=1;flush=1;end
++            if(n>11000) begin
++                case(n%8)
++                    0: data[14]=1'bx;
++                    1: data[63]=1'bz;
++                    2: begin data[31:0]=32'h12345037;data[19]=1'bz;end
++                    3: ra[15]=1'bz;
++                    4: rb[31]=1'bx;
++                    5: pc[15]=1'bx;
++                    6: hold=1'bx;
++                endcase
++            end
++            step;
++        end
++        $display("FIFO_ALU_DECODE_PASS stage=%0d checks=%0d lanes=2 invalid_flush_full_xz",DECODE_STAGE,checks);
++        $finish;
++    end
++endmodule
+diff --git a/tb/cpu/tb_pc_early.v b/tb/cpu/tb_pc_early.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_pc_early.v
+@@ -0,0 +1,95 @@
++/* PC update priority and modulo-32-bit arithmetic, independent oracle. */
++`timescale 1ns / 1ps
++module tb_pc_early #(parameter BROKEN=0, parameter DUAL_ISSUE=1);
++    reg clk=0, rst=1;
++    always #5 clk=~clk;
++    reg csr_req=0, ex0_req=0, ex1_req=0, single_step=0, dual_step=0;
++    reg raw0=0,raw1=0;
++    reg [31:0] csr_pc=0, ex0_pc=0, ex1_pc=0;
++    reg [1:0] csr_priv=0;
++    reg [31:0] expected_pc=0, random_q=32'h71a5c093, corrupt_pc=0;
++    reg [1:0] expected_priv=2'b11;
++    integer cycles=0, i;
++    triha_cpu #(.SUPPORT_DUAL_ISSUE(DUAL_ISSUE),.SUPPORT_SUPER(0),.SUPPORT_MMU(0)) u_dut (
++        .clk_i(clk),.rst_i(rst),.intr_i(1'b0),.reset_vector_i(32'h80000000),.cpu_id_i(32'b0),
++        .mem_i_accept_i(1'b1),.mem_i_valid_i(1'b0),.mem_i_error_i(1'b0),.mem_i_inst_i(64'b0),
++        .mem_d_data_rd_i(32'b0),.mem_d_accept_i(1'b1),.mem_d_ack_i(1'b0),.mem_d_error_i(1'b0),.mem_d_resp_tag_i(11'b0),
++        .mem_i_rd_o(),.mem_i_pc_o(),.mem_i_flush_o(),.mem_i_invalidate_o(),
++        .mem_d_addr_o(),.mem_d_data_wr_o(),.mem_d_rd_o(),.mem_d_wr_o(),.mem_d_req_tag_o(),
++        .mem_d_cacheable_o(),.mem_d_invalidate_o(),.mem_d_writeback_o(),.mem_d_flush_o()
++    );
++    task random_next;
++        begin
++            random_q={random_q[30:0],random_q[31]^random_q[21]^random_q[1]^random_q[0]};
++        end
++    endtask
++    task step;
++        begin
++            raw0=single_step || dual_step || ex0_req;
++            raw1=dual_step || ex1_req;
++            // Raw execution can be valid while IRQ suppresses advance.
++            if(cycles%11==0) raw0=1;
++            #1;
++            if(u_dut.u_issue.pc_update_enable_w !== (csr_req|raw0|raw1))
++                $fatal(1,"PC_EARLY_FAIL late_enable cycle=%0d",cycles);
++            if (rst) begin expected_pc=0;expected_priv=2'b11;end
++            else begin
++                casez ({csr_req,ex1_req,ex0_req,dual_step,single_step})
++                    5'b1????: expected_pc=csr_pc;
++                    5'b01???: expected_pc=ex1_pc;
++                    5'b001??: expected_pc=ex0_pc;
++                    5'b0001?: expected_pc=expected_pc+32'd8;
++                    5'b00001: expected_pc=expected_pc+32'd4;
++                    default: expected_pc=expected_pc;
++                endcase
++                if(csr_req) expected_priv=csr_priv;
++            end
++            @(posedge clk); #1;
++            if(BROKEN && cycles==50) begin
++                corrupt_pc=expected_pc^32'h80000000;
++                force u_dut.u_issue.pc_x_q=corrupt_pc;
++            end
++            if(u_dut.u_issue.pc_x_q!==expected_pc || u_dut.u_issue.priv_x_q!==expected_priv)
++                $fatal(1,"PC_EARLY_FAIL cycle=%0d got=%h expected=%h priv=%h expected_priv=%h",
++                    cycles,u_dut.u_issue.pc_x_q,expected_pc,u_dut.u_issue.priv_x_q,expected_priv);
++            cycles=cycles+1;
++            @(negedge clk);
++        end
++    endtask
++    initial begin
++        force u_dut.u_issue.exec0_opcode_valid_o=raw0;
++        force u_dut.u_issue.exec1_opcode_valid_o=raw1;
++        force u_dut.u_issue.branch_csr_request_i=csr_req;
++        force u_dut.u_issue.branch_d_exec0_request_i=ex0_req;
++        force u_dut.u_issue.branch_d_exec1_request_i=ex1_req;
++        force u_dut.u_issue.branch_csr_pc_i=csr_pc;
++        force u_dut.u_issue.branch_d_exec0_pc_i=ex0_pc;
++        force u_dut.u_issue.branch_d_exec1_pc_i=ex1_pc;
++        force u_dut.u_issue.branch_csr_priv_i=csr_priv;
++        force u_dut.u_issue.single_issue_w=single_step;
++        force u_dut.u_issue.dual_issue_w=dual_step;
++        @(negedge clk);step;rst=0;
++        // Keep low bits and exercise carry through all high bits and wrap.
++        csr_req=1;csr_pc=32'hfffffffd;step;csr_req=0;single_step=1;step;
++        dual_step=DUAL_ISSUE;step;single_step=0;dual_step=0;step;
++        for(i=0;i<4096;i=i+1) begin
++            random_next;
++            {csr_req,ex1_req,ex0_req,dual_step,single_step}=random_q[4:0];
++            if(!DUAL_ISSUE) begin ex1_req=0;dual_step=0;end
++            csr_priv=random_q[6:5];
++            random_next;csr_pc=random_q;
++            random_next;ex0_pc=random_q;
++            random_next;ex1_pc=random_q;
++            if((i%97)==0) begin
++                csr_req=1;csr_pc=32'hffffffff;
++            end
++            if((i%97)==1) begin
++                csr_req=0;ex0_req=0;ex1_req=0;single_step=1;dual_step=0;
++            end
++            rst=((i%503)==499);
++            step;
++        end
++        $display("PC_EARLY_PASS dual=%0d cycles=%0d priority_reset_hold_wrap_irq_raw_valid",DUAL_ISSUE,cycles);
++        $finish;
++    end
++endmodule

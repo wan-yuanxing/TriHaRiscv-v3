@@ -1,0 +1,213 @@
+{
+  "status": "REJECTED_AS_STANDALONE",
+  "deployed_parent": "dc00f80",
+  "candidate_inputs": {
+    "config/cpu_primitives.json": "0c373cf0d98cc1f686d57b873812c260b42bb0cd31981fed4add87ac2d0aff7c",
+    "rtl/cpu/ADAPTATIONS.json": "89fd080dd23c7f931baa41374ef94ab1b2281eeb543a600ba06830c83cd9f9b0",
+    "rtl/cpu/triha_issue.v": "8ad116cc6c577e9661c61012f48fb83fd1d39881a675615da693233ac9db2541",
+    "scripts/cpu/run_redirect.ps1": "9ba871905a4b1bc8094e8e6f8f236d6b8c8c4ad512cb3f27bbbc253d3332d060",
+    "tb/cpu/tb_pc_update.v": "2ac946b4ec6050f811f353a66d499be014af4aa6ca7eef8b4f0244cab8eeeb5c",
+    "tb/cpu/tb_pc_early.v": "7ae2a83b246a4fc333a2e6cfd86e9b0beb01421c1a67a9597722c49831246be7"
+  },
+  "snapshot": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\pc-early-prototype",
+  "patch_sha256": "eeb71510ff247e81b19b75efb67362fb408440e0e3edb354bcb054d847fe31b4",
+  "evidence_result_hashes": {
+    "build/cpu/redirect-pcearly-20261020T1144370903992Z": "43b0e36f90e2c6feba7df76bcbb1c4ce9f85aa5fceb4240821d7295a4d8a071f",
+    "build/cpu/redirect-pcearly-20261020T1145143069412Z": "c22b99e1f64e5e2ba8d1aa58b539ce8e130e369e4e6e13db9700379e46235497",
+    "build/cpu/redirect-pcearly-20261020T1145173711319Z": "8da1c5eb9c2cf88a076f2ba9ffbfc07ec248132a0a7a7cf6e16580997c19c0e7",
+    "build/cpu/redirect-pcearly-20261020T1145200980944Z": "c34ed9855c6f4465e0df4619b0e31f2d3c92e296c8d06b60113fef622b5573e6",
+    "build/cpu/redirect-ordered-20261020T1145368128294Z": "82dde9a01c8c9fbdbbb4dbeb523146a6567934a897f5ad11cc04fc905857aa0c",
+    "build/cpu/redirect-ordered-20261020T1145468064252Z": "165ecc1e317261a4e9f219460616249a1c54f5b6d1dc2394b6a5c16d5d654406",
+    "build/cpu/redirect-ordered-20261020T1145559132017Z": "7a3e8ddc035107ee436d36f66559ab5cb77aebcbaddc89cb9967dca6fa37bf27",
+    "build/cpu/redirect-ordered-20261020T1146048172982Z": "e92beac56509cae9d146a19d08801f4550ec8996575eaed661b58f9a96383c5d",
+    "build/cpu/redirect-pcupdate-20261020T1159127676290Z": "fd5837d604acc351c450d140fc95007fb4a5c8bedc691fbc0041a5f5465b4244",
+    "build/cpu/redirect-pcupdate-20261020T1159375280312Z": "89666515be4123088979bdf58e43ead83ccda7b9931e3a08984b22a05703b174",
+    "build/cpu/redirect-pcupdate-20261020T1159412310231Z": "48e086a3b6239ab0b89bec3b82cd804533455f690c83828add0bc297056ed373",
+    "build/soc/cpu-area-20261020T114536546221Z": "09281cd01a1bd8356a0bfbc4dbdccaefcff4af8dc604373ad45da76e43a3a9a2",
+    "build/soc/board-system-20261020T114536572761Z": "391dba2e025957fd23b6a504f1ed32277b6887064161ac296f90aeae2403fea4",
+    "build/soc/board-coremark-20261020T115629028170Z": "50d699c528336c61c54d31989db0d1de7860231fa4a88009ac7a2aa6bc7d8b8a",
+    "build/soc/board-coremark-20261020T115639145679Z": "b9604436b04fcaf7f306703ff9a5f26e1f913a10049114dac89647c178756752",
+    "build/soc/board-route-20261020T1200002915652Z": "64e28a1d5314f86421e8e4574603abb9dcb89e67610235f3ef69534fafd10232"
+  },
+  "review_sha256": "bdd554b652172d1cc49719f1c9fb22582efa4dd6dff02c92f85e6a54ec952656",
+  "review": {
+    "status": "PASS",
+    "timing_closed": false,
+    "scope": "Independently verified board post-route; no physical execution",
+    "review_tool_sha256": "75edbf494ff5d9c7b8cd65f0e591b73075cd3691087a1a30d0f4f996b37bc7b5",
+    "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T1200002915652Z",
+    "route_result_sha256": "64e28a1d5314f86421e8e4574603abb9dcb89e67610235f3ef69534fafd10232",
+    "selected_seed": 1,
+    "selected_physical_report_sha256": "bec4b98662a566f30cd38b93fb021fff6ac3536cc06e1fa0055a301538212c07",
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": -0.092,
+        "total_negative_slack_ns": -0.092,
+        "failing_endpoints": 1,
+        "endpoints": 17313
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.122,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17313
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3133
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.777,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17313
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.076,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17313
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3133
+      }
+    ],
+    "reset_checks": [
+      {
+        "corner": "Slow",
+        "check": "Recovery",
+        "slack_ns": 3.651,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Slow",
+        "check": "Removal",
+        "slack_ns": 0.525,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Recovery",
+        "slack_ns": 5.161,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Removal",
+        "slack_ns": 0.35,
+        "failing_endpoints": 0
+      }
+    ],
+    "worst_setup_ns": -0.092,
+    "cpu_hierarchy_resources": {
+      "lut": 5970,
+      "ff": 3528,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "pc_replication": null,
+    "early_mul_bypass": true,
+    "actual_pins": {
+      "ref_clk_pi": {
+        "location": "N3",
+        "direction": "INPUT",
+        "vccio": "1.5",
+        "standard": "SSTL15D_I"
+      },
+      "ref_clk_ni": {
+        "location": "N2",
+        "direction": "INPUT",
+        "vccio": "1.5",
+        "standard": "SSTL15D_I"
+      },
+      "rst_ni": {
+        "location": "C22",
+        "direction": "INPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "uart_tx_o": {
+        "location": "C24",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[0]": {
+        "location": "A20",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[1]": {
+        "location": "C18",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[2]": {
+        "location": "C19",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[3]": {
+        "location": "E18",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      }
+    },
+    "pll": {
+      "status": "PASS",
+      "configuration_sha256": "dc4e80bfd69c3311671fbb7388feda08dee63bfc724c17513e51128b4a0fed7b",
+      "reference_manifest_sha256": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+      "source_idf_sha256": "b0401ee91e562ebd466e7e533eed2cbb6c6d1bb26064a1e91b0a6268706528ee",
+      "archive_sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b",
+      "generated_idf_sha256": "b16c48dcab1865683415642ae0e02d2e06b4e2950872f30fa8f60df254e33482",
+      "wrapper_sha256": "2bc4c9434b8484892c3457c87faacd00333d82121dbd74d2b3d1b3ca62fe57aa",
+      "actual_parameters": {
+        "CLKIN_FREQ": 125.0,
+        "STATIC_RATIOI": 1,
+        "STATIC_RATIOM": 1,
+        "STATIC_RATIOF": 8,
+        "STATIC_RATIO0": 10,
+        "BANDWIDTH": "HIGH"
+      },
+      "pfd_hz": 125000000,
+      "vco_hz": 1000000000,
+      "cpu_hz": 100000000,
+      "scope": "Generated IP, not physical clock or board validation"
+    },
+    "programmed": false,
+    "board_validated": false
+  },
+  "map_review_sha256": "02e9c617ed68713a9805a00661e76f210f29e326795f4fc85c05a891b46249c5",
+  "cycles": 1646428,
+  "timed_trace_equal": true,
+  "resources": {
+    "lut": 5970,
+    "ff": 3528,
+    "distributed_ram_luts_included": 688,
+    "drm": 0,
+    "apm": 4
+  },
+  "programmed": false
+}

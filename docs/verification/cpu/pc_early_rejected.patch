@@ -1,0 +1,266 @@
+diff --git a/config/cpu_primitives.json b/config/cpu_primitives.json
+--- a/config/cpu_primitives.json
++++ b/config/cpu_primitives.json
+@@ -25,6 +25,11 @@
+       "module": "GTP_LUT6",
+       "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+       "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
++    },
++    {
++      "module": "GTP_DFF_CE",
++      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_DFF_CE.v",
++      "sha256": "0bb065edebb4359a06146a2075ef0fe32b4466b7a12e674239552d9921a1a201"
+     }
+   ],
+   "scope": "Read installed PDS simulation models without copying or modifying vendor tool files; synthesis uses native primitives."
+diff --git a/rtl/cpu/ADAPTATIONS.json b/rtl/cpu/ADAPTATIONS.json
+--- a/rtl/cpu/ADAPTATIONS.json
++++ b/rtl/cpu/ADAPTATIONS.json
+@@ -40,7 +40,7 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+       "derived": "rtl/cpu/triha_issue.v",
+-      "derived_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
++      "derived_sha256": "8ad116cc6c577e9661c61012f48fb83fd1d39881a675615da693233ac9db2541",
+       "changes": [
+         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
+         "Rename integration module to triha_issue.",
+@@ -53,7 +53,8 @@
+         "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
+         "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle.",
+         "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles.",
+-        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates."
++        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates.",
++        "Use existing32 PC bits in native asynchronous-clear enabled FF; CE from CSR redirect/raw execution valid before branch compare, D retains original redirect/advance/hold priority including raw-valid IRQ no-advance feedback. Installed model uses disabled global reset; simulation-only constant binding, no new CPU stage or PC state."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+diff --git a/rtl/cpu/triha_issue.v b/rtl/cpu/triha_issue.v
+--- a/rtl/cpu/triha_issue.v
++++ b/rtl/cpu/triha_issue.v
+@@ -200,7 +200,7 @@
+ //-------------------------------------------------------------
+ wire        single_issue_w;
+ wire        dual_issue_w;
+-reg  [31:0] pc_x_q;
++wire [31:0] pc_x_q;
+ reg   [1:0] priv_x_q;
+ 
+ // Finish constant increments before the late redirect selection. Keep these
+@@ -218,19 +218,40 @@
+ end
+ endgenerate
+ 
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    pc_x_q <= 32'b0;
+-else if (branch_csr_request_i)
+-    pc_x_q <= branch_csr_pc_i;
+-else if (branch_d_exec1_request_i)
+-    pc_x_q <= branch_d_exec1_pc_i;
+-else if (branch_d_exec0_request_i)
+-    pc_x_q <= branch_d_exec0_pc_i;
+-else if (dual_issue_w)
+-    pc_x_q <= pc_plus8_w;
+-else if (single_issue_w)
+-    pc_x_q <= pc_plus4_w;
++// Raw execution validity precedes branch comparison. Interrupt suppression
++// may prevent advance while raw-valid remains asserted, so keep the original
++// priority including a real feedback value on those cycles.
++wire pc_update_enable_w = branch_csr_request_i |
++    exec0_opcode_valid_o | exec1_opcode_valid_o;
++reg [31:0] pc_next_r;
++always @* begin
++    pc_next_r = pc_x_q;
++    if (branch_csr_request_i)
++        pc_next_r = branch_csr_pc_i;
++    else if (branch_d_exec1_request_i)
++        pc_next_r = branch_d_exec1_pc_i;
++    else if (branch_d_exec0_request_i)
++        pc_next_r = branch_d_exec0_pc_i;
++    else if (dual_issue_w)
++        pc_next_r = pc_plus8_w;
++    else if (single_issue_w)
++        pc_next_r = pc_plus4_w;
++end
++
++// Bind the installed model's static global-reset reference while explicitly
++// disabling its global reset. This is simulation scope only, no hardware.
++// synthesis translate_off
++generate if (1) begin: GRS_INST
++    wire GRSNET = 1'b1;
++end endgenerate
++// synthesis translate_on
++genvar pc_bit;
++generate for (pc_bit=0;pc_bit<32;pc_bit=pc_bit+1) begin: g_pc_state
++    GTP_DFF_CE #(.GRS_EN("FALSE"),.INIT(1'b0)) u_pc (
++        .Q(pc_x_q[pc_bit]),.D(pc_next_r[pc_bit]),.CLK(clk_i),
++        .C(rst_i),.CE(pc_update_enable_w)
++    );
++end endgenerate
+ 
+ always @ (posedge clk_i or posedge rst_i)
+ if (rst_i)
+diff --git a/scripts/cpu/run_redirect.ps1 b/scripts/cpu/run_redirect.ps1
+--- a/scripts/cpu/run_redirect.ps1
++++ b/scripts/cpu/run_redirect.ps1
+@@ -1,6 +1,6 @@
+ #requires -Version 7.0
+ [CmdletBinding()]
+-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','ordered')][string] $Test='frontend',
++param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','pcearly','ordered')][string] $Test='frontend',
+     [ValidateSet('single','dual','both')][string] $Mode='both',
+     [ValidateRange(1,2147483647)][int] $Seed=37,
+     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor,
+@@ -62,6 +62,7 @@
+     if($Test -eq 'indexedbtb'){$sources+='tb/cpu/tb_indexed_btb.v'}
+     if($Test -eq 'dependencies'){$sources+='tb/cpu/tb_issue_dependencies.v'}
+     if($Test -eq 'mulforward'){$sources+='tb/cpu/tb_issue_mul_forward.v'}
++    if($Test -eq 'pcearly'){$sources+='tb/cpu/tb_pc_early.v'}
+     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
+     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
+         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
+@@ -80,16 +81,17 @@
+         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
+         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
+         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
+-        $top=switch($Test){mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
+-        $marker=switch($Test){mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
++        $top=switch($Test){pcearly{'work.tb_pc_early'} mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
++        $marker=switch($Test){pcearly{'PC_EARLY_PASS'} mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
+         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
+         if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
++        if($Test -eq 'pcearly'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -ne 'single')),('-gBROKEN='+[int][bool]$Broken))}
+         if($Test -eq 'mulforward'){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+         if($Test -eq 'dependencies'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -eq 'dual')),('-gBROKEN='+[int][bool]$Broken))}
+         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
+             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
+-        if($out -notmatch $marker -or $out -match '(MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
++        if($out -notmatch $marker -or $out -match '(PC_EARLY|MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+         if($Test -eq 'dependencies' -and $out -notmatch ('ISSUE_DEPENDENCIES_PASS dual='+[int]($Mode -eq 'dual')+' checks=')){throw 'Dependency test elaborated wrong issue mode.'}
+         $result.executions+=@{test=$Test;status='PASS'}
+     } else {
+diff --git a/tb/cpu/tb_pc_update.v b/tb/cpu/tb_pc_update.v
+--- a/tb/cpu/tb_pc_update.v
++++ b/tb/cpu/tb_pc_update.v
+@@ -4,6 +4,10 @@
+     reg clk=0, rst=1;
+     always #5 clk=~clk;
+     reg csr_req=0, ex0_req=0, ex1_req=0, single_step=0, dual_step=0;
++    // Model the integrated controller contract: redirect/advance requires
++    // raw execution validity, which is independent of IRQ-suppressed advance.
++    wire raw0=ex0_req | single_step | dual_step;
++    wire raw1=ex1_req | dual_step;
+     reg [31:0] csr_pc=0, ex0_pc=0, ex1_pc=0;
+     reg [1:0] csr_priv=0;
+     reg [31:0] expected_pc=0, random_q=32'h71a5c093, corrupt_pc=0;
+@@ -49,6 +53,8 @@
+         end
+     endtask
+     initial begin
++        force u_dut.u_issue.exec0_opcode_valid_o=raw0;
++        force u_dut.u_issue.exec1_opcode_valid_o=raw1;
+         force u_dut.u_issue.branch_csr_request_i=csr_req;
+         force u_dut.u_issue.branch_d_exec0_request_i=ex0_req;
+         force u_dut.u_issue.branch_d_exec1_request_i=ex1_req;
+diff --git a/tb/cpu/tb_pc_early.v b/tb/cpu/tb_pc_early.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_pc_early.v
+@@ -0,0 +1,95 @@
++/* PC update priority and modulo-32-bit arithmetic, independent oracle. */
++`timescale 1ns / 1ps
++module tb_pc_early #(parameter BROKEN=0, parameter DUAL_ISSUE=1);
++    reg clk=0, rst=1;
++    always #5 clk=~clk;
++    reg csr_req=0, ex0_req=0, ex1_req=0, single_step=0, dual_step=0;
++    reg raw0=0,raw1=0;
++    reg [31:0] csr_pc=0, ex0_pc=0, ex1_pc=0;
++    reg [1:0] csr_priv=0;
++    reg [31:0] expected_pc=0, random_q=32'h71a5c093, corrupt_pc=0;
++    reg [1:0] expected_priv=2'b11;
++    integer cycles=0, i;
++    triha_cpu #(.SUPPORT_DUAL_ISSUE(DUAL_ISSUE),.SUPPORT_SUPER(0),.SUPPORT_MMU(0)) u_dut (
++        .clk_i(clk),.rst_i(rst),.intr_i(1'b0),.reset_vector_i(32'h80000000),.cpu_id_i(32'b0),
++        .mem_i_accept_i(1'b1),.mem_i_valid_i(1'b0),.mem_i_error_i(1'b0),.mem_i_inst_i(64'b0),
++        .mem_d_data_rd_i(32'b0),.mem_d_accept_i(1'b1),.mem_d_ack_i(1'b0),.mem_d_error_i(1'b0),.mem_d_resp_tag_i(11'b0),
++        .mem_i_rd_o(),.mem_i_pc_o(),.mem_i_flush_o(),.mem_i_invalidate_o(),
++        .mem_d_addr_o(),.mem_d_data_wr_o(),.mem_d_rd_o(),.mem_d_wr_o(),.mem_d_req_tag_o(),
++        .mem_d_cacheable_o(),.mem_d_invalidate_o(),.mem_d_writeback_o(),.mem_d_flush_o()
++    );
++    task random_next;
++        begin
++            random_q={random_q[30:0],random_q[31]^random_q[21]^random_q[1]^random_q[0]};
++        end
++    endtask
++    task step;
++        begin
++            raw0=single_step || dual_step || ex0_req;
++            raw1=dual_step || ex1_req;
++            // Raw execution can be valid while IRQ suppresses advance.
++            if(cycles%11==0) raw0=1;
++            #1;
++            if(u_dut.u_issue.pc_update_enable_w !== (csr_req|raw0|raw1))
++                $fatal(1,"PC_EARLY_FAIL late_enable cycle=%0d",cycles);
++            if (rst) begin expected_pc=0;expected_priv=2'b11;end
++            else begin
++                casez ({csr_req,ex1_req,ex0_req,dual_step,single_step})
++                    5'b1????: expected_pc=csr_pc;
++                    5'b01???: expected_pc=ex1_pc;
++                    5'b001??: expected_pc=ex0_pc;
++                    5'b0001?: expected_pc=expected_pc+32'd8;
++                    5'b00001: expected_pc=expected_pc+32'd4;
++                    default: expected_pc=expected_pc;
++                endcase
++                if(csr_req) expected_priv=csr_priv;
++            end
++            @(posedge clk); #1;
++            if(BROKEN && cycles==50) begin
++                corrupt_pc=expected_pc^32'h80000000;
++                force u_dut.u_issue.pc_x_q=corrupt_pc;
++            end
++            if(u_dut.u_issue.pc_x_q!==expected_pc || u_dut.u_issue.priv_x_q!==expected_priv)
++                $fatal(1,"PC_EARLY_FAIL cycle=%0d got=%h expected=%h priv=%h expected_priv=%h",
++                    cycles,u_dut.u_issue.pc_x_q,expected_pc,u_dut.u_issue.priv_x_q,expected_priv);
++            cycles=cycles+1;
++            @(negedge clk);
++        end
++    endtask
++    initial begin
++        force u_dut.u_issue.exec0_opcode_valid_o=raw0;
++        force u_dut.u_issue.exec1_opcode_valid_o=raw1;
++        force u_dut.u_issue.branch_csr_request_i=csr_req;
++        force u_dut.u_issue.branch_d_exec0_request_i=ex0_req;
++        force u_dut.u_issue.branch_d_exec1_request_i=ex1_req;
++        force u_dut.u_issue.branch_csr_pc_i=csr_pc;
++        force u_dut.u_issue.branch_d_exec0_pc_i=ex0_pc;
++        force u_dut.u_issue.branch_d_exec1_pc_i=ex1_pc;
++        force u_dut.u_issue.branch_csr_priv_i=csr_priv;
++        force u_dut.u_issue.single_issue_w=single_step;
++        force u_dut.u_issue.dual_issue_w=dual_step;
++        @(negedge clk);step;rst=0;
++        // Keep low bits and exercise carry through all high bits and wrap.
++        csr_req=1;csr_pc=32'hfffffffd;step;csr_req=0;single_step=1;step;
++        dual_step=DUAL_ISSUE;step;single_step=0;dual_step=0;step;
++        for(i=0;i<4096;i=i+1) begin
++            random_next;
++            {csr_req,ex1_req,ex0_req,dual_step,single_step}=random_q[4:0];
++            if(!DUAL_ISSUE) begin ex1_req=0;dual_step=0;end
++            csr_priv=random_q[6:5];
++            random_next;csr_pc=random_q;
++            random_next;ex0_pc=random_q;
++            random_next;ex1_pc=random_q;
++            if((i%97)==0) begin
++                csr_req=1;csr_pc=32'hffffffff;
++            end
++            if((i%97)==1) begin
++                csr_req=0;ex0_req=0;ex1_req=0;single_step=1;dual_step=0;
++            end
++            rst=((i%503)==499);
++            step;
++        end
++        $display("PC_EARLY_PASS dual=%0d cycles=%0d priority_reset_hold_wrap_irq_raw_valid",DUAL_ISSUE,cycles);
++        $finish;
++    end
++endmodule

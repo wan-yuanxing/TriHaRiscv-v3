@@ -1,0 +1,217 @@
+{
+  "status": "REJECTED",
+  "deployed_parent": "dc00f80",
+  "candidate_inputs": {
+    "config/cpu_sources.f": "4d80606edb2c1e8ab44f7a587871f55bd5f1f9c70b4ee7a847cf53510fbeb7c4",
+    "fpga/pg2l100h/project/cpu_core.json": "8336508f9b5914183cdeb0377e9ae1fe17c735a2f212810bc0dd142d1bb40705",
+    "rtl/cpu/ADAPTATIONS.json": "f6095cae81774c1c259f4db07b1087b2e6ac6c7b78be4a5286737ee139bff969",
+    "rtl/cpu/triha_cpu.v": "2732c914fe520c711e1f9b35dc2d08f8899177e48cf77eda1500778c1d862aab",
+    "rtl/cpu/triha_decode.v": "2b5b0158c01d36aa1b1f149276c3b18cc313acaa523d598020b14de76d0d222f",
+    "rtl/cpu/triha_frontend.v": "baeab94cb2c705474040beea070a181902c544ab001ebb7acbac5c1293ebf2f2",
+    "rtl/cpu/triha_issue.v": "db4fd784cc848bd4f490d7440c9ce763a2913e3ca761822e7ea253d6fb702227",
+    "scripts/cpu/run_redirect.ps1": "f1ca6666a8e9491173b8c6172bc71ce2f04b62e8feee1976d981f3f0d74dc068",
+    "rtl/cpu/triha_alu_decode.v": "79e13b31489528e1433b487beb0117317a23ffe27ce0ebb9cb292ce7955f060d",
+    "rtl/cpu/triha_exec.v": "e19ae1ac6cc9efcf37907bf754c6afe94c6c6b2ba2d482102ac8194b05f5ef97",
+    "tb/cpu/tb_exec_decode.v": "f9e64b273da7336b81a78deaa0e0ff81cc49c332671d2d56f169ec08a45fa402",
+    "tb/cpu/tb_fifo_alu_decode.v": "174e7a5cd109421b648e694468de9037561404032e4cdfed3ed4255f95352836"
+  },
+  "snapshot": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\alu-predecode-prototype",
+  "patch_sha256": "940e9c0213166c1dcea6c9f6ed1d5b60d090536323e1124ec9264faaa7325512",
+  "evidence_result_hashes": {
+    "build/cpu/redirect-fifodecode-20261020T1104049991131Z": "ecdd903ff095a99a078ff09a63a060316d94470db6233070fc401539a00091f5",
+    "build/cpu/redirect-execdecode-20261020T1114316330361Z": "ca9511e532e93eb9c853c8919457e4e86c8351d09c142311bbf888c7fcbe224b",
+    "build/cpu/redirect-execdecode-20261020T1114353025413Z": "92128dfb6120c781a12b06399b3284b4767551012242f43a3ba1b202aacc9726",
+    "build/cpu/redirect-fifodecode-20261020T1114316330004Z": "156d6db34325996035c5b1f067b6ead6258a6d33206109ebaddfd1ddf9664df6",
+    "build/cpu/redirect-fifodecode-20261020T1114344276923Z": "274d6339940066fef8c35e21da78a2f3fa6ba754194f2e19cfff73b0d2d538d2",
+    "build/cpu/redirect-fifodecode-20261020T1114370692965Z": "45c8d7b701f5f5fff87428e016458ae48c7c05627f7e20a65f277e613855f461",
+    "build/cpu/redirect-ordered-20261020T1114529113126Z": "673b14784dd121fb447f0b8c0289af732047064864a98992c46e6d96f6232224",
+    "build/cpu/redirect-ordered-20261020T1115035850233Z": "36349e1cd82490392ec487b86aa54154971efc499cbeae6af9481f9ba2e16c81",
+    "build/cpu/redirect-ordered-20261020T1115127990121Z": "6e61040c5aed14f08042881b2b7ed15a57aae7ba8eb0b35fd55e89936d846f11",
+    "build/cpu/redirect-ordered-20261020T1115251042454Z": "11f0f588c0a8076ee88b7b4dc923290ed6989c84f7903ec6c41c690bf39a33c5",
+    "build/soc/cpu-area-20261020T111452642950Z": "dde94f0735d4a679eefd5d12e04783a6cb68b9670ca83f083d2959dc2c489f1b",
+    "build/soc/board-system-20261020T111452656946Z": "a82f1fb7182d9396eae6b89408ccf0c414cc734d1646aaae57174216f7388ebb",
+    "build/soc/board-coremark-20261020T111813561844Z": "bcc15710e3ee6d3a3c1641cc64c4b564be9648e32adc5c6b544bb78034a66a4f",
+    "build/soc/board-coremark-20261020T111832576290Z": "19eac1f003c50620c1059af72e4074b3ad346447da992aa4b34b130bc6f4213a",
+    "build/soc/board-route-20261020T1123473645772Z": "3687404feb3de51cf9d19b83baee612f2072f96553424335c2bfc121a8f21b27"
+  },
+  "review_sha256": "dfb790744592488ce07808fea1a9b54dd2cc6254b571457e302b716bdfd21298",
+  "review": {
+    "status": "PASS",
+    "timing_closed": false,
+    "scope": "Independently verified board post-route; no physical execution",
+    "review_tool_sha256": "75edbf494ff5d9c7b8cd65f0e591b73075cd3691087a1a30d0f4f996b37bc7b5",
+    "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T1123473645772Z",
+    "route_result_sha256": "3687404feb3de51cf9d19b83baee612f2072f96553424335c2bfc121a8f21b27",
+    "selected_seed": 1,
+    "selected_physical_report_sha256": "431b5045a11719087a851214e6f5e8a6153a47f938bb8ee6ac3fab87a6edfd98",
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": -0.088,
+        "total_negative_slack_ns": -0.227,
+        "failing_endpoints": 7,
+        "endpoints": 17464
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.016,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17464
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3179
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.777,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17464
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.0,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17464
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3179
+      }
+    ],
+    "reset_checks": [
+      {
+        "corner": "Slow",
+        "check": "Recovery",
+        "slack_ns": 3.325,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Slow",
+        "check": "Removal",
+        "slack_ns": 0.51,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Recovery",
+        "slack_ns": 5.004,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Removal",
+        "slack_ns": 0.351,
+        "failing_endpoints": 0
+      }
+    ],
+    "worst_setup_ns": -0.088,
+    "cpu_hierarchy_resources": {
+      "lut": 6002,
+      "ff": 3564,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "pc_replication": null,
+    "early_mul_bypass": true,
+    "actual_pins": {
+      "ref_clk_pi": {
+        "location": "N3",
+        "direction": "INPUT",
+        "vccio": "1.5",
+        "standard": "SSTL15D_I"
+      },
+      "ref_clk_ni": {
+        "location": "N2",
+        "direction": "INPUT",
+        "vccio": "1.5",
+        "standard": "SSTL15D_I"
+      },
+      "rst_ni": {
+        "location": "C22",
+        "direction": "INPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "uart_tx_o": {
+        "location": "C24",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[0]": {
+        "location": "A20",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[1]": {
+        "location": "C18",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[2]": {
+        "location": "C19",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      },
+      "led_o[3]": {
+        "location": "E18",
+        "direction": "OUTPUT",
+        "vccio": "3.3",
+        "standard": "LVCMOS33"
+      }
+    },
+    "pll": {
+      "status": "PASS",
+      "configuration_sha256": "dc4e80bfd69c3311671fbb7388feda08dee63bfc724c17513e51128b4a0fed7b",
+      "reference_manifest_sha256": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+      "source_idf_sha256": "b0401ee91e562ebd466e7e533eed2cbb6c6d1bb26064a1e91b0a6268706528ee",
+      "archive_sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b",
+      "generated_idf_sha256": "b16c48dcab1865683415642ae0e02d2e06b4e2950872f30fa8f60df254e33482",
+      "wrapper_sha256": "2bc4c9434b8484892c3457c87faacd00333d82121dbd74d2b3d1b3ca62fe57aa",
+      "actual_parameters": {
+        "CLKIN_FREQ": 125.0,
+        "STATIC_RATIOI": 1,
+        "STATIC_RATIOM": 1,
+        "STATIC_RATIOF": 8,
+        "STATIC_RATIO0": 10,
+        "BANDWIDTH": "HIGH"
+      },
+      "pfd_hz": 125000000,
+      "vco_hz": 1000000000,
+      "cpu_hz": 100000000,
+      "scope": "Generated IP, not physical clock or board validation"
+    },
+    "programmed": false,
+    "board_validated": false
+  },
+  "cycles": 1646428,
+  "timed_trace_equal": true,
+  "cpu_resources": {
+    "lut": 6002,
+    "ff": 3564,
+    "distributed_ram_luts_included": 688,
+    "drm": 0,
+    "apm": 4
+  },
+  "programmed": false
+}
