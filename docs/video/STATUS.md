@@ -145,6 +145,31 @@ wrapper综合3806LUT/3561FF/0DRM/APM/0锁存器，8ns估计setup+1.993ns、hold+
 可先独立仿真，不必等待CPU核。正式CPU/NPU共享fabric、跨master物理可见性、素材
 DDR读取和连续视频仍待集成，CPU仍是全局帧与graph所有者。
 
+## F4c3b 显示MMIO与真实RAW扫描闭环
+
+新增`display_scanout_link`和`video_display_scanout`独立RAW-only目标，保持既有显示
+ABI/owner/raw/CDC及C三槽库字节。接纳命令不制造commit；匹配真实raw commit后
+反馈原slot/frame/generation/seq。raw真实释放经逐槽代际账本交owner，owner继续
+保持release至软件ACK；link退休握手不代替CPU全局FREE。同帧RAW命令经CDC在
+对齐帧边界完成，不再提交raw记录，不释放槽。BOX/AVATAR能力未接入且明确拒绝。
+
+新suite含11项协议和6项真实wrapper联测/实际C事务回放。完整800×600检查实际
+换帧/旧引用释放，缩小探针仍使用固定800×600/2400 ABI；覆盖长ACK、第三槽提交、
+同RAW模式、代际重用、错误保留及像素/同步。C库本机执行，真实R/W/F以等待事件
+标记驱动RTL，不注入commit/retire。模型采集/NPU结果仅为C所有权前提，不冒称
+RISC-V执行或真实推理。计数、独立审查及证据见
+[闭环验证](../verification/video/display_scanout.md)。
+
+修复旧release延迟至下一命令OFFER/WAIT_RAW时的互等：匹配非active旧引用继续
+排空，当前active引用仍等待替换反馈。9项关键变异被断言检出。综合12174LUT/
+18123FF/4DRM/4APM/0锁存器，core8ns估计setup+0.373ns，pixel25ns估计+19.809ns，
+最小hold估计+0.619ns；14项约束均适用，无error/critical。仅组件综合，无本批
+布线/板测或端口I/O预算；独立fault输出仍须由平台接收，不改变MMIO故障ABI。
+
+下一步把本RAW闭环与ABI2采集、共享DDR及CPU三槽控制联测组合，再接BOX/AVATAR
+整记录和真实NPU结果。全局fabric、跨master物理可见性、不可背压HDMI连续流及
+800×600采显并发带宽仍待验收，CPU继续统一全局帧和graph状态。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

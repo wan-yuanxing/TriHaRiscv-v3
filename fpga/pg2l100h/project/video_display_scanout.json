@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "target": "video_display_scanout",
+  "top": "video_display_scanout",
+  "test_top": "tb_display_scanout_link",
+  "sources": [
+    "rtl/video/display_slot_owner.sv",
+    "rtl/video/display_record_guard.sv",
+    "rtl/video/video_display_mmio.sv",
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/display_scanout_link.sv",
+    "rtl/video/raw_display.sv",
+    "rtl/video/video_display_scanout.sv"
+  ],
+  "tests": [
+    "tb/video/tb_display_scanout_link.sv",
+    "tb/video/tb_video_display_scanout.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_display_scanout.fdc"
+  ],
+  "scope": "RAW-only frozen display MMIO/owner + real raw commit/retirement adapter; native C pool I/O replay, not RISC-V execution, physical DDR visibility, overlay, global fabric, routing or board"
+}

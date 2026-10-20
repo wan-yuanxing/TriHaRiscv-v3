@@ -433,6 +433,19 @@ raw显示联测。`python scripts/video/build_pds.py --target video_shared_ddr -
 契约与证据见[共享端口验证](../verification/video/shared_video.md)。这是Video局部组件，
 生产显示MMIO/CPU三槽库适配、全局fabric与物理DDR可见性须继续联合验收。
 
+## F4c3b RAW显示控制闭环
+
+`python scripts/video/run.py --suite display_scanout`运行link协议、真实显示MMIO/
+owner/raw/CDC及C三槽库实际事务回放；完整800×600与缩小探针分开记录。
+`python scripts/video/build_pds.py --target video_display_scanout --stage synth`仅综合
+组件，不生成板级下载镜像。新目标只发布RAW能力，BOX/AVATAR接入后另验。
+
+`display_scanout_link.sv`保留逐槽代际并等待真实扫描提交/释放；
+`video_display_scanout.sv`显式连接既有组件。软件ACK前owner保留引用，MODE不重采。
+结果为`build/video/latest_display_scanout.json`及`latest_pds_video_display_scanout.json`。
+平台须单独接收`fault/fault_code`，本批没有更改显示MMIO ABI。详见
+[RAW闭环验证](../verification/video/display_scanout.md)。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。

@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "display_scanout", "frame_pool", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "display_scanout", "frame_pool"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,41 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('display_scanout','all'):
+            from common import sha256
+            path=ROOT/'fpga/pg2l100h/project/video_display_scanout.json'
+            component=json.loads(path.read_text(encoding='utf-8'))
+            sources=[ROOT/p for p in component['sources']]
+            tests=[ROOT/p for p in component['tests']]
+            add_inputs(result,[path,*sources,*tests,*[ROOT/p for p in component['constraints']],
+                ROOT/'config/video_display.json',ROOT/'rtl/video/include/video_display.vh',ROOT/'sw/include/video_display_abi.h',
+                ROOT/'sw/drivers/video_frame_pool.c',ROOT/'sw/drivers/video_display.c',ROOT/'sw/include/video_frame_pool.h',
+                ROOT/'sw/include/video_display.h',ROOT/'tb/video/test_display_scanout.c'])
+            run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'scanout_abi.log')
+            run_logged([sys.executable,ROOT/'scripts/video/test_display_scanout.py'],work/'scanout_native.log')
+            native=json.loads((BUILD/'latest_display_scanout_native.json').read_text(encoding='utf-8'))
+            if native['status']!='pass':raise RuntimeError('Scanout C driver failed')
+            result['display_scanout_native']=native
+            result['display_scanout_tools']={};artifacts=[work/'scanout_abi.log',work/'scanout_native.log']
+            for name in ('iverilog','vvp'):
+                executable=tool(name);log=work/('scanout_'+name+'_version.log')
+                result['display_scanout_tools'][name]={'path':str(executable),'sha256':sha256(executable)}
+                run_logged([executable,'-V'],log);artifacts.append(log)
+            cases=[('link_'+str(i),'tb_display_scanout_link',(),('+CASE='+str(i),)) for i in range(11)]
+            cases += [('normal','tb_video_display_scanout',(),()),
+                ('minimum','tb_video_display_scanout',(('W',1),('H',1)),()),
+                ('ratio','tb_video_display_scanout',(('PIXEL_HALF',17),),()),
+                ('fault','tb_video_display_scanout',(),('+CASE=2',)),
+                ('full','tb_video_display_scanout',(('W',800),('H',600),('FULL',1)),()),
+                ('driver','tb_video_display_scanout',(),('+TRACE='+str(ROOT/native['trace']),))]
+            for name,top,parameters,options in cases:
+                stem='display_scanout_'+name;test=tests[0] if top=='tb_display_scanout_link' else tests[1]
+                log=simulate(work,stem,top,sources+[test],[ROOT/'rtl/video/include'],parameters=parameters,run_args=options,timeout=600)
+                marker='DISPLAY_SCANOUT_LINK_PASS' if top=='tb_display_scanout_link' else 'VIDEO_DISPLAY_SCANOUT_PASS'
+                if log.count(marker)!=1:raise RuntimeError('Missing scanout pass '+name)
+                artifacts += [work/(stem+s) for s in ('.vvp','_compile.log','_simulation.log')]
+            result['display_scanout_artifacts']=input_hashes(artifacts)
+            result['passed'].append('display_scanout')
         if args.suite in ('frame_pool', 'all'):
             from common import sha256
             path = ROOT/'fpga/pg2l100h/project/video_display_mmio.json'
@@ -1026,6 +1061,15 @@ def main():
                 if sha256(ROOT/name)!=digest:raise RuntimeError('Shared Video artifact changed')
             for record in result['shared_video_tools'].values():
                 if sha256(record['path'])!=record['sha256']:raise RuntimeError('Shared Video tool changed')
+        if 'display_scanout' in result['passed']:
+            native=result['display_scanout_native']
+            for table in ('inputs','artifacts','tools'):
+                for name,digest in native[table].items():
+                    if sha256(ROOT/name)!=digest:raise RuntimeError('Scanout C source/artifact/tool changed: '+name)
+            for name,digest in result['display_scanout_artifacts'].items():
+                if sha256(ROOT/name)!=digest:raise RuntimeError('Scanout artifact changed: '+name)
+            for record in result['display_scanout_tools'].values():
+                if sha256(record['path'])!=record['sha256']:raise RuntimeError('Scanout tool changed')
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

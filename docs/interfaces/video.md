@@ -28,6 +28,29 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4c3b 显示MMIO至真实RAW提交/退休
+
+独立`video_display_scanout`连接原`video_display_mmio`、owner和raw_display，能力
+寄存器MODES=001，仅RAW；BOX/AVATAR由原validator拒绝。640B记录及地址/ABI不变。
+link锁存一条命令和每槽frame/generation，只有匹配raw实际commit才反馈owner的
+slot/frame/generation/mode/seq。raw记录握手或SUBMIT写响应不是提交事件。
+
+同帧RAW命令不再次提交raw记录；复用display_mode_cdc，在与raw两周期输出对齐的
+pixel帧边界确认，保持身份再反馈。不改变当前槽或发布release，不提供首次像素
+精确时间戳。当前active引用在替换commit反馈消费后才能退休；更早非active引用
+的延迟release在下一命令等待期间也可排空，避免和raw的旧事件ACK条件互等。
+
+raw release匹配账本后携代际交owner，owner保持事件至软件release ACK；扫描器
+释放、link退休、软件ACK及CPU全局FREE是不同边界。未知/错身份/无主raw事件、
+raw拒绝/错误或CDC错误锁存fault并停新任务；保留已发布记录及已证明事件，协调
+reset恢复，不能靠清账本丢弃引用。输出`fault/fault_code`由未来平台接收，不向旧
+MMIO合成虚假故障位；irq_o仍是原MMIO事件IRQ。
+
+默认真实几何800×600、stride2400。缩小参数仅为扫描固定ABI左上子区的测试探针。
+本批native C库事务回放等真实事件，不执行CPU，不证明采集/NPU或物理DDR排序。
+尚未接共享DDR/ABI2生产闭环及叠加素材退休；证据见
+[显示闭环验证](../verification/video/display_scanout.md)。
+
 ## F4c3a Video局部采集写/显示读共享端口
 
 `video_shared_ddr`同一core域接采集AW/W/B与raw显示AR/R，内部一个

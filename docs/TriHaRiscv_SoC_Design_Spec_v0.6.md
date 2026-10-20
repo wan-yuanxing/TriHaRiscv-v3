@@ -631,6 +631,15 @@ CPU执行/共享DDR仲裁/实际像素退休，不表示连续视频已实现。
 跨master物理可见性与800×600并行带宽仍待验收。组件仿真及综合见
 [共享端口验证](verification/video/shared_video.md)，不表示连续视频或本批板测完成。
 
+2026-10-20 F4c3b实施注记：独立RAW-only显示闭环把既有显示MMIO/owner命令接到
+真实raw扫描；保留逐槽代际，真实commit关联generation/seq，真实release交owner
+后仍等软件ACK。同帧RAW在安全对齐帧边界完成，不重发raw记录或释放槽。更早
+非active延迟release在下一命令等待时继续排空，当前active仍保留至替换提交。
+仅发布RAW能力，BOX/AVATAR拒绝；没有更改原ABI。fault为独立平台输出，未安装
+正式CPU/fabric故障路由。默认800×600、完整像素验证与C三槽库实际事务回放见
+[显示闭环验证](verification/video/display_scanout.md)。共享采集/DDR、真实NPU与
+连续视频、物理跨master可见性仍须联合验收。
+
 ### 10.1 总线约定
 
 | 接口 | 当前决定 |
