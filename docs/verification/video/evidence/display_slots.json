@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "status": "independent_display_reference_component_verified",
+  "base_head": "511e6b5cc1cf9c677cba05c64051d7b8d164a4e2",
+  "owned": [
+    "rtl/video/display_slot_owner.sv",
+    "tb/video/tb_display_slot_owner.sv",
+    "fpga/pg2l100h/project/video_display_slot_owner.json",
+    "fpga/pg2l100h/constraints/video_display_slot_owner.fdc",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "docs/superpowers/specs/2026-10-20-display-slot-owner-design.md",
+    "docs/superpowers/plans/2026-10-20-display-slot-owner.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/verification/video/display_slots.md",
+    "docs/verification/video/evidence/display_slots.json"
+  ],
+  "source_hashes": {
+    "rtl/video/display_slot_owner.sv": "9f128f33bfb4ad19959565ff9731bbdf272702341c47a8fad3902cce0ffe15ef",
+    "tb/video/tb_display_slot_owner.sv": "f55af08456fd4f752fd3f01a7b53fe1ec50c55ad3d0c7a3b04b4a2cd6268cb20",
+    "fpga/pg2l100h/project/video_display_slot_owner.json": "413573a4f5cb4282c92a1e22bcf5234230678c047c0fd3f71e2e7db6b5fdf3b1",
+    "fpga/pg2l100h/constraints/video_display_slot_owner.fdc": "87367ea3823b57611ffdb5bca6dea5082b78dfe3d486c93c86d06c5e17e8ef63",
+    "scripts/video/run.py": "f06d8c7f66576cdca115a1548ec244614c5b445ac1643ed6bacfece66b51ab3a",
+    "scripts/video/build_pds.py": "521faf2f0d56b9b3cc27eb466dcd087df00e6c1adcf4a4635f0b7d40b983a139",
+    "docs/superpowers/specs/2026-10-20-display-slot-owner-design.md": "4a7bb6966b99d7459e208ca37e8977f8f57562415b96f30874a6de79032483c7",
+    "docs/superpowers/plans/2026-10-20-display-slot-owner.md": "7bf6b5548c696ffd1105f7480ed3ae2a0efc9bca2d15f6193eeae62334155ab0",
+    "docs/video/STATUS.md": "3fc123cb0dbcedb9fdc45f66fc861f0c6727d5acfe110a69e706dcd472fb69d0",
+    "docs/video/README.md": "264702de456cfdb3b7e5172e4ba4b1cba3b43abcb61558de53aca526e8a42bc2",
+    "docs/interfaces/video.md": "0dbe186b245aa8d796a54fa4099d484ab8950ce220606f92c0cb41518cac5c5a",
+    "docs/verification/video/display_slots.md": "7d1b60ddb0b8a264cc9f993b033e07f3221fb63ebf31641aa6a12814d0b4e8b3"
+  },
+  "refs": {
+    "audit": {
+      "path": "build/video/audit_display_slots.py",
+      "sha256": "c246d3ac79b2d7b8e80b71a30b9b69cad8e7bfbc2d029cfcb67ab65033d794f4"
+    },
+    "baseline": {
+      "path": "build/video/display_slots_baseline/result.json",
+      "sha256": "c13f2aedc396eb7da6e3981f3f59d156531eda374581c7953ce626e042daa0c1"
+    },
+    "red": {
+      "path": "build/video/display_slots_red/20261020T024852_522633Z/result.json",
+      "sha256": "163dcff10b10bcf1b26ce5f89a56938fb840220f8a5ff9b436faec05d0e5010d"
+    },
+    "display_slots": {
+      "path": "build/video/regression/20261020T025757_666601Z/result.json",
+      "sha256": "8083baf1bd8ed8f94b72d769e57c5a9f57d8fc15a2ad560e3518a4dd1763cf3c"
+    },
+    "mode_control": {
+      "path": "build/video/regression/20261020T025838_192786Z/result.json",
+      "sha256": "4e8e92abdc05aac7a15a6a9dffaf2f33c6a8071df448fa89c39a8676f97c1ad7"
+    },
+    "quality": {
+      "path": "build/video/display_slots_quality/20261020T025808_723486Z/result.json",
+      "sha256": "3490b3620a3d8645cfca0897fe089a2504b9d49ca68ea96fe3d8aa8303709fe6"
+    },
+    "mutations": {
+      "path": "build/video/display_slots_mutations/20261020T025805_471240Z/result.json",
+      "sha256": "8a6f179f66b07d2ed00e528f34e99d6f95b2b4e0a2fa11409500dac18ce98c53"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261020T025114_888053Z/result.json",
+      "sha256": "5f052105092ef832134dbb1a6dc67b9c6fdd8e914ea0c6664209e4598f1075a3"
+    },
+    "netlist_graph": {
+      "path": "build/video/display_slots_review/netlist_graph_result.json",
+      "sha256": "f6cdbc0ffc43bfa13820ded67ff9198969a721521e60bf4669f1ac7fca0652be"
+    },
+    "review": {
+      "path": "build/video/display_slots_review/review.json",
+      "sha256": "d1fdfd7139ba76f5e8a43bcd09bc56a6840bef5b913126e3718ec38be85d700e"
+    }
+  },
+  "simulations": {
+    "display_slots": 13,
+    "mode_control": 24
+  },
+  "python": {
+    "tests": 102,
+    "passed": 101,
+    "skipped": 1
+  },
+  "parent_mutations_detected": 5,
+  "independent_review": {
+    "runs": 42,
+    "public_assertion_checks": 304916,
+    "effective_mutants_killed": 9,
+    "final_canonical_runs": 13,
+    "protected_sources": 256,
+    "unchanged_unlisted_sources": 254,
+    "open_findings": 0
+  },
+  "mapped_structure": {
+    "flip_flops": 963,
+    "latches": 0,
+    "combinational_nodes": 3389,
+    "combinational_edges": 3630,
+    "combinational_cycle_residual": 0,
+    "multiple_driver_nets": 0,
+    "constant_probe_warnings_retained": 4
+  },
+  "resources": {
+    "lut": 478.0,
+    "registers": 963.0,
+    "drm": 0.0,
+    "apm": 0
+  },
+  "synthesis_estimate": {
+    "core_period_ns": 8,
+    "slow_setup_ns": 2.369,
+    "slow_hold_ns": 0.671,
+    "scope": "Register-to-register synthesis estimate only; component I/O unconstrained; no routing or board result"
+  },
+  "protected_f3c_hardware_files": 51,
+  "prior_f3c_acceptance_preserved": true,
+  "displayed_reference_owner_only": true,
+  "global_slot_allocator_implemented": false,
+  "formal_display_abi_implemented": false,
+  "formal_display_mmio_implemented": false,
+  "real_retirement_producer_integrated": false,
+  "shared_fabric_integrated": false,
+  "continuous_capture_verified": false,
+  "true_npu_result": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "external_ac_signoff": false,
+  "flash_written": false
+}

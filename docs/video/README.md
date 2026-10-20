@@ -28,6 +28,11 @@ F3c本批新增独立 `video_mode_board`：KEY1/C23切 RAW/BOX/AVATAR，KEY0回�
 框/五点/封存测试纹理为人工诊断输入。原8ns core/25ns pixel布线及50项端点核验通过，已Program/Verify；实体三次KEY1、四角图三CRC、模式不重采及普通桌面KEY0恢复均已验收，
 见[三模式板级记录](../verification/video/mode_board.md)。正式多帧所有者/MMIO与真实NPU仍待接入。
 
+F4a提供独立`display_slot_owner`，区分显示记录接纳、实际commit、完整退休证明及
+release ACK；同帧MODE保持原槽。`--suite display_slots`验证三槽引用和事件背压，
+`video_display_slot_owner`仅组件synth；它未接当前板级镜像，也不是全局槽allocator。
+正式显示ABI/MMIO与共享fabric尚待后续，见[显示槽验证](../verification/video/display_slots.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -65,12 +70,14 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
 python scripts/video/run.py --suite raw_display
 python scripts/video/run.py --suite raw_board
+python scripts/video/run.py --suite display_slots
 python scripts/video/run.py --suite mode_control
 python scripts/video/run.py --suite overlay
 python scripts/video/run.py --suite mode_resources
 python scripts/video/run.py --suite mode_output
 python scripts/video/run.py --suite mode_board
 python scripts/video/build_pds.py --target video_button_debounce --stage synth
+python scripts/video/build_pds.py --target video_display_slot_owner --stage synth
 python scripts/video/build_pds.py --target video_mode_control --stage synth
 python scripts/video/build_pds.py --target video_overlay --stage synth
 python scripts/video/build_pds.py --target video_mode_cdc --stage synth
@@ -196,6 +203,7 @@ rtl/video/
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
   raw_display.sv                         原分辨率全屏、完整首像素及独立描述符拒绝
   video_button_debounce.sv               两级同步、20ms按下/释放资格和单次事件
+  display_slot_owner.sv                 F4a显示引用三槽、实际提交与退休ACK
   display_mode_control.sv                请求/合并/冻结上下文/实际提交，独立回绕完成性
   avatar_sample_map.sv                   9级精确最近邻地址，保留未裁剪目标原点
   display_overlay.sv                     16框/可选五点/固定素材响应/Alpha像素流水
@@ -262,6 +270,7 @@ tb/video/
   tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
   test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
+  tb_display_slot_owner.sv              三槽/冻结/背压/退休与错误反馈记分板
   tb_display_mode_control.sv             同帧资格/背压/合并/错反馈及回绕别名
   tb_display_overlay.sv                  固定周期纹理供数/未知注入/复位空泡/像素转储
   tb_display_mode_cdc.sv                 双钟背压/实际提交/回绕及三阶段reset
@@ -305,6 +314,7 @@ fpga/pg2l100h/
   project/video_raw_display.json         F1原分辨率全屏组件显式源/测试
   project/video_raw_board.json           F2独立全屏、三分支读回的板级目标
   project/video_button_debounce.json     F3a独立按键资格组件显式源/测试
+  project/video_display_slot_owner.json  F4a显示引用组件显式清单
   project/video_mode_control.json        F3a独立请求/实际提交控制组件
   project/video_overlay.json             F3b像素叠加显式源/测试/独立oracle
   project/video_mode_output.json         F3c组合组件综合目标
@@ -326,6 +336,7 @@ fpga/pg2l100h/
   constraints/video_mode_board.fdc       KEY1及新增第一阶段/6ns束约束
   constraints/video_raw_board.fdc        F2实际存活CDC端点与6ns束约束
   constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
+  constraints/video_display_slot_owner.fdc F4a core8ns组件估计
   constraints/video_mode_control.fdc     F3a单core域8ns组件约束
   constraints/video_overlay.fdc          F3b像素25ns及同钟组件边界估计
   constraints/video_mode_cdc.fdc         双域8/25ns，mailbox bundle 6ns

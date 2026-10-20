@@ -1,0 +1,2 @@
+# Core-domain component estimate only, no board pins or CDC exceptions.
+create_clock -name clk_i -period 8.000 [get_ports {clk_i}]

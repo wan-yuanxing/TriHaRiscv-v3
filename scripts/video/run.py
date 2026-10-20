@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,31 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('display_slots', 'all'):
+            from common import sha256
+            path = ROOT/'fpga/pg2l100h/project/video_display_slot_owner.json'
+            component = json.loads(path.read_text(encoding='utf-8'))
+            sources = [ROOT/p for p in component['sources']+component['tests']]
+            add_inputs(result, [path, *sources, *[ROOT/p for p in component['constraints']]])
+            result['display_slots_tools'] = {}
+            artifacts = []
+            for name in ('iverilog', 'vvp'):
+                executable = tool(name)
+                log = work/('display_slots_'+name+'_version.log')
+                result['display_slots_tools'][name] = {'path': str(executable), 'sha256': sha256(executable)}
+                run_logged([executable, '-V'], log)
+                artifacts.append(log)
+            scenarios = [(f'case_{n}', (), (f'+CASE={n}',)) for n in range(11)]
+            scenarios += [('narrow', (('CONTEXT_WIDTH', 7),), ('+CASE=8',)),
+                          ('wide', (('CONTEXT_WIDTH', 513),), ('+CASE=8',))]
+            for name, parameters, options in scenarios:
+                stem = 'display_slots_'+name
+                log = simulate(work, stem, component['test_top'], sources,
+                               includes=(ROOT/'rtl/video/include',), parameters=parameters, run_args=options)
+                if log.count('DISPLAY_SLOTS_PASS') != 1:raise RuntimeError('Missing display slots PASS: '+name)
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp', '_compile.log', '_simulation.log')]
+            result['display_slots_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('display_slots')
         if args.suite in ('mode_output', 'all'):
             from common import sha256
             path = ROOT/'fpga/pg2l100h/project/video_mode_output.json'
@@ -800,6 +825,12 @@ def main():
         for name, expected in result.get('mode_board_artifacts', {}).items():
             if sha256(ROOT/name) != expected:
                 raise RuntimeError('Mode board artifact changed during regression: '+name)
+        for name, record in result.get('display_slots_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Display slots simulation tool changed during regression: '+name)
+        for name, expected in result.get('display_slots_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:
+                raise RuntimeError('Display slots artifact changed during regression: '+name)
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

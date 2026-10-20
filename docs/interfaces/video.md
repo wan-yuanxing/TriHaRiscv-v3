@@ -27,6 +27,19 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4a 显示引用所有者
+
+`display_slot_owner`新增同core域显示引用管理，不修改公共采帧ABI1或分配显示寄存器。
+完整submit冻结到下游cmd，匹配实际feedback后发布active/保持commit事件；新帧只可
+使用显示侧FREE槽，同帧MODE必须保持raw和完整context，mode/seq可改且不释放槽。
+旧槽经完整retire证明进入WAIT_ACK，再等release事件握手才FREE；所有事件独立背压。
+错误反馈首错锁存、阻止新submit，但不撤销已公开命令，已有合法反馈继续排空。
+
+调用方负责同帧结果/素材资格和身份新鲜度，retire生产者负责DMA/bank/像素完整退休。
+`slot_free`只表示显示引用清除，全局采集/NPU allocator必须另行汇总；协调reset不能
+用局部复位替代。参数化context不是正式显示ABI。详细端口、错误码与测试范围见
+[display_slots](../verification/video/display_slots.md)。组件仿真/综合未扩大为实际板测。
+
 ## F3c 前置资源组件
 
 `display_mode_cdc`接F3a命令，core/pixel复位必须协调。`cmd_valid/ready`冻结mode、
