@@ -31,8 +31,13 @@ typedef uint32_t ee_u32;
 typedef uint8_t ee_u8;
 typedef uintptr_t ee_ptr_int;
 typedef size_t ee_size_t;
+#if TRIHA_COREMARK_BOARD
+typedef uint64_t CORE_TICKS;
+typedef uint64_t CORETIMETYPE;
+#else
 typedef uint32_t CORE_TICKS;
 typedef uint32_t CORETIMETYPE;
+#endif
 
 #define align_mem(x) ((void *)(4u + (((ee_ptr_int)(x) - 1u) & ~3u)))
 

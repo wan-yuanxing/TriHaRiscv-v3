@@ -3,6 +3,7 @@
 param(
     [Parameter(Mandatory)][string] $FirmwareRunDirectory,
     [Parameter(Mandatory)][string] $ClockRunDirectory,
+    [ValidateSet('system','coremark')][string] $FirmwareTest='system',
     [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe',
     [ValidateRange(1,16)][int] $PlacementSeed=1
 )
@@ -32,9 +33,18 @@ try {
         $directory=(Resolve-Path -LiteralPath $item[1]).Path
         $evidencePath=Join-Path $directory 'result.json'
         $evidence=Get-Content -LiteralPath $evidencePath -Raw|ConvertFrom-Json
-        if($evidence.status -ne 'PASS' -or $evidence.test -ne $item[0] -or $evidence.fault -ne 'none' -or
+        $expectedTest=if($item[0] -eq 'system'){$FirmwareTest}else{'clocks'}
+        if($evidence.status -ne 'PASS' -or $evidence.test -ne $expectedTest -or $evidence.fault -ne 'none' -or
            -not $evidence.source_unchanged -or -not $evidence.external_unchanged -or $evidence.runner_return_code -ne 0){
             throw 'Need unchanged passing actual board clocks and system simulation.'
+        }
+        if($expectedTest -eq 'coremark'){
+            if(-not $evidence.short_simulation_passed -or $evidence.release_iterations -ne 5000 -or
+               $evidence.preflight_iterations -ne 5 -or $evidence.full_run_simulated -or
+               (Get-TrihaHash (Join-Path $directory 'firmware.elf')) -ne $evidence.deployment_firmware_sha256 -or
+               (Get-TrihaHash (Join-Path $directory 'sram.hex')) -ne $evidence.deployment_sram_sha256){
+                throw 'CoreMark release/preflight binding failed.'
+            }
         }
         foreach($entry in $evidence.input_hashes.PSObject.Properties){
             if((Get-TrihaHash (Join-Path $root $entry.Name)) -ne $entry.Value){throw "Validation source drift: $($entry.Name)"}
@@ -50,6 +60,7 @@ try {
         }
         $result[$item[0]+'_directory']=$directory
     }
+    $result['firmware_profile']=$FirmwareTest
     foreach($name in @('rom.hex','sram.hex','firmware.elf')){
         [IO.File]::Copy((Join-Path $result.system_directory $name),(Join-Path $work $name))
     }

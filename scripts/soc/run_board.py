@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import shutil
 import time
 from datetime import datetime, timezone
 
@@ -22,9 +23,11 @@ def initialized_address(symbols):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--test", choices=("clocks", "system"), required=True)
-    parser.add_argument("--fault", choices=("none", "memory"), default="none")
+    parser.add_argument("--test", choices=("clocks", "system", "coremark"), required=True)
+    parser.add_argument("--fault", choices=("none", "memory", "crc"), default="none")
     args = parser.parse_args()
+    if args.fault == 'crc' and args.test != 'coremark' or args.fault == 'memory' and args.test != 'system':
+        parser.error('memory fault belongs to system; crc fault belongs to coremark')
     work = ROOT / "build/soc" / ("board-" + args.test + "-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"))
     work.mkdir(parents=True)
     print("CPU_BOARD_RUN", work, flush=True)
@@ -63,9 +66,10 @@ def main():
                   "fpga/pg2l100h/constraints/cpu_board.fdc", "fpga/pg2l100h/ip/video_reference_manifest.json",
                   "fpga/pg2l100h/rtl/triha_cpu_clock_reset.v", "scripts/cpu/run_modelsim.do"]
         rtl = ["fpga/pg2l100h/rtl/triha_cpu_clock_reset.v"]
-        tb = "tb/soc/tb_cpu_board_clock.v" if args.test == "clocks" else "tb/soc/tb_cpu_board.v"
+        tb = {"clocks": "tb/soc/tb_cpu_board_clock.v", "system": "tb/soc/tb_cpu_board.v",
+              "coremark": "tb/soc/tb_cpu_coremark.v"}[args.test]
         inputs += [tb]
-        if args.test == "system":
+        if args.test != "clocks":
             core = json.loads((ROOT / "fpga/pg2l100h/project/cpu_core.json").read_text(encoding="utf-8"))
             soc = json.loads((ROOT / "fpga/pg2l100h/project/cpu_minimal_soc_compact.json").read_text(encoding="utf-8"))
             rtl += core["sources"] + soc["sources"] + ["fpga/pg2l100h/rtl/triha_cpu_board_top.v", "tb/soc/cpu_board_pll_model.v"]
@@ -83,6 +87,14 @@ def main():
                 if sha(ROOT / "rtl/cpu/vendor" / name) != digest:
                     raise ValueError("CPU vendor drift")
                 inputs.append("rtl/cpu/vendor/" + name)
+            if args.test == 'coremark':
+                inputs += ['scripts/soc/coremark_board.py', 'sw/benchmarks/coremark/port/core_portme.c',
+                           'sw/benchmarks/coremark/port/core_portme.h', 'sw/benchmarks/coremark/UPSTREAM.json']
+                for name, digest in json.loads((ROOT / 'sw/benchmarks/coremark/UPSTREAM.json').read_text(encoding='utf-8'))['files'].items():
+                    source = 'sw/benchmarks/coremark/src/' + name
+                    if sha(ROOT / source) != digest:
+                        raise ValueError('CoreMark upstream drift')
+                    inputs.append(source)
         for name in sorted(set(inputs)):
             path = ROOT / name
             result["input_hashes"][name] = sha(path)
@@ -109,7 +121,15 @@ def main():
                      "-Wall", "-Wextra", "-Werror", "-DTRIHA_SOC_MMIO=1", "-I", work / "src/sw/runtime",
                      "-nostdlib", "-T", work / "src/sw/runtime/triha_sram.ld", "-Wl,--gc-sections,--build-id=none",
                      "-Wl,-Map=" + str(work / "firmware.map"), "-o", work / "firmware.elf"]
-            native(gcc, flags + [work / "src" / n for n in ("sw/runtime/crt0.S", "sw/runtime/triha_runtime.c", "sw/tests/cpu_board.c")] + ["-lgcc"], "firmware-build")
+            if args.test == 'coremark':
+                from coremark_board import build
+                build(work, work, native, 5, preflight=True, fault=args.fault)
+                build(work, work / 'deployment', native, 5000, fault=args.fault)
+                result.update(release_iterations=5000, preflight_iterations=5, full_run_simulated=False,
+                              firmware_profile='coremark', board_score_validated=False,
+                              scope='5-iteration board RTL preflight; 5000-iteration deployment built from same sources; full physical run pending')
+            else:
+                native(gcc, flags + [work / "src" / n for n in ("sw/runtime/crt0.S", "sw/runtime/triha_runtime.c", "sw/tests/cpu_board.c")] + ["-lgcc"], "firmware-build")
             libgcc = native(gcc, ["-march=rv32im_zicsr", "-mabi=ilp32", "-print-libgcc-file-name"], "libgcc").strip()
             result["external_hashes"][libgcc] = sha(libgcc)
             image = elf_sram((work / "firmware.elf").read_bytes(), memory)
@@ -134,12 +154,28 @@ def main():
         native(SIM / "vlog.exe", ["+incdir+" + str(work / "src/rtl/cpu/vendor/src/core"),
                                   "+incdir+" + str(work / "src/rtl/soc/include")] +
                [work / "src" / name for name in rtl + [tb]] + extra + primitives, "rtl-build")
-        top = "tb_cpu_board_clock" if args.test == "clocks" else "tb_cpu_board"
+        top = {"clocks": "tb_cpu_board_clock", "system": "tb_cpu_board", "coremark": "tb_cpu_coremark"}[args.test]
         log = native(SIM / "vsim.exe", ["-c", "-onfinish", "exit", "-t", "1ps", "-voptargs=+acc", "work." + top,
                                       "-do", work / "src/scripts/cpu/run_modelsim.do"], "simulation", 420)
-        marker = "CPU_BOARD_CLOCK_PASS" if args.test == "clocks" else "CPU_BOARD_SYSTEM_PASS boots=2"
+        marker = {"clocks": "CPU_BOARD_CLOCK_PASS", "system": "CPU_BOARD_SYSTEM_PASS boots=2",
+                  "coremark": "CPU_COREMARK_SIM_PASS"}[args.test]
         if marker not in log or re.search(r"CPU_BOARD_\w*FAIL|CPU_TRAP|\*\* (Error|Fatal)", log):
             raise RuntimeError("board self-check failed; see simulation.log")
+        if args.test == 'coremark':
+            from coremark_board import review_output
+            result['preflight_measurement'] = review_output(log, allow_short=True)
+            if result['preflight_measurement']['iterations'] != 5:
+                raise RuntimeError('unexpected preflight iteration count')
+            measured = re.search(r'CPU_COREMARK_SIM_PASS cycles=(\d+) reads=2', log)
+            if not measured or int(measured[1]) != result['preflight_measurement']['cycles']:
+                raise RuntimeError('hardware observer and software timing differ')
+            result['short_simulation_passed'] = True
+            (work / 'preflight').mkdir()
+            for name in ('firmware.elf', 'firmware.map', 'sram.hex'):
+                shutil.copyfile(work / name, work / 'preflight' / name)
+                shutil.copyfile(work / 'deployment' / name, work / name)
+            result['deployment_firmware_sha256'] = sha(work / 'firmware.elf')
+            result['deployment_sram_sha256'] = sha(work / 'sram.hex')
         result["status"] = "PASS"
     except Exception as error:
         result.update(status="FAIL", error=str(error))

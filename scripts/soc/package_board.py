@@ -14,13 +14,14 @@ def package(work):
     if not checked["timing_closed"]:
         raise ValueError("100MHz board timing has not passed")
     bit = work / "generate_bitstream/triha_cpu_board_top.sbit"
-    output = ROOT / "build/soc/releases" / ("cpu_board_" + sha(bit)[:12])
+    terminal = json.loads((work / "result.json").read_text(encoding="utf-8"))
+    coremark = terminal.get('firmware_profile') == 'coremark'
+    output = ROOT / "build/soc/releases" / (("cpu_coremark_" if coremark else "cpu_board_") + sha(bit)[:12])
     output.mkdir(parents=True, exist_ok=False)
     sources = [bit, bit.with_suffix(".smsk"), work / "rom.hex", work / "sram.hex", work / "firmware.elf",
                work / "result.json", work / "report_timing/triha_cpu_board_top.rtr"]
     for source in sources:
         shutil.copyfile(source, output / source.name)
-    terminal = json.loads((work / "result.json").read_text(encoding="utf-8"))
     shutil.copyfile(Path(terminal["system_directory"]) / "firmware.map", output / "firmware.map")
     save(output / "review.json", checked)
     readme = """# TriHa CPU board image
@@ -38,8 +39,26 @@ Keep the existing Video release and its matching smsk as the recovery image; no 
 Physical PLL frequency, UART reception, sustained execution and physical KEY0 are separate acceptance steps.
 The ELF/map and initial images use the same firmware validated in ModelSim; no simulator-only loading path.
 """
+    if coremark:
+        readme = """# TriHa CPU CoreMark board image
+
+PG2L100H/FBG676/-6, six-stage single-issue RV32IM/CSR, no caches, local 32KiB SRAM.
+125MHz differential reference, HIGH-bandwidth PLL -> nominal100MHz; unchanged original timing constraints.
+COM12, UART115200, 8 data bits, no parity, 1 stop bit, no flow control. KEY0 restarts the run.
+CoreMark1.0 performance seeds0/0/0x66, data2000 bytes, 5000 iterations; expect roughly17 seconds.
+Use precise final CoreMark and CoreMark/MHz lines, not the coarse whole-seconds upstream throughput.
+Accept only CPU_COREMARK_BOARD_PASS, errors=0/short=0 and seed/list/matrix/state CRC e9f5/e714/1fd7/8e3a.
+Timing is measured with the actual64-bit cycle counter, derived from the nominal100MHz CPU clock.
+
+This package passed actual100MHz post-route STA. RTL tested5 iterations with physical UART decoding,
+using the same frozen sources with the iteration/preflight defines changed; full5000 iterations were built,
+not simulated. Firmware ELF/map/ROM/SRAM in this package are the deployment versions.
+Program/Verify and the full physical UART result are separate checks. No official score submission is claimed.
+Only volatile configuration is intended; do not write Flash. Keep the existing self-test package unchanged.
+"""
     (output / "README.md").write_text(readme, encoding="utf-8", newline="\n")
-    manifest = dict(status="PASS", target="cpu_board", route_directory=str(work),
+    manifest = dict(status="PASS", target="cpu_coremark" if coremark else "cpu_board", route_directory=str(work),
+                    firmware_profile='coremark' if coremark else 'system',
                     timing_closed=True, programmed=False, board_validated=False,
                     bitstream_sha256=sha(bit), verify_mask_sha256=sha(bit.with_suffix(".smsk")),
                     files={path.name: sha(path) for path in output.iterdir() if path.is_file()})

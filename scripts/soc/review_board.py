@@ -40,8 +40,14 @@ def review(work):
     for kind in ("clocks", "system"):
         directory = Path(result[kind + "_directory"])
         evidence = json.loads((directory / "result.json").read_text(encoding="utf-8"))
-        assert evidence["status"] == "PASS" and evidence["test"] == kind and evidence["fault"] == "none"
+        expected_test = result.get('firmware_profile', 'system') if kind == 'system' else 'clocks'
+        assert evidence["status"] == "PASS" and evidence["test"] == expected_test and evidence["fault"] == "none"
         assert evidence["source_unchanged"] and evidence["external_unchanged"]
+        if expected_test == 'coremark':
+            assert evidence['short_simulation_passed'] and not evidence['full_run_simulated']
+            assert evidence['release_iterations'] == 5000 and evidence['preflight_iterations'] == 5
+            assert sha(directory / 'firmware.elf') == evidence['deployment_firmware_sha256']
+            assert sha(directory / 'sram.hex') == evidence['deployment_sram_sha256']
         for name, digest in evidence["input_hashes"].items():
             assert sha(ROOT / name) == sha(directory / "src" / name) == digest, name
         for name, digest in evidence["external_hashes"].items():
