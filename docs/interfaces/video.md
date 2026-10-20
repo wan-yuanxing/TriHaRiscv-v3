@@ -28,6 +28,29 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4c3a Video局部采集写/显示读共享端口
+
+`video_shared_ddr`同一core域接采集AW/W/B与raw显示AR/R，内部一个
+`video_memory_scheduler`和一个未改动的`axi128_hmic256`。两路总计只接纳一个事务，
+完整AW/AR描述符先锁存再下发；W必须等下游AW握手。写占有到上游B握手，读占有
+到ARLEN+1次R握手，不以RLAST提前释放。协议范围仍由桥约束为128bit、1..16拍、
+16B对齐INCR/4KiB拆分；调度器9bit计数另外验证非法256拍的DECERR排空。
+
+普通竞争按前次方向交替。`display_urgent=1`优先读，但等待写前最多连续
+`MAX_READ_BURSTS`次读grant（默认4，合法1..16）。不会抢占已接纳事务；背压、
+native或master停止前进时无无条件等待上界。联测urgent固定1，未接实际行水位。
+
+失锁、桥fault、提前/无主/未知响应、错ID/LAST、未知有效W控制/数据等锁存fault，
+保留首因并阻止新grant，地址及已接纳W/B/R继续保持/按长度排空。正常SLVERR/
+DECERR原样传回。调度器错误码1..11见DDR契约，wrapper桥错误置bit7。
+必须与全部master及native桥协调reset；本地`port_drained`只证明调度器无事务，
+不能代替显示像素退休、其他master引用或CPU全局FREE资格。
+
+数字联测接真实ABI2与多帧核、raw_display和桥；仿真控制器模拟CPU分配，记录接纳
+持有槽，实际release握手后才允许复用。未接生产C三槽库/显示MMIO退休适配，
+未宣称物理跨master排序或完整连续视频。详细边界见
+[共享端口验证](../verification/video/shared_video.md)。
+
 ## F4c2b 独立采集 ABI2
 
 新端点`video_capture_mmio_v2`位于`0x20012000/4KiB`，版本`0x00020000`。

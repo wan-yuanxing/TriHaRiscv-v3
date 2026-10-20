@@ -123,6 +123,28 @@ setup+2.708ns、hold+0.701ns；无布线或板测。构建首轮遗漏新增incl
 [ABI2验证](../verification/video/capture_v2.md)。正式fabric须优先译码新子窗口；
 共享DDR仲裁/跨master可见性、CPU执行和真实像素退休仍待后续，未完成连续视频验收。
 
+## F4c3a Video局部共享DDR
+
+新增`video_memory_scheduler`和`video_shared_ddr`，让采集写与raw显示读共用唯一的
+既有AXI/native桥。普通竞争交替服务，急迫显示读采用默认4次、可设1..16次的配额，
+随后服务等待写。地址接纳后锁存，写占有到B握手，读按ARLEN+1拍退休；故障阻止
+新请求，已公开事务继续保持并排空。旧桥、ABI1/2及采集/显示核字节保持。
+
+19个协议场景及5组真实采集/显示数字联测通过，共33帧/96237有效字节/39900显示像素，欠载0。覆盖三槽轮换、三路数据/CRC、逐像素、
+提交/释放背压和并行读写。故障测试重新提出请求，验证真正锁止；9项关键变异
+被指定断言检出。共享端口、旧桥/raw显示/ABI2及Python回归结果以
+[本批验证](../verification/video/shared_video.md)和[机器证据](../verification/video/evidence/shared_video.json)为准。
+
+wrapper综合3806LUT/3561FF/0DRM/APM/0锁存器，8ns估计setup+1.993ns、hold+0.730ns。
+没有本批布线或板测。联测控制器模拟CPU槽引用，实际raw_display的commit/release
+控制复用；尚未接生产C三槽库与显示MMIO退休适配器。urgent在联测固定为1，
+真实水位生产者未实现；服务界限以对端持续前进条件下的事务数计，不是无条件周期
+或显示deadline。仅验证所列缩小几何/时钟/native模型，未验证800×600并行带宽。
+
+下一批推进显示MMIO/所有者与raw扫描器的实际提交、释放适配及CPU三槽库事务回放；
+可先独立仿真，不必等待CPU核。正式CPU/NPU共享fabric、跨master物理可见性、素材
+DDR读取和连续视频仍待集成，CPU仍是全局帧与graph所有者。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

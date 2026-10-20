@@ -72,7 +72,7 @@ def verify_build_inputs(work, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "video_shared_ddr", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     parser.add_argument('--seed-start', type=int, default=4)
     parser.add_argument('--seed-count', type=int, default=6)

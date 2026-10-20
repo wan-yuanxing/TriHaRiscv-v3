@@ -7,7 +7,7 @@ RAW/BOX/AVATAR，KEY0 保留协调复位/重采。方案见
 [全屏显示设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 旧板级工程及已验收双窗位流保留；F1已新增独立raw扫描组件，F2新增独立
 `video_raw_board`全屏板级目标，当前验证进度见[全屏板级记录](../verification/video/raw_board.md)。
-F3c人工叠加/模式接入见下文，共享DDR仍属后续。raw组件入口为
+F3c人工叠加/模式接入见下文；F4c3a已增加Video局部共享DDR组件，系统fabric仍待接入。raw组件入口为
 `python scripts/video/run.py --suite raw_display`，综合目标`video_raw_display`仅支持synth；
 实际范围见[全屏组件验证](../verification/video/raw_display.md)。
 
@@ -419,6 +419,19 @@ build/video/                            被忽略的运行结果、参考副本�
 ```
 
 后续 HDMI/DDR/CDC wrapper 放在 `fpga/pg2l100h/rtl/`；跨板可复用像素和 DMA 模块放在 `rtl/video/`。板级约束不与组件约束混用；最终 SoC 顶层由 CPU 牵头集成。已经存在的空目录不表示功能已实现。
+
+## F4c3a 共享端口组件
+
+`python scripts/video/run.py --suite shared_video`运行19项协议场景与5组实际采集/
+raw显示联测。`python scripts/video/build_pds.py --target video_shared_ddr --stage synth`
+综合独立wrapper；该目标没有板级管脚，只支持synth。
+
+`rtl/video/video_memory_scheduler.sv`锁存方向描述符并保有事务至B或advertised R数量
+退休；`video_shared_ddr.sv`接唯一的既有`axi128_hmic256`。显式filelist在
+`fpga/pg2l100h/project/video_shared_ddr.json`，联测字节模型和oracle在`tb/video/`。
+结果入口为`build/video/latest_shared_video.json`及`latest_pds_video_shared_ddr.json`。
+契约与证据见[共享端口验证](../verification/video/shared_video.md)。这是Video局部组件，
+生产显示MMIO/CPU三槽库适配、全局fabric与物理DDR可见性须继续联合验收。
 
 ## 结果定位
 

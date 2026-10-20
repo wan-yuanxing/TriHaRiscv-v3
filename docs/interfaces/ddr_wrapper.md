@@ -42,3 +42,24 @@ V015 的必要验证：
 沿用 `TRV1` 37 字节 UART 包，type 2 的 payload：byte1 flags 的 bit0..4 为 init/busy/done/error/allPLL；byte2 phase、byte3 errorcode；bytes4..7 比较数；8..11 首错 native **32-bit-word 地址**；12..15 首错 256-bit XOR 的**低 32 位**；16..19 低窗口字节偏移；20..23 高窗口字节偏移；24..27 窗口 beat 数；28..31 独立时基 heartbeat。低 32 位 XOR 为零不能排除高 lane 出错。板级保持错误 E0/E1/E2/E3/E4 分别表示 init 超时、init/PLL 丢失、PHY 初始化失败、align、快照停滞；native 错误码见组件源文件。
 
 保护库已通过 ModelSim 编译/展开，但本机厂商 GPLL 模型在 76 ns 因除零中止，未得到真实训练仿真通过。便携板级 TB 使用明确标记的数字 IP 替身，仅验证 wrapper、复位、CDC、UART 与 BIST 控制。
+
+## F4c3a Video局部共享端口
+
+`video_shared_ddr`在原桥前增加采集写/显示读调度器；所有信号已经处于core域。
+内部仅一个`axi128_hmic256`，写后读回核验期间不会插入其他native拥有者。
+桥本身仍写优先，公平性由新增调度器的完整事务串行化提供；未修改桥字节。
+
+普通竞争交替，urgent读配额默认4、可设1..16；有写等待时达到配额便服务写。
+所有界限按对端持续前进下的已完成事务计。输入描述符接纳后注册保持，下游AW/AR
+背压不撤回，写等AW握手才传W。owner在B握手或ARLEN+1次R握手后才释放，
+响应背压及错误RLAST不能伪造退休。`port_drained`不包含像素缓存或全局所有权。
+
+调度器首因码：1曾上线后失锁，2桥/外部memory_fault，3提前/无主B，4提前/无主R，
+5错BID，6错RID，7错WLAST，8错RLAST，9未知描述符，10未知有效transport控制，
+11未知B/R负载或已接纳W数据/掩码。错误锁止新grant，已接纳/公开事务继续排空。
+wrapper统一fault_code以bit7标记桥错误，其余为调度器码；首个采样错误保持。
+合法SLVERR/DECERR正常转发，不独立改变既有桥策略。
+
+组件综合和数字联测见[共享端口验证](../verification/video/shared_video.md)。联测实际
+raw扫描release后才复用三槽，urgent固定1；没有生产CPU/NPU fabric、实际水位、
+跨master物理可见性或800×600并行吞吐证明，也没有本批新布线/板测。

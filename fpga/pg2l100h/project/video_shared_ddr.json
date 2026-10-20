@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target": "video_shared_ddr",
+  "top": "video_shared_ddr",
+  "test_top": "tb_video_memory_scheduler",
+  "sources": [
+    "rtl/video/video_memory_scheduler.sv",
+    "rtl/video/video_shared_ddr.sv",
+    "rtl/video/axi128_hmic256.sv"
+  ],
+  "tests": [
+    "tb/video/tb_video_memory_scheduler.sv",
+    "tb/video/models/axi_bridge_native_model.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_shared_ddr.fdc"
+  ],
+  "scope": "single-core-clock Video-local capture-write/display-read scheduling and exclusive verified DDR bridge; no CPU/NPU global fabric, physical DDR visibility, routing or board",
+  "integration_test_top": "tb_video_shared_memory",
+  "integration_sources": [
+    "rtl/video/video_capture_mmio_v2.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv",
+    "rtl/video/raw_display.sv"
+  ],
+  "integration_tests": [
+    "tb/video/models/video_shared_memory_model.sv",
+    "tb/video/tb_video_shared_memory.sv"
+  ]
+}
