@@ -44,6 +44,12 @@ MODE不释放，错误和ACK失败不提前复用。源码位于sw/include与sw/
 硬件或改变旧ABI；采集rearm、共享fabric/DDR及NPU真实tag适配另验。见
 [三槽验证](../verification/video/frame_pool.md)。
 
+F4c2a提供可选多帧采集组件：`--suite capture_rearm`，
+`--target video_capture_rearm --stage synth`。仅显式开启`ENABLE_REARM=1`的
+入口/三分支核配对实例可在成功记录消费后采下一帧；默认板级实例和ABI1仍单帧。
+FIFO不逐帧reset，错误继续锁止；见[重武装验证](../verification/video/capture_rearm.md)。
+CPU/fabric和新的采集MMIO生命周期接入留待下一批。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -363,6 +369,7 @@ fpga/pg2l100h/
   constraints/video_mode_board.fdc       KEY1及新增第一阶段/6ns束约束
   constraints/video_raw_board.fdc        F2实际存活CDC端点与6ns束约束
   constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
+  constraints/video_capture_rearm.fdc   F4c2a开启多帧核8ns组件估计
   constraints/video_display_mmio.fdc     F4b core8ns组件估计
   constraints/video_display_slot_owner.fdc F4a core8ns组件估计
   constraints/video_mode_control.fdc     F3a单core域8ns组件约束
@@ -389,6 +396,9 @@ fpga/pg2l100h/
   rtl/video_ddr_snapshot_cdc.sv          DDR 目标共用的冻结快照握手
   rtl/video_hdmi_capture_top.sv          HDMI初始化、彩条输出、帧入口和HMIC
   rtl/video_preview_board_top.sv         真实源双平面、双窗口和448bit诊断快照
+rtl/video/video_capture_rearm_core.sv    开启多帧参数的综合专用核wrapper
+tb/video/tb_video_capture_rearm.sv        真实入口/FIFO/三路写入的多帧组件测试
+fpga/pg2l100h/project/video_capture_rearm.json 显式组件filelist
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据
 docs/video/STATUS.md                     任务、依赖和完成状态

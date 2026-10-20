@@ -607,6 +607,12 @@ DISPLAY_PENDING区分已保留记录；事件先完整核对、再ACK、成功�
 冻结。该C组件及显示RTL事务回放尚不等于生产CPU/fabric、多帧采集或NPU实际运行，
 见[三槽验证](verification/video/frame_pool.md)。
 
+2026-10-20 F4c2a实施注记：入口与三分支核提供默认关闭的`ENABLE_REARM`；
+显式开启且成功记录消费、所有写响应退休、入口空闲后，可在同一协调reset代际
+内接下一CPU槽请求。仅清理空闲预处理/每帧状态，FIFO指针、DDR及显示保留。
+错误仍锁止且晚到错误不撤销已发布记录；未扩展旧采集MMIO ABI1，尚未接正式
+CPU/fabric、实际显示退休或跨master DDR可见性。见[重武装验证](verification/video/capture_rearm.md)。
+
 ## 10. DDR 地址、带宽与互连
 
 ### 10.1 总线约定

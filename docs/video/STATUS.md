@@ -96,6 +96,19 @@ DISPLAY_PENDING/DISPLAYING/RETIRING；整图锁保留到结果发布和工作区
 详细边界见[三槽记录](../verification/video/frame_pool.md)；F4c2
 继续采集rearm、共享CPU/fabric/DDR和真实退休生产者，多主可见性及连续采集另验。
 
+F4c2a增加默认关闭的`ENABLE_REARM`：成功记录消费、三路写响应退休且入口空闲后，
+允许新CPU槽请求清理预处理并再arm；FIFO指针、DMA/DDR/显示不靠局部reset重启。
+所有失败仍锁止。独立审查复现并关闭DONE/IDLE短暂健康脉冲消失后误复用，修复
+仅作用于开启多帧的实例，保留已发布成功记录且不制造旧身份的第二完成。
+20个新场景覆盖109个完整成功帧、6类失败排空及DONE/IDLE晚到脉冲；包括三帧
+800×600逐字节raw/preview/BGR NCHW校验、三槽循环、异步时钟、记录/最终B背压。
+7个关键变异被指定断言检出，旧默认three_capture/ingress/MMIO/frame_pool及Python
+105通过/1权限跳过。开启实例核综合4273LUT/2876FF/1.5DRM/2APM/0锁存器，
+8ns寄存器路径估计setup+1.578ns、hold+0.428ns；无布线或新板测。入口双时钟
+本批仅数字仿真，组件综合不包含实际HDMI/DDR或新增物理CDC验收。399个其他已跟踪
+文件及31项其他路线现状（含两项原有删除）保持；详见[重武装验证](../verification/video/capture_rearm.md)。
+本批是F4c2a采集组件，不是连续视频交付；采集MMIO ABI1仍单次，CPU/fabric/共享DDR
+可见性、真实显示退休生产者及NPU执行仍需后续集成。
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

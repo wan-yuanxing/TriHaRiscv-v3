@@ -1,9 +1,11 @@
 `timescale 1ns/1ps
-// Exactly one selected source frame per coordinated pixel/core reset epoch.
+// Default: one selected frame per coordinated reset. Opt-in rearm accepts a
+// subsequent arm only after a healthy EOF was published. FIFO pointers persist.
 module video_capture_ingress #(
     parameter integer FRAME_WIDTH = 800,
     parameter integer FRAME_HEIGHT = 600,
-    parameter integer FIFO_ADDR_WIDTH = 11
+    parameter integer FIFO_ADDR_WIDTH = 11,
+    parameter integer ENABLE_REARM = 0
 ) (
     input  wire        pixel_clk,
     input  wire        pixel_reset_n,
@@ -147,6 +149,15 @@ module video_capture_ingress #(
                     end
                 end
                 EOF_WAIT: if (fifo_ready) state<=STOPPED;
+                STOPPED: if (ENABLE_REARM && !fault_pixel && !overflow_pixel && arm_sync2!=arm_seen) begin
+                    // The controller may toggle only after consuming good EOF
+                    // and retiring the old job. Never reset either FIFO port.
+                    // Skip a coincident frame_start: old counters still belong
+                    // to the preceding frame on this rearm edge.
+                    arm_seen<=arm_sync2; state<=WAIT_START;
+                    pixel_count<=0; expected_x<=0; expected_y<=0;
+                    crc_state<=32'hffffffff; peak_ram<=0; eof_word<=0;
+                end
                 default: state<=STOPPED;
             endcase
         end

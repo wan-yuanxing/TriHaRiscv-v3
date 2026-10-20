@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -349,6 +349,30 @@ def main():
             run_logged([sys.executable,'-m','unittest','discover','-s',ROOT/'tb/video',
                         '-p','test_video_regs.py','-v'],work/'regs_python.log')
             result['passed'].append('capture_mmio')
+        if args.suite in ('capture_rearm','all'):
+            from common import sha256
+            manifest_path=ROOT/'fpga/pg2l100h/project/video_capture_rearm.json'
+            component=json.loads(manifest_path.read_text(encoding='utf-8'))
+            sources=[ROOT/p for p in component['sources']+component['tests']]
+            add_inputs(result,[manifest_path,*sources,*[ROOT/p for p in component['constraints']]])
+            artifacts=[]
+            result['capture_rearm_tools']={}
+            for name in ('iverilog','vvp'):
+                executable=tool(name);log=work/('rearm_'+name+'_version.log')
+                result['capture_rearm_tools'][name]={'path':str(executable),'sha256':sha256(executable)}
+                run_logged([executable,'-V'],log);artifacts.append(log)
+            scenarios=[('normal',(),()),('minimum',(('W',10),('H',10),('PT',0),('PB',0),('JOBS',10)),()),
+                ('ratio',(('PIXEL_HALF',8.5),('CORE_HALF',5.5),('PIXEL_GAP',12)),())]
+            scenarios += [(f'case_{case}',(),(f'+CASE={case}',)) for case in (1,2,3,4,10,11,12,13,14,15,20,21,22,23,24,25)]
+            scenarios += [('full',(('W',800),('H',600),('PT',40),('PB',40),('JOBS',3),('PIXEL_GAP',1),('FIFO_AW',11)),())]
+            for name,parameters,options in scenarios:
+                stem='capture_rearm_'+name
+                log=simulate(work,stem,component['test_top'],sources,[ROOT/'rtl/video/include'],
+                    parameters=parameters,run_args=options,timeout=1200)
+                if log.count('VIDEO_CAPTURE_REARM_PASS')!=1:raise RuntimeError('Missing capture rearm pass: '+name)
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            result['capture_rearm_artifacts']=input_hashes(artifacts)
+            result['passed'].append('capture_rearm')
         if args.suite in ('three_capture','all'):
             manifest_path=ROOT/'fpga/pg2l100h/project/video_three_capture.json'
             three=json.loads(manifest_path.read_text(encoding='utf-8'))
@@ -907,6 +931,13 @@ def main():
             if any(sha256(ROOT/p)!=h for p,h in native['inputs'].items()):raise RuntimeError('Frame pool source changed')
             if any(sha256(ROOT/p)!=h for p,h in native['artifacts'].items()):raise RuntimeError('Frame pool native artifact changed')
             if any(sha256(p)!=h for p,h in native['tools'].items()):raise RuntimeError('Frame pool compiler changed')
+        if 'capture_rearm' in result['passed']:
+            for name, digest in result['inputs'].items():
+                if sha256(ROOT/name)!=digest:raise RuntimeError('Capture rearm source changed: '+name)
+            for name,digest in result['capture_rearm_artifacts'].items():
+                if sha256(ROOT/name)!=digest:raise RuntimeError('Capture rearm artifact changed: '+name)
+            for record in result['capture_rearm_tools'].values():
+                if sha256(record['path'])!=record['sha256']:raise RuntimeError('Capture rearm tool changed')
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

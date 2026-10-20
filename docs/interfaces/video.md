@@ -3,7 +3,8 @@
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
 同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a提供独立MODE控制/去抖组件，
 F3b提供独立框/五点/单头像像素组件；F3c独立静态三模式诊断的布线、易失Program/Verify及实体KEY1/KEY0验收已通过。
-正式显示MMIO、通用多帧所有者与素材DDR接入尚未实现；下文
+独立显示MMIO、CPU三槽库及可选采集rearm组件已实现；正式CPU/fabric、像素退休
+与素材DDR接入尚待集成；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
 
@@ -26,6 +27,26 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 缓存仍是一次装好后封存，未增加DDR素材DMA或运行中替换。正式多帧/raw/素材引用
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
+
+## F4c2a 采集核受控重武装
+
+`video_capture_ingress`与`video_three_branch_capture`新增`ENABLE_REARM=0`，
+现有实例保持单次。新集成须在两端同时开启；源必须每次只发送一个完整PIX/EOF
+序列。上一帧good EOF和数量/CRC合格、三writer结果全部退休、仲裁器空闲、
+accepted和成功completion均消费后才重新开放请求；新的请求还检查无残留m_valid、
+无未消费事件、所有writer就绪和无健康错误。CPU仍负责FREE槽及显示/计算引用资格。
+
+completion_ready是核端整记录消费，调用方必须先复制统计和身份；不是旧MMIO
+ABI1的ACK。`busy=0`不能代替req_ready或port_drained，核无新release/allocator。
+新请求同步清理packer/scaler和每帧统计，再发描述符；上padding写完才arm。
+源端健康STOPPED收到新arm后清理本地坐标/CRC并等下一帧首，重arm同拍的源帧
+主动跳过；FIFO指针不复位。失败、DONE/IDLE采样到的abort/overflow/source_fault
+及离线均粘滞锁止，不能因脉冲结束而复用，也不能靠新请求清错。晚到错不撤销
+已发布成功记录；无新job的IDLE健康错不制造旧身份第二完成。
+
+本批独立数字仿真和核综合不表示已接CPU/MMIO/fabric、实际显示/DDR引用退休或
+跨master可见性。旧采帧ABI1和既有板级KEY0行为保持，详见
+[capture_rearm](../verification/video/capture_rearm.md)。
 
 ## F4c1 CPU统一三槽
 

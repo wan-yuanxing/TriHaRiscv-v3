@@ -1,11 +1,12 @@
 `timescale 1ns/1ps
 `default_nettype none
 `include "video_cfg.vh"
-// One selected frame and one immutable record per coordinated port reset.
+// Default: one immutable frame record per coordinated reset. ENABLE_REARM
+// permits a new CPU-selected job after consuming a successful drained record.
 // Completion covers good EOF and all AXI B retirements, not CPU visibility.
 module video_three_branch_capture #(
     parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,PAD_TOP=40,PAD_BOTTOM=40,
-    parameter integer TIMEOUT_CYCLES=625000000
+    parameter integer TIMEOUT_CYCLES=625000000,ENABLE_REARM=0
 )(
     input wire clk,reset_n,init_done,abort,
     input wire req_valid,output wire req_ready,input wire [1:0] req_slot,
@@ -89,7 +90,7 @@ module video_three_branch_capture #(
         if(seen_online&&!init_done)commit_fast_fault=8'h01;
         else if(arb_fault)commit_fast_fault=8'h09;
         else if(|writer_fault)commit_fast_fault=8'h06;
-        else if(state!=IDLE&&state!=DONE&&state!=DRAIN)begin
+        else if(state!=DRAIN&&(ENABLE_REARM||(state!=IDLE&&state!=DONE)))begin
             if(abort)commit_fast_fault=8'h0c;
             else if(overflow)commit_fast_fault=8'h02;
             else if(source_fault)commit_fast_fault=8'h03;
@@ -105,7 +106,14 @@ module video_three_branch_capture #(
     wire pixel_offer=packet_present&&pixel_kind&&pixel_legal&&!stopping;
     assign preview_ready=preview_pixel_ready&&!transport_stop;
     assign input_ready=input_pixel_ready&&!transport_stop;
-    assign req_ready=reset_n&&state==IDLE&&init_done&&!abort&&!error&&!fault_pending&&!(|writer_fault)&&!arb_fault&&!bvalid;
+    assign req_ready=reset_n&&state==IDLE&&init_done&&!abort&&!error&&!fault_pending&&!(|writer_fault)&&!arb_fault&&!bvalid&&
+        (!ENABLE_REARM||(rearm_healthy&&rearm_empty&&!completion_valid));
+    // An opted-in source must stop after EOF and use matching rearm semantics.
+    // No request may hide stale input, outstanding events or writer ownership.
+    wire job_clear=ENABLE_REARM && req_valid && req_ready;
+    wire rearm_healthy=init_done && !abort && !source_fault && !overflow &&
+        !error && !fault_pending && !(|writer_fault) && !arb_fault && !bvalid;
+    wire rearm_empty=port_drained && (&req_ready_vec) && !m_valid && !accepted_valid;
     assign cancel=error||fault_pending;
     assign busy=state!=IDLE&&state!=DONE;
     assign port_drained=reset_n&&((requested&~retired)==0)&&arb_idle;
@@ -137,7 +145,7 @@ module video_three_branch_capture #(
         if(seen_online&&!init_done)transport_fault=8'h01;
         else if(arb_fault)transport_fault=8'h09;
         else if((|writer_fault)||(|result_bad))transport_fault=8'h06;
-        else if(state!=IDLE&&state!=DONE&&state!=DRAIN)begin
+        else if(state!=DRAIN&&(ENABLE_REARM||(state!=IDLE&&state!=DONE)))begin
             if(abort)transport_fault=8'h0c;
             else if(overflow)transport_fault=8'h02;
             else if(source_fault)transport_fault=8'h03;
@@ -151,20 +159,20 @@ module video_three_branch_capture #(
         end
     end
     rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_raw_packer(
-        .clk(clk),.reset_n(reset_n),.flush(1'b0),
+        .clk(clk),.reset_n(reset_n),.flush(job_clear),
         .pixel_valid(pixel_offer&&preview_input_ready&&input_input_ready),.pixel_ready(raw_pixel_ready),
         .pixel_rgb(m_data[23:0]),.pixel_last(m_data[45]),.s_valid(stream_valid[0]),.s_ready(stream_ready[0]),
         .s_data(stream_data[0+:128]),.s_keep(stream_keep[0+:16]),.s_row_last(stream_last[0]));
     preview_downscale #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_preview_scale(
-        .clk(clk),.reset_n(reset_n),.clear(1'b0),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
+        .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
         .s_ready(preview_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
         .m_valid(preview_valid),.m_ready(preview_ready),.m_rgb(preview_rgb),.m_row_last(preview_last),.fault(preview_fault));
     detect_bilinear #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_input_scale(
-        .clk(clk),.reset_n(reset_n),.clear(1'b0),.s_valid(pixel_offer&&raw_pixel_ready&&preview_input_ready),
+        .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&preview_input_ready),
         .s_ready(input_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
         .m_valid(input_valid),.m_ready(input_ready),.m_rgb(input_rgb),.m_row_last(input_last),.fault(input_fault));
     rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_preview_packer(
-        .clk(clk),.reset_n(reset_n),.flush(1'b0),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
+        .clk(clk),.reset_n(reset_n),.flush(job_clear),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
         .pixel_rgb(preview_rgb),.pixel_last(preview_last),.s_valid(stream_valid[1]),.s_ready(stream_ready[1]),
         .s_data(stream_data[128+:128]),.s_keep(stream_keep[16+:16]),.s_row_last(stream_last[1]));
     genvar g;
@@ -240,9 +248,20 @@ module video_three_branch_capture #(
             end
             if(!error&&fault_stage_code!=0)begin
                 error<=1;error_code<=fault_stage_code;
-                if(state!=DONE)state<=DRAIN;
+                // No new owned job exists in rearmed IDLE: latch health without
+                // manufacturing a second completion for the previous identity.
+                if(state!=DONE&&!(ENABLE_REARM&&state==IDLE))state<=DRAIN;
             end else if(!error)case(state)
                 IDLE:if(req_valid&&req_ready)begin
+                    if(ENABLE_REARM)begin
+                        requested<=0;retired<=0;eof_seen<=0;timer<=0;
+                        accepted_started<=0;accepted_consumed<=0;
+                        completion_success<=0;completion_code<=0;
+                        captured_pixels<=0;preview_pixels<=0;input_pixels<=0;source_crc<=0;preview_crc<=0;fifo_peak<=0;
+                        raw_written_bytes<=0;preview_written_bytes<=0;input_written_bytes<=0;
+                        source_x<=0;source_y<=0;preview_x<=0;input_x<=0;
+                        raw_crc_state<=32'hffffffff;preview_crc_state<=32'hffffffff;
+                    end
                     slot<=req_slot;frame_id<=req_frame_id;preprocess_version<=req_preprocess_version;
                     raw_base<=frame_address(req_slot);preview_base<=frame_address(req_slot)+`VIDEO_FRAME_PREVIEW_OFFSET;
                     input_base<=input_address(req_slot);
@@ -258,6 +277,8 @@ module video_three_branch_capture #(
                 end
                 CAPTURE:if(eof_seen&&(&retired)&&port_drained&&count_good)state<=WAIT_EVENT;
                 WAIT_EVENT:if(accepted_consumed&&commit_fast_fault==0)begin completion_valid<=1;completion_success<=1;completion_code<=0;state<=DONE;end
+                DONE:if(ENABLE_REARM && !completion_valid && completion_success &&
+                    accepted_consumed && rearm_healthy && rearm_empty)state<=IDLE;
                 default:begin end
             endcase
             if(state==DRAIN&&port_drained)begin completion_valid<=1;completion_success<=0;completion_code<=error_code;state<=DONE;end
