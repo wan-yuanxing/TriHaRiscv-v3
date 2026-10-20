@@ -5,7 +5,7 @@
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "cbbd09e472fbb5d6f6964c935dad3e77b543a9b403db895d3f8b16d2e225a184",
+      "derived_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
@@ -16,7 +16,8 @@
         "Select predictor training register independently from redirect timing.",
         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
         "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
-        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available."
+        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
+        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -39,7 +40,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
       "derived": "rtl/cpu/triha_issue.v",
-      "derived_sha256": "0a55f1a405d836030429f135c6a3e65cabb4b659feca833f013d6ded86c1492b",
+      "derived_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
       "changes": [
         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
         "Rename integration module to triha_issue.",
@@ -51,7 +52,8 @@
         "Use the registered E2/WB tags only for operand data selection; preserve all original commit/RF/scoreboard tags and assert equality on actual issue.",
         "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
         "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle.",
-        "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles."
+        "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles.",
+        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -59,13 +61,20 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
       "base_sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
       "derived": "rtl/cpu/triha_multiplier.v",
-      "derived_sha256": "34847aea4a5d14bcf012b653dff8eb224ddbbbfeb1bc89431c04a3c3316ce32a",
+      "derived_sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
       "changes": [
         "Rename integration module to triha_multiplier.",
         "Sample multiplier operand data whenever not held, matching existing execution-unit data registers; pipeline validity still controls result use.",
-        "Remove now-unused mult_inst_w decode."
+        "Remove now-unused mult_inst_w decode.",
+        "Expose a shared 16x16 low partial product from four signed17-bit products, with equivalent full33-bit arithmetic, state or architectural writeback latency."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
+      "external_reference": {
+        "url": "https://github.com/lowRISC/ibex/blob/246849ed1063828355cae8a22c6f1aa95250c3b6/rtl/ibex_multdiv_fast.sv",
+        "sha256": "c86ca819b58b8ce2fc4ff5db887346bcd622b868fb7815fa07dd77119c68c04a",
+        "license": "Apache-2.0",
+        "scope": "Signed17-bit low/high partial-product pattern; independent combinational Verilog reconstruction, no external FSM/divider imported."
+      }
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_csr.v",

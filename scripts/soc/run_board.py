@@ -188,6 +188,9 @@ def main():
                 raise RuntimeError('missing actual predictor profile check')
             result['predictor'] = dict(btb=512, bht=512, ras=4, gshare=False, algorithm='PC-indexed 2-bit BHT with direct-mapped native-RAM BTB')
             result['optimization'] = '-O2'
+            if 'indexed_btb=1 early_mul=1' not in log:
+                raise RuntimeError('missing actual early MUL configuration check')
+            result['early_mul_bypass'] = True
             result['preflight_measurement'] = review_output(log, allow_short=True, expected_luts=cpu_luts or None)
             if result['preflight_measurement']['iterations'] != 5:
                 raise RuntimeError('unexpected preflight iteration count')
@@ -195,6 +198,15 @@ def main():
             if not measured or int(measured[1]) != result['preflight_measurement']['cycles']:
                 raise RuntimeError('hardware observer and software timing differ')
             result['short_simulation_passed'] = True
+            profiles = re.findall(r'CPU_COREMARK_PROFILE ([^\r\n]+)', log)
+            if len(profiles) != 1:
+                raise RuntimeError('missing or duplicate timed-window profile')
+            profile = {k: int(v) for k, v in re.findall(r'(\w+)=(\d+)', profiles[0])}
+            categories = ('issue', 'frontend', 'lsu', 'pipe', 'div', 'csr', 'cancel', 'unit', 'dependency', 'other')
+            if profile['cycles'] != int(measured[1]) or sum(profile[k] for k in categories) != profile['cycles']:
+                raise RuntimeError('profile categories do not sum to measured cycles')
+            result['timed_profile'] = profile
+            result['timed_trace_hashes'] = {name: sha(work / name) for name in ('coremark.wb.log', 'coremark.store.log')}
             (work / 'preflight').mkdir()
             for name in ('firmware.elf', 'firmware.map', 'sram.hex'):
                 shutil.copyfile(work / name, work / 'preflight' / name)

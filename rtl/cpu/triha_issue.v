@@ -33,6 +33,7 @@ module triha_issue
     ,parameter SUPPORT_DUAL_ISSUE = 1
     ,parameter SUPPORT_LOAD_BYPASS = 1
     ,parameter SUPPORT_MUL_BYPASS = 1
+    ,parameter EARLY_MUL_BYPASS = 1
     ,parameter SUPPORT_REGFILE_XILINX = 0
 )
 //-----------------------------------------------------------------
@@ -100,6 +101,8 @@ module triha_issue
     ,input [31:0]   writeback_mem_bypass_i
     ,input  [  5:0]  writeback_mem_exception_i
     ,input  [ 31:0]  writeback_mul_value_i
+    ,input  [ 31:0]  writeback_mul_early_i
+    ,input           writeback_mul_early_valid_i
     ,input           writeback_div_valid_i
     ,input  [ 31:0]  writeback_div_value_i
     ,input  [ 31:0]  csr_result_e1_value_i
@@ -357,6 +360,13 @@ wire [4:0]  pipe0_rd_e1_w;
 
 wire [31:0] pipe0_pc_e1_w;
 wire [31:0] pipe0_opcode_e1_w;
+// Reuse E1 forwarding for the existing low-word product. The registered E2
+// result still supplies architectural writeback; high products and dual issue
+// retain their original hazard policy.
+wire pipe0_early_mul_w = EARLY_MUL_BYPASS && SUPPORT_MUL_BYPASS && !SUPPORT_DUAL_ISSUE &&
+    pipe0_mul_e1_w && writeback_mul_early_valid_i &&
+    ((pipe0_opcode_e1_w & `INST_MUL_MASK) == `INST_MUL);
+wire [31:0] pipe0_forward_e1_w = pipe0_early_mul_w ? writeback_mul_early_i : writeback_exec0_value_i;
 wire [31:0] pipe0_operand_ra_e1_w;
 wire [31:0] pipe0_operand_rb_e1_w;
 
@@ -693,7 +703,7 @@ begin
     end
 
     // Execution units with >= 1 cycle latency (loads / multiply)
-    if (pipe0_load_e1_w || pipe0_mul_e1_w)
+    if (pipe0_load_e1_w || (pipe0_mul_e1_w && !pipe0_early_mul_w))
         scoreboard_r[pipe0_rd_e1_w] = 1'b1;
     if (pipe1_load_e1_w || pipe1_mul_e1_w)
         scoreboard_r[pipe1_rd_e1_w] = 1'b1;
@@ -834,7 +844,7 @@ function [31:0] forward_raw_operand;
 endfunction
 wire [29:0] raw_bypass_tags_w = {pipe1_rd_e1_w,pipe0_rd_e1_w,
     pipe1_rd_bypass_e2_w,pipe0_rd_bypass_e2_w,pipe1_rd_bypass_wb_w,pipe0_rd_bypass_wb_w};
-wire [191:0] raw_bypass_values_w = {writeback_exec1_value_i,writeback_exec0_value_i,
+wire [191:0] raw_bypass_values_w = {writeback_exec1_value_i,pipe0_forward_e1_w,
     pipe1_result_e2_w,pipe0_result_e2_w,pipe1_result_wb_w,pipe0_result_wb_w};
 wire [31:0] raw_lower_ra_w = forward_raw_operand(fetch0_instr_i[19:15],issue_a_ra_value_w,
     raw_bypass_tags_w,raw_bypass_values_w);
@@ -918,9 +928,9 @@ begin
 
     // Bypass - E1
     if (pipe0_rd_e1_w == issue_a_ra_idx_w)
-        issue_a_ra_value_r = writeback_exec0_value_i;
+        issue_a_ra_value_r = pipe0_forward_e1_w;
     if (pipe0_rd_e1_w == issue_a_rb_idx_w)
-        issue_a_rb_value_r = writeback_exec0_value_i;
+        issue_a_rb_value_r = pipe0_forward_e1_w;
 
     if (pipe1_rd_e1_w == issue_a_ra_idx_w)
         issue_a_ra_value_r = writeback_exec1_value_i;
@@ -988,9 +998,9 @@ begin
 
     // Bypass - E1
     if (pipe0_rd_e1_w == issue_b_ra_idx_w)
-        issue_b_ra_value_r = writeback_exec0_value_i;
+        issue_b_ra_value_r = pipe0_forward_e1_w;
     if (pipe0_rd_e1_w == issue_b_rb_idx_w)
-        issue_b_rb_value_r = writeback_exec0_value_i;
+        issue_b_rb_value_r = pipe0_forward_e1_w;
 
     if (pipe1_rd_e1_w == issue_b_ra_idx_w)
         issue_b_ra_value_r = writeback_exec1_value_i;

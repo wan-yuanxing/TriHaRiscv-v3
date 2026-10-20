@@ -2,7 +2,13 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-当前板上已换为5000次、GCC-O2、BTB512/BHT512/RAS4的CoreMark串口镜像`cpu_coremark_224be86f8972`，实际Program/Verify返回0，未写Flash，下载流程未打开COM12。串口增加CPU core LUTs=5912及CoreMark/LUTs（当次实测CoreMark除以5912），分母仅CPU核，含688个distributed RAM LUT子集，不含SoC外围。六级单发射、PC索引两位BHT/GShare关闭，无I/D Cache。512项BTB改为两bank直接映射原生异步RAM，未增加查询拍；RF有效写入数据门修复hold，未改变有效写入和CoreMark周期。
+最新优化版已下载为`cpu_coremark_6ff82025b53d`，实际Program/Verify返回0，两项成功标记齐全，未写Flash、未打开COM12。六级单发射、RV32IM/CSR、BTB512/BHT512/RAS4及PC索引两位预测算法、GShare=0、GCC-O2/无LTO均不变。复用四个17位部分积，符合unsigned16×16条件的MUL可提前旁路，宽/高位乘法和双发射保留原等待策略；SRAM/ROM响应用预寄存独热字选择，仍为一周期，没有增加CPU状态级。
+
+本轮5次短RTL CoreMark1646428周期，相比父版1690888少44460周期；CoreMark/MHz从2.957026升为3.036877（吞吐+2.700391%）。CPU-only5933LUT/3528FF/688distributed-RAM-LUT/0DRM/4APM，总LUT已含RAM子集，较父版5912增加21；100MHz短测CoreMark/LUTs从0.050017357升为0.051186203（+2.336881%）。1448453个计时窗口WB观察事件及70840次真实store与父版对照通过，仅起始绝对计时读值及其store不同；不是完整ISA退休证明。完整5000次板级分数仍待用户串口，不用短RTL估算代替。
+
+最终实际100MHz后布线`board-route-20261020T0824200693298Z`通过：Slow/Fast setup +0.113/+1.821ns、hold +0.160/+0.101ns、MPW +3.655/+4.202ns；recovery/removal无违例，performance slack与最差setup一致，原全部FDC哈希不变。四类MUL/保持/复位、窄宽资格、真实损坏负例、三组背压single/dual有序异常/写回/store及独立IRQ、415项访存和父版逐周期接口对照、8KiB两次启动、CRC正负例及44项Python检查均有证据。假相关改动收益仅0.002%而损失LUT效率、两个编译调度模型无收益、全宽提前旁路−1.130ns及中间布局失败均保留，未下载这些失败版。证据`docs/verification/cpu/operand_hazard.md`及json；备份`cpu-narrow-mul-100mhz-20261020`。COM12/115200/8N1/无流控，KEY0重跑约17秒，串口新增分母5933。下面为逐阶段历史，非当前配置。
+
+此前板上换为5000次、GCC-O2、BTB512/BHT512/RAS4的CoreMark串口镜像`cpu_coremark_224be86f8972`，实际Program/Verify返回0，未写Flash，下载流程未打开COM12。串口增加CPU core LUTs=5912及CoreMark/LUTs（当次实测CoreMark除以5912），分母仅CPU核，含688个distributed RAM LUT子集，不含SoC外围。六级单发射、PC索引两位BHT/GShare关闭，无I/D Cache。512项BTB改为两bank直接映射原生异步RAM，未增加查询拍；RF有效写入数据门修复hold，未改变有效写入和CoreMark周期。
 
 本镜像重新完整100MHz后布线通过，Slow/Fast setup +0.037/+1.752ns、hold +0.152/+0.100ns、脉宽 +3.655/+4.202ns，原IO/hold/多corner约束不变；CPU-only5912LUT/3486FF/0DRM/4APM。5次RTL预检1690888周期、标准CRC正确，短测2.957026 CoreMark/MHz，CRC负例实际exit=1；这些不是板级分数。打开COM12、115200/8N1/无流控、文本接收，短按KEY0，等待约17秒，接收完整实测分数及BOARD_PASS。完整实物分数仍待用户串口记录。新证据见`docs/verification/cpu/bpu512_o2.md`及json。旧O3包、原自检包及其备份标签保留，下文为历史记录。
 

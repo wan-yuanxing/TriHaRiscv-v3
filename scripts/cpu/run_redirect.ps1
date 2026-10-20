@@ -1,9 +1,10 @@
 #requires -Version 7.0
 [CmdletBinding()]
-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','ordered')][string] $Test='frontend',
+param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','ordered')][string] $Test='frontend',
     [ValidateSet('single','dual','both')][string] $Mode='both',
     [ValidateRange(1,2147483647)][int] $Seed=37,
-    [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor)
+    [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor,
+    [string] $IssueSource='')
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 . (Join-Path $PSScriptRoot 'simulation_common.ps1')
@@ -30,6 +31,19 @@ try {
     $sources=@(Get-Content (Join-Path $root 'config/cpu_sources.f') | ForEach-Object {$_.Trim()} |
         Where-Object {$_ -and -not $_.StartsWith('#') -and $_ -ne 'tb/cpu/tb_triha_core.v'})
     $sources+='tb/cpu/tb_frontend_redirect.v'
+    if($IssueSource){
+        if($Test -notin @('dependencies','ordered')){throw 'IssueSource is only for dependency/ordered diagnostics.'}
+        if([IO.Path]::IsPathRooted($IssueSource) -or $IssueSource -notlike 'build/*/triha_issue.v'){throw 'IssueSource must identify a frozen build snapshot.'}
+        $snapshotCpu=$IssueSource.Substring(0,$IssueSource.LastIndexOf('/'))
+        $sources=@($sources|ForEach-Object {
+            if($_ -like 'rtl/cpu/triha*.v'){
+                $frozen=$snapshotCpu+'/'+[IO.Path]::GetFileName($_)
+                if(-not (Test-Path -LiteralPath (Join-Path $root $frozen))){throw 'Incomplete frozen CPU snapshot.'}
+                $frozen
+            }else{$_}
+        })
+        $result['diagnostic_issue_source']=$IssueSource
+    }
     if($Test -eq 'payload'){$sources+='tb/cpu/tb_issue_payload.v'}
     if($Test -in @('muldata','csrdata')){$sources+='tb/cpu/tb_unit_payload.v'}
     if($Test -eq 'mularith'){$sources+='tb/cpu/tb_multiplier_payload.v'}
@@ -46,6 +60,8 @@ try {
     if($Test -eq 'parallelread'){$sources+='tb/cpu/tb_issue_parallel_read.v'}
     if($Test -eq 'priority'){$sources+='tb/cpu/tb_npc_priority.v'}
     if($Test -eq 'indexedbtb'){$sources+='tb/cpu/tb_indexed_btb.v'}
+    if($Test -eq 'dependencies'){$sources+='tb/cpu/tb_issue_dependencies.v'}
+    if($Test -eq 'mulforward'){$sources+='tb/cpu/tb_issue_mul_forward.v'}
     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
@@ -64,14 +80,17 @@ try {
         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
-        $top=switch($Test){indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
-        $marker=switch($Test){indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+        $top=switch($Test){mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
+        $marker=switch($Test){mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
         if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+        if($Test -eq 'mulforward'){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+        if($Test -eq 'dependencies'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -eq 'dual')),('-gBROKEN='+[int][bool]$Broken))}
         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
-        if($out -notmatch $marker -or $out -match '(FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+        if($out -notmatch $marker -or $out -match '(MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+        if($Test -eq 'dependencies' -and $out -notmatch ('ISSUE_DEPENDENCIES_PASS dual='+[int]($Mode -eq 'dual')+' checks=')){throw 'Dependency test elaborated wrong issue mode.'}
         $result.executions+=@{test=$Test;status='PASS'}
     } else {
         $config=Get-Content (Join-Path $root 'config/cpu_toolchain.json') -Raw|ConvertFrom-Json

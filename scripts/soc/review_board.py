@@ -9,6 +9,19 @@ from gen_board import ROOT, validate
 from run import sha, save
 
 
+def review_early_mul(text):
+    base = 'triha_cpu_board_top/u_soc/u_core/u_cpu'
+    for tail in ('', '/u_issue'):
+        blocks = re.findall(r'(?ms)^I: Module instance \{' + re.escape(base + tail) +
+                            r'\} parameter value:\r?\n(.*?)(?=^I:|\Z)', text)
+        if len(blocks) != 1:
+            raise ValueError('missing or duplicate early-MUL scope: ' + base + tail)
+        values = re.findall(r"(?m)^\s*EARLY_MUL_BYPASS = (1|32)'b([01]+)\s*$", blocks[0])
+        if len(values) != 1 or len(values[0][1]) != int(values[0][0]) or int(values[0][1], 2) != 1:
+            raise ValueError('early-MUL bypass disabled or malformed: ' + base + tail)
+    return True
+
+
 def review_routed_database(work, result, selected_seed, multiseed):
     folder = Path(work).resolve() / "place_route"
     if multiseed:
@@ -140,6 +153,10 @@ def review(work):
         review_predictor((work / 'compile/run.log').read_text(encoding='utf-8'))
         software = json.loads((Path(result['system_directory']) / 'result.json').read_text(encoding='utf-8'))
         assert resources['lut'] == software['cpu_core_luts'] == result['cpu_core_luts_expected'] == result['cpu_core_luts_actual']
+    early_mul = None
+    if 'EARLY_MUL_BYPASS' in (work / 'src/rtl/cpu/triha_core.v').read_text(encoding='utf-8'):
+        early_mul = review_early_mul((work / 'compile/run.log').read_text(encoding='utf-8'))
+        assert result.get('early_mul_bypass') is True
     assert resources["drm36k_equivalent"] == 0 and resources["apm"] == 4
     replication = None
     if any("cpu_board_pc_fanout.fdc" in name for name in result["input_hashes"]):
@@ -171,6 +188,7 @@ def review(work):
                 selected_seed=selected_seed, selected_physical_report_sha256=sha(physical_path),
                 corners=rows, reset_checks=reset_checks, worst_setup_ns=worst, cpu_hierarchy_resources=resources,
                 pc_replication=replication,
+                early_mul_bypass=early_mul,
                 actual_pins=config["pins"], pll=pll, programmed=False, board_validated=False)
 
 

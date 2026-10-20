@@ -11,6 +11,28 @@ import review_board
 from run import sha
 
 
+class EarlyMultiplyConfiguration(unittest.TestCase):
+    def text(self, value=1):
+        base = 'triha_cpu_board_top/u_soc/u_core/u_cpu'
+        return ''.join('I: Module instance {' + base + tail + "} parameter value:\n    EARLY_MUL_BYPASS = 32'b" +
+                       format(value, '032b') + '\n' for tail in ('', '/u_issue'))
+
+    def test_both_actual_scopes_must_enable_the_bypass(self):
+        self.assertTrue(hasattr(review_board, 'review_early_mul'))
+        self.assertTrue(review_board.review_early_mul(self.text()))
+
+    def test_disabled_or_missing_scope_is_rejected(self):
+        self.assertTrue(hasattr(review_board, 'review_early_mul'))
+        for text in ('', self.text(0), self.text().split('I: Module instance', 2)[1]):
+            with self.assertRaises(ValueError):
+                review_board.review_early_mul(text)
+
+    def test_duplicate_actual_scope_is_rejected(self):
+        self.assertTrue(hasattr(review_board, 'review_early_mul'))
+        with self.assertRaises(ValueError):
+            review_board.review_early_mul(self.text() + self.text())
+
+
 class RoutedDatabaseBinding(unittest.TestCase):
     def setUp(self):
         self.assertTrue(hasattr(review_board, "review_routed_database"),

@@ -42,6 +42,8 @@ module triha_multiplier
 
     // Outputs
     ,output [ 31:0]  writeback_value_o
+    ,output [ 31:0]  early_low_value_o
+    ,output         early_low_valid_o
 );
 
 
@@ -113,7 +115,26 @@ begin
     mulhi_sel_e1_q <= ~((opcode_opcode_i & `INST_MUL_MASK) == `INST_MUL);
 end
 
-assign mult_result_w = {{ 32 {operand_a_e1_q[32]}}, operand_a_e1_q}*{{ 32 {operand_b_e1_q[32]}}, operand_b_e1_q};
+// Signed 17-bit partial products retain the full signed/unsigned 33-bit math.
+// The low partial product is shared by normal writeback and the narrow bypass.
+wire signed [16:0] low_a_w = {1'b0,operand_a_e1_q[15:0]};
+wire signed [16:0] low_b_w = {1'b0,operand_b_e1_q[15:0]};
+wire signed [16:0] high_a_w = operand_a_e1_q[32:16];
+wire signed [16:0] high_b_w = operand_b_e1_q[32:16];
+wire signed [33:0] partial_ll_w = low_a_w * low_b_w;
+wire signed [33:0] partial_lh_w = low_a_w * high_b_w;
+wire signed [33:0] partial_hl_w = high_a_w * low_b_w;
+wire signed [33:0] partial_hh_w = high_a_w * high_b_w;
+wire signed [35:0] cross_w = {{2{partial_lh_w[33]}},partial_lh_w} +
+    {{2{partial_hl_w[33]}},partial_hl_w} + {20'b0,partial_ll_w[31:16]};
+// Isolate the arithmetic shift from the unsigned concatenation's expression
+// context; otherwise Verilog can zero-fill a negative cross-product carry.
+wire signed [35:0] cross_carry_w = cross_w >>> 16;
+wire signed [35:0] upper_w = {{2{partial_hh_w[33]}},partial_hh_w} + cross_carry_w;
+assign mult_result_w = {upper_w[32:0],cross_w[15:0],partial_ll_w[15:0]};
+assign early_low_value_o = partial_ll_w[31:0];
+assign early_low_valid_o = (operand_a_e1_q[31:16]==16'b0) &&
+                          (operand_b_e1_q[31:16]==16'b0);
 
 always @ *
 begin

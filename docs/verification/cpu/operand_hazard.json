@@ -1,0 +1,461 @@
+{
+  "schema_version": 1,
+  "status": "DEPLOYED_AWAITING_USER_UART",
+  "date": "2026-10-20",
+  "verified_utc": "2026-10-20T08:30:02.412898+00:00",
+  "generator_sha256": "b7dc4bf2d205aad9fe7fb057b7b0be416118161b177dcbde845c5c151ffed326",
+  "parent_commit": "be225f5",
+  "backup_tag": "cpu-narrow-mul-100mhz-20261020",
+  "clock_hz": 100000000,
+  "pipeline_stages": 6,
+  "issue_width": 1,
+  "optimization": "-O2",
+  "lto": false,
+  "feature": "Shared unsigned16x16 E1 partial-product bypass; wide/high multiply retains original waiting",
+  "memory_change": "Registered onehot response word/target selection; original one-cycle response and public signals preserved",
+  "predictor": {
+    "btb": 512,
+    "bht": 512,
+    "ras": 4,
+    "gshare": false,
+    "algorithm": "PC-indexed 2-bit BHT with direct-mapped native-RAM BTB"
+  },
+  "cpu_only_resources": {
+    "lut": 5933,
+    "ff": 3528,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "lut_scope": "Inclusive u_core LUTs; distributed-RAM LUTs already included; no SRAM/ROM/UART/PLL/board logic",
+  "benchmark": {
+    "version": "1.0",
+    "data_size_bytes": 2000,
+    "seeds": [
+      0,
+      0,
+      102
+    ],
+    "deployment_iterations": 5000,
+    "full5000_simulated": false,
+    "official_submission": false
+  },
+  "baseline": {
+    "iterations": 5,
+    "cycles": 1690888,
+    "clock_hz": 100000000,
+    "seconds": 0.01690888,
+    "coremark": 295.7026130648511,
+    "coremark_per_mhz": 2.9570261306485115,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 5912,
+    "coremark_per_lut": 0.050017356743039774
+  },
+  "rtl_preflight": {
+    "iterations": 5,
+    "cycles": 1646428,
+    "clock_hz": 100000000,
+    "seconds": 0.01646428,
+    "coremark": 303.68774097622247,
+    "coremark_per_mhz": 3.0368774097622246,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.05118620276019256
+  },
+  "throughput_gain_pct": 2.7003913927605705,
+  "coremark_per_lut_gain_pct": 2.336880821506915,
+  "timed_profile": {
+    "cycles": 1646428,
+    "issue": 1448453,
+    "frontend": 91852,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 9,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 106114,
+    "other": 0,
+    "false_dependency": 35,
+    "wb": 1448453,
+    "stores": 70840
+  },
+  "baseline_profile": {
+    "cycles": 1690888,
+    "issue": 1448453,
+    "frontend": 91852,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 9,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 150574,
+    "other": 0,
+    "false_dependency": 35,
+    "wb": 1448453,
+    "stores": 70840
+  },
+  "wb_observation_ipc": 0.8797548389604647,
+  "ipc_scope": "WB completion observations, not ISA-proven architectural instret",
+  "timed_trace_comparison": {
+    "coremark.wb.log": {
+      "events": 1448453,
+      "identical_after_initial_absolute_cycle_value": true,
+      "normalized_tail_sha256": "39182f02fb591664ac50d4da2bec70ce1b53f23f9a835cc17a8aeadf85c4fec6",
+      "raw_sha256": "4e13d0e8038e8a8453c3d2a28aa825c74117703bf63b2d505ef8b102f397e70c"
+    },
+    "coremark.store.log": {
+      "events": 70840,
+      "identical_after_initial_absolute_cycle_value": true,
+      "normalized_tail_sha256": "6dbef4f79ebc850eebb9e49a49b6ff1f4c0fc4661caa3a0c8ec3c1a85059a853",
+      "raw_sha256": "f89ca421170f40665e4862bb869f78fd85ebf656b36ec36a62d8fc0adc314ee9"
+    }
+  },
+  "timing": {
+    "closed": true,
+    "worst_setup_ns": 0.113,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.113,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.16,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3150
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.821,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.101,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3150
+      }
+    ],
+    "reset_checks": [
+      {
+        "corner": "Slow",
+        "check": "Recovery",
+        "slack_ns": 3.501,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Slow",
+        "check": "Removal",
+        "slack_ns": 0.438,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Recovery",
+        "slack_ns": 5.116,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Removal",
+        "slack_ns": 0.294,
+        "failing_endpoints": 0
+      }
+    ],
+    "performance_slack_ns": 0.113,
+    "early_mul_enabled": true,
+    "source_unchanged": true,
+    "constraints_sha256": {
+      "fpga/pg2l100h/constraints/cpu_board_core_clock.fdc": "b48c6221b951562f8e8c54400c3d5a636f8d7b65a5fe39e17fa0d92eb2453e7e",
+      "fpga/pg2l100h/constraints/cpu_board_sram_local.fdc": "2314a2fdeb5f556c0a617ae16cbb5c774d147365f52360f11fb8d26f5d36a3b1",
+      "fpga/pg2l100h/constraints/cpu_board.fdc": "61cb27a36c928e6146d019cc890582efd4f0285c3ba5531106314bda215c6a85",
+      "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "95a040423e8ceccc0c248264ca986fc0810bad27bf6656c3ee5578855c17ed6d"
+    }
+  },
+  "package": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_coremark_6ff82025b53d",
+    "manifest_sha256": "9e5d62605eb82d36d288db17cb06110d3455af1f5a6aa1652fdf0e2e98314c8c",
+    "bitstream_sha256": "6ff82025b53d071827fb093a1f97dc417628f89fdc22db6dc0736eabd7404cd9",
+    "verify_mask_sha256": "6b1ae6a18985198d20955dd4d18bc899c1d569c62a187a54ec9af92b060e1adf",
+    "review_sha256": "c50e6b80e6f5fcc855eb2cd4b730dc69d2bfcbb5fbb6ad60e0e1b008a58acb7d"
+  },
+  "program": {
+    "status": "PASS",
+    "native_return_code": 0,
+    "expected_device_id": "00602899",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "serial_port_opened": false
+  },
+  "physical_coremark": {
+    "status": "AWAITING_USER_UART",
+    "cycles": null,
+    "coremark": null,
+    "coremark_per_mhz": null,
+    "coremark_per_lut": null
+  },
+  "uart": {
+    "port": "COM12",
+    "baud": 115200,
+    "data_bits": 8,
+    "parity": "none",
+    "stop_bits": 1,
+    "flow_control": "none",
+    "capture_by_agent": false
+  },
+  "integrity": {
+    "vendor_files": 28,
+    "original_benchmark_files": 9,
+    "adaptations": 11,
+    "python_checks_passed": 44
+  },
+  "cpu_source_hashes": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+    "rtl/cpu/triha_issue.v": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+    "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+    "rtl/cpu/triha_npc.v": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+    "rtl/cpu/triha_btb.v": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+    "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+    "rtl/cpu/triha_core.v": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "rtl/cpu/ADAPTATIONS.json": "2325a576e02f36a1768ca2b9b5d2fb191cb9c660d6d96d75aaed6a6bd0533cdc",
+    "rtl/cpu/vendor/UPSTREAM.json": "0ec4b9a2d06cbe37eb8de7b607e4e363c1f2addbddf3ecbb737b2565ec651d04"
+  },
+  "runs": {
+    "baseline": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T071803030270Z",
+      "result_sha256": "fa00b0afd40a4c2202443e9e08d7720e4149969d390b9dc88c0c1a5daf705426",
+      "status": "PASS"
+    },
+    "rejected_operand_area": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\cpu-area-20261020T072433252651Z",
+      "result_sha256": "2fe3ce8968e6eb75eb5f836dce0e7c6a961c2795d44cc086e8cd16381472d6fa",
+      "status": "PASS"
+    },
+    "rejected_operand_preflight": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T072627970691Z",
+      "result_sha256": "c5854ae835ea13941f53cf2828d4e26ca87be60ff57c757085a21d8919cbfab8",
+      "status": "PASS"
+    },
+    "rejected_tune_3": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T073213041355Z",
+      "result_sha256": "bbfba72bd2a2cb295c8a243bfe814bf992bfd3cdacbbbb55761caedea9489169",
+      "status": "PASS"
+    },
+    "rejected_tune_5": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T073213056435Z",
+      "result_sha256": "d99f6b54e1b827f39c117367e2714034964bb41332aca10c77387697b6babf81",
+      "status": "PASS"
+    },
+    "full_width_preflight": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T074316942000Z",
+      "result_sha256": "8cdfafa0cc6e33662cd95ce99604cef715cec1071e0f6cf0495cee679df95fd5",
+      "status": "PASS"
+    },
+    "full_width_route_failed": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T0748348838408Z",
+      "result_sha256": "a2ea06516f6eaaef1a3d9c0909846b8929e31a1a7add05d1aa352f131fcaddf6",
+      "status": "TIMING_FAIL"
+    },
+    "narrow_arithmetic": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z",
+      "result_sha256": "b4f323711f32bbf70a99528933b0390cc368acd604e83064267fdfb7633120d5",
+      "status": "PASS"
+    },
+    "narrow_forwarding": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z",
+      "result_sha256": "ca756f5395206a1aff18a66f0ae0a3dabd2f66c1bd9edfaa0f66fcb0918ee2ca",
+      "status": "PASS"
+    },
+    "narrow_product_negative": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z",
+      "result_sha256": "eaeccdd5c72c253a657e8e331d28937af09f8bc3b7e7c7e8b66b921d76484725",
+      "status": "FAIL"
+    },
+    "narrow_writeback_negative": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z",
+      "result_sha256": "4c3e0371df8756b26206bc243631ea107a84105709d5ed31fcd3460b45d6d9e3",
+      "status": "FAIL"
+    },
+    "ordered_seed37": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z",
+      "result_sha256": "eaea4dbf78faeb227148bc78b3793ca29da1aa53e605fe8b04df0e1e82671db6",
+      "status": "PASS"
+    },
+    "ordered_seed1234567": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z",
+      "result_sha256": "a3c5536efd9627aa3c318a2a3613d5119a3cabd0c2a55468178f0a044b779308",
+      "status": "PASS"
+    },
+    "ordered_seed271828": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z",
+      "result_sha256": "9bd1761fd51de879d92a48e3c51494750a1c87e2984df5c0968fef801822df73",
+      "status": "PASS"
+    },
+    "irq": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z",
+      "result_sha256": "23f508cd79b130000fa63d06dcd340d0b72ec498928fda48359aebd629abf74c",
+      "status": "PASS"
+    },
+    "memory_protocol": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\memory-20261020T081739889386Z",
+      "result_sha256": "c551ee437825f76f4520adf1bf8547cf68de25d1cbc34ad2af61566578dc18b6",
+      "status": "PASS"
+    },
+    "memory_negative": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\memory-20261020T081556796307Z",
+      "result_sha256": "2d46ba1c6c1b6ad976e3199db7d8a814e6ba47dbec635cf150764def434d9be3",
+      "status": "FAIL"
+    },
+    "memory_cycle_miter": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\memory-parent-miter-20261020T081742189189Z",
+      "result_sha256": "d84e95cf4d4b8fea4dcc801b60389b39cacee89e31e37142e8d776a03da44cc4",
+      "status": "PASS"
+    },
+    "board_two_boots": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-system-20261020T081554739722Z",
+      "result_sha256": "1fb2c5bf03623c68eef8ea920bea25f099cde82ec37cff32b69a24c918387003",
+      "status": "PASS"
+    },
+    "area": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\cpu-area-20261020T081554709001Z",
+      "result_sha256": "914cc12a37bd79f640abe54f45c198646d847bfc5662921ce9b634c81041ab4a",
+      "status": "PASS"
+    },
+    "positive": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T081904735517Z",
+      "result_sha256": "33019db548a43be3915ba0d36d1aecd2d979af8fc0b65e1c9b00e497e6a7490a",
+      "status": "PASS"
+    },
+    "crc_negative": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T081904731166Z",
+      "result_sha256": "9497a0480551dc8411d1933f6261bad7deecb461bb4204316f3ee6f7ff69b9fc",
+      "status": "FAIL"
+    },
+    "route": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T0824200693298Z",
+      "result_sha256": "29d1b2fbef577e7af533c4da039e9deb7d2e83fad044c13d0679e9f20ec60d95",
+      "status": "PASS"
+    },
+    "program": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-program-20261020T082907336769Z",
+      "result_sha256": "86a3a6d1dfa45ef6a87bffe32122bdcdbd383d262d156307ef4700aba977d521",
+      "status": "PASS"
+    }
+  },
+  "alternate_final_route": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T0824200755631Z",
+    "result_sha256": "8e95e28461ae3ab891cdd59d160cd9d0131716b92545d6eca34ed1fc1514b689",
+    "timing_closed": false,
+    "worst_setup_ns": 0.095,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.095,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": -0.049,
+        "total_negative_slack_ns": -0.049,
+        "failing_endpoints": 1,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3151
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.752,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": -0.049,
+        "total_negative_slack_ns": -0.049,
+        "failing_endpoints": 1,
+        "endpoints": 17374
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 3151
+      }
+    ],
+    "not_packaged": true
+  }
+}

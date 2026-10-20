@@ -51,6 +51,7 @@ module triha_core #(
         .SUPPORT_DUAL_ISSUE(DUAL_ISSUE),
         .SUPPORT_LOAD_BYPASS(1),
         .SUPPORT_MUL_BYPASS(1),
+        .EARLY_MUL_BYPASS(1),
         .SUPPORT_REGFILE_XILINX(0),
         .EXTRA_DECODE_STAGE(0),
         .NUM_BTB_ENTRIES(512),

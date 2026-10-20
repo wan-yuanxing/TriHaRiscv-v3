@@ -146,6 +146,14 @@ try {
     $compileText=[IO.File]::ReadAllText((Join-Path $work 'compile/run.log'))
     $result['elaborated_cpu_configuration']=Assert-TrihaPdsConfiguration ($compileText.Replace('triha_cpu_board_top/u_soc/u_core','triha_core')) 0 1 1
     $result['elaborated_predictor_configuration']=Assert-TrihaPdsPredictorConfiguration ($compileText.Replace('triha_cpu_board_top/u_soc/u_core','triha_core'))
+    foreach($scope in @('triha_cpu_board_top/u_soc/u_core/u_cpu','triha_cpu_board_top/u_soc/u_core/u_cpu/u_issue')){
+        $blocks=[regex]::Matches($compileText,'(?ms)^I: Module instance \{'+[regex]::Escape($scope)+'\} parameter value:\r?\n(.*?)(?=^I:|\z)')
+        if($blocks.Count -ne 1){throw 'Missing/duplicate early-MUL elaborated scope.'}
+        $values=[regex]::Matches($blocks[0].Groups[1].Value,"(?m)^\s*EARLY_MUL_BYPASS = (1|32)'b([01]+)\s*$")
+        if($values.Count -ne 1 -or [Convert]::ToUInt32($values[0].Groups[2].Value,2) -ne 1){throw 'Early-MUL bypass was not actually enabled.'}
+    }
+    $result['early_mul_bypass']=$true
+    $result.elaborated_cpu_configuration['EARLY_MUL_BYPASS']=1
     $cpuRows=[regex]::Matches([IO.File]::ReadAllText((Join-Path $work 'synthesize/triha_cpu_board_top.snr')),'(?m)^\|[ +]*u_core\s+\|\s+(\d+)\s+\|')
     if($cpuRows.Count -ne 1){throw 'Missing/duplicate CPU hierarchy LUT count.'}
     $result['cpu_core_luts_actual']=[int]$cpuRows[0].Groups[1].Value

@@ -36,7 +36,7 @@ module triha_soc_memory #(
     reg uart_pending_q;
     reg [7:0] uart_byte_q;
     reg [31:0] mmio_data_q;
-    reg upper_word_q, sram_q, rom_q;
+    reg [3:0] read_select_q;
     reg inst_sram_q, inst_rom_q;
     reg [31:0] cycle_q;
     wire i_rom = inst_addr_i >= `TRIHA_ROM_BASE && inst_addr_i < `TRIHA_ROM_BASE + `TRIHA_ROM_BYTES;
@@ -83,14 +83,19 @@ module triha_soc_memory #(
     );
     // SRAM and ROM outputs are clocked in the memory modules; these selects
     // and the response-valid/tag are captured at that same acceptance edge.
-    assign data_rdata_o = sram_q ? (upper_word_q ? ram_data[63:32] : ram_data[31:0]) :
-                          rom_q ? (upper_word_q ? rom_data[63:32] : rom_data[31:0]) : mmio_data_q;
+    // Decode bank/target before the synchronous RAM edge. The MMIO register
+    // is zero on every memory response, so all response sources can merge in
+    // parallel without a late RAM-word mux followed by a target-priority mux.
+    assign data_rdata_o = ({32{read_select_q[0]}} & ram_data[31:0]) |
+                          ({32{read_select_q[1]}} & ram_data[63:32]) |
+                          ({32{read_select_q[2]}} & rom_data[31:0]) |
+                          ({32{read_select_q[3]}} & rom_data[63:32]) | mmio_data_q;
     always @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin
             inst_valid_o <= 0; inst_error_o <= 0; inst_rom_q <= 0; inst_sram_q <= 0;
             uart_pending_q <= 0; uart_byte_q <= 0;
             data_ack_o <= 0; data_error_o <= 0; data_resp_tag_o <= 0;
-            mmio_data_q <= 0; upper_word_q <= 0; sram_q <= 0; rom_q <= 0;
+            mmio_data_q <= 0; read_select_q <= 0;
             done_o <= 0; exit_code_o <= 0; cycle_q <= 0;
         end else begin
             cycle_q <= cycle_q + 1'b1;
@@ -103,9 +108,10 @@ module triha_soc_memory #(
                 data_ack_o <= !uart_write;
                 data_error_o <= d_bad;
                 data_resp_tag_o <= data_req_tag_i;
-                upper_word_q <= data_addr_i[2];
-                sram_q <= d_sram && data_re_i && !d_bad;
-                rom_q <= d_rom && data_re_i && !d_bad;
+                read_select_q <= {d_rom && data_re_i && !d_bad && data_addr_i[2],
+                                  d_rom && data_re_i && !d_bad && !data_addr_i[2],
+                                  d_sram && data_re_i && !d_bad && data_addr_i[2],
+                                  d_sram && data_re_i && !d_bad && !data_addr_i[2]};
                 mmio_data_q <= 0;
                 if (!d_bad && data_re_i) begin
                     if (data_addr_i == `TRIHA_UART_BASE + 4) mmio_data_q <= {31'b0, uart_ready};

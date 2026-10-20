@@ -39,6 +39,41 @@ module tb_soc_memory;
         .data_rdata_o(d_data), .data_resp_tag_o(d_resp),
         .uart_tx_o(tx), .done_o(done), .exit_code_o(code)
     );
+`ifdef COMPARE_MEMORY_PARENT
+    wire parent_i_accept,parent_i_valid,parent_i_error,parent_d_accept,parent_d_ack,parent_d_error;
+    wire [63:0] parent_i_data;
+    wire [31:0] parent_d_data;
+    wire [10:0] parent_d_resp;
+    wire parent_tx,parent_done;
+    wire [7:0] parent_code;
+    triha_soc_memory_parent #(.UART_DIVISOR(8)) u_parent (
+        .clk_i(clk), .rst_ni(rst_n),
+        .inst_req_i(i_req), .inst_addr_i(i_addr),
+        .inst_accept_o(parent_i_accept), .inst_valid_o(parent_i_valid),
+        .inst_error_o(parent_i_error), .inst_rdata_o(parent_i_data),
+        .data_addr_i(d_addr), .data_wdata_i(d_wdata),
+        .data_re_i(d_re), .data_wstrb_i(d_we), .data_req_tag_i(d_tag),
+        .data_invalidate_i(d_invalidate), .data_writeback_i(d_writeback), .data_flush_i(d_flush),
+        .data_accept_o(parent_d_accept), .data_ack_o(parent_d_ack), .data_error_o(parent_d_error),
+        .data_rdata_o(parent_d_data), .data_resp_tag_o(parent_d_resp),
+        .uart_tx_o(parent_tx), .done_o(parent_done), .exit_code_o(parent_code)
+    );
+    always @(posedge clk) if (rst_n) begin
+        #1;
+        if ({i_accept,i_valid,i_error,i_data,d_accept,d_ack,d_error,d_data,d_resp,tx,done,code} !==
+            {parent_i_accept,parent_i_valid,parent_i_error,parent_i_data,parent_d_accept,parent_d_ack,
+             parent_d_error,parent_d_data,parent_d_resp,parent_tx,parent_done,parent_code})
+            $fatal(1,"SOC_MEMORY_FAIL parent_response_or_cycle_mismatch");
+    end
+`endif
+    always @(posedge clk) if (rst_n) begin
+        #2;
+        if ((u_dut.read_select_q & (u_dut.read_select_q-4'b1)) !== 4'b0)
+            $fatal(1,"SOC_MEMORY_FAIL response_select_not_onehot");
+        if (u_dut.read_select_q!=0 && u_dut.mmio_data_q!==0)
+            $fatal(1,"SOC_MEMORY_FAIL memory_response_has_mmio_payload");
+    end
+
 
     // Independent wire-level receiver, not the transmitter's internal data.
     initial forever begin

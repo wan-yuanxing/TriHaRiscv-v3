@@ -39,6 +39,7 @@ module triha_cpu
     ,parameter SUPPORT_DUAL_ISSUE = 1
     ,parameter SUPPORT_LOAD_BYPASS = 1
     ,parameter SUPPORT_MUL_BYPASS = 1
+    ,parameter EARLY_MUL_BYPASS = 1
     ,parameter SUPPORT_REGFILE_XILINX = 0
     ,parameter EXTRA_DECODE_STAGE = 0
     ,parameter MEM_CACHE_ADDR_MIN = 32'h80000000
@@ -243,6 +244,8 @@ wire           mul_opcode_invalid_w;
 wire           branch_exec0_is_ret_w;
 wire  [ 31:0]  mmu_lsu_data_rd_w;
 wire  [ 31:0]  writeback_mul_value_w;
+wire  [ 31:0]  writeback_mul_early_w;
+wire           writeback_mul_early_valid_w;
 wire           mmu_lsu_flush_w;
 wire  [  4:0]  lsu_opcode_rb_idx_w;
 wire           mmu_lsu_accept_w;
@@ -519,6 +522,8 @@ u_mul
 
     // Outputs
     ,.writeback_value_o(writeback_mul_value_w)
+    ,.early_low_value_o(writeback_mul_early_w)
+    ,.early_low_valid_o(writeback_mul_early_valid_w)
 );
 
 
@@ -551,6 +556,7 @@ triha_issue
     ,.SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
     ,.SUPPORT_MULDIV(SUPPORT_MULDIV)
     ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
+    ,.EARLY_MUL_BYPASS(EARLY_MUL_BYPASS)
     ,.SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)
 )
 u_issue
@@ -616,6 +622,8 @@ u_issue
     ,.writeback_mem_bypass_i(writeback_mem_bypass_w)
     ,.writeback_mem_exception_i(writeback_mem_exception_w)
     ,.writeback_mul_value_i(writeback_mul_value_w)
+    ,.writeback_mul_early_i(writeback_mul_early_w)
+    ,.writeback_mul_early_valid_i(writeback_mul_early_valid_w)
     ,.writeback_div_valid_i(writeback_div_valid_w)
     ,.writeback_div_value_i(writeback_div_value_w)
     ,.csr_result_e1_value_i(csr_result_e1_value_w)
