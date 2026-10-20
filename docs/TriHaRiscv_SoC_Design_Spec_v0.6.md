@@ -613,6 +613,13 @@ DISPLAY_PENDING区分已保留记录；事件先完整核对、再ACK、成功�
 错误仍锁止且晚到错误不撤销已发布记录；未扩展旧采集MMIO ABI1，尚未接正式
 CPU/fabric、实际显示退休或跨master DDR可见性。见[重武装验证](verification/video/capture_rearm.md)。
 
+2026-10-20 F4c2b实施注记：独立多帧采集ABI2使用`0x20012000/4KiB`，
+保留原采集ABI1和显示窗口；正式fabric应优先译码独立子窗口。新增CPU代际回显、
+排空记录及显式REARM，只有成功、软件双事件消费和核就绪后才能请求下一采集。
+跨reset仍要求协调清空；C驱动的MMIO fence与排空资格不替代跨master DDR可见性。
+独立组件及驱动RTL回放见[ABI2验证](verification/video/capture_v2.md)，尚未接正式
+CPU执行/共享DDR仲裁/实际像素退休，不表示连续视频已实现。
+
 ## 10. DDR 地址、带宽与互连
 
 ### 10.1 总线约定

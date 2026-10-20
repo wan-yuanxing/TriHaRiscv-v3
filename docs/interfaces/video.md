@@ -28,6 +28,31 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4c2b 独立采集 ABI2
+
+新端点`video_capture_mmio_v2`位于`0x20012000/4KiB`，版本`0x00020000`。
+权威配置`config/video_capture_v2.json`由`gen_capture_v2.py`生成独立RTL/C定义，
+旧采帧ABI1定义/行为保持。正式fabric必须先译码本窗口和显示窗口，再进入旧
+Video大窗口；本批不替CPU安装fabric或决定DDR屏障语义。
+
+沿用ABI1寄存器偏移，新增REARM=`0x30`、REQUEST_GENERATION=`0x134`、
+ACCEPTED_GENERATION=`0x158`、COMPLETED_GENERATION=`0x1c0`、COMPLETED_DRAINED=
+`0x1c4`；STATUS位8为REARM_READY、位9为核req_ready。generation为CPU锁存回显，
+不是未协调reset后的核端旧事件甄别证明，endpoint/core/source仍必须协调reset。
+
+SUBMIT冻结slot/非零frame/version/generation，accepted/completion复制进保持
+邮箱后由软件读全记录再ACK。成功要求accepted、身份/权威地址、精确三路数量
+和字节、合法峰值及真实port_drained；失败记录同样须排空。两个事件均消费且成功、
+核ready、无在途事件/故障后才能显式REARM。ACK不隐式重武装，REARM不复位FIFO、
+不arm视频、不分配全局槽或改变显示引用。错误仅可信协调恢复可清除。
+
+`video_capture.h/.c`回调按窗口偏移读写，返回成功须真实总线响应已完成。失败写
+可能已经执行，驱动不重试命令、不隐式释放allocation。读完整事件后再检查
+sticky STATUS，清除IRQ通知不隐藏终态故障；已发布成功记录可保留但资格返回失败。
+驱动validate只验证控制记录和排空资格；CPU调用frame_pool_capture_done前仍须
+真实跨master DDR可见性证明。MMIO fence回调和本机C仿真不构成物理排序签核。
+详见[capture_v2](../verification/video/capture_v2.md)。
+
 ## F4c2a 采集核受控重武装
 
 `video_capture_ingress`与`video_three_branch_capture`新增`ENABLE_REARM=0`，

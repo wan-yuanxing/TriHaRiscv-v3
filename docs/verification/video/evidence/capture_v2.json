@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "status": "independent_capture_ABI2_and_native_driver_verified",
+  "base_head": "f18a6574a2ebcd97f44cd7db9d8f945202022b68",
+  "owned": [
+    "config/video_capture_v2.json",
+    "scripts/video/gen_capture_v2.py",
+    "rtl/video/include/video_capture_v2.vh",
+    "sw/include/video_capture_v2.h",
+    "rtl/video/video_capture_mmio_v2.sv",
+    "sw/include/video_capture.h",
+    "sw/drivers/video_capture.c",
+    "tb/video/tb_video_capture_v2.sv",
+    "tb/video/tb_video_capture_v2_core.sv",
+    "tb/video/tb_video_capture_driver.sv",
+    "tb/video/test_capture_driver.c",
+    "tb/video/test_capture_v2_abi.py",
+    "scripts/video/test_capture_driver.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_capture_v2.json",
+    "fpga/pg2l100h/constraints/video_capture_v2.fdc",
+    "docs/superpowers/specs/2026-10-20-capture-v2-design.md",
+    "docs/superpowers/plans/2026-10-20-capture-v2.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/capture_v2.md",
+    "docs/verification/video/evidence/capture_v2.json"
+  ],
+  "source_hashes": {
+    "config/video_capture_v2.json": "09a48b839c5a341f6bfa525d26fa07b9c6aef4f6ed0d795012935764eb7eab32",
+    "scripts/video/gen_capture_v2.py": "27030ce11a52f34213e579b82cf9669254e40bf133604cf5e4e32969e7f64bfb",
+    "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+    "sw/include/video_capture_v2.h": "7fefe306c820706d6089ead59fa1d98a685827f96a291c1787e8110451ffc08c",
+    "rtl/video/video_capture_mmio_v2.sv": "39121cbd168d6693362ad596e858d05cc19af39124c039da68b99112a5a710c3",
+    "sw/include/video_capture.h": "5eb238bf29a75ec08553183f6fff291d1b30ae4e451ea0884ce08886ccdaac8c",
+    "sw/drivers/video_capture.c": "4437a50882acfa6614c5e85238ab0d5163c65077a28b4e510e9a06d7ea0f5679",
+    "tb/video/tb_video_capture_v2.sv": "7dfe32fe8675b038de2cbb041e11dc078d655ad1888ad39afc28a19448f2e59b",
+    "tb/video/tb_video_capture_v2_core.sv": "c8ab6c6d502c002e06cdae24b73823f7af11e791d9ed6a9d349ea853a08d6f7e",
+    "tb/video/tb_video_capture_driver.sv": "088fc2841262cf09254e8577a0ead78c30b68eb55d3d169976c1d916b4cd85a2",
+    "tb/video/test_capture_driver.c": "ad7c86e2b727d598fa330e8ab6f1f6e800610e7d7a61a07714e50a2754a5dc94",
+    "tb/video/test_capture_v2_abi.py": "a42eee4cf93254346038cb96c2f784584d59856b058faece514f4fb74f006d09",
+    "scripts/video/test_capture_driver.py": "26192128c81e2b85379f54ca550ac4d3409cd82be735236fdf176d2f3d33d5c8",
+    "scripts/video/run.py": "9198268f5d2057e87328046dd04f55f5ccfee75604da8cd1a8dc507361e87a39",
+    "scripts/video/build_pds.py": "6fdfc55bedd2eec39a31e3a4e5e170c9ebf4eb4779d48a0f161de7845c794a1e",
+    "fpga/pg2l100h/project/video_capture_v2.json": "a75aca2e2ae60d594efc302c3b179c1eeffdd5e741f36dfe36a45b6e8771306f",
+    "fpga/pg2l100h/constraints/video_capture_v2.fdc": "b85b0f590f5c62b49189701e45683df2238b494c7374f5df0156386f07315c1d",
+    "docs/superpowers/specs/2026-10-20-capture-v2-design.md": "d46b05fa348f07e72128d18cd2fac6d2e3fb22748b2d7de13c0c59db8f236117",
+    "docs/superpowers/plans/2026-10-20-capture-v2.md": "62c9cdd56c94caf3d66a66b819e0e409991e188a09bbb3ca05ea31e979be79cb",
+    "docs/video/STATUS.md": "51366d93a0695cdc3085c47f8b56f8764ebe8eb86f99a0e8b4e061233e0041b8",
+    "docs/video/README.md": "df7d7990008c4b50e1c5f2eca58cc42f024e244ea5a2efec3b3791ba38355a37",
+    "docs/interfaces/video.md": "b1c29b41a72be2a9959ad6f43bb2b65366db4f34b5a671b9a01149c1307e3400",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "656120b28f5e3befa6310551b9c7e0b0383627f7b736865b55fd6e484ed3054f",
+    "docs/verification/video/capture_v2.md": "1c84a082bb905af8b023b816864e1a145ae68e149f676bfa0917067766798bd2"
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/capture_v2_baseline/result.json",
+      "sha256": "0a0aec9902ca7a4fc80541c6cc5d5617f4087d6c045467f42bcbc31c6f34509b"
+    },
+    "audit": {
+      "path": "build/video/audit_capture_v2.py",
+      "sha256": "a4de9e3bdd95f98817f8e98f2d690d377af5b7ac499a2139bed6d9d2ec7c1a4e"
+    },
+    "legacy_red": {
+      "path": "build/video/capture_v2_red_behavior/result.json",
+      "sha256": "c4f0b30191e93f1f86d9032dd96630e40467185a15d27d8900b0dfe28b352080"
+    },
+    "driver_red": {
+      "path": "build/video/capture_driver_red/result.json",
+      "sha256": "0545c8439bef1c094a70f19f385ea0f9ba462db195409f0889c5275bda8b4ed1"
+    },
+    "muted_fault_failure_artifacts": {
+      "compile.log": {
+        "path": "build/video/capture_driver/20261020T075836_977042Z/compile.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "driver.exe": {
+        "path": "build/video/capture_driver/20261020T075836_977042Z/driver.exe",
+        "sha256": "ca55d5f3dc93cf631590e1a20cb87dadc7dff613d1374ae36b9b2721844b77bf"
+      },
+      "host_version.log": {
+        "path": "build/video/capture_driver/20261020T075836_977042Z/host_version.log",
+        "sha256": "785caf0d76c92dcd02ae28282b535bd3abd2caad2abb733b1edf63e2c602c2ef"
+      },
+      "rv_version.log": {
+        "path": "build/video/capture_driver/20261020T075836_977042Z/rv_version.log",
+        "sha256": "56e9ba794dc0f3d4846eef892db8f5528046f8dfb5dbec6d5f63ddf06d5fea40"
+      },
+      "test.log": {
+        "path": "build/video/capture_driver/20261020T075836_977042Z/test.log",
+        "sha256": "11430f02b71618c668ce254765ad98e51e7abbc2c39956322b6f284b35c94026"
+      }
+    },
+    "muted_fault_red": {
+      "path": "build/video/capture_muted_fault_red/result.json",
+      "sha256": "a24b8650b68c5af9960b731d0729bffa4dfa7450983806a652b7123f2a910dae"
+    },
+    "muted_fault_native_red": {
+      "path": "build/video/capture_driver/20261020T075836_977042Z/result.json",
+      "sha256": "f857d1e88b42e5580981afae387961806fa17c01f2b92e474d9733f850a44a64"
+    },
+    "capture_v2": {
+      "path": "build/video/regression/20261020T080050_779681Z/result.json",
+      "sha256": "af23fca47dee7639b1bb29ebca8f49227ffe79dc48f0a72daf9bfc2f8199546e"
+    },
+    "capture_mmio": {
+      "path": "build/video/regression/20261020T080135_224629Z/result.json",
+      "sha256": "7f389df0bc6af67ff6daa100e91c625d5a21e7475f5f96739d29a866cc31ae05"
+    },
+    "frame_pool": {
+      "path": "build/video/regression/20261020T080135_244988Z/result.json",
+      "sha256": "6c9d914256718321638f8a3ac31087b3275b8ff2c60a21e34c2b5d077ac5a516"
+    },
+    "native_driver": {
+      "path": "build/video/capture_driver/20261020T080100_944471Z/result.json",
+      "sha256": "29f5fedeb9ce44e8768d6046a3af3f70e6d1d9e8665bcd517e0980aa976e8201"
+    },
+    "RV32I": {
+      "path": "build/video/capture_v2_memset/green.json",
+      "sha256": "9124beb5400dc5bc839540884b46793ebec86cfb355cbb98d4cfcb8a6f60aaff"
+    },
+    "memset_red": {
+      "path": "build/video/capture_v2_memset/red.json",
+      "sha256": "5e3d10ce6484cdd4db7e4c64c970bdcdbe4ac1587b585d7ff25bcc09a1fcf08b"
+    },
+    "quality": {
+      "path": "build/video/capture_v2_quality/20261020T080135_232970Z/result.json",
+      "sha256": "5680f47878fb0cf64b0edcb76e8ca4d5bb10c28b0e039115dc52faa2d93abe6d"
+    },
+    "mutations": {
+      "path": "build/video/capture_v2_mutations/20261020T080135_231843Z/result.json",
+      "sha256": "2646eb7da79b80c5edc07c0b5ebb918e7244b70443f5fcd8b3248d7d1ccc90aa"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261020T075511_551311Z/result.json",
+      "sha256": "dd2a1a0e7f159b2e36cf77f152398d1d277fcc174766d429e03c777014f0302b"
+    },
+    "review": {
+      "path": "build/video/capture_v2_review/review.json",
+      "sha256": "7ba971576da15f0f38b1f92399c569e77d403b517e1d459c961b930f1b07a0dc"
+    }
+  },
+  "simulations": {
+    "capture_v2": 12,
+    "capture_mmio": 2,
+    "frame_pool": 1
+  },
+  "real_core": {
+    "frames": 21,
+    "geometries": [
+      [
+        10,
+        10
+      ],
+      [
+        30,
+        20
+      ],
+      [
+        40,
+        30
+      ]
+    ],
+    "bytes_checked": 60039
+  },
+  "native": {
+    "checks": 224,
+    "callback_failures": 50,
+    "ambiguous_writes": 4,
+    "trace": {
+      "R": 139,
+      "W": 30,
+      "E": 4,
+      "F": 13
+    }
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "mutations_detected": 10,
+  "independent_review": {
+    "summary": {
+      "endpoint_adversarial_runs": 49,
+      "actual_core_fault_runs": 5,
+      "independent_c_assertions": 705,
+      "independent_c_callback_failures": 128,
+      "production_c_assertions": 224,
+      "production_c_callback_failures": 50,
+      "production_c_ambiguous_writes": 4,
+      "production_endpoint_cases": 8,
+      "real_core_geometries": 3,
+      "real_core_jobs_per_geometry": 7,
+      "abi_unit_tests": 4,
+      "trace": {
+        "reads": 139,
+        "writes": 30,
+        "events": 4,
+        "fences": 13
+      },
+      "rv32i_compiled_only": true,
+      "rv32i_architecture": "rv32i2p1",
+      "rv32i_undefined_symbols": 0,
+      "protected_files_unchanged": 409,
+      "unrelated_paths_unchanged": 31,
+      "parent_mutations_detected": 10
+    },
+    "source_hashes_verified": 33,
+    "reviewer_artifacts_verified": 134,
+    "external_artifacts_verified": 6,
+    "open_findings": [],
+    "closed_findings": [
+      "CAPTURE_V2_C1_MUTED_STICKY_FAULT",
+      "CAPTURE_V2_C2_FREESTANDING_MEMSET"
+    ]
+  },
+  "synthesis": {
+    "lut": 816.0,
+    "registers": 982.0,
+    "drm": 0.0,
+    "apm": 0,
+    "latches": 0,
+    "setup_estimate_ns": 2.708,
+    "hold_estimate_ns": 0.701
+  },
+  "protected_files": 409,
+  "other_route_paths_preserved": 31,
+  "old_entrypoint_bytes_exact_outside_new_hooks": true,
+  "prior_ABI1_and_capture_rearm_core_bytes_unchanged": true,
+  "CPU_selects_slots": true,
+  "generation_is_CPU_echo": true,
+  "coordinated_reset_required": true,
+  "explicit_rearm_after_software_consumption": true,
+  "RV32I_compiled_only": true,
+  "RV32I_no_undefined_symbols": true,
+  "native_C_executed": true,
+  "CPU_executed": false,
+  "shared_fabric_integrated": false,
+  "physical_DDR_visibility_verified": false,
+  "actual_pixel_retirement_producer_integrated": false,
+  "continuous_video_verified": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

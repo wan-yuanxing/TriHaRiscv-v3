@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "target": "video_capture_v2",
+  "top": "video_capture_mmio_v2",
+  "test_top": "tb_video_capture_v2",
+  "integration_test_top": "tb_video_capture_v2_core",
+  "sources": [
+    "rtl/video/video_capture_mmio_v2.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv"
+  ],
+  "tests": [
+    "tb/video/tb_video_capture_v2.sv",
+    "tb/video/tb_video_capture_v2_core.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_capture_v2.fdc"
+  ],
+  "scope": "independent capture ABI2 mailbox, explicit success-only REARM and CPU generation echo; digital MMIO/real capture core and native C trace only; no shared-fabric visibility, CPU execution, routing or board"
+}

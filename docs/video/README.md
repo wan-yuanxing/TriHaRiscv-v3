@@ -50,6 +50,12 @@ F4c2a提供可选多帧采集组件：`--suite capture_rearm`，
 FIFO不逐帧reset，错误继续锁止；见[重武装验证](../verification/video/capture_rearm.md)。
 CPU/fabric和新的采集MMIO生命周期接入留待下一批。
 
+F4c2b增加独立多帧控制ABI2和C驱动：`--suite capture_v2`，综合目标
+`video_capture_v2`仅synth。显式REARM与邮箱ACK分开，CPU generation随事件回显；
+旧采集ABI1/静态板级目标不变。生成器为`gen_capture_v2.py --check`，驱动位于
+`sw/include/video_capture.h`与`sw/drivers/video_capture.c`，详见
+[ABI2验证](../verification/video/capture_v2.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -399,6 +405,13 @@ fpga/pg2l100h/
 rtl/video/video_capture_rearm_core.sv    开启多帧参数的综合专用核wrapper
 tb/video/tb_video_capture_rearm.sv        真实入口/FIFO/三路写入的多帧组件测试
 fpga/pg2l100h/project/video_capture_rearm.json 显式组件filelist
+config/video_capture_v2.json             独立0x20012000/4KiB采集ABI2权威定义
+rtl/video/video_capture_mmio_v2.sv       显式REARM/保持邮箱/generation回显端点
+sw/include/video_capture.h              采集驱动及完整事件/资格检查API
+sw/drivers/video_capture.c              CPU可移植采集驱动，不替代DDR可见性
+tb/video/tb_video_capture_v2*.sv         控制协议和真实三分支多帧写入验证
+tb/video/tb_video_capture_driver.sv      实际C驱动读写事务回放
+scripts/video/gen_capture_v2.py         同源生成video_capture_v2.vh/.h
 docs/interfaces/                        Video 与 DDR 契约状态
 docs/verification/video/                 工具、参考差异、验证证据
 docs/video/STATUS.md                     任务、依赖和完成状态

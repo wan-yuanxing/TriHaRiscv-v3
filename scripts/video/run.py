@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "capture_v2", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -336,6 +336,44 @@ def main():
             artifacts += [work/(name+'_version.log') for name in ('iverilog', 'vvp')]
             result['cpu_axil_artifacts'] = input_hashes(artifacts)
             result['passed'].append('cpu_axil')
+        if args.suite in ('capture_v2','all'):
+            from common import sha256
+            run_logged([sys.executable,ROOT/'scripts/video/gen_capture_v2.py','--check'],work/'capture_v2_abi.log')
+            manifest_path=ROOT/'fpga/pg2l100h/project/video_capture_v2.json'
+            component=json.loads(manifest_path.read_text(encoding='utf-8'))
+            sources=[ROOT/p for p in component['sources']]
+            tests=[ROOT/p for p in component['tests']]
+            add_inputs(result,[manifest_path,*sources,*tests,ROOT/'config/video_capture_v2.json',
+                ROOT/'rtl/video/include/video_capture_v2.vh',ROOT/'sw/include/video_capture_v2.h',
+                *[ROOT/p for p in component['constraints']]])
+            artifacts=[];result['capture_v2_tools']={}
+            for name in ('iverilog','vvp'):
+                executable=tool(name);log=work/('capture_v2_'+name+'_version.log')
+                result['capture_v2_tools'][name]={'path':str(executable),'sha256':sha256(executable)}
+                run_logged([executable,'-V'],log);artifacts.append(log)
+            for case in range(8):
+                stem=f'capture_v2_{case}'
+                log=simulate(work,stem,component['test_top'],sources+[tests[0]],[ROOT/'rtl/video/include'],run_args=(f'+CASE={case}',))
+                if log.count('VIDEO_CAPTURE_V2_PASS')!=1:raise RuntimeError('Missing capture ABI2 pass')
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            for width,height,top,bottom in ((10,10,0,0),(30,20,2,1),(40,30,4,5)):
+                stem=f'capture_v2_core_{width}_{height}'
+                log=simulate(work,stem,component['integration_test_top'],sources+[tests[1]],[ROOT/'rtl/video/include'],
+                    parameters=(('W',width),('H',height),('PT',top),('PB',bottom)))
+                if log.count('VIDEO_CAPTURE_V2_CORE_PASS')!=1:raise RuntimeError('Missing real ABI2 capture pass')
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            run_logged([sys.executable,ROOT/'scripts/video/test_capture_driver.py'],work/'capture_driver.log')
+            native=json.loads((ROOT/'build/video/latest_capture_driver.json').read_text(encoding='utf-8'))
+            if native['status']!='pass':raise RuntimeError('Native capture driver failed')
+            result['capture_v2_driver']=native
+            trace_test=ROOT/'tb/video/tb_video_capture_driver.sv';add_inputs(result,[trace_test,*[ROOT/p for p in native['inputs']]])
+            stem='capture_v2_driver'
+            log=simulate(work,stem,'tb_video_capture_driver',sources+[trace_test],[ROOT/'rtl/video/include'],
+                run_args=(f'+TRACE={(ROOT/native["trace"]).as_posix()}',))
+            if log.count('VIDEO_CAPTURE_DRIVER_RTL_PASS')!=1:raise RuntimeError('Missing native capture trace replay')
+            artifacts += [work/(stem+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            result['capture_v2_artifacts']=input_hashes(artifacts)
+            result['passed'].append('capture_v2')
         if args.suite in ('capture_mmio','all'):
             mmio_path=ROOT/'fpga/pg2l100h/project/video_capture_mmio.json'
             mmio=json.loads(mmio_path.read_text(encoding='utf-8'))
@@ -938,6 +976,15 @@ def main():
                 if sha256(ROOT/name)!=digest:raise RuntimeError('Capture rearm artifact changed: '+name)
             for record in result['capture_rearm_tools'].values():
                 if sha256(record['path'])!=record['sha256']:raise RuntimeError('Capture rearm tool changed')
+        if 'capture_v2_driver' in result:
+            native=result['capture_v2_driver']
+            for table in ('inputs','artifacts'):
+                for name,digest in native[table].items():
+                    if sha256(ROOT/name)!=digest:raise RuntimeError('Capture driver source/artifact changed: '+name)
+            for name,digest in native['tools'].items():
+                if sha256(name)!=digest:raise RuntimeError('Capture driver compiler changed')
+            for name,digest in result['capture_v2_artifacts'].items():
+                if sha256(ROOT/name)!=digest:raise RuntimeError('Capture ABI2 artifact changed')
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"
