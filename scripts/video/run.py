@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,37 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('display_mmio', 'all'):
+            from common import sha256
+            path = ROOT/'fpga/pg2l100h/project/video_display_mmio.json'
+            component = json.loads(path.read_text(encoding='utf-8'))
+            sources = [ROOT/p for p in component['sources']+component['tests']]
+            dependencies = [ROOT/p for p in ('config/video_display.json','rtl/video/include/video_display.vh',
+                'sw/include/video_display_abi.h','sw/include/video_display.h','sw/drivers/video_display.c',
+                'tb/video/test_display_driver.c')]
+            add_inputs(result, [path, *sources, *dependencies, *[ROOT/p for p in component['constraints']]])
+            run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'display_abi_check.log')
+            run_logged([sys.executable,ROOT/'scripts/video/test_display_driver.py'],work/'display_driver.log')
+            driver = json.loads((BUILD/'latest_display_driver.json').read_text(encoding='utf-8'))
+            if driver['status'] != 'pass':raise RuntimeError('Display driver failed')
+            result['display_driver'] = driver
+            result['display_mmio_tools'] = {}
+            artifacts = [work/'display_abi_check.log', work/'display_driver.log']
+            for name in ('iverilog','vvp'):
+                executable = tool(name)
+                log = work/('display_mmio_'+name+'_version.log')
+                result['display_mmio_tools'][name] = {'path':str(executable),'sha256':sha256(executable)}
+                run_logged([executable,'-V'],log);artifacts.append(log)
+            for case in range(10):
+                stem = f'display_mmio_{case}'
+                options = [f'+CASE={case}']
+                if case == 9:options += ['+DRIVER_TRACE='+str(ROOT/driver['trace'])]
+                log = simulate(work,stem,component['test_top'],sources,
+                    includes=(ROOT/'rtl/video/include',),run_args=options)
+                if log.count('DISPLAY_MMIO_PASS') != 1:raise RuntimeError('Missing display MMIO PASS')
+                artifacts += [work/(stem+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            result['display_mmio_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('display_mmio')
         if args.suite in ('display_slots', 'all'):
             from common import sha256
             path = ROOT/'fpga/pg2l100h/project/video_display_slot_owner.json'
@@ -831,6 +862,17 @@ def main():
         for name, expected in result.get('display_slots_artifacts', {}).items():
             if sha256(ROOT/name) != expected:
                 raise RuntimeError('Display slots artifact changed during regression: '+name)
+        for name, record in result.get('display_mmio_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:
+                raise RuntimeError('Display MMIO tool changed: '+name)
+        for name, expected in result.get('display_mmio_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:raise RuntimeError('Display MMIO artifact changed: '+name)
+        if 'display_driver' in result:
+            driver = result['display_driver']
+            add_inputs(result,[ROOT/p for p in driver['inputs']])
+            if any(sha256(ROOT/p)!=h for p,h in driver['inputs'].items()):raise RuntimeError('Driver input changed')
+            if any(sha256(ROOT/p)!=h for p,h in driver['artifacts'].items()):raise RuntimeError('Driver artifact changed')
+            if any(sha256(p)!=h for p,h in driver['tools'].items()):raise RuntimeError('Driver tool changed')
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

@@ -33,6 +33,11 @@ release ACK；同帧MODE保持原槽。`--suite display_slots`验证三槽引用
 `video_display_slot_owner`仅组件synth；它未接当前板级镜像，也不是全局槽allocator。
 正式显示ABI/MMIO与共享fabric尚待后续，见[显示槽验证](../verification/video/display_slots.md)。
 
+F4b新增`video_display_mmio`独立组件：同源640B显示ABI、AXI-Lite校验提交、F4a
+引用所有者和保持事件；采帧ABI1不变。C驱动原生执行并将实际写事务回放到RTL，
+RV32I对象仅交叉编译。正式CPU/fabric/像素退休仍待接入，见
+[显示控制验证](../verification/video/display_mmio.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -70,6 +75,7 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
 python scripts/video/run.py --suite raw_display
 python scripts/video/run.py --suite raw_board
+python scripts/video/run.py --suite display_mmio
 python scripts/video/run.py --suite display_slots
 python scripts/video/run.py --suite mode_control
 python scripts/video/run.py --suite overlay
@@ -77,6 +83,7 @@ python scripts/video/run.py --suite mode_resources
 python scripts/video/run.py --suite mode_output
 python scripts/video/run.py --suite mode_board
 python scripts/video/build_pds.py --target video_button_debounce --stage synth
+python scripts/video/build_pds.py --target video_display_mmio --stage synth
 python scripts/video/build_pds.py --target video_display_slot_owner --stage synth
 python scripts/video/build_pds.py --target video_mode_control --stage synth
 python scripts/video/build_pds.py --target video_overlay --stage synth
@@ -203,6 +210,8 @@ rtl/video/
   preview_display.sv                     双时钟双bank行RAM、共享读取及提交/释放
   raw_display.sv                         原分辨率全屏、完整首像素及独立描述符拒绝
   video_button_debounce.sv               两级同步、20ms按下/释放资格和单次事件
+  display_record_guard.sv               640B同帧/框点/素材与保留字段检查
+  video_display_mmio.sv                 独立显示AXI-Lite、shadow租约和事件ACK
   display_slot_owner.sv                 F4a显示引用三槽、实际提交与退休ACK
   display_mode_control.sv                请求/合并/冻结上下文/实际提交，独立回绕完成性
   avatar_sample_map.sv                   9级精确最近邻地址，保留未裁剪目标原点
@@ -212,6 +221,9 @@ rtl/video/
   video_preview_engine.sv                双平面CRC检查到显示读口的阶段所有权
 sw/include/video_cfg.h                    同源生成的 C 常量
 sw/include/video_regs.h                   同源生成的采帧MMIO C定义
+sw/include/video_display_abi.h             同源显示子窗口及640B字段
+sw/include/video_display.h                 平台I/O回调和驱动API
+sw/drivers/video_display.c                 记录初始化/提交/事件/ACK
 tb/video/
   tb_video_capture_mmio.sv               字面ABI/通道背压/邮箱/错误/IRQ自检
   tb_video_capture_mmio_core.sv          实际采帧核/三路DMA/字节内存联测
@@ -270,6 +282,8 @@ tb/video/
   tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
   test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
+  tb_video_display_mmio.sv              AXI-Lite/整记录/事件及C事务回放
+  test_display_abi.py / test_display_driver.c 同源防漂移与真实C执行
   tb_display_slot_owner.sv              三槽/冻结/背压/退休与错误反馈记分板
   tb_display_mode_control.sv             同帧资格/背压/合并/错反馈及回绕别名
   tb_display_overlay.sv                  固定周期纹理供数/未知注入/复位空泡/像素转储
@@ -314,6 +328,7 @@ fpga/pg2l100h/
   project/video_raw_display.json         F1原分辨率全屏组件显式源/测试
   project/video_raw_board.json           F2独立全屏、三分支读回的板级目标
   project/video_button_debounce.json     F3a独立按键资格组件显式源/测试
+  project/video_display_mmio.json        F4b独立显示控制组件
   project/video_display_slot_owner.json  F4a显示引用组件显式清单
   project/video_mode_control.json        F3a独立请求/实际提交控制组件
   project/video_overlay.json             F3b像素叠加显式源/测试/独立oracle
@@ -336,6 +351,7 @@ fpga/pg2l100h/
   constraints/video_mode_board.fdc       KEY1及新增第一阶段/6ns束约束
   constraints/video_raw_board.fdc        F2实际存活CDC端点与6ns束约束
   constraints/video_button_debounce.fdc  F3a8ns时钟，仅异步按钮至首级例外
+  constraints/video_display_mmio.fdc     F4b core8ns组件估计
   constraints/video_display_slot_owner.fdc F4a core8ns组件估计
   constraints/video_mode_control.fdc     F3a单core域8ns组件约束
   constraints/video_overlay.fdc          F3b像素25ns及同钟组件边界估计

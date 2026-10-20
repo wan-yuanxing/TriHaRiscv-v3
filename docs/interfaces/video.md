@@ -27,6 +27,16 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4b 独立显示 ABI/MMIO
+
+独立显示端点位于`0x20011000/4KiB`，保留采帧ABI1。公共
+`config/video_display.json`同源生成RTL/C，640B记录含原图身份、结果、16框/五点及
+单头像素材参数。校验期间保护shadow，合格后交F4a；实际commit/release仍来自
+外部消费者。C驱动提供完整写序、平台fence回调、保持事件读取与显式ACK。
+最末像素/DDR退休生产者、全局allocator、CPU/fabric译码和物理排序仍需集成；
+独立数字/驱动测试不等于实际CPU或新板测。详细接口见
+[display_mmio](../verification/video/display_mmio.md)。
+
 ## F4a 显示引用所有者
 
 `display_slot_owner`新增同core域显示引用管理，不修改公共采帧ABI1或分配显示寄存器。

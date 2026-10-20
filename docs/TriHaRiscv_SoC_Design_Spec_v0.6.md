@@ -728,20 +728,29 @@ START 原子锁存参数，BUSY 时禁止修改活跃任务。DONE 晚于所有�
 
 ### 11.3 Video 控制寄存器起点
 
-这些偏移作为新接口草案，须从共同源生成。功能语义为当前要求，具体打包不能由 RTL 与驱动各自决定。
+2026-10-20 显示控制扩展：采帧ABI1继续使用`config/video_regs.json`及既有偏移；
+独立显示ABI1使用`config/video_display.json`同源生成RTL/C。Video区域仍为
+`0x20010000/64KiB`，显示子窗口为`0x20011000/4KiB`，正式fabric必须先子译码。
+原未发布草案的0x30/0x200显示偏移不再作为新显示端点地址，既有采帧寄存器不改义。
 
-| 偏移/参数区 | 功能 |
+| 相对Video基址偏移 | 当前契约 |
 |---|---|
-| `0x00–0x1C` | 版本、能力、运行控制、状态、中断、错误 |
-| `0x20` | CAPTURE_REQUEST，锁存请求记录，等待下一个合法输入帧 |
-| `0x24–0x2C` | CAPTURE_STATUS、已接受/已完成 frame_id |
-| `0x30` | DISPLAY_SUBMIT，提交完整显示记录，不直接改活动寄存器 |
-| `0x34–0x3C` | DISPLAY_STATUS、已显示 frame_id、旧槽释放确认 |
-| `0x40` 起 | 抽帧、额外丢帧、重复显示、未显示即丢弃、可配置截止时间超期、FIFO/DDR 错误计数；详细字段沿用版本化接口流程冻结 |
-| `0x100` 起 | 采集记录：帧槽号、frame_id、raw/preview/input 地址和步长、预处理版本 |
-| `0x200` 起 | 版本化显示记录草案：slot/frame_id、raw 地址/步长、请求模式/序号、同帧结果有效性、框列表、头像/素材与状态 |
+| `0x00–0x1C` | 采帧版本、能力、控制、状态、中断、错误 |
+| `0x20–0x2C` | 采帧请求、状态、已接受/完成frame_id |
+| `0x100–0x1BC` | 采帧shadow/接受/完成记录，保持ABI1 |
+| `0x1000–0x1080` | 独立显示版本/能力/状态/IRQ、提交、mode/seq、active/commit/release/reject事件及计数 |
+| `0x1100–0x137F` | 640B显示shadow：32字头部＋16框×8字，五点与素材参数同帧冻结 |
 
-首版固定尺寸来自公共配置；效果模式不是 HDMI 分辨率选择。显示请求/活动模式、请求序号、实际提交与 MODE pending/unavailable/error 必须可读，MODE_COMMIT 与 DISPLAY_RELEASE_ACK 分开。按键由同一控制所有者纳入记录，硬件按键和 CPU 不并发改写像素域活动参数。这里是显示语义草案，当前 ABI1 采帧端点尚未实现显示寄存器；实施时扩展共同源并发布显示能力/版本，不直接改写现有偏移语义。CPU 在记录被接纳前保持其稳定；接纳 ACK 不等于实际提交。
+显示子窗口内`+0x20` SUBMIT全字1新帧/3同帧MODE；B OKAY仅表示本地接纳校验任务。
+整记录和首行/资源准备、实际安全帧边界提交、末端像素与旧引用退休各自分离。
+`+0x14` EVENTS位0/1/2/3为commit/release/reject/fault，`+0x18` ACK位0/1/2消费
+已存在的保持事件；release ACK才清显示引用，不能充当采集/NPU全局引用清除。
+同帧MODE要求raw、frame/slot/generation及完整640B context不变，只改mode/seq。
+素材未就绪时AVATAR保持pending；非法能力/素材身份由拒绝事件报告，旧活动记录不改。
+KEY事件由同一个CPU控制所有者生成请求，硬件/CPU不得并发写活动记录。
+
+独立端点/驱动组件验证不代表正式CPU、共享fabric、实际像素提交/退休生产者已经接入。
+详细布局和边界见[显示控制验证](verification/video/display_mmio.md)。
 
 ### 11.4 检测结果记录
 

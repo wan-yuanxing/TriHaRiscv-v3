@@ -54,6 +54,15 @@ module display_slot_owner #(parameter integer CONTEXT_WIDTH=128)(
             default:slot_base=0;
         endcase
     endfunction
+    // Preserve word boundaries: a single very wide equality maps to a
+    // linear carry chain in PDS. Four-state != and OR semantics are unchanged.
+    localparam integer COMPARE_GROUPS=(CONTEXT_WIDTH+31)/32;
+    (* syn_keep=1 *) wire [COMPARE_GROUPS-1:0] context_difference;
+    generate for(genvar g=0;g<COMPARE_GROUPS;g=g+1)begin:context_compare
+        localparam integer BITS=(CONTEXT_WIDTH-g*32<32)?CONTEXT_WIDTH-g*32:32;
+        assign context_difference[g]=(submit_data_i[g*32+:BITS]!=active_data_o[g*32+:BITS]);
+    end endgenerate
+    wire context_changed=|context_difference;
     reg [7:0] submission_error;
     always @* begin
         submission_error=0;
@@ -66,7 +75,7 @@ module display_slot_owner #(parameter integer CONTEXT_WIDTH=128)(
         else if(submit_mode_only_i)begin
             if(!active_valid_o||submit_slot_i!=active_slot_o||submit_frame_i!=active_frame_o||
                 submit_generation_i!=active_generation_o||submit_base_i!=active_base_o||
-                submit_stride_i!=active_stride_o||submit_data_i!=active_data_o)submission_error=6;
+                submit_stride_i!=active_stride_o||context_changed)submission_error=6;
         end else if(slot_state[submit_slot_i]!=FREE)submission_error=5;
     end
     // Offers/feedback never share an acceptance edge. This also makes incoming

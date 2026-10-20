@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "status": "independent_display_abi_mmio_driver_component_verified",
+  "base_head": "05b1191ac60c3825908bb94db15bcd95129eef48",
+  "owned": [
+    "config/video_display.json",
+    "scripts/video/gen_display_abi.py",
+    "rtl/video/include/video_display.vh",
+    "sw/include/video_display_abi.h",
+    "rtl/video/display_record_guard.sv",
+    "rtl/video/video_display_mmio.sv",
+    "rtl/video/display_slot_owner.sv",
+    "sw/include/video_display.h",
+    "sw/drivers/video_display.c",
+    "tb/video/test_display_abi.py",
+    "tb/video/test_display_driver.c",
+    "tb/video/tb_video_display_mmio.sv",
+    "scripts/video/test_display_driver.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_display_mmio.json",
+    "fpga/pg2l100h/constraints/video_display_mmio.fdc",
+    "docs/superpowers/specs/2026-10-20-display-mmio-design.md",
+    "docs/superpowers/plans/2026-10-20-display-mmio.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/display_mmio.md",
+    "docs/verification/video/evidence/display_mmio.json"
+  ],
+  "source_hashes": {
+    "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4",
+    "scripts/video/gen_display_abi.py": "82faa8e6d30820471a567aa2f15e04b0282cc4f5179b5c7dae6640b2550151b8",
+    "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+    "sw/include/video_display_abi.h": "93705171343939e1ec52d2965a335b6a65cca19ecbaa88d3bfa3a81d9f69a6ef",
+    "rtl/video/display_record_guard.sv": "56894fb671a4fb668de3920d17590f3198d9cb1cb41d5352a019786ca7810b47",
+    "rtl/video/video_display_mmio.sv": "894e7c609e22869c0b2f149b2b322ac39d34263f437a7a6b768ee87b313e09c9",
+    "rtl/video/display_slot_owner.sv": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+    "sw/include/video_display.h": "4c7627af3b8a91e1012f09f0beeba71ccd77644a1c4b1f145dbb45c6d1414916",
+    "sw/drivers/video_display.c": "af359ecc9c895ab7c98f45de394109981b2baedd8d5f1600cc8b579b677b6b1d",
+    "tb/video/test_display_abi.py": "e03070e0ec932ecf55a336b65b7de19232f9e283de6af0eaf410f177cfe28b00",
+    "tb/video/test_display_driver.c": "95d15009ae37e4d4e51c0686ac1368f793e7082fde4464518cac1083ce666aaf",
+    "tb/video/tb_video_display_mmio.sv": "02667eb5916feb8aa4eb290ac2d0cd3f98e61d844e97164312d6e472e37135a7",
+    "scripts/video/test_display_driver.py": "a96c078ef9c7f8e4fe03ad8f0572622f54f32031625d00d25d47329c99273072",
+    "scripts/video/run.py": "ddb6ea1bcd9788098574216f954bb37b8dc1f544ee6d664234677406e3412e28",
+    "scripts/video/build_pds.py": "aca0ac3ac936bb3aec058994cf49b427c02ec54682686e24ec5e4ab2d23a500e",
+    "fpga/pg2l100h/project/video_display_mmio.json": "6cada3b9e87e8214b2b0018df70a442ea819497d70301a6febd8749dc80d3c6b",
+    "fpga/pg2l100h/constraints/video_display_mmio.fdc": "7a01b3b630ae2332dace96a98db668b297802abd71530785ed25829d91e1a332",
+    "docs/superpowers/specs/2026-10-20-display-mmio-design.md": "fe70e4c6254fb17c4b4f18b041897c9695006ebb942f71db354b584ad9c151cc",
+    "docs/superpowers/plans/2026-10-20-display-mmio.md": "699738e2ec86d07bc1602c29636b928b5d5aeee15479745b02093a23e9556450",
+    "docs/video/STATUS.md": "8f9d979b9b60f57d2d783f843cea8ada904fabffbfaa321df4da21cd526cf44d",
+    "docs/video/README.md": "bb14d1dfb06f3635a277af1f8bcd0ef2189c8f47fdd5ffc0f9cb3454cf3d53f9",
+    "docs/interfaces/video.md": "54e64908843d07f5807088a844e36d089185f4a48eeab74b5866f49968a5f094",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "859358f1beb50cec2209a74f63108428a4a4304603ee914b16088ddccb5449c3",
+    "docs/verification/video/display_mmio.md": "ca41f950e64876298de751e7a5e5094a9fc111c10b958e653e80a29d3c990335"
+  },
+  "refs": {
+    "audit": {
+      "path": "build/video/audit_display_mmio.py",
+      "sha256": "a44c07c6f8a511d045bcfe895d38d026e5e375f66815237948b1e72fc6a68cbb"
+    },
+    "checkout_eol_red_green": {
+      "path": "build/video/display_abi_eol_closure/result.json",
+      "sha256": "99c2f54e1247d2149fa64acd74f58ff8b5f4970bc08bd95adaf8ff4bde1447b6"
+    },
+    "checkout_eol_red": {
+      "path": "build/video/display_abi_eol_closure/red.log",
+      "sha256": "e0be7513f3ebe166788e9f66b8d24af92f9a26496ad88e127723b74cd3875f0e"
+    },
+    "checkout_eol_green": {
+      "path": "build/video/display_abi_eol_closure/green.log",
+      "sha256": "8b164bb761365781ec32b2eccce84889742e4b566c5700cd919432b710f1d3b3"
+    },
+    "baseline": {
+      "path": "build/video/display_mmio_baseline/result.json",
+      "sha256": "7f7e421fe5241d0d56fe366bd751b0367bbca4883da1b0afe9efb7f08939f8d4"
+    },
+    "comparison": {
+      "path": "build/video/display_compare_candidate/before.json",
+      "sha256": "0cc332e85d012e524c6a95cbf5ba0357ac0e52571d208b83dc1d45fc4b19ead7"
+    },
+    "equivalence": {
+      "path": "build/video/display_compare_equivalence/20261020T040409_623915Z/result.json",
+      "sha256": "aff1b7a282963d3887a90e3dcc41c30ea5175477092bece40558428b9cfd1f2a"
+    },
+    "red": {
+      "path": "build/video/display_mmio_red/20261020T035106_452011Z/result.json",
+      "sha256": "5e4eb3edd632c552de008410148a51cacc5c8c322eb526b25cbd0beb82aac900"
+    },
+    "driver_red": {
+      "path": "build/video/display_driver_red.log",
+      "sha256": "a47b1f06fdd99451a7d7ad490d2410b00d309ebef4b7b0711531dad0cf9a128a"
+    },
+    "abi_red": {
+      "path": "build/video/display_abi_red.log",
+      "sha256": "c1c1a74c28664aa31f0206557340b12687a65d6b8da4b047a9456ab6dfa05aa2"
+    },
+    "display_mmio": {
+      "path": "build/video/regression/20261020T041928_638004Z/result.json",
+      "sha256": "0df6384f24f7d55d6012c951654964ecc08fc1f0ebeb456f471978af815f6ec9"
+    },
+    "display_slots": {
+      "path": "build/video/regression/20261020T042351_008172Z/result.json",
+      "sha256": "96e6552af06f81fd1b797015cf2cd79780a8de6cca8627f859310ade761c9f98"
+    },
+    "capture_mmio": {
+      "path": "build/video/regression/20261020T042351_000122Z/result.json",
+      "sha256": "b2766b2f66989221eba82b74225d059d0ae9665c939b8a122a5f9bf6cd78747d"
+    },
+    "driver": {
+      "path": "build/video/display_driver/20261020T041928_809521Z/result.json",
+      "sha256": "ecb2a74e528ed12d78d02d3a1bf04fd40d947a983d76e527e30dcf7f7a9d4ea3"
+    },
+    "quality": {
+      "path": "build/video/display_mmio_quality/20261020T041928_618654Z/result.json",
+      "sha256": "8d1a0e0c75f67c0a8f51d2c25e8fa89e458c14263391def9ade768ae58c75a3b"
+    },
+    "mutations": {
+      "path": "build/video/display_mmio_mutations/20261020T041928_640927Z/result.json",
+      "sha256": "5787dd00cf1ff0db7e5f8b9374f7ef40f4911f5461ea78be7c386b23fbc061b1"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261020T041944_395036Z/result.json",
+      "sha256": "7d44d75a6dffba064da53a861c085d7525cccfdb88d485f58bce70defb941579"
+    },
+    "failed_wide_compare_synthesis": {
+      "path": "build/video/pds/20261020T035943_562996Z/result.json",
+      "sha256": "fe9facfe78c15cbc207dfbb1b1b6e3150b38b6178c4527bc077ad639df405982"
+    },
+    "review": {
+      "path": "build/video/display_mmio_review/review.json",
+      "sha256": "338859ac355714c60c75ec7c53a81b4196c07ad183b03417e80fab52286a0f7d"
+    },
+    "mapped_netlist": {
+      "path": "build/video/pds/20261020T041944_395036Z/synthesize/video_display_mmio_syn.vm",
+      "sha256": "f4992052b4a628740a94722e67342288da75a410a7b634fd33b5034d637a7aac"
+    }
+  },
+  "simulations": {
+    "display_mmio": 10,
+    "display_slots": 13,
+    "capture_mmio": 2
+  },
+  "python": {
+    "tests": 106,
+    "passed": 105,
+    "skipped": 1
+  },
+  "parent_mutations_detected": 5,
+  "resources": {
+    "lut": 10853.0,
+    "registers": 16038.0,
+    "drm": 0.0,
+    "apm": 0
+  },
+  "synthesis_estimate": {
+    "core_period_ns": 8,
+    "slow_setup_ns": 1.591,
+    "slow_hold_ns": 0.671,
+    "scope": "Component register paths only; no I/O constraints, routing or board verification"
+  },
+  "owner_comparison_exception": {
+    "path": "rtl/video/display_slot_owner.sv",
+    "before_sha256": "9f128f33bfb4ad19959565ff9731bbdf272702341c47a8fad3902cce0ffe15ef",
+    "candidate_sha256": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+    "failed_build": "build/video/pds/20261020T035943_562996Z/result.json",
+    "failed_setup_ns": -51.451,
+    "public_cycle_equivalence_cases": 44,
+    "public_signals": 43
+  },
+  "protected_prior_files": 56,
+  "prior_capture_abi_preserved": true,
+  "prior_board_image_preserved": true,
+  "independent_review": {
+    "coverage": {
+      "independent_guard_vectors": 1595,
+      "independent_mmio_scenarios": 7,
+      "canonical_parent_mmio_scenarios": 10,
+      "independent_four_state_compare_cases": 190522,
+      "compare_widths": [
+        1,
+        7,
+        31,
+        32,
+        33,
+        63,
+        64,
+        65,
+        513,
+        5120
+      ],
+      "native_event_patterns": 16,
+      "native_callback_failure_cases": 441,
+      "native_ack_combinations": 256,
+      "native_trace_writes": 163,
+      "assertion_targeted_mutants_killed": 7,
+      "abi_tests": 4,
+      "frozen_files": 244,
+      "authorized_frozen_changes": 5,
+      "owner_graph_nodes": 13937,
+      "owner_graph_cycle_residual": 0,
+      "owner_multiple_driver_nets": 0,
+      "preserved_comparison_chunks": 160,
+      "chunk_carry_distribution": {
+        "16": 159,
+        "10": 1
+      },
+      "maximum_chunk_carry_chain": 16,
+      "maximum_whole_owner_CIN_COUT_chain": 50
+    },
+    "commands_verified": 57,
+    "reviewer_artifacts_verified": 114,
+    "frozen_files_verified": 244,
+    "external_artifacts_verified": 212,
+    "open_findings": [],
+    "closed_findings": [
+      "F4b-SYNTH-COMPARE",
+      "F4b-ABI-EOL"
+    ],
+    "graph_scope": "Owner module only; no complete hierarchical top-level graph proof"
+  },
+  "new_ABI_checkout_bytes_verified": true,
+  "native_C_driver_tested": true,
+  "rv32i_compiled_only": true,
+  "C_driver_transaction_replay_writes": 163,
+  "cpu_execution_verified": false,
+  "physical_fence_verified": false,
+  "global_allocator_implemented": false,
+  "shared_fabric_integrated": false,
+  "real_commit_retirement_producer_integrated": false,
+  "continuous_video_verified": false,
+  "true_npu_result": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}
