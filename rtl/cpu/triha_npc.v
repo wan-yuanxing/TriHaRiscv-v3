@@ -31,6 +31,7 @@ module triha_npc
      parameter SUPPORT_BRANCH_PREDICTION = 1
     ,parameter NUM_BTB_ENTRIES  = 32
     ,parameter NUM_BTB_ENTRIES_W = 5
+    ,parameter BTB_DIRECT_MAPPED = 0
     ,parameter NUM_BHT_ENTRIES  = 512
     ,parameter NUM_BHT_ENTRIES_W = 9
     ,parameter RAS_ENABLE       = 1
@@ -85,6 +86,7 @@ wire        btb_upper_w;
 wire [31:0] btb_next_pc_w;
 wire        btb_is_call_w;
 wire        btb_is_ret_w;
+wire        btb_is_jmp_w;
 
 //-----------------------------------------------------------------
 // Return Address Stack (actual)
@@ -254,6 +256,23 @@ wire bht_predict_taken_w = BHT_ENABLE && bht_selected_taken_r;
 //-----------------------------------------------------------------
 // Branch target buffer
 //-----------------------------------------------------------------
+if (BTB_DIRECT_MAPPED) begin: g_indexed
+    wire [31:0] target;
+    wire [2:0] kind;
+    triha_btb u_btb (
+        .clk_i(clk_i), .rst_i(rst_i), .invalidate_i(invalidate_i),
+        .train_i(branch_request_i), .taken_i(branch_is_taken_i),
+        .source_i(branch_source_i), .target_i(branch_pc_i),
+        .kind_i({branch_is_call_i,branch_is_ret_i,branch_is_jmp_i}), .pc_i(pc_f_i),
+        .valid_o(btb_valid_w), .upper_o(btb_upper_w), .target_o(target), .kind_o(kind)
+    );
+    assign {btb_is_call_w,btb_is_ret_w,btb_is_jmp_w} = kind;
+    assign btb_next_pc_w = btb_valid_w ? target : sequential_pc_w;
+    // synthesis translate_off
+    initial if (NUM_BTB_ENTRIES != 512 || NUM_BTB_ENTRIES_W != 9)
+        $fatal(1,"INDEXED_BTB_FAIL requires512entries");
+    // synthesis translate_on
+end else begin: g_associative
 reg [31:0]  btb_pc_q[NUM_BTB_ENTRIES-1:0];
 reg [31:0]  btb_target_q[NUM_BTB_ENTRIES-1:0];
 reg         btb_is_call_q[NUM_BTB_ENTRIES-1:0];
@@ -439,15 +458,18 @@ assign btb_valid_w   = btb_valid_r;
 assign btb_upper_w   = btb_upper_r;
 assign btb_is_call_w = btb_is_call_r;
 assign btb_is_ret_w  = btb_is_ret_r;
+assign btb_is_jmp_w  = btb_is_jmp_r;
+assign btb_next_pc_w = btb_next_pc_r;
+end
 assign next_pc_f_o   = ras_ret_pred_w      ? ras_pc_pred_w : 
-                       (bht_predict_taken_w | btb_is_jmp_r) ? btb_next_pc_r :
+                       (bht_predict_taken_w | btb_is_jmp_w) ? btb_next_pc_w :
                        sequential_pc_w;
 
-assign next_taken_f_o = (btb_valid_w & (ras_ret_pred_w | bht_predict_taken_w | btb_is_jmp_r)) ? 
-                        pc_f_i[2] ? {btb_upper_r, 1'b0} :
-                        {btb_upper_r, ~btb_upper_r} : 2'b0;
+assign next_taken_f_o = (btb_valid_w & (ras_ret_pred_w | bht_predict_taken_w | btb_is_jmp_w)) ? 
+                        pc_f_i[2] ? {btb_upper_w, 1'b0} :
+                        {btb_upper_w, ~btb_upper_w} : 2'b0;
 
-assign pred_taken_w   = btb_valid_w & (ras_ret_pred_w | bht_predict_taken_w | btb_is_jmp_r) & pc_accept_i;
+assign pred_taken_w   = btb_valid_w & (ras_ret_pred_w | bht_predict_taken_w | btb_is_jmp_w) & pc_accept_i;
 assign pred_ntaken_w  = btb_valid_w & ~pred_taken_w & pc_accept_i;
 
 

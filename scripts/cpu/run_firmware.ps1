@@ -70,7 +70,8 @@ try {
     $result.compiler = $gcc
     $result['compiler_sha256'] = Get-TrihaHash $gcc
     $result.compiler_version = (Native $gcc @('--version') 'gcc-version').Trim()
-    $flags = @('-march=rv32im_zicsr','-mabi=ilp32','-std=gnu99','-O3','-mcmodel=medany',
+    $optimization=if($Program -eq 'coremark'){'-O2'}else{'-O3'}
+    $flags = @('-march=rv32im_zicsr','-mabi=ilp32','-std=gnu99',$optimization,'-mcmodel=medany',
         '-mno-relax','-msmall-data-limit=0','-ffreestanding','-fno-builtin',
         '-ffunction-sections','-fdata-sections','-Wall','-Wextra','-Werror=implicit-function-declaration')
     $result.compiler_flags = $flags

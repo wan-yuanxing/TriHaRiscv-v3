@@ -25,6 +25,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--test", choices=("clocks", "system", "coremark"), required=True)
     parser.add_argument("--fault", choices=("none", "memory", "crc"), default="none")
+    parser.add_argument('--cpu-area-directory', type=Path,
+                        help='Frozen native board map evidence supplying CPU-only LUT count')
     args = parser.parse_args()
     if args.fault == 'crc' and args.test != 'coremark' or args.fault == 'memory' and args.test != 'system':
         parser.error('memory fault belongs to system; crc fault belongs to coremark')
@@ -59,6 +61,16 @@ def main():
         return output.decode("utf-8", errors="replace")
 
     try:
+        cpu_luts = 0
+        if args.cpu_area_directory is not None:
+            if args.test != 'coremark':
+                raise ValueError('CPU area metadata belongs to CoreMark')
+            from cpu_area import load
+            area = load(args.cpu_area_directory)
+            cpu_luts = area['cpu_core_luts']
+            result['cpu_area'] = area
+            result['external_hashes'].update(area['bound_hashes'])
+            result['cpu_core_luts'] = cpu_luts
         config = json.loads(CONFIG.read_text(encoding="utf-8"))
         check_config(config, check=True)
         inputs = ["config/cpu_board.json", "scripts/soc/run_board.py", "scripts/soc/board_pll.py",
@@ -88,7 +100,7 @@ def main():
                     raise ValueError("CPU vendor drift")
                 inputs.append("rtl/cpu/vendor/" + name)
             if args.test == 'coremark':
-                inputs += ['scripts/soc/coremark_board.py', 'sw/benchmarks/coremark/port/core_portme.c',
+                inputs += ['scripts/soc/coremark_board.py', 'scripts/soc/cpu_area.py', 'sw/benchmarks/coremark/port/core_portme.c',
                            'sw/benchmarks/coremark/port/core_portme.h', 'sw/benchmarks/coremark/UPSTREAM.json']
                 for name, digest in json.loads((ROOT / 'sw/benchmarks/coremark/UPSTREAM.json').read_text(encoding='utf-8'))['files'].items():
                     source = 'sw/benchmarks/coremark/src/' + name
@@ -123,8 +135,8 @@ def main():
                      "-Wl,-Map=" + str(work / "firmware.map"), "-o", work / "firmware.elf"]
             if args.test == 'coremark':
                 from coremark_board import build
-                build(work, work, native, 5, preflight=True, fault=args.fault)
-                build(work, work / 'deployment', native, 5000, fault=args.fault)
+                build(work, work, native, 5, preflight=True, fault=args.fault, cpu_luts=cpu_luts)
+                build(work, work / 'deployment', native, 5000, fault=args.fault, cpu_luts=cpu_luts)
                 result.update(release_iterations=5000, preflight_iterations=5, full_run_simulated=False,
                               firmware_profile='coremark', board_score_validated=False,
                               scope='5-iteration board RTL preflight; 5000-iteration deployment built from same sources; full physical run pending')
@@ -156,14 +168,27 @@ def main():
                [work / "src" / name for name in rtl + [tb]] + extra + primitives, "rtl-build")
         top = {"clocks": "tb_cpu_board_clock", "system": "tb_cpu_board", "coremark": "tb_cpu_coremark"}[args.test]
         log = native(SIM / "vsim.exe", ["-c", "-onfinish", "exit", "-t", "1ps", "-voptargs=+acc", "work." + top,
-                                      "-do", work / "src/scripts/cpu/run_modelsim.do"], "simulation", 420)
+                                      "-do", work / "src/scripts/cpu/run_modelsim.do"], "simulation", 1200 if args.test == 'coremark' else 420)
         marker = {"clocks": "CPU_BOARD_CLOCK_PASS", "system": "CPU_BOARD_SYSTEM_PASS boots=2",
                   "coremark": "CPU_COREMARK_SIM_PASS"}[args.test]
         if marker not in log or re.search(r"CPU_BOARD_\w*FAIL|CPU_TRAP|\*\* (Error|Fatal)", log):
             raise RuntimeError("board self-check failed; see simulation.log")
         if args.test == 'coremark':
             from coremark_board import review_output
-            result['preflight_measurement'] = review_output(log, allow_short=True)
+            builds = 0
+            for record in result['commands']:
+                if not any(str(a).endswith('firmware.elf') for a in record['command']):
+                    continue
+                builds += 1
+                if '-O2' not in record['command'] or any(a in record['command'] for a in ('-O3', '-Ofast', '-flto')):
+                    raise RuntimeError('CoreMark must use O2 without LTO')
+            if builds != 2:
+                raise RuntimeError('need both actual CoreMark firmware builds')
+            if 'CPU_COREMARK_CONFIG btb=512 bht=512 ras=4 gshare=0 single_issue=1 indexed_btb=1' not in log:
+                raise RuntimeError('missing actual predictor profile check')
+            result['predictor'] = dict(btb=512, bht=512, ras=4, gshare=False, algorithm='PC-indexed 2-bit BHT with direct-mapped native-RAM BTB')
+            result['optimization'] = '-O2'
+            result['preflight_measurement'] = review_output(log, allow_short=True, expected_luts=cpu_luts or None)
             if result['preflight_measurement']['iterations'] != 5:
                 raise RuntimeError('unexpected preflight iteration count')
             measured = re.search(r'CPU_COREMARK_SIM_PASS cycles=(\d+) reads=2', log)

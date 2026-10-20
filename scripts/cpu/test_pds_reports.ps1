@@ -69,3 +69,20 @@ foreach($bad in @($dividerConfiguration.Replace("REGISTER_DIVIDER_INPUT = 1'b1",
     if(-not $rejected){throw 'Unregistered divider input was accepted.'}
 }
 Write-Host 'CPU_DIVIDER_CONFIGURATION_TEST PASS'
+
+if(-not (Get-Command Assert-TrihaPdsPredictorConfiguration -ErrorAction SilentlyContinue)){
+    throw 'Missing elaborated predictor configuration checker.'
+}
+$predictorText=''
+foreach($scope in @('triha_core/u_cpu','triha_core/u_cpu/u_frontend','triha_core/u_cpu/u_frontend/u_npc')){
+    $predictorText+="I: Module instance {$scope} parameter value:`n"
+    foreach($entry in ([ordered]@{NUM_BTB_ENTRIES=512;NUM_BTB_ENTRIES_W=9;NUM_BHT_ENTRIES=512;NUM_BHT_ENTRIES_W=9;NUM_RAS_ENTRIES=4;NUM_RAS_ENTRIES_W=2;GSHARE_ENABLE=0;BTB_DIRECT_MAPPED=1}).GetEnumerator()){
+        $predictorText+="    $($entry.Key) = 32'b"+[Convert]::ToString($entry.Value,2).PadLeft(32,'0')+"`n"
+    }
+}
+Assert-TrihaPdsPredictorConfiguration $predictorText|Out-Null
+$bad=$predictorText.Replace("NUM_BTB_ENTRIES = 32'b00000000000000000000001000000000","NUM_BTB_ENTRIES = 32'b00000000000000000000000000100000")
+$rejected=$false
+try {Assert-TrihaPdsPredictorConfiguration $bad|Out-Null} catch {$rejected=$true}
+if(-not $rejected){throw 'Wrong predictor capacity accepted.'}
+Write-Host 'CPU_PREDICTOR_CONFIGURATION_TEST PASS'

@@ -88,3 +88,20 @@ function Get-TrihaPdsMappedResources([string] $Text) {
     }
     return $resources
 }
+
+function Assert-TrihaPdsPredictorConfiguration([string] $Text) {
+    $expected=[ordered]@{NUM_BTB_ENTRIES=512;NUM_BTB_ENTRIES_W=9;NUM_BHT_ENTRIES=512;NUM_BHT_ENTRIES_W=9;NUM_RAS_ENTRIES=4;NUM_RAS_ENTRIES_W=2;GSHARE_ENABLE=0;BTB_DIRECT_MAPPED=1}
+    foreach($scope in @('triha_core/u_cpu','triha_core/u_cpu/u_frontend','triha_core/u_cpu/u_frontend/u_npc')){
+        $pattern='(?ms)^I: Module instance \{'+[regex]::Escape($scope)+'\} parameter value:\r?\n(.*?)(?=^I:|\z)'
+        $blocks=[regex]::Matches($Text,$pattern)
+        if($blocks.Count -ne 1){throw "Missing/duplicate elaborated predictor scope: $scope"}
+        foreach($key in $expected.Keys){
+            $fields=[regex]::Matches($blocks[0].Groups[1].Value,'(?m)^\s*'+$key+" = (1|32)'b([01]+)\s*$")
+            if($fields.Count -ne 1 -or $fields[0].Groups[2].Value.Length -ne [int]$fields[0].Groups[1].Value -or
+               [Convert]::ToUInt32($fields[0].Groups[2].Value,2) -ne $expected[$key]){
+                throw "Wrong/missing elaborated predictor parameter: $scope/$key"
+            }
+        }
+    }
+    return $expected
+}

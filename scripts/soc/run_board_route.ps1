@@ -61,6 +61,11 @@ try {
         $result[$item[0]+'_directory']=$directory
     }
     $result['firmware_profile']=$FirmwareTest
+    if($FirmwareTest -eq 'coremark'){
+        $software=Get-Content (Join-Path $result.system_directory 'result.json') -Raw|ConvertFrom-Json
+        if($software.optimization -ne '-O2' -or $software.cpu_core_luts -le 0){throw 'Need O2 CoreMark with bound CPU-only LUT count.'}
+        $result['cpu_core_luts_expected']=[int]$software.cpu_core_luts
+    }
     foreach($name in @('rom.hex','sram.hex','firmware.elf')){
         [IO.File]::Copy((Join-Path $result.system_directory $name),(Join-Path $work $name))
     }
@@ -139,6 +144,13 @@ try {
     }
     $compileText=[IO.File]::ReadAllText((Join-Path $work 'compile/run.log'))
     $result['elaborated_cpu_configuration']=Assert-TrihaPdsConfiguration ($compileText.Replace('triha_cpu_board_top/u_soc/u_core','triha_core')) 0 1 1
+    $result['elaborated_predictor_configuration']=Assert-TrihaPdsPredictorConfiguration ($compileText.Replace('triha_cpu_board_top/u_soc/u_core','triha_core'))
+    $cpuRows=[regex]::Matches([IO.File]::ReadAllText((Join-Path $work 'synthesize/triha_cpu_board_top.snr')),'(?m)^\|[ +]*u_core\s+\|\s+(\d+)\s+\|')
+    if($cpuRows.Count -ne 1){throw 'Missing/duplicate CPU hierarchy LUT count.'}
+    $result['cpu_core_luts_actual']=[int]$cpuRows[0].Groups[1].Value
+    if($FirmwareTest -eq 'coremark' -and $result.cpu_core_luts_actual -ne $result.cpu_core_luts_expected){
+        throw 'CPU-only LUT count changed; rebuild UART metric against this actual report.'
+    }
     $unconstrained=@([regex]::Matches($output,"(?m)^W: Timing-408[67]: Port '([^']+)' is not constrained.*$")|Where-Object {$_.Groups[1].Value -notin @('ref_clk_pi','ref_clk_ni')})
     if($unconstrained.Count -ne 0){throw 'A functional board port lacks timing constraints.'}
     $report=Join-Path $work 'report_timing/triha_cpu_board_top.rtr'

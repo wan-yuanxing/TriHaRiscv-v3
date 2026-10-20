@@ -127,6 +127,8 @@ def main():
             gcc = Path(toolchain["compiler"])
             native(gcc, ["--version"], "gcc-version")
             flags = ["-march=rv32im_zicsr", "-mabi=ilp32", "-std=gnu99", "-O3", "-mcmodel=medany", "-mno-relax", "-msmall-data-limit=0", "-ffreestanding", "-fno-builtin", "-ffunction-sections", "-fdata-sections", "-Wall", "-Wextra", "-Werror=implicit-function-declaration", "-DTRIHA_SOC_MMIO=1"]
+            if args.test == 'coremark':
+                flags[flags.index('-O3')] = '-O2'
             sources = [work / "src/sw/runtime/crt0.S", work / "src/sw/runtime/triha_runtime.c"]
             if args.test == "runtime":
                 sources += [work / "src/sw/tests/soc_runtime.c"]

@@ -13,7 +13,22 @@ module tb_cpu_coremark;
         .ref_clk_pi(ref_clk), .ref_clk_ni(~ref_clk), .rst_ni(rst_n),
         .uart_tx_o(tx), .led_o(led)
     );
-    initial begin #317; rst_n = 1; end
+    initial begin
+        #1;
+        if (u_dut.u_soc.u_core.u_cpu.NUM_BTB_ENTRIES != 512 ||
+            u_dut.u_soc.u_core.u_cpu.BTB_DIRECT_MAPPED != 1 ||
+            u_dut.u_soc.u_core.u_cpu.NUM_BTB_ENTRIES_W != 9 ||
+            u_dut.u_soc.u_core.u_cpu.NUM_BHT_ENTRIES != 512 ||
+            u_dut.u_soc.u_core.u_cpu.NUM_BHT_ENTRIES_W != 9 ||
+            u_dut.u_soc.u_core.u_cpu.NUM_RAS_ENTRIES != 4 ||
+            u_dut.u_soc.u_core.u_cpu.NUM_RAS_ENTRIES_W != 2 ||
+            u_dut.u_soc.u_core.u_cpu.GSHARE_ENABLE != 0) begin
+            $display("CPU_COREMARK_SIM_FAIL actual predictor profile must be BTB512/BHT512/RAS4 PC-indexed");
+            $finish;
+        end
+        $display("CPU_COREMARK_CONFIG btb=512 bht=512 ras=4 gshare=0 single_issue=1 indexed_btb=1");
+        #316; rst_n = 1;
+    end
     initial forever begin
         @(negedge tx);
         repeat (1302) @(posedge u_dut.cpu_clk);

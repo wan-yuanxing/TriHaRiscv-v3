@@ -3,6 +3,9 @@
 `ifndef CPU_PREDICTOR_MODULE
 `define CPU_PREDICTOR_MODULE triha_npc
 `endif
+`ifndef CPU_CANDIDATE_BTB_SCOPE
+`define CPU_CANDIDATE_BTB_SCOPE BRANCH_PREDICTION.g_associative
+`endif
 module predictor_select_case #(
     parameter ENTRIES=32, ENTRY_W=5, BHT_ENTRIES=512, BHT_W=9,
     parameter RAS_ENTRIES=8, RAS_W=3, GSHARE=0, BROKEN=0
@@ -40,14 +43,14 @@ module predictor_select_case #(
                 $fatal(1,"PREDICTOR_SELECT_FAIL output entries=%0d cycle=%0d pc=%h original=%h/%b candidate=%h/%b",ENTRIES,cycles,pc,original_pc,original_taken,candidate_pc,candidate_taken);
             if({u_candidate.BRANCH_PREDICTION.ras_index_q,u_candidate.BRANCH_PREDICTION.ras_index_real_q,
                 u_candidate.BRANCH_PREDICTION.global_history_q,u_candidate.BRANCH_PREDICTION.global_history_real_q,
-                u_candidate.BRANCH_PREDICTION.u_lru.lfsr_q}!==
+                u_candidate.`CPU_CANDIDATE_BTB_SCOPE.u_lru.lfsr_q}!==
                {u_original.BRANCH_PREDICTION.ras_index_q,u_original.BRANCH_PREDICTION.ras_index_real_q,
                 u_original.BRANCH_PREDICTION.global_history_q,u_original.BRANCH_PREDICTION.global_history_real_q,
                 u_original.BRANCH_PREDICTION.u_lru.lfsr_q})
                 $fatal(1,"PREDICTOR_SELECT_FAIL control_state entries=%0d cycle=%0d",ENTRIES,cycles);
             for(j=0;j<ENTRIES;j=j+1)
-                if({u_candidate.BRANCH_PREDICTION.btb_pc_q[j],u_candidate.BRANCH_PREDICTION.btb_target_q[j],
-                    u_candidate.BRANCH_PREDICTION.btb_is_call_q[j],u_candidate.BRANCH_PREDICTION.btb_is_ret_q[j],u_candidate.BRANCH_PREDICTION.btb_is_jmp_q[j]}!==
+                if({u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_pc_q[j],u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_target_q[j],
+                    u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_call_q[j],u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_ret_q[j],u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_jmp_q[j]}!==
                    {u_original.BRANCH_PREDICTION.btb_pc_q[j],u_original.BRANCH_PREDICTION.btb_target_q[j],
                     u_original.BRANCH_PREDICTION.btb_is_call_q[j],u_original.BRANCH_PREDICTION.btb_is_ret_q[j],u_original.BRANCH_PREDICTION.btb_is_jmp_q[j]})
                     $fatal(1,"PREDICTOR_SELECT_FAIL BTB_state entry=%0d cycle=%0d",j,cycles);
@@ -83,12 +86,12 @@ module predictor_select_case #(
             expected_target=({pc[31:3],3'b0}+32'd8);
             if(chosen>=0) expected_target=u_original.BRANCH_PREDICTION.btb_target_q[chosen];
             else misses=misses+1;
-            if({u_candidate.BRANCH_PREDICTION.btb_valid_r,u_candidate.BRANCH_PREDICTION.btb_upper_r,
-                u_candidate.BRANCH_PREDICTION.btb_next_pc_r}!=={expected_valid,expected_upper,expected_target})
+            if({u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_valid_r,u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_upper_r,
+                u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_next_pc_r}!=={expected_valid,expected_upper,expected_target})
                 $fatal(1,"PREDICTOR_SELECT_FAIL independent_lookup cycle=%0d",cycles);
             if(chosen>=0 &&
-                {u_candidate.BRANCH_PREDICTION.btb_entry_r,u_candidate.BRANCH_PREDICTION.btb_is_call_r,
-                 u_candidate.BRANCH_PREDICTION.btb_is_ret_r,u_candidate.BRANCH_PREDICTION.btb_is_jmp_r}!==
+                {u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_entry_r,u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_call_r,
+                 u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_ret_r,u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_jmp_r}!==
                 {chosen[ENTRY_W-1:0],u_original.BRANCH_PREDICTION.btb_is_call_q[chosen],
                  u_original.BRANCH_PREDICTION.btb_is_ret_q[chosen],u_original.BRANCH_PREDICTION.btb_is_jmp_q[chosen]})
                 $fatal(1,"PREDICTOR_SELECT_FAIL highest_index_metadata cycle=%0d",cycles);
@@ -118,14 +121,23 @@ module predictor_select_case #(
         // covers states not reached by well-behaved training, including reset's
         // multiple PC=0 matches; no unique-tag assumption is permitted.
         for(i=0;i<ENTRIES;i=i+1) begin
-            u_candidate.BRANCH_PREDICTION.btb_pc_q[i]=32'h80000004;
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_pc_q[i]=32'h80000004;
             u_original.BRANCH_PREDICTION.btb_pc_q[i]=32'h80000004;
-            u_candidate.BRANCH_PREDICTION.btb_target_q[i]=32'h90000000+(i*8);
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_target_q[i]=32'h90000000+(i*8);
             u_original.BRANCH_PREDICTION.btb_target_q[i]=32'h90000000+(i*8);
-            u_candidate.BRANCH_PREDICTION.btb_is_call_q[i]=i[0];u_original.BRANCH_PREDICTION.btb_is_call_q[i]=i[0];
-            u_candidate.BRANCH_PREDICTION.btb_is_ret_q[i]=~i[0];u_original.BRANCH_PREDICTION.btb_is_ret_q[i]=~i[0];
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_call_q[i]=i[0];u_original.BRANCH_PREDICTION.btb_is_call_q[i]=i[0];
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_is_ret_q[i]=~i[0];u_original.BRANCH_PREDICTION.btb_is_ret_q[i]=~i[0];
         end
         pc=32'h80000000;step;pc=32'h80000004;step;
+        // Query every unique BTB slot, including indices above31/255 in the
+        // deployment profile, before random replacement and training.
+        for(i=0;i<ENTRIES;i=i+1) begin
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_pc_q[i]=32'h82000000+(i*8);
+            u_original.BRANCH_PREDICTION.btb_pc_q[i]=32'h82000000+(i*8);
+            u_candidate.`CPU_CANDIDATE_BTB_SCOPE.btb_target_q[i]=32'h92000000+(i*8);
+            u_original.BRANCH_PREDICTION.btb_target_q[i]=32'h92000000+(i*8);
+        end
+        for(i=0;i<ENTRIES;i=i+1) begin pc=32'h82000000+(i*8);step;end
         // Exercise every physical BHT write index before random training.
         // No BTB update or speculative RAS activity is needed for this sweep.
         request=0;accept=0;taken=0;not_taken=1;
@@ -184,12 +196,13 @@ module predictor_tag_case(output reg done=0);
     end
 endmodule
 module tb_predictor_select #(parameter BROKEN=0);
-    wire full_done,small_done,tag_done;
+    wire full_done,small_done,large_done,tag_done;
     predictor_select_case #(.BROKEN(BROKEN)) u_full(.done(full_done));
     predictor_select_case #(.ENTRIES(4),.ENTRY_W(2),.BHT_ENTRIES(16),.BHT_W(4),.RAS_ENTRIES(4),.RAS_W(2),.GSHARE(1)) u_small(.done(small_done));
+    predictor_select_case #(.ENTRIES(512),.ENTRY_W(9),.RAS_ENTRIES(4),.RAS_W(2),.BROKEN(BROKEN)) u_large(.done(large_done));
     predictor_tag_case u_tag(.done(tag_done));
     initial begin
-        wait(full_done&&small_done&&tag_done);
+        wait(full_done&&small_done&&large_done&&tag_done);
         $display("PREDICTOR_SELECT_PASS complete_outputs_BTB_BHT_RAS_LFSR_and_priority");
         $finish;
     end

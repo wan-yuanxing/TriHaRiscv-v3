@@ -52,7 +52,15 @@ module triha_core #(
         .SUPPORT_LOAD_BYPASS(1),
         .SUPPORT_MUL_BYPASS(1),
         .SUPPORT_REGFILE_XILINX(0),
-        .EXTRA_DECODE_STAGE(0)
+        .EXTRA_DECODE_STAGE(0),
+        .NUM_BTB_ENTRIES(512),
+        .NUM_BTB_ENTRIES_W(9),
+        .BTB_DIRECT_MAPPED(1),
+        .NUM_BHT_ENTRIES(512),
+        .NUM_BHT_ENTRIES_W(9),
+        .NUM_RAS_ENTRIES(4),
+        .NUM_RAS_ENTRIES_W(2),
+        .GSHARE_ENABLE(0)
     ) u_cpu (
         .clk_i(clk_i),
         .rst_i(!rst_ni),

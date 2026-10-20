@@ -47,6 +47,20 @@ CPU_COREMARK_BOARD_PASS iterations=5000
         self.assertAlmostEqual(result['coremark_per_mhz'], float(Decimal(5000000000) / Decimal(1685831000)))
         self.assertTrue(result['duration_valid'])
 
+    def test_coremark_per_lut_uses_measured_cpu_luts(self):
+        text = self.text.replace('CPU_COREMARK_BOARD_PASS',
+                                 'CPU core LUTs  : 6000\nCoreMark/LUTs  : 0.049431\nCPU_COREMARK_BOARD_PASS')
+        result = self.review(text)
+        self.assertEqual(result.get('cpu_core_luts'), 6000, 'CPU-only LUT denominator must be reported')
+        self.assertAlmostEqual(result['coremark_per_lut'], result['coremark'] / 6000)
+
+    def test_coremark_per_lut_rejects_wrong_or_zero_denominator(self):
+        for count, score in ((0, '0.049431'), (6000, '0.050000')):
+            text = self.text.replace('CPU_COREMARK_BOARD_PASS',
+                f'CPU core LUTs  : {count}\nCoreMark/LUTs  : {score}\nCPU_COREMARK_BOARD_PASS')
+            with self.subTest(count=count), self.assertRaises(ValueError):
+                self.review(text)
+
     def test_rejects_bad_crc(self):
         with self.assertRaisesRegex(ValueError, 'CRC'):
             self.review(self.text.replace('0xe714', '0xe715'))

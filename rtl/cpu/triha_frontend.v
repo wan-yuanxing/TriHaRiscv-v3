@@ -37,6 +37,7 @@ module triha_frontend
     ,parameter EXTRA_DECODE_STAGE = 0
     ,parameter NUM_BTB_ENTRIES  = 32
     ,parameter NUM_BTB_ENTRIES_W = 5
+    ,parameter BTB_DIRECT_MAPPED = 0
     ,parameter NUM_BHT_ENTRIES  = 512
     ,parameter NUM_BHT_ENTRIES_W = 9
     ,parameter RAS_ENABLE       = 1
@@ -151,6 +152,7 @@ assign {training_request_w, training_taken_w, training_not_taken_w,
 triha_npc
 #(
      .NUM_BTB_ENTRIES(NUM_BTB_ENTRIES)
+    ,.BTB_DIRECT_MAPPED(BTB_DIRECT_MAPPED)
     ,.SUPPORT_BRANCH_PREDICTION(SUPPORT_BRANCH_PREDICTION)
     ,.GSHARE_ENABLE(GSHARE_ENABLE)
     ,.NUM_RAS_ENTRIES_W(NUM_RAS_ENTRIES_W)

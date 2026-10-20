@@ -121,6 +121,11 @@ void portable_fini(core_portable *port)
               (ee_u32)(ticks >> 32), (ee_u32)ticks);
     print_fixed("CoreMark       : ", (uint64_t)ITERATIONS * 100000000u * 1000000u / ticks);
     print_fixed("CoreMark/MHz   : ", (uint64_t)ITERATIONS * 1000000u * 1000000u / ticks);
+#if TRIHA_CPU_CORE_LUTS > 0
+    ee_printf("CPU core LUTs  : %lu\n", (ee_u32)TRIHA_CPU_CORE_LUTS);
+    print_fixed("CoreMark/LUTs  : ",
+                ((uint64_t)ITERATIONS * 100000000u * 1000000u / ticks) / TRIHA_CPU_CORE_LUTS);
+#endif
     if (short_run || ticks < 1000000000u) {
 #if TRIHA_COREMARK_PREFLIGHT
         ee_printf("CPU_COREMARK_PREFLIGHT_PASS iterations=%lu\n", (ee_u32)ITERATIONS);

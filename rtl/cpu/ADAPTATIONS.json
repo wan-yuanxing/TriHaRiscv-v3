@@ -5,7 +5,7 @@
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "3ced92a39a68f6b6d390587902b234ffa05e94b0ba3e8a293b7ad22da6b6b906",
+      "derived_sha256": "cbbd09e472fbb5d6f6964c935dad3e77b543a9b403db895d3f8b16d2e225a184",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
@@ -15,7 +15,8 @@
         "Connect maintained multiplier/CSR data-register derivatives.",
         "Select predictor training register independently from redirect timing.",
         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
-        "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it."
+        "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
+        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -23,13 +24,14 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
       "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
       "derived": "rtl/cpu/triha_frontend.v",
-      "derived_sha256": "f6dbf6b6123dbf2a83865aefadc49bfa80b5d306d64cfd98eb1e575bec0263b0",
+      "derived_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
       "changes": [
         "Rename integration module to triha_frontend.",
         "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
         "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request.",
         "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history.",
-        "Connect the equivalent parallel-priority prediction-table derivative; prediction/training cycles and table sizes remain unchanged."
+        "Connect the equivalent parallel-priority prediction-table derivative; prediction/training cycles and table sizes remain unchanged.",
+        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available."
       ],
       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     },
@@ -148,7 +150,7 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
       "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "55b90f3218f306c8cdec2931a5df2ad67fa268982f63243cfe1a1f0d1f49039a",
+      "derived_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
@@ -161,7 +163,8 @@
         "Keep six-input partial AND reductions for the full tag equality and reuse the verified three-term/six-input balanced AND-OR implementation in the existing single payload selector; same four-state Boolean values, table state, priority and cycles.",
         "Implement unchanged highest-entry priority with six-entry local/global lookahead in installed Pango LUT6 primitives; OR6 INIT fffffffffffffffe and own-match/no-higher INIT 2, same bitwise four-state function and no state. Larger optional tables retain original expression.",
         "Reuse native group hit reductions for PC/upper/write hits; choose valid directly with original procedural priority. Read even/odd BHT word banks in parallel before the late index LSB, preserving >=2 comparison and explicit X for unknown low address; no state or cycle change.",
-        "Keep a shared sequential PC+8 sum before both late prediction selections, preventing late control from entering the increment carry; same arithmetic and cycles."
+        "Keep a shared sequential PC+8 sum before both late prediction selections, preventing late control from entering the increment carry; same arithmetic and cycles.",
+        "Select independently checked512-entry direct-mapped native-RAM BTB backend without adding prediction latency; retain shared BHT/RAS and legacy associative backend."
       ],
       "references": [
         {

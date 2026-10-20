@@ -17,7 +17,7 @@ def compiler_description(flags):
     return report
 
 
-def review_output(text, allow_short=False):
+def review_output(text, allow_short=False, expected_luts=None):
     def match(pattern):
         rows = re.findall(pattern, text)
         if len(rows) != 1:
@@ -57,12 +57,22 @@ def review_output(text, allow_short=False):
         raise ValueError('result iterations differ')
     if duration_valid and 'Correct operation validated.' not in text:
         raise ValueError('missing upstream correctness validation')
-    return dict(iterations=iterations, cycles=ticks, clock_hz=hz, seconds=float(seconds_exact),
+    result = dict(iterations=iterations, cycles=ticks, clock_hz=hz, seconds=float(seconds_exact),
                 coremark=float(score), coremark_per_mhz=float(per_mhz), crc=crcs,
                 duration_valid=duration_valid, official_submission=False)
+    if 'CPU core LUTs' in text or 'CoreMark/LUTs' in text or expected_luts is not None:
+        count = int(match(r'CPU core LUTs  : (\d+)'))
+        if count <= 0 or expected_luts is not None and count != expected_luts:
+            raise ValueError('invalid or mismatched CPU-only LUT denominator')
+        value = Decimal(match(r'CoreMark/LUTs  : ([0-9]+\.[0-9]{6})'))
+        exact = score / count
+        if not Decimal(0) <= exact - value < Decimal('0.000001'):
+            raise ValueError('CoreMark/LUTs disagrees with measured score and CPU LUTs')
+        result.update(cpu_core_luts=count, coremark_per_lut=float(exact))
+    return result
 
 
-def build(work, destination, native, iterations, preflight=False, fault='none'):
+def build(work, destination, native, iterations, preflight=False, fault='none', cpu_luts=0):
     """Same frozen source and flags; only iteration count/preflight policy differ."""
     import json
     destination.mkdir(parents=True, exist_ok=True)
@@ -70,10 +80,11 @@ def build(work, destination, native, iterations, preflight=False, fault='none'):
     port = src / 'sw/benchmarks/coremark/port'
     bench = src / 'sw/benchmarks/coremark/src'
     gcc = Path(json.loads((src / 'config/cpu_toolchain.json').read_text(encoding='utf-8'))['compiler'])
-    flags = ['-march=rv32im_zicsr', '-mabi=ilp32', '-std=gnu99', '-O3', '-mcmodel=medany', '-mno-relax',
+    flags = ['-march=rv32im_zicsr', '-mabi=ilp32', '-std=gnu99', '-O2', '-mcmodel=medany', '-mno-relax',
              '-msmall-data-limit=0', '-ffreestanding', '-fno-builtin', '-ffunction-sections', '-fdata-sections',
              '-Wall', '-Wextra', '-Werror=implicit-function-declaration', '-DTRIHA_SOC_MMIO=1',
              '-DTRIHA_COREMARK_BOARD=1', '-DTRIHA_COREMARK_PREFLIGHT=' + str(int(preflight)),
+             '-DTRIHA_CPU_CORE_LUTS=' + str(cpu_luts),
              '-DITERATIONS=' + str(iterations), '-DTOTAL_DATA_SIZE=2000', '-DCORE_DEBUG=0',
              '-DPERFORMANCE_RUN=1', '-DVALIDATION_RUN=0']
     (destination / 'core_build_config.h').write_text(

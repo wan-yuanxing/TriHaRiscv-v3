@@ -56,9 +56,12 @@ not simulated. Firmware ELF/map/ROM/SRAM in this package are the deployment vers
 Program/Verify and the full physical UART result are separate checks. No official score submission is claimed.
 Only volatile configuration is intended; do not write Flash. Keep the existing self-test package unchanged.
 """
+        readme += '\nBTB/BHT/RAS=512/512/4, PC-indexed BHT, GShare disabled; GCC-O2, no LTO.\n'
+        readme += f"CPU-only synthesis LUT count={checked['cpu_hierarchy_resources']['lut']}; UART CoreMark/LUTs uses this denominator.\n"
     (output / "README.md").write_text(readme, encoding="utf-8", newline="\n")
     manifest = dict(status="PASS", target="cpu_coremark" if coremark else "cpu_board", route_directory=str(work),
                     firmware_profile='coremark' if coremark else 'system',
+                    cpu_core_luts=checked['cpu_hierarchy_resources']['lut'],
                     timing_closed=True, programmed=False, board_validated=False,
                     bitstream_sha256=sha(bit), verify_mask_sha256=sha(bit.with_suffix(".smsk")),
                     files={path.name: sha(path) for path in output.iterdir() if path.is_file()})

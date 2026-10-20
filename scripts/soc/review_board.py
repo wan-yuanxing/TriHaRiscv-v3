@@ -48,6 +48,8 @@ def review(work):
             assert evidence['release_iterations'] == 5000 and evidence['preflight_iterations'] == 5
             assert sha(directory / 'firmware.elf') == evidence['deployment_firmware_sha256']
             assert sha(directory / 'sram.hex') == evidence['deployment_sram_sha256']
+            assert evidence['optimization'] == '-O2'
+            assert evidence['preflight_measurement']['cpu_core_luts'] == evidence['cpu_core_luts'] > 0
         for name, digest in evidence["input_hashes"].items():
             assert sha(ROOT / name) == sha(directory / "src" / name) == digest, name
         for name, digest in evidence["external_hashes"].items():
@@ -133,6 +135,11 @@ def review(work):
     match = re.search(r"(?m)^\|[ +]*u_core\s+\|\s+(\d+)\s+\|\s+(\d+)\s+\|\s+(\d+)\s+\|\s+(\d+)\s+\|\s+([\d.]+)", snr)
     assert match, "missing CPU-only hierarchy resources"
     resources = dict(lut=int(match[1]), ff=int(match[2]), distributed_ram=int(match[3]), apm=int(match[4]), drm36k_equivalent=float(match[5]))
+    if result.get('firmware_profile') == 'coremark':
+        from cpu_area import review_predictor
+        review_predictor((work / 'compile/run.log').read_text(encoding='utf-8'))
+        software = json.loads((Path(result['system_directory']) / 'result.json').read_text(encoding='utf-8'))
+        assert resources['lut'] == software['cpu_core_luts'] == result['cpu_core_luts_expected'] == result['cpu_core_luts_actual']
     assert resources["drm36k_equivalent"] == 0 and resources["apm"] == 4
     replication = None
     if any("cpu_board_pc_fanout.fdc" in name for name in result["input_hashes"]):
