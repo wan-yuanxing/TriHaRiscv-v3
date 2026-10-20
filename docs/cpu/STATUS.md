@@ -2,6 +2,8 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
+当前板上已换为5000次CoreMark串口镜像`cpu_coremark_3f69fa00663b`，实际Program/Verify返回0，未写Flash，下载流程未打开COM12。打开115200/8N1/无流控串口并短按KEY0后，等待约17秒，接收精确CoreMark、CoreMark/MHz及BOARD_PASS。实物跑分日志尚待用户接收，当前不填板级分数；5次RTL预检为1685886周期，标准CRC正确，CRC负例实际exit=1。新固件重新完整100MHz后布线通过，Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns。CPU RTL未变，原实物自检包和备份标签保留。操作与证据见`docs/verification/cpu/board_coremark.md`和`board_coremark.json`。
+
 当前六级单发射CPU已通过真实板级PLL/管脚100MHz后布线，并完成HIGH带宽PLL修正版cpu_board_df5475cbb154的实际Program/Verify、8KiB软件自检、持续UART运行和实体KEY0重启。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例。CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。CoreMark短RTL仍2.965896/MHz、WB观察IPC0.870694；不是官方或板级CoreMark。用户明确不用恢复Video，当前保留CPU易失配置，未写Flash。
 
 最新现场验收见`docs/verification/cpu/board_system_physical.md`及board_system_physical_acceptance.json；HIGH版STA/package见board_pll_high_route.json和board_pll_high_package.json。原912cb8d/5f5eb8c89efd虽通过STA和Program/Verify，实物PLL未锁、软件未启动，已保留失败与独立时钟诊断，不能部署该旧包。原外供100MHz片上系统5c4229a及385项输出保持不变。独立CPU分支和工作树保留，不自动合入主工程、push或修改Video源码。以下为逐阶段历史。

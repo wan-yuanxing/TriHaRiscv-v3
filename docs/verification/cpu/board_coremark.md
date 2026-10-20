@@ -1,5 +1,7 @@
 # 板上 CoreMark 串口接收
 
+2026-10-20已部署`build/soc/releases/cpu_coremark_3f69fa00663b`，实际PG2L100H扫描ID00602899，Program/Verify原生返回0。新固件重新完整100MHz后布线通过：Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、MPW +3.655/+4.202ns，恢复/移除检查也通过。下载未打开串口，未写Flash；完整实物跑分日志仍待用户接收，不能把预检短测填成板级成绩。配套索引为`board_coremark.json`。
+
 串口助手使用COM12（CP210x）、115200波特率、8数据位、无校验、1停止位、无流控，文本接收。打开后短按KEY0并松开；收到CPU_COREMARK_START后等待测试完成。测试中不需要发送命令。再次按KEY0重新测试。串口被其他程序占用时先关闭那个程序的连接；下载工具本身不打开串口。
 
 当前配置是六级单发射RV32IM/CSR、BTB32/BHT512/RAS8开启、无Cache、本地32KiB SRAM、标称100MHz。CoreMark v1.0采用2000字节performance数据集、5000次迭代，预计约17秒；以实际UART计时为准。

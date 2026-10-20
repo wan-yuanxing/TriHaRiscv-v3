@@ -1,0 +1,183 @@
+{
+  "status": "DEPLOYED_AWAITING_USER_UART",
+  "date": "2026-10-20",
+  "implementation_commit": "966301c",
+  "cpu_rtl_changed": false,
+  "upstream_algorithms_changed": false,
+  "clock_hz": 100000000,
+  "uart": {
+    "port": "COM12",
+    "baud": 115200,
+    "data_bits": 8,
+    "parity": "none",
+    "stop_bits": 1,
+    "flow_control": "none"
+  },
+  "benchmark": {
+    "version": "1.0",
+    "data_size_bytes": 2000,
+    "performance_seeds": [
+      0,
+      0,
+      102
+    ],
+    "iterations": 5000,
+    "official_submission": false
+  },
+  "preflight": {
+    "iterations": 5,
+    "cycles": 1685886,
+    "clock_hz": 100000000,
+    "seconds": 0.01685886,
+    "coremark": 296.579958549985,
+    "coremark_per_mhz": 2.96579958549985,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "rtl_iterations": 5,
+    "full5000_simulated": false
+  },
+  "package": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_coremark_3f69fa00663b",
+    "manifest_sha256": "95c093a8685488cbed9ce81e4108a19fc8afe79cee9855857ee8eb2a1fc3c97b",
+    "bitstream_sha256": "3f69fa00663ba9795f62c30e22b39f8f2be332c155cbd503a46894488d8f47aa",
+    "verify_mask_sha256": "5bf4f831efab749adad8141e1d0b16cf070b96b8bfcaf0bff518207b178d001b"
+  },
+  "timing": {
+    "closed": true,
+    "worst_setup_ns": 0.023,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.023,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.155,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.655,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4394
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 1.752,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.1,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 15784
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.202,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4394
+      }
+    ],
+    "reset_checks": [
+      {
+        "corner": "Slow",
+        "check": "Recovery",
+        "slack_ns": 2.056,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Slow",
+        "check": "Removal",
+        "slack_ns": 0.739,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Recovery",
+        "slack_ns": 4.164,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Removal",
+        "slack_ns": 0.499,
+        "failing_endpoints": 0
+      }
+    ]
+  },
+  "cpu_only_resources": {
+    "lut": 5977,
+    "ff": 5172,
+    "distributed_ram": 64,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "program": {
+    "status": "PASS",
+    "native_return_code": 0,
+    "device_id": "00602899",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "serial_port_opened": false
+  },
+  "physical_coremark": {
+    "status": "AWAITING_USER_UART",
+    "cycles": null,
+    "coremark": null,
+    "coremark_per_mhz": null
+  },
+  "baseline_preserved": {
+    "tag": "cpu-board-physical-pass-20261020",
+    "package": "build/soc/releases/cpu_board_df5475cbb154"
+  },
+  "unit_tests": {
+    "command": "python -m unittest discover -s scripts/soc -p test_*.py",
+    "passed": 36
+  },
+  "runs": {
+    "clocks": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-clocks-20261020T042218465425Z",
+      "result_sha256": "d9455f94bb7073152526931ade7781e057fe10054638be3377570eb2ebf202f4"
+    },
+    "positive_preflight": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T042735923125Z",
+      "result_sha256": "975b9bad8c5e3bc99a8915c0da3f74683876cb5df9b52ac3e7117cf0e7b4aece"
+    },
+    "crc_negative": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-20261020T042746084511Z",
+      "result_sha256": "c19583e40dc031236110aafc13e539f15eb9dbe3cdb4713832965e309fcc8603"
+    },
+    "route": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T0429447900688Z",
+      "result_sha256": "47ba32d6f94ca494c95e03478087d3323cd4fda700998cec4aad4ca5c58387f6"
+    },
+    "program": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-coremark-program-20261020T043418084980Z",
+      "result_sha256": "d01b110145132193083b8b557122da61d64381bc56dfd92c351af162d213173a"
+    }
+  }
+}
