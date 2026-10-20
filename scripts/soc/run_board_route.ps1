@@ -5,7 +5,8 @@ param(
     [Parameter(Mandatory)][string] $ClockRunDirectory,
     [ValidateSet('system','coremark')][string] $FirmwareTest='system',
     [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe',
-    [ValidateRange(1,16)][int] $PlacementSeed=1
+    [ValidateRange(1,16)][int] $PlacementSeed=1,
+    [ValidateRange(1,20)][int] $HoldFixIterations=5
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
@@ -21,7 +22,7 @@ $result=[ordered]@{schema_version=1;status='RUNNING';flow_status='RUNNING';timin
     directory=$work;input_hashes=[ordered]@{};evidence_hashes=[ordered]@{};output_hashes=[ordered]@{}
     native_commands=$commands;source_unchanged=$false;error=$null;timing=$null;runner_return_code=$null
     scope='CPU board PLL/pins post-route and bitstream; not programmed or physically tested'
-    placement_seed=$PlacementSeed;board_validated=$false;programmed=$false;bitstream_generated=$false
+    placement_seed=$PlacementSeed;hold_fix_iterations=$HoldFixIterations;board_validated=$false;programmed=$false;bitstream_generated=$false
     started_utc=[DateTime]::UtcNow.ToString('o')}
 $resultPath=Join-Path $work 'result.json'
 Save-TrihaJson $resultPath $result
@@ -108,7 +109,7 @@ try {
     $lines+='compile -top_module triha_cpu_board_top -include_path {'+($includes -join ' ')+'}'
     $lines+='synthesize -ads -write_verilog TRUE'
     $lines+='dev_map -detail'
-    $route="pnr -action_timeout $($recipe.pnr_action_minutes) -optimize_multi_corner_timing -fix_hold_violation -gplace_seed $PlacementSeed -dump_router_congestion_plot TRUE"
+    $route="pnr -action_timeout $($recipe.pnr_action_minutes) -optimize_multi_corner_timing -fix_hold_violation -fix_hold_violation_iterations $HoldFixIterations -gplace_seed $PlacementSeed -dump_router_congestion_plot TRUE"
     if($recipe.slack_prior_in_global_router){$route+=' -slack_prior_in_global_router TRUE'}
     if($recipe.PSObject.Properties.Name -contains 'refineplacement_iterations'){
         $route+=" -refineplacement_iteration $($recipe.refineplacement_iterations)"

@@ -56,6 +56,24 @@ module triha_regfile #(
             wire write_w = !rst_i && (|rd0_i);
             wire [31:0] ra_data_w;
             wire [31:0] rb_data_w;
+            // Keep the write-data minimum delay above the native RAM hold
+            // requirement even when WB FF and RAM are packed beside each other.
+            // Enabled writes have a valid address and reset released, so the
+            // two data gates preserve exactly the value that RAM may capture.
+            // Plain identity LUTs are bypassed by ADS even with kept net names.
+            (* syn_keep = 1 *) wire [31:0] write_delay_w;
+            (* syn_keep = 1 *) wire [31:0] write_data_w;
+            genvar write_bit;
+            for (write_bit=0; write_bit<32; write_bit=write_bit+1) begin: g_write_hold
+                (* syn_keep = 1 *) GTP_LUT6 #(.INIT(64'h8888888888888888)) u_first (
+                    .I0(rd0_value_i[write_bit]), .I1(|rd0_i), .I2(1'b0), .I3(1'b0),
+                    .I4(1'b0), .I5(1'b0), .Z(write_delay_w[write_bit])
+                );
+                (* syn_keep = 1 *) GTP_LUT6 #(.INIT(64'h2222222222222222)) u_second (
+                    .I0(write_delay_w[write_bit]), .I1(rst_i), .I2(1'b0), .I3(1'b0),
+                    .I4(1'b0), .I5(1'b0), .Z(write_data_w[write_bit])
+                );
+            end
 
             always @(posedge clk_i) begin
                 if (rst_i)
@@ -68,12 +86,12 @@ module triha_regfile #(
             for (bit_pair=0; bit_pair<16; bit_pair=bit_pair+1) begin : g_pair
                 GTP_RAM32X2DP #(.INIT_0(32'b0), .INIT_1(32'b0)) u_ra (
                     .DO(ra_data_w[2*bit_pair +: 2]),
-                    .DI(rd0_value_i[2*bit_pair +: 2]),
+                    .DI(write_data_w[2*bit_pair +: 2]),
                     .RADDR(ra0_i), .WADDR(rd0_i), .WCLK(clk_i), .WE(write_w)
                 );
                 GTP_RAM32X2DP #(.INIT_0(32'b0), .INIT_1(32'b0)) u_rb (
                     .DO(rb_data_w[2*bit_pair +: 2]),
-                    .DI(rd0_value_i[2*bit_pair +: 2]),
+                    .DI(write_data_w[2*bit_pair +: 2]),
                     .RADDR(rb0_i), .WADDR(rd0_i), .WCLK(clk_i), .WE(write_w)
                 );
             end

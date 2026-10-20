@@ -2,9 +2,11 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-当前板上已换为5000次CoreMark串口镜像`cpu_coremark_3f69fa00663b`，实际Program/Verify返回0，未写Flash，下载流程未打开COM12。打开115200/8N1/无流控串口并短按KEY0后，等待约17秒，接收精确CoreMark、CoreMark/MHz及BOARD_PASS。实物跑分日志尚待用户接收，当前不填板级分数；5次RTL预检为1685886周期，标准CRC正确，CRC负例实际exit=1。新固件重新完整100MHz后布线通过，Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns。CPU RTL未变，原实物自检包和备份标签保留。操作与证据见`docs/verification/cpu/board_coremark.md`和`board_coremark.json`。
+当前板上已换为5000次、GCC-O2、BTB512/BHT512/RAS4的CoreMark串口镜像`cpu_coremark_224be86f8972`，实际Program/Verify返回0，未写Flash，下载流程未打开COM12。串口增加CPU core LUTs=5912及CoreMark/LUTs（当次实测CoreMark除以5912），分母仅CPU核，含688个distributed RAM LUT子集，不含SoC外围。六级单发射、PC索引两位BHT/GShare关闭，无I/D Cache。512项BTB改为两bank直接映射原生异步RAM，未增加查询拍；RF有效写入数据门修复hold，未改变有效写入和CoreMark周期。
 
-当前六级单发射CPU已通过真实板级PLL/管脚100MHz后布线，并完成HIGH带宽PLL修正版cpu_board_df5475cbb154的实际Program/Verify、8KiB软件自检、持续UART运行和实体KEY0重启。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例。CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。CoreMark短RTL仍2.965896/MHz、WB观察IPC0.870694；不是官方或板级CoreMark。用户明确不用恢复Video，当前保留CPU易失配置，未写Flash。
+本镜像重新完整100MHz后布线通过，Slow/Fast setup +0.037/+1.752ns、hold +0.152/+0.100ns、脉宽 +3.655/+4.202ns，原IO/hold/多corner约束不变；CPU-only5912LUT/3486FF/0DRM/4APM。5次RTL预检1690888周期、标准CRC正确，短测2.957026 CoreMark/MHz，CRC负例实际exit=1；这些不是板级分数。打开COM12、115200/8N1/无流控、文本接收，短按KEY0，等待约17秒，接收完整实测分数及BOARD_PASS。完整实物分数仍待用户串口记录。新证据见`docs/verification/cpu/bpu512_o2.md`及json。旧O3包、原自检包及其备份标签保留，下文为历史记录。
+
+此前六级单发射CPU已通过真实板级PLL/管脚100MHz后布线，并完成HIGH带宽PLL修正版cpu_board_df5475cbb154的实际Program/Verify、8KiB软件自检、持续UART运行和实体KEY0重启。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例。该历史版CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。该版CoreMark短RTL为2.965896/MHz、WB观察IPC0.870694；不是官方或板级CoreMark。用户明确不用恢复Video，当前保留CPU易失配置，未写Flash。
 
 最新现场验收见`docs/verification/cpu/board_system_physical.md`及board_system_physical_acceptance.json；HIGH版STA/package见board_pll_high_route.json和board_pll_high_package.json。原912cb8d/5f5eb8c89efd虽通过STA和Program/Verify，实物PLL未锁、软件未启动，已保留失败与独立时钟诊断，不能部署该旧包。原外供100MHz片上系统5c4229a及385项输出保持不变。独立CPU分支和工作树保留，不自动合入主工程、push或修改Video源码。以下为逐阶段历史。
 

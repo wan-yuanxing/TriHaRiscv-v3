@@ -110,11 +110,12 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
       "base_sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
       "derived": "rtl/cpu/triha_regfile.v",
-      "derived_sha256": "35826b4c144ed6ec5e23b7faf52d2cafdcc551e080ce2da7f2bdfcc4e6a793a6",
+      "derived_sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
       "changes": [
         "Reuse the existing FPGA two-copy asynchronous-read register-file structure with native GTP_RAM32X2DP primitives for single issue.",
         "Preserve synchronous zero-on-reset visibility with 31 written flags; x0 stays zero; no read register or added latency.",
-        "Single-issue secondary write must be zero and is checked by simulation; dual issue retains original register-file behavior."
+        "Single-issue secondary write must be zero and is checked by simulation; dual issue retains original register-file behavior.",
+        "Use native valid-address/reset data gates for RAM write hold delay; enabled write values and write/read cycles unchanged. Verify actual mapped retention and final multicorner hold."
       ],
       "reference_files": [
         "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
