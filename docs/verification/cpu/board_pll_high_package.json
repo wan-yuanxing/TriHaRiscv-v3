@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "Frozen HIGH bandwidth CPU board 100MHz route and package, separate physical acceptance to follow",
+  "route_result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-route-20261020T0301376595393Z\\result.json",
+  "route_result_sha256": "f2cf15ef485cde1c5eb908f66955e6266834d312b236da88f051a5cd2c3f6d3b",
+  "frozen_inputs": 46,
+  "frozen_outputs": 328,
+  "package_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_board_df5475cbb154",
+  "package_manifest_sha256": "e564eaf051a80e78c86e7f98980c02741971dadac4c2e576f79c800ff5344a62",
+  "package_files": 10,
+  "bitstream_sha256": "df5475cbb1543dbcaa264d1e26a2eca05b20019e87c29b65a3b8ab5d41c70704",
+  "verify_mask_sha256": "df20d8f7be3d5058915405f084e2650a9a04303297d566fb4d2572f8bfe991c6",
+  "pll_bandwidth": "HIGH",
+  "cpu_rtl_changed": false,
+  "constraints_changed": false,
+  "nominal_cpu_hz": 100000000,
+  "board_execution_proof": "see board_system_physical_acceptance.json when complete"
+}

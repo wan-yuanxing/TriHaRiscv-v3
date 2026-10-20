@@ -12,8 +12,8 @@
 - [x] 新增`sw/tests/cpu_board.c`、`tb/soc/tb_cpu_board.v`和独立入口，整核验证8KiB自检、串口、KEY0重启及真实损坏拒绝。两次启动通过；真实SRAM初始化字节损坏报告code1并被拒绝。
 - [x] 添加显式板级PDS目标、独立完整运行及报告复核入口；检查六项实际STA、CPU配置、PLL及管脚，时序通过后生成位流/掩码。
 - [x] 打包位流、掩码、固件/报告/哈希/恢复说明；更新CPU STATUS与证据，精确标明未Program/未板测。
-- [ ] 用户确认临时替换当前Video配置后，volatile Program/Verify、UART/KEY0现场验收及恢复Video；不写Flash，不自动合入主工程。
+- [x] 用户授权后完成volatile Program/Verify、UART/实体KEY0现场验收；按随后“不用恢复”指示保留CPU配置，未恢复Video、未写Flash、未自动合入主工程。
 
 验证命令：`python scripts/soc/test_board_tools.py`；`python scripts/soc/gen_board.py --check`；`python scripts/soc/run_board.py --test clocks`；`python scripts/soc/run_board.py --test system`；`python scripts/soc/run_board.py --test system --fault memory`；`pwsh -NoProfile -File scripts/soc/run_board_route.ps1 -FirmwareRunDirectory <system运行目录> -ClockRunDirectory <clocks运行目录>`。失败记录保留、返回非零，不重写原100MHz通过记录。
 
-2026-10-20终态：并行RF、分组预测器、提前顺序PC与独占旁路选择保持六级单发射和原CoreMark周期。真实高PFD PLL模型111项、两次整核启动及单字节损坏拒绝通过；15项当前运行/哈希核验。实际板级100MHz全部STA通过，完整工具/宿主返回0并成功生成位流/掩码。下载包cpu_board_5f5eb8c89efd已核验，见board_system_100mhz.md和board_system_acceptance.json。发布检查5项含真实拆行回归，串口解析6项、配置9项。尚未Program/Verify或板测。
+2026-10-20终态：并行RF、分组预测器、提前顺序PC与独占旁路选择保持六级单发射和原CoreMark周期。首版STA通过后，实物暴露OPTIMIZED带宽PLL不锁定；诊断和HIGH带宽修正均保留证据。真实PLL模型111项、整核两次启动、单字节损坏拒绝、配置11项、发布5项、串口解析6项通过。新完整100MHz STA及位流生成通过，包cpu_board_df5475cbb154实际Program/Verify、8KiB自检、KEY0和164条连续ALIVE通过；见board_system_physical.md和board_system_physical_acceptance.json。当前保留CPU易失配置，不恢复Video。完整ISA、DDR/Video/NPU系统集成和板级CoreMark另行推进。

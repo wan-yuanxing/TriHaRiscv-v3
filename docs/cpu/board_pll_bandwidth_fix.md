@@ -13,3 +13,5 @@
 正式修复只在config/cpu_board.json显式声明HIGH，生成器同时写入IDF的BANDWIDTH和BANDWIDTH_advancedPage，独立生成wrapper复核也检查该字符串。新增生成带宽漂移/非法带宽两项测试先RED后GREEN，配置工具11项通过。真正安装PLL模型按既有-t 1ps/-voptargs=+acc设置111项通过；一次临时遗漏+acc的诊断调用产生模型除零，原日志保留，未据该调用验收。厂商文件无修改。
 
 正式时钟/整核两次启动仿真及真实单字节损坏拒绝重新运行。CPU CoreMark源/输出哈希未变，复用1685831周期/1467843WB观察、短估算2.965896/MHz证据，不把PLL-only测量当CPU性能分数。后续必须完整新compile/synthesize/dev_map/pnr/report_timing、原100MHz/IO/hold/multicorner全部通过并重新生成包，再Program/Verify和现场UART/KEY0验收。不恢复Video、不写Flash。
+
+终态：3e73c28修正版完整运行board-route-20261020T0301376595393Z、独立review和包df5475cbb154通过，六项STA及recovery/removal与父版余量相同。PG2L100H/00602899实际Program/Verify成功，软件8KiB自检PASS，按键前107.34秒和实体KEY0后53.17秒UART连续，164条ALIVE全部序号/周期检查通过。用户已确认本次KEY0，观察窗口没有其他JTAG操作。见board_system_physical.md及机器证据；保持CPU易失配置，不恢复Video。

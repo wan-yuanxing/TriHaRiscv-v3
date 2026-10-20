@@ -2,9 +2,9 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
-当前六级单发射CPU已通过真实板级PLL/管脚边界的100MHz后布线，并生成下载包cpu_board_5f5eb8c89efd。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例；不是布局估计。CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。CoreMark短RTL仍2.965896/MHz、WB观察IPC0.870694；非官方分数或板测。尚未Program/Verify或物理UART/KEY0验收。
+当前六级单发射CPU已通过真实板级PLL/管脚100MHz后布线，并完成HIGH带宽PLL修正版cpu_board_df5475cbb154的实际Program/Verify、8KiB软件自检、持续UART运行和实体KEY0重启。Slow/Fast setup +0.023/+1.752ns、hold +0.155/+0.100ns、脉宽 +3.655/+4.202ns，全部无违例。CPU-only5977LUT/5172FF/64distributedRAM/0DRM/4APM，RV32IM/CSR、BTB32/BHT512/RAS8开启，无I/D Cache。CoreMark短RTL仍2.965896/MHz、WB观察IPC0.870694；不是官方或板级CoreMark。用户明确不用恢复Video，当前保留CPU易失配置，未写Flash。
 
-最新验收见`docs/verification/cpu/board_system_100mhz.md`及board_system_acceptance.json。原外供100MHz片上系统5c4229a/cpu-soc-100mhz-sta-20261019及385项输出保持不变。独立CPU分支和工作树保留，不自动合入主工程、push或修改Video。以下为逐阶段历史，旧失败不改写。
+最新现场验收见`docs/verification/cpu/board_system_physical.md`及board_system_physical_acceptance.json；HIGH版STA/package见board_pll_high_route.json和board_pll_high_package.json。原912cb8d/5f5eb8c89efd虽通过STA和Program/Verify，实物PLL未锁、软件未启动，已保留失败与独立时钟诊断，不能部署该旧包。原外供100MHz片上系统5c4229a及385项输出保持不变。独立CPU分支和工作树保留，不自动合入主工程、push或修改Video源码。以下为逐阶段历史。
 
 ## 本批交付
 
@@ -502,3 +502,13 @@ FIFO复制实际增加6FF，首段布线虽缩短，整体setup -0.438ns，已�
 首次实际STA已全通过，但位流生成命令因PowerShell数组内拼接缺括号被拆行而失败，原记录完整保留。回归测试真实复现4行而非2行，修复后5项发布检查通过；未改写旧FAIL。完整复跑board-route-20261019T1825066711298Z的compile/synthesize/dev_map/pnr/report_timing/gen_bit_stream均成功，宿主和3个原生调用均返回0、source_unchanged，46项输入、328项输出及实际管脚/PLL/最终STA独立复核通过。最差路径已为SRAM块RAM→执行结果，setup +0.023ns；不据此声称高于100MHz。
 
 下载包build/soc/releases/cpu_board_5f5eb8c89efd包含位流、校验掩码、ELF/map、ROM/SRAM、最终报告及review/manifest/README，10项文件哈希通过。验收/备份标签cpu-board-100mhz-sta-20261020。下一步在获得临时替换当前Video配置的确认后，执行volatile Program/Verify、UART两次完整启动/ALIVE及KEY0现场验收，并恢复用户指定的Video包；不写Flash。当前不自动下载或宣称板测成功。
+
+## 2026-10-20 实体板级启动与KEY0验收完成
+
+用户授权Program/Verify，随后明确“不用恢复”。旧5f5eb8c89efd实际下载和回读校验成功，但KEY0后无CPU串口、LED全灭。独立27MHz观察诊断证明125MHz参考存在、KEY0松开，原OPTIMIZED带宽PLL始终不锁定，CPU复位未释放；仅增加PLL复位仍失败。保持其他诊断输入不变、只使用同板已验证DDR GPLL的HIGH带宽后，锁定和复位释放均正常，输出分频计数符合标称100MHz。完整原始对照和失败记录保留，见board_pll_bandwidth_fix.md及对应JSON。
+
+正式修复3e73c28只改变PLL带宽配置及生成/核对入口，CPU RTL、分频、100MHz/IO/hold/multicorner不变。配置工具11项先RED后GREEN，真实模型111项、整核两次启动、损坏拒绝通过。新完整PDS运行board-route-20261020T0301376595393Z和独立review通过，所有余量与父版相同，位流df5475cbb154已打包；46输入/328输出及10项包文件绑定通过。旧CoreMark的完整输入/输出哈希仍相同，性能证据只按该RTL范围复用。
+
+实际PG2L100H/00602899 Program/Verify返回0，COM12记录软件8KiB自检PASS。完成下载后约107.34秒连续运行，再按用户确认的实体KEY0重新自检，随后约53.17秒连续运行；总164条ALIVE（含下载窗口的两个初始启动epoch），每个epoch从seq0开始，序号和cycle差连续，无FAIL/TRAP。KEY0观察窗口在Program/Verify之后开启，只有一个新启动banner，没有新的JTAG操作。
+
+现场证据board_system_physical_acceptance.json绑定位流/掩码、工具、实际JTAG日志、原始串口及用户按键确认；标签cpu-board-physical-pass-20261020。当前保留CPU易失配置，不恢复Video，不写Flash；主工程源码和独立Video/技术报告任务不改动、不自动合并。下一阶段接正式CPU MMIO互连及既有DDR/Video/NPU契约，完整ISA/异常、板级CoreMark和校准仪器测频仍是独立验收，不以本轮8KiB缓冲自检替代。

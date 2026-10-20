@@ -1,5 +1,7 @@
 # CPU板级100MHz验收
 
+后续现场更新：本文件以下是原5f5eb8c89efd的冻结STA/打包记录。实物发现其OPTIMIZED带宽PLL不锁定，不能部署该旧包。HIGH带宽修正保持以下STA余量，并以新包df5475cbb154通过实际Program/Verify、自检、UART及KEY0验收，见[现场结果](board_system_physical.md)和[HIGH版实际STA](board_pll_high_route.json)。旧证据不改写为板测通过。
+
 2026-10-20：PG2L100H/FBG676/-6的板级PLL/管脚边界已通过真实后布线100MHz，并生成下载包。六级单发射、RV32IM/CSR、BTB32/BHT512/RAS8、GShare关闭、无I/D Cache；8KiB ROM、32KiB SRAM、UART TX和原地址保持。尚未Program/Verify或现场板测。
 
 ## 实际物理结果

@@ -1,0 +1,149 @@
+{
+  "status": "PASS",
+  "scope": "Physical CPU Program/Verify, owned 8KiB SRAM self-test, continuous UART cycle/sequence progress and user-confirmed KEY0 restart; no full ISA, full SRAM, calibrated frequency or board CoreMark claim",
+  "recorded_utc": "2026-10-20T03:13:22.725057+00:00",
+  "source_commit": "3e73c28a773fc542990094c3652afb61be7ab71d",
+  "physical_reviewer_file": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\review_cpu_physical.py",
+  "physical_reviewer_sha256": "9d00150bd467542b49a84c20fd9d813fc69c6d90077b758d5847a0ff9068d81a",
+  "program_driver_file": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\cpu_board_program_high_once.py",
+  "program_driver_sha256": "24da586a1476f37fffce76c50f72ff1b1cbea3173db75df8f082db9c3e0eaa47",
+  "nominal_cpu_hz": 100000000,
+  "physical_key0_confirmed": true,
+  "physical_key0_reboot_observed": true,
+  "program_result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-pll-high-program-20261020T030627030226Z\\result.json",
+  "program_result_sha256": "78d57f4b41b8ac65a2b62608a3e1571d27d6fd39e3ee553319f93fce473e1cc9",
+  "program_log_sha256": "90f58448dcc76e64076ecba82dd0186934b9ec584f07e40c061b0ce95d3c5917",
+  "uart_file": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\board-pll-high-program-20261020T030627030226Z\\uart.bin",
+  "uart_sha256": "7c86aa431d8b8fce197bae875cccc7a41a38cb76434f0211254aedea73154367",
+  "physical_observation": {
+    "boots": 3,
+    "alive_records": 164,
+    "checked_bytes_per_boot": 8192,
+    "epochs": [
+      {
+        "alive_records": 2,
+        "first_cycle": 814931,
+        "last_cycle": 101136154
+      },
+      {
+        "alive_records": 108,
+        "first_cycle": 814931,
+        "last_cycle": 2145251412
+      },
+      {
+        "alive_records": 54,
+        "first_cycle": 814931,
+        "last_cycle": 1022872558
+      }
+    ]
+  },
+  "epochs": [
+    {
+      "alive_records": 2,
+      "first_seq": 0,
+      "last_seq": 1,
+      "observed_cycle_span": 100321223,
+      "nominal_seconds": 1.00321223
+    },
+    {
+      "alive_records": 108,
+      "first_seq": 0,
+      "last_seq": 107,
+      "observed_cycle_span": 10734371073,
+      "nominal_seconds": 107.34371073
+    },
+    {
+      "alive_records": 54,
+      "first_seq": 0,
+      "last_seq": 53,
+      "observed_cycle_span": 5317024923,
+      "nominal_seconds": 53.17024923
+    }
+  ],
+  "key0_observation": {
+    "boots": 1,
+    "alive_records": 54,
+    "checked_bytes_per_boot": 8192,
+    "epochs": [
+      {
+        "alive_records": 54,
+        "first_cycle": 814931,
+        "last_cycle": 1022872558
+      }
+    ]
+  },
+  "key0_window_sha256": "da129e47fec2ced789da8c1525207534ec8e11c9bc630a6d05460c4858fb3f64",
+  "key0_confirmation_sha256": "77fc14f83f9639f47acfb732f3aa0fb654acbb343ea8d71457a4ebda39c47355",
+  "no_jtag_actions_after_program_verify": true,
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "restore_video": false,
+  "final_board_configuration": "CPU",
+  "package_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_board_df5475cbb154",
+  "package_manifest_sha256": "e564eaf051a80e78c86e7f98980c02741971dadac4c2e576f79c800ff5344a62",
+  "bitstream_sha256": "df5475cbb1543dbcaa264d1e26a2eca05b20019e87c29b65a3b8ab5d41c70704",
+  "verify_mask_sha256": "df20d8f7be3d5058915405f084e2650a9a04303297d566fb4d2572f8bfe991c6",
+  "timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": 0.023,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.155,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 1.752,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.1,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 15784
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4394
+    }
+  ],
+  "cpu_only_resources": {
+    "lut": 5977,
+    "ff": 5172,
+    "distributed_ram": 64,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "remaining": [
+    "CPU/Video/NPU/DDR system integration",
+    "full ISA/exception qualification",
+    "official or board CoreMark measurement"
+  ]
+}
