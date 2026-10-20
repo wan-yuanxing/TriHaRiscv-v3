@@ -1,0 +1,610 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-20",
+  "status": "ROUND_COMPLETE_NO_ADOPTION",
+  "adopted": false,
+  "programmed": false,
+  "parent_commit": "dc00f80",
+  "backup_tag": "cpu-before-branch-pc-20261020",
+  "deployed_package": "cpu_coremark_6ff82025b53d",
+  "scope": "Native Windows CPU optimization; short RTL CoreMark and actual board post-route are separate. Full physical score pending user UART.",
+  "constraints": {
+    "six_stage": true,
+    "single_issue": true,
+    "isa": "RV32IM/CSR",
+    "btb": 512,
+    "bht": 512,
+    "ras": 4,
+    "gshare": false,
+    "optimization": "-O2",
+    "clock_hz": 100000000
+  },
+  "candidates": {
+    "A": {
+      "resources": {
+        "lut": 5945,
+        "ff": 3530
+      },
+      "worst_setup_ns": 0.149,
+      "adopted": false,
+      "reason": "Only0.036ns more margin, extra12LUT, no score improvement"
+    },
+    "B": {
+      "resources": {
+        "lut": 5987,
+        "ff": 3530
+      },
+      "worst_setup_ns": -0.082,
+      "adopted": false,
+      "reason": "Actual100MHz setup fails4endpoints"
+    },
+    "C": {
+      "resources": {
+        "lut": 5903,
+        "ff": 3530,
+        "distributed_ram": 688,
+        "apm": 4,
+        "drm": 0
+      },
+      "decision": "Rejected:seed1 setup-0.029ns;seed8 setup-0.081ns at sole LED3 endpoint, whole-system timing fails."
+    },
+    "D": {
+      "cpu_only_resources": {
+        "lut": 5903,
+        "ff": 3530,
+        "distributed_ram": 688,
+        "apm": 4,
+        "drm": 0
+      },
+      "board_status_latency_clocks": 1,
+      "board_added_ff": 2,
+      "decision": "Rejected:full final routes1/8 fail setup-0.292/-0.162ns. Board LED path removed from worst paths; remaining frontend/RAS and ALU cones require a different design step.",
+      "worst_setup_seed1_ns": -0.292,
+      "worst_setup_seed8_ns": -0.162
+    }
+  },
+  "measurement": {
+    "iterations": 5,
+    "cycles": 1646428,
+    "clock_hz": 100000000,
+    "seconds": 0.01646428,
+    "coremark": 303.68774097622247,
+    "coremark_per_mhz": 3.0368774097622246,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.05118620276019256
+  },
+  "timed_profile": {
+    "cycles": 1646428,
+    "issue": 1448453,
+    "frontend": 91852,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 9,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 106114,
+    "other": 0,
+    "false_dependency": 35,
+    "wb": 1448453,
+    "stores": 70840
+  },
+  "timed_trace_hashes": {
+    "coremark.wb.log": "4e13d0e8038e8a8453c3d2a28aa825c74117703bf63b2d505ef8b102f397e70c",
+    "coremark.store.log": "f89ca421170f40665e4862bb869f78fd85ebf656b36ec36a62d8fc0adc314ee9"
+  },
+  "parent_trace_hashes_equal": true,
+  "higher_frequency_tested": false,
+  "official_submission": false,
+  "full5000_simulated": false,
+  "physical_score": null,
+  "reference": {
+    "url": "https://github.com/lowRISC/ibex/blob/246849ed1063828355cae8a22c6f1aa95250c3b6/rtl/ibex_alu.sv",
+    "sha256": "06ce1c3ce30807f715478cf9e3bc279cac1c1cc2fb95d289516169fadcf7b7dc",
+    "scope": "Common comparison flag pattern only; no external HDL/toolchain imported."
+  },
+  "runs": {
+    "parent_coremark": {
+      "path": "build/soc/board-coremark-20261020T081904735517Z/result.json",
+      "sha256": "33019db548a43be3915ba0d36d1aecd2d979af8fc0b65e1c9b00e497e6a7490a",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 87,
+      "output_count": 138
+    },
+    "parent_route": {
+      "path": "build/soc/board-route-20261020T0824200693298Z/result.json",
+      "sha256": "29d1b2fbef577e7af533c4da039e9deb7d2e83fad044c13d0679e9f20ec60d95",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 269
+    },
+    "parent_carry_red": {
+      "path": "build/soc/branch-pc-parent-carry.json",
+      "sha256": "233db8d142cca99a6715867d02a3675432cd516092116494ff106f50134d797f",
+      "status": "FAIL",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "A_miter": {
+      "path": "build/cpu/redirect-execbranch-20261020T0850399018871Z/result.json",
+      "sha256": "3bb87ace1245533c513640d5ce133327c70c388b683e3801bd6baa51e8978090",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 10
+    },
+    "A_negative": {
+      "path": "build/cpu/redirect-execbranch-20261020T0850534841359Z/result.json",
+      "sha256": "7dfd37cd505208bbf9cc05236431d7e2ac15b9ca838087498ccacd4573198f32",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 47,
+      "output_count": 10
+    },
+    "A_area": {
+      "path": "build/soc/cpu-area-20261020T085114522984Z/result.json",
+      "sha256": "c4844b21804d09f208d77b97507a15262155d9acd19b4d6227723c06c350725d",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 42,
+      "output_count": 80
+    },
+    "A_coremark": {
+      "path": "build/soc/board-coremark-20261020T085304716644Z/result.json",
+      "sha256": "948d6f67b6eea525cff1a7feee2c8c6b62d6f9a9e93ee40b9582838757ce86c1",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 88,
+      "output_count": 139
+    },
+    "A_crc_negative": {
+      "path": "build/soc/board-coremark-20261020T085304730045Z/result.json",
+      "sha256": "82975a3f593e2afa18fec608b58ef4ad12c48d1bd7c1e1b5959b19b8583586d7",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 88,
+      "output_count": 136
+    },
+    "A_route": {
+      "path": "build/soc/board-route-20261020T0857419430951Z/result.json",
+      "sha256": "b93fe4bd1b0753bc065651c23f869918a8a034a35fb1780a8eb79738b42dc95f",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 259
+    },
+    "A_review": {
+      "path": "build/soc/branch-pc-route-review.json",
+      "sha256": "09cc788561d90a1e93d7d54e08600850fc46092ceeef70f693435c04541f3079",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "B_miter": {
+      "path": "build/cpu/redirect-execbranch-20261020T0905277432170Z/result.json",
+      "sha256": "0bd679c7d6573b10960a7ae206b66cbe5905c9f6ea2e1236787e6e5212843a1a",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 10
+    },
+    "B_area": {
+      "path": "build/soc/cpu-area-20261020T090452073915Z/result.json",
+      "sha256": "983538fa0bc96f8fa522266d974c99228974adc7bcd512accc6e097045ebfef0",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 42,
+      "output_count": 80
+    },
+    "B_coremark": {
+      "path": "build/soc/board-coremark-20261020T090653957741Z/result.json",
+      "sha256": "044bfa9793f92696207304e8d8ca5832bb3fed2730b20a6732cd5bd3ade3a0e6",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 88,
+      "output_count": 139
+    },
+    "B_crc_negative": {
+      "path": "build/soc/board-coremark-20261020T090653972937Z/result.json",
+      "sha256": "203367283a267b1c6c5e330f42008ef85868e4e806299059791baa882eed9423",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 88,
+      "output_count": 136
+    },
+    "B_route": {
+      "path": "build/soc/board-route-20261020T0911028939497Z/result.json",
+      "sha256": "04d4f7908bc37ae2881b95a3895dbd98177a69fcb1888b5994a78a4e79b1dd95",
+      "status": "TIMING_FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 2,
+      "input_count": 47,
+      "output_count": 290
+    },
+    "B_review": {
+      "path": "build/soc/branch-pc-parallel-route-review.json",
+      "sha256": "895ab56ad94ff3e5add66e20773f7550895059395ff3d8501cc0d8f39926d920",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "C_frozen_area": {
+      "path": "build/soc/branch-pc-compare-candidate/build/soc/cpu-area-20261020T091348959100Z/result.json",
+      "sha256": "61681ce77594a870966100bb91acb170620655db45c703c5f575bc474a76d245",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 42,
+      "output_count": 80
+    },
+    "C_primary_area": {
+      "path": "build/soc/cpu-area-20261020T091543331827Z/result.json",
+      "sha256": "d08b1624b3c552e706f535adfbcd30287870d33c8f641a06fa65e957549d8de9",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 42,
+      "output_count": 80
+    },
+    "C_miter": {
+      "path": "build/cpu/redirect-execbranch-20261020T0915435587935Z/result.json",
+      "sha256": "cbafc1ec7f1e30a516af7373afa23a85210bd5804a57b00e90d30504c5e45590",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 10
+    },
+    "C_negative": {
+      "path": "build/cpu/redirect-execbranch-20261020T0916193657460Z/result.json",
+      "sha256": "478551882553ab7d5b26b4239efe0451cde8e8c2dd0d88b5a3c7c2aa5838b215",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 47,
+      "output_count": 10
+    },
+    "C_ordered37": {
+      "path": "build/cpu/redirect-ordered-20261020T0915435922328Z/result.json",
+      "sha256": "eef583b538fb363144188dcbccadd655568992d561ce1908a8793d79e1c32eb4",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 38
+    },
+    "C_ordered1234567": {
+      "path": "build/cpu/redirect-ordered-20261020T0915435938434Z/result.json",
+      "sha256": "464d43d9210d1719f377382328d8721f8ac316f4844bbf1acba32fd623999a21",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 38
+    },
+    "C_ordered271828": {
+      "path": "build/cpu/redirect-ordered-20261020T0915436328827Z/result.json",
+      "sha256": "931684f532e06fce53aa0c3cb4b5b27a5ca4deb72743d8ecafc88d8324691706",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 38
+    },
+    "C_irq": {
+      "path": "build/cpu/redirect-ordered-20261020T0915435995566Z/result.json",
+      "sha256": "5db12f7fc82196a0edb3f7213cd55116da0e9b0f8851b1f78efd36b5c58b63c5",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 47,
+      "output_count": 38
+    },
+    "C_system": {
+      "path": "build/soc/board-system-20261020T091543342205Z/result.json",
+      "sha256": "c999df145a91400fe5257f54ae6d26572b4ca89397613d23aab035ae475a508e",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 74,
+      "output_count": 110
+    },
+    "C_coremark": {
+      "path": "build/soc/board-coremark-20261020T091619004723Z/result.json",
+      "sha256": "55c22cb09dfaf04e8456d9275e31b66a0db7473f3d22ec55eb392ead1a7d427a",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 88,
+      "output_count": 139
+    },
+    "C_crc_negative": {
+      "path": "build/soc/board-coremark-20261020T091619012776Z/result.json",
+      "sha256": "1dafff4e17cf94bbba8c1455264758903e27078cf0b6e19b5ede4dd2728c0c4d",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 88,
+      "output_count": 136
+    },
+    "C_carry": {
+      "path": "build/soc/branch-pc-compare-carry.json",
+      "sha256": "483bd31b4fa8f31172c00e7aa7dedcf5e6ab4a1909b30b14658fac4444fb043b",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "C_route": {
+      "path": "build/soc/board-route-20261020T0919500667464Z/result.json",
+      "sha256": "b98d7a6e403985b17996e8877a547e785903d6d0b5f928de062b65a384f4b16d",
+      "status": "TIMING_FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 2,
+      "input_count": 47,
+      "output_count": 322
+    },
+    "C_review": {
+      "path": "build/soc/branch-pc-compare-route-review.json",
+      "sha256": "967b7869666af9e73eb7578e10290dac003f75b022c66306c40a3638377b42f4",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "C_seed8_route": {
+      "path": "build/soc/board-route-20261020T0927068229669Z/result.json",
+      "sha256": "a3868556e7aa30eac76b71bfae01230871ba2afad5bbbbe0c59cbbd776483351",
+      "status": "TIMING_FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 2,
+      "input_count": 47,
+      "output_count": 330
+    },
+    "C_seed8_review": {
+      "path": "build/soc/branch-pc-compare-seed8-route-review.json",
+      "sha256": "4b6c5f2786ac118e2e284a0cd267177ec6d54e4a780647a62eb019896b376b54",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "D_led_red": {
+      "path": "build/soc/board-system-20261020T093242300926Z/result.json",
+      "sha256": "d88b9bc1533f28192c8d23a887f7099b8798e0170f4281d231157257a1d4dd63",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 74,
+      "output_count": 110
+    },
+    "D_system": {
+      "path": "build/soc/board-system-20261020T093259792780Z/result.json",
+      "sha256": "904a7af10b015e64951d654f35dea1378e9378a7b229221ba7a4ca3e3ce6874b",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 74,
+      "output_count": 110
+    },
+    "D_area": {
+      "path": "build/soc/cpu-area-20261020T093259788557Z/result.json",
+      "sha256": "8d7473d2901a1ec98466e8577acef6749bf240af1a3597bad34fad457ce5f20a",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 42,
+      "output_count": 80
+    },
+    "D_crc_negative": {
+      "path": "build/soc/board-coremark-20261020T093528726393Z/result.json",
+      "sha256": "9a0c2165b80c75d98134ad91965d1c7b51db14b26b0875a0e90189b2be14575f",
+      "status": "FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 1,
+      "input_count": 88,
+      "output_count": 136
+    },
+    "D_coremark": {
+      "path": "build/soc/board-coremark-20261020T093553790821Z/result.json",
+      "sha256": "bb8f6b11aea3faee34a6058ef515167bb318aa520c15ec3742ac882292da7408",
+      "status": "PASS",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "input_count": 88,
+      "output_count": 139
+    },
+    "D_route1": {
+      "path": "build/soc/board-route-20261020T0939267219701Z/result.json",
+      "sha256": "200dc528251dec5753d108c6ac4c5938814ec2939e09aab349b43a0e4ead3fcd",
+      "status": "TIMING_FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 2,
+      "input_count": 47,
+      "output_count": 384
+    },
+    "D_route8": {
+      "path": "build/soc/board-route-20261020T0939267219063Z/result.json",
+      "sha256": "5ac3a40516cdc88b7dee7d2ea8b8dd5546dd22957a14fec0ebc6e3203315c438",
+      "status": "TIMING_FAIL",
+      "source_unchanged": true,
+      "runner_return_code": 2,
+      "input_count": 47,
+      "output_count": 270
+    },
+    "D_review1": {
+      "path": "build/soc/branch-pc-final-seed1-review.json",
+      "sha256": "c69e69b9e045ac40f123a7d1d4f20e472474762c93878da5e202de6050e3c9e7",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "D_review8": {
+      "path": "build/soc/branch-pc-final-seed8-review.json",
+      "sha256": "07f5b846382476800cb7f2f7f68e67ced860cdc8cc2b806e188b336d87b0bac0",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "restored_parent_review": {
+      "path": "build/soc/branch-pc-restored-parent-review.json",
+      "sha256": "c50e6b80e6f5fcc855eb2cd4b730dc69d2bfcbb5fbb6ad60e0e1b008a58acb7d",
+      "status": "PASS",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "rejected_source_snapshot": {
+      "path": "build/soc/branch-pc-final-prototype/snapshot.json",
+      "sha256": "9edea958015c6212cbcccf6579c10c7e0b488d1989949b090cb7b216cc7397d5",
+      "status": "REJECTED_TIMING",
+      "source_unchanged": null,
+      "runner_return_code": null,
+      "input_count": 0,
+      "output_count": 0
+    },
+    "restored_issue_carry": {
+      "path": "build/soc/branch-pc-restored-issue-check.json",
+      "sha256": "2cac47446b2b0ad2b7d24e1ba037362091bb0e917aba0122b2d8c8f7c935217d",
+      "status": "PASS"
+    }
+  },
+  "infrastructure_failures": [
+    "Initial A area invocation used a nonexistent clock directory; no PDS launched.",
+    "Initial build-only C snapshot lacked scratch directory and two runner inputs; repaired before successful test/map.",
+    "Concurrent final CoreMark positive/negative launch timestamps collided; mkdir failed without overwriting the negative run, positive was retried in a distinct directory."
+  ],
+  "production_restored_to_commit": "dc00f80",
+  "diagnostic_tag": "cpu-branch-pc-diagnostic-20261020",
+  "production_metric_change": false,
+  "decision": "Retain deployed100MHz parent; no prototype improved the full timing/performance/area criteria. Rejected RTL is only in ignored immutable build snapshots, with no unused production RTL.",
+  "candidate_measurement": {
+    "iterations": 5,
+    "cycles": 1646428,
+    "clock_hz": 100000000,
+    "seconds": 0.01646428,
+    "coremark": 303.68774097622247,
+    "coremark_per_mhz": 3.0368774097622246,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 5903,
+    "coremark_per_lut": 0.0514463393149623
+  },
+  "next_design_focus": [
+    "Generate ALU function and operand-source controls before an existing decode register boundary.",
+    "Separate early valid/enable generation for PC/RAS from late comparison/data selection; prove IRQ/flush and invalid-payload behavior.",
+    "Keep six-stage single issue, O2 and the existing prediction algorithm; evaluate actual CPU-only resources and complete original100MHz timing."
+  ],
+  "restored_parent_corners": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "slack_ns": 0.113,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 17374
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "slack_ns": 0.16,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 17374
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3150
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "slack_ns": 1.821,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 17374
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "slack_ns": 0.101,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 17374
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3150
+    }
+  ],
+  "evaluated_changes": [
+    "Keep sequential/taken PC arithmetic results before the branch decision.",
+    "Share signed less-than for BLT/BGE and remove reverse subtraction.",
+    "Preserve existing ALU decode; parallel-decode prototype was rejected.",
+    "Register paired board status LED outputs one CPU clock later, retaining asynchronous reset; no CPU/UART/software latency changes."
+  ],
+  "rejected_replay_patch": {
+    "path": "docs/verification/cpu/branch_pc_rejected.patch",
+    "sha256": "26ee5328f0c6634d84583548b80b3ed9d2be1bdfa5e194385791a9be02715555",
+    "scope": "Rejected prototype only; not applied to production."
+  },
+  "final_verification": {
+    "production_sources_match_commit": "dc00f80",
+    "deployed_package_hashes_verified": true,
+    "restored_original_100mhz_review_passed": true,
+    "structural_checker_tests_passed": 4,
+    "original_issue_structural_check_passed": true,
+    "no_active_hardware_candidate": true,
+    "no_new_package_or_programming": true
+  }
+}

@@ -2,6 +2,8 @@
 
 更新：2026-10-20。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
+本轮分支/PC清理诊断已结束，**没有准入的新RTL或部署镜像**。仅分离PC算术的方案100MHz通过但增加12LUT、周期不变；共享比较器可将CPU降至5903LUT，但原约束下setup−0.029ns，板级LED寄存修复后的最终两组仍−0.292/−0.162ns。所有功能、CoreMark及轨迹检查通过不替代时序验收。已恢复生产RTL及板级文件至dc00f80，重新独立核对原部署版100MHz通过；板上仍是cpu_coremark_6ff82025b53d，未重新编程、未打开COM12。试验源码/报告保存在build，清单见docs/verification/cpu/branch_pc_timing.md和json，备份cpu-before-branch-pc-20261020。最终两组最差路径分别落在前端RAS使能和ALU，下一步需前移预译码及PC/RAS使能生成，预测算法和六级单发射规格保持不变。本轮未提高主频或实际跑分。
+
 最新优化版已下载为`cpu_coremark_6ff82025b53d`，实际Program/Verify返回0，两项成功标记齐全，未写Flash、未打开COM12。六级单发射、RV32IM/CSR、BTB512/BHT512/RAS4及PC索引两位预测算法、GShare=0、GCC-O2/无LTO均不变。复用四个17位部分积，符合unsigned16×16条件的MUL可提前旁路，宽/高位乘法和双发射保留原等待策略；SRAM/ROM响应用预寄存独热字选择，仍为一周期，没有增加CPU状态级。
 
 本轮5次短RTL CoreMark1646428周期，相比父版1690888少44460周期；CoreMark/MHz从2.957026升为3.036877（吞吐+2.700391%）。CPU-only5933LUT/3528FF/688distributed-RAM-LUT/0DRM/4APM，总LUT已含RAM子集，较父版5912增加21；100MHz短测CoreMark/LUTs从0.050017357升为0.051186203（+2.336881%）。1448453个计时窗口WB观察事件及70840次真实store与父版对照通过，仅起始绝对计时读值及其store不同；不是完整ISA退休证明。完整5000次板级分数仍待用户串口，不用短RTL估算代替。

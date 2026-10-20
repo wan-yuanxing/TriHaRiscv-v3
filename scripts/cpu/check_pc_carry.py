@@ -16,12 +16,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('netlist', type=Path)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--module', default='triha_issue')
+    parser.add_argument('--requests', nargs='+')
     args = parser.parse_args()
     raw = args.netlist.read_bytes()
     text = raw.decode('utf-8-sig')
-    module = re.search(r'\bmodule\s+triha_issue\b(.*?)\bendmodule\b', text, re.S)
+    module = re.search(r'\bmodule\s+'+re.escape(args.module)+r'\b(.*?)\bendmodule\b', text, re.S)
     if not module:
-        raise ValueError('Missing preserved triha_issue module')
+        raise ValueError('Missing preserved module '+args.module)
     body = re.sub(r'/\*.*?\*/|//[^\n]*', '', module[1], flags=re.S)
     cell_re = re.compile(r'\b(GTP_\w+)\s*(?:#\s*\(.*?\)\s*)?(\\[^\s]+|[\w$]+)\s*\((.*?)\);', re.S)
     port_re = re.compile(r'\.(\w+)\s*\(([^()]*)\)')
@@ -97,7 +99,11 @@ def main():
                      and not re.fullmatch(r"\d+'[bhd][0-9a-fxz]+",n,re.I))
     if unknown:
         raise ValueError('Unrecognized PC cone terminals: '+repr(unknown))
-    requests = {'branch_csr_request_i','branch_d_exec0_request_i','branch_d_exec1_request_i'}
+    requests = set(args.requests or [
+        'branch_csr_request_i', 'branch_d_exec0_request_i', 'branch_d_exec1_request_i'])
+    present = {request for request in requests if re.search(r'\b'+re.escape(request)+r'\b', body)}
+    if not present or args.requests and present != requests:
+        raise ValueError('Late request signal missing from selected module')
     def path_to_request(start):
         queue = deque([(start,[])])
         seen = set()
@@ -124,7 +130,8 @@ def main():
         if path:
             violations.append({'cell':cell['name'],'path':path})
     result = {'status':'FAIL' if violations else 'PASS',
-              'scope':'Conservative structural check of issue-module PC D-input cone; CE/control cone, STA and equivalence are separate',
+              'scope':'Conservative structural check of selected-module PC D-input cone; CE/control cone, STA and equivalence are separate',
+              'module':args.module, 'late_requests':sorted(requests),
               'netlist':str(args.netlist.resolve()),
               'netlist_sha256':hashlib.sha256(raw).hexdigest(),
               'checker_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
