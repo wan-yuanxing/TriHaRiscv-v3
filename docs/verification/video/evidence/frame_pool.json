@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "status": "CPU_unified_frame_pool_native_and_display_RTL_verified",
+  "base_head": "9f39ee0adf3b4d41a6280d17b6ebb77b350fdf08",
+  "owned": [
+    "sw/include/video_frame_pool.h",
+    "sw/drivers/video_frame_pool.c",
+    "tb/video/test_video_frame_pool.c",
+    "tb/video/tb_video_frame_pool.sv",
+    "scripts/video/test_frame_pool.py",
+    "scripts/video/run.py",
+    "docs/superpowers/specs/2026-10-20-frame-pool-design.md",
+    "docs/superpowers/plans/2026-10-20-frame-pool.md",
+    "docs/verification/video/frame_pool.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/evidence/frame_pool.json"
+  ],
+  "source_hashes": {
+    "sw/include/video_frame_pool.h": "f906e95e566e5cb3c1c05e268a5d12640252c765a7342c4636b0c2cd7178fc50",
+    "sw/drivers/video_frame_pool.c": "d40a037d8ef2c7eff18804430f756ec8353998668471f41693211bc2e0861f18",
+    "tb/video/test_video_frame_pool.c": "3e4dbae299dde2de289fe300a2a2562474ef66b49a8c32dadd84dfe39da1985b",
+    "tb/video/tb_video_frame_pool.sv": "372d4b1717ccf1a317886ef2582c825752b81fd57aaf5ae58746b607b88bc091",
+    "scripts/video/test_frame_pool.py": "5bc44a9019fabdc4a5dc45da01bd9796cbaf06124d7c33fec90a2d8c1e678798",
+    "scripts/video/run.py": "ac40a6e8d660627d8fa7af459290b4af76e379f4c9e5408b7f69ec14921d6573",
+    "docs/superpowers/specs/2026-10-20-frame-pool-design.md": "ddad0f393f43e65417454b21b92d60048e1640386f692f393e3a70e29c26980c",
+    "docs/superpowers/plans/2026-10-20-frame-pool.md": "5ffc176111c0f7438521ad2eee5dba75c071d5257b07587fb6f43c1a37b288d5",
+    "docs/verification/video/frame_pool.md": "e4a2096c8449061c143366d0beba705835c7f9fc8886e06a6f5b7045e51df0cb",
+    "docs/video/STATUS.md": "875c4ceaea726a54bbac75ee862ff8202f713503fd279f6d7ef53ee6fa2c60cd",
+    "docs/video/README.md": "3e1a5339acb5d9296024063682a2fe3f4f7a06bd85b5bf48295b8c0a029b91eb",
+    "docs/interfaces/video.md": "8609be62fbcc156b4aec5e10360df47fb4de8025d63704123b1e4d298d32e2da",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "c07f2217ff130091cd5f57fd39c0e604b69b1801acd66d6afb035710bdb70654"
+  },
+  "refs": {
+    "audit": {
+      "path": "build/video/audit_frame_pool.py",
+      "sha256": "df9c300bb96ec72c5c4ad97a003e60d0a0502fe647d38dbb27cf653c3c99362d"
+    },
+    "baseline": {
+      "path": "build/video/frame_pool_baseline/result.json",
+      "sha256": "53f1bd3852758cbd793856a123f9c656beea27dfd2d941a4d316c66f03c9cec8"
+    },
+    "initial_red": {
+      "path": "build/video/frame_pool_red/result.json",
+      "sha256": "01838750cb47b1acd46c5f08ac85a67b779a4d428e6ef3d2aeb0682c462b0bc0"
+    },
+    "tag_reuse_red": {
+      "path": "build/video/frame_pool_tag_reuse/red.json",
+      "sha256": "402cf99fefabc7c3d4d3a35044f16858404f36e638093d33e7e36b84de32e7b9"
+    },
+    "tag_reuse_native_red": {
+      "path": "build/video/frame_pool_native/20261020T050419_346647Z/result.json",
+      "sha256": "315cb91364edf396833d530bf2c34c554d54ec695cc505d6468cd4ba305f4007"
+    },
+    "tag_counter_red": {
+      "path": "build/video/frame_pool_tag_reuse/limit_red.log",
+      "sha256": "958bf64eb43d1de62d53eda946a46e8b760feebfc92260ca6c557087e7c2648d"
+    },
+    "frame_pool": {
+      "path": "build/video/regression/20261020T050556_671768Z/result.json",
+      "sha256": "070877b2251fb56849529fd69d49a105414b1feb14db31b6725ea43a2d8ab072"
+    },
+    "display_mmio": {
+      "path": "build/video/regression/20261020T050231_931863Z/result.json",
+      "sha256": "af3be383726380ce9301c7a9f23aab53efb65a92f26f89d59acb37eb4789e1c9"
+    },
+    "display_slots": {
+      "path": "build/video/regression/20261020T050231_931917Z/result.json",
+      "sha256": "855452c2f4661b8449084545c04ba18385701861bcdd6a1cae5222fff761ecf1"
+    },
+    "capture_mmio": {
+      "path": "build/video/regression/20261020T050231_941036Z/result.json",
+      "sha256": "714f737e244b7230abf1661e82217545837474657905222fd25f6cf82c2e1dc4"
+    },
+    "native": {
+      "path": "build/video/frame_pool_native/20261020T050556_844964Z/result.json",
+      "sha256": "a88236b364993268c5e90d7c3d541bc26192550e5f766864ffaa548170ea2219"
+    },
+    "display_driver": {
+      "path": "build/video/display_driver/20261020T050232_171024Z/result.json",
+      "sha256": "e5a7000e1b0c8127019b69e4cba066c5390fbaad61eb33134c112d5ced92dfe8"
+    },
+    "quality": {
+      "path": "build/video/frame_pool_quality/20261020T050231_947266Z/result.json",
+      "sha256": "1855bb5577844ad74f82ecdf454ad661c939eca1b45b7ca419666079a91c27b0"
+    },
+    "mutations": {
+      "path": "build/video/frame_pool_mutations/20261020T050556_660880Z/result.json",
+      "sha256": "c52a4af8270db0ed92dbb74251f4c5ac67abd3522a2cfb570143a9dde756e730"
+    },
+    "icarus_probe": {
+      "packed_case.log": {
+        "path": "build/video/frame_pool_icarus_probe/packed_case.log",
+        "sha256": "7fbc65d1dd8a61227d4e5216746316593fda1bcd557d0fb5b03cf30070d8b2bc"
+      },
+      "packed_case.sv": {
+        "path": "build/video/frame_pool_icarus_probe/packed_case.sv",
+        "sha256": "120e6de1e593b10370f4db366420ef39a870713181f76c951d755c4e5db79edc"
+      },
+      "packed_case.vvp": {
+        "path": "build/video/frame_pool_icarus_probe/packed_case.vvp",
+        "sha256": "c1b19b0eafc4b06af7d024c1a3663897727297403d21443bfd1d979ac9d833e4"
+      },
+      "string_case.log": {
+        "path": "build/video/frame_pool_icarus_probe/string_case.log",
+        "sha256": "453871144fe0f7021004b93f534f427bb3aae49d6dd28897e1fd2ed03e4588f7"
+      },
+      "string_case.sv": {
+        "path": "build/video/frame_pool_icarus_probe/string_case.sv",
+        "sha256": "5fec8d65981a695b3f398616f5bb694b59e7532fb8c40599946250a50d02726d"
+      },
+      "string_case.vvp": {
+        "path": "build/video/frame_pool_icarus_probe/string_case.vvp",
+        "sha256": "6f2bae6333c7cdd8cc1fde89c9c8196dd8771433bd0dced48fd85df571e49631"
+      },
+      "string_scan.log": {
+        "path": "build/video/frame_pool_icarus_probe/string_scan.log",
+        "sha256": "3db0b2fad86184da9fc2fe122d1ee7524c5d96b14c07db861f965a889dd7281c"
+      },
+      "string_scan.sv": {
+        "path": "build/video/frame_pool_icarus_probe/string_scan.sv",
+        "sha256": "88c76d10a91f1c91be80019b6353011d0a8390db305696108f86977db75f487c"
+      },
+      "string_scan.vvp": {
+        "path": "build/video/frame_pool_icarus_probe/string_scan.vvp",
+        "sha256": "ac93aa411976870af2029ef9c2cf804065864e6f273c1541d8c390e26da8857e"
+      }
+    },
+    "review": {
+      "path": "build/video/frame_pool_review/review.json",
+      "sha256": "cc9ef60735990f283c50ef217c3b5ca29e3b304863004949ccd646d2b331b94f"
+    }
+  },
+  "native": {
+    "cases": 11,
+    "checks": 233390,
+    "callback_failures": 180,
+    "stress_frames": 1000
+  },
+  "trace": {
+    "R": 81,
+    "W": 1149,
+    "Q": 6,
+    "T": 2,
+    "J": 1,
+    "F": 15
+  },
+  "simulations": {
+    "frame_pool": 1,
+    "display_mmio": 10,
+    "display_slots": 13,
+    "capture_mmio": 2
+  },
+  "python": {
+    "tests": 106,
+    "passed": 105,
+    "skipped": 1
+  },
+  "parent_mutations_detected": 11,
+  "independent_review": {
+    "coverage": {
+      "groups": 8,
+      "checks": 65153,
+      "callback_failure_points": 183,
+      "ambiguous_MODE_write_cases": 3,
+      "actual_native_trace": {
+        "R": 70,
+        "W": 985,
+        "F": 13,
+        "T": 2,
+        "Q": 5,
+        "J": 1
+      },
+      "actual_native_trace_RTL_checks": 4431,
+      "canonical_native_cases": 11,
+      "canonical_native_checks": 233390,
+      "canonical_callback_failure_points": 180,
+      "canonical_stress_frames": 1000,
+      "canonical_actual_trace": {
+        "R": 81,
+        "W": 1149,
+        "F": 15,
+        "T": 2,
+        "Q": 6,
+        "J": 1
+      },
+      "canonical_RTL_checks": 5166,
+      "independent_targeted_mutants_killed": 2,
+      "parent_targeted_mutants_killed": 11
+    },
+    "commands_verified": 19,
+    "reviewer_artifacts_verified": 56,
+    "external_artifacts_verified": 164,
+    "open_findings": [],
+    "closed_findings": [
+      "F4c1-OP-TICKET-REUSE"
+    ]
+  },
+  "protected_prior_files": 243,
+  "other_route_files_preserved": 31,
+  "prior_capture_and_display_ABI_preserved": true,
+  "prior_board_files_and_evidence_preserved": true,
+  "previous_runner_code_exact_after_removing_new_hooks": true,
+  "software_operator_ticket_sequential_within_graph": true,
+  "NPU_hardware_tag_ABI_frozen": false,
+  "native_C_executed": true,
+  "RV32I_compiled_only": true,
+  "cpu_executed": false,
+  "physical_fence_verified": false,
+  "capture_completion_producer_integrated": false,
+  "capture_rearm_implemented": false,
+  "shared_fabric_integrated": false,
+  "cross_master_DDR_visibility_verified": false,
+  "actual_pixel_retirement_producer_integrated": false,
+  "true_NPU_inference": false,
+  "coordinated_quiescence_producer_verified": false,
+  "continuous_video_verified": false,
+  "full_all_rerun": false,
+  "new_synthesis": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

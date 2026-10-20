@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "three_board", "capture_mmio", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "frame_pool", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_mmio", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "frame_pool"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,30 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('frame_pool', 'all'):
+            from common import sha256
+            path = ROOT/'fpga/pg2l100h/project/video_display_mmio.json'
+            component = json.loads(path.read_text(encoding='utf-8'))
+            sources = [ROOT/p for p in component['sources']]+[ROOT/'tb/video/tb_video_frame_pool.sv']
+            add_inputs(result,[path,*sources,ROOT/'rtl/video/include/video_display.vh'])
+            run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'frame_pool_abi.log')
+            run_logged([sys.executable,ROOT/'scripts/video/test_frame_pool.py'],work/'frame_pool_native.log')
+            native = json.loads((BUILD/'latest_frame_pool_native.json').read_text(encoding='utf-8'))
+            if native['status'] != 'pass':raise RuntimeError('Frame pool native tests failed')
+            result['frame_pool_native'] = native
+            result['frame_pool_tools'] = {}
+            artifacts = [work/'frame_pool_abi.log',work/'frame_pool_native.log']
+            for name in ('iverilog','vvp'):
+                executable = tool(name)
+                log = work/('frame_pool_'+name+'_version.log')
+                result['frame_pool_tools'][name] = {'path':str(executable),'sha256':sha256(executable)}
+                run_logged([executable,'-V'],log);artifacts.append(log)
+            log = simulate(work,'frame_pool','tb_video_frame_pool',sources,
+                includes=(ROOT/'rtl/video/include',),run_args=['+TRACE='+str(ROOT/native['trace'])])
+            if log.count('FRAME_POOL_RTL_PASS') != 1:raise RuntimeError('Missing frame pool RTL replay PASS')
+            artifacts += [work/('frame_pool'+suffix) for suffix in ('.vvp','_compile.log','_simulation.log')]
+            result['frame_pool_artifacts'] = input_hashes(artifacts)
+            result['passed'].append('frame_pool')
         if args.suite in ('display_mmio', 'all'):
             from common import sha256
             path = ROOT/'fpga/pg2l100h/project/video_display_mmio.json'
@@ -873,6 +897,16 @@ def main():
             if any(sha256(ROOT/p)!=h for p,h in driver['inputs'].items()):raise RuntimeError('Driver input changed')
             if any(sha256(ROOT/p)!=h for p,h in driver['artifacts'].items()):raise RuntimeError('Driver artifact changed')
             if any(sha256(p)!=h for p,h in driver['tools'].items()):raise RuntimeError('Driver tool changed')
+        for name, record in result.get('frame_pool_tools', {}).items():
+            if sha256(record['path']) != record['sha256']:raise RuntimeError('Frame pool tool changed: '+name)
+        for name, expected in result.get('frame_pool_artifacts', {}).items():
+            if sha256(ROOT/name) != expected:raise RuntimeError('Frame pool artifact changed: '+name)
+        if 'frame_pool_native' in result:
+            native = result['frame_pool_native']
+            add_inputs(result,[ROOT/p for p in native['inputs']])
+            if any(sha256(ROOT/p)!=h for p,h in native['inputs'].items()):raise RuntimeError('Frame pool source changed')
+            if any(sha256(ROOT/p)!=h for p,h in native['artifacts'].items()):raise RuntimeError('Frame pool native artifact changed')
+            if any(sha256(p)!=h for p,h in native['tools'].items()):raise RuntimeError('Frame pool compiler changed')
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

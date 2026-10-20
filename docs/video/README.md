@@ -38,6 +38,12 @@ F4b新增`video_display_mmio`独立组件：同源640B显示ABI、AXI-Lite校验
 RV32I对象仅交叉编译。正式CPU/fabric/像素退休仍待接入，见
 [显示控制验证](../verification/video/display_mmio.md)。
 
+F4c1增加CPU侧统一三槽C状态库和实际显示事务回放：
+`python scripts/video/run.py --suite frame_pool`。整图锁跨算子IDLE保持至结果发布，
+MODE不释放，错误和ACK失败不提前复用。源码位于sw/include与sw/drivers，未新增
+硬件或改变旧ABI；采集rearm、共享fabric/DDR及NPU真实tag适配另验。见
+[三槽验证](../verification/video/frame_pool.md)。
+
 ## 目前可以运行
 
 从仓库根目录的 PowerShell 执行：
@@ -75,6 +81,7 @@ python scripts/video/program_board.py --target video_hdmi_capture --start-server
 python scripts/video/run.py --suite preview_display
 python scripts/video/run.py --suite raw_display
 python scripts/video/run.py --suite raw_board
+python scripts/video/run.py --suite frame_pool
 python scripts/video/run.py --suite display_mmio
 python scripts/video/run.py --suite display_slots
 python scripts/video/run.py --suite mode_control
@@ -224,6 +231,8 @@ sw/include/video_regs.h                   同源生成的采帧MMIO C定义
 sw/include/video_display_abi.h             同源显示子窗口及640B字段
 sw/include/video_display.h                 平台I/O回调和驱动API
 sw/drivers/video_display.c                 记录初始化/提交/事件/ACK
+sw/include/video_frame_pool.h              CPU统一三槽/整图租约接口
+sw/drivers/video_frame_pool.c              唯一计算所有者及ACK后全局复用
 tb/video/
   tb_video_capture_mmio.sv               字面ABI/通道背压/邮箱/错误/IRQ自检
   tb_video_capture_mmio_core.sv          实际采帧核/三路DMA/字节内存联测
@@ -282,6 +291,8 @@ tb/video/
   tb_video_raw_board.sv                  F2协调复位、三类UART和完整数字光栅
   test_raw_board_packets.py              独立type9资格及跨epoch旧成功拒绝
   tb_video_button_debounce.sv            门槛/取整/极性/抖动/长按/未知样本
+  test_video_frame_pool.c                原生三槽/整图锁/错误注入/延迟退休
+  tb_video_frame_pool.sv                 真实CPU驱动事务回放至显示端点
   tb_video_display_mmio.sv              AXI-Lite/整记录/事件及C事务回放
   test_display_abi.py / test_display_driver.c 同源防漂移与真实C执行
   tb_display_slot_owner.sv              三槽/冻结/背压/退休与错误反馈记分板
@@ -305,6 +316,7 @@ scripts/video/
   gen_pll.py                            基于官方 IDF 生成真正 40/10 MHz PLL
   gen_edid.py / gen_ddr.py               固定 EDID 和锁定来源的完整 HMIC IP
   prepare_reference.py                  只提取哈希匹配的参考文件
+  test_frame_pool.py                    原生C执行/RV32I编译及真实I/O记录
   run.py                                已实现的回归入口
   detect_reference.py                   规格定义的几何整数参考，不含模型量化
   input_format_reference.py             独立通道/补行/C8布局参考，不执行量化

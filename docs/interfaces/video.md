@@ -27,6 +27,17 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
 
+## F4c1 CPU统一三槽
+
+`sw/include/video_frame_pool.h`由CPU单一控制所有者使用，管理采集预留、三分支完成、
+唯一graph/frame_owner、结果发布、显示在途/active/retiring及ACK后的全局复用。
+算子间IDLE不释放整图锁，最后算子之后仍等后处理与工作区消费者退出；32bit软件
+ticket在同图内首值任意、随后加一且禁止完整循环，实际NPU tag位宽/映射另行冻结。
+完整事件快照校验后才ACK，ACK成功后才修改FREE；MODE不释放，失败发布/ACK保留引用。
+recover要求四类真实协调清空证明和新generation；这些证明及跨master排序是平台
+边界。没有采集rearm或新全局MMIO；旧采帧/显示ABI和板级RTL保持，详见
+[frame_pool](../verification/video/frame_pool.md)。
+
 ## F4b 独立显示 ABI/MMIO
 
 独立显示端点位于`0x20011000/4KiB`，保留采帧ABI1。公共

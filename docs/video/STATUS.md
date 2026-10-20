@@ -83,6 +83,19 @@ F4b新增独立显示ABI/AXI-Lite和C驱动：0x20011000/4KiB子窗口，640B同
 
 完整context比较在首轮综合形成长进位链，8ns下估计setup -51.451ns；仅等价拆成32bit组并保留边界，44组/43个对外信号逐周期对照及独立190522组四态检查通过。最终10853LUT/16038FF/0DRM/APM/0锁存器，8ns寄存器路径综合估计setup +1.591ns、hold +0.671ns；未布线或新板测。56项其他冻结来源保持字节一致，owner为唯一有前后hash和等价证据的例外。详细证据见[显示控制记录](../verification/video/display_mmio.md)。CPU/fabric、实际像素提交/DDR退休、统一三槽分配及跨master可见性继续由F4c推进。交付前修正新显示JSON的CRLF/仓库LF检出差异，先失败断言、再仅规范新配置并重生成头；定义不变，受影响验证和综合重新运行，旧采帧ABI字节保持。独立1595组校验/7个MMIO场景、441次回调失败/256组ACK和7变异均通过，无未关闭发现；57条审查命令、114项审查产物及244项冻结文件由交付审计核对。owner组合图无环/多驱动的结论仅限该模块；综合警告和未完成集成边界保留。25文件小范围本地交付，31项其他路线文件保持原字节，见[机器证据](../verification/video/evidence/display_mmio.json)。
 
+F4c1新增CPU单一所有者三槽C库，串起CAPTURING/READY/PROCESSING/READY_DISPLAY/
+DISPLAY_PENDING/DISPLAYING/RETIRING；整图锁保留到结果发布和工作区退出，MODE不
+释放、实际事件ACK成功才FREE，错误/未知完成不推进新帧，失败I/O保守保留引用。
+同图软件ticket顺序和issued耗尽规则关闭旧tag重复完成风险；实际NPU tag映射未冻结。
+11个原生场景、180次I/O失败、1000帧延迟退休及81读/1149写/6命令/2退休/1拒绝的
+实际显示RTL回放通过，11个策略变异由指定断言检出。旧MMIO/owner/采帧回归及Python
+105通过/1权限跳过。RV32I仅交叉编译，未执行CPU；旧RTL/ABI/PDS输入不改，没有新
+综合、布线或板测。独立8组/65153检查、183个MODE失败点/3类不确定写及70读/985写的第二条实际RTL
+回放均通过，标签重用修复独立复核，无未关闭发现。243项旧冻结来源及31项其他路线
+文件保持字节；详见[机器证据](../verification/video/evidence/frame_pool.json)。
+详细边界见[三槽记录](../verification/video/frame_pool.md)；F4c2
+继续采集rearm、共享CPU/fabric/DDR和真实退休生产者，多主可见性及连续采集另验。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |
