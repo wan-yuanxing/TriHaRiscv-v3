@@ -563,3 +563,18 @@ DMA 请求锁存 `req_base/req_row_bytes/req_stride/req_rows/req_tag`，base 和
 - CPU 统一维护槽状态与 graph_active/frame_owner；Video 只管理自己持有的引用和握手。共享 DMA 数据不可缓存。
 
 详细记录打包、序号回绕/复位代际、超时、屏障与中断规则在 V020 前完成 CPU–Video 联调，不以本文件存在代替接口已冻结。
+
+## F4c4d 真实扫描与联合退休组件
+
+`video_record_scanout`输入为调用者已通过guard的完整记录，沿用冻结ABI和原owner。
+新帧必须同时取得实际scanner commit及渲染首输出commit；mode_only不重发RAW。
+旧槽必须同时取得带generation的scanner release和精确pixel retire_raw，再在
+替换反馈被owner接受后提交退休。release ACK仅结束Video引用，CPU仍负责全局FREE。
+
+`raw_display`新增可选record_generation、commit/release generation及与RGB两级
+对齐的像素slot/frame/generation/x/y/SOF/context_valid。新联接层租用owner冻结
+cmd_data至feedback消费，素材贡献按上一份渲染commit完整身份单次消费，独立保持
+至asset_retire_ready。素材仍封存至协调reset。故障门控只针对新的显示记录提交；
+素材load沿用cache接口，平台须先检查online/综合fault并停发新load。保留已证明
+历史事件。正式显示MMIO及video_pipeline保持RAW-only，边界见
+[实际扫描验证](../verification/video/record_scanout.md)。

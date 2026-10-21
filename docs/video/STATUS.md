@@ -258,6 +258,24 @@ online边界及已有fault后stray排空可信性三项问题均有RED/GREEN并�
 STATUS中NPU追加不暂存。下一步接实际RAW身份与owner联合退休，并优先收敛真实
 内部互连下的core时序；不把本地像素退休当作CPU全局FREE。本批无COM/JTAG/Flash。
 
+## F4c4d 实际扫描器身份与联合退休
+
+2026-10-21新增video_record_scanout/display_record_link，组合原owner、实际RAW
+扫描器和DDR素材渲染器；扫描generation沿冻结mailbox及像素启动路径传递，与
+RGB两级对齐。新帧同时等scanner/输出commit，旧槽同时等RAW/像素退休并在替换
+反馈被owner接受后才退休；release ACK前不可复用，CPU保留全局FREE决定。
+
+测试为6个事件场景及小尺寸/异钟比/完整800×600整链，逐像素独立oracle、同帧
+三模式、generation复用、ACK/素材背压及故障门控；定向变异和独立审查另绑定。
+审查发现故障后接受新submit、素材未期待/重复退休两项实现问题，已以即时门控和
+精确单次旧渲染引用账本修正；最终结果见[验证记录](../verification/video/record_scanout.md)。
+
+综合18624LUT/30058FF/68DRM/10APM/0latch，core8ns setup估计−1.797ns，pixel
++11.549ns，hold−2.470ns，125MHz尚未闭合。26约束均适用；constraint_check为
+0error/critical和138warning，组件6944接口位仅作内部估计，无物理CDC/布线/板测。
+正式MMIO和video_pipeline继续RAW-only；下一步接正式控制/采显链并收敛实际内部
+互连时序。本批Windows原生、本地提交，不操作COM/JTAG/Flash；保留其他路线改动。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

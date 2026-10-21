@@ -1,0 +1,261 @@
+{
+  "schema_version": 1,
+  "status": "actual_RAW_identity_and_joined_Video_retirement_verified",
+  "base_head": "8635a91626d87eb7573beba5ea805a5f6043bb8a",
+  "owned": [
+    "rtl/video/raw_display.sv",
+    "rtl/video/display_record_link.sv",
+    "rtl/video/video_record_scanout.sv",
+    "tb/video/tb_raw_display.sv",
+    "tb/video/tb_display_record_link.sv",
+    "tb/video/tb_video_record_scanout.sv",
+    "tb/video/models/video_scanout_memory.sv",
+    "scripts/video/test_record_scanout.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_record_scanout.json",
+    "fpga/pg2l100h/constraints/video_record_scanout.fdc",
+    "docs/superpowers/specs/2026-10-21-record-scanout-design.md",
+    "docs/superpowers/plans/2026-10-21-record-scanout.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/record_scanout.md",
+    "docs/verification/video/evidence/record_scanout.json"
+  ],
+  "source_hashes": {
+    "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+    "rtl/video/display_record_link.sv": "e114d098f426354382348b295203d67c62eac773a717b63f58105b63ee245c1a",
+    "rtl/video/video_record_scanout.sv": "c7cf49fb6778f58dfc7c3b5ffcd233ee2d90971341dedbc7aca6d6a4b8277671",
+    "tb/video/tb_raw_display.sv": "01b5541ddce94d4e91c83a85999b71baa2f88a55f13ef8c15be6b59219685b9a",
+    "tb/video/tb_display_record_link.sv": "40dc6ebfc3a9358c3033d0ed97703c2bc7f5146b7e58d4df04be7b06c75947b9",
+    "tb/video/tb_video_record_scanout.sv": "49e20af265147ff54432de9cc19db3f90cab425a5c242fe1e7132d2877ad971b",
+    "tb/video/models/video_scanout_memory.sv": "180123f491181255f6d899cd1bf0246c1392c74dd45bb13f7b6a32d694b60015",
+    "scripts/video/test_record_scanout.py": "cb4f658d35734f3b6ef0f3f328848282e6b2284375cf5053993f815a07839a1a",
+    "scripts/video/run.py": "bf381a348ffdcbc89eac43a2e8f7931d3e2ebd18b1f3149230672dd74abd363e",
+    "scripts/video/build_pds.py": "6c1cc54c8727634b0217d975508363258742079ffcfd74ef7d2037aba43e830d",
+    "fpga/pg2l100h/project/video_record_scanout.json": "160071cd84277ab799ad5e27967c240a7a46341b8be5c0da06aa0d465a5a6781",
+    "fpga/pg2l100h/constraints/video_record_scanout.fdc": "a56de799433367316e10a83ea48d7f7ef37df26f78a74fd2db5abea9e3679255",
+    "docs/superpowers/specs/2026-10-21-record-scanout-design.md": "2a0be4b0c8c1aeecfe185a159e6ea3ae877bbf941755ae4ded39cdf34532e56a",
+    "docs/superpowers/plans/2026-10-21-record-scanout.md": "6f270cc854be99a6f0598ead17effb41751a2676141b12c58de7ff22ae7d76fa",
+    "docs/video/STATUS.md": "afb60cc12d2bb627810440295a2db860e5c5f74e6ca5690659191ec3085c7680",
+    "docs/video/README.md": "25185880b5fdc0366259b95d1d6d6ec3d30ba7a82fe15810125464ff81df8b7c",
+    "docs/interfaces/video.md": "bcbd432165753a5ff13a5b9fb90e80020bdc769690ba615b84d9767ca53fb0c3",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "8304a9124a26b0fa3f28810219af0d8928ae96fdcd0191db1713e5b14757b03f",
+    "docs/verification/video/record_scanout.md": "abd49bc682a21bbabddd7b2ad9df19757603fbfd67ed1f6623e80d9bcb013236"
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "worktree_sha256": "1e8bc33fc023caeeb32fbd24c3cce602a297c263ad6ed73c0795b2044e3eb62b",
+    "committed_content_sha256": "afb60cc12d2bb627810440295a2db860e5c5f74e6ca5690659191ec3085c7680",
+    "retained_delta_sha256": "308ae079070835170f8b6305b7fddc255789acd6fb1668dfd6692f8f207f5401",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/scanout_record_baseline/result.json",
+      "sha256": "52b2322011b3c856dac1333adf27f4762608cd83626947c1e478e2cf713b634e"
+    },
+    "audit": {
+      "path": "build/video/audit_record_scanout.py",
+      "sha256": "a6cc38ad0e8acfdf5c48da08d059d54b808c3a501a617f07c2b368f233ca31ed"
+    },
+    "regression": {
+      "path": "build/video/regression/20261021T143032_112419Z/result.json",
+      "sha256": "39586aa1c7080591dc171ca3c125a592132ccff5241c5fa814fb266da302ae6e"
+    },
+    "component": {
+      "path": "build/video/record_scanout/20261021T143032_217934Z/result.json",
+      "sha256": "98a957af434a3e4e5576e8f12ef00331c30fe20c5acf986bc2de6977e02624ae"
+    },
+    "affected": {
+      "path": "build/video/record_scanout_affected/20261021T142138_225406Z/result.json",
+      "sha256": "5e4fa9cf665c831bd9b89a083f32fbdad6c1e2ba8c61b5757f80af60799ec8fe"
+    },
+    "mutations": {
+      "path": "build/video/record_scanout_mutations/20261021T143623_060643Z/validated_result.json",
+      "sha256": "0133cc4962a5382397190dcd99cf6e4f8777162fffc056f8d67bf285427725fa"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261021T143042_200984Z/result.json",
+      "sha256": "718c6727a06ebb6c3b6432a2ba65cc4d3a0fe7718c21fb7f6cdd2d1a7bb697fd"
+    },
+    "review": {
+      "path": "build/video/record_scanout_review/20261021T142307_157137Z/final_review.json",
+      "sha256": "512f2cf9a517049f83d25f3f67b37b381f3a33f6e188223d0b9e59b523bd06bb"
+    },
+    "absence_RED": {
+      "path": "build/video/record_scanout_red_snapshot/result.json",
+      "sha256": "3057bc83257e6dbb447246895b6f84054f11dff6d83e610dc4dff06c6bd28a9a"
+    },
+    "STATUS_projection": {
+      "path": "build/video/record_scanout_delivery/status_partial.json",
+      "sha256": "5f7470845e2f8585a31e3362d7dbd3ee3952d7b6042585cb9e2a48306717868c"
+    },
+    "external_route_changes": {
+      "path": "build/video/record_scanout_delivery/external_changes.json",
+      "sha256": "e5776de421601b1e1179e6f7301fd57af57aa6d9ed688ddb66c22df85aa509af"
+    }
+  },
+  "link_cases": {
+    "0": {
+      "case": 0,
+      "commits": 4,
+      "retires": 1,
+      "fault": 1
+    },
+    "1": {
+      "case": 1,
+      "commits": 0,
+      "retires": 0,
+      "fault": 1
+    },
+    "2": {
+      "case": 2,
+      "commits": 1,
+      "retires": 0,
+      "fault": 1
+    },
+    "3": {
+      "case": 3,
+      "commits": 1,
+      "retires": 0,
+      "fault": 1
+    },
+    "4": {
+      "case": 4,
+      "commits": 4,
+      "retires": 1,
+      "fault": 1
+    },
+    "5": {
+      "case": 5,
+      "commits": 1,
+      "retires": 0,
+      "fault": 1
+    }
+  },
+  "scanout_cases": {
+    "probe": {
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 20480,
+      "box_pixels": 10240,
+      "avatar_pixels": 10240,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 40960,
+      "raw_commits": 3,
+      "overlap": 360819,
+      "raw_reads": 546,
+      "asset_reads": 1025,
+      "native": 1571
+    },
+    "ratio": {
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 20480,
+      "box_pixels": 5120,
+      "avatar_pixels": 10240,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 35840,
+      "raw_commits": 3,
+      "overlap": 360663,
+      "raw_reads": 478,
+      "asset_reads": 1025,
+      "native": 1503
+    },
+    "full": {
+      "w": 800,
+      "h": 600,
+      "raw_pixels": 1920000,
+      "box_pixels": 480000,
+      "avatar_pixels": 960000,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 3360000,
+      "raw_commits": 3,
+      "overlap": 359185,
+      "raw_reads": 42653,
+      "asset_reads": 1025,
+      "native": 43678
+    }
+  },
+  "affected_cases": {
+    "raw_display": 46,
+    "display_scanout": 17,
+    "video_pipeline": 3
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "parent_mutations": 5,
+  "review_retirement_mutations": 2,
+  "review_open_findings": [],
+  "review_resolved_findings": [
+    {
+      "priority": 2,
+      "summary": "Post-fault record submission still reserved owner slot",
+      "fix": "Gate owner input valid and exposed ready with record submission health",
+      "independent_probe": "fault_submit_green_simulation.log"
+    },
+    {
+      "priority": 2,
+      "summary": "Unsolicited or duplicate asset-only retirement forwarded without exact expected history",
+      "fix": "Exact once-only previous-renderer retirement ledger validates flags and full identity/key",
+      "independent_probe": "duplicate_asset_green_simulation.log"
+    }
+  ],
+  "protected_paths_unchanged": 507,
+  "other_route_paths_unchanged": 70,
+  "external_NPU_document_changes_preserved": {
+    "docs/superpowers/plans/2026-10-21-npu-layer-validation.md": {
+      "baseline_sha256": "1e74f4d027ae154f04976ce71fb3e94703a3591ab9b3efba6e680567ba1ed9e9",
+      "current_sha256": "4863c66593a9131e448029662a5684de6b6b0f27be2213dda30c9b4100741c9e",
+      "snapshot": "build/video/record_scanout_delivery/external/docs/superpowers/plans/2026-10-21-npu-layer-validation.md"
+    },
+    "docs/verification/npu/2026-10-21-layer-validation.md": {
+      "baseline_sha256": "2aef8455659387737a5312e28a8dc6bf307f17215b5631a5d5b94b5b4b8815f3",
+      "current_sha256": "b1087d17fe86b59486cd5dedfafacad61e67111c365aa8c502bc28f51e43ca3d",
+      "snapshot": "build/video/record_scanout_delivery/external/docs/verification/npu/2026-10-21-layer-validation.md"
+    }
+  },
+  "old_entrypoint_bytes_exact_outside_hooks": true,
+  "old_RAW_TB_only_optional_port_hookup": true,
+  "actual_RAW_memory_and_pixels_unified": true,
+  "actual_RAW_generation_at_pixel_launch": true,
+  "immutable_material_until_coordinated_reset": true,
+  "precise_single_consumption_pixel_retirement_ledger": true,
+  "joint_scanner_pixel_commit": true,
+  "joint_scanner_pixel_retirement": true,
+  "owner_release_ACK_required": true,
+  "synthesis": {
+    "lut": 18624.0,
+    "registers": 30058.0,
+    "drm": 68.0,
+    "apm": 10,
+    "latches": 0,
+    "constraints": 26,
+    "constraint_warnings": 138,
+    "core_setup_estimate_ns": -1.797,
+    "pixel_setup_estimate_ns": 11.549,
+    "core_to_pixel_bundle_ns": 4.355,
+    "pixel_to_core_bundle_ns": 4.934,
+    "min_hold_estimate_ns": -2.47,
+    "physical_timing_closed": false
+  },
+  "formal_MMIO_expanded": false,
+  "existing_video_pipeline_RAW_only": true,
+  "CPU_global_owner": true,
+  "global_FREE_verified": false,
+  "CPU_NPU_executed": false,
+  "physical_visibility_verified": false,
+  "continuous_HDMI_verified": false,
+  "physical_board": false,
+  "routed": false,
+  "flash_written": false
+}

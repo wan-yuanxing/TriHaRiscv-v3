@@ -509,6 +509,14 @@ owner/MMIO，正式RAW系统能力不变。14个协议场景及6个集成场景�
 [验证记录](../verification/video/record_renderer.md)，结果入口`latest_record_renderer.json`。
 综合core setup估计-3.630ns，尚未闭合125MHz；无布线/板测，下一步接真实RAW联合退休。
 
+## 实际扫描与联合退休组件
+
+`python scripts/video/run.py --suite record_scanout`连接实际RAW扫描器、DDR素材和
+完整记录渲染；generation从实际像素启动沿传递。新联接层汇合scanner/output
+commit与两项退休证明，再交Video owner；release ACK前不可复用槽。详见
+[验证记录](../verification/video/record_scanout.md)。正式MMIO和video_pipeline
+仍为RAW-only；core综合setup估计−1.797ns，125MHz尚未闭合，未布线/上板。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。

@@ -1208,6 +1208,15 @@ CPU 牵头顶层、互连和软件集成；Video 负责 DDR/HDMI/像素域封装
 | S7 | 紫光同创 Logos-2 产品资源表；PG2L100H 资源基数。`https://www.pangomicro.com/en/product/logos_family/195.html` |
 | S8 | EEMBC CoreMark README；运行、校验和性能报告规则。`https://raw.githubusercontent.com/eembc/coremark/main/README.md` |
 
+### 实施补充：F4c4d 实际扫描与完整记录组件
+
+2026-10-21新增video_record_scanout，实际DDR扫描RGB与像素身份进入RAW/BOX/AVATAR
+渲染。新帧两项commit证明齐备才反馈原Video owner；旧帧scanner release与pixel
+retire_raw齐备且替换反馈消费后才退休，release ACK前禁止复用。素材贡献独立单次
+保持，CPU保留全局帧/graph所有权；正式显示MMIO/采显video_pipeline仍为RAW-only。
+组件验证/综合边界见[实际扫描验证](verification/video/record_scanout.md)，不据此
+宣称125MHz闭合、物理CDC、CPU/NPU执行、连续HDMI或板测已通过。
+
 ### 20.3 本版不作的结论
 
 本版没有完成指定形状 YuNet 的实际导出、INT8 精度测试或 FPGA 布局布线；没有确认 ≥24 fps、50 ms 或一帧延迟已经达到，也不保证取消 30 fps 要求就能自动达到新的优化目标；没有实现或验证表情识别。所有验收结果需以第 14、18 章规定的证据补齐。

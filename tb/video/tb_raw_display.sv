@@ -56,7 +56,9 @@ module tb_raw_display;
     raw_display #(.FRAME_WIDTH(INVALID_GEOMETRY==1 ? 801 :
                      INVALID_GEOMETRY==3 ? 0 : INVALID_GEOMETRY==5 ? -1 : W),
         .FRAME_HEIGHT(INVALID_GEOMETRY==2 ? 601 : INVALID_GEOMETRY==4 ? 0 : H),
-        .TIMEOUT_CYCLES(FULL ? 100000 : 10000)) dut (.*);
+        .TIMEOUT_CYCLES(FULL ? 100000 : 10000)) dut (
+        .record_generation(32'd0),.commit_generation(),.release_generation(),
+        .out_context_valid(),.out_frame_id(),.out_generation(),.out_slot(),.out_x(),.out_y(),.out_sof(),.*);
 
     function automatic [7:0] memory_byte(input [31:0] address);
         memory_byte=(address*13) ^ (address>>8) ^ (address>>16);

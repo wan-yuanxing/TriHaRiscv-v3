@@ -29,7 +29,12 @@ module raw_display #(
  output wire [1:0] m_axi_arburst,output reg m_axi_arvalid,input wire m_axi_arready,
  input wire [3:0] m_axi_rid,input wire [127:0] m_axi_rdata,
  input wire [1:0] m_axi_rresp,input wire m_axi_rlast,m_axi_rvalid,
- output wire m_axi_rready
+ output wire m_axi_rready,
+ // Optional metadata sideband. Legacy named-port users may leave it unused.
+ input wire [31:0] record_generation,
+ output reg [31:0] commit_generation,release_generation,
+ output reg out_context_valid,output reg [31:0] out_frame_id,out_generation,
+ output reg [1:0] out_slot,output reg [10:0] out_x,out_y,output reg out_sof
 );
     // RGB888 rows are padded to AXI beats; padding is never shown.
     localparam integer ROW_BYTES = FRAME_WIDTH*3;
@@ -67,6 +72,7 @@ module raw_display #(
     reg [31:0] protected_base;
     reg [1:0] protected_slot;
     reg [31:0] mailbox_base,mailbox_stride,mailbox_frame;
+    reg [31:0] mailbox_generation;
     reg [1:0] mailbox_slot;
     reg [1:0] request_toggle,done_toggle,bank_success;
     reg [31:0] req_base[0:1],req_stride[0:1],req_frame[0:1],req_epoch[0:1];
@@ -79,6 +85,7 @@ module raw_display #(
     reg commit_toggle,release_toggle,scan_toggle,underflow_toggle;
     reg commit_ack,release_ack;
     reg [31:0] commit_pixel_id,release_pixel_id;
+    reg [31:0] commit_pixel_generation,release_pixel_generation;
     reg [1:0] commit_pixel_slot,release_pixel_slot;
     (* async_reg="true" *) reg commit_sync1,commit_sync2,release_sync1,release_sync2;
     (* async_reg="true" *) reg scan_sync1,scan_sync2,underflow_sync1,underflow_sync2;
@@ -138,10 +145,10 @@ module raw_display #(
     end
     always @(posedge core_clk or negedge core_reset_n) begin
         if(!core_reset_n) begin
-            record_toggle<=0;record_busy<=0;mailbox_base<=0;mailbox_stride<=0;mailbox_frame<=0;mailbox_slot<=0;
+            record_toggle<=0;record_busy<=0;mailbox_base<=0;mailbox_stride<=0;mailbox_frame<=0;mailbox_slot<=0;mailbox_generation<=0;
             record_reject_valid<=0;record_reject_code<=0;rejected_records<=0;
             protected_valid<=0;protected_base<=0;protected_slot<=0;
-            commit_valid<=0;release_valid<=0;commit_frame_id<=0;commit_slot<=0;release_frame_id<=0;release_slot<=0;
+            commit_valid<=0;release_valid<=0;commit_frame_id<=0;commit_slot<=0;release_frame_id<=0;release_slot<=0;commit_generation<=0;release_generation<=0;
             commit_ack<=0;release_ack<=0;commit_seen<=0;release_seen<=0;scan_seen<=0;underflow_seen<=0;
             error<=0;error_code<=0;commits<=0;completed_scans<=0;read_lines<=0;underflows<=0;frame_id<=0;
             done_toggle<=0;bank_success<=0;dma_state<=D_IDLE;dma_bank<=0;dma_bad<=0;dma_address<=0;
@@ -156,18 +163,18 @@ module raw_display #(
                     rejected_records<=rejected_records+1'b1;
                 end else begin
                     mailbox_base<=record_base;mailbox_stride<=record_stride;
-                    mailbox_frame<=record_frame_id;mailbox_slot<=record_slot;
+                    mailbox_frame<=record_frame_id;mailbox_slot<=record_slot;mailbox_generation<=record_generation;
                     record_toggle<=~record_toggle;record_busy<=1;
                 end
             end
             if(commit_sync2!=commit_seen) begin
-                commit_seen<=commit_sync2;commit_valid<=1;commit_frame_id<=commit_pixel_id;commit_slot<=commit_pixel_slot;
+                commit_seen<=commit_sync2;commit_valid<=1;commit_frame_id<=commit_pixel_id;commit_slot<=commit_pixel_slot;commit_generation<=commit_pixel_generation;
                 commits<=commits+1'b1;frame_id<=commit_pixel_id;
                 protected_valid<=1;protected_base<=mailbox_base;protected_slot<=mailbox_slot;
             end
             if(commit_valid && commit_ready) begin commit_valid<=0;commit_ack<=commit_seen;record_busy<=0;end
             if(release_sync2!=release_seen) begin
-                release_seen<=release_sync2;release_valid<=1;release_frame_id<=release_pixel_id;release_slot<=release_pixel_slot;
+                release_seen<=release_sync2;release_valid<=1;release_frame_id<=release_pixel_id;release_slot<=release_pixel_slot;release_generation<=release_pixel_generation;
             end
             if(release_valid && release_ready) begin release_valid<=0;release_ack<=release_seen;end
             if(scan_sync2!=scan_seen) begin scan_seen<=scan_sync2;completed_scans<=completed_scans+1'b1;end
@@ -244,6 +251,7 @@ module raw_display #(
     reg [2:0] pixel_state;
     reg pending_valid,target_pending,active_valid,prefetch_started,scan_bad;
     reg [31:0] pending_base,pending_stride,pending_frame;
+    reg [31:0] pending_generation,target_generation,active_generation;
     reg [1:0] pending_slot;
     reg [31:0] target_base,target_stride,target_frame,active_base,active_stride,active_frame,epoch;
     reg [1:0] target_slot,active_slot;
@@ -282,12 +290,12 @@ module raw_display #(
     always @(posedge pixel_clk or negedge pixel_reset_n) begin
         if(!pixel_reset_n) begin
             pixel_state<=P_IDLE;record_seen<=0;pending_valid<=0;target_pending<=0;active_valid<=0;prefetch_started<=0;scan_bad<=0;
-            pending_base<=0;pending_stride<=0;pending_frame<=0;pending_slot<=0;
+            pending_base<=0;pending_stride<=0;pending_frame<=0;pending_slot<=0;pending_generation<=0;target_generation<=0;active_generation<=0;
             target_base<=0;target_stride<=0;target_frame<=0;target_slot<=0;
             active_base<=0;active_stride<=0;active_frame<=0;active_slot<=0;epoch<=0;
             request_toggle<=0;bank_inflight<=0;bank_ready<=0;
             commit_toggle<=0;release_toggle<=0;scan_toggle<=0;underflow_toggle<=0;
-            commit_pixel_id<=0;commit_pixel_slot<=0;release_pixel_id<=0;release_pixel_slot<=0;
+            commit_pixel_id<=0;commit_pixel_slot<=0;release_pixel_id<=0;release_pixel_slot<=0;commit_pixel_generation<=0;release_pixel_generation<=0;
             consume_d1<=0;consume_d2<=0;consume_bank_d1<=0;consume_bank_d2<=0;
             consume_last_d1<=0;consume_last_d2<=0;consume_row_d1<=0;consume_row_d2<=0;
             for(b=0;b<2;b=b+1) begin req_base[b]<=0;req_stride[b]<=0;req_frame[b]<=0;req_slot[b]<=0;req_row[b]<=0;req_epoch[b]<=0;end
@@ -304,12 +312,12 @@ module raw_display #(
             end
             if(record_sync2!=record_seen) begin
                 record_seen<=record_sync2;pending_valid<=1;
-                pending_base<=mailbox_base;pending_stride<=mailbox_stride;pending_frame<=mailbox_frame;pending_slot<=mailbox_slot;
+                pending_base<=mailbox_base;pending_stride<=mailbox_stride;pending_frame<=mailbox_frame;pending_slot<=mailbox_slot;pending_generation<=mailbox_generation;
             end
             if(fault_sync2) begin pixel_state<=P_FAULT;scan_bad<=1;end
             else case(pixel_state)
             P_IDLE: if(pending_valid) begin
-                target_base<=pending_base;target_stride<=pending_stride;target_frame<=pending_frame;target_slot<=pending_slot;
+                target_base<=pending_base;target_stride<=pending_stride;target_frame<=pending_frame;target_slot<=pending_slot;target_generation<=pending_generation;
                 target_pending<=1;epoch<=epoch+1'b1;pixel_state<=P_CLEAN;
             end
             P_CLEAN: if(bank_inflight==0) begin bank_ready<=0;prefetch_started<=0;pixel_state<=P_PREFETCH;end
@@ -329,11 +337,11 @@ module raw_display #(
                     // needs both previous event bundles to have retired.
                     if(target_pending) begin
                         if(active_valid) begin
-                            release_pixel_id<=active_frame;release_pixel_slot<=active_slot;release_toggle<=~release_toggle;
+                            release_pixel_id<=active_frame;release_pixel_slot<=active_slot;release_toggle<=~release_toggle;release_pixel_generation<=active_generation;
                         end
-                        active_base<=target_base;active_stride<=target_stride;active_frame<=target_frame;active_slot<=target_slot;
+                        active_base<=target_base;active_stride<=target_stride;active_frame<=target_frame;active_slot<=target_slot;active_generation<=target_generation;
                         active_valid<=1;pending_valid<=0;target_pending<=0;
-                        commit_pixel_id<=target_frame;commit_pixel_slot<=target_slot;commit_toggle<=~commit_toggle;
+                        commit_pixel_id<=target_frame;commit_pixel_slot<=target_slot;commit_toggle<=~commit_toggle;commit_pixel_generation<=target_generation;
                     end
                     scan_bad<=0;pixel_state<=P_SCAN;
                 end
@@ -354,9 +362,9 @@ module raw_display #(
                         if(!scan_bad) scan_toggle<=~scan_toggle;
                         epoch<=epoch+1'b1;
                         if(pending_valid) begin
-                            target_base<=pending_base;target_stride<=pending_stride;target_frame<=pending_frame;target_slot<=pending_slot;target_pending<=1;
+                            target_base<=pending_base;target_stride<=pending_stride;target_frame<=pending_frame;target_slot<=pending_slot;target_pending<=1;target_generation<=pending_generation;
                         end else begin
-                            target_base<=active_base;target_stride<=active_stride;target_frame<=active_frame;target_slot<=active_slot;target_pending<=0;
+                            target_base<=active_base;target_stride<=active_stride;target_frame<=active_frame;target_slot<=active_slot;target_pending<=0;target_generation<=active_generation;
                         end
                         pixel_state<=(scan_bad ? P_FAULT : P_CLEAN);
                     end
@@ -376,6 +384,8 @@ module raw_display #(
     wire [8:0] next_ram_address=final_byte[12:4];
     reg [3:0] offset_pipe;
     reg show_pipe,de_pipe,hs_pipe,vs_pipe;
+    reg [31:0] frame_pipe,generation_pipe;reg [1:0] slot_pipe;
+    reg [10:0] x_pipe,y_pipe;reg sof_pipe;
     reg [255:0] assembled;
     reg [23:0] rgb_bytes;
     always @(posedge pixel_clk) begin
@@ -390,10 +400,20 @@ module raw_display #(
         if(!pixel_reset_n) begin
             offset_pipe<=0;show_pipe<=0;de_pipe<=0;hs_pipe<=0;vs_pipe<=0;
             out_rgb<=BACKGROUND_RGB;out_de<=0;out_hs<=0;out_vs<=0;
+            frame_pipe<=0;generation_pipe<=0;slot_pipe<=0;x_pipe<=0;y_pipe<=0;sof_pipe<=0;
+            out_context_valid<=0;out_frame_id<=0;out_generation<=0;out_slot<=0;out_x<=0;out_y<=0;out_sof<=0;
         end else if(pixel_run) begin
             offset_pipe<=byte_offset[3:0];show_pipe<=show_pixel;
             de_pipe<=pixel_de;hs_pipe<=pixel_hs;vs_pipe<=pixel_vs;
             out_de<=de_pipe;out_hs<=hs_pipe;out_vs<=vs_pipe;
+            // Capture identity at the same launch edge as show_pixel. The
+            // first (0,0) uses target, before active_* changes at that edge.
+            frame_pipe<=scan_start?target_frame:active_frame;
+            generation_pipe<=scan_start?target_generation:active_generation;
+            slot_pipe<=scan_start?target_slot:active_slot;
+            x_pipe<=pixel_x;y_pipe<=pixel_y;sof_pipe<=pixel_frame_start&&show_pixel;
+            out_context_valid<=show_pipe;out_frame_id<=frame_pipe;out_generation<=generation_pipe;out_slot<=slot_pipe;
+            out_x<=x_pipe;out_y<=y_pipe;out_sof<=sof_pipe;
             if(offset_pipe>=14) assembled={ram_word,ram_previous};else assembled={128'd0,ram_word};
             rgb_bytes=assembled[offset_pipe*8+:24];
             out_rgb<=(show_pipe ? {rgb_bytes[7:0],rgb_bytes[15:8],rgb_bytes[23:16]} : BACKGROUND_RGB);
