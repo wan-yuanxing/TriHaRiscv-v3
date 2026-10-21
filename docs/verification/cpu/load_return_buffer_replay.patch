@@ -1,0 +1,698 @@
+diff --git a/config/cpu_sources.f b/config/cpu_sources.f
+--- a/config/cpu_sources.f
++++ b/config/cpu_sources.f
+@@ -25,6 +25,7 @@
+ rtl/cpu/triha_divider.v
+ rtl/cpu/triha_multiplier.v
+ rtl/cpu/triha_csr.v
++rtl/cpu/triha_load_buffer.v
+ rtl/cpu/triha_lsu.v
+ rtl/cpu/triha_pipe_ctrl.v
+ rtl/cpu/triha_cpu.v
+diff --git a/fpga/pg2l100h/project/cpu_core.json b/fpga/pg2l100h/project/cpu_core.json
+--- a/fpga/pg2l100h/project/cpu_core.json
++++ b/fpga/pg2l100h/project/cpu_core.json
+@@ -20,6 +20,7 @@
+     "rtl/cpu/triha_issue.v",
+     "rtl/cpu/triha_regfile.v",
+     "rtl/cpu/triha_divider.v",
++    "rtl/cpu/triha_load_buffer.v",
+     "rtl/cpu/triha_lsu.v",
+     "rtl/cpu/vendor/src/core/biriscv_mmu.v",
+     "rtl/cpu/triha_multiplier.v",
+diff --git a/rtl/cpu/ADAPTATIONS.json b/rtl/cpu/ADAPTATIONS.json
+--- a/rtl/cpu/ADAPTATIONS.json
++++ b/rtl/cpu/ADAPTATIONS.json
+@@ -5,7 +5,7 @@
+       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
+       "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+       "derived": "rtl/cpu/triha_cpu.v",
+-      "derived_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
++      "derived_sha256": "11d89583c66db5b4116a775cccc8ce39012c47ad543b2db167d0a76bdce1b077",
+       "changes": [
+         "Rename integration module to triha_cpu.",
+         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
+@@ -17,7 +17,8 @@
+         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
+         "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
+         "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
+-        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only."
++        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only.",
++        "Connect optional local completed-load E1 value/valid to issue; feature disabled in generic CPU, dual issue and MMU. Original E2 completion, writeback and exceptions unchanged."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -40,7 +41,7 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+       "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+       "derived": "rtl/cpu/triha_issue.v",
+-      "derived_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
++      "derived_sha256": "c79ccac5c4aaa82635ec6018486532364c2845e496ad69bcfabe579a258a6df5",
+       "changes": [
+         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
+         "Rename integration module to triha_issue.",
+@@ -53,7 +54,8 @@
+         "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
+         "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle.",
+         "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles.",
+-        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates."
++        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates.",
++        "Only a proven current-E1 local load hit releases its original dependency gate and selects the early value in the existing E1 forwarding priority; misses/dual issue/flush/stall retain original behavior."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -92,13 +94,14 @@
+       "base": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
+       "base_sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+       "derived": "rtl/cpu/triha_lsu.v",
+-      "derived_sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
++      "derived_sha256": "9c615a714da39b64fa39856eaea92473e48879dba823843bd48b3c5736c9a1ad",
+       "changes": [
+         "Rename integration/helper modules to triha_lsu/triha_lsu_fifo.",
+         "Export pure load payload for bypass without response ack/error selection; preserve the original completion/fault address bus and all request/exception controls.",
+         "Decode address format and store data without late issue valid; retain final request/unaligned strobe qualification.",
+         "Keep address/data/cacheability payload in separate registers with response-wait and unaccepted-request holds, excluding late fault cancellation from wide data.",
+-        "For the existing depth-two request FIFO, rotate the original two storage banks into registered head/tail coordinates; preserve accept/pop/count and all stale output data with no extra latency or payload state. Other depths retain the original implementation."
++        "For the existing depth-two request FIFO, rotate the original two storage banks into registered head/tail coordinates; preserve accept/pop/count and all stale output data with no extra latency or payload state. Other depths retain the original implementation.",
++        "Optional local SRAM completed-load buffer produces E1 value/valid only; all real request/completion/fault paths remain original, errors/maintenance invalidate and stores invalidate accepted indices."
+       ],
+       "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+     },
+@@ -187,6 +190,16 @@
+         }
+       ],
+       "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
++    },
++    {
++      "base": "rtl/cpu/triha_btb.v",
++      "base_sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
++      "derived": "rtl/cpu/triha_load_buffer.v",
++      "derived_sha256": "4d2d38d845204205d7e1fabed4a4272a1d17717e984fc6ab7fae8ae7af3e7c95",
++      "changes": [
++        "Reuse the maintained native RAM plus resettable-valid/tag storage pattern for32completed local SRAM response words; store-index/full invalidation, no transaction suppression or prediction change."
++      ],
++      "license": "Native primitive instances only; installed vendor model bytes are not copied."
+     }
+   ]
+ }
+diff --git a/rtl/cpu/triha_core.v b/rtl/cpu/triha_core.v
+--- a/rtl/cpu/triha_core.v
++++ b/rtl/cpu/triha_core.v
+@@ -52,6 +52,8 @@
+         .SUPPORT_LOAD_BYPASS(1),
+         .SUPPORT_MUL_BYPASS(1),
+         .EARLY_MUL_BYPASS(1),
++        .EARLY_LOAD_BYPASS(!DUAL_ISSUE),
++        .LOAD_BUFFER_BASE(32'h00010000),
+         .SUPPORT_REGFILE_XILINX(0),
+         .EXTRA_DECODE_STAGE(0),
+         .NUM_BTB_ENTRIES(512),
+diff --git a/rtl/cpu/triha_cpu.v b/rtl/cpu/triha_cpu.v
+--- a/rtl/cpu/triha_cpu.v
++++ b/rtl/cpu/triha_cpu.v
+@@ -40,6 +40,8 @@
+     ,parameter SUPPORT_LOAD_BYPASS = 1
+     ,parameter SUPPORT_MUL_BYPASS = 1
+     ,parameter EARLY_MUL_BYPASS = 1
++    ,parameter EARLY_LOAD_BYPASS = 0
++    ,parameter LOAD_BUFFER_BASE = 32'h00010000
+     ,parameter SUPPORT_REGFILE_XILINX = 0
+     ,parameter EXTRA_DECODE_STAGE = 0
+     ,parameter MEM_CACHE_ADDR_MIN = 32'h80000000
+@@ -91,6 +93,8 @@
+     ,output [ 31:0]  mem_i_pc_o
+ );
+ 
++wire [31:0] writeback_mem_early_w;
++wire writeback_mem_early_valid_w;
+ wire           mmu_lsu_writeback_w;
+ wire  [  4:0]  csr_opcode_rd_idx_w;
+ wire  [  4:0]  mul_opcode_rd_idx_w;
+@@ -412,7 +416,9 @@
+ 
+ triha_lsu
+ #(
+-     .MEM_CACHE_ADDR_MAX(MEM_CACHE_ADDR_MAX)
++     .EARLY_LOAD_BYPASS(EARLY_LOAD_BYPASS && !SUPPORT_DUAL_ISSUE && !SUPPORT_MMU)
++    ,.LOAD_BUFFER_BASE(LOAD_BUFFER_BASE)
++    ,.MEM_CACHE_ADDR_MAX(MEM_CACHE_ADDR_MAX)
+     ,.MEM_CACHE_ADDR_MIN(MEM_CACHE_ADDR_MIN)
+ )
+ u_lsu
+@@ -420,6 +426,7 @@
+     // Inputs
+      .clk_i(clk_i)
+     ,.rst_i(rst_i)
++    ,.early_invalidate_i(ifence_w)
+     ,.opcode_valid_i(lsu_opcode_valid_w)
+     ,.opcode_opcode_i(lsu_opcode_opcode_w)
+     ,.opcode_pc_i(lsu_opcode_pc_w)
+@@ -450,6 +457,8 @@
+     ,.writeback_valid_o(writeback_mem_valid_w)
+     ,.writeback_value_o(writeback_mem_value_w)
+     ,.writeback_bypass_o(writeback_mem_bypass_w)
++    ,.early_load_value_o(writeback_mem_early_w)
++    ,.early_load_valid_o(writeback_mem_early_valid_w)
+     ,.writeback_exception_o(writeback_mem_exception_w)
+     ,.stall_o(lsu_stall_w)
+ );
+@@ -557,6 +566,7 @@
+     ,.SUPPORT_MULDIV(SUPPORT_MULDIV)
+     ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
+     ,.EARLY_MUL_BYPASS(EARLY_MUL_BYPASS)
++    ,.EARLY_LOAD_BYPASS(EARLY_LOAD_BYPASS && !SUPPORT_MMU)
+     ,.SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)
+ )
+ u_issue
+@@ -619,6 +629,8 @@
+     ,.writeback_exec1_value_i(writeback_exec1_value_w)
+     ,.writeback_mem_valid_i(writeback_mem_valid_w)
+     ,.writeback_mem_value_i(writeback_mem_value_w)
++    ,.writeback_mem_early_i(writeback_mem_early_w)
++    ,.writeback_mem_early_valid_i(writeback_mem_early_valid_w)
+     ,.writeback_mem_bypass_i(writeback_mem_bypass_w)
+     ,.writeback_mem_exception_i(writeback_mem_exception_w)
+     ,.writeback_mul_value_i(writeback_mul_value_w)
+diff --git a/rtl/cpu/triha_issue.v b/rtl/cpu/triha_issue.v
+--- a/rtl/cpu/triha_issue.v
++++ b/rtl/cpu/triha_issue.v
+@@ -34,6 +34,7 @@
+     ,parameter SUPPORT_LOAD_BYPASS = 1
+     ,parameter SUPPORT_MUL_BYPASS = 1
+     ,parameter EARLY_MUL_BYPASS = 1
++    ,parameter EARLY_LOAD_BYPASS = 0
+     ,parameter SUPPORT_REGFILE_XILINX = 0
+ )
+ //-----------------------------------------------------------------
+@@ -97,6 +98,8 @@
+     ,input  [ 31:0]  writeback_exec0_value_i
+     ,input  [ 31:0]  writeback_exec1_value_i
+     ,input           writeback_mem_valid_i
++    ,input  [ 31:0]  writeback_mem_early_i
++    ,input           writeback_mem_early_valid_i
+     ,input  [ 31:0]  writeback_mem_value_i
+     ,input [31:0]   writeback_mem_bypass_i
+     ,input  [  5:0]  writeback_mem_exception_i
+@@ -366,7 +369,10 @@
+ wire pipe0_early_mul_w = EARLY_MUL_BYPASS && SUPPORT_MUL_BYPASS && !SUPPORT_DUAL_ISSUE &&
+     pipe0_mul_e1_w && writeback_mul_early_valid_i &&
+     ((pipe0_opcode_e1_w & `INST_MUL_MASK) == `INST_MUL);
+-wire [31:0] pipe0_forward_e1_w = pipe0_early_mul_w ? writeback_mul_early_i : writeback_exec0_value_i;
++wire pipe0_early_load_w = EARLY_LOAD_BYPASS && SUPPORT_LOAD_BYPASS && !SUPPORT_DUAL_ISSUE &&
++    pipe0_load_e1_w && writeback_mem_early_valid_i;
++wire [31:0] pipe0_forward_e1_w = pipe0_early_load_w ? writeback_mem_early_i :
++    pipe0_early_mul_w ? writeback_mul_early_i : writeback_exec0_value_i;
+ wire [31:0] pipe0_operand_ra_e1_w;
+ wire [31:0] pipe0_operand_rb_e1_w;
+ 
+@@ -703,7 +709,7 @@
+     end
+ 
+     // Execution units with >= 1 cycle latency (loads / multiply)
+-    if (pipe0_load_e1_w || (pipe0_mul_e1_w && !pipe0_early_mul_w))
++    if ((pipe0_load_e1_w && !pipe0_early_load_w) || (pipe0_mul_e1_w && !pipe0_early_mul_w))
+         scoreboard_r[pipe0_rd_e1_w] = 1'b1;
+     if (pipe1_load_e1_w || pipe1_mul_e1_w)
+         scoreboard_r[pipe1_rd_e1_w] = 1'b1;
+diff --git a/rtl/cpu/triha_lsu.v b/rtl/cpu/triha_lsu.v
+--- a/rtl/cpu/triha_lsu.v
++++ b/rtl/cpu/triha_lsu.v
+@@ -29,7 +29,9 @@
+ // Params
+ //-----------------------------------------------------------------
+ #(
+-     parameter MEM_CACHE_ADDR_MIN = 0
++     parameter EARLY_LOAD_BYPASS = 0
++    ,parameter LOAD_BUFFER_BASE = 32'h00010000
++    ,parameter MEM_CACHE_ADDR_MIN = 0
+     ,parameter MEM_CACHE_ADDR_MAX = 32'hffffffff
+ )
+ //-----------------------------------------------------------------
+@@ -39,6 +41,7 @@
+     // Inputs
+      input           clk_i
+     ,input           rst_i
++    ,input           early_invalidate_i
+     ,input           opcode_valid_i
+     ,input  [ 31:0]  opcode_opcode_i
+     ,input  [ 31:0]  opcode_pc_i
+@@ -70,6 +73,8 @@
+     ,output [ 31:0]  writeback_value_o
+     ,output [31:0]   writeback_bypass_o
+     ,output [  5:0]  writeback_exception_o
++    ,output [31:0]   early_load_value_o
++    ,output          early_load_valid_o
+     ,output          stall_o
+ );
+ 
+@@ -341,6 +346,44 @@
+ wire        resp_byte_w;
+ wire        resp_half_w;
+ wire        resp_signed_w;
++
++// Completed local SRAM words may feed an E1 dependent instruction, but
++// every load still uses the unchanged real request, E2 completion and error.
++generate if (EARLY_LOAD_BYPASS) begin: g_early_load
++    wire [31:0] cached_word_w;
++    wire hit_w;
++    wire invalidate_w = early_invalidate_i || mem_flush_q ||
++        mem_writeback_q || mem_invalidate_q || (mem_ack_i && mem_error_i);
++    triha_load_buffer #(.SRAM_BASE(LOAD_BUFFER_BASE)) u_buffer (
++        .clk_i(clk_i),.rst_i(rst_i),.invalidate_i(invalidate_w),
++        .lookup_addr_i(mem_addr_q),.hit_o(hit_w),.data_o(cached_word_w),
++        .fill_i(pending_lsu_e2_q && mem_ack_i && !mem_error_i && resp_load_w && !mem_unaligned_e2_q),
++        .fill_addr_i(resp_addr_w),.fill_data_i(mem_data_rd_i),
++        .store_i(issue_lsu_e1_w && (|mem_wr_o)),.store_addr_i(mem_addr_q)
++    );
++    reg [31:0] value_r;
++    always @* begin
++        value_r = 32'b0;
++        if (mem_xb_q) begin
++            case (mem_addr_q[1:0])
++                2'd0: value_r = {24'b0,cached_word_w[7:0]};
++                2'd1: value_r = {24'b0,cached_word_w[15:8]};
++                2'd2: value_r = {24'b0,cached_word_w[23:16]};
++                2'd3: value_r = {24'b0,cached_word_w[31:24]};
++            endcase
++            if (mem_ls_q && value_r[7]) value_r = {24'hffffff,value_r[7:0]};
++        end else if (mem_xh_q) begin
++            if (mem_addr_q[1]) value_r = {16'b0,cached_word_w[31:16]};
++            else value_r = {16'b0,cached_word_w[15:0]};
++            if (mem_ls_q && value_r[15]) value_r = {16'hffff,value_r[15:0]};
++        end else value_r = cached_word_w;
++    end
++    assign early_load_value_o = value_r;
++    assign early_load_valid_o = hit_w && mem_rd_q && mem_load_q && !mem_unaligned_e1_q;
++end else begin: g_no_early_load
++    assign early_load_value_o = 32'b0;
++    assign early_load_valid_o = 1'b0;
++end endgenerate
+ 
+ triha_lsu_fifo
+ #(
+diff --git a/scripts/cpu/run_redirect.ps1 b/scripts/cpu/run_redirect.ps1
+--- a/scripts/cpu/run_redirect.ps1
++++ b/scripts/cpu/run_redirect.ps1
+@@ -1,6 +1,6 @@
+ #requires -Version 7.0
+ [CmdletBinding()]
+-param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','ordered')][string] $Test='frontend',
++param([ValidateSet('frontend','payload','muldata','csrdata','mularith','training','loadbypass','requestdata','lanedata','divarith','fifodata','bypasstag','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb','dependencies','mulforward','loadreturn','lsuearly','loadforward','ordered')][string] $Test='frontend',
+     [ValidateSet('single','dual','both')][string] $Mode='both',
+     [ValidateRange(1,2147483647)][int] $Seed=37,
+     [switch] $LegacyFrontend, [switch] $Interrupt, [switch] $Broken, [switch] $LegacyDivider, [switch] $LegacyFifo, [switch] $LegacyPredictor,
+@@ -62,6 +62,9 @@
+     if($Test -eq 'indexedbtb'){$sources+='tb/cpu/tb_indexed_btb.v'}
+     if($Test -eq 'dependencies'){$sources+='tb/cpu/tb_issue_dependencies.v'}
+     if($Test -eq 'mulforward'){$sources+='tb/cpu/tb_issue_mul_forward.v'}
++    if($Test -eq 'loadforward'){$sources+='tb/cpu/tb_issue_load_forward.v'}
++    if($Test -eq 'lsuearly'){$sources+='tb/cpu/tb_lsu_early_load.v'}
++    if($Test -eq 'loadreturn'){$sources+='tb/cpu/tb_load_return_buffer.v'}
+     if($Test -eq 'ordered'){$sources+='tb/cpu/tb_cpu_ordered.v'}
+     foreach($name in $sources+@('scripts/cpu/run_redirect.ps1','scripts/cpu/firmware_common.ps1',
+         'scripts/cpu/run_modelsim.do','sw/tests/control_stress.S','sw/runtime/triha_tcm.ld',
+@@ -80,16 +83,17 @@
+         if($Test -eq 'divarith'){$defines+=('+define+DIV_MODULE='+$(if($LegacyDivider){'biriscv_divider'}else{'triha_divider'}))}
+         if($Test -eq 'fifodata'){$defines+=('+define+FIFO_MODULE='+$(if($LegacyFifo){'fetch_fifo'}else{'triha_fetch_fifo'}));if(-not $LegacyFifo){$defines+='+define+FIFO_HAS_HINT'}}
+         Native (Join-Path $modelsim 'vlog.exe') (@('-work','work',('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+$defines+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) 'compile'|Out-Null
+-        $top=switch($Test){mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
+-        $marker=switch($Test){mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
++        $top=switch($Test){loadforward{'work.tb_issue_load_forward'} lsuearly{'work.tb_lsu_early_load'} loadreturn{'work.tb_load_return_buffer'} mulforward{'work.tb_issue_mul_forward'} dependencies{'work.tb_issue_dependencies'} indexedbtb{'work.tb_indexed_btb'} frontend{'work.tb_frontend_redirect'} payload{'work.tb_issue_payload'} mularith{'work.tb_multiplier_payload'} training{'work.tb_predictor_training'} loadbypass{'work.tb_load_bypass'} requestdata{'work.tb_request_payload'} lanedata{'work.tb_issue_lane'} parallelread{'work.tb_issue_parallel_read'} priority{'work.tb_npc_priority'} divarith{'work.tb_divider_arithmetic'} fifodata{'work.tb_fifo_payload'} bypasstag{'work.tb_bypass_tag'} pcupdate{'work.tb_pc_update'} lsuqueue{'work.tb_lsu_queue'} predictorselect{'work.tb_predictor_select'} default{'work.tb_unit_payload'}}
++        $marker=switch($Test){loadforward{'LOAD_FORWARD_PASS'} lsuearly{'LSU_EARLY_LOAD_PASS'} loadreturn{'LOAD_RETURN_BUFFER_PASS'} mulforward{'MUL_FORWARD_PASS'} dependencies{'ISSUE_DEPENDENCIES_PASS'} indexedbtb{'INDEXED_BTB_PASS'} frontend{'FRONTEND_PASS'} payload{'ISSUE_PAYLOAD_PASS'} mularith{'MUL_PAYLOAD_PASS'} training{'TRAINING_PASS'} loadbypass{'LOAD_BYPASS_PASS'} requestdata{'REQUEST_PAYLOAD_PASS'} lanedata{'ISSUE_LANE_PASS'} parallelread{'PARALLEL_READ_PASS'} priority{'NPC_PRIORITY_PASS'} divarith{'DIV_ARITH_PASS'} fifodata{'FIFO_PAYLOAD_PASS'} bypasstag{'BYPASS_TAG_PASS'} pcupdate{'PC_UPDATE_PASS'} lsuqueue{'LSU_QUEUE_PASS'} predictorselect{'PREDICTOR_SELECT_PASS'} default{'UNIT_PAYLOAD_PASS'}}
+         $generics=if($Test -in @('muldata','csrdata')){@('-gTEST_CSR='+[int]($Test -eq 'csrdata'))}else{@()}
+         if($Test -eq 'mularith'){$generics=@('-gCORRUPT_RESULT='+[int][bool]$Broken)}
+         if($Test -in @('divarith','fifodata','pcupdate','lsuqueue','predictorselect','parallelread','priority','indexedbtb')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
++        if($Test -in @('loadreturn','lsuearly','loadforward')){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+         if($Test -eq 'mulforward'){$generics=@('-gBROKEN='+[int][bool]$Broken)}
+         if($Test -eq 'dependencies'){$generics=@(('-gDUAL_ISSUE='+[int]($Mode -eq 'dual')),('-gBROKEN='+[int][bool]$Broken))}
+         $out=Native (Join-Path $modelsim 'vsim.exe') (@('-c','-onfinish','exit','-voptargs=+acc')+$generics+@(
+             $top,'-do',(Join-Path $root 'scripts/cpu/run_modelsim.do'))) $Test
+-        if($out -notmatch $marker -or $out -match '(MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
++        if($out -notmatch $marker -or $out -match '(LOAD_FORWARD|LSU_EARLY_LOAD|LOAD_RETURN_BUFFER|MUL_FORWARD|ISSUE_DEPENDENCIES|FRONTEND|ISSUE_PAYLOAD|UNIT_PAYLOAD|MUL_PAYLOAD|TRAINING|LOAD_BYPASS|REQUEST_PAYLOAD|ISSUE_LANE|DIV_ARITH|FIFO_PAYLOAD|BYPASS_TAG|PC_UPDATE|LSU_QUEUE|PREDICTOR_SELECT|PARALLEL_READ|NPC_PRIORITY)_FAIL|\*\* (Error|Fatal)'){throw 'Component contract failed.'}
+         if($Test -eq 'dependencies' -and $out -notmatch ('ISSUE_DEPENDENCIES_PASS dual='+[int]($Mode -eq 'dual')+' checks=')){throw 'Dependency test elaborated wrong issue mode.'}
+         $result.executions+=@{test=$Test;status='PASS'}
+     } else {
+@@ -107,7 +111,9 @@
+         foreach($kind in @('golden','candidate')) {
+             Native (Join-Path $modelsim 'vlib.exe') @($kind) "vlib-$kind"|Out-Null
+             $module=if($kind -eq 'golden'){'riscv_core'}else{'triha_cpu'}
+-            Native (Join-Path $modelsim 'vlog.exe') (@('-work',$kind,("+define+CPU_TEST_MODULE=$module"),
++            $bufferDefines=@()
++            if($kind -eq 'candidate'){$bufferDefines=@('+define+CPU_EARLY_LOAD_TEST=1')}
++            Native (Join-Path $modelsim 'vlog.exe') ($bufferDefines+@('-work',$kind,("+define+CPU_TEST_MODULE=$module"),
+                 ('+incdir+'+(Join-Path $root 'rtl/cpu/vendor/src/core')))+@($sources|ForEach-Object{Join-Path $root $_})+$primitiveSources) "compile-$kind"|Out-Null
+             foreach($selected in $(if($Mode -eq 'both'){@('single','dual')}else{@($Mode)})) {
+                 $dual=[int]($selected -eq 'dual')
+diff --git a/sw/tests/control_stress.S b/sw/tests/control_stress.S
+--- a/sw/tests/control_stress.S
++++ b/sw/tests/control_stress.S
+@@ -20,6 +20,9 @@
+     add s2, s2, t2
+     addi s3, s3, 1
+     sw s2, 0(t0)
++    lw a0, 0(t0)
++    bne a0, s2, fail
++    /* Repeat without a store: exercise completed-load early forwarding. */
+     lw a0, 0(t0)
+     bne a0, s2, fail
+     sb s3, 4(t0)
+diff --git a/tb/cpu/tb_cpu_ordered.v b/tb/cpu/tb_cpu_ordered.v
+--- a/tb/cpu/tb_cpu_ordered.v
++++ b/tb/cpu/tb_cpu_ordered.v
+@@ -41,6 +41,9 @@
+         .SUPPORT_MULDIV(1), .SUPPORT_SUPER(0), .SUPPORT_MMU(0),
+         .SUPPORT_LOAD_BYPASS(1), .SUPPORT_MUL_BYPASS(1),
+         .SUPPORT_REGFILE_XILINX(0), .EXTRA_DECODE_STAGE(0)
++        `ifdef CPU_EARLY_LOAD_TEST
++        ,.EARLY_LOAD_BYPASS(!DUAL_ISSUE),.LOAD_BUFFER_BASE(32'h80000000)
++        `endif
+     ) u_dut (
+         .clk_i(clk), .rst_i(rst), .intr_i(irq),
+         .reset_vector_i(32'h80000000), .cpu_id_i(32'b0),
+@@ -54,6 +57,11 @@
+         .mem_d_rd_o(d_rd), .mem_d_wr_o(d_wr), .mem_d_req_tag_o(request_tag),
+         .mem_d_cacheable_o(), .mem_d_invalidate_o(), .mem_d_writeback_o(), .mem_d_flush_o()
+     );
++    `ifdef CPU_EARLY_LOAD_TEST
++    integer buffer_hits=0;
++    always @(posedge clk) if(!rst && !DUAL_ISSUE && u_dut.u_issue.pipe0_early_load_w)
++        buffer_hits=buffer_hits+1;
++    `endif
+     initial begin
+         if (!$value$plusargs("MEM_IMAGE=%s",image_path) ||
+             !$value$plusargs("FETCH_FAULT_PC=%h",fetch_fault_pc) ||
+@@ -182,7 +190,11 @@
+             $fclose(wb_file);
+             $fclose(store_file);
+             $fclose(exception_file);
+-            $display("CPU_ORDER_PASS dual=%0d cycles=%0d traps=%0d retired=%0d stores=%0d delayed=%0d",
++            `ifdef CPU_EARLY_LOAD_TEST
++        if(!DUAL_ISSUE && buffer_hits<1)$fatal(1,"CPU_ORDER_FAIL early_buffer_unexercised");
++        $display("LOAD_BUFFER_TEST_PASS dual=%0d hits=%0d",DUAL_ISSUE,buffer_hits);
++        `endif
++        $display("CPU_ORDER_PASS dual=%0d cycles=%0d traps=%0d retired=%0d stores=%0d delayed=%0d",
+                 DUAL_ISSUE,cycles,trap_mask,retired,stores,delayed);
+             $finish;
+         end
+diff --git a/rtl/cpu/triha_load_buffer.v b/rtl/cpu/triha_load_buffer.v
+new file mode 100644
+--- /dev/null
++++ b/rtl/cpu/triha_load_buffer.v
+@@ -0,0 +1,62 @@
++/* TriHa32-entry local SRAM completed-load forwarding buffer.
++ * Native RAM/tag/valid storage follows the existing CPU storage pattern.
++ * This module never acknowledges or suppresses a real memory transaction.
++ */
++module triha_load_buffer #(
++    parameter [31:0] SRAM_BASE = 32'h00010000
++) (
++    input wire clk_i,
++    input wire rst_i,
++    input wire invalidate_i,
++    input wire [31:0] lookup_addr_i,
++    output reg hit_o,
++    output reg [31:0] data_o,
++    input wire fill_i,
++    input wire [31:0] fill_addr_i,
++    input wire [31:0] fill_data_i,
++    input wire store_i,
++    input wire [31:0] store_addr_i
++);
++    reg [31:0] valid_q;
++    wire lookup_local_w = lookup_addr_i[31:15] == SRAM_BASE[31:15];
++    wire fill_local_w = fill_addr_i[31:15] == SRAM_BASE[31:15];
++    wire store_local_w = store_addr_i[31:15] == SRAM_BASE[31:15];
++    wire [39:0] write_data_w = {fill_addr_i[14:7],fill_data_i};
++    wire [39:0] read_data_w;
++    wire write_w = fill_i && fill_local_w && !rst_i && !invalidate_i;
++    integer entry;
++    always @(posedge clk_i or posedge rst_i)
++    if (rst_i)
++        valid_q <= 32'b0;
++    else if (invalidate_i)
++        valid_q <= 32'b0;
++    else begin
++        for (entry=0;entry<32;entry=entry+1) begin
++            if (store_i && store_local_w && store_addr_i[6:2] == entry)
++                valid_q[entry] <= 1'b0;
++            else if (write_w && fill_addr_i[6:2] == entry)
++                valid_q[entry] <= 1'b1;
++        end
++    end
++    genvar pair;
++    generate for (pair=0;pair<20;pair=pair+1) begin: g_word
++        GTP_RAM32X2DP #(.INIT_0(32'b0),.INIT_1(32'b0)) u_ram (
++            .DO(read_data_w[pair*2 +: 2]),.DI(write_data_w[pair*2 +: 2]),
++            .RADDR(lookup_addr_i[6:2]),.WADDR(fill_addr_i[6:2]),
++            .WCLK(clk_i),.WE(write_w)
++        );
++    end endgenerate
++    always @* begin
++        hit_o = 1'b0;
++        data_o = 32'b0;
++        if (!rst_i && !invalidate_i && lookup_local_w &&
++            valid_q[lookup_addr_i[6:2]] && read_data_w[39:32] == lookup_addr_i[14:7]) begin
++            hit_o = 1'b1;
++            data_o = read_data_w[31:0];
++        end
++    end
++    // synthesis translate_off
++    initial if (SRAM_BASE[14:0] != 0)
++        $fatal(1,"LOAD_RETURN_BUFFER_FAIL base_must_align32KiB");
++    // synthesis translate_on
++endmodule
+diff --git a/tb/cpu/tb_load_return_buffer.v b/tb/cpu/tb_load_return_buffer.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_load_return_buffer.v
+@@ -0,0 +1,83 @@
++`timescale 1ns/1ps
++// Independent word-index/tag oracle; no CPU or production decode reused.
++module tb_load_return_buffer #(parameter BROKEN=0);
++    reg clk=0,rst=1,invalidate=0,fill=0,store=0;
++    reg [31:0] query=0,fill_addr=0,fill_data=0,store_addr=0,rng=32'h37c4a2e1;
++    reg [31:0] words[0:31];
++    reg [31:0] addresses[0:31];
++    reg valid[0:31];
++    wire hit;
++    wire [31:0] data;
++    integer n,k,checks=0;
++    reg expected_hit;
++    reg [31:0] expected_data;
++    always #5 clk=~clk;
++    triha_load_buffer u_dut (
++        .clk_i(clk),.rst_i(rst),.invalidate_i(invalidate),
++        .lookup_addr_i(query),.hit_o(hit),.data_o(data),
++        .fill_i(fill),.fill_addr_i(fill_addr),.fill_data_i(fill_data),
++        .store_i(store),.store_addr_i(store_addr)
++    );
++    task check;
++        begin
++            expected_hit=0;expected_data=0;
++            for(k=0;k<32;k=k+1)
++                if(valid[k] && query>=32'h10000 && query<32'h18000 &&
++                   (query>>2)==(addresses[k]>>2) && !invalidate && !rst) begin
++                    expected_hit=1;expected_data=words[k];
++                end
++            if({hit,data}!=={expected_hit,expected_data})
++                $fatal(1,"LOAD_RETURN_BUFFER_FAIL check=%0d query=%h hit=%b expected=%b data=%h expected_data=%h",checks,query,hit,expected_hit,data,expected_data);
++        end
++    endtask
++    task step;
++        begin
++            #1;check;
++            @(posedge clk);
++            if(rst || invalidate) begin
++                for(k=0;k<32;k=k+1)valid[k]=0;
++            end else begin
++                if(fill && fill_addr>=32'h10000 && fill_addr<32'h18000) begin
++                    valid[(fill_addr/4)%32]=1;
++                    words[(fill_addr/4)%32]=fill_data;
++                    addresses[(fill_addr/4)%32]=fill_addr;
++                end
++                // Store index wins even if its tag differs or fill collides.
++                if(store && store_addr>=32'h10000 && store_addr<32'h18000)
++                    valid[(store_addr/4)%32]=0;
++            end
++            #1;check;checks=checks+1;
++            @(negedge clk);
++        end
++    endtask
++    task random_next;
++        begin rng=rng^(rng<<13);rng=rng^(rng>>17);rng=rng^(rng<<5);end
++    endtask
++    initial begin
++        for(k=0;k<32;k=k+1)begin valid[k]=0;words[k]=0;addresses[k]=0;end
++        step;rst=0;
++        for(n=0;n<32;n=n+1)begin fill=1;fill_addr=32'h10000+n*4;fill_data=32'h87650000+n;query=fill_addr;step;end
++        fill=0;
++        for(n=0;n<128;n=n+1)begin query=32'h10000+n;step;end
++        query=32'h10100;step; // Same index, wrong tag.
++        fill=1;fill_addr=query;fill_data=32'h12345678;step;fill=0;query=32'h10000;step;
++        query=32'h10100;store=1;store_addr=32'h10300;step;store=0;step;
++        fill=1;fill_addr=query;store=1;store_addr=query;step;fill=0;store=0;step;
++        fill=1;fill_addr=query;fill_data=32'hxxzz34ff;step;fill=0;step;
++        if(BROKEN) force u_dut.data_o=32'hdeadbeef;
++        for(n=0;n<20000;n=n+1) begin
++            random_next;fill=rng[0];store=rng[1];invalidate=rng[8:2]==0;rst=(n%997)==0;
++            query=32'h10000+{24'b0,rng[7:0]};
++            random_next;fill_addr=32'h10000+{24'b0,rng[7:0]};fill_data=rng;
++            random_next;store_addr=32'h10000+{24'b0,rng[7:0]};
++            if(n%7==0)query=fill_addr;
++            if(n%11==0)store_addr=fill_addr;
++            if(n%13==0)fill_addr=32'h20000;
++            if(n%17==0)query=32'h18000;
++            if(n%19==0)store_addr=32'h20000;
++            if(n%101==0)query=32'hxxxxxxxx;
++            step;
++        end
++        $display("LOAD_RETURN_BUFFER_PASS checks=%0d alias_range_store_fill_reset_xz",checks);$finish;
++    end
++endmodule
+diff --git a/tb/cpu/tb_lsu_early_load.v b/tb/cpu/tb_lsu_early_load.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_lsu_early_load.v
+@@ -0,0 +1,68 @@
++`timescale 1ns/1ps
++module tb_lsu_early_load #(parameter BROKEN=0);
++    reg clk=0,rst=1,valid=0,accept=1,ack=0,error=0;
++    reg [31:0] op=0,ra=0,rb=0,rdata=0;
++    wire [31:0] addr,wdata,early_data,wb_data,bypass_data;
++    wire [3:0] wr;
++    wire rd,early_valid,stall,wb_valid;
++    wire [5:0] exception;
++    integer checks=0;
++    always #5 clk=~clk;
++    triha_lsu #(.EARLY_LOAD_BYPASS(1)) u_dut (
++        .clk_i(clk),.rst_i(rst),.early_invalidate_i(1'b0),.opcode_valid_i(valid),.opcode_opcode_i(op),
++        .opcode_pc_i(32'b0),.opcode_invalid_i(1'b0),.opcode_rd_idx_i(op[11:7]),
++        .opcode_ra_idx_i(op[19:15]),.opcode_rb_idx_i(op[24:20]),
++        .opcode_ra_operand_i(ra),.opcode_rb_operand_i(rb),
++        .mem_data_rd_i(rdata),.mem_accept_i(accept),.mem_ack_i(ack),.mem_error_i(error),
++        .mem_resp_tag_i(11'b0),.mem_load_fault_i(1'b0),.mem_store_fault_i(1'b0),
++        .mem_addr_o(addr),.mem_data_wr_o(wdata),.mem_wr_o(wr),.mem_rd_o(rd),
++        .writeback_valid_o(wb_valid),.writeback_value_o(wb_data),
++        .writeback_bypass_o(bypass_data),.writeback_exception_o(exception),.stall_o(stall),
++        .early_load_value_o(early_data),.early_load_valid_o(early_valid)
++    );
++    task edge_step;begin @(posedge clk);#1;checks=checks+1;@(negedge clk);end endtask
++    task idle;begin valid=0;ack=0;error=0;edge_step;end endtask
++    task issue_load;
++        input [31:0] code,address;input hit;input [31:0] expected;
++        begin
++            valid=1;op=code;ra=address;edge_step;valid=0;
++            if(rd!==1 || addr!==(address&32'hfffffffc) || early_valid!==hit)
++                $fatal(1,"LSU_EARLY_LOAD_FAIL real_request_or_hit addr=%h early=%b expected=%b",addr,early_valid,hit);
++            if(hit && early_data!==expected)$fatal(1,"LSU_EARLY_LOAD_FAIL payload got=%h expected=%h",early_data,expected);
++        end
++    endtask
++    task complete_load;
++        input [31:0] value;input bad;
++        begin
++            edge_step; // Accept request at this edge, request now tracked in E2.
++            ack=1;error=bad;rdata=value;#1;
++            if(!wb_valid || (bad && (wb_data!==32'h10000 || exception!==6'h15)))
++                $fatal(1,"LSU_EARLY_LOAD_FAIL fault_badaddr_or_completion");
++            edge_step;ack=0;error=0;idle;
++        end
++    endtask
++    initial begin
++        edge_step;edge_step;rst=0;idle;
++        issue_load(32'h00002283,32'h10000,0,0);complete_load(32'h817f8001,0);
++        issue_load(32'h00002283,32'h10000,1,32'h817f8001);
++        if(BROKEN)begin force u_dut.early_load_value_o=0;#1;if(early_data!==32'h817f8001)$fatal(1,"LSU_EARLY_LOAD_FAIL corrupt_early_data");end
++        complete_load(32'h817f8001,0);
++        issue_load(32'h00000283,32'h10001,1,32'hffffff80);complete_load(32'h817f8001,0);
++        issue_load(32'h00004283,32'h10003,1,32'h00000081);complete_load(32'h817f8001,0);
++        issue_load(32'h00001283,32'h10002,1,32'hffff817f);complete_load(32'h817f8001,0);
++        issue_load(32'h00005283,32'h10000,1,32'h00008001);complete_load(32'h817f8001,0);
++        // A cached early hit must not hide the real error or its bad address.
++        issue_load(32'h00002283,32'h10000,1,32'h817f8001);complete_load(32'h12345678,1);
++        issue_load(32'h00002283,32'h18000,0,0);complete_load(32'hfeedbeef,0);
++        // Accepted store invalidates; completion must still use original bus.
++        valid=1;op=32'h00502023;ra=32'h10000;rb=32'h99887766;edge_step;valid=0;
++        if(wr!==4'hf || wdata!==rb)$fatal(1,"LSU_EARLY_LOAD_FAIL store_payload");
++        edge_step;ack=1;edge_step;ack=0;idle;
++        issue_load(32'h00002283,32'h10000,0,0);complete_load(32'h99887766,0);
++        // Backpressure must keep the actual request, not replace it by a hit ack.
++        accept=0;issue_load(32'h00002283,32'h10000,1,32'h99887766);
++        repeat(4)begin edge_step;if(!rd || addr!==32'h10000 || !stall)$fatal(1,"LSU_EARLY_LOAD_FAIL held_request");end
++        accept=1;complete_load(32'h99887766,0);
++        $display("LSU_EARLY_LOAD_PASS checks=%0d request_error_format_store_backpressure",checks);$finish;
++    end
++endmodule
+diff --git a/tb/cpu/tb_issue_load_forward.v b/tb/cpu/tb_issue_load_forward.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_issue_load_forward.v
+@@ -0,0 +1,69 @@
++/* E1 local load hit/miss forwarding; both word slots and cancellation. */
++`timescale 1ns/1ps
++module tb_issue_load_forward #(parameter BROKEN=0);
++    reg clk=0,rst=1,run_clock=1;
++    reg [31:0] op=32'h00128313;
++    reg [31:0] cached=7;
++    reg available=0;
++    reg [63:0] expected;
++    reg [31:0] rng=32'h271828;
++    integer index,checks=0;
++    always #5 if(run_clock) clk=~clk;
++    triha_cpu #(.EARLY_LOAD_BYPASS(1),.SUPPORT_DUAL_ISSUE(0),.SUPPORT_SUPER(0),.SUPPORT_MMU(0)) u_dut (
++        .clk_i(clk),.rst_i(rst),.intr_i(1'b0),.reset_vector_i(32'h80000000),.cpu_id_i(32'b0),
++        .mem_i_accept_i(1'b1),.mem_i_valid_i(1'b0),.mem_i_error_i(1'b0),.mem_i_inst_i(64'b0),
++        .mem_d_data_rd_i(32'b0),.mem_d_accept_i(1'b1),.mem_d_ack_i(1'b0),
++        .mem_d_error_i(1'b0),.mem_d_resp_tag_i(11'b0));
++    `define I u_dut.u_issue
++    task check;
++        input issued;
++        begin
++            #1;checks=checks+1;
++            if(`I.opcode_a_issue_r!==issued)
++                $fatal(1,"LOAD_FORWARD_FAIL issue expected=%b actual=%b",issued,`I.opcode_a_issue_r);
++            if(issued && `I.opcode0_ra_operand_o!==expected[31:0])
++                $fatal(1,"LOAD_FORWARD_FAIL operand expected=%h actual=%h",expected[31:0],`I.opcode0_ra_operand_o);
++        end
++    endtask
++    initial begin
++        repeat(5) @(negedge clk);rst=0;run_clock=0;
++        force `I.pc_x_q=32'h80000000;
++        force `I.fetch0_valid_i=1;force `I.fetch0_pc_i=32'h80000000;force `I.fetch0_instr_i=op;
++        force `I.fetch0_fault_fetch_i=0;force `I.fetch0_fault_page_i=0;
++        force `I.fetch0_instr_exec_i=1;force `I.fetch0_instr_lsu_i=0;force `I.fetch0_instr_mul_i=0;
++        force `I.fetch0_instr_div_i=0;force `I.fetch0_instr_csr_i=0;force `I.fetch0_instr_invalid_i=0;
++        force `I.fetch0_instr_rd_valid_i=1;force `I.fetch1_valid_i=0;
++        force `I.branch_csr_request_i=0;force `I.squash_w=0;force `I.take_interrupt_i=0;
++        force `I.lsu_stall_i=0;force `I.stall_w=0;force `I.div_pending_q=0;force `I.csr_pending_q=0;
++        force `I.pipe0_mul_e1_w=0;force `I.pipe0_load_e1_w=1;force `I.pipe0_store_e1_w=0;
++        force `I.pipe1_mul_e1_w=0;force `I.pipe1_load_e1_w=0;force `I.pipe1_store_e1_w=0;
++        force `I.pipe0_rd_e1_w=5;force `I.pipe1_rd_e1_w=0;
++        force `I.pipe0_opcode_e1_w=32'h00002283; // LW x5,0(x0)
++        force `I.pipe0_rd_bypass_e2_w=0;force `I.pipe0_rd_bypass_wb_w=0;
++        force `I.pipe1_rd_bypass_e2_w=0;force `I.pipe1_rd_bypass_wb_w=0;
++        force u_dut.u_lsu.early_load_value_o=cached;
++        force u_dut.u_lsu.early_load_valid_o=available;
++        if(BROKEN) force u_dut.u_lsu.early_load_value_o=0;
++        for(index=0;index<1024;index=index+1) begin
++            rng={rng[30:0],rng[31]^rng[21]^rng[1]^rng[0]};
++            cached=rng;expected=rng;available=index[0];check(available);
++        end
++        available=1;cached=32'h81234567;expected=cached;
++        op=32'h00528333;check(1);
++        if(`I.opcode0_rb_operand_o!==cached)$fatal(1,"LOAD_FORWARD_FAIL source2");
++        force `I.pc_x_q=32'h80000004;
++        force `I.fetch0_valid_i=0;force `I.fetch1_valid_i=1;
++        force `I.fetch1_pc_i=32'h80000004;force `I.fetch1_instr_i=op;
++        force `I.fetch1_fault_fetch_i=0;force `I.fetch1_fault_page_i=0;
++        force `I.fetch1_instr_exec_i=1;force `I.fetch1_instr_lsu_i=0;force `I.fetch1_instr_mul_i=0;
++        force `I.fetch1_instr_div_i=0;force `I.fetch1_instr_csr_i=0;force `I.fetch1_instr_invalid_i=0;
++        force `I.fetch1_instr_rd_valid_i=1;check(1);
++        if(`I.opcode0_rb_operand_o!==cached)$fatal(1,"LOAD_FORWARD_FAIL upper_source2");
++        available=0;check(0);available=1;
++        force `I.squash_w=1;check(0);force `I.squash_w=0;
++        force `I.lsu_stall_i=1;check(0);force `I.lsu_stall_i=0;
++        force `I.branch_csr_request_i=1;check(0);
++        $display("LOAD_FORWARD_PASS checks=%0d",checks);$finish;
++    end
++    `undef I
++endmodule

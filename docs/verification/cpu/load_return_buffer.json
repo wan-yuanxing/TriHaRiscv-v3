@@ -1,0 +1,303 @@
+{
+  "status": "REJECTED_RESOURCE_EFFICIENCY",
+  "parent_commit": "2de418c",
+  "deployed_parent": "dc00f80",
+  "deployed_release": "build/soc/releases/cpu_coremark_6ff82025b53d",
+  "candidate_inputs": {
+    "config/cpu_sources.f": "24e0cbd4b298a2203fd013bde52bb41aca0b60e7e3daa30a735fd20bdc8909b2",
+    "fpga/pg2l100h/project/cpu_core.json": "a807d6a3d9c6ee3d41c429769751ca44fef7f1ac28ac6eaaf7ab4eac0477d265",
+    "rtl/cpu/ADAPTATIONS.json": "10a285518bb2c913de13d570c77d4fb4ff412c1ddb20d855847e554ed53098c6",
+    "rtl/cpu/triha_core.v": "f7e5258bfb9cb949132d69e91bfc7d7eed14ceba33bc5259c29eb53c012dec9c",
+    "rtl/cpu/triha_cpu.v": "11d89583c66db5b4116a775cccc8ce39012c47ad543b2db167d0a76bdce1b077",
+    "rtl/cpu/triha_issue.v": "c79ccac5c4aaa82635ec6018486532364c2845e496ad69bcfabe579a258a6df5",
+    "rtl/cpu/triha_lsu.v": "9c615a714da39b64fa39856eaea92473e48879dba823843bd48b3c5736c9a1ad",
+    "scripts/cpu/run_redirect.ps1": "279be0f90fa68336b3646207de34e392ae27b65c598462ae082886aee4e9f6fb",
+    "sw/tests/control_stress.S": "aa2b3604a82dfc3484913a79d21d86511b37453c8f65a54dd392f191d9a37ad3",
+    "tb/cpu/tb_cpu_ordered.v": "e3ed7ce81eb93806c7efc20c59da2db37ad0ac6099ce2c7ac1b7b97b2fabb6bd",
+    "rtl/cpu/triha_load_buffer.v": "4d2d38d845204205d7e1fabed4a4272a1d17717e984fc6ab7fae8ae7af3e7c95",
+    "tb/cpu/tb_load_return_buffer.v": "3ef7a32f1e8855b7faa7f6de4d0c2729d3ffc599b03a469da5182314c5e67f7d",
+    "tb/cpu/tb_lsu_early_load.v": "50c299f668b7670cbe5fccc51dcd6a807e6b6fa88af562f393ebb26368aada86",
+    "tb/cpu/tb_issue_load_forward.v": "0c9fc3505f3e021ed63195677599b6525a5c8c68da990a39c644bbd267d1cb82"
+  },
+  "snapshot": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\load-return-buffer-prototype",
+  "patch_sha256": "d9bb8860fb05f0a30c88ef89691c14c3fdf298da762ff77418db9263a4e6b68c",
+  "replay_base": "2de418c",
+  "evidence": {
+    "build/cpu/redirect-loadreturn-20261020T1518075518564Z": {
+      "result_sha256": "e0845b4328238394fb40111cd403b25753d4c0e04a229d13c67515cd00007acf",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-loadreturn-20261020T1525142156887Z": {
+      "result_sha256": "42d3f771dbf5c67c2ed05c677bd0985e562da0e37f33f8175aad660fc3f81d1b",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-loadreturn-20261020T1525167241318Z": {
+      "result_sha256": "611eca7481cf2e7cb28dcea6b09f040b909225ada3e6b58f42643870e204655f",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-lsuearly-20261020T1528514946660Z": {
+      "result_sha256": "3fa390e05dd872ebd7d22ed7c90c84fe8df623a51b42548baf2c7268978e4b1f",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-lsuearly-20261021T0145167705559Z": {
+      "result_sha256": "50f120607ed350ecb974da366fa66ce5f88f45fec10eefb0c5f4de9214ba9dc1",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-lsuearly-20261021T0145197835221Z": {
+      "result_sha256": "499665d82957ab4dd2bca8619322f089bd11be2da487366e9e5034894b6a4fea",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-loadforward-20261021T0147323344319Z": {
+      "result_sha256": "601156acbea4173c8cb7954fc3e6ce3ef5b7519b1d6ddd9a58f2eed51f814e14",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-loadforward-20261021T0152297822279Z": {
+      "result_sha256": "f34cd111df41d21a0aad4bb633879ed497fee8e19923f7ce8c3ae0548782db32",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-loadforward-20261021T0152328227133Z": {
+      "result_sha256": "e6e10902f55ac7af15d4f20430b498849850b5b21da926e9fff2838055cb9618",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-mulforward-20261021T0152354872806Z": {
+      "result_sha256": "2d9bb3c9972cf8d4afe7abb67b9be64d4fda2d8eacb6b37bd03905160a61d073",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 10
+    },
+    "build/cpu/redirect-ordered-20261021T0612008068215Z": {
+      "result_sha256": "7b9ff54746bc4cd22592d4bd21d40183a9715e07230113a234e5c06a63d4aaff",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 38
+    },
+    "build/cpu/redirect-ordered-20261021T0612116389566Z": {
+      "result_sha256": "292323b17e333a4fe955d5790465ac8c38e678f2005b01646d08557c362c28be",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 38
+    },
+    "build/cpu/redirect-ordered-20261021T0612213077633Z": {
+      "result_sha256": "3f1e77902f41891ae57b3b4b82d90807fdde721b730ab88dfed3b98464f47046",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 38
+    },
+    "build/cpu/redirect-ordered-20261021T0612306264244Z": {
+      "result_sha256": "b5202e13f8b520c62bfd5ea654346ea9d64a0daa688afb79c6e4d21f7aebba54",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 38
+    },
+    "build/soc/cpu-area-20261021T015421928153Z": {
+      "result_sha256": "08e999c5bceab0fa8de90f3c407e2f6507c10ff4aa247fa0133d3e380ef072bd",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 81
+    },
+    "build/soc/board-system-20261021T015421945645Z": {
+      "result_sha256": "e68156e66cd04e28bed721e31fb1f348e4714e04259aab4706da766a8cfc1d32",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 113
+    },
+    "build/soc/board-coremark-20261021T060956731420Z": {
+      "result_sha256": "b27f5955af87e955e8b46e4bde4a5c3249739384ae260b41f2610e7a842a3287",
+      "status": "PASS",
+      "return_code": 0,
+      "verified_outputs": 139
+    },
+    "build/soc/board-coremark-20261021T061006284909Z": {
+      "result_sha256": "c0d8e50b40af1925a1eae0eb1e79f9999ac9669b1218973ff13d8dafbe89e4b2",
+      "status": "FAIL",
+      "return_code": 1,
+      "verified_outputs": 136
+    }
+  },
+  "verified_output_count": 721,
+  "analysis_hashes": {
+    "load-use-adjacency-analysis.json": "af1166ece9c1c2d82b0d6074b02c0c44bf9fd24a50480c13ae634b8bbd853fb6",
+    "load-address-replay-analysis.json": "6e0657b15525ce8e9660aaaf8b0713aa2517df138035879ae26b452ac5c572d6",
+    "load-buffer-upper-bound.json": "ee8ed9d4b2cea984a2148b87071b0de05ba44e7b628438bf4733893eb352826f",
+    "sram-held-return-upper-bound.json": "1e19c8218548319ffabd892a6aa4bbd382f2dd6ba6720b9d4280ac5d6f71ce2d",
+    "integrate_load_buffer.py": "f0832a8a06b2c1d06a9266031ead48436c3af04184ee2924468e6bfe84afb8f4",
+    "wire_load_early_cpu.py": "c4aa4b703707416ba9d177d5ab624fe9022db291dbaed84c1a7dcc18641e1419",
+    "finish_load_buffer.py": "7074c65742868fde75785a87406ac8e15cd415b3ee74bed875753c3a369c9ee9"
+  },
+  "ordered_enabled_hits": {
+    "build/cpu/redirect-ordered-20261021T0612008068215Z": 30,
+    "build/cpu/redirect-ordered-20261021T0612116389566Z": 30,
+    "build/cpu/redirect-ordered-20261021T0612213077633Z": 30,
+    "build/cpu/redirect-ordered-20261021T0612306264244Z": 30
+  },
+  "original_files_verified": {
+    "rtl/cpu/vendor/UPSTREAM.json": 28,
+    "sw/benchmarks/coremark/UPSTREAM.json": 9
+  },
+  "trace_comparison": {
+    "coremark.wb.log": {
+      "events": 1448453,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "39182f02fb591664ac50d4da2bec70ce1b53f23f9a835cc17a8aeadf85c4fec6",
+      "candidate_sha256": "e7627b326051c2fa277fb3c621568c5f31fb18d57282cc5fa87c451e98987a6d",
+      "parent_sha256": "4e13d0e8038e8a8453c3d2a28aa825c74117703bf63b2d505ef8b102f397e70c"
+    },
+    "coremark.store.log": {
+      "events": 70840,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "6dbef4f79ebc850eebb9e49a49b6ff1f4c0fc4661caa3a0c8ec3c1a85059a853",
+      "candidate_sha256": "942be4097c8495722e6da84a394311d7d0f7206df1d7ba88dc2226cffdd628ef",
+      "parent_sha256": "f89ca421170f40665e4862bb869f78fd85ebf656b36ec36a62d8fc0adc314ee9"
+    }
+  },
+  "parent_metrics": {
+    "iterations": 5,
+    "cycles": 1646428,
+    "clock_hz": 100000000,
+    "seconds": 0.01646428,
+    "coremark": 303.68774097622247,
+    "coremark_per_mhz": 3.0368774097622246,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.05118620276019256
+  },
+  "candidate_metrics": {
+    "iterations": 5,
+    "cycles": 1621293,
+    "clock_hz": 100000000,
+    "seconds": 0.01621293,
+    "coremark": 308.3958297482318,
+    "coremark_per_mhz": 3.0839582974823183,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": false,
+    "official_submission": false,
+    "cpu_core_luts": 6178,
+    "coremark_per_lut": 0.049918392642964035
+  },
+  "parent_profile": {
+    "cycles": 1646428,
+    "issue": 1448453,
+    "frontend": 91852,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 9,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 106114,
+    "other": 0,
+    "false_dependency": 35,
+    "wb": 1448453,
+    "stores": 70840
+  },
+  "candidate_profile": {
+    "cycles": 1621293,
+    "issue": 1448453,
+    "frontend": 91852,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 9,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 80979,
+    "other": 0,
+    "false_dependency": 35,
+    "wb": 1448453,
+    "stores": 70840
+  },
+  "cycles_saved": 25135,
+  "throughput_gain_percent": 1.5503058361443722,
+  "lut_increase": 245,
+  "lut_increase_percent": 4.1294454744648545,
+  "coremark_per_lut_change_percent": -2.4768590926117717,
+  "parent_resources": {
+    "lut": 5933,
+    "ff": 3528,
+    "distributed_ram_luts_included": 688,
+    "drm": 0,
+    "apm": 4
+  },
+  "candidate_resources": {
+    "lut": 6178,
+    "ff": 3561,
+    "distributed_ram_luts_included": 708,
+    "drm": 0,
+    "apm": 4
+  },
+  "scope": "5-iteration RTL simulation and CPU-only native synthesis; not official or board score",
+  "physical_route": "NOT_RUN_RESOURCE_EFFICIENCY_GATE",
+  "candidate_100mhz": "NOT_VERIFIED",
+  "full5000_firmware_built": true,
+  "full5000_executed": false,
+  "programmed": false,
+  "limits": [
+    "No complete CPU/ISA/coherence proof",
+    "Cached-hit plus later real-load error plus younger-store cancellation not proved as an integrated scenario",
+    "WB observations are not a complete architectural instret proof"
+  ],
+  "production_restored": true,
+  "restored_parent_review_sha256": "c50e6b80e6f5fcc855eb2cd4b730dc69d2bfcbb5fbb6ad60e0e1b008a58acb7d",
+  "restoration_verification": {
+    "status": "PASS",
+    "production_equals": "dc00f80",
+    "production_paths": [
+      "rtl/cpu",
+      "rtl/soc",
+      "sw",
+      "config",
+      "fpga",
+      "tb",
+      "scripts/cpu/run_redirect.ps1",
+      "scripts/soc"
+    ],
+    "replay_reconstructed_files": 14,
+    "test_commands": [
+      {
+        "command": "python -m unittest discover -s scripts/soc -p 'test_*.py'",
+        "return_code": 0,
+        "passed": 44
+      },
+      {
+        "command": "python scripts/cpu/test_pc_carry.py",
+        "return_code": 0,
+        "passed": 4
+      }
+    ],
+    "retained_prior_diagnostics": [
+      "scripts/cpu/check_pc_carry.py",
+      "scripts/cpu/test_pc_carry.py"
+    ],
+    "verification_script_sha256": "2d06a67a6c429d03bba71f4b4df710f4527b1aa63fc265303579de64aab5d92a"
+  }
+}
