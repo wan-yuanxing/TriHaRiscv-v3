@@ -1,0 +1,133 @@
+{
+  "status": "PASS",
+  "bound_results": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143345815035Z\\result.json": "18ce7acce52b9131603ec6cc03f4b7b6bfc9463a5eb163ee948d87ffac3b24bc",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143348656530Z\\result.json": "947f594d35352934b254c5ec1e39f2fb216670483813697cef63a5a019afe159",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-router-20261021T143351632390Z\\result.json": "e152ca985e0b610e45da53976c3fec8ee67dd3efe7b0c71df2017d423c2cbdf6",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-router-20261021T143354258153Z\\result.json": "432a6b62bf18c77c825e99db63c9654b1ca80fb4ad624ba7e0146652818a2720",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-map-20261021T1434381759761Z\\result.json": "6be9a25642baa6efe076ecb2af11fab60a361c948a32a40a3e998203d9385e50",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-router-20261021T143356571824Z\\result.json": "d88617b097dd6bcd507fb3383bcb3de6e95a4dcef31eac2fa8e8269c56002190",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143358864063Z\\result.json": "b64a03619713e713b337b3418cf9f83d0e7f29bed12e3c1ea6db67483b60d41f",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143401604175Z\\result.json": "6f581ee05c38e1519f250df9eea10fec8fb7804733b49acc634d0829cba94bcb"
+  },
+  "negative_checks": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-router-20261021T143356571824Z",
+      "test": "router",
+      "fault": "data",
+      "expected_failure": "I returned instruction pair"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143358864063Z",
+      "test": "runtime",
+      "fault": "data",
+      "expected_failure": "real firmware success exit"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-soc-runtime-20261021T143401604175Z",
+      "test": "runtime",
+      "fault": "watchdog",
+      "expected_failure": "transport watchdog"
+    }
+  ],
+  "synthesis_hierarchy_resources": {
+    "total": {
+      "lut": 7180,
+      "registers": 4431,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 27.5
+    },
+    "u_core": {
+      "lut": 6434,
+      "registers": 3531,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 0.0
+    },
+    "u_cache": {
+      "lut": 519,
+      "registers": 763,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 11.0
+    },
+    "u_memory": {
+      "lut": 183,
+      "registers": 121,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 16.5
+    },
+    "router_logic": {
+      "lut": 44,
+      "registers": 16,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 0.0
+    }
+  },
+  "identical_loaded_images": true,
+  "differing_nonloaded_elf_sections": [
+    ".strtab"
+  ],
+  "cache_100mhz_verified": false,
+  "physical_ddr_validated": false,
+  "programmed": false,
+  "scope": "Local/cache routing functional and native mapping checkpoint; not deployment acceptance",
+  "reviewer_sha256": "67235ea87577b19b71d7079c911100c4761d7e3131a813ab21bf2800c2681a1c",
+  "review_json_sha256": "03c48b839a39f048d64a0655a4874f3b9ba15ab91bb63372c6795222ab7a127a",
+  "checkpoint": "2026-10-21 local cached CPU SoC functional/native mapping",
+  "base_commit": "10b1bf59af16aa408960eb6414a3dfc2bf34f2d7",
+  "backup_tag": "cpu-before-id-cache-20261021",
+  "red_runs": [
+    "build/cpu/cache-soc-router-20261021T140516604973Z",
+    "build/cpu/cache-soc-runtime-20261021T140924039546Z"
+  ],
+  "known_intermediate_failures": [
+    {
+      "directory": "build/cpu/cache-soc-router-20261021T140653519433Z",
+      "reason": "bench counted uncached instruction ID3 as a data transaction; corrected instruction counter"
+    },
+    {
+      "directory": "build/cpu/cache-soc-router-20261021T141725599059Z",
+      "reason": "frozen local configuration check needed generated SRAM linker script even for router-only test; frozen inputs repaired"
+    },
+    {
+      "directory": "build/cpu/cache-soc-router-20261021T141725661265Z",
+      "reason": "same missing linker-script snapshot in bypass harness"
+    }
+  ],
+  "python_tests": {
+    "cache_policy": 6,
+    "cached_soc_config": 6,
+    "evidence_review": 4,
+    "existing_soc": 44
+  },
+  "next_gates": [
+    "bind actual main-project DDR and HMIC native completion version",
+    "CPU100MHz / DDR125MHz AXI CDC with coordinated reset",
+    "shared-master fabric and physical write visibility",
+    "actual post-route100MHz Slow/Fast setup/hold/MPW",
+    "board admission, separately authorized deployment"
+  ],
+  "preserved_release": "build/soc/releases/cpu_coremark_6ff82025b53d",
+  "readonly_ddr_inspection": {
+    "main_commit": "8635a91626d87eb7573beba5ea805a5f6043bb8a",
+    "files": {
+      "rtl/video/video_async_fifo.sv": {
+        "main_sha256": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+        "cpu_worktree_sha256": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe"
+      },
+      "rtl/video/axi128_hmic256.sv": {
+        "main_sha256": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+        "cpu_worktree_sha256": "f898c46870e418f99d4086956d2ff1fa376d5295f075c8fed11a28a969a52408"
+      },
+      "docs/interfaces/ddr_wrapper.md": {
+        "main_sha256": "3de14158665f7f0fd1ac468ab724aaec44202983be4c8ec1918adb7b360a0706",
+        "cpu_worktree_sha256": "bd9b956c95dabd5d927c9d29d2776120fa8fefd5bac3a99d5d9a1c9286e9e2aa"
+      }
+    },
+    "scope": "inspection only; not imported or integrated; current bridge differs from CPU worktree snapshot"
+  }
+}

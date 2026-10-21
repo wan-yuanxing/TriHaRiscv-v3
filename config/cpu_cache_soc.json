@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "local_config": "config/soc_map.json",
+  "cache_config": "config/cpu_cache.json",
+  "ddr_status_offset": 12,
+  "ddr_status_ready_mask": 1,
+  "ddr_status_fault_mask": 2,
+  "clock_domain": "cpu_clk",
+  "ddr_interface_clock_domain": "cpu_clk",
+  "fault_recovery": "coordinated_cpu_cache_fabric_ddr_reset",
+  "scope": "Opt-in local-memory plus cached-DDR CPU subsystem; external CDC and DDR controller remain explicit"
+}
