@@ -578,3 +578,28 @@ cmd_data至feedback消费，素材贡献按上一份渲染commit完整身份单�
 素材load沿用cache接口，平台须先检查online/综合fault并停发新load。保留已证明
 历史事件。正式显示MMIO及video_pipeline保持RAW-only，边界见
 [实际扫描验证](../verification/video/record_scanout.md)。
+
+## F4c4e 正式显示MMIO接入
+
+`video_display_record`使用原`video_display_mmio`内唯一owner，替代独立组件外部
+owner；连接`display_record_link`、实际RAW扫描和DDR素材渲染器。运行时MODES为
+`3'b111`，asset ready/id/generation来自实际封存cache。0x20011000/4KiB子窗口、
+640B记录、事件和ACK契约不变；没有新增软件寄存器或修改C驱动。
+
+`video_display_mmio.EXTERNAL_HEALTH`默认0，旧命名端口实例保留原行为；设为1时
+`submit_enable_i`必须为1、`external_fault_i`必须为0且没有粘滞故障才可接纳SUBMIT
+或从OFFER向owner预留槽。`external_fault_i`锁存至协调reset，以既有FAULT事件、
+STATUS bit6和ERROR_CODE=0xf0报告；owner协议错误优先。`fault_o/fault_code_o`
+输出合并故障。ACK/读操作仍可处理历史事件，CHECK/OFFER租约可能保持锁定，
+不自动取消预留、不因局部故障推断全局FREE。
+
+新组合的素材load同时门控VALID与READY，online/fault不合格时不接纳新load；
+已接纳load及已公开AR保持，不能通过关闭VALID撤销已公开事务。装载仍由平台
+旁带提供，单bank缓存封存至协调reset，不支持运行中替换。
+
+新增`video_record_pipeline`复用原采集MMIO、三分支核和唯一共享DDR桥，显示端改为
+此三模式组合；原`video_pipeline`和`video_display_scanout`继续RAW-only。采集与
+显示保留独立AXI-Lite端点，PIX/EOF输入可背压，尚未接物理HDMI入口。mode_only
+只提交新显示context，不重发RAW扫描命令。实际扫描器与像素退休证明联合成立后
+才送owner退休，release ACK成功后才能结束Video引用；CPU仍负责全局帧/graph、
+NPU引用、跨master可见性及最终FREE。[验证与综合边界](../verification/video/record_mmio.md)。

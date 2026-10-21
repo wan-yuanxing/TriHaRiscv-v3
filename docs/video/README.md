@@ -539,3 +539,27 @@ commit与两项退休证明，再交Video owner；release ACK前不可复用槽�
 - 回归和 PDS 使用独立时间戳目录；时间戳目录用 UTC，报告日期按北京时间记录。
 
 当前入口可生成彩条、RX 诊断和独立 DDR 自检镜像；扫描脚本仅检查连接。`program_board.py` 在同一会话核对 FPGA ID 后执行易失配置与 Verify；本批无 Flash 固化流程。外部 AC 参数、实际画面、RX 模式和 DDR 校准/自检分别验收，当前状态见 STATUS。
+
+## F4c4e 正式MMIO与三模式采显
+
+```powershell
+python scripts/video/run.py --suite record_mmio
+python scripts/video/run.py --suite record_pipeline
+python scripts/video/build_pds.py --target video_display_record --stage synth
+python scripts/video/build_pds.py --target video_record_pipeline --stage synth
+```
+
+`video_display_record`把既有正式显示MMIO接入实际RAW扫描、BOX和DDR素材AVATAR，
+运行时MODES=7；单一owner、640B记录、地址和C驱动不变。新增`video_record_pipeline`
+把它接入原ABI2三分支采集和唯一共享DDR端点，旧`video_pipeline`目标继续RAW-only。
+源仍是已同步到core且可背压的PIX/EOF。素材load是平台旁带，真实cache就绪后才
+允许AVATAR通过guard；缓存封存至协调reset。
+
+默认关闭的外部健康扩展只由新组合启用：故障停止新SUBMIT/owner预留和素材load，
+既有历史commit/release仍可读取、ACK；下游故障通过FAULT和ERROR_CODE=0xf0报告。
+已接纳事务不能凭故障自动回滚，必须排空或协调reset。
+
+本机C驱动与实际RTL双向联测覆盖两帧800×600和同帧RAW→BOX→AVATAR→RAW，
+逐像素核对同一字节内存产生的RGB，详见[验证记录](../verification/video/record_mmio.md)。
+本机C不代表CPU执行，框/点为固定夹具，不代表NPU执行。两目标已综合，core8ns
+setup估计分别−2.090/−3.337ns，尚未闭合125MHz；没有新布线、物理HDMI或板测。

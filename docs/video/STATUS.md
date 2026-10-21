@@ -276,6 +276,25 @@ RGB两级对齐。新帧同时等scanner/输出commit，旧槽同时等RAW/像�
 正式MMIO和video_pipeline继续RAW-only；下一步接正式控制/采显链并收敛实际内部
 互连时序。本批Windows原生、本地提交，不操作COM/JTAG/Flash；保留其他路线改动。
 
+## F4c4e 正式MMIO与三模式采显
+
+新增video_display_record：原正式MMIO内唯一owner连接实际扫描与DDR素材三模式，
+MODES=7、地址/640B记录/事件/ACK/C驱动保持。默认关闭的健康扩展仅由新组合启用，
+当拍offline/fault阻止新SUBMIT、owner预留和素材load；历史事件仍可ACK，F0下游
+fault粘滞，owner协议错误优先，未完成事务不自动回滚。新增video_record_pipeline
+复用原采集MMIO、三分支核与唯一shared_ddr，旧video_pipeline目标继续RAW-only。
+
+直接MMIO六个健康及三个实际像素场景通过；完整采显原生C/实际RTL双向回归
+完成两帧800×600、三次同帧MODE、五次显示commit、一次联合退休，逐像素核对
+2880000个有效输出，欠载0；坏EOF/损坏场景不发布。父4项/审查3项变异均检出，
+旧MMIO10/显示扫描17/RAW采显3场景及Python109通过/1权限跳过。独立审查无未关闭
+发现；[验证记录](../verification/video/record_mmio.md)及机器证据绑定最终来源/产物。
+两目标综合26254/34480LUT、35278/42299FF、68/69.5DRM、10/12APM，0锁存器；
+core8ns setup估计−2.090/−3.337ns，pixel25ns +11.549/+11.128ns，hold最差−2.470ns。
+125MHz尚未闭合，没有新布线、板测、CPU/NPU执行或物理可见性证明。素材仍为
+平台旁带、封存至协调reset，源仍为core域可背压PIX/EOF。下一步推进正式内部
+互连/板级wrapper和时序收敛，CPU仍负责全局帧/graph所有权。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

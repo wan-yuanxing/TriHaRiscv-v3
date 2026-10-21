@@ -25,7 +25,7 @@ module tb_video_display_mmio;
     reg [31:0] rd;integer checks=0,test_case=0,j,k,n;
     string trace_path;integer trace_file,trace_status;reg [31:0] trace_off,trace_value;
     reg held=0;reg [5284:0] held_cmd;
-    video_display_mmio dut(.*);
+    video_display_mmio dut(.submit_enable_i(1'b1),.external_fault_i(1'b0),.fault_o(),.fault_code_o(),.*);
     task automatic check(input bit ok,input string msg);
         begin checks++;if(ok!==1'b1)$fatal(1,"DISPLAY_MMIO case%0d: %s",test_case,msg);end
     endtask

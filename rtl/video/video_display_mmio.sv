@@ -3,7 +3,7 @@
 `include "video_display.vh"
 // Same-core display endpoint. Shadow record lease -> validation -> slot owner.
 // Actual commit and full retirement are supplied by external consumers.
-module video_display_mmio(
+module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
     input wire clk_i,rst_ni,
     input wire [31:0] s_axi_awaddr_i,input wire [2:0] s_axi_awprot_i,
     input wire s_axi_awvalid_i,output wire s_axi_awready_o,
@@ -22,7 +22,9 @@ module video_display_mmio(
     input wire feedback_valid_i,output wire feedback_ready_o,input wire [1:0] feedback_slot_i,feedback_mode_i,
     input wire [31:0] feedback_frame_i,feedback_generation_i,feedback_seq_i,
     input wire retire_valid_i,output wire retire_ready_o,input wire [1:0] retire_slot_i,
-    input wire [31:0] retire_frame_i,retire_generation_i,output wire irq_o
+    input wire [31:0] retire_frame_i,retire_generation_i,output wire irq_o,
+    // Opt-in consumer health. Legacy instances preserve the original behavior.
+    input wire submit_enable_i,external_fault_i,output wire fault_o,output wire [7:0] fault_code_o
 );
 
     localparam [1:0] IDLE=0,CHECK=1,OFFER=2;
@@ -36,8 +38,14 @@ module video_display_mmio(
     reg guard_start,reject_pending;reg [7:0] reject_code;
     reg [31:0] reject_seq,guard_rejected;
     wire guard_ready,guard_valid;wire [7:0] guard_code;
-    wire owner_ready,owner_reject_valid,commit_valid,release_valid,active_valid,protocol_error;
-    wire [7:0] owner_reject_code,error_code;
+    wire owner_ready,owner_reject_valid,commit_valid,release_valid,active_valid,protocol_error,owner_protocol_error;
+    wire [7:0] owner_reject_code,error_code,owner_error_code;
+    reg external_error;
+    wire consumer_healthy=EXTERNAL_HEALTH==0||
+        (submit_enable_i===1'b1&&external_fault_i===1'b0&&!external_error);
+    assign protocol_error=owner_protocol_error||external_error;
+    assign error_code=owner_protocol_error?owner_error_code:external_error?8'hf0:8'd0;
+    assign fault_o=protocol_error;assign fault_code_o=error_code;
     wire [31:0] owner_reject_seq,owner_rejected,submits,commits,releases;
     wire [2:0] slot_free;
     wire commit_mode_only;
@@ -49,7 +57,7 @@ module video_display_mmio(
     assign irq_o=|(events&irq_mask);
     wire locked=phase!=IDLE;
     wire [31:0] status_word={24'd0,active_valid,protocol_error,reject_pending,release_valid,
-        commit_valid,!owner_ready,phase==OFFER,phase==CHECK};
+        commit_valid,(!owner_ready||!consumer_healthy),phase==OFFER,phase==CHECK};
     reg aw_full,w_full;reg [31:0] awaddr,wdata;reg [3:0] wstrb;
     assign s_axi_awready_o=rst_ni&&!aw_full&&!s_axi_bvalid_o;
     assign s_axi_wready_o=rst_ni&&!w_full&&!s_axi_bvalid_o;
@@ -90,7 +98,7 @@ module video_display_mmio(
                 if(merged[31:4]!=0)write_response=2;else do_mask=1;
             end
             `VDISP_REG_SUBMIT:if(wstrb!=0)begin
-                if(wstrb!=15||(wdata!=1&&wdata!=3)||locked||!owner_ready||reject_pending||owner_reject_valid||!guard_ready)
+                if(wstrb!=15||(wdata!=1&&wdata!=3)||locked||!owner_ready||!consumer_healthy||reject_pending||owner_reject_valid||!guard_ready)
                     write_response=2;
                 else do_submit=1;
             end
@@ -109,7 +117,7 @@ module video_display_mmio(
         .asset_id_i(asset_id_i),.asset_generation_i(asset_generation_i),.result_valid_o(guard_valid),
         .result_ready_i(phase==CHECK&&!reject_pending),.result_code_o(guard_code));
     display_slot_owner #(.CONTEXT_WIDTH(5120)) u_owner(
-        .clk_i(clk_i),.rst_ni(rst_ni),.submit_valid_i(phase==OFFER),.submit_ready_o(owner_ready),
+        .clk_i(clk_i),.rst_ni(rst_ni),.submit_valid_i(phase==OFFER&&consumer_healthy),.submit_ready_o(owner_ready),
         .submit_mode_only_i(mode_only),.submit_slot_i(shadow[`VDISP_FIELD_SLOT][1:0]),
         .submit_mode_i(request_mode[1:0]),.submit_frame_i(shadow[`VDISP_FIELD_FRAME]),
         .submit_generation_i(shadow[`VDISP_FIELD_GENERATION]),.submit_base_i(shadow[`VDISP_FIELD_RAW_BASE]),
@@ -126,7 +134,7 @@ module video_display_mmio(
         .release_valid_o(release_valid),.release_ready_i(ack_fire&&ack[1]),.release_slot_o(release_slot),.release_frame_o(release_frame),.release_generation_o(release_generation),
         .active_valid_o(active_valid),.active_slot_o(active_slot),.active_mode_o(active_mode),.active_frame_o(active_frame),
         .active_generation_o(active_generation),.active_base_o(active_base),.active_stride_o(active_stride),.active_seq_o(active_seq),.active_data_o(active_data),
-        .slot_free_o(slot_free),.protocol_error_o(protocol_error),.error_code_o(error_code),
+        .slot_free_o(slot_free),.protocol_error_o(owner_protocol_error),.error_code_o(owner_error_code),
         .submits_o(submits),.commits_o(commits),.releases_o(releases),.rejected_o(owner_rejected));
     always @* begin
         read_data=0;read_response=0;
@@ -175,9 +183,10 @@ module video_display_mmio(
             aw_full<=0;w_full<=0;awaddr<=0;wdata<=0;wstrb<=0;
             s_axi_bvalid_o<=0;s_axi_bresp_o<=0;s_axi_rvalid_o<=0;s_axi_rresp_o<=0;s_axi_rdata_o<=0;
             request_mode<=0;request_seq<=0;mode_only<=0;phase<=IDLE;guard_start<=0;
-            irq_mask<=0;reject_pending<=0;reject_code<=0;reject_seq<=0;guard_rejected<=0;
+            irq_mask<=0;reject_pending<=0;reject_code<=0;reject_seq<=0;guard_rejected<=0;external_error<=0;
             for(k=0;k<160;k=k+1)shadow[k]<=0;
         end else begin
+            if(EXTERNAL_HEALTH!=0&&external_fault_i!==1'b0)external_error<=1;
             guard_start<=0;
             if(s_axi_awvalid_i&&s_axi_awready_o)begin aw_full<=1;awaddr<=s_axi_awaddr_i;end
             if(s_axi_wvalid_i&&s_axi_wready_o)begin w_full<=1;wdata<=s_axi_wdata_i;wstrb<=s_axi_wstrb_i;end
@@ -200,7 +209,7 @@ module video_display_mmio(
                     phase<=IDLE;reject_pending<=1;reject_seq<=request_seq;reject_code<=guard_code;guard_rejected<=guard_rejected+1'b1;
                 end else phase<=OFFER;
             end
-            if(phase==OFFER&&owner_ready)phase<=IDLE;
+            if(phase==OFFER&&owner_ready&&consumer_healthy)phase<=IDLE;
             if(owner_reject_valid&&!reject_pending)begin
                 reject_pending<=1;reject_seq<=owner_reject_seq;reject_code<=owner_reject_code;
             end

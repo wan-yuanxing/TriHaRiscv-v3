@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "status": "formal_display_MMIO_and_captured_three_mode_pipeline_verified",
+  "base_head": "28f7ec92cc692d2d275484cb677aea90065fcd45",
+  "owned": [
+    "rtl/video/video_display_mmio.sv",
+    "rtl/video/video_display_record.sv",
+    "rtl/video/video_record_pipeline.sv",
+    "tb/video/tb_video_display_mmio.sv",
+    "tb/video/tb_video_display_health.sv",
+    "tb/video/tb_video_display_record.sv",
+    "tb/video/tb_video_record_pipeline.sv",
+    "tb/video/test_video_record_pipeline.c",
+    "tb/video/models/video_record_pipeline_memory.sv",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "scripts/video/test_record_mmio.py",
+    "scripts/video/test_record_pipeline.py",
+    "scripts/video/record_pipeline_reference.py",
+    "fpga/pg2l100h/project/video_display_record.json",
+    "fpga/pg2l100h/project/video_record_pipeline.json",
+    "fpga/pg2l100h/constraints/video_display_record.fdc",
+    "fpga/pg2l100h/constraints/video_record_pipeline.fdc",
+    "docs/superpowers/specs/2026-10-21-record-mmio-design.md",
+    "docs/superpowers/plans/2026-10-21-record-mmio.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/video/STATUS.md",
+    "docs/verification/video/record_mmio.md",
+    "docs/verification/video/evidence/record_mmio.json"
+  ],
+  "source_hashes": {
+    "rtl/video/video_display_mmio.sv": "dd893486d40557ca71b48de1aff852cb274ecb92ef25821aa753104dd59bf853",
+    "rtl/video/video_display_record.sv": "a15d3acb549db9648fd8bd3c66aa6e36ebb80822cc1618854850fba42ea75a00",
+    "rtl/video/video_record_pipeline.sv": "30f0730e1bfc15dda4a67d6e1777f5e55bccf27623a32512c22b68e4822464db",
+    "tb/video/tb_video_display_mmio.sv": "07ac942c6a22ecebf99c1242dd32e2d7e4fa50a52020e006f4a7564cce9b9004",
+    "tb/video/tb_video_display_health.sv": "3783fab3ff5bdc6820398547b332c2ab20e09890aa898069559f7ce558863e56",
+    "tb/video/tb_video_display_record.sv": "cb1417eb45f062754472e85696119e5461d5415fb94a8c87fdbb0606316fae0d",
+    "tb/video/tb_video_record_pipeline.sv": "911f9514dea6a344eb098cfa31392391761b9ef85e1617a704652e0c14a02e98",
+    "tb/video/test_video_record_pipeline.c": "adc441bb6b81e949819f7adb47d89677e6da62395c53ef31a4b253dab717b918",
+    "tb/video/models/video_record_pipeline_memory.sv": "c531092e22fc2fb2174117ced319da79b7c7f7c011d771e1cba374fd09144b6d",
+    "scripts/video/run.py": "a7d78f7bbf48220529e6118b624e0149e2884cf74547286c0748c33135b46781",
+    "scripts/video/build_pds.py": "9a9a0994f4af6ee5386db4d7863a50cab4effac54f11dd901e263fedf6d4ca3c",
+    "scripts/video/test_record_mmio.py": "acd59a9b78bc13c79086acfe89e61a1347935216b5637b374eed6588a812309e",
+    "scripts/video/test_record_pipeline.py": "903c654f83ef2f8b5a52cad150ae55b27be719148a06c27419a8f6d3b23e9de4",
+    "scripts/video/record_pipeline_reference.py": "3036bf355564e875fa9c6f1b8dae8c0764159d811fcb96580dfe9b3c5960787b",
+    "fpga/pg2l100h/project/video_display_record.json": "a0aa82650f580508414d9c868a79eac4ad07fc282f23e9e12910ce21b27a4525",
+    "fpga/pg2l100h/project/video_record_pipeline.json": "9a46e32a401a5e3ca8e0bafe13bd5aa0c26d949a4dcce534feea825791bd3f90",
+    "fpga/pg2l100h/constraints/video_display_record.fdc": "87b8d27408512723e34269aecb7e58bba3847d9404edb71fa6986849c18ecb00",
+    "fpga/pg2l100h/constraints/video_record_pipeline.fdc": "b8298acfcc7e993b7921289427577524001023233a30074272c90833d22cbf32",
+    "docs/superpowers/specs/2026-10-21-record-mmio-design.md": "b105c60246c79e685e66dcc66690aa8fe48a7b8cc1c7516fa90d73847711cdae",
+    "docs/superpowers/plans/2026-10-21-record-mmio.md": "7d3cd9afb55efb8d7e7a20cff98141cbcbdbe7a134b8a8b353c5b462b784bfc1",
+    "docs/video/README.md": "8703f5300dd1f158e667ae8d98e90d03d61111934a658c04b79240be079502a6",
+    "docs/interfaces/video.md": "51a76484fc352289839c05b59d9f95d94fd4a342776507f489aac022a2339756",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "8f6f3c98c0c57353ab18171b74ebd1aaf45ae5f08ac17c815ab94d53d91ee110",
+    "docs/video/STATUS.md": "cc08b273c6182600e876595f4e9e89dce062c9489074a5109b7c4a79971f2828",
+    "docs/verification/video/record_mmio.md": "40e4569a8b890f3c9a8a7c48dfee4f28d589b82e4987046f6283f9ed13bf236b"
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/record_mmio_baseline/result.json",
+      "sha256": "30276f9b7850d469b3534ddcd8a2041f265851b0176cdec7ba750b39b7527ee9"
+    },
+    "audit": {
+      "path": "build/video/audit_record_mmio.py",
+      "sha256": "ab5f3c26add02b5532a7dfaaf39cb9fb45e790a2e3508e86c630f4df967216f7"
+    },
+    "review": {
+      "path": "build/video/record_mmio_review/20261021T153615_688419Z/final_review.json",
+      "sha256": "de10350869ecbffc21d05513d25c0d2fcd2d687451ebe1cff53037177f8c704e"
+    },
+    "absence_RED": {
+      "path": "build/video/record_mmio_red/result.json",
+      "sha256": "5d6cf2464e8a4d712e7c53b61ba7416e8d52c8a18de0bd612f0f77d4b9e0e2cb"
+    },
+    "mutations": {
+      "path": "build/video/record_mmio_mutations/20261021T155524_182335Z/result.json",
+      "sha256": "8a326e5eee3e9dcc72aec3fa115004864ef40614581eb2b04e8a5ab0fb7d4528"
+    },
+    "retirement_mutation": {
+      "path": "build/video/record_mmio_retirement_mutation/20261021T160810_310369Z/result.json",
+      "sha256": "9996319219f85656eebb84068df5391ba9338977e8f1b80eb46f5d22ce9ddf56"
+    },
+    "affected": {
+      "path": "build/video/record_mmio_affected/20261021T154917_876801Z/result.json",
+      "sha256": "d49d63bee2ee8e5ed6e06143409e317b14870e70e6be2f14557fdb4532fb94a8"
+    },
+    "STATUS_projection": {
+      "path": "build/video/record_mmio_delivery/status_partial.json",
+      "sha256": "e2a2e2bf08dbd37bee887561fee520f50505729d847de330a551d8b7eca3f93a"
+    },
+    "configuration_checks": {
+      "path": "build/video/record_mmio_delivery/configuration_checks.json",
+      "sha256": "6844356e1c6e50f1b3211046e867074d26224aa1e10db5ce825c84ab7dd6286c"
+    },
+    "record_mmio": {
+      "path": "build/video/regression/20261021T154907_718280Z/result.json",
+      "sha256": "2216eb49c1f83662858164ad0d8699d7d033892c9a23ee5742e2517e31c54970"
+    },
+    "record_mmio_component": {
+      "path": "build/video/record_mmio/20261021T154907_828488Z/result.json",
+      "sha256": "bec190f6f42d1fa56ef91ab275e57fd1381dbeda7d4eec8c688adc9ea704d3b3"
+    },
+    "record_pipeline": {
+      "path": "build/video/regression/20261021T154114_969634Z/result.json",
+      "sha256": "ebc3581062aa2a17f2c09a026647a4a26d735cc9990784477111571f8eb866e4"
+    },
+    "record_pipeline_component": {
+      "path": "build/video/record_pipeline/20261021T154115_085921Z/result.json",
+      "sha256": "6de0fbc14e5b0a6ec7693a88ec0d7902435726c5358ee423008fea7d39d35885"
+    },
+    "video_display_record_synthesis": {
+      "path": "build/video/pds/20261021T154124_976176Z/result.json",
+      "sha256": "59680439aed81135f8e24af4bfa7c862f95ab873ba5fa33ce1bbd2ef00fc214b"
+    },
+    "video_display_record_constraints": {
+      "path": "build/video/pds/20261021T154124_976176Z/constraint_check/constraint_check.ccr",
+      "sha256": "e8de7b820ca2e9d9fd3c40cbdb9b3c629ff6743e0b116590a71f70a137147be2"
+    },
+    "video_record_pipeline_synthesis": {
+      "path": "build/video/pds/20261021T154423_184897Z/result.json",
+      "sha256": "a01174d711bc3d35c946c5fd5852713309dec14a53aade9c3f7db4ae25e7d9f1"
+    },
+    "video_record_pipeline_constraints": {
+      "path": "build/video/pds/20261021T154423_184897Z/constraint_check/constraint_check.ccr",
+      "sha256": "917c6924c4e49780e02bb02468342d1a590d670f641dfeac8ad3ce0bc7c95706"
+    }
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "worktree_sha256": "87b490211c44b63cd3c1ee537f661123dcca50e2359cf35f05eb1ef6b19af805",
+    "committed_content_sha256": "cc08b273c6182600e876595f4e9e89dce062c9489074a5109b7c4a79971f2828",
+    "retained_delta_sha256": "308ae079070835170f8b6305b7fddc255789acd6fb1668dfd6692f8f207f5401",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "health_cases": {
+    "0": {
+      "case": 0,
+      "checks": 167
+    },
+    "1": {
+      "case": 1,
+      "checks": 166
+    },
+    "2": {
+      "case": 2,
+      "checks": 168
+    },
+    "3": {
+      "case": 3,
+      "checks": 168
+    },
+    "4": {
+      "case": 4,
+      "checks": 172
+    },
+    "5": {
+      "case": 5,
+      "checks": 167
+    }
+  },
+  "direct_display_cases": {
+    "normal": {
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 20480,
+      "box_pixels": 10240,
+      "avatar_pixels": 10240,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 40960,
+      "raw_commits": 3,
+      "overlap": 360460,
+      "raw_reads": 546,
+      "asset_reads": 1025,
+      "native": 1571
+    },
+    "ratio": {
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 20480,
+      "box_pixels": 5120,
+      "avatar_pixels": 10240,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 35840,
+      "raw_commits": 3,
+      "overlap": 360304,
+      "raw_reads": 478,
+      "asset_reads": 1025,
+      "native": 1503
+    },
+    "asset_wait": {
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 30720,
+      "box_pixels": 10240,
+      "avatar_pixels": 5120,
+      "commits": 5,
+      "releases": 2,
+      "scanner_pixels": 46080,
+      "raw_commits": 3,
+      "overlap": 360460,
+      "raw_reads": 614,
+      "asset_reads": 1025,
+      "native": 1639
+    }
+  },
+  "live_pipeline_cases": {
+    "bad_eof": {
+      "rtl": {
+        "case": 1,
+        "requests": 1,
+        "captures": 0,
+        "records": 0,
+        "feedbacks": 0,
+        "retires": 0,
+        "bytes": 71104,
+        "pixels": 0,
+        "overlap": 0,
+        "held": 0,
+        "contested": 0,
+        "Rgrants": 385,
+        "Wgrants": 383,
+        "underflows": 0,
+        "commands": 48
+      },
+      "host": {
+        "failure": 1,
+        "frames": 0,
+        "modes": 0,
+        "releases": 0,
+        "checks": 75,
+        "R": 37,
+        "W": 7,
+        "F": 2,
+        "A": 1
+      },
+      "mode_pixels": {
+        "raw": 0,
+        "box": 0,
+        "avatar": 0,
+        "assets": 0
+      },
+      "rpc_counts": {
+        "R": 37,
+        "W": 7,
+        "F": 2,
+        "A": 1,
+        "E": 1
+      }
+    },
+    "corrupt": {
+      "rtl": {
+        "case": 2,
+        "requests": 1,
+        "captures": 0,
+        "records": 0,
+        "feedbacks": 0,
+        "retires": 0,
+        "bytes": 256,
+        "pixels": 0,
+        "overlap": 0,
+        "held": 0,
+        "contested": 0,
+        "Rgrants": 2,
+        "Wgrants": 1,
+        "underflows": 0,
+        "commands": 41
+      },
+      "host": {
+        "failure": 1,
+        "frames": 0,
+        "modes": 0,
+        "releases": 0,
+        "checks": 68,
+        "R": 30,
+        "W": 7,
+        "F": 2,
+        "A": 1
+      },
+      "mode_pixels": {
+        "raw": 0,
+        "box": 0,
+        "avatar": 0,
+        "assets": 0
+      },
+      "rpc_counts": {
+        "R": 30,
+        "W": 7,
+        "F": 2,
+        "A": 1,
+        "E": 1
+      }
+    },
+    "normal": {
+      "rtl": {
+        "case": 0,
+        "requests": 2,
+        "captures": 2,
+        "records": 2,
+        "feedbacks": 5,
+        "retires": 1,
+        "bytes": 4214400,
+        "pixels": 2880000,
+        "overlap": 1191697,
+        "held": 0,
+        "contested": 8,
+        "Rgrants": 37584,
+        "Wgrants": 19146,
+        "underflows": 0,
+        "commands": 999
+      },
+      "host": {
+        "failure": 0,
+        "frames": 2,
+        "modes": 3,
+        "releases": 1,
+        "checks": 1928,
+        "R": 129,
+        "W": 836,
+        "F": 17,
+        "A": 7
+      },
+      "mode_pixels": {
+        "raw": 1920000,
+        "box": 480000,
+        "avatar": 480000,
+        "assets": 1
+      },
+      "rpc_counts": {
+        "R": 129,
+        "W": 836,
+        "F": 17,
+        "A": 7,
+        "V": 7,
+        "S": 2,
+        "E": 1
+      }
+    }
+  },
+  "affected_cases": {
+    "display_mmio": 10,
+    "display_scanout": 17,
+    "video_pipeline": 3
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "parent_mutations": 4,
+  "review_ingress_mutations": 3,
+  "review_open_findings": [],
+  "protected_paths_unchanged": 519,
+  "other_route_paths_unchanged": 73,
+  "old_entrypoint_bytes_exact_outside_hooks": true,
+  "old_MMIO_TB_only_optional_port_hookup": true,
+  "existing_C_drivers_unchanged": true,
+  "ABI_configuration_unchanged": true,
+  "one_display_owner": true,
+  "one_shared_DDR_endpoint": true,
+  "formal_MMIO_three_modes": true,
+  "new_video_record_pipeline_three_modes": true,
+  "existing_video_pipeline_RAW_only": true,
+  "material_load_platform_sideband": true,
+  "material_immutable_until_coordinated_reset": true,
+  "health_stops_current_SUBMIT_and_owner_reservation": true,
+  "material_VALID_and_READY_health_gated": true,
+  "historical_ACK_after_fault": true,
+  "automatic_fault_rollback": false,
+  "CPU_global_owner": true,
+  "native_C_executed": true,
+  "live_RTL_MMIO": true,
+  "CPU_NPU_executed": false,
+  "global_FREE_verified": false,
+  "physical_visibility_verified": false,
+  "continuous_HDMI_verified": false,
+  "physical_board": false,
+  "routed": false,
+  "flash_written": false,
+  "synthesis": {
+    "video_display_record": {
+      "lut": 26254.0,
+      "registers": 35278.0,
+      "drm": 68.0,
+      "apm": 10,
+      "latches": 0,
+      "interface_bits": 1519,
+      "constraints": 26,
+      "constraint_warnings": 124,
+      "core_setup_estimate_ns": -2.09,
+      "pixel_setup_estimate_ns": 11.549,
+      "pixel_to_core_bundle_ns": 4.934,
+      "core_to_pixel_bundle_ns": 5.047,
+      "min_hold_estimate_ns": -2.47,
+      "timing_closed": false,
+      "routed": false
+    },
+    "video_record_pipeline": {
+      "lut": 34480.0,
+      "registers": 42299.0,
+      "drm": 69.5,
+      "apm": 12,
+      "latches": 0,
+      "interface_bits": 2215,
+      "constraints": 26,
+      "constraint_warnings": 161,
+      "core_setup_estimate_ns": -3.337,
+      "pixel_setup_estimate_ns": 11.128,
+      "pixel_to_core_bundle_ns": 4.934,
+      "core_to_pixel_bundle_ns": 5.047,
+      "min_hold_estimate_ns": -2.47,
+      "timing_closed": false,
+      "routed": false
+    }
+  }
+}

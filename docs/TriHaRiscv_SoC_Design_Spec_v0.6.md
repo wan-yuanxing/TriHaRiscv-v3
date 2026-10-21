@@ -1220,3 +1220,22 @@ retire_raw齐备且替换反馈消费后才退休，release ACK前禁止复用�
 ### 20.3 本版不作的结论
 
 本版没有完成指定形状 YuNet 的实际导出、INT8 精度测试或 FPGA 布局布线；没有确认 ≥24 fps、50 ms 或一帧延迟已经达到，也不保证取消 30 fps 要求就能自动达到新的优化目标；没有实现或验证表情识别。所有验收结果需以第 14、18 章规定的证据补齐。
+
+### 实施补充：F4c4e 正式MMIO与三模式采显
+
+2026-10-21新增`video_display_record`，原显示MMIO内单一owner直接驱动完整记录
+联接、真实RAW扫描和DDR素材渲染，运行时MODES=7；地址、640B记录和C驱动保持。
+新增`video_record_pipeline`复用原ABI2三分支采集及唯一共享DDR端点，将实际采集
+结果送RAW/BOX/AVATAR显示。旧`video_pipeline`目标继续RAW-only，早期批次关于
+正式三模式尚未接入的描述保留为历史状态。
+
+新组合启用默认关闭的外部健康检查，同拍故障阻止新SUBMIT和owner预留，素材
+load的VALID/READY同样门控；FAULT/STATUS bit6和ERROR_CODE=0xf0报告下游故障，
+owner协议错误优先。历史事件仍可ACK；已接纳事务不自动撤销，可能需协调reset。
+素材装载仍为平台旁带，cache就绪/key实际匹配后才能发布AVATAR，封存至协调reset。
+
+本机既有C驱动与真实RTL双向联测，两帧800×600经过三分支捕获、共享DDR及三模式
+逐像素核验；固定框/点夹具不代表NPU执行。本批未执行CPU，源是可背压core域
+PIX/EOF，没有新增物理HDMI、布局布线或板测。core8ns综合setup估计显示组合
+−2.090ns、采显组合−3.337ns，125MHz尚未闭合。CPU仍持有全局帧/graph所有权，
+物理可见性、连续采集及真实模型输出各自验收。见[验证记录](verification/video/record_mmio.md)。

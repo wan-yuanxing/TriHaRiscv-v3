@@ -72,7 +72,7 @@ def verify_build_inputs(work, result):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "video_shared_ddr", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio", "video_display_scanout", "video_pipeline", "video_record_pixels", "video_avatar_ddr", "video_record_renderer", "video_record_scanout"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "video_shared_ddr", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio", "video_display_scanout", "video_pipeline", "video_record_pixels", "video_avatar_ddr", "video_record_renderer", "video_record_scanout", "video_display_record", "video_record_pipeline"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     parser.add_argument('--seed-start', type=int, default=4)
     parser.add_argument('--seed-count', type=int, default=6)
@@ -114,11 +114,11 @@ def main():
             run_logged([sys.executable,ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
             names += ['config/video_regs.json','rtl/video/include/video_regs.vh',
                       'sw/include/video_regs.h','scripts/video/gen_regs.py']
-        if args.target in ('video_capture_v2','video_pipeline'):
+        if args.target in ('video_capture_v2','video_pipeline','video_record_pipeline'):
             run_logged([sys.executable,ROOT/'scripts/video/gen_capture_v2.py','--check'],work/'capture_v2_abi_check.log')
             names += ['config/video_capture_v2.json','rtl/video/include/video_capture_v2.vh',
                       'sw/include/video_capture_v2.h','scripts/video/gen_capture_v2.py']
-        if args.target in ('video_display_scanout','video_pipeline','video_record_pixels','video_record_renderer','video_record_scanout'):
+        if args.target in ('video_display_scanout','video_pipeline','video_record_pixels','video_record_renderer','video_record_scanout','video_display_record','video_record_pipeline'):
             run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'scanout_abi_check.log')
             names += ['config/video_display.json','rtl/video/include/video_display.vh',
                       'sw/include/video_display_abi.h','scripts/video/gen_display_abi.py']
@@ -197,7 +197,7 @@ def main():
         script.write_text("\n".join(lines) + "\n", encoding="utf-8")
         verify_build_inputs(work, result)
         executable = tool("pds_shell")
-        if args.target in ('cpu_native_axil', 'video_raw_display', 'video_display_scanout', 'video_pipeline', 'video_record_pixels', 'video_avatar_ddr', 'video_record_renderer', 'video_record_scanout'):
+        if args.target in ('cpu_native_axil', 'video_raw_display', 'video_display_scanout', 'video_pipeline', 'video_record_pixels', 'video_avatar_ddr', 'video_record_renderer', 'video_record_scanout', 'video_display_record', 'video_record_pipeline'):
             result['pds_executable'] = str(executable)
             result['pds_executable_sha256'] = sha256(executable)
         result["pds_version"] = run_logged(
