@@ -1,0 +1,2 @@
+# Paired-cache component synthesis goal; no physical or board timing acceptance.
+create_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]

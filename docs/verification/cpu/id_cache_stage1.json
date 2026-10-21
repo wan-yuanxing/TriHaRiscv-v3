@@ -1,0 +1,240 @@
+{
+  "status": "IN_PROGRESS_FUNCTIONAL_AND_MAPPING_CHECKPOINT",
+  "backup": "cpu-before-id-cache-20261021",
+  "baseline_commit": "e4eae68",
+  "deployed_release_unchanged": "build/soc/releases/cpu_coremark_6ff82025b53d",
+  "scope": "Paired I/D Cache, transport and real CPU RTL; same-model performance and native area; not SoC/board/timing admission",
+  "evidence": {
+    "build/cpu/cache-components-20261021T090412892239Z": {
+      "status": "PASS",
+      "result_sha256": "fd4244de08b1787601f19276bd81b31493e419f06341f4e6d917cfe03dbde914",
+      "return_code": 0
+    },
+    "build/cpu/cache-components-20261021T085908056422Z": {
+      "status": "FAIL",
+      "result_sha256": "b719a76cd601c6a3f4235349d54f29c088110eb5fd8d811e84f40fc98835494f",
+      "return_code": 1
+    },
+    "build/cpu/cache-transport-20261021T085905589305Z": {
+      "status": "PASS",
+      "result_sha256": "975d40c6abb144711e5f3da551d0e7279db52a2bea071fb809fdc3c603e0751a",
+      "return_code": 0
+    },
+    "build/cpu/cache-transport-20261021T085908003334Z": {
+      "status": "FAIL",
+      "result_sha256": "a5b14aabf3d23c0ba83c63c35fd17bc6dd74a8b29715791157c233c4aba6777d",
+      "return_code": 1
+    },
+    "build/cpu/cache-joint-20261021T085905599050Z": {
+      "status": "PASS",
+      "result_sha256": "7a8a6bb56b63255f3c4a1556caa022550ee5e475b28be4221e87cd45101b4057",
+      "return_code": 0
+    },
+    "build/cpu/cache-joint-20261021T085908056117Z": {
+      "status": "FAIL",
+      "result_sha256": "3172d536e39e5fa76dc69a574b470add3276d954adc3b074e52c2adf425af6c5",
+      "return_code": 1
+    },
+    "build/cpu/cache-cpu-20261021T090412892384Z": {
+      "status": "PASS",
+      "result_sha256": "7a217074f8c6bc9c8bdc643402e88d463016800e680ee180b97e1a6b3a5c1f3d",
+      "return_code": 0
+    },
+    "build/cpu/cache-cpu-20261021T090415414579Z": {
+      "status": "PASS",
+      "result_sha256": "d173d5608ef2846407eb0a1bac5338098fa79b65c68154c2ece815bdaa310717",
+      "return_code": 0
+    },
+    "build/cpu/cache-cpu-20261021T085320314587Z": {
+      "status": "FAIL",
+      "result_sha256": "f7367f91b5357e128659f5514f91de72bdbe88e549e0d0993e73eee5f576205a",
+      "return_code": 1
+    },
+    "build/cpu/cache-coremark-20261021T083910890762Z": {
+      "status": "PASS",
+      "result_sha256": "d400a6429a869e105c7647dd7eeb7d15a90c298733eccbdc5313135846df1d84",
+      "return_code": 0
+    },
+    "build/cpu/cache-coremark-20261021T083910909264Z": {
+      "status": "PASS",
+      "result_sha256": "bc4247c1e7337009f654a2ba33d57c74687be4a52a29e402404440bcf10f82d5",
+      "return_code": 0
+    },
+    "build/cpu/cache-coremark-20261021T085320274609Z": {
+      "status": "FAIL",
+      "result_sha256": "c555cc2fc4b75a6f6d02d75c6f1abde077bb590837379ca174876948d2802b5d",
+      "return_code": 1
+    },
+    "build/cpu/cache-map-20261021T0859059025099Z": {
+      "status": "PASS",
+      "result_sha256": "3b2dd596bfbc2b10495137eef1fd8a9b8e0d8e17f0fc79b4ce77bf902d0b1b68",
+      "return_code": 0
+    },
+    "build/cpu/cache-map-20261021T0853205856232Z": {
+      "status": "PASS",
+      "result_sha256": "b65fbe40898433a997ad433c800b211dd86ba988d9eaaef1caa2ee08325e0a7b",
+      "return_code": 0
+    }
+  },
+  "verified_output_count": 1597,
+  "coremark": {
+    "status": "PASS",
+    "scope": "Same-loaded-program five-iteration RTL comparison; modeled AXI DDR, not board or official score",
+    "cached_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-coremark-20261021T083910890762Z",
+    "uncached_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-coremark-20261021T083910909264Z",
+    "cached_result_sha256": "d400a6429a869e105c7647dd7eeb7d15a90c298733eccbdc5313135846df1d84",
+    "uncached_result_sha256": "bc4247c1e7337009f654a2ba33d57c74687be4a52a29e402404440bcf10f82d5",
+    "loaded_image_sha256": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+    "elf_raw_equal": false,
+    "differing_nonloaded_sections": [
+      ".strtab"
+    ],
+    "trace_comparison": {
+      "cpu-cache.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "79ad486ba36966c360ba5bc96986916160b878ab9d1b08567a7dca753c66555f",
+        "cached_sha256": "4895f37b4faa29c7aa9ca3ee4e447fda2185bb66b415ad2980309315bd3e11c4",
+        "uncached_sha256": "02552a8e52f45d0622977d01b31284c53e02515be036f04f161a7b66792a4d2c"
+      },
+      "cpu-cache.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+        "cached_sha256": "ef7209cece7d8c1e1f233d4a1731f4810be21a305f64ef2db1d62acdfa7fb583",
+        "uncached_sha256": "f82b62ffc958ba1c31e4304a316a2000a5bb833fb0c7dedd9dcf626493cdd3ed"
+      }
+    },
+    "cached": {
+      "cycles": 4699674,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 1.063903581397348,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "uncached": {
+      "cycles": 10646732,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 0.4696276754219041,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "memory_model": {
+      "axi_bits": 128,
+      "deterministic_ready": true,
+      "model_write_wait_cycles": 30,
+      "refill_bytes": 32,
+      "physical_ddr_latency_validated": false
+    },
+    "iterations": 5,
+    "cycles_reduced_percent": 55.858060482784765,
+    "throughput_gain_percent": 126.54192609955497,
+    "actual_postroute_100mhz": false,
+    "board_score_validated": false,
+    "programmed": false,
+    "cached_area": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-map-20261021T0859059025099Z",
+      "result_sha256": "3b2dd596bfbc2b10495137eef1fd8a9b8e0d8e17f0fc79b4ce77bf902d0b1b68",
+      "resources": {
+        "lut": 6890,
+        "ff": 4326,
+        "distributed_ram_luts_included": 688,
+        "apm": 4,
+        "drm36k_equivalent": 11.0
+      },
+      "core": {
+        "lut": 6438,
+        "ff": 3563,
+        "distributed_ram_luts_included": 688,
+        "apm": 4,
+        "drm36k_equivalent": 0.0
+      },
+      "cache_and_transport": {
+        "lut": 452,
+        "ff": 763,
+        "distributed_ram_luts_included": 0,
+        "apm": 0,
+        "drm36k_equivalent": 11.0
+      },
+      "fixture_excluded": true,
+      "timing_closed": false
+    },
+    "cached_coremark_per_lut_nominal100mhz": 0.015441271137842499,
+    "uncached_area": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\cache-map-20261021T0853205856232Z",
+      "result_sha256": "b65fbe40898433a997ad433c800b211dd86ba988d9eaaef1caa2ee08325e0a7b",
+      "resources": {
+        "lut": 6632,
+        "ff": 4096,
+        "distributed_ram_luts_included": 688,
+        "apm": 4,
+        "drm36k_equivalent": 0.0
+      },
+      "core": {
+        "lut": 6395,
+        "ff": 3561,
+        "distributed_ram_luts_included": 688,
+        "apm": 4,
+        "drm36k_equivalent": 0.0
+      },
+      "cache_and_transport": {
+        "lut": 237,
+        "ff": 535,
+        "distributed_ram_luts_included": 0,
+        "apm": 0,
+        "drm36k_equivalent": 0.0
+      },
+      "fixture_excluded": true,
+      "timing_closed": false
+    },
+    "uncached_coremark_per_lut_nominal100mhz": 0.0070812375666752725,
+    "runner_return_code": 0
+  },
+  "directed_cpu_ordered": {
+    "cpu-cache.wb.log": {
+      "events": 154,
+      "identical": true,
+      "sha256": "70c936bb8125afa8d9c9d18d56595c833a0959cb6dfae2a031a6b1d1965e2ac9"
+    },
+    "cpu-cache.store.log": {
+      "events": 9,
+      "identical": true,
+      "sha256": "845a5d74a51a7b1a281db8e0bdaad2f925874225b61dff3a06c0f445db7f788b"
+    }
+  },
+  "source_adaptations_sha256": "da4b293cb95f3232736bc8c1a6610903deff3f9c1e0ed8a9d8d2f2ae03f68750",
+  "cache_upstream_sha256": "1d61783ffa147c697292032791c8b98bcd2f6fb0314b0c047feff7eedd387a57",
+  "original_file_counts": {
+    "core": 28,
+    "benchmark": 9,
+    "cache": 7
+  },
+  "preflight_tests_passed": 6,
+  "soc_script_tests_passed": 44,
+  "parent_route_review_sha256": "c50e6b80e6f5fcc855eb2cd4b730dc69d2bfcbb5fbb6ad60e0e1b008a58acb7d",
+  "actual_cache_postroute_100mhz": false,
+  "real_ddr_integration": false,
+  "board_validated": false,
+  "programmed": false,
+  "pending": [
+    "local ROM/SRAM/MMIO plus DDR system routing",
+    "original-constraint actual post-route 100MHz",
+    "real DDR/fabric/CDC version binding",
+    "physical board validation"
+  ],
+  "infrastructure_failure": {
+    "directory": "build/cpu/cache-coremark-20261021T082552788900Z",
+    "original_result_remains_running": true,
+    "actual_runner_exit_code": 1,
+    "error": "Result serialization rejected a WindowsPath in compiler flags; raw run is not acceptance evidence; fixed and rerun"
+  },
+  "limits": [
+    "WB observations are not complete architectural instret proof",
+    "DDR timing is a fixed digital model, including a 30-cycle modeled write wait",
+    "Synthesis hierarchy counts exclude serial fixtures; full fixture map counts retained separately"
+  ]
+}

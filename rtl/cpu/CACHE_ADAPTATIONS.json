@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "revision": "6af9c4be5a0807d368eaad5e49af52322e31d073",
+  "scope": "Opt-in paired-cache candidate; no production admission",
+  "files": {
+    "rtl/cpu/triha_icache.v": {
+      "base": "rtl/cpu/vendor/src/icache/icache.v",
+      "base_sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+      "derived_sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+      "changes": [
+        "TriHa name/reset adaptation",
+        "Prevent valid publication after failed refill and complete request with error",
+        "Remember maintenance during refill; full-cache I invalidation",
+        "Move declaration for native Verilog compiler"
+      ]
+    },
+    "rtl/cpu/triha_icache_tag_ram.v": {
+      "base": "rtl/cpu/vendor/src/icache/icache_tag_ram.v",
+      "base_sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389",
+      "derived_sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+      "changes": [
+        "TriHa name; explicit native block RAM inference; original synchronous read-first storage"
+      ]
+    },
+    "rtl/cpu/triha_icache_data_ram.v": {
+      "base": "rtl/cpu/vendor/src/icache/icache_data_ram.v",
+      "base_sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+      "derived_sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+      "changes": [
+        "TriHa name; explicit native block RAM inference; original synchronous read-first storage"
+      ]
+    },
+    "rtl/cpu/triha_dcache.v": {
+      "base": "rtl/cpu/vendor/src/dcache/dcache_core.v",
+      "base_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+      "derived_sha256": "3bb2bc9d2be4b7a4c7300ae80cd1628b5994c495055d3dfd108719d983f8112f",
+      "changes": [
+        "Retain two-way 256-set/32B-line synchronous tag/data organization and replacement",
+        "Specialize controller to blocking write-through/no-write-allocate; remove dirty/eviction/writeback state",
+        "Wait real lower store response before byte update; invalidate hit on error",
+        "Discard partial/failed refill; enforce CPU-private DDR cacheability; preserve response tags"
+      ]
+    },
+    "rtl/cpu/triha_dcache_tag_ram.v": {
+      "base": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
+      "base_sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+      "derived_sha256": "2a9df8c5dbeacb31414d07533b41196361d2df627894e2f16a274fe15c7b2eb8",
+      "changes": [
+        "TriHa name; remove unused dirty bit; explicit block RAM",
+        "Use synchronous read-first with controller relookup instead of write-first blocking assignment"
+      ]
+    },
+    "rtl/cpu/triha_dcache_data_ram.v": {
+      "base": "rtl/cpu/vendor/src/dcache/dcache_core_data_ram.v",
+      "base_sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+      "derived_sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+      "changes": [
+        "TriHa name; explicit block RAM inference; retain synchronous read-first byte-write port",
+        "Specialize port0 to lookup-only: original unused second writer is rejected before PDS constant propagation"
+      ]
+    }
+  },
+  "new_files": {
+    "rtl/soc/triha_cpu_cache_axi.v": "a21d7a62fc7f2bcd05d09fed96b048fcd752358592e442469a6d6b2e1face6f9",
+    "rtl/cpu/triha_cache_subsystem.v": "38e129df40a0975a552bf18251e122c0b21070de1ec365df602865bed4507953",
+    "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+    "rtl/cpu/triha_cached_core.v": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
+    "fpga/pg2l100h/rtl/triha_cache_map_top.v": "f28d739af237c4604fe50d09ee17b51b6673e3c574abd3cece636885c19eca6d"
+  }
+}

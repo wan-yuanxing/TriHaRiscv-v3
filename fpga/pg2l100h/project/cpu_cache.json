@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "target": "cpu_cache",
+  "top": "triha_cache_map_top",
+  "family": "Logos2",
+  "device": "PG2L100H",
+  "package": "FBG676",
+  "speedgrade": "-6",
+  "sources": [
+    "rtl/cpu/triha_icache_tag_ram.v",
+    "rtl/cpu/triha_icache_data_ram.v",
+    "rtl/cpu/triha_icache.v",
+    "rtl/cpu/triha_ifetch_uncached.v",
+    "rtl/cpu/triha_dcache_tag_ram.v",
+    "rtl/cpu/triha_dcache_data_ram.v",
+    "rtl/cpu/triha_dcache.v",
+    "rtl/soc/triha_cpu_cache_axi.v",
+    "rtl/cpu/triha_cache_subsystem.v",
+    "fpga/pg2l100h/rtl/triha_cache_map_top.v"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/cpu_cache.fdc"
+  ],
+  "scope": "Paired-cache u_cache hierarchy only; serial fixture excluded; no CPU, DDR PHY, routed timing or board acceptance",
+  "cache_instance": "u_cache"
+}
