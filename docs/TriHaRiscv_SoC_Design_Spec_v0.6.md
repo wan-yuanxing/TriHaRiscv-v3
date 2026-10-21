@@ -652,6 +652,20 @@ RPC模拟时间可暂停，不宣称CPU执行/延迟、真实NPU、物理DDR可�
 采显吞吐、布局布线、外部I/O时序或本批板测完成。后续依次接BOX/AVATAR整记录与
 素材退休，再联合CPU/NPU及物理ingress验收，不以诊断前提替代真实推理。
 
+2026-10-21 F4c4a实施注记：新增独立`display_record_pixels`，接收已通过guard的
+640B记录，完整CDC后在实际RAW slot/frame/generation匹配的SOF应用全部框、点及
+素材参数。每请求素材id/generation随9级地址流水传递，输入n的像素在n+13退出，
+首个实际输出像素才证明commit；core消费反馈后才产生旧像素退休贡献。相同素材
+跨新帧持续持有，同帧AVATAR转RAW只退休素材。素材未就绪可先透传匹配的新RAW，
+保持旧引用等待下一SOF；两个域与provider/上下游状态必须协调reset。
+
+该贡献不能替代扫描器DMA/缓存排空、owner release和CPU全局FREE。素材provider
+须固定拍响应并保持版本，DDR素材装载尚未接入；现有`video_pipeline`继续RAW-only。
+16场景含完整800×600像素oracle及8项变异检出；组件综合13267LUT/15475FF/
+0DRM/6APM，core8ns setup估计-1.249ns、边界hold-2.470ns，不能宣称125MHz
+闭合。无本批布线或板测，验证边界见[完整记录像素验证](verification/video/record_pixels.md)。
+后续接真实RAW身份、素材装载和联合退休，再由CPU/NPU/fabric及物理实现独立验收。
+
 ### 10.1 总线约定
 
 | 接口 | 当前决定 |

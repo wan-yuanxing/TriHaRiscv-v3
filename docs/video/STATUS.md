@@ -193,6 +193,29 @@ minhold+0.619ns；14约束适用、94项组件I/O预算未指定警告，无本�
 BOX/AVATAR整记录与素材退休；正式CPU/NPU fabric、物理可见性、不可背压连续HDMI
 及实际NPU仍待联合验收。451保护文件/31其他路线现状保持，限定17文件本地交付。
 
+## F4c4a 完整记录与叠加像素退休
+
+2026-10-21新增独立`display_record_pixels`，完整640B记录经冻结CDC原子传递，
+在实际RAW slot/frame/generation匹配的SOF应用16框/80点/primary及素材矩形。
+素材身份随9级寻址流水传递；n输入像素在n+13退出后才证明commit，core消费
+反馈后发布保持的旧像素退休贡献。同素材跨新帧持续持有，同帧转RAW只退休素材。
+CPU仍是全局帧/graph所有者；此贡献不能代替扫描器排空、owner release和全局FREE。
+现有`video_pipeline`保持RAW-only，正式BOX/AVATAR闭环尚未接入。
+
+16场景覆盖完整800×600数值oracle、异钟比/无blanking、全部框点/稀疏mask、
+素材/源代际等待、故障/复位及反馈/退休背压。旧四套件55份仿真日志通过，Python
+109通过/1权限跳过。八项隔离变异检出；独立审查修复新RAW先于素材时误报错、
+core fault后pending仍可提交，并补齐禁用点/primary测试盲区。
+
+组件综合13267LUT/15475FF/0DRM/6APM/0latch；core8ns setup估计-1.249ns、
+pixel25ns+12.426ns，边界hold-2.470ns、reset最小-0.037ns，未满足125MHz时序。
+13约束适用，74项物理I/O未指定警告；5076组件接口位不能用作板级top。未布线
+或上板，不能把综合完成视为时序闭合。详见[验证记录](../verification/video/record_pixels.md)。
+
+下一步接素材DDR装载/版本持有与真实RAW身份，再联合像素退休、扫描器和owner。
+462保护文件/42其他路线路径保留，旧RTL/ABI/C字节不变；交付16文件，其他路线
+STATUS追加保持未暂存，本地提交，无COM/JTAG/Flash操作。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

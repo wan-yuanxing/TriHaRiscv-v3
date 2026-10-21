@@ -1,0 +1,571 @@
+{
+  "schema_version": 1,
+  "status": "validated_record_BOX_AVATAR_pixels_and_local_retirement_verified",
+  "base_head": "d079e75731e260f37c9b1308e62c35819c16efb6",
+  "owned": [
+    "rtl/video/display_record_pixels.sv",
+    "tb/video/tb_display_record_pixels.sv",
+    "tb/video/check_record_pixels.py",
+    "scripts/video/test_record_pixels.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_record_pixels.json",
+    "fpga/pg2l100h/constraints/video_record_pixels.fdc",
+    "docs/superpowers/specs/2026-10-21-display-record-pixels-design.md",
+    "docs/superpowers/plans/2026-10-21-display-record-pixels.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/record_pixels.md",
+    "docs/verification/video/evidence/record_pixels.json"
+  ],
+  "source_hashes": {
+    "rtl/video/display_record_pixels.sv": "d237dc43f4a7c24df4da29854dd5fa4109f22701cde6adb39c6ab7b849b164e4",
+    "tb/video/tb_display_record_pixels.sv": "0d23cb864b728253458a50e420635dc55df1b5501543ad6a057783ab5b619541",
+    "tb/video/check_record_pixels.py": "98327419ae6a0d67d00e320ef8a832661729b866b5d59133e499f0f807af694e",
+    "scripts/video/test_record_pixels.py": "c65b8cf5e1f4ea066ff18a48de3e18989dbc1a44a4604c848a4e931b795abf76",
+    "scripts/video/run.py": "9e56e95bd60d1b17f45ba77fdca7e9ed78af6d9c22c3e9cdb9c6cce92cb62387",
+    "scripts/video/build_pds.py": "e707d8ec142450cb76a7a9e0fd413dc2b9d6da5322540bfaf530256527f003b3",
+    "fpga/pg2l100h/project/video_record_pixels.json": "49c64d75940afb6f12c9adc36c4cfdde8510eb3325f30beb38137232a7d5ff32",
+    "fpga/pg2l100h/constraints/video_record_pixels.fdc": "8342efdf6d3da4cd2cb637146a818905501d464bc974e2c20bf7f4bba9f043f5",
+    "docs/superpowers/specs/2026-10-21-display-record-pixels-design.md": "fa0acb22b690602e8610601afdc9f22da00c15ba9ee6e2a1032f5c305446a948",
+    "docs/superpowers/plans/2026-10-21-display-record-pixels.md": "7c9de6fadf233a0b4c8e8aada965436af757adafc0387ac1401ae88e86531ece",
+    "docs/video/STATUS.md": "d416ba70038e905f9aaddf8e0c227cfffeecce7e7dc4f63a983bbe210eac3722",
+    "docs/video/README.md": "547ea489f580081e23e48e7c77a103d813fd0827dcfa39638c5bdfb4aa1e42c7",
+    "docs/interfaces/video.md": "add7af0602e062f4e641eb131ac2d3a32790c66540fb6e2fa04f9772c74d6804",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "78eca219299b7d7554b50a11276fbd633019b4d0fc3427c66f16199f5c60fec3",
+    "docs/verification/video/record_pixels.md": "9f9245f608926a39078d1f31eb7fc60ea04fb5f7a42e43f1e13b8c69bb0956db"
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "status": "only_F4c4a_Video_section_for_index",
+    "committed_content_sha256": "d416ba70038e905f9aaddf8e0c227cfffeecce7e7dc4f63a983bbe210eac3722",
+    "worktree_sha256": "0f2e7b3d712bac73d7fdb4b37942cab84ec9f2bdc12ea4d521738e1322e2acce",
+    "baseline_worktree_sha256": "96a692a66f989339644c1fd101bdfb5444dcd52645dc70ad9ff2ad6f8b4c47a3",
+    "retained_delta_sha256": "4f277292659121b3bb7be44092d567f3bf7569217726c02f90f2059b9b37c931",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/record_pixels_baseline/result.json",
+      "sha256": "1b91d7ba55113442ac778b24edf8ff8338fed58cb4693db3c1c6b767457b62ab"
+    },
+    "audit": {
+      "path": "build/video/audit_record_pixels.py",
+      "sha256": "d6cb0e0c4fcca35a34bb97189626900eed27d86edb12f5c277bc66752449870e"
+    },
+    "partial_STATUS": {
+      "path": "build/video/record_pixels_delivery/status_partial.json",
+      "sha256": "097127c207a12c4abc782033e4457f38493032b8f5911182d82b892ff681942f"
+    },
+    "retained_STATUS_changes": {
+      "path": "build/video/record_pixels_delivery/retained_status_delta.bin",
+      "sha256": "4f277292659121b3bb7be44092d567f3bf7569217726c02f90f2059b9b37c931"
+    },
+    "regression": {
+      "path": "build/video/regression/20261021T071104_195034Z/result.json",
+      "sha256": "a1a4dbd2b319b0519faa60bb46228c78b2dcf911b3eb6a82da4670e90e8530c6"
+    },
+    "component": {
+      "path": "build/video/record_pixels/20261021T071104_361393Z/result.json",
+      "sha256": "707ad2020f54e65305e9f055ce29104530f0e18f9bdf4e3531975ae1b5cff796"
+    },
+    "overlay": {
+      "path": "build/video/regression/20261021T071407_487227Z/result.json",
+      "sha256": "6c4dd0b8b229b0af4b2d8a291038a7858ab72944c622fde54a47601084422567"
+    },
+    "mode_resources": {
+      "path": "build/video/regression/20261021T071701_959912Z/result.json",
+      "sha256": "b2b23a93bdcbc110be527728f6b9c1ef954eaa12ee1e0b009935dba3a8086c4b"
+    },
+    "display_scanout": {
+      "path": "build/video/regression/20261021T071711_767371Z/result.json",
+      "sha256": "1b6806a26a5553d25102f76e65fca2fa743aa0bbc4f049bc977b0fb3085aec76"
+    },
+    "display_mmio": {
+      "path": "build/video/regression/20261021T071907_913979Z/result.json",
+      "sha256": "fabd362d86f29a9e4f14bd19d63cb145969ee9c8068c0149c2bc520c51b63d66"
+    },
+    "affected": {
+      "path": "build/video/record_pixels_affected/20261021T071407_385685Z/result.json",
+      "sha256": "393a300f7432b71fd7e8de9a768d6e21c16665f4883ada6c51b65327d4bc16cb"
+    },
+    "mutations": {
+      "path": "build/video/record_pixels_mutations/20261021T071417_634738Z/result.json",
+      "sha256": "f22d578fd1aa0d9f23e7c2ffbf692f462300e7e95059a5a073da8dc85a21cab0"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261021T070841_937234Z/result.json",
+      "sha256": "7ce540a8014506e56c5a249a5069fb688416372cea4fd20e47a28df6d3b36652"
+    },
+    "synthesis_artifacts": {
+      "build/video/pds/20261021T070841_937234Z/build.tcl": "da1f453d29f34d499e459f0ac5b393cd9a38fc9d0522031b0557bbd7e7b54151",
+      "build/video/pds/20261021T070841_937234Z/compile/run.log": "b490f19b21a90d0a8e3b59ea4d284de67aa8fb1b0a7c32f7fb8c3017d55b4971",
+      "build/video/pds/20261021T070841_937234Z/constraint_check/constraint_check.ccr": "8bb7964ea45bb478b2bdd43328dd746a35217461b9bedd849fe5d30103c6bb27",
+      "build/video/pds/20261021T070841_937234Z/synthesize/display_record_pixels_syn.vm": "eb7263da7e3a7578764b1c4ffe9f180fc86ec17570e5c839fafe70fae3152229",
+      "build/video/pds/20261021T070841_937234Z/synthesize/run.log": "6c743fe6e967ba9aa8f6fca28087adadeae7bd2b3924a1517c0d278a58b9fcc9",
+      "build/video/pds/20261021T070841_937234Z/version.log": "315d6d3535b5e1501bf314d3eb8784c1ccff0bdc56b503eb6c661622c673dead"
+    },
+    "review": {
+      "path": "build/video/record_pixels_review/20261021T072000Z/review.json",
+      "sha256": "c3534f0f05f98a20b1f27644381f8833a13160444db7f566acdc131e28956335"
+    },
+    "absence_compile_RED": {
+      "path": "build/video/record_pixels_red/result.json",
+      "sha256": "499461570ab518444615cd414d4270bf9921201c36b3d3d527edb28d4e9e9226"
+    },
+    "absence_RED_artifacts": {
+      "build/video/record_pixels_red/compile.log": "c6ec09bfa5490866a31f88efbf76d0f120ad2e10b8f170b85d87e8aa55e80c2b",
+      "build/video/record_pixels_red/result.json": "499461570ab518444615cd414d4270bf9921201c36b3d3d527edb28d4e9e9226",
+      "build/video/record_pixels_red/tb_display_record_pixels.sv": "13f0ddc1a04fefdb458f5abb2688a38bdd911577fc433fb540839b92bc9f37bc"
+    },
+    "material_wait_RED": {
+      "path": "build/video/record_pixels_wait_red/20261021T070139_546516Z/result.json",
+      "sha256": "3df4ccb93df171e22c606725cbf64a0debdbd269c4569a4823bf5ba93ede8310"
+    },
+    "material_wait_GREEN_artifacts": {
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/checked.json": "532a95be845cf915347733c28f4f19196a3adcd95205516c98e7bafdf5042e76",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/pixels.log": "1cae66ba1976e092a157f342ad832cdbae7c496bb23fdee6e8127d1ae5b9a580",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/records.hex": "20769324f4b5b615ecf4249af16ea0f98dbe401f83b44ed1c9503d9b487d1d8a",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/reference.json": "0550284397666a1a8f459f1fa3810cdfffdb3379139b2451eb37054ce3798ef5",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/run.log": "e62fe247dc432a038184ff022c381a95b1f2ed170a5505f382a2c032654a5607",
+      "build/video/record_pixels_wait_green/20261021T070720_122381Z/sim.vvp": "a31bab782d725c3091a98cf13cf20173cccded3abb8e3621aa996ae0f7e613a5"
+    }
+  },
+  "cases": {
+    "normal": {
+      "rtl": {
+        "case": 0,
+        "commits": 8,
+        "retires": 4,
+        "applies": 8,
+        "pixels": 83795,
+        "requests": 15360
+      },
+      "oracle": {
+        "pixels": 83795,
+        "requests": 15360,
+        "box": 5632,
+        "point": 4736,
+        "avatar": 15360,
+        "fault": 0
+      }
+    },
+    "ratio": {
+      "rtl": {
+        "case": 0,
+        "commits": 8,
+        "retires": 4,
+        "applies": 8,
+        "pixels": 83795,
+        "requests": 15360
+      },
+      "oracle": {
+        "pixels": 83795,
+        "requests": 15360,
+        "box": 5632,
+        "point": 4736,
+        "avatar": 15360,
+        "fault": 0
+      }
+    },
+    "tight": {
+      "rtl": {
+        "case": 0,
+        "commits": 8,
+        "retires": 4,
+        "applies": 8,
+        "pixels": 71699,
+        "requests": 15360
+      },
+      "oracle": {
+        "pixels": 71699,
+        "requests": 15360,
+        "box": 5632,
+        "point": 4736,
+        "avatar": 15360,
+        "fault": 0
+      }
+    },
+    "header": {
+      "rtl": {
+        "case": 1,
+        "commits": 0,
+        "retires": 0,
+        "applies": 0,
+        "pixels": 1369,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 1369,
+        "requests": 0,
+        "box": 0,
+        "point": 0,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "asset_key": {
+      "rtl": {
+        "case": 2,
+        "commits": 2,
+        "retires": 0,
+        "applies": 2,
+        "pixels": 5421,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 5421,
+        "requests": 0,
+        "box": 0,
+        "point": 1840,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "sample_fault": {
+      "rtl": {
+        "case": 3,
+        "commits": 2,
+        "retires": 0,
+        "applies": 3,
+        "pixels": 5433,
+        "requests": 1013
+      },
+      "oracle": {
+        "pixels": 5433,
+        "requests": 1013,
+        "box": 0,
+        "point": 900,
+        "avatar": 0,
+        "fault": 1009
+      }
+    },
+    "reset": {
+      "rtl": {
+        "case": 4,
+        "commits": 1,
+        "retires": 0,
+        "applies": 1,
+        "pixels": 8144,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 8144,
+        "requests": 0,
+        "box": 0,
+        "point": 953,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "unknown": {
+      "rtl": {
+        "case": 5,
+        "commits": 0,
+        "retires": 0,
+        "applies": 0,
+        "pixels": 1369,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 1369,
+        "requests": 0,
+        "box": 0,
+        "point": 0,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "late_fault": {
+      "rtl": {
+        "case": 6,
+        "commits": 3,
+        "retires": 0,
+        "applies": 3,
+        "pixels": 5470,
+        "requests": 1042
+      },
+      "oracle": {
+        "pixels": 5470,
+        "requests": 1042,
+        "box": 0,
+        "point": 900,
+        "avatar": 36,
+        "fault": 1004
+      }
+    },
+    "generation_wait": {
+      "rtl": {
+        "case": 7,
+        "commits": 1,
+        "retires": 0,
+        "applies": 1,
+        "pixels": 5395,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 5395,
+        "requests": 0,
+        "box": 0,
+        "point": 0,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "new_source_asset_wait": {
+      "rtl": {
+        "case": 8,
+        "commits": 4,
+        "retires": 1,
+        "applies": 4,
+        "pixels": 10771,
+        "requests": 2903
+      },
+      "oracle": {
+        "pixels": 10771,
+        "requests": 2903,
+        "box": 0,
+        "point": 900,
+        "avatar": 2899,
+        "fault": 0
+      }
+    },
+    "core_fault_pending": {
+      "rtl": {
+        "case": 9,
+        "commits": 1,
+        "retires": 0,
+        "applies": 1,
+        "pixels": 5470,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 5470,
+        "requests": 0,
+        "box": 0,
+        "point": 0,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "same_frame_generation": {
+      "rtl": {
+        "case": 10,
+        "commits": 4,
+        "retires": 1,
+        "applies": 4,
+        "pixels": 10771,
+        "requests": 2903
+      },
+      "oracle": {
+        "pixels": 10771,
+        "requests": 2903,
+        "box": 0,
+        "point": 900,
+        "avatar": 2899,
+        "fault": 0
+      }
+    },
+    "sparse": {
+      "rtl": {
+        "case": 0,
+        "commits": 8,
+        "retires": 4,
+        "applies": 8,
+        "pixels": 71699,
+        "requests": 15360
+      },
+      "oracle": {
+        "pixels": 71699,
+        "requests": 15360,
+        "box": 1408,
+        "point": 0,
+        "avatar": 15360,
+        "fault": 0
+      }
+    },
+    "no_primary": {
+      "rtl": {
+        "case": 0,
+        "commits": 2,
+        "retires": 0,
+        "applies": 2,
+        "pixels": 23955,
+        "requests": 0
+      },
+      "oracle": {
+        "pixels": 23955,
+        "requests": 0,
+        "box": 954,
+        "point": 200,
+        "avatar": 0,
+        "fault": 0
+      }
+    },
+    "full": {
+      "rtl": {
+        "case": 0,
+        "commits": 3,
+        "retires": 0,
+        "applies": 3,
+        "pixels": 2440179,
+        "requests": 960023
+      },
+      "oracle": {
+        "pixels": 2440179,
+        "requests": 960023,
+        "box": 21504,
+        "point": 1184,
+        "avatar": 960019,
+        "fault": 0
+      }
+    }
+  },
+  "old_suite_simulations": {
+    "overlay": 12,
+    "mode_resources": 16,
+    "display_scanout": 17,
+    "display_mmio": 10
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "mutations_detected": 8,
+  "mutations": [
+    {
+      "name": "early_commit",
+      "status": "detected",
+      "assertion": "RECORD_PIXELS_EARLY_OR_WRONG_COMMIT"
+    },
+    {
+      "name": "live_asset_key",
+      "status": "detected",
+      "assertion": "material key/address"
+    },
+    {
+      "name": "points_always_on",
+      "status": "detected",
+      "assertion": "pixel"
+    },
+    {
+      "name": "primary_always_on",
+      "status": "detected",
+      "assertion": "pixel"
+    },
+    {
+      "name": "release_continuous_asset",
+      "status": "detected",
+      "assertion": "RECORD_PIXELS_RETIRE_FLAGS"
+    },
+    {
+      "name": "raw_before_asset_fault",
+      "status": "detected",
+      "assertion": "RECORD_PIXELS_NEW_SOURCE_ASSET_WAIT"
+    },
+    {
+      "name": "drop_core_fault",
+      "status": "detected",
+      "assertion": "RECORD_PIXELS_UNPROVEN_AFTER_CORE_FAULT"
+    },
+    {
+      "name": "ignore_generation",
+      "status": "detected",
+      "assertion": "RECORD_PIXELS_GENERATION_WAIT"
+    }
+  ],
+  "review_open_findings": [],
+  "closed_review_findings": [
+    {
+      "id": "R1",
+      "priority": "P1",
+      "title": "Known pending RAW arriving before its asset wrongly faulted",
+      "original_file": "rtl/video/display_record_pixels.sv",
+      "original_line": 144,
+      "fix": "Allow known pending source identity to pass raw pixels until matching source SOF and asset readiness; retain old references.",
+      "red": "build/video/record_pixels_review/20261021T072000Z/initial_red/probe_0.log",
+      "green": "build/video/record_pixels_review/20261021T072000Z/green_recheck/probe_0.log",
+      "regression": "new_source_asset_wait"
+    },
+    {
+      "id": "R2",
+      "priority": "P1",
+      "title": "Core fault allowed unproven pending record to apply and commit",
+      "original_file": "rtl/video/display_record_pixels.sv",
+      "original_line": 123,
+      "fix": "Synchronize sticky core fault into pixel domain and inhibit new accept/proof after observation; retain historical CDC feedback.",
+      "red": "build/video/record_pixels_review/20261021T072000Z/initial_red/probe_2.log",
+      "green": "build/video/record_pixels_review/20261021T072000Z/green_recheck/probe_2.log",
+      "regression": "core_fault_pending"
+    },
+    {
+      "id": "R3",
+      "priority": "P2",
+      "title": "Dense enabled-only fixtures let wrapper point-enable mutation survive",
+      "original_file": "tb/video/check_record_pixels.py",
+      "original_line": 18,
+      "fix": "Decode numerical oracle from validated record words; add sparse masks, disabled points and BOX-only no-primary fixture. Source qualification includes slot/frame/generation.",
+      "red": "build/video/record_pixels_review/20261021T072000Z/sparse_mask_mutation/mutation.json",
+      "green": "build/video/record_pixels_review/20261021T072000Z/sparse_green/result.json",
+      "regression": [
+        "sparse",
+        "no_primary",
+        "same_frame_generation"
+      ]
+    }
+  ],
+  "independent_review_bindings": {
+    "inputs": 21,
+    "artifacts": 243,
+    "tools": 4
+  },
+  "synthesis": {
+    "lut": 13267.0,
+    "registers": 15475.0,
+    "drm": 0.0,
+    "apm": 6,
+    "latches": 0,
+    "core_setup_estimate_ns": -1.249,
+    "pixel_setup_estimate_ns": 12.426,
+    "stable_CDC_bundle_estimate_ns": 5.172,
+    "min_hold_estimate_ns": -2.47,
+    "min_reset_recovery_removal_estimate_ns": -0.037,
+    "constraints_applicable": 13,
+    "physical_IO_warnings": 74,
+    "component_port_bits": 5076,
+    "timing_closed": false,
+    "core_requested_mhz": 125,
+    "core_estimated_mhz": 108.1198
+  },
+  "protected_files_unchanged": 462,
+  "other_route_paths_preserved": 42,
+  "old_entrypoint_bytes_exact_outside_new_hooks": true,
+  "old_production_RTL_ABI_and_C_bytes_unchanged": true,
+  "full_record_bits": 5120,
+  "source_identity_qualified": true,
+  "material_key_per_request": true,
+  "input_n_output_n_plus_13": true,
+  "output_proven_commit": true,
+  "pixel_retire_only_local_contribution": true,
+  "CPU_global_frame_graph_owner": true,
+  "asset_provider_fixed_latency_required": true,
+  "referenced_asset_versions_must_be_retained": true,
+  "coordinated_reset_required": true,
+  "existing_video_pipeline_RAW_only": true,
+  "actual_raw_owner_integrated": false,
+  "material_DDR_integrated": false,
+  "global_FREE_verified": false,
+  "full_800x600_active_pixel_oracle": true,
+  "VESA_1056x628_verified_this_batch": false,
+  "CPU_NPU_executed": false,
+  "physical_crossmaster_visibility_verified": false,
+  "continuous_video_verified": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

@@ -53,6 +53,32 @@ ACK仍是不同边界；旧release未ACK时可使用第三槽，但旧槽不能�
 物理HDMI不可背压连续流、CPU/NPU全局fabric、跨master可见性、素材/叠加退休与
 真实NPU推理尚待集成；本批没有路由或板测。
 
+## F4c4a 完整记录像素消费者
+
+独立`display_record_pixels`的`cmd_valid/ready`接纳mode/slot/frame/generation/
+seq及5120bit `cmd_data`。调用者须先通过冻结`display_record_guard`，本组件只
+补查已知值、头部身份/几何一致性。完整payload跨域；只在`raw_sof`且实际
+`raw_context_valid/slot/frame/generation`匹配时应用，同拍首输入像素使用新记录。
+AVATAR还要求`asset_ready`及id/generation匹配。素材未就绪而新RAW已到时先透传，
+保留旧引用至下一匹配SOF；就绪但素材key错误粘滞fault。
+
+`avatar_req_valid/addr/asset_id/generation`保持9级请求对齐，provider按固定拍
+返回`sample_valid/error/rgba`，不可背压或随意替换仍在用的版本。像素颜色、同步、
+坐标、RAW身份、mode/seq与效果标记在n+13对齐退出。`commit_valid/ready`来自实际
+首输出像素证明；core消费反馈后才发布保持的`retire_valid/ready`及旧身份。
+`retire_raw`表示源身份变化的像素排空贡献；`retire_asset`另给旧素材id/generation。
+相同素材跨新帧不退休素材；同帧AVATAR转RAW不退休RAW。退休未消费时拒绝新命令。
+
+像素退休不表示扫描器DMA/预取/行缓存已经排空，不替代owner release或CPU全局
+FREE。调用者保留全部引用版本至各自退休完成。两个域及上下游必须协调reset；
+各域按已寄存/同步观察的fault禁止未证明提交，故障前证明保持。后续输入同拍故障
+不撤销已经正确退出的历史首像素证明；当前输出像素错误禁止其commit。
+
+本批只验证独立组件，未接实际raw scanner/owner、素材DDR或CPU/NPU。已有
+`video_pipeline`、`video_display_scanout`仍RAW-only，原ABI/C及生产RTL不改。
+组件综合core8ns setup估计-1.249ns，尚无布线时序闭合或板测，详见
+[记录像素验证](../verification/video/record_pixels.md)。
+
 ## F4c3b 显示MMIO至真实RAW提交/退休
 
 独立`video_display_scanout`连接原`video_display_mmio`、owner和raw_display，能力

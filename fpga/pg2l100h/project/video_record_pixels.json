@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "target": "video_record_pixels",
+  "top": "display_record_pixels",
+  "test_top": "tb_display_record_pixels",
+  "sources": [
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/avatar_sample_map.sv",
+    "rtl/video/display_overlay.sv",
+    "rtl/video/display_record_pixels.sv"
+  ],
+  "tests": [
+    "rtl/video/display_record_guard.sv",
+    "tb/video/tb_display_record_pixels.sv"
+  ],
+  "reference": "tb/video/check_record_pixels.py",
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_record_pixels.fdc"
+  ],
+  "scope": "Full validated display record CDC and BOX/AVATAR pixel consumer, fixed-slot material provider, output-aligned commit and local pixel retirement proof. No actual raw scanner/owner integration, material DDR/cache allocation, global FREE, CPU/NPU, routing or board."
+}

@@ -463,6 +463,24 @@ python scripts/video/build_pds.py --target video_pipeline --stage synth
 不承诺硬件延迟；物理ingress、全局fabric/可见性、真实NPU和连续视频仍待接入。
 本目标只有组件综合，无管脚/位流或本批上板操作，既有板级诊断目标保持原样。
 
+## F4c4a 完整记录到叠加像素
+
+```powershell
+python scripts/video/run.py --suite record_pixels
+python scripts/video/build_pds.py --target video_record_pixels --stage synth
+```
+
+新增独立`display_record_pixels`接收已通过guard的640B记录，在匹配实际RAW身份
+的SOF应用BOX/AVATAR，素材key随请求流水对齐；实际首输出像素证明commit后，
+core才发布旧像素引用退休贡献。素材未就绪先透传匹配的新RAW，保留旧引用等待。
+调用者必须提供固定拍素材响应并保持版本；本组件没有DDR素材装载或全局FREE。
+
+16场景含完整800×600独立像素oracle，旧四套件55份仿真日志、Python109项及
+8项变异检出见[验证记录](../verification/video/record_pixels.md)。结果入口是
+`build/video/latest_record_pixels.json`和`latest_record_pixels_component.json`。
+现有`video_pipeline`仍只支持RAW。组件综合core8ns估计setup-1.249ns，未闭合
+125MHz，未布线或上板；下一步接素材装载、真实RAW身份和扫描器/owner退休。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。
