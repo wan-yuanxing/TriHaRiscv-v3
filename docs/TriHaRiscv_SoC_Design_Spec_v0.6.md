@@ -677,6 +677,16 @@ core内部setup估计+2.614ns，仅综合，无布线或板测；未解决前批
 本批没有动态素材替换、共享读仲裁、真实RAW/owner或正式BOX/AVATAR系统闭环，
 不新增第二物理DDR端口，不改变全局CPU帧/graph所有权。
 
+2026-10-21 F4c4c实施注记：新增RAW/素材AXI128读仲裁，单在途、锁存owner，紧急
+RAW有默认4次额度、非紧急轮转；错误按公布拍数排空，未知/意外响应保守undrained。
+新组合显式连接DDR封存素材provider与完整记录像素组件，单出口接旧唯一共享DDR
+读端点。14协议/6集成场景覆盖实际旧桥/数字内存和完整800×600像素参考，详见
+[共享读叠加验证](verification/video/record_renderer.md)。RAW像素与实际身份由
+调用者提供，尚未联接真实scanner/owner/MMIO；现有RAW闭环能力不变，不能以本地
+退休贡献推进全局FREE。综合13998LUT/16295FF/64DRM/6APM，core8ns setup估计
+-3.630ns、hold-2.470ns，未闭合时序。无本批布线、物理CDC或板测；后续联合实际
+RAW身份/owner及内部时序，再接正式CPU/NPU/fabric与物理ingress。
+
 ### 10.1 总线约定
 
 | 接口 | 当前决定 |

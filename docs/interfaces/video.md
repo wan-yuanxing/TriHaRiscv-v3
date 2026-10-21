@@ -99,6 +99,24 @@ online丢失不撤销成功；后续意外R可另报fault/undrained而历史成�
 [素材DDR验证](../verification/video/avatar_ddr.md)。本批未联接record_pixels/
 RAW owner，未实现动态版本替换或全局FREE；无CPU/NPU、物理可见性或板测结论。
 
+## F4c4c RAW/素材读仲裁与记录组合
+
+`video_read_arbiter`在同core域接d（RAW）、a（素材）与唯一m下游AXI128读口。
+16B对齐、size4/INCR、1..16拍、不跨4KiB/DDR窗口；AR先锁存，最多一笔总在途，
+R按锁存owner转发，不能用RID选择接收者。RAW紧急时默认4次额度，非紧急轮转；
+它限制burst，不保证实际截止期。已公开AR/R不被抢占，故障后仍按公布拍数排空。
+意外/未知响应、错误RID/LAST保守失去排空可信性直至协调reset。
+
+`video_record_renderer`显式组合此仲裁、原DDR素材cache及完整记录像素组件；
+额外在pixel-ready之后捕获稳定素材身份，连接固定拍provider。单个m出口待接旧
+唯一共享DDR端点；faults[0/1/2]分别为像素/素材/读仲裁，错误码独立交平台恢复。
+RAW stream与实际slot/frame/generation为调用者输入，本批没有从core反馈伪造标签，
+没有联接raw scanner/owner/MMIO或全局FREE；历史本地commit不代替全局故障决策。
+
+14协议场景、6集成场景及完整尺寸oracle、实际旧共享DDR数字链、时序违例与边界见
+[共享读叠加验证](../verification/video/record_renderer.md)。现有`video_pipeline`
+保持RAW-only，CPU/NPU/物理可见性、布局布线、板测及运行中素材替换另验。
+
 ## F4c3b 显示MMIO至真实RAW提交/退休
 
 独立`video_display_scanout`连接原`video_display_mmio`、owner和raw_display，能力

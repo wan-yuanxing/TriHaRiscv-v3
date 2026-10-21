@@ -495,6 +495,20 @@ ACK不释放素材。24场景、完整65536词逐一读回、9项变异及旧资
 `latest_avatar_ddr_component.json`。综合509LUT/628FF/64DRM，core内部setup估计
 +2.614ns；无布线/板测。尚需共享DDR读仲裁、完整记录联接及RAW/owner联合退休。
 
+## F4c4c 共享读与完整记录素材链
+
+```powershell
+python scripts/video/run.py --suite record_renderer
+python scripts/video/build_pds.py --target video_record_renderer --stage synth
+```
+
+新增RAW/素材单在途读仲裁：紧急RAW有额度，非紧急轮转，锁存owner并按公布拍数
+排空。`video_record_renderer`把DDR封存素材provider接到完整记录像素组件，单个
+AXI128出口可接原共享DDR读口。实际RAW流/身份仍由调用方提供，未联接真实scanner/
+owner/MMIO，正式RAW系统能力不变。14个协议场景及6个集成场景、八项变异与证据见
+[验证记录](../verification/video/record_renderer.md)，结果入口`latest_record_renderer.json`。
+综合core setup估计-3.630ns，尚未闭合125MHz；无布线/板测，下一步接真实RAW联合退休。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。

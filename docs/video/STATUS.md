@@ -235,6 +235,29 @@ online边界及已有fault后stray排空可信性三项问题均有RED/GREEN并�
 保留，交付15文件，其他路线STATUS保持未暂存。下一步接共享读仲裁及完整记录
 叠加链，再联合RAW扫描器/owner退休和平台可见性；本批无COM/JTAG/Flash操作。
 
+## F4c4c 共享读仲裁与完整记录素材链
+
+2026-10-21新增`video_read_arbiter`，RAW紧急最多连续4个burst后服务等待素材，
+非紧急轮转。源AR锁存后独占owner，不按RID路由；错误仍按公布拍数排空，未知/
+意外响应保守undrained。新`video_record_renderer`显式组合仲裁、DDR素材cache和
+完整记录像素组件，真实固定拍provider连接，单个AXI128出口，不新增物理DDR通路。
+
+验证分14个仲裁场景及6个集成场景，含实际旧共享DDR/原生桥、并发RAW字节核验、
+800×600三模式像素oracle、异钟比/素材等待/CRC失败/协调reset和退休背压；8项
+变异及独立协议/端口审查另绑定。测试退休ready曾未跨core上升沿，已由实际与
+最小RED/GREEN定位并修正。集成TB补实际首输出seq证明，检出原先存活的提前commit
+变异；PDS实例简写改显式171端口连接，旧生产模块不变。
+
+综合13998LUT/16295FF/64DRM/6APM/0latch；core8ns setup估计-3.630ns，pixel
+25ns+12.607ns，hold-2.470ns，未时序闭合。14约束适用，118警告含宽对象集合/
+物理I/O未指定；5755接口位仅为组件top，无布线/物理CDC/板测结论。详见
+[共享读叠加验证](../verification/video/record_renderer.md)。实际RAW像素身份仍由
+调用者提供，尚未联接scanner/owner/MMIO，`video_pipeline`继续RAW-only。
+
+18文件本地交付；465保护文件保持，另1项并行CPU修改及57其他路线路径保留，
+STATUS中NPU追加不暂存。下一步接实际RAW身份与owner联合退休，并优先收敛真实
+内部互连下的core时序；不把本地像素退休当作CPU全局FREE。本批无COM/JTAG/Flash。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

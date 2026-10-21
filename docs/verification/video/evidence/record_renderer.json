@@ -1,0 +1,458 @@
+{
+  "schema_version": 1,
+  "status": "shared_RAW_material_reads_and_full_record_pixels_verified",
+  "base_head": "3f34cce478af6cb94fc06f9eee546ae539a1e9de",
+  "owned": [
+    "rtl/video/video_read_arbiter.sv",
+    "rtl/video/video_record_renderer.sv",
+    "tb/video/tb_video_read_arbiter.sv",
+    "tb/video/tb_video_record_renderer.sv",
+    "tb/video/models/video_renderer_memory.sv",
+    "scripts/video/test_record_renderer.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_record_renderer.json",
+    "fpga/pg2l100h/constraints/video_record_renderer.fdc",
+    "docs/superpowers/specs/2026-10-21-record-renderer-design.md",
+    "docs/superpowers/plans/2026-10-21-record-renderer.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/record_renderer.md",
+    "docs/verification/video/evidence/record_renderer.json"
+  ],
+  "source_hashes": {
+    "rtl/video/video_read_arbiter.sv": "cb9c6f83efc7a73b2cbdb199be29bd217a46996a18280b7d454f12354018b4a0",
+    "rtl/video/video_record_renderer.sv": "1b901d5888f07c93a49c7ff7e874d8cb567d5eed82216178222d94a8e45edbfa",
+    "tb/video/tb_video_read_arbiter.sv": "28d17f81f74a70440a685cd0cd5891578903bdfde738192808728fe1ff66a3ca",
+    "tb/video/tb_video_record_renderer.sv": "0280d675d38696e958b23b75b4c210d822f71547aca3d870c41b359a064bccbc",
+    "tb/video/models/video_renderer_memory.sv": "538d6be5a08db82dec358f0bca7786917ca62b13fc95039f773e772545f32496",
+    "scripts/video/test_record_renderer.py": "ab78e14bb2444d1798dec45e10e1c8b1a21895deae3bd27d68370489c3e2388f",
+    "scripts/video/run.py": "5c93d98e6d05d1a4af80390c2916cc169db7aef2ae60ee93f4baa0ed47134571",
+    "scripts/video/build_pds.py": "e0d4209170f27b499504eaa6f6c15eb7082e90c8643caf088e8f7ff4f387b378",
+    "fpga/pg2l100h/project/video_record_renderer.json": "e28208f0550875a021a080987b9f94a182ec4059ebc9ba8048b79a624c1ade5a",
+    "fpga/pg2l100h/constraints/video_record_renderer.fdc": "73fb4b99f1a269a6ebc0c468ef2c419cbb0933d3f147430e954e134d3ff89276",
+    "docs/superpowers/specs/2026-10-21-record-renderer-design.md": "f7092d31dcb50a25b8e55875b4982d2534e07d04cd56d9b1c9a6ff6ddeef28ca",
+    "docs/superpowers/plans/2026-10-21-record-renderer.md": "28442485f21563979e5d9986674260d03aa133fb672b89cf825ae7fbd5067b51",
+    "docs/video/STATUS.md": "9a6b4b59c0910db37561d56856b68bddaa0508622b8393aeb602529a789cdd8d",
+    "docs/video/README.md": "36e0e2097150bcf77a0d1783154de2f3200248ace5e81ecce1c6cb6ff876ca03",
+    "docs/interfaces/video.md": "c9009e9a4163de39accbf8fc5f037d7b1dacc995fb6cd1819c7593760ab8f32b",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "a11af0093e982f40c036b72da34125e8aa26ab5a2db27bb1840ffd79d57a48b0",
+    "docs/verification/video/record_renderer.md": "28470946c1bdbe20fb551722300369d7b1a0bae6e74971faf03f1b273aa90b95"
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "status": "only_F4c4c_Video_section_for_index",
+    "committed_content_sha256": "9a6b4b59c0910db37561d56856b68bddaa0508622b8393aeb602529a789cdd8d",
+    "worktree_sha256": "f45e81396c3d4c826fe97e95c73a885039a4f3d77cd6115e039eda06037bd3ad",
+    "baseline_worktree_sha256": "71244c61a8bf831e968a386d77468f16487feecfc8b4e5b509e5186019a992ae",
+    "retained_delta_sha256": "860dc15d75f2c7a5f2ea132577946d3a1c0e868880acb5338311ca1859477d4c",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/renderer_baseline/result.json",
+      "sha256": "b98b63a3a84d833a5b73b94aa503f26ea1bde5037b656eec3fd337eb4cc23554"
+    },
+    "audit": {
+      "path": "build/video/audit_renderer.py",
+      "sha256": "58de3e8b8a9b01a2ece1944d2ac99dae96d93bcb5007504e8d2a9777ce451e1c"
+    },
+    "external_CPU_change": {
+      "path": "build/video/renderer_delivery/external_change.json",
+      "sha256": "4a53f5b5a41c81d753a610916bea636a54a8a9203ab567fd8d3faa0cd5dac9ea"
+    },
+    "external_CPU_snapshot": {
+      "path": "build/video/renderer_delivery/external_cpu_native_axil.v",
+      "sha256": "af76419e2b5b6146ebe1bdb6a8efa6e95f2e7534ea0a7bc461bf2605aba90a87"
+    },
+    "partial_STATUS": {
+      "path": "build/video/renderer_delivery/status_partial.json",
+      "sha256": "9ebeda7d45381f5c8b7992c8004c091f24627451e6bbf25d796b8f0152eecafe"
+    },
+    "retained_STATUS_changes": {
+      "path": "build/video/renderer_delivery/retained_status_delta.bin",
+      "sha256": "860dc15d75f2c7a5f2ea132577946d3a1c0e868880acb5338311ca1859477d4c"
+    },
+    "regression": {
+      "path": "build/video/regression/20261021T091741_170536Z/result.json",
+      "sha256": "fc714c8a039296bfa50b0da143e8f8183c153bd130815edb2dd1f30fcb5f40c7"
+    },
+    "component": {
+      "path": "build/video/record_renderer/20261021T091741_294254Z/result.json",
+      "sha256": "323e4ec3a96e7e9ff8d27d648a36cb0441d77cbcf27266f4e279ff55c77d474d"
+    },
+    "avatar_ddr": {
+      "path": "build/video/regression/20261021T085349_090149Z/result.json",
+      "sha256": "7420b28649726f670dd4cb4d154208b2eb4e85daabbd213acd9782cc5d97d5d4"
+    },
+    "shared_video": {
+      "path": "build/video/regression/20261021T085404_948086Z/result.json",
+      "sha256": "222ec6eae70580e3aeacb39765431e31a70b2a12c55976010a11db3f52d1d241"
+    },
+    "affected": {
+      "path": "build/video/renderer_affected/20261021T085349_008027Z/result.json",
+      "sha256": "0facab6dabd26612713d77e8c0525aa4a2b913a9b192bda8ce626b949dd1b897"
+    },
+    "mutations": {
+      "path": "build/video/renderer_mutations/20261021T091741_147744Z/result.json",
+      "sha256": "ce00f44185371af6c8fda205dd7972c75b9318a06944444f791ce8d09a71d1f9"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261021T084747_188361Z/result.json",
+      "sha256": "6c3c65425625ae766903550d28c89e90539e20785385ebccaf1af2837cb424e2"
+    },
+    "synthesis_artifacts": {
+      "build/video/pds/20261021T084747_188361Z/build.tcl": "155c950d3ba62ae19eb0fb081d94b1afe6cab98c072e003f28612cb12882f909",
+      "build/video/pds/20261021T084747_188361Z/compile/run.log": "d5464169c2bdae70b4b79c4a68d79e9f46a4e8f11008f92830d8bda7a98cc1a5",
+      "build/video/pds/20261021T084747_188361Z/constraint_check/constraint_check.ccr": "c69ddb649154235b3f32251d801b5e5d6ee5ee2fb8c1e31b19e231da028d4871",
+      "build/video/pds/20261021T084747_188361Z/synthesize/run.log": "1c3820adf9b6e16cab966c05a17bb68871307be076f2db9b53ab9b351b5cd76b",
+      "build/video/pds/20261021T084747_188361Z/synthesize/video_record_renderer_syn.vm": "ff7f3be406196a9a945901a04637246289849e17ad9e0796a21e73ab82e64d78",
+      "build/video/pds/20261021T084747_188361Z/version.log": "315d6d3535b5e1501bf314d3eb8784c1ccff0bdc56b503eb6c661622c673dead"
+    },
+    "review": {
+      "path": "build/video/renderer_review/20261021T084001_092218Z/final_review.json",
+      "sha256": "db87be317421727bece506d67cd11f2e5b538d44082f75c2e17be2f9a2575ceb"
+    },
+    "absence_RED_artifacts": {
+      "build/video/renderer_red/result.json": "35ba071e6856c585dedd746e7aebe5c6136943f577fae1f21749a509521a8d7b",
+      "build/video/renderer_red/tb_video_read_arbiter.log": "2b01152689a7368a2fc9cf0caa6c351b2b1a6b09c5ab7d7a7a040a530a4e73c5",
+      "build/video/renderer_red/tb_video_read_arbiter.sv": "28d17f81f74a70440a685cd0cd5891578903bdfde738192808728fe1ff66a3ca",
+      "build/video/renderer_red/tb_video_record_renderer.log": "04b94e65925d9275360451a294baa1f6101a2b32eaa412757d885e25d7d8efa8",
+      "build/video/renderer_red/tb_video_record_renderer.sv": "04fd9edd8266c1cac33953e51bef6f87f88d8e69ea9d2745be27b9c070be1a2b"
+    },
+    "output_commit_assertion_RED": {
+      "path": "build/video/renderer_commit_assertion_red/result.json",
+      "sha256": "3278684ac4b9af768262ff9829ce7e47b0e3683ba0228f075e96593e17477984"
+    },
+    "test_retire_ack_RED": {
+      "path": "build/video/renderer_wait_debug/ack.log",
+      "sha256": "e0f0a4341326e3e8ba967740826d5f54670d1b19ccfc0bf65a0c06baeee84450"
+    }
+  },
+  "arbiter_cases": {
+    "0": {
+      "case": 0,
+      "raw": 12,
+      "asset": 12,
+      "masters": 24,
+      "code": 0
+    },
+    "1": {
+      "case": 1,
+      "raw": 12,
+      "asset": 12,
+      "masters": 24,
+      "code": 0
+    },
+    "2": {
+      "case": 2,
+      "raw": 12,
+      "asset": 12,
+      "masters": 24,
+      "code": 0
+    },
+    "3": {
+      "case": 3,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 1
+    },
+    "4": {
+      "case": 4,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 5
+    },
+    "5": {
+      "case": 5,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 6
+    },
+    "6": {
+      "case": 6,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 9
+    },
+    "7": {
+      "case": 7,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 4
+    },
+    "8": {
+      "case": 8,
+      "raw": 0,
+      "asset": 0,
+      "masters": 0,
+      "code": 3
+    },
+    "9": {
+      "case": 9,
+      "raw": 0,
+      "asset": 0,
+      "masters": 0,
+      "code": 3
+    },
+    "10": {
+      "case": 10,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 7
+    },
+    "11": {
+      "case": 11,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 9
+    },
+    "13": {
+      "case": 13,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 2
+    },
+    "14": {
+      "case": 14,
+      "raw": 1,
+      "asset": 0,
+      "masters": 1,
+      "code": 8
+    }
+  },
+  "renderer_cases": {
+    "probe": {
+      "case": 0,
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 5138,
+      "box_pixels": 5120,
+      "avatar_pixels": 5120,
+      "commits": 4,
+      "retires": 1,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    },
+    "ratio": {
+      "case": 0,
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 5133,
+      "box_pixels": 5120,
+      "avatar_pixels": 5120,
+      "commits": 4,
+      "retires": 1,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    },
+    "wait": {
+      "case": 3,
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 5138,
+      "box_pixels": 5120,
+      "avatar_pixels": 10240,
+      "commits": 5,
+      "retires": 2,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    },
+    "crc": {
+      "case": 4,
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 0,
+      "box_pixels": 0,
+      "avatar_pixels": 0,
+      "commits": 0,
+      "retires": 0,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    },
+    "reset": {
+      "case": 5,
+      "w": 80,
+      "h": 64,
+      "raw_pixels": 5138,
+      "box_pixels": 5120,
+      "avatar_pixels": 5120,
+      "commits": 4,
+      "retires": 1,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    },
+    "full": {
+      "case": 0,
+      "w": 800,
+      "h": 600,
+      "raw_pixels": 480018,
+      "box_pixels": 480000,
+      "avatar_pixels": 480000,
+      "commits": 4,
+      "retires": 1,
+      "raw_reads": 65616,
+      "asset_reads": 1025,
+      "native": 5126
+    }
+  },
+  "affected_cases_or_logs": {
+    "avatar_ddr": 24,
+    "shared_video": 24
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "mutations_detected": 8,
+  "mutations": [
+    {
+      "name": "route_by_RID",
+      "status": "detected",
+      "assertion": "READ_ARB_LEAK_BOTH"
+    },
+    {
+      "name": "ignore_quota",
+      "status": "detected",
+      "assertion": "READ_ARB_QUOTA"
+    },
+    {
+      "name": "retract_AR",
+      "status": "detected",
+      "assertion": "READ_ARB_POSTED_AR"
+    },
+    {
+      "name": "drain_by_LAST",
+      "status": "detected",
+      "assertion": "READ_ARB_TIMEOUT"
+    },
+    {
+      "name": "wrong_provider_ID",
+      "status": "detected",
+      "assertion": "RENDER_PIXEL_ORACLE"
+    },
+    {
+      "name": "wrong_source_generation",
+      "status": "detected",
+      "assertion": "RENDER_PIXEL_METADATA"
+    },
+    {
+      "name": "wrong_pixel_asset_generation",
+      "status": "detected",
+      "assertion": "RENDER_PIXEL_METADATA"
+    },
+    {
+      "name": "early_commit",
+      "status": "detected",
+      "assertion": "RENDER_UNPROVEN_COMMIT"
+    }
+  ],
+  "review_open_findings": [],
+  "closed_review_findings": [
+    {
+      "id": "REVIEW-1",
+      "severity": "important",
+      "file": "tb/video/tb_video_record_renderer.sv",
+      "line": 119,
+      "issue": "Retirement READY could deassert without a core-posedge handshake after the pixel-domain scoreboard resumed.",
+      "minimal_red": "retire_0_simulation.log",
+      "minimal_green": "retire_1_simulation.log",
+      "actual_fix": "Initial core negedge added before asserting retire_ready, preserving an intervening core posedge.",
+      "actual_green": "build/video/record_renderer/20261021T091741_294254Z/wait/simulation.log",
+      "actual_wait_commits": 5,
+      "actual_wait_retirements": 2
+    },
+    {
+      "id": "REVIEW-2",
+      "severity": "important",
+      "file": "tb/video/tb_video_record_renderer.sv",
+      "line": 96,
+      "issue": "consume_commit checks held identity but never proves the first selected output pixel retired. Moving pixel_commit from retire_marker[12] to[1] incorrectly acknowledges before actual output and still passes the complete80x64 normal probe.",
+      "reproduction": "commit_early_reproduce.py",
+      "surviving_mutant_log": "commit_early/simulation.log",
+      "surviving_mutant_result": "commit_early/result.json",
+      "requested_fix": "Track actual output seq at out_de&&out_sof after pixel-edge updates and reject any commit_valid/handshake for a seq not already seen; detect the early-commit mutant and rerun current-input final validation.",
+      "actual_fix": "Core rejects commit_valid until its seq is observed on actual qualified out_de&&out_sof; pixel reset clears proof.",
+      "actual_red": "build/video/renderer_mutations/20261021T091741_147744Z/early_commit/simulation.log",
+      "actual_green": "build/video/record_renderer/20261021T091741_294254Z/probe/simulation.log",
+      "full_green": "build/video/record_renderer/20261021T091741_294254Z/full/simulation.log"
+    }
+  ],
+  "synthesis": {
+    "lut": 13998.0,
+    "registers": 16295.0,
+    "drm": 64.0,
+    "apm": 6,
+    "latches": 0,
+    "core_setup_estimate_ns": -3.63,
+    "pixel_setup_estimate_ns": 12.607,
+    "stable_CDC_bundle_estimate_ns": 5.172,
+    "min_hold_estimate_ns": -2.47,
+    "constraints_applicable": 14,
+    "constraint_warnings": 118,
+    "component_port_bits": 5755,
+    "physical_timing_closed": false,
+    "core_requested_mhz": 125,
+    "core_estimated_mhz": 85.9845
+  },
+  "baseline_protected_paths": 466,
+  "protected_files_unchanged": 465,
+  "external_CPU_path_change_preserved": {
+    "path": "rtl/soc/cpu_native_axil.v",
+    "baseline_worktree_sha256": "02d95863a55650fe4f2e1d9641cb570a5925fda7997661d3dd67209be31d5549",
+    "observed_worktree_sha256": "af76419e2b5b6146ebe1bdb6a8efa6e95f2e7534ea0a7bc461bf2605aba90a87",
+    "head_blob_sha256": "02d95863a55650fe4f2e1d9641cb570a5925fda7997661d3dd67209be31d5549",
+    "snapshot": "build/video/renderer_delivery/external_cpu_native_axil.v",
+    "reason": "Parallel CPU-route worktree modification observed; outside Video-owned paths, preserved and never staged by this batch"
+  },
+  "other_route_paths_preserved": 57,
+  "old_entrypoint_bytes_exact_outside_new_hooks": true,
+  "old_Video_RTL_ABI_and_C_bytes_unchanged": true,
+  "one_outstanding_RAW_material_owner": true,
+  "ID_alias_routing_checked": true,
+  "urgent_RAW_burst_quota": 4,
+  "nonurgent_round_robin": true,
+  "published_AR_never_retracted": true,
+  "drain_uses_advertised_count": true,
+  "actual_shared_DDR_and_bridge_in_digital_test": true,
+  "material_bytes": 262144,
+  "material_bursts_per_case": 1025,
+  "RAW_AXI_bytes_checked_per_case": 1049856,
+  "full_800x600_three_mode_oracle": true,
+  "actual_first_output_proof_before_commit": true,
+  "material_provider_DDR_fed": true,
+  "immutable_asset_until_coordinated_reset": true,
+  "RAW_pixel_and_AXI_models_independent": true,
+  "actual_RAW_scanner_identity_integrated": false,
+  "scanner_owner_retirement_integrated": false,
+  "MMIO_modes_expanded": false,
+  "existing_video_pipeline_RAW_only": true,
+  "CPU_global_frame_graph_owner": true,
+  "global_FREE_verified": false,
+  "coordinated_reset_required": true,
+  "CPU_NPU_executed": false,
+  "physical_crossmaster_visibility_verified": false,
+  "continuous_HDMI_verified": false,
+  "VESA_1056x628_verified_this_batch": false,
+  "live_material_replacement": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

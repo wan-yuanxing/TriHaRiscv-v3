@@ -1,0 +1,9 @@
+{
+ "schema_version": 1,
+ "target": "video_record_renderer",
+ "top": "video_record_renderer",
+ "sources": ["rtl/video/video_read_arbiter.sv", "rtl/video/avatar_texture_cache.sv", "rtl/video/avatar_ddr_cache.sv", "rtl/video/display_mode_cdc.sv", "rtl/video/avatar_sample_map.sv", "rtl/video/display_overlay.sv", "rtl/video/display_record_pixels.sv", "rtl/video/video_record_renderer.sv"],
+ "tests": ["rtl/video/display_record_guard.sv", "rtl/video/video_memory_scheduler.sv", "rtl/video/axi128_hmic256.sv", "rtl/video/video_shared_ddr.sv", "tb/video/models/video_renderer_memory.sv", "tb/video/tb_video_read_arbiter.sv", "tb/video/tb_video_record_renderer.sv"],
+ "constraints": ["fpga/pg2l100h/constraints/video_record_renderer.fdc"],
+ "scope": "One RAW/material AXI128 owner arbiter and checked full-record material pixel composition. Caller supplies actual RAW identity/stream. No RAW scanner/owner/MMIO integration, dynamic replacement, CPU/NPU global fabric, physical visibility, routing or board."
+}
