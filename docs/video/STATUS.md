@@ -1,6 +1,6 @@
 # Video 工作台账
 
-更新：2026-10-20。分支：`video/windows-bringup`。用户已确认板卡、HDMI 源和显示器已就绪；当前开发在主工程内执行，未建立第二份源码副本。
+更新：2026-10-21。分支：`video/windows-bringup`。用户已确认板卡、HDMI 源和显示器已就绪；当前开发在主工程内执行，未建立第二份源码副本。
 
 ## 全屏显示设计变更
 
@@ -169,6 +169,29 @@ RISC-V执行或真实推理。计数、独立审查及证据见
 下一步把本RAW闭环与ABI2采集、共享DDR及CPU三槽控制联测组合，再接BOX/AVATAR
 整记录和真实NPU结果。全局fabric、跨master物理可见性、不可背压HDMI连续流及
 800×600采显并发带宽仍待验收，CPU继续统一全局帧和graph状态。
+
+## F4c3c 采集/共享DDR/显示端到端联测
+
+2026-10-21新增`video_pipeline`独立组件，显式连接原ABI2采集、可REARM三分支核、
+唯一共享DDR端口及RAW-only显示MMIO；两个独立AXI-Lite口、core域可背压PIX/EOF，
+CPU继续全局帧/graph所有权。原RTL/ABI/生产C库保持字节，独立fault/IRQ留给平台。
+
+原生C通过真实RTL响应控制四帧槽0/1/2/0轮转：第二次显示事件未ACK期间采第三槽，
+真实软件ACK完成后才复用slot0。同RAW模式不重发raw或释放槽；坏EOF/单bit存储
+损坏均产生真实失败，C保留引用并拒绝REARM/新分配。正常三路8428800写字节、
+2400000像素/5完整光栅、欠载0，实际并行争用42拍；native C共2216检查通过。
+每地址唯一写与精确分支总量检查含全零padding，完整光栅同步/blanking独立核对。
+
+受影响旧capture_v2/display_scanout/shared_video/frame_pool共54份仿真PASS，
+Python109通过/1权限跳过。独立审查关闭重复地址覆盖盲点和第三帧BUSY测试预期，
+三项身份/字节/ACK前状态变异被检出；没有为测试改变生产协议。组件综合20318LUT/
+25158FF/5.5DRM/6APM/0latch，core8ns setup估计+0.311ns、pixel25ns+19.809ns，
+minhold+0.619ns；14约束适用、94项组件I/O预算未指定警告，无本批布线/板测。
+
+详见[端到端验证](../verification/video/video_pipeline.md)。本机C不是RISC-V执行，
+空检测结果为测试前提；RPC可暂停时间，不作CPU延迟或物理吞吐承诺。下一步接
+BOX/AVATAR整记录与素材退休；正式CPU/NPU fabric、物理可见性、不可背压连续HDMI
+及实际NPU仍待联合验收。451保护文件/31其他路线现状保持，限定17文件本地交付。
 
 ## 本批已交付
 

@@ -1,0 +1,19 @@
+# Component estimate only: 125 MHz core, fixed 40 MHz raster.
+# No board pin, external I/O AC, routed CDC or complete SoC timing claim.
+create_clock -name core_clk -period 8.000 [get_ports {clk_i}]
+create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]
+# Only asynchronous scalar first stages; local stage-to-stage paths stay timed.
+set_false_path -from [get_clocks {core_clk}] -to [get_cells {u_display.u_raw.record_sync1 u_display.u_raw.done_sync1* u_display.u_raw.commit_ack_sync1 u_display.u_raw.release_ack_sync1 u_display.u_raw.fault_sync1}]
+set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {u_display.u_raw.request_sync1* u_display.u_raw.commit_sync1 u_display.u_raw.release_sync1 u_display.u_raw.scan_sync1 u_display.u_raw.underflow_sync1}]
+# Stable mailbox/request/result/event bundles, held through two-stage control.
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.mailbox_base* u_display.u_raw.mailbox_stride* u_display.u_raw.mailbox_frame* u_display.u_raw.mailbox_slot*}] -to [get_cells {u_display.u_raw.pending_base* u_display.u_raw.pending_stride* u_display.u_raw.pending_frame* u_display.u_raw.pending_slot*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.req_base*}] -to [get_cells {u_display.u_raw.dma_base_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.req_stride*}] -to [get_cells {u_display.u_raw.dma_stride_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.req_row*}] -to [get_cells {u_display.u_raw.dma_row_latched*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.bank_success*}] -to [get_cells {u_display.u_raw.bank_ready*}]
+# Synthesis may merge commit payloads with identical active-frame/slot Qs.
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.active_frame* u_display.u_raw.active_slot*}] -to [get_cells {u_display.u_raw.commit_frame_id* u_display.u_raw.commit_slot*}]
+set_max_delay 6.0 -datapath_only -from [get_cells {u_display.u_raw.release_pixel_id* u_display.u_raw.release_pixel_slot*}] -to [get_cells {u_display.u_raw.release_frame_id* u_display.u_raw.release_slot*}]
+set_false_path -from [get_clocks {core_clk}] -to [get_cells {u_display.u_link.u_mode.request_meta}]
+set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {u_display.u_link.u_mode.ack_meta u_display.u_link.u_mode.error_meta}]
+set_max_delay 6.000 -datapath_only -from [get_cells {u_display.u_link.u_mode.mailbox_payload*}] -to [get_cells {u_display.u_link.u_mode.pixel_payload*}]

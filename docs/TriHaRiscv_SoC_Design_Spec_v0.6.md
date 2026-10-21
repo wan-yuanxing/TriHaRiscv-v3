@@ -640,6 +640,18 @@ CPU执行/共享DDR仲裁/实际像素退休，不表示连续视频已实现。
 [显示闭环验证](verification/video/display_scanout.md)。共享采集/DDR、真实NPU与
 连续视频、物理跨master可见性仍须联合验收。
 
+2026-10-21 F4c3c实施注记：新增`video_pipeline`组合原ABI2采集、三分支核、唯一
+Video共享DDR桥与RAW-only显示MMIO。采集/显示各保留独立AXI-Lite控制口，源为
+core域可背压PIX/EOF；不代替物理HDMI ingress或CPU全局fabric。正式成功尺寸
+800×600/stride2400、预览400×300、320×320 BGR NCHW不变。CPU统一分配三槽，
+采集完成经原C validator验证后才更新所有权；显示实际退休且软件ACK成功后旧槽
+才可复用。允许旧显示事件未ACK时采第三槽；同RAW模式不释放槽。
+三类独立fault/错误码及两个事件IRQ留给平台协调恢复，不改原ABI，不隐式局部reset。
+本机C与真实RTL联测和组件综合见[端到端验证](verification/video/video_pipeline.md)；
+RPC模拟时间可暂停，不宣称CPU执行/延迟、真实NPU、物理DDR可见性、连续HDMI
+采显吞吐、布局布线、外部I/O时序或本批板测完成。后续依次接BOX/AVATAR整记录与
+素材退休，再联合CPU/NPU及物理ingress验收，不以诊断前提替代真实推理。
+
 ### 10.1 总线约定
 
 | 接口 | 当前决定 |

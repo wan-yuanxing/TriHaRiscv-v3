@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target": "video_pipeline",
+  "top": "video_pipeline",
+  "test_top": "tb_video_pipeline",
+  "sources": [
+    "rtl/video/video_capture_mmio_v2.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv",
+    "rtl/video/raw_display.sv",
+    "rtl/video/video_memory_scheduler.sv",
+    "rtl/video/video_shared_ddr.sv",
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/display_slot_owner.sv",
+    "rtl/video/display_record_guard.sv",
+    "rtl/video/video_display_mmio.sv",
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/display_scanout_link.sv",
+    "rtl/video/video_display_scanout.sv",
+    "rtl/video/video_pipeline.sv"
+  ],
+  "tests": [
+    "tb/video/models/video_pipeline_memory.sv",
+    "tb/video/tb_video_pipeline.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_pipeline.fdc"
+  ],
+  "scope": "Core-domain PIX/EOF + ABI2 capture + shared Video DDR + RAW-only display MMIO; live native C owner simulation. No physical ingress, CPU execution, NPU graph, global fabric, routing or board."
+}

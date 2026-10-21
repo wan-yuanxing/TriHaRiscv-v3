@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "display_scanout", "frame_pool", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "display_scanout", "frame_pool", "video_pipeline", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -42,7 +42,7 @@ def main():
                    work / "config_check.log")
         if args.suite in ('config','capture_mmio','all'):
             run_logged([sys.executable, ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
-        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "display_scanout", "frame_pool"):
+        if args.suite not in ("timing", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "mode_control", "overlay", "mode_resources", "mode_output", "display_slots", "display_mmio", "display_scanout", "frame_pool", "video_pipeline"):
             run_logged([sys.executable, ROOT / "scripts/video/prepare_reference.py", "--reference", "hdmi"],
                        work / "reference_check.log")
         manifest_path = ROOT / "fpga/pg2l100h/project/video_timing.json"
@@ -65,6 +65,17 @@ def main():
         if args.suite in ("rx", "all"):
             add_inputs(result,[ROOT / "rtl/video/video_rx.sv", ROOT / "fpga/pg2l100h/project/video_rx.json"])
         result["python"] = sys.version.split()[0]
+        if args.suite in ('video_pipeline','all'):
+            from common import sha256
+            run_logged([sys.executable,ROOT/'scripts/video/gen_capture_v2.py','--check'],work/'pipeline_capture_abi.log')
+            run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'pipeline_display_abi.log')
+            run_logged([sys.executable,ROOT/'scripts/video/test_video_pipeline.py'],work/'pipeline_live.log',timeout=6000)
+            live=json.loads((BUILD/'latest_video_pipeline.json').read_text(encoding='utf-8'))
+            if live['status']!='pass' or set(live['cases'])!={'normal','bad_eof','corrupt'}:
+                raise RuntimeError('Incomplete live pipeline suite')
+            add_inputs(result,[ROOT/p for p in live['inputs']])
+            result['video_pipeline_live']=live
+            result['passed'].append('video_pipeline')
         if args.suite in ('display_scanout','all'):
             from common import sha256
             path=ROOT/'fpga/pg2l100h/project/video_display_scanout.json'
@@ -1070,6 +1081,10 @@ def main():
                 if sha256(ROOT/name)!=digest:raise RuntimeError('Scanout artifact changed: '+name)
             for record in result['display_scanout_tools'].values():
                 if sha256(record['path'])!=record['sha256']:raise RuntimeError('Scanout tool changed')
+        if 'video_pipeline' in result['passed']:
+            for table in ('inputs','artifacts','tools'):
+                for name,digest in result['video_pipeline_live'][table].items():
+                    if sha256(ROOT/name)!=digest:raise RuntimeError('Pipeline source/artifact/tool changed: '+name)
         result["status"] = "pass"
     except Exception as error:
         result["status"] = "fail"

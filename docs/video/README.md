@@ -446,6 +446,23 @@ owner/raw/CDC及C三槽库实际事务回放；完整800×600与缩小探针分�
 平台须单独接收`fault/fault_code`，本批没有更改显示MMIO ABI。详见
 [RAW闭环验证](../verification/video/display_scanout.md)。
 
+## F4c3c 原生C与采集/显示联测
+
+```powershell
+python scripts/video/run.py --suite video_pipeline
+python scripts/video/build_pds.py --target video_pipeline --stage synth
+```
+
+显式`video_pipeline.json`组合原ABI2采集、共享DDR与RAW-only显示控制，保留两个
+独立AXI-Lite口和core域可背压PIX/EOF。原生C驱动在每次回调取得真实RTL响应，四帧
+按槽0/1/2/0轮转；保留旧显示事件未ACK时采第三槽，再以真实ACK释放旧槽。
+三分支逐地址写入和完整输出光栅独立校验；坏EOF/单bit存储损坏要求C保留引用。
+
+`build/video/latest_video_pipeline.json`为该suite结果；详情及范围见
+[验证记录](../verification/video/video_pipeline.md)。本机C不等于CPU执行，RPC等待
+不承诺硬件延迟；物理ingress、全局fabric/可见性、真实NPU和连续视频仍待接入。
+本目标只有组件综合，无管脚/位流或本批上板操作，既有板级诊断目标保持原样。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。

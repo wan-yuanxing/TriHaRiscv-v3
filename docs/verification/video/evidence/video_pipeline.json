@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "status": "live_capture_shared_DDR_RAW_display_C_owner_verified",
+  "base_head": "869a028bc0d6b4cda9ba5422c929263b77656837",
+  "owned": [
+    "rtl/video/video_pipeline.sv",
+    "tb/video/tb_video_pipeline.sv",
+    "tb/video/models/video_pipeline_memory.sv",
+    "tb/video/test_video_pipeline.c",
+    "scripts/video/test_video_pipeline.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_pipeline.json",
+    "fpga/pg2l100h/constraints/video_pipeline.fdc",
+    "docs/superpowers/specs/2026-10-20-video-pipeline-design.md",
+    "docs/superpowers/plans/2026-10-20-video-pipeline.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/video_pipeline.md",
+    "docs/verification/video/evidence/video_pipeline.json"
+  ],
+  "source_hashes": {
+    "rtl/video/video_pipeline.sv": "86f01300c696ec3a1cb9c5626dd9a92cc39354920fced7fccbb04fc9583423a5",
+    "tb/video/tb_video_pipeline.sv": "1564ce15afd2e085f47be1e314d624e54b6922c5a11a14c9aee1d9749688a66e",
+    "tb/video/models/video_pipeline_memory.sv": "a5ca6b2e59ff2ab14d18c2499802cc0e5fbc9b3a31d03ec8b90a63e175ffd203",
+    "tb/video/test_video_pipeline.c": "3e97bd944c6049878641a46dfaf29af546a831bb1191e6caaecd5716db23a9d5",
+    "scripts/video/test_video_pipeline.py": "807087b63338f94597669f847e0a4bd94232ac418deac910ddad066017dbea86",
+    "scripts/video/run.py": "14675b1a19b1b2613093c4a40350185aa1b805667b74b0c60dea14015a52f3f4",
+    "scripts/video/build_pds.py": "7c25b65c70c769194748492a858a0750184b6ff896b1b0e5f19dfcd60ef3d40c",
+    "fpga/pg2l100h/project/video_pipeline.json": "ffd3e46f71333c1994cff4ea1f8ee822c9f88b1503074adc02418567eae22ca3",
+    "fpga/pg2l100h/constraints/video_pipeline.fdc": "750f3436d61cde65cd8e36e48bc9af09ee56fd29e6d841e167103fdba0c0e081",
+    "docs/superpowers/specs/2026-10-20-video-pipeline-design.md": "85de362acd388f22d3094b82f2fa4a008080a8c0e6a537494f8e9844a28757d3",
+    "docs/superpowers/plans/2026-10-20-video-pipeline.md": "8f16c0cc801552d667821124a5603812c05d649872dd7ebfc368519b79a9d8f8",
+    "docs/video/STATUS.md": "cbe9ff042f16c121774288c03554d7c11615b9185d6d1574f9358bdc36604814",
+    "docs/video/README.md": "3371ff601b84671d992dda2778236a98babbcb0ddf1a70210d3230496a836cdc",
+    "docs/interfaces/video.md": "47684864267df2a4a3f01092a442f195ea3f6c455d4ab4e8ffedae7ab0572010",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "95a6deda21b081d2ceff6c4f70a20957f4d36a4e869fc89396df871798d50ae8",
+    "docs/verification/video/video_pipeline.md": "016b27c3d41adc24c9e14407cdfc64506495ee940b46f9c7839906d0f4067770"
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "status": "only_Video_section_and_date_for_index",
+    "committed_content_sha256": "cbe9ff042f16c121774288c03554d7c11615b9185d6d1574f9358bdc36604814",
+    "worktree_sha256": "237aba96d9a7f6c6f058629975f5c55712fae1fb87c350e5dbfd3ae2edf26e9e",
+    "baseline_worktree_sha256": "f65b48e71bae1784efbb6693535185392c7a544073f988af8c10a1392f8b3741",
+    "original_delta_sha256": "1b7f66a26c993b368a46cb85572da4cd9831965ee6c16356cd05b3bdf1ad9e70",
+    "original_NPU_record_changes_retained_unstaged": true
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/video_pipeline_baseline/result.json",
+      "sha256": "d7bc2c2fae2a2aa7e1a04f9c7f13cff8b704d5d257bc2d761390a1f573adeb41"
+    },
+    "audit": {
+      "path": "build/video/audit_pipeline.py",
+      "sha256": "231708a3abdc6cb12cc67c69e047546f3ec464572e3afb9de5646e961fa2a063"
+    },
+    "partial_STATUS": {
+      "path": "build/video/video_pipeline_delivery/status_partial.json",
+      "sha256": "95c1fa25a111057b28d9e6d2efea8faf38c4369ec29e4dcfad20d69bf19c0dc0"
+    },
+    "retained_STATUS_other_changes": {
+      "path": "build/video/video_pipeline_delivery/original_status_delta.bin",
+      "sha256": "1b7f66a26c993b368a46cb85572da4cd9831965ee6c16356cd05b3bdf1ad9e70"
+    },
+    "actual_RPC_lifetime": {
+      "path": "build/video/video_pipeline_delivery/rpc_lifetime.json",
+      "sha256": "11d1fd10d405851e0df0f45f7c71ec1cfa2e8304f7f959d27f9e21e51dce269b"
+    },
+    "regression": {
+      "path": "build/video/regression/20261021T021230_157750Z/result.json",
+      "sha256": "946d416099b283c2e7a2fa6789cce3f0011b59b8660b2aee15517a1e21589918"
+    },
+    "live": {
+      "path": "build/video/video_pipeline/20261021T021230_381214Z/result.json",
+      "sha256": "51b335630b00468f4571aaae744bb632d1fcc1c81db8d9adf7e209999b9d2b20"
+    },
+    "capture_v2": {
+      "path": "build/video/regression/20261021T020211_079931Z/result.json",
+      "sha256": "bcf1af00f06f14f93a6e898082b7c64e6554cb58c0e4c8af7b2d78654d5f68a7"
+    },
+    "display_scanout": {
+      "path": "build/video/regression/20261021T020224_327851Z/result.json",
+      "sha256": "30dd0a72768ee3c5b146327eef2b2d93b66d1f473c76af6b2ea03c2a8123800d"
+    },
+    "shared_video": {
+      "path": "build/video/regression/20261021T020415_721651Z/result.json",
+      "sha256": "4c5db52ef469c8c8e991b04a26085b2db00d531c462af9d6ef3ab0a4d8b4a078"
+    },
+    "frame_pool": {
+      "path": "build/video/regression/20261021T020920_223523Z/result.json",
+      "sha256": "b88a9361243ac162bff263f83fd9e454a6f31f5589d57dbc855cd2b1ba6f8aec"
+    },
+    "quality": {
+      "path": "build/video/pipeline_quality/20261021T020206_614146Z/result.json",
+      "sha256": "a0a497c85c58b724d8f2e31aba0ca3dc10683c574e865735b8ea7062704ad5f9"
+    },
+    "mutations": {
+      "path": "build/video/pipeline_mutations/20261021T021316_204482Z/result.json",
+      "sha256": "28591ce1848f30efdb603612cc9119d72c14b780a01e4e93359fc7f235fbdb47"
+    },
+    "coverage_fix": {
+      "path": "build/video/pipeline_coverage_fix/20261021T021240_135767Z/result.json",
+      "sha256": "6006ce34e52baaeae487ccfe60829ddbbd72263c35ba0797712d3b95dcaaef47"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261021T020047_094706Z/result.json",
+      "sha256": "d9a149a3cfadf16100cc01a6082b4625bec6ea1c158e0a0e2f111b1641f8e7d5"
+    },
+    "synthesis_artifacts": {
+      "build/video/pds/20261021T020047_094706Z/build.tcl": "cd071efe0d72ec1d3ed0507c8f5412dd117180106036f9d69a46c8b094eb7100",
+      "build/video/pds/20261021T020047_094706Z/compile/run.log": "c10185418f7b7f49622a139d3e2d825f491b6e8e05b70855c649eb40f1f97b3e",
+      "build/video/pds/20261021T020047_094706Z/constraint_check/constraint_check.ccr": "aa4eb666a5d39686903d20875ab0c76c259e99f2cc51c2424578969b7df70e5a",
+      "build/video/pds/20261021T020047_094706Z/synthesize/run.log": "746f31afa20e5aaa283bbf08022fbd9693ee197d39accce8bc4939351f88ec0a",
+      "build/video/pds/20261021T020047_094706Z/synthesize/video_pipeline_syn.vm": "9c45134d2bd945683269d9a41692c57dc10da44c7e6dce3f007e0b915b3af397",
+      "build/video/pds/20261021T020047_094706Z/version.log": "315d6d3535b5e1501bf314d3eb8784c1ccff0bdc56b503eb6c661622c673dead"
+    },
+    "review": {
+      "path": "build/video/pipeline_review/20261021T020532Z/review.json",
+      "sha256": "5c5d5b2f08b08f19353cd72a2fe6946f32a2daa11fc455f1f65e734ee82685c8"
+    },
+    "absence_compile_RED": {
+      "path": "build/video/video_pipeline_red/result.json",
+      "sha256": "9a46280014fad564a0c2273e7d5b5590877aa48c7bda516514ba029d86e55501"
+    }
+  },
+  "live_matrix": {
+    "bad_eof": {
+      "case": 1,
+      "requests": 1,
+      "captures": 0,
+      "records": 0,
+      "feedbacks": 0,
+      "retires": 0,
+      "bytes": 71104,
+      "pixels": 0,
+      "rasters": 0,
+      "overlap": 0,
+      "held": 0,
+      "contested": 0,
+      "Rgrants": 0,
+      "Wgrants": 383,
+      "underflows": 0,
+      "commands": 48,
+      "C": {
+        "failure": 1,
+        "frames": 0,
+        "modes": 0,
+        "releases": 0,
+        "checks": 73,
+        "R": 37,
+        "W": 7,
+        "F": 2,
+        "A": 1
+      }
+    },
+    "corrupt": {
+      "case": 2,
+      "requests": 1,
+      "captures": 0,
+      "records": 0,
+      "feedbacks": 0,
+      "retires": 0,
+      "bytes": 256,
+      "pixels": 0,
+      "rasters": 0,
+      "overlap": 0,
+      "held": 0,
+      "contested": 0,
+      "Rgrants": 0,
+      "Wgrants": 1,
+      "underflows": 0,
+      "commands": 41,
+      "C": {
+        "failure": 1,
+        "frames": 0,
+        "modes": 0,
+        "releases": 0,
+        "checks": 66,
+        "R": 30,
+        "W": 7,
+        "F": 2,
+        "A": 1
+      }
+    },
+    "normal": {
+      "case": 0,
+      "requests": 4,
+      "captures": 4,
+      "records": 4,
+      "feedbacks": 5,
+      "retires": 3,
+      "bytes": 8428800,
+      "pixels": 2400000,
+      "rasters": 5,
+      "overlap": 3584490,
+      "held": 1194635,
+      "contested": 42,
+      "Rgrants": 30485,
+      "Wgrants": 38292,
+      "underflows": 0,
+      "commands": 1095,
+      "C": {
+        "failure": 0,
+        "frames": 4,
+        "modes": 1,
+        "releases": 3,
+        "checks": 2077,
+        "R": 203,
+        "W": 850,
+        "F": 23,
+        "A": 10
+      }
+    }
+  },
+  "old_suite_simulations": {
+    "capture_v2": 12,
+    "display_scanout": 17,
+    "shared_video": 24,
+    "frame_pool": 1
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "mutations_detected": 3,
+  "review_open_findings": [],
+  "closed_review_findings": [
+    {
+      "id": "R1",
+      "priority": 1,
+      "severity": "important",
+      "file": "tb/video/test_video_pipeline.c",
+      "line": 64,
+      "title": "Third-slot premature-present assertion expects STATE while a prior submission is pending",
+      "description": "On iteration 2, the second display submission intentionally remains unacknowledged. video_frame_pool_present checks p.pending.valid before slot state and returns VIDEO_FRAME_BUSY. The unconditional STATE expectation aborts before third-slot capture and slot0 reuse.",
+      "evidence": "Actual normal run failed at VIDEO_PIPELINE_C_ASSERT NO_PRESENT_BEFORE_CAPTURE; normal RPC ends after the second submission returns real events 3.",
+      "recommendation": "Keep frozen C driver. Assert BUSY when the prior submission remains pending and STATE when there is no pending submission, while checking no I/O or pool mutation.",
+      "status": "closed",
+      "closure_evidence": "Full normal actual C/RTL PASS; corrected BUSY precedence with NO_IO checks."
+    },
+    {
+      "id": "R2",
+      "priority": 2,
+      "severity": "important",
+      "file": "tb/video/models/video_pipeline_memory.sv",
+      "line": 98,
+      "title": "Byte totals do not prove every expected address was written",
+      "description": "The memory model validates only presented address/data pairs and increments totals even for duplicate addresses. V uses only totals. Correct repeated writes can leave preview/input locations at initialized A5; display raster checks only RAW.",
+      "evidence": "Independent H10 model probe repeats the first valid 32B of each branch until all expected totals are reached: raw24000 preview6000 input80640; all branch offset32 locations remain A5, and the oracle accepts every write.",
+      "recommendation": "Track address coverage per frame/slot, reject duplicate effective byte writes, and require complete branch coverage at V. A final full-span data check is another option.",
+      "probe_result": "build/video/pipeline_review/20261021T020532Z/probe_result.json",
+      "status": "closed",
+      "closure_evidence": "Original independent duplicate-address probe now exits nonzero at PIPELINE_DUPLICATE_WRITE; full three-branch normal scenario PASS."
+    }
+  ],
+  "independent_review_bindings": {
+    "inputs": 503,
+    "artifacts": 25,
+    "tools": 3
+  },
+  "synthesis": {
+    "lut": 20318.0,
+    "registers": 25158.0,
+    "drm": 5.5,
+    "apm": 6,
+    "latches": 0,
+    "core_setup_estimate_ns": 0.311,
+    "pixel_setup_estimate_ns": 19.809,
+    "min_hold_estimate_ns": 0.619,
+    "constraints_applicable": 14,
+    "unconstrained_port_warnings": 94
+  },
+  "protected_files_unchanged": 451,
+  "other_route_paths_preserved": 31,
+  "old_entrypoint_bytes_exact_outside_new_hooks": true,
+  "old_production_RTL_ABI_and_C_bytes_unchanged": true,
+  "native_C_executed": true,
+  "live_RTL_MMIO": true,
+  "complete_800x600_parallel_digital_model": true,
+  "all_write_addresses_unique_and_branch_byte_totals_exact": true,
+  "release_ACK_required": true,
+  "CPU_global_frame_graph_owner": true,
+  "RAW_only": true,
+  "MMIO_modes": 1,
+  "BOX_AVATAR_integrated": false,
+  "coordinated_reset_required": true,
+  "independent_fault_outputs_require_platform": true,
+  "CPU_executed": false,
+  "real_NPU": false,
+  "physical_HDMI_ingress": false,
+  "source_backpressure_allowed": true,
+  "physical_crossmaster_visibility_verified": false,
+  "physical_bandwidth_verified": false,
+  "continuous_video_verified": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

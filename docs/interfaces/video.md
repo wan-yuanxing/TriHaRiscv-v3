@@ -3,7 +3,7 @@
 2026-10-19 显示设计修订：正式目标为 800×600 raw 全屏，功能键切换 RAW/BOX/AVATAR，
 同帧只改模式不释放当前槽。F1/F2全屏已验收，F3a提供独立MODE控制/去抖组件，
 F3b提供独立框/五点/单头像像素组件；F3c独立静态三模式诊断的布线、易失Program/Verify及实体KEY1/KEY0验收已通过。
-独立显示MMIO、CPU三槽库及可选采集rearm组件已实现；正式CPU/fabric、像素退休
+独立显示MMIO、CPU三槽库及可选采集rearm组件已实现；正式CPU/fabric、叠加退休
 与素材DDR接入尚待集成；下文
 `preview_display` 与双窗板级条目描述现有诊断接口，不能作为新全屏能力。规格与迁移
 边界见[全屏设计](../superpowers/specs/2026-10-19-fullscreen-display-design.md)。
@@ -27,6 +27,31 @@ mode_state位0..1请求/2..3实际模式，4有效，5待提交，6不可用，7
 缓存仍是一次装好后封存，未增加DDR素材DMA或运行中替换。正式多帧/raw/素材引用
 与显示MMIO属于F4；诊断不替代其ABI。证据及当前物理状态见
 [三模式板级记录](../verification/video/mode_board.md)。
+
+## F4c3c 采集与显示的端到端组件
+
+`video_pipeline`把原ABI2采集端点、允许显式REARM的三分支核、RAW-only显示端点和
+唯一Video共享DDR桥连接。`c_s_axi_*`/`d_s_axi_*`是两个独立AXI4-Lite口，分别仍为
+0x20012000/4KiB和0x20011000/4KiB；由未来全局fabric精确译码，不在本组件内别名。
+默认core125MHz、pixel40MHz；源`src_valid/data/ready`是已同步到core、允许背压的
+48bit PIX/EOF流，`arm_toggle/cancel`供未来物理ingress连接。正式成功几何固定
+800×600 RGB888/stride2400，预览400×300、输入320×320 BGR NCHW（上下各40行0）。
+
+CPU继续唯一管理全局槽与graph；组件没有自动分配或FREE接口。采集成功要求好EOF、
+三分支DMA结果及全部B退休，C读取完成记录并验证身份/几何后才改变池状态；两个
+采集事件ACK并确认rearm-ready后，软件显式REARM。显示实际commit/retire和软件
+ACK仍是不同边界；旧release未ACK时可使用第三槽，但旧槽不能进入全局FREE。
+同RAW模式不重复提交raw记录、不释放槽。BOX/AVATAR仍拒绝。
+
+`faults[0/1/2]`依次为采集核/显示链/共享内存，错误码各自输出；两个`irq_*`仍来自
+原MMIO事件端点，不向旧ABI合成fault位，也没有隐式局部reset。平台须采样独立fault
+并执行协调恢复。`capture_port_drained`仅表示采集写口已排空，不能替代显示退休或
+全局引用释放。`display_urgent`由外部提供，当前仿真固定1，尚无生产水位源。
+
+本机C直接驱动实际RTL端点的联测验证功能和引用生命周期；RPC边界可暂停模拟时间，
+不代表RISC-V执行或CPU延迟。详见[端到端验证](../verification/video/video_pipeline.md)。
+物理HDMI不可背压连续流、CPU/NPU全局fabric、跨master可见性、素材/叠加退休与
+真实NPU推理尚待集成；本批没有路由或板测。
 
 ## F4c3b 显示MMIO至真实RAW提交/退休
 
