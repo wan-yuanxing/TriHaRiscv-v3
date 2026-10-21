@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "cpu_hz": 100000000,
+  "ddr_hz": 125000000,
+  "axi_data_bits": 128,
+  "axi_id_bits": 4,
+  "fifo_address_bits": 2,
+  "reset": "single_coordinated_epoch",
+  "revision": "8635a91626d87eb7573beba5ea805a5f6043bb8a",
+  "files": {
+    "rtl/video/axi128_hmic256.sv": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "tb/video/models/ddr_native_model.sv": "ae5944bd80164f7d848f6329496e42d72d0bab4f3350af619939661f0cbb8060",
+    "docs/interfaces/ddr_wrapper.md": "3de14158665f7f0fd1ac468ab724aaec44202983be4c8ec1918adb7b360a0706"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "status": "PASS",
+  "bound_results": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-cdc-20261021T150116039447Z\\result.json": "923e656df1f0596b99a790542b72c2c9923b1930ab30df5999049ffa209ee9c6",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-cdc-20261021T150118448795Z\\result.json": "2aa0630502b2a16d3802de0910c9f55c8e19fbba93afbc3727e249f7e27dbe87",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-cdc-20261021T150120747944Z\\result.json": "0c9fa0a02d46e457e0ffaa5d3a66e4c467921a106de22905dc870f988db7b85c",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-system-20261021T151107812548Z\\result.json": "31263e2f18a8c22de735ede160452f0b797e8d6bb13b88ae1bef57da46baeacd",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-system-20261021T151155843202Z\\result.json": "6f5c23010c0f78d3ac11cb52385c8489c7a95f61d903492b7c74878a5052b852",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-cdc-20261021T150203715537Z\\result.json": "ba2203835e75e6de7cfe15067fb966cb149712b63ed623165f2c8affa1e24464",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-cdc-20261021T150206104885Z\\result.json": "bcb99bb5f26e7b95e2de4edc584a84e5d23cfd0636ca63536d6df894b9fbe7e8",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-system-20261021T151158751687Z\\result.json": "6ee9d1e0c04cb8490bbc60825a21fbde9281307a608e09582bc42c09aacb80ac",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-system-20261021T151201535224Z\\result.json": "f2360e34b96e082a87d0e24bdfaab43d977eae7eaabd80c131e58c2fd6d36f20",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-map-20261021T1511561236951Z\\result.json": "46d75b1fb8013f9e5b260b37366af76a87cc80af97025deb9b98c8c9234e1a5e"
+  },
+  "pinned_revision": "8635a91626d87eb7573beba5ea805a5f6043bb8a",
+  "cdc_runs": [
+    {
+      "directory": "build\\cpu\\ddr-cdc-20261021T150116039447Z",
+      "cpu_half_ns": 5,
+      "ddr_half_ns": 4
+    },
+    {
+      "directory": "build\\cpu\\ddr-cdc-20261021T150118448795Z",
+      "cpu_half_ns": 3,
+      "ddr_half_ns": 6
+    },
+    {
+      "directory": "build\\cpu\\ddr-cdc-20261021T150120747944Z",
+      "cpu_half_ns": 7,
+      "ddr_half_ns": 4
+    }
+  ],
+  "system_runs": [
+    {
+      "directory": "build\\cpu\\ddr-system-20261021T151107812548Z",
+      "cache_enable": true,
+      "cycles": 28337,
+      "checks": 147,
+      "native_read_beats": 33,
+      "native_write_beats": 22,
+      "scope": "directed RTL software with forced recoverable AXI read error and native init-loss; not CoreMark or physical DDR"
+    },
+    {
+      "directory": "build\\cpu\\ddr-system-20261021T151155843202Z",
+      "cache_enable": false,
+      "cycles": 27894,
+      "checks": 147,
+      "native_read_beats": 37,
+      "native_write_beats": 22,
+      "scope": "directed RTL software with forced recoverable AXI read error and native init-loss; not CoreMark or physical DDR"
+    }
+  ],
+  "negatives": [
+    {
+      "directory": "build\\cpu\\ddr-cdc-20261021T150203715537Z",
+      "test": "cdc",
+      "fault": "data",
+      "actual_failure": "payload/order channel=5"
+    },
+    {
+      "directory": "build\\cpu\\ddr-cdc-20261021T150206104885Z",
+      "test": "cdc",
+      "fault": "watchdog",
+      "actual_failure": "watchdog"
+    },
+    {
+      "directory": "build\\cpu\\ddr-system-20261021T151158751687Z",
+      "test": "system",
+      "fault": "data",
+      "actual_failure": "real firmware success exit"
+    },
+    {
+      "directory": "build\\cpu\\ddr-system-20261021T151201535224Z",
+      "test": "system",
+      "fault": "watchdog",
+      "actual_failure": "watchdog"
+    }
+  ],
+  "hierarchy_resources": {
+    "u_system": {
+      "lut": 10671,
+      "registers": 7942,
+      "distributed_ram": 816,
+      "apm": 4,
+      "drm": 33.5
+    },
+    "u_soc": {
+      "lut": 6913,
+      "registers": 4431,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 27.5
+    },
+    "u_core": {
+      "lut": 6218,
+      "registers": 3563,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 0.0
+    },
+    "u_cache": {
+      "lut": 514,
+      "registers": 763,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 11.0
+    },
+    "u_memory": {
+      "lut": 127,
+      "registers": 89,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 16.5
+    },
+    "u_cdc": {
+      "lut": 67,
+      "registers": 153,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 6.0
+    },
+    "u_bridge": {
+      "lut": 3691,
+      "registers": 3358,
+      "distributed_ram": 128,
+      "apm": 0,
+      "drm": 0.0
+    }
+  },
+  "actual_postroute_100mhz_verified": false,
+  "physical_ddr_validated": false,
+  "shared_fabric_validated": false,
+  "programmed": false,
+  "reviewer_sha256": "69472c0bef8d8c337ec2ccc396ee67d1125d4a84434720ea69f3bf58783bded3",
+  "scope": "Digital CPU/CDC/pinned-bridge functional and native area checkpoint; not deployment",
+  "checkpoint": "2026-10-21 CPU100MHz/DDR125MHz digital boundary and native area",
+  "base_commit": "445ae87",
+  "review_json_sha256": "98b715f5605c0896e524a46ad72b4e37389f58873be7da3b8d4e932e8101f4a3",
+  "python_tests": {
+    "ddr_binding": 4,
+    "ddr_review": 4,
+    "cache_policy": 6,
+    "cache_soc_config": 6,
+    "cache_soc_review": 4,
+    "existing_soc": 44
+  },
+  "preserved_release": "build/soc/releases/cpu_coremark_6ff82025b53d",
+  "red_runs": [
+    "build/cpu/ddr-cdc-20261021T144711758686Z",
+    "build/cpu/ddr-system-20261021T145346199375Z"
+  ],
+  "known_intermediate_failures": [
+    {
+      "directory": "build/cpu/ddr-system-20261021T145451198150Z",
+      "return_code": 12,
+      "reason": "testbench integer variables connected to model output ports; changed to wire32; implicit reset-name typo found in static review and guarded with default_nettype none"
+    }
+  ],
+  "next_gates": [
+    "physical DDR controller/CPU PLL/pin boundary",
+    "CDC physical skew/delay and synchronizer placement review",
+    "actual100MHz post-route Slow/Fast setup/hold/MPW",
+    "CPU/NPU/Video shared fabric and cross-master visibility",
+    "separate board admission"
+  ]
+}
