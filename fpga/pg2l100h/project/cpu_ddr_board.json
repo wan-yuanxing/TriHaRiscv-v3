@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "target": "cpu_ddr_board",
+  "top": "triha_cpu_ddr_board_top",
+  "soc_manifest": "fpga/pg2l100h/project/cpu_cached_soc.json",
+  "board_config": "config/cpu_ddr_board.json",
+  "sources": [
+    "rtl/soc/triha_axi128_cdc.v",
+    "rtl/soc/triha_cpu_ddr.v",
+    "fpga/pg2l100h/rtl/triha_cpu_ddr_supervisor.v",
+    "fpga/pg2l100h/rtl/triha_cpu_ddr_board_top.v"
+  ],
+  "headers": ["rtl/soc/include/cpu_ddr_board_cfg.vh"],
+  "pinned_sources": ["rtl/video/video_async_fifo.sv", "rtl/video/axi128_hmic256.sv"],
+  "constraints": [
+    "fpga/pg2l100h/constraints/cpu_ddr_board.fdc",
+    "fpga/pg2l100h/constraints/cpu_ddr_board_regions.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf"
+  ],
+  "scope": "Standalone cached CPU100MHz / CDC / exclusive DDR125MHz native owner / actual board PLL and DDR PHY; no shared fabric, programming or board acceptance"
+}

@@ -1,0 +1,5 @@
+# Preserve the accepted local-memory CPU placement bands at the new hierarchy.
+# DDR/Cache/CDC remain free; no timing paths are excepted here.
+define_attribute {i:u_system/u_soc/u_core/u_cpu} {PAP_REGION} {soc_cpu_clock(0,64,150,199)}
+define_attribute {i:u_system/u_soc/u_router/u_memory/u_rom} {PAP_REGION} {soc_cpu_clock(0,64,150,199)}
+define_attribute {i:u_system/u_soc/u_router/u_memory/u_sram} {PAP_REGION} {soc_sram_local(0,96,150,199)}

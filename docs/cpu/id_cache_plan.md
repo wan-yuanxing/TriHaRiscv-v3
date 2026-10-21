@@ -58,3 +58,13 @@ Second checkpoint2026-10-21: `docs/verification/cpu/id_cache_stage2.md/.json` bi
 - [x] Run native compile/synthesize/dev_map and independently re-read frozen files, actual elaboration, output hashes and CPU/Cache/CDC/bridge area. `docs/verification/cpu/id_cache_stage3.md/.json` records10671LUT/7942FF/33.5DRM/4APM excluding scan logic; CPU6218LUT, Cache514LUT, CDC67LUT/153FF/6DRM, bridge3691LUT/3358FF. Context differs from stage2; do not claim a core optimization.
 - [ ] Bind the physical DDR controller/clock/pin top and reviewed CDC physical constraints, then run the original100MHz multi-corner post-route checks. No area fixture is a timing boundary.
 - [ ] Integrate CPU/NPU/Video arbitration upstream of the one native bridge and prove other-master write visibility. The exclusive CPU wrapper is not that shared fabric. Board admission remains separate; no automatic programming or COM12 access.
+
+## 8. Standalone physical DDR board boundary
+
+- [x] Bind the canonical71 DDR pins/PHY constraints and priority nets, one shared differential reference buffer, actual HIGH-bandwidth CPU PLL and exact74-source generated DDR IP in an explicit hardware manifest. Digital substitutes never enter the hardware filelist.
+- [x] Add free-clock startup/init/clock/PLL supervision and an actual O2 standalone firmware image. Two software boots each test private/shared8KiB and changed executable private instructions through FENCE.I. Four fault monitors and real native readback-corruption rejection pass.
+- [x] Correct PDS wide-cell versus mapped-bit Gray selectors; independently verify20 three-bit selections and six first-stage synchronizer selections. Keep only scoped asynchronous control exceptions; second-stage D paths remain timed.
+- [x] Reproduce unsynchronized board-state release with an executable failing check; use local two-stage free/DDR releases for LEDs, heartbeat and fault synchronizers. Repeat all board digital tests after the repair.
+- [x] Run two fresh complete compile/synthesize/dev_map/place/route/report_timing implementations under original100MHz/IO/hold/multicorner budgets. Independently re-read bindings, actual stages, all clock summaries, CPU-only hierarchy and max-delay paths. Stage4 records actual failures, not admission.
+- [ ] Close the actual remaining CPU setup path (-0.155ns/two endpoints), vendor phase-adjust FSM reset recovery (five endpoints), and explicitly verify Gray skew. Existing complete paths are not sufficient skew-report evidence. Preserve all failed runs; no CPU cycles/ISA/predictor changes in this checkpoint.
+- [ ] Shared-fabric/other-master visibility, physical DDR training and board admission remain separate gates. The previous deployment stays intact; no COM12, programming, Flash, merge or push.

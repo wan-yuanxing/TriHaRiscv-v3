@@ -1,6 +1,8 @@
 # TriHa CPU 状态
 
-更新：2026-10-21。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+更新：2026-10-22。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+
+I/D Cache已接入独立CPU/DDR板级顶层：真实125→100MHz HIGH带宽PLL、固定DDR控制器/PHY、71个DDR管脚和五通道CDC。真实O2固件在数字IP替身下两次完成私有/共享各8KiB自检和FENCE.I，四类监测故障通过，数据损坏负例被实际CPU store异常拒绝。实际PDS两轮完整布通，最新CPU Slow setup -0.155ns/2端点，Fast +3.521ns，hold +0.158/+0.100ns，MPW +3.655/+4.202ns；仍未100MHz准入。新增本域同步释放修复了普通板级逻辑的跨域复位违例，保留PHY相位调整FSM五个recovery端点（Slow -8.198ns/Fast -4.539ns）待处理。60条Gray实际max-delay路径均通过，但没有独立skew结果，保持UNKNOWN。CPU-only6478LUT/3562FF/688RAM-LUT已含/0DRM/4APM；Cache523LUT/763FF/11DRM，CDC67LUT/153FF/6DRM，桥3634LUT/3354FF，整板目标15746LUT/13221FF/33.5DRM/4APM，不能把整板资源算成CPU。没有新CoreMark成绩、位流或板测，原部署包未改动。证据docs/verification/cpu/id_cache_stage4.md及JSON。下一步只针对真实FIFO读指针→执行单元路径、厂商FSM复位约束传播和完整Gray skew核验；共享fabric准入仍未完成。
 
 I/D Cache已进一步接通CPU100MHz→五通道异步AXI→固定125MHz DDR桥的数字通路，仍未物理准入。配置固定Git提交和4项SHA256，构建直接抽取Git对象，不覆盖旧Video文件或主工程。三组比例的CDC逐位/顺序/背压/在途复位通过；真实CPU缓存开启/旁路均通过原O2软件，22次成功store均等待native写入及读回，三次访问异常和真实桥初始化丢失后本地执行正确；native写已接受、CPU未响应时协调复位后整套软件重启通过。四类损坏/超时负例实际退出1，68项Python回归和独立证据核验通过。PDS原生映射总计10671LUT/7942FF/816RAM-LUT已含/33.5DRM/4APM，排除夹具；本上下文CPU6218LUT/3563FF、Cache514LUT、CDC67LUT/153FF/6DRM、DDR桥3691LUT/3358FF。不同综合上下文不算CPU优化；定向诊断不是CoreMark，也不是物理DDR/CDC时序。真实DDR/PLL/管脚、CDC物理约束、实际100MHz后布线及共享fabric仍待准入。未访问COM12或编程，原包保留。证据docs/verification/cpu/id_cache_stage3.md及JSON。
 

@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "status": "CHECKPOINT",
+  "date": "2026-10-22",
+  "parent_commit": "6c40346",
+  "branch": "cpu/windows-baseline",
+  "scope": "Standalone cached CPU / CDC / exclusive native DDR / actual board PLL and PHY; no shared-fabric or board admission",
+  "digital_status": "PASS",
+  "physical_flow_status": "PASS",
+  "timing_status": "FAIL",
+  "timing_closed": false,
+  "programmed": false,
+  "bitstream_generated": false,
+  "board_validated": false,
+  "digital_review": {
+    "path": "build/cpu/ddr-board-reset-digital-review-20261022.json",
+    "sha256": "03b8088898b795ba0d616679f1f455c14921a06e097143b583cef6151ca94369"
+  },
+  "physical_review": {
+    "path": "build/cpu/ddr-board-reset-route-review-20261022.json",
+    "sha256": "bcef445d8e03feda79dc70af34b5bb1608ccaec846a94ecc8b92f59a775da975"
+  },
+  "first_physical_review": {
+    "path": "build/cpu/ddr-board-route-review-20261022.json",
+    "sha256": "2d4ba8cb2813e70b6aa4487859a1c0057b51c5619390d0183b0220e0263f2990"
+  },
+  "source_binding": {
+    "path": "build/cpu/ddr-board-route-20261021T163448972576Z/result.json",
+    "sha256": "02e0ccd42f5f00429549019e8594a5f957f6a4ec67ca7691ae12c791add09efc"
+  },
+  "actual_timing_report": {
+    "path": "build/cpu/ddr-board-route-20261021T163448972576Z/report_timing/triha_cpu_ddr_board_top.rtr",
+    "sha256": "74132239ae8b181e29a50506b49fc7a9482edade09f34cdda3a447fa76e46db4"
+  },
+  "review_tool": {
+    "path": "scripts/cpu/review_ddr_board.py",
+    "sha256": "dd6a0661f6f918f02eb7aaa5b8a1b96b11b66f5a526665f2cc85c61a12743f06"
+  },
+  "digital_runs": {
+    "boot": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163333732403Z",
+    "no-init": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163351998208Z",
+    "init-loss": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163355815290Z",
+    "clock-stop": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163359524985Z",
+    "cpu-pll-loss": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163402875619Z",
+    "corrupt-data": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261021T163406350281Z"
+  },
+  "actual_elaboration": {
+    "u_system/u_soc": {
+      "CACHE_ENABLE": 1
+    },
+    "u_system/u_soc/u_core": {
+      "DUAL_ISSUE": 0
+    },
+    "u_system/u_soc/u_core/u_cpu": {
+      "SUPPORT_DUAL_ISSUE": 0,
+      "NUM_BTB_ENTRIES": 512,
+      "NUM_BHT_ENTRIES": 512,
+      "NUM_RAS_ENTRIES": 4,
+      "GSHARE_ENABLE": 0,
+      "EARLY_MUL_BYPASS": 1
+    },
+    "u_system/u_soc/u_router/u_cache": {
+      "ICACHE_ENABLE": 1,
+      "DCACHE_ENABLE": 1
+    },
+    "u_system/u_cdc/u_aw_fifo": {
+      "DATA_WIDTH": 49,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_w_fifo": {
+      "DATA_WIDTH": 145,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_b_fifo": {
+      "DATA_WIDTH": 6,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_ar_fifo": {
+      "DATA_WIDTH": 49,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_r_fifo": {
+      "DATA_WIDTH": 135,
+      "ADDR_WIDTH": 2
+    }
+  },
+  "resources": {
+    "triha_cpu_ddr_board_top": {
+      "lut": 15746,
+      "registers": 13221,
+      "distributed_ram": 859,
+      "apm": 4,
+      "drm": 33.5
+    },
+    "I_ips_ddr_top": {
+      "lut": 4696,
+      "registers": 5144,
+      "distributed_ram": 43,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_supervisor": {
+      "lut": 110,
+      "registers": 105,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_core": {
+      "lut": 6478,
+      "registers": 3562,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 0.0
+    },
+    "u_cache": {
+      "lut": 523,
+      "registers": 763,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 11.0
+    },
+    "u_cdc": {
+      "lut": 67,
+      "registers": 153,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 6.0
+    },
+    "u_bridge": {
+      "lut": 3634,
+      "registers": 3354,
+      "distributed_ram": 128,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_memory": {
+      "lut": 145,
+      "registers": 89,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 16.5
+    }
+  },
+  "cpu_timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": -0.155,
+      "total_negative_slack_ns": -0.161,
+      "failing_endpoints": 2,
+      "endpoints": 22648
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.158,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22648
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 4.723,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3414
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.219,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3414
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4191
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.521,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22648
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.1,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22648
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 6.463,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3414
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.129,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3414
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4191
+    }
+  ],
+  "all_clock_violations": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": -0.155,
+      "total_negative_slack_ns": -0.161,
+      "failing_endpoints": 2,
+      "endpoints": 22648
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "free_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": -8.198,
+      "total_negative_slack_ns": -40.788,
+      "failing_endpoints": 5,
+      "endpoints": 5
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "free_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": -4.539,
+      "total_negative_slack_ns": -22.509,
+      "failing_endpoints": 5,
+      "endpoints": 5
+    }
+  ],
+  "worst_cpu_setup_paths": [
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/rd_ptr_q[0]/opit_0_inv_L6Q_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_exec0/result_q[5]/opit_0_inv_L6Q_perm/I4",
+      "slack_ns": -0.155
+    },
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/ram_q[0][55]/opit_0_inv_L6Q_LUT6DQL5_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_exec0/result_q[7]/opit_0_inv_L6Q_perm/I3",
+      "slack_ns": -0.006
+    },
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_issue/u_pipe0_ctrl/valid_e2_q/opit_0_inv_L6Q_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_exec0/result_q[0]/opit_0_inv_L6Q_perm/I5",
+      "slack_ns": 0.027
+    }
+  ],
+  "gray": {
+    "pointer_selections": 20,
+    "bits_per_selection": 3,
+    "first_stage_selection_bits": [
+      1,
+      1,
+      9,
+      1,
+      2,
+      1
+    ],
+    "actual_maxdelay_paths": 60,
+    "maxdelay_ns": 8.0,
+    "maxdelay_all_met": true,
+    "largest_reported_datapath_ns": 1.234,
+    "requested_skew_ns": 2.0,
+    "skew_status": "UNKNOWN; no explicit skew section"
+  },
+  "red_runs": [
+    {
+      "path": "build/cpu/ddr-board-20261021T154448688933Z",
+      "reason": "missing implementation",
+      "recorded_exit": 2
+    },
+    {
+      "path": "build/cpu/ddr-board-route-20261021T160251140045Z",
+      "reason": "PDS wide-cell selectors did not match; synthesis import failure",
+      "timing_available": false
+    },
+    {
+      "path": "build/cpu/ddr-board-20261021T162839770425Z",
+      "reason": "unsynchronized free reset release",
+      "recorded_exit": 1
+    }
+  ],
+  "diagnostic_only": {
+    "path": "build/cpu/ddr-reset-port-probe-20261022",
+    "scope": "Frozen compiler DB resynthesis with scoped PHY reset-port through exception",
+    "outcome": "free-to-DDR five recovery endpoints still present in synthesis summary; not adopted; no new post-route result"
+  },
+  "verification": {
+    "python_unittest_count": 41,
+    "python_unittest_status": "PASS",
+    "generated_config_check": "PASS",
+    "original_source_check": "PASS 28+9+7",
+    "pds_report_tests": "PASS",
+    "route_report_tests": "PASS"
+  },
+  "preserved_release": {
+    "manifest": {
+      "path": "build/soc/releases/cpu_coremark_6ff82025b53d/manifest.json",
+      "sha256": "9e5d62605eb82d36d288db17cb06110d3455af1f5a6aa1652fdf0e2e98314c8c"
+    },
+    "verified_files": 10,
+    "bitstream_sha256": "6ff82025b53d071827fb093a1f97dc417628f89fdc22db6dc0736eabd7404cd9"
+  },
+  "open_gates": [
+    "CPU Slow setup -0.155ns/two endpoints",
+    "PHY phase-adjust FSM recovery/five endpoints",
+    "Independent Gray skew evidence",
+    "Shared-fabric other-master visibility",
+    "Physical DDR training and board acceptance"
+  ]
+}

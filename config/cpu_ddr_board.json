@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "free_clock_hz": 27000000,
+  "startup_cycles": 27000,
+  "init_timeout_cycles": 135000000,
+  "clock_timeout_cycles": 27000000,
+  "heartbeat_cycles": 13500000,
+  "cpu_board_config": "config/cpu_board.json",
+  "ddr_manifest": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "pin_template": "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+  "private_test_base": 2147549184,
+  "shared_test_base": 2268069888,
+  "test_words": 2048,
+  "cpu_period_ns": 10.0,
+  "gray_max_delay_ns": 8.0,
+  "gray_max_skew_ns": 2.0,
+  "pnr_action_minutes": 20,
+  "outer_seconds": 1500
+}
