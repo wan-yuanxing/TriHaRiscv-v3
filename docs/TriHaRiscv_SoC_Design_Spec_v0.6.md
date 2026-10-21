@@ -666,6 +666,17 @@ RPC模拟时间可暂停，不宣称CPU执行/延迟、真实NPU、物理DDR可�
 闭合。无本批布线或板测，验证边界见[完整记录像素验证](verification/video/record_pixels.md)。
 后续接真实RAW身份、素材装载和联合退休，再由CPU/NPU/fabric及物理实现独立验收。
 
+2026-10-21 F4c4b实施注记：新增`avatar_ddr_cache`作为待仲裁AXI128读客户端，
+从素材区装载256×256 RGBA8888，16B拍/最多16拍/单在途并按4KiB拆分。逐字节
+CRC通过后才写最后texel、封存原cache，素材身份保持至协调reset；结果ACK不允许
+覆盖。CRC来自本地装载描述符，不改变显示ABI。源DDR不可变与写后读可见性由CPU/
+fabric保证。失败保留已公开AR并排空，非法/意外R保守失去排空可信性；最后写入
+后成功事件保留，后来端口故障另报。24场景及9项变异检出见
+[素材DDR验证](verification/video/avatar_ddr.md)。组件综合509LUT/628FF/64DRM，
+core内部setup估计+2.614ns，仅综合，无布线或板测；未解决前批record_pixels违例。
+本批没有动态素材替换、共享读仲裁、真实RAW/owner或正式BOX/AVATAR系统闭环，
+不新增第二物理DDR端口，不改变全局CPU帧/graph所有权。
+
 ### 10.1 总线约定
 
 | 接口 | 当前决定 |

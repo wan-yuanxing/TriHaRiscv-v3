@@ -1,0 +1,485 @@
+{
+  "schema_version": 1,
+  "status": "DDR_RGBA_CRC_to_immutable_cache_verified",
+  "base_head": "770dfde96615df778e0db5251ee91737270628d9",
+  "owned": [
+    "rtl/video/avatar_ddr_cache.sv",
+    "tb/video/tb_avatar_ddr_cache.sv",
+    "scripts/video/test_avatar_ddr.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "fpga/pg2l100h/project/video_avatar_ddr.json",
+    "fpga/pg2l100h/constraints/video_avatar_ddr.fdc",
+    "docs/superpowers/specs/2026-10-21-avatar-ddr-cache-design.md",
+    "docs/superpowers/plans/2026-10-21-avatar-ddr-cache.md",
+    "docs/video/STATUS.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/verification/video/avatar_ddr.md",
+    "docs/verification/video/evidence/avatar_ddr.json"
+  ],
+  "source_hashes": {
+    "rtl/video/avatar_ddr_cache.sv": "3b5dba0a06faa14158fa0db30afa7fb90adc796b185b628beadd0e51242d0f91",
+    "tb/video/tb_avatar_ddr_cache.sv": "03e5ccde3168704fc658116811c149d7d161fed8af961adf68a747dea4b6fbb6",
+    "scripts/video/test_avatar_ddr.py": "9a9d4e5173761878ba1f9ad0f951050edbd21cdbe52337dba429ca8743fe859e",
+    "scripts/video/run.py": "1334632212fb1da931315ce5ab4e9cce07d36c1874479050d08b7c8f6e66ef32",
+    "scripts/video/build_pds.py": "271fec125293b6ede4f6d8b96c82d878e33bf0396ab2e2d47ec6be6e858064e5",
+    "fpga/pg2l100h/project/video_avatar_ddr.json": "35a0974291977a7577470183b59f0207d5b418fb6b3e05e0178cd4c423a689d2",
+    "fpga/pg2l100h/constraints/video_avatar_ddr.fdc": "7f5212ec709da74e64637f0a5d234b3cb4467fb2608a55d7bf12890212490fc9",
+    "docs/superpowers/specs/2026-10-21-avatar-ddr-cache-design.md": "65aba9aadb7d22e10856d5eaeec49782f1e492fd2e6c340c26176ce4b8304190",
+    "docs/superpowers/plans/2026-10-21-avatar-ddr-cache.md": "9f04aca50dbcac34b320e420f002c9d07d7301d30e177865ba173c54c65af5b7",
+    "docs/video/STATUS.md": "86bde8f56a63637193ad894d8a582a0a5599881d4ac9deda9d6c50447f27bd16",
+    "docs/video/README.md": "918ceced4b37d987de3df4a54e12e333211669841e3fd77d1b7ff141cc0cb950",
+    "docs/interfaces/video.md": "ed9bd802488978e81c3bce7eac2569b24edeec07d3f2a6fe3dbe931cf4e51941",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "34c993ba7862fb835b941a0ca602c4886b832c8d60a431aa09d1aed1cf38a296",
+    "docs/verification/video/avatar_ddr.md": "ea73f93461ecdf53f411e41df9968f3da4d41eebc077d02a7929d7bb6e431cb4"
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "status": "only_F4c4b_Video_section_for_index",
+    "committed_content_sha256": "86bde8f56a63637193ad894d8a582a0a5599881d4ac9deda9d6c50447f27bd16",
+    "worktree_sha256": "71244c61a8bf831e968a386d77468f16487feecfc8b4e5b509e5186019a992ae",
+    "baseline_worktree_sha256": "0f2e7b3d712bac73d7fdb4b37942cab84ec9f2bdc12ea4d521738e1322e2acce",
+    "retained_delta_sha256": "4f277292659121b3bb7be44092d567f3bf7569217726c02f90f2059b9b37c931",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/avatar_ddr_baseline/result.json",
+      "sha256": "7ec26310d801ea670a474e7a8eddece291e2fec310da7affe6561ab539821104"
+    },
+    "audit": {
+      "path": "build/video/audit_avatar_ddr.py",
+      "sha256": "1448425db00073a4280c35050e64bc7894b8483e8b4fa942b7e8c719f59f8709"
+    },
+    "partial_STATUS": {
+      "path": "build/video/avatar_ddr_delivery/status_partial.json",
+      "sha256": "7e4a812f8542ee8b59468c074b09661e66bc710a7611d0325eb88ae010131a79"
+    },
+    "retained_STATUS_changes": {
+      "path": "build/video/avatar_ddr_delivery/retained_status_delta.bin",
+      "sha256": "4f277292659121b3bb7be44092d567f3bf7569217726c02f90f2059b9b37c931"
+    },
+    "regression": {
+      "path": "build/video/regression/20261021T080016_692336Z/result.json",
+      "sha256": "4d563398d4a327fe169956688edcd34df48f020188d34dd883a23391d481cc08"
+    },
+    "component": {
+      "path": "build/video/avatar_ddr/20261021T080016_815501Z/result.json",
+      "sha256": "20569f1cf9ce7eff7c9703ae6048733563fd5d727160b49ab7550c8cd106e8f9"
+    },
+    "affected": {
+      "path": "build/video/avatar_ddr_affected/20261021T080016_684553Z/result.json",
+      "sha256": "d391035682a1151eeeffcff8bea2c097de8e5468ba6416c695bef82f3bd3ffc5"
+    },
+    "mode_resources": {
+      "path": "build/video/regression/20261021T080016_768082Z/result.json",
+      "sha256": "a8239ffd60fb77278f527471d5fc76a658ca6c36191cc68abfe32befeabcfe3c"
+    },
+    "mutations": {
+      "path": "build/video/avatar_ddr_mutations/20261021T080016_670689Z/result.json",
+      "sha256": "8c72c01b18c38228279cd989dc83ef83815ef30217f61d41e2292d9caf9321c4"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261021T080016_704123Z/result.json",
+      "sha256": "96a543492aa4be7a956096ad4b03e04e53dad398ef230e12bdec85b48376f764"
+    },
+    "synthesis_artifacts": {
+      "build/video/pds/20261021T080016_704123Z/build.tcl": "3bfff6b4cdfb85cd9a57f31e2805d5d1e8595a169a0cad353b3dddbfa17ce3b2",
+      "build/video/pds/20261021T080016_704123Z/compile/run.log": "167acf53e9ce17a78deb9327999fb44dd12cf52a839c8a4b320a6a17110f3f87",
+      "build/video/pds/20261021T080016_704123Z/constraint_check/constraint_check.ccr": "2d664264d2a11b53df74d4046436d2aacc7b6cc0fc30e241ec0c689a09fb227c",
+      "build/video/pds/20261021T080016_704123Z/synthesize/avatar_ddr_cache_syn.vm": "5cd09f8d5800a31ba6c61f7624f4a0b93e294282c627684017d651384d715965",
+      "build/video/pds/20261021T080016_704123Z/synthesize/run.log": "00e04ca00b2d7212622043a6296bd605ccbf2753a47663165c7708eccf4a6076",
+      "build/video/pds/20261021T080016_704123Z/version.log": "315d6d3535b5e1501bf314d3eb8784c1ccff0bdc56b503eb6c661622c673dead"
+    },
+    "review": {
+      "path": "build/video/avatar_ddr_review/20261021T075138Z/review_report.json",
+      "sha256": "0d1c08580f6c3dc44ac0ebf27c104f59e83ba88e2cb00123e9393c65c24aa774"
+    },
+    "independent_regression": {
+      "path": "build/video/avatar_ddr_review/20261021T075138Z/final_green/20261021T080106_507177Z/result.json",
+      "sha256": "f7d03fa320512918053ff0402dc73c5b2ab1868424582b3f2c20eb4bb0d6c7e7"
+    },
+    "absence_compile_RED": {
+      "path": "build/video/avatar_ddr_red/result.json",
+      "sha256": "499461570ab518444615cd414d4270bf9921201c36b3d3d527edb28d4e9e9226"
+    },
+    "absence_RED_artifacts": {
+      "build/video/avatar_ddr_red/compile.log": "bcf6a421d3ed3e2be5b0892c442c5bcbcfc30396c4fa6119509dda6580326ade",
+      "build/video/avatar_ddr_red/result.json": "499461570ab518444615cd414d4270bf9921201c36b3d3d527edb28d4e9e9226",
+      "build/video/avatar_ddr_red/tb_avatar_ddr_cache.sv": "187b5cb9d07292737b81aacb067f22f78fedcd48f3995a635cb3e7af8367aed3"
+    },
+    "pre_AR_RED_artifacts": {
+      "build/video/avatar_ddr_pre_ar_red/avatar_ddr_cache.sv": "10b37007a3c6ca9ecd468f3b4551035b850a4f85de17f156a83475d2b5dfdf48",
+      "build/video/avatar_ddr_pre_ar_red/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+      "build/video/avatar_ddr_pre_ar_red/bus_words.hex": "8316f60fc700ac003f42ea3bd601a45807b547af8677dbd52b4f4b14f1059a25",
+      "build/video/avatar_ddr_pre_ar_red/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "build/video/avatar_ddr_pre_ar_red/crc.hex": "10a60bdb3ac73d90f850998e5dc404040e8c2914e6f4359a4696f81371750f21",
+      "build/video/avatar_ddr_pre_ar_red/expected_words.hex": "79aa0e2b0f79580fa0c2f660221f2fa31d5a5d456e62e6d1c165bec54cdc3284",
+      "build/video/avatar_ddr_pre_ar_red/fixture.json": "034a48e56a89561e6d34cf62a7ae4db6a00100620f2ec8cfaa20542a84c06595",
+      "build/video/avatar_ddr_pre_ar_red/result.json": "0a06ab822ade1ae2ce9d990f1871baadf81282f6a45c5174b31b0d423bfe6943",
+      "build/video/avatar_ddr_pre_ar_red/rgba.bin": "a7ae935ae2aab0b0aa93a9b5179a7c39d726dcc4b70a8265cbbdcdcbe2b7750f",
+      "build/video/avatar_ddr_pre_ar_red/sim.vvp": "1eb98c00bcc7b184fae3f84344b4a21c575d8d3ea8df252c0b567a344f86aff1",
+      "build/video/avatar_ddr_pre_ar_red/simulation.log": "5bf26213adcad81b1c868b378eeb3e7ec26faf0472d40efac343e200b70f4b4e",
+      "build/video/avatar_ddr_pre_ar_red/tb_avatar_ddr_cache.sv": "14a99b03eb9f14277c20c14a7f56224f370f4611ae60a6749e8d7eae65c313c7"
+    },
+    "late_stray_RED_artifacts": {
+      "build/video/avatar_ddr_late_stray_red/avatar_ddr_cache.sv": "c296fe4202ba82d1c22eefc215bc75382ad6ddc6e8998f5b148e00ede94c2aee",
+      "build/video/avatar_ddr_late_stray_red/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+      "build/video/avatar_ddr_late_stray_red/bus_words.hex": "8316f60fc700ac003f42ea3bd601a45807b547af8677dbd52b4f4b14f1059a25",
+      "build/video/avatar_ddr_late_stray_red/compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "build/video/avatar_ddr_late_stray_red/crc.hex": "10a60bdb3ac73d90f850998e5dc404040e8c2914e6f4359a4696f81371750f21",
+      "build/video/avatar_ddr_late_stray_red/expected_words.hex": "79aa0e2b0f79580fa0c2f660221f2fa31d5a5d456e62e6d1c165bec54cdc3284",
+      "build/video/avatar_ddr_late_stray_red/fixture.json": "034a48e56a89561e6d34cf62a7ae4db6a00100620f2ec8cfaa20542a84c06595",
+      "build/video/avatar_ddr_late_stray_red/result.json": "1e920be842cdb19e641b18c33bd6742399f446416fd7d9f304f3a6e8394dbf7f",
+      "build/video/avatar_ddr_late_stray_red/rgba.bin": "a7ae935ae2aab0b0aa93a9b5179a7c39d726dcc4b70a8265cbbdcdcbe2b7750f",
+      "build/video/avatar_ddr_late_stray_red/sim.vvp": "dc2b36f276053924db204c3cf5525019246c7553f0ad46a5dd60c6b3cf651160",
+      "build/video/avatar_ddr_late_stray_red/simulation.log": "a9ca962bef5c92341c74568a711916bf0305323556e73924cc4551c1a8f090ca",
+      "build/video/avatar_ddr_late_stray_red/tb_avatar_ddr_cache.sv": "03e5ccde3168704fc658116811c149d7d161fed8af961adf68a747dea4b6fbb6"
+    }
+  },
+  "cases": {
+    "tail": {
+      "case": 0,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "full_page": {
+      "case": 0,
+      "texels": 65536,
+      "bursts": 1025,
+      "beats": 16384,
+      "compared": 65538,
+      "code": 0
+    },
+    "ratio": {
+      "case": 0,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "upper_edge": {
+      "case": 0,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "minimum": {
+      "case": 0,
+      "texels": 4,
+      "bursts": 1,
+      "beats": 1,
+      "compared": 6,
+      "code": 0
+    },
+    "lower": {
+      "case": 1,
+      "texels": 68,
+      "bursts": 0,
+      "beats": 0,
+      "compared": 1,
+      "code": 1
+    },
+    "upper": {
+      "case": 2,
+      "texels": 68,
+      "bursts": 0,
+      "beats": 0,
+      "compared": 1,
+      "code": 1
+    },
+    "unaligned": {
+      "case": 3,
+      "texels": 68,
+      "bursts": 0,
+      "beats": 0,
+      "compared": 1,
+      "code": 1
+    },
+    "length": {
+      "case": 4,
+      "texels": 68,
+      "bursts": 0,
+      "beats": 0,
+      "compared": 1,
+      "code": 1
+    },
+    "unknown": {
+      "case": 5,
+      "texels": 68,
+      "bursts": 0,
+      "beats": 0,
+      "compared": 1,
+      "code": 1
+    },
+    "crc": {
+      "case": 6,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 1,
+      "code": 5
+    },
+    "resp": {
+      "case": 7,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    },
+    "rid": {
+      "case": 8,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    },
+    "early_last": {
+      "case": 9,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    },
+    "missing_last": {
+      "case": 10,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    },
+    "unknown_data": {
+      "case": 11,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    },
+    "offline_ar": {
+      "case": 12,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 3
+    },
+    "timeout_r": {
+      "case": 13,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 4
+    },
+    "reset": {
+      "case": 14,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "offline_r": {
+      "case": 15,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 3
+    },
+    "pre_ar_response": {
+      "case": 16,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 6
+    },
+    "offline_after_seal": {
+      "case": 17,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "stray_after_seal": {
+      "case": 18,
+      "texels": 68,
+      "bursts": 2,
+      "beats": 17,
+      "compared": 70,
+      "code": 0
+    },
+    "stray_after_failure": {
+      "case": 19,
+      "texels": 68,
+      "bursts": 1,
+      "beats": 16,
+      "compared": 1,
+      "code": 2
+    }
+  },
+  "old_suite_simulations": {
+    "mode_resources": 16
+  },
+  "python": {
+    "tests": 110,
+    "passed": 109,
+    "skipped": 1
+  },
+  "mutations_detected": 9,
+  "mutations": [
+    {
+      "name": "skip_crc",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_FAILURE_NOT_ISOLATED"
+    },
+    {
+      "name": "wrong_byte_order",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_PIXEL"
+    },
+    {
+      "name": "cross_page",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_BURST"
+    },
+    {
+      "name": "ignore_resp",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_FAILURE_NOT_ISOLATED"
+    },
+    {
+      "name": "accept_sealed",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_SEALED_REPLACED"
+    },
+    {
+      "name": "retract_ar",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_AR_RETRACTED"
+    },
+    {
+      "name": "ignore_pre_ar",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_FAILURE_NOT_ISOLATED"
+    },
+    {
+      "name": "late_online",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_RESULT"
+    },
+    {
+      "name": "mask_late_stray",
+      "status": "detected",
+      "assertion": "AVATAR_DDR_LATE_STRAY_DRAIN"
+    }
+  ],
+  "review_open_findings": [],
+  "closed_review_findings": [
+    {
+      "id": "R1",
+      "priority": "P2",
+      "title": "Post-seal online loss was incorrectly recorded as a load fault",
+      "root_cause": "busy included FINISH, although the final cache write already proved load completion",
+      "red": "semantics/2/simulation.log",
+      "green": "final_green/20261021T080106_507177Z/independent_cases/2/simulation.log",
+      "fix": "Exclude FINISH from load-busy; preserve historical completion and identity",
+      "status": "closed",
+      "red_sha256": "51e0aaa610aa7361999b9e9ece2812cd99ff99bf27b906ffd0c0efc59d26971d",
+      "green_sha256": "031827cfbf90ba5e4a111cd0db302cde7463ec10241b98020bdb7b2eadbc74ae"
+    },
+    {
+      "id": "R2",
+      "priority": "P2",
+      "title": "A stalled unaccepted AR exempted premature RVALID from stray detection",
+      "root_cause": "stray exempted all ADDRESS cycles instead of the cycle that actually accepts AR",
+      "red": "semantics/17/simulation.log",
+      "green": "final_green/20261021T080106_507177Z/independent_cases/17/simulation.log",
+      "fix": "Exempt only ADDRESS with ARREADY; keep the posted AR stable and drain its advertised count",
+      "status": "closed",
+      "red_sha256": "dc22de38187b3d149690c28474814be4d624f9aae930795b79d284ad80b4efcc",
+      "green_sha256": "ccab1f86cd919a792e18b1fd38d43d5e689f85b2e24dd05e960455261bd2fff0"
+    },
+    {
+      "id": "R3",
+      "priority": "P2",
+      "title": "An existing sticky fault suppressed later loss of drain certainty",
+      "root_cause": "stray set uncertain only inside if(!fault)",
+      "red": "sticky_fault_red/simulation.log",
+      "green": "final_green/20261021T080106_507177Z/independent_cases/23/simulation.log",
+      "fix": "Latch stray uncertainty independently of sticky first fault_code",
+      "status": "closed",
+      "red_sha256": "8364ca7ed16e0ff9bbee10664c60c78a783eab93106acc4f5a1a7e688024b3b9",
+      "green_sha256": "b12457abedbcba324610ffb967a427f4012548af9005f20b74e0d73a91e6160e"
+    }
+  ],
+  "independent_review_bindings": {
+    "inputs": 10,
+    "artifacts": 512,
+    "tools": 3,
+    "submitted_cases": 24,
+    "independent_cases": 23
+  },
+  "synthesis": {
+    "lut": 509.0,
+    "registers": 628.0,
+    "drm": 64.0,
+    "apm": 0,
+    "latches": 0,
+    "core_setup_estimate_ns": 2.614,
+    "pixel_setup_estimate_ns": 21.793,
+    "stable_identity_bundle_estimate_ns": 5.224,
+    "min_hold_estimate_ns": 0.619,
+    "constraints_applicable": 4,
+    "unspecified_IO_budget_warnings": 48,
+    "component_port_bits": 719,
+    "physical_timing_closed": false,
+    "core_requested_mhz": 125,
+    "core_estimated_mhz": 185.6665
+  },
+  "protected_files_unchanged": 457,
+  "other_route_paths_preserved": 57,
+  "old_entrypoint_bytes_exact_outside_new_hooks": true,
+  "old_production_RTL_ABI_and_C_bytes_unchanged": true,
+  "full_256x256_RGBA_262144_bytes": true,
+  "all_65536_cache_words_checked": true,
+  "CRC_before_last_texel_and_ready": true,
+  "source_DDR_immutable_and_visible_required": true,
+  "one_outstanding_AXI128_read_client": true,
+  "immutable_cache_identity_until_coordinated_reset": true,
+  "load_result_ACK_does_not_release_asset": true,
+  "completion_proof_is_final_cache_write": true,
+  "later_port_fault_preserves_historical_result": true,
+  "uncertain_drain_sticky_even_after_previous_fault": true,
+  "CPU_global_frame_graph_owner": true,
+  "coordinated_reset_required": true,
+  "live_replacement": false,
+  "raw_owner_integrated": false,
+  "record_pixels_integrated": false,
+  "shared_read_arbitration_integrated": false,
+  "second_physical_DDR_port": false,
+  "global_FREE_verified": false,
+  "CPU_NPU_executed": false,
+  "physical_crossmaster_visibility_verified": false,
+  "continuous_video_verified": false,
+  "previous_record_pixels_timing_violation_resolved": false,
+  "full_all_rerun": false,
+  "routed": false,
+  "physical_board": false,
+  "flash_written": false
+}

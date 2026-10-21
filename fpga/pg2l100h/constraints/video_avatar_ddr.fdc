@@ -1,0 +1,5 @@
+# Component only; reset and both endpoints must be coordinated.
+create_clock -name core_clk -period 8.000 [get_ports {core_clk}]
+create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]
+set_false_path -from [get_clocks {core_clk}] -to [get_cells {u_cache.ready_meta}]
+set_max_delay 6.000 -datapath_only -from [get_cells {u_cache.asset_id* u_cache.asset_generation*}] -to [get_cells {u_cache.pixel_asset_id* u_cache.pixel_generation*}]

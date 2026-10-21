@@ -481,6 +481,20 @@ core才发布旧像素引用退休贡献。素材未就绪先透传匹配的新R
 现有`video_pipeline`仍只支持RAW。组件综合core8ns估计setup-1.249ns，未闭合
 125MHz，未布线或上板；下一步接素材装载、真实RAW身份和扫描器/owner退休。
 
+## F4c4b DDR素材到封存cache
+
+```powershell
+python scripts/video/run.py --suite avatar_ddr
+python scripts/video/build_pds.py --target video_avatar_ddr --stage synth
+```
+
+`avatar_ddr_cache`是待仲裁的AXI128客户端，装载一张256×256 RGBA并核对CRC，最后
+texel校验成功才封存原cache。素材版本保持到协调reset，不支持运行中覆盖；结果
+ACK不释放素材。24场景、完整65536词逐一读回、9项变异及旧资源回归见
+[验证记录](../verification/video/avatar_ddr.md)，结果为`latest_avatar_ddr.json`和
+`latest_avatar_ddr_component.json`。综合509LUT/628FF/64DRM，core内部setup估计
++2.614ns；无布线/板测。尚需共享DDR读仲裁、完整记录联接及RAW/owner联合退休。
+
 ## 结果定位
 
 - `build/video/doctor.json`：工具版本发现。

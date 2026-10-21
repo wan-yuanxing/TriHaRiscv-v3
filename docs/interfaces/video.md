@@ -79,6 +79,26 @@ FREE。调用者保留全部引用版本至各自退休完成。两个域及上�
 组件综合core8ns setup估计-1.249ns，尚无布线时序闭合或板测，详见
 [记录像素验证](../verification/video/record_pixels.md)。
 
+## F4c4b DDR素材装载客户端
+
+`avatar_ddr_cache`的core端`load_valid/ready`锁存32bit base/bytes/asset_id/
+generation/expected_crc。默认262144B、16B对齐且完全位于0x82600000..0x827fffff；
+CRC为本地描述符扩展，不改640B显示ABI。源DDR由调用者保持不可变并保证可见性。
+AXI128固定ID9、size4/INCR、最多16拍和单在途，按4KiB/末尾拆分，需上游共享读
+仲裁后接唯一DDR通路。缓存及固定拍pixel接口沿用`avatar_texture_cache`。
+
+CRC32/ISO-HDLC按地址递增R/G/B/A计算，再重排cache RGBA；最后texel验证CRC后
+才写，失败不公布素材就绪。`result_valid/ready`保持success/code/asset_id/
+generation/checked_bytes/crc；checked_bytes计参与CRC的字节，不是写入或排空总量。
+封存与版本持有直到协调reset，ACK不允许重载。最后texel写入为完成证明，随后
+online丢失不撤销成功；后续意外R可另报fault/undrained而历史成功保持。
+
+失败粘滞fault，保持已公开AR并按ARLEN排空，不以早LAST提前结束。错误RID/LAST、
+未知数据或任何意外R（即使已有fault）使`port_drained=0`保持到协调reset；超时
+不得假造响应或当作排空。故障码、24场景、综合及固定版本限制详见
+[素材DDR验证](../verification/video/avatar_ddr.md)。本批未联接record_pixels/
+RAW owner，未实现动态版本替换或全局FREE；无CPU/NPU、物理可见性或板测结论。
+
 ## F4c3b 显示MMIO至真实RAW提交/退休
 
 独立`video_display_scanout`连接原`video_display_mmio`、owner和raw_display，能力

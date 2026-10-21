@@ -216,6 +216,25 @@ pixel25ns+12.426ns，边界hold-2.470ns、reset最小-0.037ns，未满足125MHz�
 462保护文件/42其他路线路径保留，旧RTL/ABI/C字节不变；交付16文件，其他路线
 STATUS追加保持未暂存，本地提交，无COM/JTAG/Flash操作。
 
+## F4c4b DDR素材装载与封存版本
+
+2026-10-21新增`avatar_ddr_cache`，作为AXI128读客户端装载256×256 RGBA素材。
+16B拍、最多16拍/单在途、4KiB拆分；逐字节CRC通过后才写最后texel并封存原cache。
+身份保持到协调reset，结果ACK不能覆盖素材；没有第二份cache或动态替换分配器。
+不改旧RTL/显示ABI/C，不接第二物理DDR端口，也未使现有RAW系统支持BOX/AVATAR。
+
+24场景全部通过，完整262144B/16384拍/1025burst、65536词逐一读回；9项变异
+检出，原mode_resources16份仿真PASS，Python109通过/1权限跳过。提前R、封存后
+online边界及已有fault后stray排空可信性三项问题均有RED/GREEN并修复。历史完成
+事件保持，后来端口故障不能伪造排空或撤销已完成素材。
+
+组件综合509LUT/628FF/64DRM/0APM/latch，core8ns setup估计+2.614ns、pixel25ns
++21.793ns、minhold+0.619ns；4约束适用，48项I/O预算未指定警告。仅内部估计，
+无布线/物理CDC/板测，前批record_pixels时序问题仍待系统集成解决。详见
+[素材DDR验证](../verification/video/avatar_ddr.md)。457保护文件/57其他路线路径
+保留，交付15文件，其他路线STATUS保持未暂存。下一步接共享读仲裁及完整记录
+叠加链，再联合RAW扫描器/owner退休和平台可见性；本批无COM/JTAG/Flash操作。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

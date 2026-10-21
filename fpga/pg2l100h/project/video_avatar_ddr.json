@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "target": "video_avatar_ddr",
+  "top": "avatar_ddr_cache",
+  "test_top": "tb_avatar_ddr_cache",
+  "sources": ["rtl/video/avatar_texture_cache.sv", "rtl/video/avatar_ddr_cache.sv"],
+  "tests": ["tb/video/tb_avatar_ddr_cache.sv"],
+  "constraints": ["fpga/pg2l100h/constraints/video_avatar_ddr.fdc"],
+  "scope": "One checked DDR material per coordinated-reset epoch, immutable cache identity and fixed-slot pixel reads. An AXI128 client only, not shared read arbitration, physical visibility, dynamic replacement, RAW/owner integration or board."
+}
