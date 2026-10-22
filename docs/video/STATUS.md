@@ -440,3 +440,12 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 该轮 `build/video/board_program/20261017T012531_400691Z` 已恢复 `video_rx_board_26d25f7dd060` 并Verify，`build/video/board_serial/20261017T012551_557951Z` 的4个快照模式合格、坏帧0；用户确认重新出现稳定彩条。raw单帧阶段的现场待验项已全部关闭。该轮验收范围为raw单平面；后续共享preview/捕获内容显示的验收见V020d，检测input、三分支CAPTURE_DONE和共享CPU fabric仍未实现。
 
 物理汇总见 [hdmi_raw_capture.json](../verification/video/evidence/hdmi_raw_capture.json)，现场补验见 [hdmi_raw_capture_key0.json](../verification/video/evidence/hdmi_raw_capture_key0.json)，详细结果见 [hdmi_raw_capture.md](../verification/video/hdmi_raw_capture.md)。[hdmi_raw_capture_preboard.json](../verification/video/evidence/hdmi_raw_capture_preboard.json) 保留为前一天上板前的历史状态，不重写或混作当前物理结论。
+
+
+## 2026-10-22 Video F4c5b 组件时序基线
+
+- 沿用已批准的125MHz收敛方向，新增三个内部组件的显式PDS pads/component诊断；默认综合命令保持兼容，未修改产品RTL、ABI、驱动或FDC。component仅禁用物理I/O缓冲，不切reset/I/O/CDC路径，core8ns、pixel25ns和稳定束6ns保持。
+- 最终同版工具四项综合及诊断完整性通过：译码器pads setup−3.676ns、component+1.255ns；显示组合component core+0.311/pixel+11.549ns；采显组合component core+0.311/pixel+11.128ns。component映射分别91/120/0、26491/35278/68、34718/42300/69.5（LUT/FF/DRM），不把I/O模式差当作RTL优化幅度。
+- 两大组件最紧内部setup为RAW描述符范围检查的APM链至显示link状态CE。采显组合hold−3.097ns、最差removal−1.393ns仍开放；均单slow corner，fast表空，无PNR、物理闭合或板测。setup正裕量不能替代全系统125MHz验收。
+- 25项相关测试普通/-O通过；独立审查的两组P2已修复，8项缺损/矛盾报告反例均拒绝。严格解析时钟、5类汇总和关键路径；datapath_only仅核验捕获组保守下界，明确区别于精确时钟对。探索的无效Tcl句柄筛选及114/120不完整名单保留，不当成功；完整120FF有限寄存器诊断另记。
+- [验证记录](../verification/video/component_timing.md)、[机器证据](../verification/video/evidence/component_timing.json)。CPU交付不阻塞本批；下一步建立可布线的内部接口边界，再验证原频率下setup/hold/removal，必要流水化单独回归。未操作JTAG/串口/Flash，保留NPU当前板卡状态；CPU/fabric/DDR/CDC与真实模型合拢仍独立验收。

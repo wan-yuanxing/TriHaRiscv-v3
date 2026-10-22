@@ -9,6 +9,7 @@ import sys
 from common import BUILD, ROOT, fresh_run, input_hashes, run_logged, sha256, tool, write_json
 from gen_pll import generate as generate_pll
 from gen_ddr import generate as generate_ddr
+from pds_timing import synthesis_command, parse_synthesis_timing
 
 
 def tcl_path(path):
@@ -77,7 +78,13 @@ def main():
     parser.add_argument('--seed-start', type=int, default=4)
     parser.add_argument('--seed-count', type=int, default=6)
     parser.add_argument('--pnr-mode', choices=('normal', 'performance'))
+    parser.add_argument("--synth-timing", choices=("pads", "component"),
+                        help="Explicit component timing diagnostic; never routed timing closure")
     args = parser.parse_args()
+    try:
+        synth_command = synthesis_command(args.target, args.stage, args.synth_timing)
+    except ValueError as error:
+        parser.error(str(error))
     try:
         placement_options = combined_route_options(args.seed_start, args.seed_count, args.pnr_mode)
     except ValueError as error:
@@ -136,7 +143,7 @@ def main():
                       'fpga/pg2l100h/ip/video_reference_manifest.json']
         result["inputs"] = input_hashes([ROOT / name for name in names] +
             [ROOT / "scripts/video" / name for name in
-             ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py")])
+             ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py", "pds_timing.py")])
         result['snapshot_inputs'] = {}
         for name in names:
             destination = work / "src" / name
@@ -178,7 +185,7 @@ def main():
         lines += ["add_constraint " + tcl_path(work / "src" / name)
                   for name in manifest["constraints"]]
         lines += [f"compile -system_verilog -top_module {top} -include_path {{" +
-                  tcl_path(work / "src/rtl/video/include") + "}", "synthesize -ads"]
+                  tcl_path(work / "src/rtl/video/include") + "}", synth_command]
         if args.stage in ("route", "bitstream"):
             route="pnr -optimize_multi_corner_timing -fix_hold_violation"
             if ddr:
@@ -229,6 +236,12 @@ def main():
             raise RuntimeError("PDS reported an error/critical warning; inspect synth.log")
         report = work / "synthesize" / (top + ".snr")
         text = report.read_text(encoding="utf-8", errors="replace")
+        if args.synth_timing is not None:
+            clocks = {"core_clk": 8.0}
+            if args.target != "video_control_decode":
+                clocks["pixel_clk"] = 25.0
+            result["synthesis_timing"] = parse_synthesis_timing(text, args.synth_timing, clocks)
+            result["synthesis_command"] = synth_command
         resources = {}
         for key, label in (("lut", "Total LUTs"), ("registers", "Total Registers"),
                            ("drm", "Total DRM")):
@@ -253,7 +266,7 @@ def main():
             result["verify_mask"] = str(verify_mask.relative_to(ROOT))
             result["verify_mask_sha256"] = sha256(verify_mask)
         verify_build_inputs(work, result)
-        if args.target in ('cpu_native_axil', 'video_raw_display') and sha256(executable) != result['pds_executable_sha256']:
+        if (args.synth_timing is not None or args.target in ('cpu_native_axil', 'video_raw_display')) and sha256(executable) != result['pds_executable_sha256']:
             raise ValueError('PDS executable changed during build')
         result['input_snapshot_verified_before_and_after_build'] = True
     except Exception as error:

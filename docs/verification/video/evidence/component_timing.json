@@ -1,0 +1,1231 @@
+{
+  "schema_version": 1,
+  "phase": "F4c5b",
+  "status": "pass_with_open_timing",
+  "baseline_commit": "434aafde439cb92013f2ab70ad186b3804b81bc0",
+  "product_rtl_changed": false,
+  "fdc_changed": false,
+  "timing_closed": false,
+  "physical_route_verified": false,
+  "board_actions": false,
+  "cpu_delivery_required": false,
+  "runs": [
+    {
+      "target": "video_control_decode",
+      "io_model": "component",
+      "command": "synthesize -ads -max_path 20 -nworst 1 -disable_io_insertion",
+      "resources": {
+        "lut": 91.0,
+        "registers": 120.0,
+        "drm": 0.0
+      },
+      "result": {
+        "path": "build/video/pds/20261022T035627_605532Z/result.json",
+        "sha256": "c0bf57adf449a3f9d663c97695df08c7d38fa35352b597671c207aa6c1bdca61"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T035627_605532Z/synthesize/video_axil_decode.snr",
+        "sha256": "98208e13fc16703e726e85b9d4d8844b9319e40d0f0552d141226f5676a1b2f5"
+      },
+      "tcl": {
+        "path": "build/video/pds/20261022T035627_605532Z/build.tcl",
+        "sha256": "db36e460c950bd402bdef0e093ac1c3f27e9ca55ecc137c0074c0d4f3c98ac14"
+      },
+      "log": {
+        "path": "build/video/pds/20261022T035627_605532Z/synth.log",
+        "sha256": "e133facb6ed5b48f027428dd5aa720e9796e783e483b58f7aa1da3f8fdfaaaa5"
+      },
+      "cli_log": {
+        "path": "build/video/timing_investigation/final_video_control_decode_component_cli.log",
+        "sha256": "6f3edb12857d9106f6487e7b540445787d48f3ec0793d9021b914b7bc6ebd92e"
+      },
+      "constraint_check": {
+        "path": "build/video/pds/20261022T035627_605532Z/constraint_check/constraint_check.ccr",
+        "sha256": "bc8b86d1e2f46364b637f5da2b0b72de97dee8d3995ee0c4110b9bddbb04b400"
+      },
+      "constraint_counts": {
+        "errors": 0,
+        "critical": 0,
+        "warnings": 40,
+        "applicable": 5,
+        "inapplicable": 0
+      },
+      "tool": {
+        "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+        "sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+        "version": "2022.2-SP6.4"
+      },
+      "input_hashes": {
+        "config/video_capture_v2.json": "09a48b839c5a341f6bfa525d26fa07b9c6aef4f6ed0d795012935764eb7eab32",
+        "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+        "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4",
+        "fpga/pg2l100h/constraints/video_control_decode.fdc": "838fc4c25268261f28bdbc94a8129da2c1edf5521d6a5d961dc136e800e73c83",
+        "fpga/pg2l100h/project/video_control_decode.json": "1bba0f2326301b6927fa1b2681839bed0039057c49bd847b066d57006e335ad0",
+        "rtl/soc/video_axil_decode.v": "3c61a538376bbe37a9fee56f7d5c4f5280e32846b18ef6d38a32fbf134e50866",
+        "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+        "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+        "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+        "scripts/video/build_pds.py": "376d6a211b1f70d1bd3430eb2e6a347702a59b496078fd7f4c69bfd240a7eadb",
+        "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+        "scripts/video/gen_capture_v2.py": "27030ce11a52f34213e579b82cf9669254e40bf133604cf5e4e32969e7f64bfb",
+        "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+        "scripts/video/gen_display_abi.py": "82faa8e6d30820471a567aa2f15e04b0282cc4f5179b5c7dae6640b2550151b8",
+        "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+        "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+        "sw/include/video_capture_v2.h": "7fefe306c820706d6089ead59fa1d98a685827f96a291c1787e8110451ffc08c",
+        "sw/include/video_display_abi.h": "93705171343939e1ec52d2965a335b6a65cca19ecbaa88d3bfa3a81d9f69a6ef"
+      },
+      "source_snapshot_verified": true,
+      "clocks": {
+        "core_clk": {
+          "period_ns": 8.0,
+          "loads": 120,
+          "nonclock_loads": 0,
+          "source": "clk_i"
+        }
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.255,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 499
+            }
+          ],
+          "fast": []
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -2.375,
+              "total_negative_slack_ns": -444.626,
+              "failing_endpoints": 229,
+              "endpoints": 499
+            }
+          ],
+          "fast": []
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 8.343,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -2.055,
+              "total_negative_slack_ns": -246.6,
+              "failing_endpoints": 120,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.8,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        }
+      },
+      "setup_estimate_met": true,
+      "all_synthesis_checks_met": false,
+      "path_count": 80,
+      "first_setup_path": {
+        "startpoint": "read_route[0]/CLK (GTP_DFF_CE)",
+        "endpoint": "m_axi_arvalid_o[0] (port)",
+        "group": "core_clk",
+        "type": "max (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": 1.255,
+        "summary_match": "clock_pair",
+        "analysis": "setup"
+      },
+      "path_match_counts": {
+        "clock_pair": 80
+      }
+    },
+    {
+      "target": "video_control_decode",
+      "io_model": "pads",
+      "command": "synthesize -ads -max_path 20 -nworst 1",
+      "resources": {
+        "lut": 89.0,
+        "registers": 120.0,
+        "drm": 0.0
+      },
+      "result": {
+        "path": "build/video/pds/20261022T035627_599793Z/result.json",
+        "sha256": "ecbb468e29ed56a4f669bfdabc24003b1101706f5c874779e3dc0a4a0d1625c5"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T035627_599793Z/synthesize/video_axil_decode.snr",
+        "sha256": "72e44200ca7a1175a48d3b24404f5b3c506b7534c814b3ac2139657fed2fa78f"
+      },
+      "tcl": {
+        "path": "build/video/pds/20261022T035627_599793Z/build.tcl",
+        "sha256": "9938b476c8f389da527c4957b1bc67a17c2ef24db04295d5daf901902c2f785d"
+      },
+      "log": {
+        "path": "build/video/pds/20261022T035627_599793Z/synth.log",
+        "sha256": "4b644d408803d4c494c127c18f1d2d632f9f7c7bbdfa103e94ca12add4a7c856"
+      },
+      "cli_log": {
+        "path": "build/video/timing_investigation/final_video_control_decode_pads_cli.log",
+        "sha256": "b8997892715adda253316b31a684ba1782f330469458dba14ce9437fb56ee3bc"
+      },
+      "constraint_check": {
+        "path": "build/video/pds/20261022T035627_599793Z/constraint_check/constraint_check.ccr",
+        "sha256": "2aa16fe65284cf02ddb4d6cf83dcb6e12eef3584ca9d216c2c2a4baf84482e42"
+      },
+      "constraint_counts": {
+        "errors": 0,
+        "critical": 0,
+        "warnings": 40,
+        "applicable": 5,
+        "inapplicable": 0
+      },
+      "tool": {
+        "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+        "sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+        "version": "2022.2-SP6.4"
+      },
+      "input_hashes": {
+        "config/video_capture_v2.json": "09a48b839c5a341f6bfa525d26fa07b9c6aef4f6ed0d795012935764eb7eab32",
+        "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+        "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4",
+        "fpga/pg2l100h/constraints/video_control_decode.fdc": "838fc4c25268261f28bdbc94a8129da2c1edf5521d6a5d961dc136e800e73c83",
+        "fpga/pg2l100h/project/video_control_decode.json": "1bba0f2326301b6927fa1b2681839bed0039057c49bd847b066d57006e335ad0",
+        "rtl/soc/video_axil_decode.v": "3c61a538376bbe37a9fee56f7d5c4f5280e32846b18ef6d38a32fbf134e50866",
+        "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+        "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+        "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+        "scripts/video/build_pds.py": "376d6a211b1f70d1bd3430eb2e6a347702a59b496078fd7f4c69bfd240a7eadb",
+        "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+        "scripts/video/gen_capture_v2.py": "27030ce11a52f34213e579b82cf9669254e40bf133604cf5e4e32969e7f64bfb",
+        "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+        "scripts/video/gen_display_abi.py": "82faa8e6d30820471a567aa2f15e04b0282cc4f5179b5c7dae6640b2550151b8",
+        "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+        "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+        "sw/include/video_capture_v2.h": "7fefe306c820706d6089ead59fa1d98a685827f96a291c1787e8110451ffc08c",
+        "sw/include/video_display_abi.h": "93705171343939e1ec52d2965a335b6a65cca19ecbaa88d3bfa3a81d9f69a6ef"
+      },
+      "source_snapshot_verified": true,
+      "clocks": {
+        "core_clk": {
+          "period_ns": 8.0,
+          "loads": 120,
+          "nonclock_loads": 0,
+          "source": "clk_i"
+        }
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -3.676,
+              "total_negative_slack_ns": -427.508,
+              "failing_endpoints": 263,
+              "endpoints": 499
+            }
+          ],
+          "fast": []
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -1.97,
+              "total_negative_slack_ns": -211.505,
+              "failing_endpoints": 116,
+              "endpoints": 499
+            }
+          ],
+          "fast": []
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 6.629,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.263,
+              "total_negative_slack_ns": -31.56,
+              "failing_endpoints": 120,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.8,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 120
+            }
+          ],
+          "fast": []
+        }
+      },
+      "setup_estimate_met": false,
+      "all_synthesis_checks_met": false,
+      "path_count": 80,
+      "first_setup_path": {
+        "startpoint": "rst_ni (port)",
+        "endpoint": "s_axi_awready_o (port)",
+        "group": "core_clk",
+        "type": "max (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": -3.676,
+        "summary_match": "clock_pair",
+        "analysis": "setup"
+      },
+      "path_match_counts": {
+        "clock_pair": 80
+      }
+    },
+    {
+      "target": "video_display_record",
+      "io_model": "component",
+      "command": "synthesize -ads -max_path 20 -nworst 1 -disable_io_insertion",
+      "resources": {
+        "lut": 26491.0,
+        "registers": 35278.0,
+        "drm": 68.0
+      },
+      "result": {
+        "path": "build/video/pds/20261022T035627_603131Z/result.json",
+        "sha256": "97676ea8cb17e2a6c7d15da3215ad8632e26c43c60f44c3f806aad9a0d3f7331"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T035627_603131Z/synthesize/video_display_record.snr",
+        "sha256": "47aaed2da8b3520958b8e3b3fe5055ed120f0ac5d288063b836bb0b5818edd20"
+      },
+      "tcl": {
+        "path": "build/video/pds/20261022T035627_603131Z/build.tcl",
+        "sha256": "94682b654f5a2739192a078ebb6bed588d499ffc82be37ea52539d78e6cc94ac"
+      },
+      "log": {
+        "path": "build/video/pds/20261022T035627_603131Z/synth.log",
+        "sha256": "7553f0f36f0ed2493cbfce8f26bfb1c6aa7d7ac8e24fa65c101fa73890fd5185"
+      },
+      "cli_log": {
+        "path": "build/video/timing_investigation/final_video_display_record_component_cli.log",
+        "sha256": "78ef5ea3eb45d331e9d78a0776fe99b9181fd45342acf3c4a6d9be50715769fb"
+      },
+      "constraint_check": {
+        "path": "build/video/pds/20261022T035627_603131Z/constraint_check/constraint_check.ccr",
+        "sha256": "a8310b9f0bdcff188425483e9a3ec14603d0caf8349e77a8e410f198f4cad6a6"
+      },
+      "constraint_counts": {
+        "errors": 0,
+        "critical": 0,
+        "warnings": 124,
+        "applicable": 26,
+        "inapplicable": 0
+      },
+      "tool": {
+        "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+        "sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+        "version": "2022.2-SP6.4"
+      },
+      "input_hashes": {
+        "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+        "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4",
+        "fpga/pg2l100h/constraints/video_display_record.fdc": "87b8d27408512723e34269aecb7e58bba3847d9404edb71fa6986849c18ecb00",
+        "fpga/pg2l100h/project/video_display_record.json": "a0aa82650f580508414d9c868a79eac4ad07fc282f23e9e12910ce21b27a4525",
+        "rtl/video/avatar_ddr_cache.sv": "3b5dba0a06faa14158fa0db30afa7fb90adc796b185b628beadd0e51242d0f91",
+        "rtl/video/avatar_sample_map.sv": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+        "rtl/video/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+        "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+        "rtl/video/display_overlay.sv": "7661a85d3b2d3f9d7979bd706a7947a3e24f3f134a124f34fe7cedafc5d5a189",
+        "rtl/video/display_record_guard.sv": "56894fb671a4fb668de3920d17590f3198d9cb1cb41d5352a019786ca7810b47",
+        "rtl/video/display_record_link.sv": "e114d098f426354382348b295203d67c62eac773a717b63f58105b63ee245c1a",
+        "rtl/video/display_record_pixels.sv": "d237dc43f4a7c24df4da29854dd5fa4109f22701cde6adb39c6ab7b849b164e4",
+        "rtl/video/display_slot_owner.sv": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+        "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+        "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+        "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+        "rtl/video/video_display_mmio.sv": "dd893486d40557ca71b48de1aff852cb274ecb92ef25821aa753104dd59bf853",
+        "rtl/video/video_display_record.sv": "a15d3acb549db9648fd8bd3c66aa6e36ebb80822cc1618854850fba42ea75a00",
+        "rtl/video/video_read_arbiter.sv": "cb9c6f83efc7a73b2cbdb199be29bd217a46996a18280b7d454f12354018b4a0",
+        "rtl/video/video_record_renderer.sv": "1b901d5888f07c93a49c7ff7e874d8cb567d5eed82216178222d94a8e45edbfa",
+        "scripts/video/build_pds.py": "376d6a211b1f70d1bd3430eb2e6a347702a59b496078fd7f4c69bfd240a7eadb",
+        "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+        "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+        "scripts/video/gen_display_abi.py": "82faa8e6d30820471a567aa2f15e04b0282cc4f5179b5c7dae6640b2550151b8",
+        "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+        "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+        "sw/include/video_display_abi.h": "93705171343939e1ec52d2965a335b6a65cca19ecbaa88d3bfa3a81d9f69a6ef"
+      },
+      "source_snapshot_verified": true,
+      "clocks": {
+        "core_clk": {
+          "period_ns": 8.0,
+          "loads": 22846,
+          "nonclock_loads": 0,
+          "source": "core_clk"
+        },
+        "pixel_clk": {
+          "period_ns": 25.0,
+          "loads": 12574,
+          "nonclock_loads": 0,
+          "source": "pixel_clk"
+        }
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.311,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 47544
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 4.934,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.549,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 20812
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 4.427,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": []
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -2.875,
+              "total_negative_slack_ns": -4811.188,
+              "failing_endpoints": 7590,
+              "endpoints": 47544
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -2.875,
+              "total_negative_slack_ns": -2782.025,
+              "failing_endpoints": 2070,
+              "endpoints": 20812
+            }
+          ],
+          "fast": []
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 6.498,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 22777
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 26.181,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10654
+            }
+          ],
+          "fast": []
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.805,
+              "total_negative_slack_ns": -18333.07,
+              "failing_endpoints": 22774,
+              "endpoints": 22777
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -1.393,
+              "total_negative_slack_ns": -14841.022,
+              "failing_endpoints": 10654,
+              "endpoints": 10654
+            }
+          ],
+          "fast": []
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 22846
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 12574
+            }
+          ],
+          "fast": []
+        }
+      },
+      "setup_estimate_met": true,
+      "all_synthesis_checks_met": false,
+      "path_count": 200,
+      "first_setup_path": {
+        "startpoint": "u_raw/N6_m1/CLK (GTP_APM_E2)",
+        "endpoint": "u_link/state_reg[0]/CE (GTP_DFF_PE)",
+        "group": "core_clk",
+        "type": "max (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": 0.311,
+        "summary_match": "clock_pair",
+        "analysis": "setup"
+      },
+      "path_match_counts": {
+        "clock_pair": 160,
+        "capture_group_lower_bound": 40
+      }
+    },
+    {
+      "target": "video_record_pipeline",
+      "io_model": "component",
+      "command": "synthesize -ads -max_path 20 -nworst 1 -disable_io_insertion",
+      "resources": {
+        "lut": 34718.0,
+        "registers": 42300.0,
+        "drm": 69.5
+      },
+      "result": {
+        "path": "build/video/pds/20261022T035627_616254Z/result.json",
+        "sha256": "188fac2bd23e1d92086bff1c58d4245424b2fee6e9b212e8833b56b4a3bf6c0b"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T035627_616254Z/synthesize/video_record_pipeline.snr",
+        "sha256": "fb22ea47d6bf02c0c52951648f42e6d5b3af46b0aa339067faf5fb2c3a7b493b"
+      },
+      "tcl": {
+        "path": "build/video/pds/20261022T035627_616254Z/build.tcl",
+        "sha256": "4473694533587b09359f3ce902452c5cb0aaa165dbb97cf893b0ab2132c3956c"
+      },
+      "log": {
+        "path": "build/video/pds/20261022T035627_616254Z/synth.log",
+        "sha256": "0def987549695c2602b046c8ee2d51cf6a604abab518187a02d894d19f4f7419"
+      },
+      "cli_log": {
+        "path": "build/video/timing_investigation/final_video_record_pipeline_component_cli.log",
+        "sha256": "3deb160f5f52460d06106b1ff592072ea105d2f2a2e01073fc50c8d6e5e079bb"
+      },
+      "constraint_check": {
+        "path": "build/video/pds/20261022T035627_616254Z/constraint_check/constraint_check.ccr",
+        "sha256": "cfaed312f5f9e5cb75645fc221907763c70bb466848b8be3017dd926a6012fa1"
+      },
+      "constraint_counts": {
+        "errors": 0,
+        "critical": 0,
+        "warnings": 161,
+        "applicable": 26,
+        "inapplicable": 0
+      },
+      "tool": {
+        "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+        "sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+        "version": "2022.2-SP6.4"
+      },
+      "input_hashes": {
+        "config/video_capture_v2.json": "09a48b839c5a341f6bfa525d26fa07b9c6aef4f6ed0d795012935764eb7eab32",
+        "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+        "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4",
+        "fpga/pg2l100h/constraints/video_record_pipeline.fdc": "b8298acfcc7e993b7921289427577524001023233a30074272c90833d22cbf32",
+        "fpga/pg2l100h/project/video_record_pipeline.json": "9a46e32a401a5e3ca8e0bafe13bd5aa0c26d949a4dcce534feea825791bd3f90",
+        "rtl/video/avatar_ddr_cache.sv": "3b5dba0a06faa14158fa0db30afa7fb90adc796b185b628beadd0e51242d0f91",
+        "rtl/video/avatar_sample_map.sv": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+        "rtl/video/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+        "rtl/video/axi128_hmic256.sv": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+        "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+        "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+        "rtl/video/detect_nchw_dma.sv": "955ec07d6e805b79a3c37fd85ad4e26dd28af33016121d4a2d1e50345ee2045c",
+        "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+        "rtl/video/display_overlay.sv": "7661a85d3b2d3f9d7979bd706a7947a3e24f3f134a124f34fe7cedafc5d5a189",
+        "rtl/video/display_record_guard.sv": "56894fb671a4fb668de3920d17590f3198d9cb1cb41d5352a019786ca7810b47",
+        "rtl/video/display_record_link.sv": "e114d098f426354382348b295203d67c62eac773a717b63f58105b63ee245c1a",
+        "rtl/video/display_record_pixels.sv": "d237dc43f4a7c24df4da29854dd5fa4109f22701cde6adb39c6ab7b849b164e4",
+        "rtl/video/display_slot_owner.sv": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+        "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+        "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+        "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+        "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+        "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+        "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+        "rtl/video/video_capture_mmio_v2.sv": "39121cbd168d6693362ad596e858d05cc19af39124c039da68b99112a5a710c3",
+        "rtl/video/video_display_mmio.sv": "dd893486d40557ca71b48de1aff852cb274ecb92ef25821aa753104dd59bf853",
+        "rtl/video/video_display_record.sv": "a15d3acb549db9648fd8bd3c66aa6e36ebb80822cc1618854850fba42ea75a00",
+        "rtl/video/video_memory_scheduler.sv": "27795643f33e04a7560049e016a9cced5937a12609f134dea856ed20f6e86aa0",
+        "rtl/video/video_read_arbiter.sv": "cb9c6f83efc7a73b2cbdb199be29bd217a46996a18280b7d454f12354018b4a0",
+        "rtl/video/video_record_pipeline.sv": "30f0730e1bfc15dda4a67d6e1777f5e55bccf27623a32512c22b68e4822464db",
+        "rtl/video/video_record_renderer.sv": "1b901d5888f07c93a49c7ff7e874d8cb567d5eed82216178222d94a8e45edbfa",
+        "rtl/video/video_shared_ddr.sv": "6b0a282bfbcf58dc1cb6ff2c96a478c19bd8689b4776443bc1220334b6bdd8e6",
+        "rtl/video/video_three_branch_capture.sv": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+        "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+        "scripts/video/build_pds.py": "376d6a211b1f70d1bd3430eb2e6a347702a59b496078fd7f4c69bfd240a7eadb",
+        "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+        "scripts/video/gen_capture_v2.py": "27030ce11a52f34213e579b82cf9669254e40bf133604cf5e4e32969e7f64bfb",
+        "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+        "scripts/video/gen_display_abi.py": "82faa8e6d30820471a567aa2f15e04b0282cc4f5179b5c7dae6640b2550151b8",
+        "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+        "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+        "sw/include/video_capture_v2.h": "7fefe306c820706d6089ead59fa1d98a685827f96a291c1787e8110451ffc08c",
+        "sw/include/video_display_abi.h": "93705171343939e1ec52d2965a335b6a65cca19ecbaa88d3bfa3a81d9f69a6ef"
+      },
+      "source_snapshot_verified": true,
+      "clocks": {
+        "core_clk": {
+          "period_ns": 8.0,
+          "loads": 30218,
+          "nonclock_loads": 0,
+          "source": "clk_i"
+        },
+        "pixel_clk": {
+          "period_ns": 25.0,
+          "loads": 12574,
+          "nonclock_loads": 0,
+          "source": "pixel_clk"
+        }
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.311,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 64477
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 4.934,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.128,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 20812
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 4.431,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": []
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -3.097,
+              "total_negative_slack_ns": -9902.61,
+              "failing_endpoints": 11167,
+              "endpoints": 64477
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -2.875,
+              "total_negative_slack_ns": -2782.025,
+              "failing_endpoints": 2070,
+              "endpoints": 20812
+            }
+          ],
+          "fast": []
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 6.272,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26519
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 26.181,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10654
+            }
+          ],
+          "fast": []
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.579,
+              "total_negative_slack_ns": -15352.764,
+              "failing_endpoints": 26516,
+              "endpoints": 26519
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -1.393,
+              "total_negative_slack_ns": -14841.022,
+              "failing_endpoints": 10654,
+              "endpoints": 10654
+            }
+          ],
+          "fast": []
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 30218
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "total_negative_slack_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 12574
+            }
+          ],
+          "fast": []
+        }
+      },
+      "setup_estimate_met": true,
+      "all_synthesis_checks_met": false,
+      "path_count": 200,
+      "first_setup_path": {
+        "startpoint": "u_display/u_raw/N6_m1/CLK (GTP_APM_E2)",
+        "endpoint": "u_display/u_link/state_reg[0]/CE (GTP_DFF_PE)",
+        "group": "core_clk",
+        "type": "max (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": 0.311,
+        "summary_match": "clock_pair",
+        "analysis": "setup"
+      },
+      "path_match_counts": {
+        "clock_pair": 160,
+        "capture_group_lower_bound": 40
+      }
+    }
+  ],
+  "tests": [
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tb/video",
+        "-p",
+        "test_pds_*.py"
+      ],
+      "count": 25,
+      "result": "pass",
+      "path": "build/video/timing_investigation/delivery/tests_normal.log",
+      "sha256": "2a613115302e5f7bdf76a3bf0758b544e8879bd362c7994cee01542fde270a65"
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "-O",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tb/video",
+        "-p",
+        "test_pds_*.py"
+      ],
+      "count": 25,
+      "result": "pass",
+      "path": "build/video/timing_investigation/delivery/tests_optimized.log",
+      "sha256": "a16907ce59e04291f851f8170507ee4baaf6483ea50f0d6906d8709ecbe0cc69"
+    }
+  ],
+  "python": {
+    "path": "D:\\miniconda3\\python.exe",
+    "version": "3.13.13 | packaged by Anaconda, Inc. | (main, Apr 14 2026, 06:12:50) [MSC v.1942 64 bit (AMD64)]",
+    "sha256": "f3c05e11e9fc3fc0941fda221b1dfb0aac39d6ef298078054a5d949d620f3d6c"
+  },
+  "same_source_pipeline_exploration": {
+    "inputs": {
+      "rtl/video/video_capture_mmio_v2.sv": "39121cbd168d6693362ad596e858d05cc19af39124c039da68b99112a5a710c3",
+      "rtl/video/video_three_branch_capture.sv": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+      "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+      "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+      "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+      "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+      "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+      "rtl/video/detect_nchw_dma.sv": "955ec07d6e805b79a3c37fd85ad4e26dd28af33016121d4a2d1e50345ee2045c",
+      "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+      "rtl/video/video_memory_scheduler.sv": "27795643f33e04a7560049e016a9cced5937a12609f134dea856ed20f6e86aa0",
+      "rtl/video/video_shared_ddr.sv": "6b0a282bfbcf58dc1cb6ff2c96a478c19bd8689b4776443bc1220334b6bdd8e6",
+      "rtl/video/axi128_hmic256.sv": "c3d3f04bd183bc50e9ecbca25c0577c2ee802a426b3cae7c286212df9e6dea33",
+      "rtl/video/display_slot_owner.sv": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+      "rtl/video/display_record_guard.sv": "56894fb671a4fb668de3920d17590f3198d9cb1cb41d5352a019786ca7810b47",
+      "rtl/video/video_display_mmio.sv": "dd893486d40557ca71b48de1aff852cb274ecb92ef25821aa753104dd59bf853",
+      "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+      "rtl/video/video_read_arbiter.sv": "cb9c6f83efc7a73b2cbdb199be29bd217a46996a18280b7d454f12354018b4a0",
+      "rtl/video/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+      "rtl/video/avatar_ddr_cache.sv": "3b5dba0a06faa14158fa0db30afa7fb90adc796b185b628beadd0e51242d0f91",
+      "rtl/video/avatar_sample_map.sv": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+      "rtl/video/display_overlay.sv": "7661a85d3b2d3f9d7979bd706a7947a3e24f3f134a124f34fe7cedafc5d5a189",
+      "rtl/video/display_record_pixels.sv": "d237dc43f4a7c24df4da29854dd5fa4109f22701cde6adb39c6ab7b849b164e4",
+      "rtl/video/video_record_renderer.sv": "1b901d5888f07c93a49c7ff7e874d8cb567d5eed82216178222d94a8e45edbfa",
+      "rtl/video/display_record_link.sv": "e114d098f426354382348b295203d67c62eac773a717b63f58105b63ee245c1a",
+      "rtl/video/video_display_record.sv": "a15d3acb549db9648fd8bd3c66aa6e36ebb80822cc1618854850fba42ea75a00",
+      "rtl/video/video_record_pipeline.sv": "30f0730e1bfc15dda4a67d6e1777f5e55bccf27623a32512c22b68e4822464db",
+      "fpga/pg2l100h/constraints/video_record_pipeline.fdc": "b8298acfcc7e993b7921289427577524001023233a30074272c90833d22cbf32",
+      "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+      "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+      "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+      "fpga/pg2l100h/project/video_record_pipeline.json": "9a46e32a401a5e3ca8e0bafe13bd5aa0c26d949a4dcce534feea825791bd3f90",
+      "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+      "config/video_capture_v2.json": "09a48b839c5a341f6bfa525d26fa07b9c6aef4f6ed0d795012935764eb7eab32",
+      "config/video_display.json": "d2f685142e4498fda8586c10bdec3e7675cd80c3865f06db159e1207cda5c0b4"
+    },
+    "runs": [
+      {
+        "mode": "pads",
+        "report": {
+          "path": "build/video/timing_investigation/current_pipeline/pads/synthesize/video_record_pipeline.snr",
+          "sha256": "bbe1480fb83cd524d4fab4de35732c2d79b01569d4db2154a71a3487da089acb"
+        },
+        "tcl": {
+          "path": "build/video/timing_investigation/current_pipeline/pads/build.tcl",
+          "sha256": "d6563b34bdc96f7e05aa622379b80219d2742e7b14001740d304da58d3e97124"
+        },
+        "log": {
+          "path": "build/video/timing_investigation/current_pipeline/pads/build.log",
+          "sha256": "582c9c64323107506bea6d19068c300c79cae2e1f00a7fb8bd4e943ab2cea2e6"
+        },
+        "summaries": {
+          "setup": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": -3.337,
+                "total_negative_slack_ns": -578.845,
+                "failing_endpoints": 433,
+                "endpoints": 64475
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 4.934,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 207
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 11.128,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 20812
+              },
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 5.047,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 4177
+              }
+            ],
+            "fast": []
+          },
+          "hold": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": -2.47,
+                "total_negative_slack_ns": -1849.213,
+                "failing_endpoints": 1740,
+                "endpoints": 64475
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": -2.47,
+                "total_negative_slack_ns": -75.671,
+                "failing_endpoints": 47,
+                "endpoints": 20812
+              }
+            ],
+            "fast": []
+          },
+          "recovery": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 4.456,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 26518
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 24.465,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 10654
+              }
+            ],
+            "fast": []
+          },
+          "removal": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 1.216,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 26518
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 0.401,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 10654
+              }
+            ],
+            "fast": []
+          },
+          "pulse_width": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 3.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 30217
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 11.54,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 12574
+              }
+            ],
+            "fast": []
+          }
+        }
+      },
+      {
+        "mode": "ooc",
+        "report": {
+          "path": "build/video/timing_investigation/current_pipeline/ooc/synthesize/video_record_pipeline.snr",
+          "sha256": "afaf6d9e5bfe44df771e63ffb5cff6b63c8c8b1a52147b7cefd912e20276f094"
+        },
+        "tcl": {
+          "path": "build/video/timing_investigation/current_pipeline/ooc/build.tcl",
+          "sha256": "2106ece04925c3fb548b80f01b7f68cd0200afc49d7ceda53cdece418de078f5"
+        },
+        "log": {
+          "path": "build/video/timing_investigation/current_pipeline/ooc/build.log",
+          "sha256": "ffbd7d87c4cffca41751174a3de7a8dbc7a584b085c6d15648b2d5150cf73a2f"
+        },
+        "summaries": {
+          "setup": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 0.311,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 64477
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 4.934,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 207
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 11.128,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 20812
+              },
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 4.431,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 4177
+              }
+            ],
+            "fast": []
+          },
+          "hold": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": -3.097,
+                "total_negative_slack_ns": -9902.61,
+                "failing_endpoints": 11167,
+                "endpoints": 64477
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": -2.875,
+                "total_negative_slack_ns": -2782.025,
+                "failing_endpoints": 2070,
+                "endpoints": 20812
+              }
+            ],
+            "fast": []
+          },
+          "recovery": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 6.272,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 26519
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 26.181,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 10654
+              }
+            ],
+            "fast": []
+          },
+          "removal": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": -0.579,
+                "total_negative_slack_ns": -15352.764,
+                "failing_endpoints": 26516,
+                "endpoints": 26519
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": -1.393,
+                "total_negative_slack_ns": -14841.022,
+                "failing_endpoints": 10654,
+                "endpoints": 10654
+              }
+            ],
+            "fast": []
+          },
+          "pulse_width": {
+            "slow": [
+              {
+                "launch_clock": "core_clk",
+                "capture_clock": "core_clk",
+                "wns_ns": 3.04,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 30218
+              },
+              {
+                "launch_clock": "pixel_clk",
+                "capture_clock": "pixel_clk",
+                "wns_ns": 11.54,
+                "total_negative_slack_ns": 0.0,
+                "failing_endpoints": 0,
+                "endpoints": 12574
+              }
+            ],
+            "fast": []
+          }
+        }
+      }
+    ]
+  },
+  "limited_register_probe": {
+    "registers": 120,
+    "timing_endpoints": 128,
+    "setup_ns": 5.312,
+    "hold_ns": 0.753,
+    "excludes": [
+      "I/O paths",
+      "asynchronous recovery/removal"
+    ],
+    "full_timing_closure": false,
+    "names": {
+      "path": "build/video/timing_investigation/decoder_register_complete/registers.json",
+      "sha256": "8de381cce8df8aa490749dacf44b89604de153cebbc42edd16096645619d91ac"
+    },
+    "source_netlist": {
+      "path": "build/video/timing_investigation/decoder_ooc_2/synthesize/video_axil_decode_syn.vm",
+      "sha256": "64b42ed8eb00284ec24c6c763f8055377587b2eebc2dc4f009e15c4da702789f"
+    },
+    "report": {
+      "path": "build/video/timing_investigation/decoder_register_complete/synthesize/video_axil_decode.snr",
+      "sha256": "cc6ca09003bee79025ec52b53d38ba4723ea73e848a11152edf3232850621c04"
+    },
+    "tcl": {
+      "path": "build/video/timing_investigation/decoder_register_complete/build.tcl",
+      "sha256": "607d7caeb5f3f27951e49a4ee6e29e1a93a9228901de4c2b8abb3eaa1101a06f"
+    },
+    "log": {
+      "path": "build/video/timing_investigation/decoder_register_complete/build.log",
+      "sha256": "2cac7723ab3be9eaf5dc4391d9ce48f50dec4e8dec13bc408d063bc1d7e53b2e"
+    }
+  },
+  "excluded_explorations": [
+    {
+      "directory": "build/video/timing_investigation/decoder_registers_2",
+      "reason": "Tcl handles ignored by synthesis selectors"
+    },
+    {
+      "directory": "build/video/timing_investigation/decoder_register_names",
+      "reason": "wildcards matched invalid combinational endpoints"
+    },
+    {
+      "directory": "build/video/timing_investigation/decoder_register_exact",
+      "reason": "114/120 FF list omitted encoded FSM state"
+    }
+  ],
+  "review": {
+    "closed_p2_groups": 2,
+    "rejected_mutations": 8,
+    "closure": {
+      "path": "build/video/component_timing_review/20261022T033432_177863Z/finding_closure.json",
+      "sha256": "ec3fd4f0016328a8f76899caeef8ff9a2a678c9e9513ab25070559bd02b14335"
+    }
+  },
+  "delivery_files": {
+    "scripts/video/build_pds.py": "376d6a211b1f70d1bd3430eb2e6a347702a59b496078fd7f4c69bfd240a7eadb",
+    "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+    "tb/video/test_pds_timing.py": "2279c16da071498fc574d985be8577010a18d30de6f26c7fc54f2926719c3243",
+    "docs/superpowers/specs/2026-10-22-video-component-timing-design.md": "19147bd9fd71162c37041ce43fd2a92b73434efe43fc43eca073dd2192818e4f",
+    "docs/verification/video/component_timing.md": "2f8b3e65ad7f26c1d59bc19f38061939c70d909766c2ca6d0cc7af7145db8bd5",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "d7d3b181a21454b44a2c6984f45aae47b6670499c27337b4e0eec37c59193732"
+  },
+  "status_projection": {
+    "path": "build/video/timing_investigation/delivery/status_commit.md",
+    "sha256": "db3505023c49cd39afecde1e34aa1805d712754b042d02f4d1053091d7772c21"
+  },
+  "worktree_protection": {
+    "unchanged_entries": 94,
+    "status_existing_bytes_preserved": true
+  }
+}

@@ -1258,3 +1258,18 @@ CPU仍从固定Git对象导出到build，未合入本目录生产CPU；ROM/SRAM�
 逻辑修改。新译码综合89LUT/120FF/0DRM/APM，8ns加2ns I/O预算下setup估计
 −3.676ns、hold−1.970ns，无布线，不宣称125MHz系统闭合。
 [具体结果和限制](verification/video/cpu_record.md)。
+
+
+### 实施补充：F4c5b 组件时序诊断
+
+2026-10-22新增显式pads/component综合时序入口，原RTL、ABI、FDC与默认构建命令
+保持。component使用PDS原生disable_io_insertion，保留125MHz core、40MHz pixel、
+I/O预算及稳定束6ns；不指定from/to筛选。汇总与受限关键路径清单分别核验。
+最终component setup估计：译码+1.255ns，显示组合core+0.311/pixel+11.549ns，
+采显组合core+0.311/pixel+11.128ns。内部最紧为RAW描述符APM范围计算至显示
+link状态CE；没有据组件引脚负裕量直接修改READY/VALID或增加流水。
+
+这批setup正裕量仍伴随hold/removal负裕量，均单slow corner综合估计，fast表空；
+未执行布局布线、板测或物理签核，125MHz系统时序仍未闭合。后续先验证可布线的
+内部连接边界与时钟树，再按真实路径决定必要流水化。CPU交付不阻塞该独立工作。
+[分析方法、验收和限制](verification/video/component_timing.md)。
