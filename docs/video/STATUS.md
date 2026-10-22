@@ -449,3 +449,13 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 两大组件最紧内部setup为RAW描述符范围检查的APM链至显示link状态CE。采显组合hold−3.097ns、最差removal−1.393ns仍开放；均单slow corner，fast表空，无PNR、物理闭合或板测。setup正裕量不能替代全系统125MHz验收。
 - 25项相关测试普通/-O通过；独立审查的两组P2已修复，8项缺损/矛盾报告反例均拒绝。严格解析时钟、5类汇总和关键路径；datapath_only仅核验捕获组保守下界，明确区别于精确时钟对。探索的无效Tcl句柄筛选及114/120不完整名单保留，不当成功；完整120FF有限寄存器诊断另记。
 - [验证记录](../verification/video/component_timing.md)、[机器证据](../verification/video/evidence/component_timing.json)。CPU交付不阻塞本批；下一步建立可布线的内部接口边界，再验证原频率下setup/hold/removal，必要流水化单独回归。未操作JTAG/串口/Flash，保留NPU当前板卡状态；CPU/fabric/DDR/CDC与真实模型合拢仍独立验收。
+
+
+## 2026-10-22 Video F4c5c 注册边界与shadow字节写使能
+
+- 新增完整默认采显video_record_probe，161原端口/2227位经双域扫描形成12个物理端口；core708/1148、pixel26/341位输入/输出。显式生成与逐位映射检查、真实DUT idle及三个有效编译RTL反例通过；仅准synth/route，禁止bitstream。
+- core8ns/pixel25ns、4标量同步例外和12稳定束6ns保持，扫描I/O max2/min0.5ns及setup0.1/hold0.05ns不确定度共30约束。新注册边界不同于旧组件I/O模型；不作数值直接优化对比。两版CCR均0error/0critical，无不适用/有问题约束；12条缺物理pin属性告警保留。
+- 根据旧布局15级MMIO shadow合并写路径，改为逐字节写使能；ABI、B/R响应拍数、健康/owner不变，无新增周期。旧/新2723写2883读、既有MMIO10场景和C驱动、6健康/3真实三模式显示组合均通过；相关Python普通/-O各46项，独立审查发现均修复。
+- 同扫描边界新版综合35254LUT/44517FF/69.5DRM，比旧版少67LUT/1FF。相同seed4/performance及估计连线模型布局core−2.953/pixel−1.184ns，旧版−2.841/−1.393ns；最差路径由15降13级但core未改善，地址计算和高扇出写控制仍需处理。普通report_timing读placement DB的零连线正值单列，不能签核。
+- 初次route中断诚实留存；旧冻结版和字节使能版分别独立布线，最终报告均未取得。旧helper额外绑定的当前验证器变化有旧副本/哈希审计，不能将其expected hash拒绝改为helper成功。新wrapper/FDC/manifest与冻结版完全相同。125MHz系统时序仍未闭合。
+- [验证记录](../verification/video/record_probe.md)、[机器证据](../verification/video/evidence/record_probe.json)；CPU交付不阻塞本批。95项既有状态中94项非STATUS条目未变，台账只追加并按index projection仅提交本段，保留CPU/NPU/技术报告修改。无CPU/NPU迁入、JTAG/COM/Flash或板测；后续先取得真实route，再按实际关键路径继续收敛。

@@ -1,0 +1,1367 @@
+{
+  "schema_version": 1,
+  "phase": "F4c5c",
+  "status": "functional_and_synthesis_verified_placement_measured_route_pending",
+  "observed_at_utc": "2026-10-22T11:35:32.855750+00:00",
+  "baseline_commit": "77d5bfd9f25e198387d0143b47b7693a0422e483",
+  "timing_closed": false,
+  "component_route_timing_met": false,
+  "physical_route_verified": false,
+  "board_actions": false,
+  "cpu_delivery_required": false,
+  "cpu_npu_imported": false,
+  "product_rtl_changed": [
+    "rtl/video/video_display_mmio.sv"
+  ],
+  "abi_changed": false,
+  "added_response_cycles": 0,
+  "original_product_fdc_changed": false,
+  "boundary_model_changed": true,
+  "constraints": {
+    "core_ns": 8,
+    "pixel_ns": 25,
+    "stable_bundle_ns": 6,
+    "count": 30,
+    "first_stage_false_paths": 4,
+    "stable_bundles": 12,
+    "scan_io_max_ns": 2,
+    "scan_io_min_ns": 0.5,
+    "setup_uncertainty_ns": 0.1,
+    "hold_uncertainty_ns": 0.05
+  },
+  "boundary": {
+    "original_ports": 161,
+    "original_bits": 2227,
+    "physical_ports": 12,
+    "core_input_output_bits": [
+      708,
+      1148
+    ],
+    "pixel_input_output_bits": [
+      26,
+      341
+    ],
+    "default_dut": true
+  },
+  "python_tests": {
+    "ordinary": 46,
+    "optimized": 46,
+    "logs": [
+      {
+        "path": "build/video/record_probe_delivery/pds_tests_final.log",
+        "sha256": "14ec89b6069642c793bd8eb086b8be3c0d2968e2f81d6c7fe6fdd6cf1621d2ef",
+        "tests": 25,
+        "python_optimized": false
+      },
+      {
+        "path": "build/video/record_probe_delivery/probe_tests_final.log",
+        "sha256": "1da11155f5fb0a51c34690af2c2a2b4b371b05540b953060ef3f62d549e77d5b",
+        "tests": 21,
+        "python_optimized": false
+      },
+      {
+        "path": "build/video/record_probe_delivery/pds_tests_final_optimized.log",
+        "sha256": "a23dbaaed6b483ad9f2d81f606992ec81e8cd35365b50e13afebeda2209d0c92",
+        "tests": 25,
+        "python_optimized": true
+      },
+      {
+        "path": "build/video/record_probe_delivery/probe_tests_final_optimized.log",
+        "sha256": "25b57e9922b9d8b1dcd81829a40de198ff9f3fe4f12acb933bd0cf183bdc361b",
+        "tests": 21,
+        "python_optimized": true
+      }
+    ]
+  },
+  "simulation": {
+    "result": {
+      "path": "build/video/record_probe_sim/20261022T093736_825184Z/result.json",
+      "sha256": "0d754580384688ec04702367c2a5f91186eeb8e0609f4052fbe44f179dd86638"
+    },
+    "cases": [
+      {
+        "name": "boundary",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "wrong_input_bit",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "wrong_capture_priority",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "swapped_scalar_outputs",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "real_default_dut_idle",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "shadow_byte_strobes",
+        "status": "pass",
+        "exit_code": 0,
+        "writes": 2723,
+        "reads": 2883
+      }
+    ]
+  },
+  "display_regression": {
+    "result": {
+      "path": "build/video/regression/20261022T091906_717661Z/result.json",
+      "sha256": "d1782f194c832375899ff9c3778b7b2ad4fcf8722a5456e4b7cc1f8650f34d6e"
+    },
+    "cases": 10,
+    "includes_native_C_trace": true
+  },
+  "record_mmio_regression": {
+    "result": {
+      "path": "build/video/record_mmio/20261022T093045_402327Z/result.json",
+      "sha256": "3cea6ad97111039fc370f1ab70d441d2d63f364cb44caebff3525b8a70882fe5"
+    },
+    "health": {
+      "0": {
+        "case": 0,
+        "checks": 167
+      },
+      "1": {
+        "case": 1,
+        "checks": 166
+      },
+      "2": {
+        "case": 2,
+        "checks": 168
+      },
+      "3": {
+        "case": 3,
+        "checks": 168
+      },
+      "4": {
+        "case": 4,
+        "checks": 172
+      },
+      "5": {
+        "case": 5,
+        "checks": 167
+      }
+    },
+    "display": {
+      "normal": {
+        "w": 80,
+        "h": 64,
+        "raw_pixels": 20480,
+        "box_pixels": 10240,
+        "avatar_pixels": 10240,
+        "commits": 5,
+        "releases": 2,
+        "scanner_pixels": 40960,
+        "raw_commits": 3,
+        "overlap": 360460,
+        "raw_reads": 546,
+        "asset_reads": 1025,
+        "native": 1571
+      },
+      "ratio": {
+        "w": 80,
+        "h": 64,
+        "raw_pixels": 20480,
+        "box_pixels": 5120,
+        "avatar_pixels": 10240,
+        "commits": 5,
+        "releases": 2,
+        "scanner_pixels": 35840,
+        "raw_commits": 3,
+        "overlap": 360304,
+        "raw_reads": 478,
+        "asset_reads": 1025,
+        "native": 1503
+      },
+      "asset_wait": {
+        "w": 80,
+        "h": 64,
+        "raw_pixels": 30720,
+        "box_pixels": 10240,
+        "avatar_pixels": 5120,
+        "commits": 5,
+        "releases": 2,
+        "scanner_pixels": 46080,
+        "raw_commits": 3,
+        "overlap": 360460,
+        "raw_reads": 614,
+        "asset_reads": 1025,
+        "native": 1639
+      }
+    }
+  },
+  "byte_stores": {
+    "writes": 2723,
+    "reads": 2883,
+    "old_log": {
+      "path": "build/video/record_probe_delivery/shadow_bytes_before/run.log",
+      "sha256": "37aeb06c846562af3b91925f10b1a8de932af401a4dfb00bf22db1bfb8bc4ebb"
+    },
+    "new_log": {
+      "path": "build/video/record_probe_delivery/shadow_bytes_after/run.log",
+      "sha256": "37aeb06c846562af3b91925f10b1a8de932af401a4dfb00bf22db1bfb8bc4ebb"
+    }
+  },
+  "synthesis": {
+    "result": {
+      "path": "build/video/pds/20261022T092319_503464Z/result.json",
+      "sha256": "3a18545526a9122bff348970b933f4ecb7618d9e93c3d9fe1a1871c09627d360"
+    },
+    "report": {
+      "path": "build/video/pds/20261022T092319_503464Z/synthesize/video_record_probe.snr",
+      "sha256": "42bceb2245cd5323761a27be509c7221b7c8f0be2124a6c4321a304780d66b0c"
+    },
+    "old_resources": {
+      "lut": 35321,
+      "registers": 44518,
+      "drm": 69.5
+    },
+    "new_resources": {
+      "lut": 35254.0,
+      "registers": 44517.0,
+      "drm": 69.5
+    },
+    "tool": {
+      "path": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+      "sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f"
+    }
+  },
+  "placement_estimated_interconnect": {
+    "old": {
+      "stage": "placement_only",
+      "interconnect_model": "PDS report_place_timing estimated interconnect",
+      "report": {
+        "path": "build/video/pds/20261022T073453_980862Z/place_route/video_record_probe.rtr",
+        "sha256": "32b9c46151fe87e7b138df6ce16e5cad8b424092f4b11c02d4294fb9e5b36d3d"
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -2.841,
+              "tns_ns": -20758.852,
+              "failing_endpoints": 24350,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.141,
+              "tns_ns": -0.16,
+              "failing_endpoints": 2,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -1.393,
+              "tns_ns": -42.341,
+              "failing_endpoints": 36,
+              "endpoints": 21351
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 1.436,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -1.651,
+              "tns_ns": -5647.303,
+              "failing_endpoints": 15783,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.079,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -0.211,
+              "tns_ns": -3.459,
+              "failing_endpoints": 19,
+              "endpoints": 21351
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 1.576,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ]
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.027,
+              "tns_ns": -0.125,
+              "failing_endpoints": 6,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.178,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21351
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.007,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.14,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21351
+            }
+          ]
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -1.507,
+              "tns_ns": -2.975,
+              "failing_endpoints": 2,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.439,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -1.245,
+              "tns_ns": -2.483,
+              "failing_endpoints": 2,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.552,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ]
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.353,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.47,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.508,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.625,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ]
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10966
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.345,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.845,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10966
+            }
+          ]
+        }
+      },
+      "first_paths": [
+        {
+          "startpoint": "u_pipeline/u_display/u_mmio/awaddr[13]/opit_0_inv/CLK",
+          "endpoint": "u_pipeline/u_display/u_mmio/shadow[135][3]/opit_0_inv/D",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 15,
+          "slack_ns": -2.841
+        },
+        {
+          "startpoint": "u_pipeline/u_display/u_mmio/awaddr[13]/opit_0_inv/CLK",
+          "endpoint": "u_pipeline/u_display/u_mmio/shadow[15][3]/opit_0_inv/D",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 15,
+          "slack_ns": -2.809
+        }
+      ],
+      "timing_closed": false,
+      "component_route_timing_met": false
+    },
+    "byte_enable": {
+      "stage": "placement_only",
+      "interconnect_model": "PDS report_place_timing estimated interconnect",
+      "report": {
+        "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/place_route/video_record_probe.rtr",
+        "sha256": "45b24e0b6445c39e60878eaa75dff2616af97d7a691c0e59102bb9830311caf4"
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -2.953,
+              "tns_ns": -13521.692,
+              "failing_endpoints": 16328,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.579,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -1.184,
+              "tns_ns": -31.418,
+              "failing_endpoints": 35,
+              "endpoints": 21361
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.796,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -1.564,
+              "tns_ns": -2562.575,
+              "failing_endpoints": 7723,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.719,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -0.123,
+              "tns_ns": -1.722,
+              "failing_endpoints": 23,
+              "endpoints": 21361
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.937,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ]
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.027,
+              "tns_ns": -0.108,
+              "failing_endpoints": 4,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.178,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21361
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.007,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.14,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21361
+            }
+          ]
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.366,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.305,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.479,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.418,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ]
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.338,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.364,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.493,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.519,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ]
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10967
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.345,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.845,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10967
+            }
+          ]
+        }
+      },
+      "first_paths": [
+        {
+          "startpoint": "u_pipeline/u_display/u_mmio/awaddr[12]/opit_0_inv/CLK",
+          "endpoint": "u_pipeline/u_display/u_mmio/shadow[62][31]/opit_0_inv/D",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 13,
+          "slack_ns": -2.953
+        },
+        {
+          "startpoint": "u_pipeline/u_display/u_mmio/awaddr[12]/opit_0_inv/CLK",
+          "endpoint": "u_pipeline/u_display/u_mmio/shadow[20][12]/opit_0_inv/D",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 13,
+          "slack_ns": -2.863
+        }
+      ],
+      "timing_closed": false,
+      "component_route_timing_met": false
+    },
+    "core_wns_improved": false,
+    "new_critical_logic_levels": 13,
+    "qualification": "Same seed4/performance and constraints. Estimated interconnect only, not routed timing."
+  },
+  "placement_zero_net_diagnostics": [
+    {
+      "stage": "placement_only",
+      "interconnect_model": "report_timing on placement DB: zero data-net delays; not comparable with estimated-interconnect timing",
+      "report": {
+        "path": "build/video/record_probe_delivery/placement_timing_text/report_timing/video_record_probe.rtr",
+        "sha256": "cc891dca58361142fd1a85ca5a215222b7b1e451c15546f3782537bb4fc3ae15"
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.327,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.365,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.3,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21351
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 5.541,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 2.431,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.633,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 19.404,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21351
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 5.747,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ]
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.14,
+              "tns_ns": -290.495,
+              "failing_endpoints": 2279,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.001,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21351
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.106,
+              "tns_ns": -225.888,
+              "failing_endpoints": 3335,
+              "endpoints": 83202
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -0.021,
+              "tns_ns": -1.344,
+              "failing_endpoints": 64,
+              "endpoints": 21351
+            }
+          ]
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 4.849,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 22.627,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.132,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 22.74,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ]
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.109,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.124,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.264,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.279,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9935
+            }
+          ]
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10966
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.345,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.845,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10966
+            }
+          ]
+        }
+      },
+      "first_paths": [
+        {
+          "startpoint": "core_output_q[0]/opit_0_inv_L6Q/CLK",
+          "endpoint": "core_scan_o (port)",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 2,
+          "slack_ns": 1.327
+        },
+        {
+          "startpoint": "u_pipeline/u_display/u_raw/N6_m1/gopapm/CLK",
+          "endpoint": "u_pipeline/u_display/u_link/state_reg[0]/opit_0_inv_L5Q/CE",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 9,
+          "slack_ns": 2.653
+        }
+      ],
+      "timing_closed": false,
+      "component_route_timing_met": false
+    },
+    {
+      "stage": "placement_only",
+      "interconnect_model": "report_timing on placement DB: zero data-net delays; not comparable with estimated-interconnect timing",
+      "report": {
+        "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/report_timing/video_record_probe.rtr",
+        "sha256": "724bc3562735dc75c294c2e374e1571831b5321b1e20a452d9b0f5e75c5159e5"
+      },
+      "summaries": {
+        "setup": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 1.264,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.365,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 18.335,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21361
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 5.541,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 2.368,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.633,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 207
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 19.439,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21361
+            },
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 5.747,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 4177
+            }
+          ]
+        },
+        "hold": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.14,
+              "tns_ns": -290.736,
+              "failing_endpoints": 2278,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.0,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 21361
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": -0.106,
+              "tns_ns": -226.302,
+              "failing_endpoints": 3323,
+              "endpoints": 83278
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": -0.022,
+              "tns_ns": -1.408,
+              "failing_endpoints": 64,
+              "endpoints": 21361
+            }
+          ]
+        },
+        "recovery": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 4.876,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 22.634,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 5.145,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 22.747,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ]
+        },
+        "removal": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.094,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.117,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 0.249,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 26093
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 0.272,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 9936
+            }
+          ]
+        },
+        "pulse_width": {
+          "slow": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.04,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.54,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10967
+            }
+          ],
+          "fast": [
+            {
+              "launch_clock": "core_clk",
+              "capture_clock": "core_clk",
+              "wns_ns": 3.345,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 29216
+            },
+            {
+              "launch_clock": "pixel_clk",
+              "capture_clock": "pixel_clk",
+              "wns_ns": 11.845,
+              "tns_ns": 0.0,
+              "failing_endpoints": 0,
+              "endpoints": 10967
+            }
+          ]
+        }
+      },
+      "first_paths": [
+        {
+          "startpoint": "core_output_q[0]/opit_0_inv_L6Q/CLK",
+          "endpoint": "core_scan_o (port)",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 2,
+          "slack_ns": 1.264
+        },
+        {
+          "startpoint": "u_pipeline/u_display/u_raw/N6_m1/gopapm/CLK",
+          "endpoint": "u_pipeline/u_display/u_link/state_reg[0]/opit_0_inv_L5Q/CE",
+          "group": "core_clk",
+          "type": "max (slow corner)",
+          "logic_levels": 8,
+          "slack_ns": 2.76
+        }
+      ],
+      "timing_closed": false,
+      "component_route_timing_met": false
+    }
+  ],
+  "new_placement_provenance": {
+    "result": {
+      "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/result.json",
+      "sha256": "c3e552b9d09e7064ac35013a63668701028395ea5585e0eb329cfc675fc53caf"
+    },
+    "tcl": {
+      "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/place.tcl",
+      "sha256": "35c3a8dcc41a55b69f3c3fd08066316f00e1f1ec71e4885545fc0ad69ee05215"
+    },
+    "estimate_tcl": {
+      "path": "build/video/record_probe_delivery/optimized_place_estimate/estimate.tcl",
+      "sha256": "7e1a60708f881d5bb25bb4d80271b08069a886271485811be974f5e6ca1cfdae"
+    },
+    "estimate_inputs": {
+      "path": "build/video/record_probe_delivery/optimized_place_estimate/inputs.json",
+      "sha256": "342991e515bb91217bd58c169b99337d77a8a346af6cc833d1a06539be0f163b"
+    },
+    "estimate_cli": {
+      "path": "build/video/record_probe_delivery/optimized_place_estimate/cli.log",
+      "sha256": "628330b86721539fbe8f18676db1c24458bd4b1b4108316efadf02a2ee6d485f"
+    },
+    "mapped_db": {
+      "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/device_map/video_record_probe_map.adf",
+      "sha256": "d4659afe053eecb5b6cc8af2ac32e1c2849fc5072bd5dc666cd8198222e03a95"
+    },
+    "placed_db": {
+      "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/place_route/video_record_probe_plc.adf",
+      "sha256": "44b26a75dfd9e660d15f7bd9d34c605f4cba65e4d869e4827532e92c0984fee5"
+    },
+    "constraint_check": {
+      "path": "build/video/record_probe_optimized_place/20261022T093606_170256Z/constraint_check/constraint_check.ccr",
+      "sha256": "924175199e40b24243d555ad367ec95171a73e83742c5289a7727d67ac0e2bea"
+    },
+    "constraint_errors": 0,
+    "constraint_critical_warnings": 0,
+    "physical_pin_warnings": 12
+  },
+  "interrupted_original_route": {
+    "path": "build/video/record_probe_delivery/first_route_interrupted.json",
+    "sha256": "b9ea808576926c792cbd043a93cec9aa67f03791e4159b1085b7e6d67b78e729"
+  },
+  "route_observations": [
+    {
+      "locator": "build/video/record_probe_delivery/latest_resume.json",
+      "status_at_observation": "running",
+      "directory": "build/video/record_probe_route_resume/20261022T085343_631230Z",
+      "frozen_metadata": {
+        "path": "build/video/record_probe_delivery/observation_latest_resume.json",
+        "sha256": "e153966cbe1f2e884bc8f328ef41e7389c597d574054ed7a4d0cb144cbb65d52"
+      },
+      "final_report_present": false,
+      "timing_closed": false
+    },
+    {
+      "locator": "build/video/record_probe_delivery/latest_optimized_route.json",
+      "status_at_observation": "running",
+      "directory": "build/video/record_probe_optimized_route/20261022T113029_324117Z",
+      "frozen_metadata": {
+        "path": "build/video/record_probe_delivery/observation_latest_optimized_route.json",
+        "sha256": "3b48e27892c8b3244940deddfddc8d2615891d1bf1e464d590056fab9277a89c"
+      },
+      "final_report_present": false,
+      "timing_closed": false
+    }
+  ],
+  "validator_transition": {
+    "changed_inputs": [
+      "scripts/video/gen_record_probe.py"
+    ],
+    "saved_old_generator": {
+      "path": "build/video/record_probe_delivery/baseline_generator_before_review.py",
+      "sha256": "30d8405eecad7d4e446f8f616cd7ff5f22267ab57dbb783e9280763059bc00d6"
+    },
+    "current_generator": {
+      "path": "scripts/video/gen_record_probe.py",
+      "sha256": "80440f61ca9eb0fccdc6ddda113e710fa18d8b7e08e8b3077ebc19ea5b94fbb7"
+    },
+    "physical_generated_files_unchanged": true,
+    "original_helper_accepted": false,
+    "reason": "Original helper also binds current validation code; preserve its expected hash rejection. Final old-RTL acceptance needs a separate audit."
+  },
+  "review": {
+    "report": {
+      "path": "build/video/record_probe_review/REVIEW.md",
+      "sha256": "0c6f56f8ffbe0dbd9290f90982bdac94ec504a136e11cbe951fb08b98d5ea95c"
+    },
+    "baseline_input_audit": {
+      "path": "build/video/record_probe_review/validator_transition_audit.json",
+      "sha256": "ff78cb0720aab5aee520af67ee92a43368e62a71b9311c604a215c278d031ef1"
+    }
+  },
+  "protected_existing_entries": 95,
+  "protected_excluding_status_unchanged": 94,
+  "delivery_inputs": {
+    "rtl/video/video_display_mmio.sv": "e091be0868248e94dfce78e4527b4f7429804056100b55d105268750cb0c663e",
+    "scripts/video/build_pds.py": "9a4e2f7f876b8151bfa8450485889c96f432a51b6b920803e05ef0c4cbd261b0",
+    "scripts/video/gen_record_probe.py": "80440f61ca9eb0fccdc6ddda113e710fa18d8b7e08e8b3077ebc19ea5b94fbb7",
+    "scripts/video/record_probe_timing.py": "1f27c5537dc20e721f7845c3154e549549009c40b6a3b9d79d46a9171ff068f5",
+    "scripts/video/run_record_probe.py": "42664565d957347056ed59beffb2f69c7b2a584232cc96a4f13de2ec1f7d4387",
+    "fpga/pg2l100h/rtl/video_record_probe.sv": "574e380360df49b781b25f1a7a192a10303e2eb9ad60e570890fca0b5e9d78dd",
+    "fpga/pg2l100h/constraints/video_record_probe.fdc": "71eccc3ee1cda67107c5db202b2c84d834fe7e3c2f32a9fe45d19da0e59a4d9e",
+    "fpga/pg2l100h/project/video_record_probe.json": "70eb2a0e4238fe3e97e864a905addd526cdc302c6cd9f04cdd30af28080354e1",
+    "tb/video/tb_record_probe_idle.sv": "e93968c1454cec4d93652b46b50cad5d5c44667db7139df5e8ad940c6fda4888",
+    "tb/video/tb_display_shadow_bytes.sv": "2512b296ddcbb3b78e298cbec177bb99a39a960c56bc5575a8da4a024d77a6ae",
+    "tb/video/test_record_probe.py": "bb39247b05a94f8d83a5769e4243ea55edc1df409de7d8146cdafb6e2a5b3cfc",
+    "tb/video/test_record_probe_timing.py": "8779ce36fd42331bb5b65f3a5634560b5079c181c2d48c5482929b438eee8479"
+  },
+  "open": [
+    "No final routed STA for either frozen variant",
+    "Core placement setup remains negative and did not improve",
+    "Next address arithmetic/high-fanout control reduction needs independent functional/timing verification",
+    "CPU/fabric/physical DDR and CDC, continuous HDMI, real model outputs, board and system timing are separate"
+  ]
+}

@@ -83,7 +83,7 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
         else if(write_offset>=`VDISP_SHADOW_OFFSET&&write_offset<`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES)begin
             if(wstrb!=0)begin
                 if(locked)write_response=2;
-                else begin do_shadow=1;merged=(shadow[(write_offset-`VDISP_SHADOW_OFFSET)>>2]&~mask_word(wstrb))|(wdata&mask_word(wstrb));end
+                else do_shadow=1;
             end
         end else case(write_offset)
             `VDISP_REG_MODE,`VDISP_REG_SEQ:begin
@@ -197,7 +197,11 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
             if(execute_write)begin
                 aw_full<=0;w_full<=0;s_axi_bvalid_o<=1;s_axi_bresp_o<=write_response;
                 if(write_response==0)begin
-                    if(do_shadow)shadow[(write_offset-`VDISP_SHADOW_OFFSET)>>2]<=merged;
+                    // Per-byte enables avoid a 160-word read mux on the write path.
+                    if(do_shadow)begin
+                        for(k=0;k<4;k=k+1)if(wstrb[k])
+                            shadow[(write_offset-`VDISP_SHADOW_OFFSET)>>2][k*8+:8]<=wdata[k*8+:8];
+                    end
                     if(do_mode)request_mode<=merged;
                     if(do_seq)request_seq<=merged;
                     if(do_mask)irq_mask<=merged[3:0];

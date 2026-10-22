@@ -10,6 +10,7 @@ from common import BUILD, ROOT, fresh_run, input_hashes, run_logged, sha256, too
 from gen_pll import generate as generate_pll
 from gen_ddr import generate as generate_ddr
 from pds_timing import synthesis_command, parse_synthesis_timing
+from record_probe_timing import parse_record_probe_timing
 
 
 def tcl_path(path):
@@ -71,9 +72,14 @@ def verify_build_inputs(work, result):
             raise ValueError('Generated vendor input changed during build: '+name)
 
 
+def component_stage_allowed(target, stage):
+    """Only the registered scan probe has a routable component boundary."""
+    return stage == "synth" or (target == "video_record_probe" and stage == "route")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "video_shared_ddr", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio", "video_display_scanout", "video_pipeline", "video_record_pixels", "video_avatar_ddr", "video_record_renderer", "video_record_scanout", "video_display_record", "video_record_pipeline", "video_control_decode"), default="video_timing")
+    parser.add_argument("--target", choices=("video_timing", "video_rx", "video_board_smoke", "video_rx_board", "video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_detect_scale", "video_input_pad", "video_c8_pack", "video_detect_bilinear", "video_nchw_dma", "video_three_capture", "video_capture_rearm", "video_three_board", "video_capture_mmio", "video_capture_v2", "video_shared_ddr", "cpu_native_axil", "video_raw_display", "video_raw_board", "video_mode_board", "video_button_debounce", "video_mode_control", "video_overlay", "video_mode_cdc", "video_avatar_cache", "video_mode_output", "video_display_slot_owner", "video_display_mmio", "video_display_scanout", "video_pipeline", "video_record_pixels", "video_avatar_ddr", "video_record_renderer", "video_record_scanout", "video_display_record", "video_record_pipeline", "video_control_decode", "video_record_probe"), default="video_timing")
     parser.add_argument("--stage", choices=("synth", "route", "bitstream"), default="synth")
     parser.add_argument('--seed-start', type=int, default=4)
     parser.add_argument('--seed-count', type=int, default=6)
@@ -92,7 +98,7 @@ def main():
     hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
     ddr = args.target in ("video_ddr_bist", "video_axi_capture", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board")
     board = hdmi or ddr
-    if not board and args.stage != "synth":
+    if not board and not component_stage_allowed(args.target, args.stage):
         parser.error("Component targets have no board pins; only synth is supported")
     work = fresh_run("pds")
     latest = BUILD / "latest_pds.json"
@@ -108,6 +114,9 @@ def main():
     try:
         run_logged([sys.executable, ROOT / "scripts/video/gen_config.py", "--check"],
                    work / "config_check.log")
+        if args.target == "video_record_probe":
+            run_logged([sys.executable, ROOT / "scripts/video/gen_record_probe.py", "--check"],
+                       work / "probe_check.log")
         manifest_path = ROOT / f"fpga/pg2l100h/project/{args.target}.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         result["scope"] = manifest["scope"]
@@ -117,15 +126,19 @@ def main():
         names = manifest["sources"] + manifest["constraints"] + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
             manifest_path.relative_to(ROOT).as_posix()]
+        if args.target == "video_record_probe":
+            names += ["scripts/video/gen_record_probe.py",
+                      "fpga/pg2l100h/project/video_record_pipeline.json",
+                      "fpga/pg2l100h/constraints/video_record_pipeline.fdc"]
         if args.target=='video_capture_mmio':
             run_logged([sys.executable,ROOT/'scripts/video/gen_regs.py','--check'],work/'regs_check.log')
             names += ['config/video_regs.json','rtl/video/include/video_regs.vh',
                       'sw/include/video_regs.h','scripts/video/gen_regs.py']
-        if args.target in ('video_capture_v2','video_pipeline','video_record_pipeline','video_control_decode'):
+        if args.target in ('video_capture_v2','video_pipeline','video_record_pipeline','video_control_decode','video_record_probe'):
             run_logged([sys.executable,ROOT/'scripts/video/gen_capture_v2.py','--check'],work/'capture_v2_abi_check.log')
             names += ['config/video_capture_v2.json','rtl/video/include/video_capture_v2.vh',
                       'sw/include/video_capture_v2.h','scripts/video/gen_capture_v2.py']
-        if args.target in ('video_display_scanout','video_pipeline','video_record_pixels','video_record_renderer','video_record_scanout','video_display_record','video_record_pipeline','video_control_decode'):
+        if args.target in ('video_display_scanout','video_pipeline','video_record_pixels','video_record_renderer','video_record_scanout','video_display_record','video_record_pipeline','video_control_decode','video_record_probe'):
             run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'scanout_abi_check.log')
             names += ['config/video_display.json','rtl/video/include/video_display.vh',
                       'sw/include/video_display_abi.h','scripts/video/gen_display_abi.py']
@@ -143,7 +156,7 @@ def main():
                       'fpga/pg2l100h/ip/video_reference_manifest.json']
         result["inputs"] = input_hashes([ROOT / name for name in names] +
             [ROOT / "scripts/video" / name for name in
-             ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py", "pds_timing.py")])
+             ("build_pds.py", "common.py", "gen_config.py", "gen_pll.py", "pds_timing.py", "record_probe_timing.py")])
         result['snapshot_inputs'] = {}
         for name in names:
             destination = work / "src" / name
@@ -197,6 +210,10 @@ def main():
                 route += placement_options
                 result['pnr_configuration'] = {'seed_start': args.seed_start, 'seed_count': args.seed_count,
                                                'mode': args.pnr_mode or 'normal'}
+            if args.target == "video_record_probe":
+                route += placement_options
+                result["pnr_configuration"] = {"seed_start": args.seed_start,
+                    "seed_count": args.seed_count, "mode": args.pnr_mode or "normal"}
             lines += ["dev_map",route,"report_timing"]
         if args.stage == "bitstream":
             lines += ["gen_bit_stream -scbv {High Voltage}"]
@@ -204,7 +221,7 @@ def main():
         script.write_text("\n".join(lines) + "\n", encoding="utf-8")
         verify_build_inputs(work, result)
         executable = tool("pds_shell")
-        if args.target in ('cpu_native_axil', 'video_raw_display', 'video_display_scanout', 'video_pipeline', 'video_record_pixels', 'video_avatar_ddr', 'video_record_renderer', 'video_record_scanout', 'video_display_record', 'video_record_pipeline', 'video_control_decode'):
+        if args.target in ('cpu_native_axil', 'video_raw_display', 'video_display_scanout', 'video_pipeline', 'video_record_pixels', 'video_avatar_ddr', 'video_record_renderer', 'video_record_scanout', 'video_display_record', 'video_record_pipeline', 'video_control_decode','video_record_probe'):
             result['pds_executable'] = str(executable)
             result['pds_executable_sha256'] = sha256(executable)
         result["pds_version"] = run_logged(
@@ -212,7 +229,7 @@ def main():
         verify_build_inputs(work, result)
         log = run_logged([executable, "-file", script, "-work_dir", work,
                           "-project_name", args.target], work / "synth.log",
-                         cwd=work, timeout=3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board") else 1800 if ddr else 900)
+                         cwd=work, timeout=14400 if args.target == "video_record_probe" else 3600 if args.target in ("video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_mode_board") else 1800 if ddr else 900)
         reference_fdc = ""
         if board:
             reference = json.loads((ROOT / 'fpga/pg2l100h/ip/video_reference_manifest.json').read_text(encoding='utf-8'))
@@ -254,10 +271,19 @@ def main():
         if args.stage in ("route", "bitstream"):
             timing = work / "report_timing" / (top + ".rtr")
             timing_text = timing.read_text(encoding="utf-8", errors="replace")
+            if args.target == "video_record_probe":
+                result["timing_report"] = str(timing.relative_to(ROOT))
+                result["timing_report_sha256"] = sha256(timing)
+                result["routed_timing"] = parse_record_probe_timing(timing_text)
+                if not result["routed_timing"]["component_route_timing_met"]:
+                    raise RuntimeError("Routed component timing constraints not met; inspect timing report")
             if "All Constraints Met" not in timing_text:
                 raise RuntimeError("Routed internal timing constraints not met; inspect timing report")
             result["internal_timing_met"] = True
             result["timing_report"] = str(timing.relative_to(ROOT))
+            if args.target == "video_record_probe":
+                result["component_route_timing_met"] = True
+                result["timing_report_sha256"] = sha256(timing)
         if args.stage == "bitstream":
             bitstream = work / "generate_bitstream" / (top + ".sbit")
             result["artifact"] = str(bitstream.relative_to(ROOT))
@@ -266,7 +292,7 @@ def main():
             result["verify_mask"] = str(verify_mask.relative_to(ROOT))
             result["verify_mask_sha256"] = sha256(verify_mask)
         verify_build_inputs(work, result)
-        if (args.synth_timing is not None or args.target in ('cpu_native_axil', 'video_raw_display')) and sha256(executable) != result['pds_executable_sha256']:
+        if (args.synth_timing is not None or args.target in ('cpu_native_axil', 'video_raw_display', 'video_record_probe')) and sha256(executable) != result['pds_executable_sha256']:
             raise ValueError('PDS executable changed during build')
         result['input_snapshot_verified_before_and_after_build'] = True
     except Exception as error:

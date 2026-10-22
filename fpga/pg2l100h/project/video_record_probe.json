@@ -1,0 +1,851 @@
+{
+  "schema_version": 1,
+  "target": "video_record_probe",
+  "top": "video_record_probe",
+  "test_top": "tb_record_probe_idle",
+  "sources": [
+    "fpga/pg2l100h/rtl/video_record_probe.sv",
+    "rtl/video/video_capture_mmio_v2.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/video_write_dma.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv",
+    "rtl/video/raw_display.sv",
+    "rtl/video/video_memory_scheduler.sv",
+    "rtl/video/video_shared_ddr.sv",
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/display_slot_owner.sv",
+    "rtl/video/display_record_guard.sv",
+    "rtl/video/video_display_mmio.sv",
+    "rtl/video/display_mode_cdc.sv",
+    "rtl/video/video_read_arbiter.sv",
+    "rtl/video/avatar_texture_cache.sv",
+    "rtl/video/avatar_ddr_cache.sv",
+    "rtl/video/avatar_sample_map.sv",
+    "rtl/video/display_overlay.sv",
+    "rtl/video/display_record_pixels.sv",
+    "rtl/video/video_record_renderer.sv",
+    "rtl/video/display_record_link.sv",
+    "rtl/video/video_display_record.sv",
+    "rtl/video/video_record_pipeline.sv"
+  ],
+  "tests": [
+    "tb/video/tb_record_probe_idle.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_record_probe.fdc"
+  ],
+  "boundary": {
+    "core": {
+      "clock": "clk_i",
+      "reset": "rst_ni",
+      "inputs": [
+        {
+          "name": "online",
+          "width": 1,
+          "offset": 0
+        },
+        {
+          "name": "display_urgent",
+          "width": 1,
+          "offset": 1
+        },
+        {
+          "name": "source_fault",
+          "width": 1,
+          "offset": 2
+        },
+        {
+          "name": "overflow",
+          "width": 1,
+          "offset": 3
+        },
+        {
+          "name": "src_valid",
+          "width": 1,
+          "offset": 4
+        },
+        {
+          "name": "src_data",
+          "width": 48,
+          "offset": 5
+        },
+        {
+          "name": "c_s_axi_awaddr_i",
+          "width": 32,
+          "offset": 53
+        },
+        {
+          "name": "c_s_axi_awprot_i",
+          "width": 3,
+          "offset": 85
+        },
+        {
+          "name": "c_s_axi_awvalid_i",
+          "width": 1,
+          "offset": 88
+        },
+        {
+          "name": "c_s_axi_wdata_i",
+          "width": 32,
+          "offset": 89
+        },
+        {
+          "name": "c_s_axi_wstrb_i",
+          "width": 4,
+          "offset": 121
+        },
+        {
+          "name": "c_s_axi_wvalid_i",
+          "width": 1,
+          "offset": 125
+        },
+        {
+          "name": "c_s_axi_bready_i",
+          "width": 1,
+          "offset": 126
+        },
+        {
+          "name": "c_s_axi_araddr_i",
+          "width": 32,
+          "offset": 127
+        },
+        {
+          "name": "c_s_axi_arprot_i",
+          "width": 3,
+          "offset": 159
+        },
+        {
+          "name": "c_s_axi_arvalid_i",
+          "width": 1,
+          "offset": 162
+        },
+        {
+          "name": "c_s_axi_rready_i",
+          "width": 1,
+          "offset": 163
+        },
+        {
+          "name": "d_s_axi_awaddr_i",
+          "width": 32,
+          "offset": 164
+        },
+        {
+          "name": "d_s_axi_awprot_i",
+          "width": 3,
+          "offset": 196
+        },
+        {
+          "name": "d_s_axi_awvalid_i",
+          "width": 1,
+          "offset": 199
+        },
+        {
+          "name": "d_s_axi_wdata_i",
+          "width": 32,
+          "offset": 200
+        },
+        {
+          "name": "d_s_axi_wstrb_i",
+          "width": 4,
+          "offset": 232
+        },
+        {
+          "name": "d_s_axi_wvalid_i",
+          "width": 1,
+          "offset": 236
+        },
+        {
+          "name": "d_s_axi_bready_i",
+          "width": 1,
+          "offset": 237
+        },
+        {
+          "name": "d_s_axi_araddr_i",
+          "width": 32,
+          "offset": 238
+        },
+        {
+          "name": "d_s_axi_arprot_i",
+          "width": 3,
+          "offset": 270
+        },
+        {
+          "name": "d_s_axi_arvalid_i",
+          "width": 1,
+          "offset": 273
+        },
+        {
+          "name": "d_s_axi_rready_i",
+          "width": 1,
+          "offset": 274
+        },
+        {
+          "name": "h_awready",
+          "width": 1,
+          "offset": 275
+        },
+        {
+          "name": "h_arready",
+          "width": 1,
+          "offset": 276
+        },
+        {
+          "name": "h_wready",
+          "width": 1,
+          "offset": 277
+        },
+        {
+          "name": "h_rvalid",
+          "width": 1,
+          "offset": 278
+        },
+        {
+          "name": "h_rdata",
+          "width": 256,
+          "offset": 279
+        },
+        {
+          "name": "h_wid",
+          "width": 4,
+          "offset": 535
+        },
+        {
+          "name": "h_rid",
+          "width": 4,
+          "offset": 539
+        },
+        {
+          "name": "h_wlast",
+          "width": 1,
+          "offset": 543
+        },
+        {
+          "name": "h_rlast",
+          "width": 1,
+          "offset": 544
+        },
+        {
+          "name": "load_valid",
+          "width": 1,
+          "offset": 545
+        },
+        {
+          "name": "load_base",
+          "width": 32,
+          "offset": 546
+        },
+        {
+          "name": "load_bytes",
+          "width": 32,
+          "offset": 578
+        },
+        {
+          "name": "load_asset_id",
+          "width": 32,
+          "offset": 610
+        },
+        {
+          "name": "load_generation",
+          "width": 32,
+          "offset": 642
+        },
+        {
+          "name": "expected_crc",
+          "width": 32,
+          "offset": 674
+        },
+        {
+          "name": "result_ready",
+          "width": 1,
+          "offset": 706
+        },
+        {
+          "name": "asset_retire_ready",
+          "width": 1,
+          "offset": 707
+        }
+      ],
+      "input_bits": 708,
+      "outputs": [
+        {
+          "name": "src_ready",
+          "width": 1,
+          "offset": 0
+        },
+        {
+          "name": "arm_toggle",
+          "width": 1,
+          "offset": 1
+        },
+        {
+          "name": "cancel",
+          "width": 1,
+          "offset": 2
+        },
+        {
+          "name": "capture_busy",
+          "width": 1,
+          "offset": 3
+        },
+        {
+          "name": "capture_port_drained",
+          "width": 1,
+          "offset": 4
+        },
+        {
+          "name": "c_s_axi_awready_o",
+          "width": 1,
+          "offset": 5
+        },
+        {
+          "name": "c_s_axi_wready_o",
+          "width": 1,
+          "offset": 6
+        },
+        {
+          "name": "c_s_axi_bresp_o",
+          "width": 2,
+          "offset": 7
+        },
+        {
+          "name": "c_s_axi_bvalid_o",
+          "width": 1,
+          "offset": 9
+        },
+        {
+          "name": "c_s_axi_arready_o",
+          "width": 1,
+          "offset": 10
+        },
+        {
+          "name": "c_s_axi_rdata_o",
+          "width": 32,
+          "offset": 11
+        },
+        {
+          "name": "c_s_axi_rresp_o",
+          "width": 2,
+          "offset": 43
+        },
+        {
+          "name": "c_s_axi_rvalid_o",
+          "width": 1,
+          "offset": 45
+        },
+        {
+          "name": "d_s_axi_awready_o",
+          "width": 1,
+          "offset": 46
+        },
+        {
+          "name": "d_s_axi_wready_o",
+          "width": 1,
+          "offset": 47
+        },
+        {
+          "name": "d_s_axi_bresp_o",
+          "width": 2,
+          "offset": 48
+        },
+        {
+          "name": "d_s_axi_bvalid_o",
+          "width": 1,
+          "offset": 50
+        },
+        {
+          "name": "d_s_axi_arready_o",
+          "width": 1,
+          "offset": 51
+        },
+        {
+          "name": "d_s_axi_rdata_o",
+          "width": 32,
+          "offset": 52
+        },
+        {
+          "name": "d_s_axi_rresp_o",
+          "width": 2,
+          "offset": 84
+        },
+        {
+          "name": "d_s_axi_rvalid_o",
+          "width": 1,
+          "offset": 86
+        },
+        {
+          "name": "irq_capture",
+          "width": 1,
+          "offset": 87
+        },
+        {
+          "name": "irq_display",
+          "width": 1,
+          "offset": 88
+        },
+        {
+          "name": "faults",
+          "width": 3,
+          "offset": 89
+        },
+        {
+          "name": "capture_code",
+          "width": 8,
+          "offset": 92
+        },
+        {
+          "name": "display_code",
+          "width": 8,
+          "offset": 100
+        },
+        {
+          "name": "memory_code",
+          "width": 8,
+          "offset": 108
+        },
+        {
+          "name": "raw_commits",
+          "width": 32,
+          "offset": 116
+        },
+        {
+          "name": "raw_scans",
+          "width": 32,
+          "offset": 148
+        },
+        {
+          "name": "underflows",
+          "width": 32,
+          "offset": 180
+        },
+        {
+          "name": "read_grants",
+          "width": 32,
+          "offset": 212
+        },
+        {
+          "name": "write_grants",
+          "width": 32,
+          "offset": 244
+        },
+        {
+          "name": "h_awaddr",
+          "width": 28,
+          "offset": 276
+        },
+        {
+          "name": "h_araddr",
+          "width": 28,
+          "offset": 304
+        },
+        {
+          "name": "h_awlen",
+          "width": 4,
+          "offset": 332
+        },
+        {
+          "name": "h_arlen",
+          "width": 4,
+          "offset": 336
+        },
+        {
+          "name": "h_awid",
+          "width": 4,
+          "offset": 340
+        },
+        {
+          "name": "h_arid",
+          "width": 4,
+          "offset": 344
+        },
+        {
+          "name": "h_awvalid",
+          "width": 1,
+          "offset": 348
+        },
+        {
+          "name": "h_arvalid",
+          "width": 1,
+          "offset": 349
+        },
+        {
+          "name": "h_wdata",
+          "width": 256,
+          "offset": 350
+        },
+        {
+          "name": "h_wstrb",
+          "width": 32,
+          "offset": 606
+        },
+        {
+          "name": "load_ready",
+          "width": 1,
+          "offset": 638
+        },
+        {
+          "name": "result_valid",
+          "width": 1,
+          "offset": 639
+        },
+        {
+          "name": "result_success",
+          "width": 1,
+          "offset": 640
+        },
+        {
+          "name": "result_code",
+          "width": 8,
+          "offset": 641
+        },
+        {
+          "name": "result_asset_id",
+          "width": 32,
+          "offset": 649
+        },
+        {
+          "name": "result_generation",
+          "width": 32,
+          "offset": 681
+        },
+        {
+          "name": "checked_bytes",
+          "width": 32,
+          "offset": 713
+        },
+        {
+          "name": "crc",
+          "width": 32,
+          "offset": 745
+        },
+        {
+          "name": "asset_ready",
+          "width": 1,
+          "offset": 777
+        },
+        {
+          "name": "asset_id",
+          "width": 32,
+          "offset": 778
+        },
+        {
+          "name": "asset_generation",
+          "width": 32,
+          "offset": 810
+        },
+        {
+          "name": "words_written",
+          "width": 32,
+          "offset": 842
+        },
+        {
+          "name": "render_faults",
+          "width": 3,
+          "offset": 874
+        },
+        {
+          "name": "read_code",
+          "width": 8,
+          "offset": 877
+        },
+        {
+          "name": "material_code",
+          "width": 8,
+          "offset": 885
+        },
+        {
+          "name": "pixels_code",
+          "width": 8,
+          "offset": 893
+        },
+        {
+          "name": "port_drained",
+          "width": 1,
+          "offset": 901
+        },
+        {
+          "name": "raw_grants",
+          "width": 32,
+          "offset": 902
+        },
+        {
+          "name": "asset_grants",
+          "width": 32,
+          "offset": 934
+        },
+        {
+          "name": "asset_retire_valid",
+          "width": 1,
+          "offset": 966
+        },
+        {
+          "name": "asset_retire_slot",
+          "width": 2,
+          "offset": 967
+        },
+        {
+          "name": "asset_retire_frame",
+          "width": 32,
+          "offset": 969
+        },
+        {
+          "name": "asset_retire_generation",
+          "width": 32,
+          "offset": 1001
+        },
+        {
+          "name": "asset_retire_seq",
+          "width": 32,
+          "offset": 1033
+        },
+        {
+          "name": "asset_retire_id",
+          "width": 32,
+          "offset": 1065
+        },
+        {
+          "name": "asset_retire_generation_id",
+          "width": 32,
+          "offset": 1097
+        },
+        {
+          "name": "owner_error",
+          "width": 1,
+          "offset": 1129
+        },
+        {
+          "name": "link_error",
+          "width": 1,
+          "offset": 1130
+        },
+        {
+          "name": "raw_error",
+          "width": 1,
+          "offset": 1131
+        },
+        {
+          "name": "link_code",
+          "width": 8,
+          "offset": 1132
+        },
+        {
+          "name": "raw_code",
+          "width": 8,
+          "offset": 1140
+        }
+      ],
+      "output_bits": 1148
+    },
+    "pixel": {
+      "clock": "pixel_clk",
+      "reset": "pixel_reset_n",
+      "inputs": [
+        {
+          "name": "pixel_x",
+          "width": 11,
+          "offset": 0
+        },
+        {
+          "name": "pixel_y",
+          "width": 11,
+          "offset": 11
+        },
+        {
+          "name": "pixel_de",
+          "width": 1,
+          "offset": 22
+        },
+        {
+          "name": "pixel_hs",
+          "width": 1,
+          "offset": 23
+        },
+        {
+          "name": "pixel_vs",
+          "width": 1,
+          "offset": 24
+        },
+        {
+          "name": "pixel_frame_start",
+          "width": 1,
+          "offset": 25
+        }
+      ],
+      "input_bits": 26,
+      "outputs": [
+        {
+          "name": "out_rgb",
+          "width": 24,
+          "offset": 0
+        },
+        {
+          "name": "out_de",
+          "width": 1,
+          "offset": 24
+        },
+        {
+          "name": "out_hs",
+          "width": 1,
+          "offset": 25
+        },
+        {
+          "name": "out_vs",
+          "width": 1,
+          "offset": 26
+        },
+        {
+          "name": "raw_frame",
+          "width": 32,
+          "offset": 27
+        },
+        {
+          "name": "pixel_material_ready",
+          "width": 1,
+          "offset": 59
+        },
+        {
+          "name": "raw_context_valid",
+          "width": 1,
+          "offset": 60
+        },
+        {
+          "name": "raw_slot",
+          "width": 2,
+          "offset": 61
+        },
+        {
+          "name": "raw_generation",
+          "width": 32,
+          "offset": 63
+        },
+        {
+          "name": "raw_x",
+          "width": 11,
+          "offset": 95
+        },
+        {
+          "name": "raw_y",
+          "width": 11,
+          "offset": 106
+        },
+        {
+          "name": "raw_rgb",
+          "width": 24,
+          "offset": 117
+        },
+        {
+          "name": "raw_de",
+          "width": 1,
+          "offset": 141
+        },
+        {
+          "name": "raw_hs",
+          "width": 1,
+          "offset": 142
+        },
+        {
+          "name": "raw_vs",
+          "width": 1,
+          "offset": 143
+        },
+        {
+          "name": "raw_sof",
+          "width": 1,
+          "offset": 144
+        },
+        {
+          "name": "out_x",
+          "width": 11,
+          "offset": 145
+        },
+        {
+          "name": "out_y",
+          "width": 11,
+          "offset": 156
+        },
+        {
+          "name": "out_frame",
+          "width": 32,
+          "offset": 167
+        },
+        {
+          "name": "out_generation",
+          "width": 32,
+          "offset": 199
+        },
+        {
+          "name": "out_seq",
+          "width": 32,
+          "offset": 231
+        },
+        {
+          "name": "out_slot",
+          "width": 2,
+          "offset": 263
+        },
+        {
+          "name": "out_mode",
+          "width": 2,
+          "offset": 265
+        },
+        {
+          "name": "out_sof",
+          "width": 1,
+          "offset": 267
+        },
+        {
+          "name": "out_box",
+          "width": 1,
+          "offset": 268
+        },
+        {
+          "name": "out_point",
+          "width": 1,
+          "offset": 269
+        },
+        {
+          "name": "out_avatar",
+          "width": 1,
+          "offset": 270
+        },
+        {
+          "name": "out_fault",
+          "width": 1,
+          "offset": 271
+        },
+        {
+          "name": "pixel_pending",
+          "width": 1,
+          "offset": 272
+        },
+        {
+          "name": "pending_mode",
+          "width": 2,
+          "offset": 273
+        },
+        {
+          "name": "pending_slot",
+          "width": 2,
+          "offset": 275
+        },
+        {
+          "name": "pending_frame",
+          "width": 32,
+          "offset": 277
+        },
+        {
+          "name": "pending_generation",
+          "width": 32,
+          "offset": 309
+        }
+      ],
+      "output_bits": 341
+    }
+  },
+  "generator": "scripts/video/gen_record_probe.py",
+  "source_manifest": "fpga/pg2l100h/project/video_record_pipeline.json",
+  "scope": "Full default record pipeline with separate core/pixel registered scan boundaries; component routing only. No legal-traffic, CPU/NPU, DDR visibility, board or full-system timing claim."
+}
