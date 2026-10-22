@@ -2,7 +2,7 @@
   "schema_version": 1,
   "phase": "F4c5d",
   "status": "functional_and_synthesis_verified_placement_measured_route_open",
-  "observed_at_utc": "2026-10-22T12:43:21.598028+00:00",
+  "observed_at_utc": "2026-10-22T12:54:40.064465+00:00",
   "baseline_commit": "2c9c67f1797470fe038ec3de9b0cbcb2986b7daa",
   "timing_closed": false,
   "physical_route_verified": false,
@@ -652,11 +652,11 @@
     "locator": "build/video/record_probe_delivery/latest_optimized_route.json"
   },
   "static_aw_route": {
-    "status_at_observation": "running",
+    "status_at_observation": "interrupted",
     "directory": "build/video/shadow_static_route/20261022T121238_111984Z",
     "metadata_snapshot": {
       "path": "build/video/shadow_decode_delivery/static_route_observation.json",
-      "sha256": "84a4ffbb30e40240e5a458c7a478a71ad7ccf625a80b6d46491aba0072c139ca"
+      "sha256": "691ea43079d378a32bbf1a1f81e5f952b400d847d978dc21232080c6ff80e673"
     },
     "locator": "build/video/shadow_decode_delivery/latest_static_route.json"
   },

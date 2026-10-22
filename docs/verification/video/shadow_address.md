@@ -68,8 +68,10 @@ core 最差 setup 改善 0.818 ns，仍未过关；fast core setup −1.306 ns�
 已全部过关。后续应分别处理扫描 I/O、复位网络和实际内部路径。
 
 普通 `report_timing` 直接读 plc DB 的零数据连线报告另行绑定，不作这张表
-的数据来源。本轮冻结 mapped/placed DB 已继续完整布线，定位
-`build/video/shadow_decode_delivery/latest_static_route.json`；尚无最终STA。
+的数据来源。本轮冻结 mapped/placed DB 曾启动完整布线，定位
+`build/video/shadow_decode_delivery/latest_static_route.json`；进程在第10次迭代
+后消失，最后记录43247个未布通net，没有 routed DB或最终STA。原因不作推断，
+状态记录为 interrupted，不把它写成时序失败或成功。
 
 19:55:49，原 merged-write 冻结版续跑路由真实结束：`Route-4022` 报拥塞、
 `Route-0008` 报无法布线，详细迭代8仍有52375个未布通net，没有最终STA。
