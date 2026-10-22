@@ -27,7 +27,7 @@ def load_verified(directory, full=False):
             raise ValueError('DDR CoreMark output drift: ' + name)
     if any(c['return_code'] != 0 or c.get('timed_out') for c in row['commands']):
         raise ValueError('DDR CoreMark native failure')
-    if payload_image((directory / 'payload/firmware.elf').read_bytes()) != (directory / 'payload/firmware.bin').read_bytes():
+    if payload_image((directory / 'payload/firmware.elf').read_bytes(), row.get('placement_base', 0x80000000)) != (directory / 'payload/firmware.bin').read_bytes():
         raise ValueError('payload differs from linked loadable program')
     if not full:
         measurement = row['measurement']
@@ -43,7 +43,8 @@ def load_verified(directory, full=False):
 def pair(full_directory, preflight_directory):
     full = load_verified(full_directory, full=True)
     short = load_verified(preflight_directory)
-    if full['cache_enable'] != short['cache_enable'] or full['compiler_version'] != short['compiler_version']:
+    if (full['cache_enable'] != short['cache_enable'] or full['compiler_version'] != short['compiler_version'] or
+            full.get('placement_base', 0x80000000) != short.get('placement_base', 0x80000000)):
         raise ValueError('CoreMark preflight configuration differs')
     for name, digest in full['input_hashes'].items():
         if name in short['input_hashes'] and short['input_hashes'][name] != digest:

@@ -29,9 +29,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('package', type=Path)
     parser.add_argument('--seconds', type=int, default=600)
+    parser.add_argument('--existing-program-record', type=Path,
+        help='Read-only KEY0 recovery capture; do not program or verify again')
     args = parser.parse_args()
-    if not 30 <= args.seconds <= 900:
-        parser.error('capture deadline must be 30..900 seconds')
+    if not 30 <= args.seconds <= 1800:
+        parser.error('capture deadline must be 30..1800 seconds')
     sys.path.insert(0, str(ROOT / 'scripts/soc'))
     from program_board import validate_package
     from coremark_board import review_output
@@ -45,8 +47,11 @@ def main():
         package=str(package), package_manifest_sha256=sha(package / 'manifest.json'),
         bitstream_sha256=manifest['bitstream_sha256'], payload_sha256=manifest['payload_sha256'],
         cache_enable=manifest['cache_enable'], programmed=False, verified=False,
+        placement_base=manifest.get('placement_base', 0x80000000),
         flash_written=False, board_coremark_validated=False, reader_sha256=sha(__file__),
         physical_ipc=None, ipc_scope='No instruction-retirement CSR; no physical IPC claim',
+        programmed_in_this_capture=args.existing_program_record is None,
+        manual_recovery_capture=args.existing_program_record is not None,
         started_utc=datetime.now(timezone.utc).isoformat())
     save(work / 'result.json', row)
     (work / 'reader-source.py').write_bytes(Path(__file__).read_bytes())
@@ -91,16 +96,21 @@ try {
                 time.sleep(.1)
             if not (work / 'capture.ready').exists():
                 raise RuntimeError('UART capture not ready')
-            with (work / 'program.log').open('wb') as log:
-                command = [sys.executable, str(ROOT / 'scripts/soc/program_board.py'), str(package)]
-                programmed = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
-                    timeout=120, creationflags=subprocess.CREATE_NO_WINDOW)
-            row['program_runner_return_code'] = programmed.returncode
-            program_log = (work / 'program.log').read_text(encoding='utf-8')
-            locations = re.findall(r'CPU_PROGRAM PASS (.+result\.json)', program_log)
-            if programmed.returncode != 0 or len(locations) != 1:
-                raise RuntimeError('volatile Program/Verify failed; see program.log')
-            program_path = Path(locations[0].strip())
+            if args.existing_program_record:
+                program_path = args.existing_program_record.resolve()
+                row['program_runner_return_code'] = None
+                print('CPU_DDR_COREMARK_KEY0_CAPTURE_READY', work, flush=True)
+            else:
+                with (work / 'program.log').open('wb') as log:
+                    command = [sys.executable, str(ROOT / 'scripts/soc/program_board.py'), str(package)]
+                    programmed = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
+                        timeout=120, creationflags=subprocess.CREATE_NO_WINDOW)
+                row['program_runner_return_code'] = programmed.returncode
+                program_log = (work / 'program.log').read_text(encoding='utf-8')
+                locations = re.findall(r'CPU_PROGRAM PASS (.+result\.json)', program_log)
+                if programmed.returncode != 0 or len(locations) != 1:
+                    raise RuntimeError('volatile Program/Verify failed; see program.log')
+                program_path = Path(locations[0].strip())
             program = json.loads(program_path.read_text(encoding='utf-8'))
             if (program['manifest_sha256'] != row['package_manifest_sha256'] or program['native_return_code'] != 0 or
                     not program['programmed'] or not program['verified'] or program['flash_written']):
@@ -114,8 +124,9 @@ try {
                 if b'CPU_DDR_COREMARK_BOOT\n' in data:
                     text, epochs = last_epoch(data)
                     if 'CPU_COREMARK_BOARD_PASS iterations=5000\n' in text:
-                        if 'CPU_DDR_COREMARK_PAYLOAD_PASS\n' not in text or 'private DDR stack' not in text:
-                            raise ValueError('missing private-DDR copy/execution evidence')
+                        expected_memory = 'shared DDR stack (uncached)' if row['placement_base'] == 0x82000000 else 'private DDR stack'
+                        if 'CPU_DDR_COREMARK_PAYLOAD_PASS\n' not in text or expected_memory not in text:
+                            raise ValueError('missing selected DDR copy/execution evidence')
                         measurement = review_output(text, expected_luts=manifest['cpu_only_resources']['lut'])
                         (work / 'measurement-uart.txt').write_text(text, encoding='utf-8', newline='\n')
                         total_luts = manifest['cpu_only_resources']['lut'] + manifest['cache_resources']['lut']

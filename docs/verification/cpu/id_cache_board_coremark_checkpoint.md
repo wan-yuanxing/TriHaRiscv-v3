@@ -1,5 +1,9 @@
 # DDR CoreMark physical checkpoint
 
+Historical checkpoint. The subsequent shared-uncached physical score, additional
+startup failures and current programmed image are recorded in
+[the completed measurement comparison](id_cache_board_coremark_comparison.md).
+
 2026-10-22, parent baa980f, cpu/windows-baseline. Native Windows tools only.
 Raw bindings: id_cache_board_coremark_checkpoint.json.
 

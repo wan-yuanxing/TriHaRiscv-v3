@@ -17,7 +17,7 @@ int main(void)
             return 1;
         }
     }
-    volatile uint32_t *destination = (volatile uint32_t *)0x80000000u;
+    volatile uint32_t *destination = (volatile uint32_t *)TRIHA_PAYLOAD_ENTRY;
     for (uint32_t i = 0; i < TRIHA_PAYLOAD_WORDS; ++i)
         destination[i] = triha_payload[i];
     for (uint32_t i = 0; i < TRIHA_PAYLOAD_WORDS; ++i) {
@@ -29,6 +29,6 @@ int main(void)
     __asm__ volatile (".word 0x0000100f" : : : "memory");
     *(volatile uint32_t *)0x00016ff0u = TRIHA_PAYLOAD_CPU_LUTS;
     triha_puts("CPU_DDR_COREMARK_PAYLOAD_PASS\n");
-    ((void (*)(void))0x80000000u)();
+    ((void (*)(void))TRIHA_PAYLOAD_ENTRY)();
     return 3;
 }

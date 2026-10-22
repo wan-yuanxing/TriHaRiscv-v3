@@ -52,7 +52,10 @@ def main():
         import sys
         sys.path.insert(0, str(ROOT / 'scripts/cpu'))
         from review_ddr_board import physical
-        reviewed = json.loads(json.dumps(physical(Path(manifest['route_directory']))))
+        # Programming a selected immutable release validates its complete frozen
+        # sources, tools, evidence and actual routed outputs. The current branch
+        # may have advanced; candidate packaging still requires current sources.
+        reviewed = json.loads(json.dumps(physical(Path(manifest['route_directory']), require_current=False)))
         if reviewed != json.loads((package / 'review.json').read_text(encoding='utf-8')):
             raise ValueError('DDR package does not match complete independent physical review')
     else:

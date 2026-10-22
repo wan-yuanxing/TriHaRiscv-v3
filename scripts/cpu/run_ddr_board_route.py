@@ -108,6 +108,7 @@ def main():
             from ddr_coremark_review import pair
             firmware, short = pair(firmware_dir, args.coremark_preflight)
             row.update(firmware_profile='ddr-coremark', cache_enable=firmware['cache_enable'],
+                placement_base=firmware.get('placement_base', 0x80000000),
                 coremark_preflight=str(args.coremark_preflight.resolve()))
             for name in ['result.json', *short['output_hashes']]:
                 row['evidence_hashes'][str(args.coremark_preflight.resolve()/name)] = sha(args.coremark_preflight.resolve()/name)

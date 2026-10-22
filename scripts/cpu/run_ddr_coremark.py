@@ -25,7 +25,11 @@ def main():
     parser.add_argument('--fault', choices=['none', 'crc'], default='none')
     parser.add_argument('--build-only', action='store_true')
     parser.add_argument('--cpu-core-luts', type=int, default=0)
+    parser.add_argument('--uncached-shared', action='store_true', help='Keep Cache hardware; execute code/data in shared uncached DDR')
     args = parser.parse_args()
+    if args.uncached_shared and args.cache_enable != 1:
+        parser.error('shared-attribute comparison retains the successful Cache hardware')
+    base_address = 0x82000000 if args.uncached_shared else 0x80000000
     if args.build_only and (args.iterations != 5000 or args.fault != 'none'):
         parser.error('build-only is the unchanged 5000-iteration board image')
     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
@@ -92,7 +96,7 @@ def main():
         row['compiler_version'] = native(compiler, ['--version'], 'gcc-version').strip()
         libgcc = native(compiler, ['-march=rv32im_zicsr', '-mabi=ilp32', '-print-libgcc-file-name'], 'libgcc').strip()
         row['external_hashes'][libgcc] = sha(libgcc)
-        row.update(build(work, native, args.iterations, not args.build_only, args.fault, args.cpu_core_luts))
+        row.update(build(work, native, args.iterations, not args.build_only, args.fault, args.cpu_core_luts, base_address))
         if args.build_only:
             row.update(status='BUILT', runner_return_code=0)
         else:
@@ -117,7 +121,7 @@ def main():
                 work / 'src/tb/soc/cpu_board_pll_model.v', *[work / 'src' / n for n in sources],
                 work / 'src/tb/soc/tb_cpu_ddr_coremark.v', *primitives], 'compile')
             text = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc',
-                '-gCACHE_ENABLE=' + str(args.cache_enable), 'work.tb_cpu_ddr_coremark',
+                '-gCACHE_ENABLE=' + str(args.cache_enable), "-gPAYLOAD_BASE=32'h"+f'{base_address:08x}', 'work.tb_cpu_ddr_coremark',
                 '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation', 900)
             sys.path.insert(0, str(ROOT / 'scripts/soc'))
             from coremark_board import review_output

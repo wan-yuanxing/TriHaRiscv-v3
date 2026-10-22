@@ -24,3 +24,18 @@ and read-only COM12 capture are now authorized for this measurement.
 
 Stage5: docs/verification/cpu/id_cache_stage5.md/.json. This plan does not
 admit shared CPU/NPU/Video fabric or substitute simulation for physical DDR.
+
+Execution update, 2026-10-22: two cached private-DDR board runs and one
+shared-uncached board run completed with valid5000-iteration CRC/duration.
+The user explicitly selected the shared-address comparison after compile-time
+Cache-off failed DDR initialization. It retains Cache hardware and uses a
+different link address/attribute; it is not same-address Cache off/on.
+Result:84.374480817 versus10.231936873CoreMark. See
+docs/verification/cpu/id_cache_board_coremark_comparison.md/.json.
+
+DDR startup remains unresolved: reset-held Program/Verify preceded one valid
+shared run but did not prevent an init failure on cached-image restoration.
+Keep the cached e5503c690208 image programmed/verified. The user requested
+serial-assistant ownership and brief KEY0 reset instead of prolonged manual
+holding; automatic capture is closed. Do not reopen COM12 or reprogram while
+the user inspects it. No Flash or main-worktree changes.

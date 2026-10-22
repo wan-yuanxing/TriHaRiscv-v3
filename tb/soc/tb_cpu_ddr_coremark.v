@@ -3,6 +3,7 @@
  * accelerated; timing scores come from cycle CSRs, not simulator wall time. */
 module tb_cpu_ddr_coremark;
     parameter integer CACHE_ENABLE = 1;
+    parameter [31:0] PAYLOAD_BASE = 32'h80000000;
     reg ref_clk = 0, free_clk = 0, rst_n = 0;
     always #4 ref_clk = !ref_clk;
     always #18.5185 free_clk = !free_clk;
@@ -29,10 +30,10 @@ module tb_cpu_ddr_coremark;
         cycles = cycles + 1;
         if (cycles > 40000000) $fatal(1, "CPU_DDR_COREMARK_SIM_FAIL watchdog");
         if (`MEMORY.uart_write) $write("%c", `MEMORY.data_wdata_i[7:0]);
-        if (`SOC.inst_req && `SOC.inst_accept && `SOC.inst_addr >= 32'h80000000 && `SOC.inst_addr < 32'h80020000)
+        if (`SOC.inst_req && `SOC.inst_accept && `SOC.inst_addr >= PAYLOAD_BASE && `SOC.inst_addr < PAYLOAD_BASE+32'h20000)
             ddr_fetches = ddr_fetches + 1;
         if (`SOC.data_accept && (`SOC.data_re || |`SOC.data_wstrb) &&
-            `SOC.data_addr >= 32'h80000000 && `SOC.data_addr < 32'h80020000)
+            `SOC.data_addr >= PAYLOAD_BASE && `SOC.data_addr < PAYLOAD_BASE+32'h20000)
             ddr_data = ddr_data + 1;
     end
     initial begin

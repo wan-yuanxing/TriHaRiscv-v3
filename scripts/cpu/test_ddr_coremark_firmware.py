@@ -24,6 +24,12 @@ class PayloadTests(unittest.TestCase):
             with self.subTest(data=data[24:28]), self.assertRaises(ValueError):
                 ddr_coremark_firmware.payload_image(data)
 
+    def test_shared_payload_is_explicit_and_bounded(self):
+        data = elf(address=0x82000000, entry=0x82000000)
+        self.assertEqual(ddr_coremark_firmware.payload_image(data, base=0x82000000), data[0x100:])
+        with self.assertRaises(ValueError):
+            ddr_coremark_firmware.payload_image(data, base=0x83000000)
+
 
 if __name__ == '__main__':
     unittest.main()

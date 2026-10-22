@@ -1,0 +1,438 @@
+{
+  "status": "MEASUREMENT_COMPLETE_STARTUP_UNRESOLVED",
+  "date": "2026-10-22",
+  "reviewed_utc": "2026-10-22T07:35:18.076121+00:00",
+  "branch": "cpu/windows-baseline",
+  "reviewer": {
+    "path": "build/soc/finalize-ddr-coremark-20261022.py",
+    "sha256": "4b6b2166bdd2e4aba60b70ccebebe4c3bde2f021c34950c70496c777e7400f34"
+  },
+  "records": {
+    "cached": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T032238371278Z/result.json",
+        "sha256": "02ae62bc992ad2b8f4536f7acf9197c86a2cdef40f650aa9e00b9c7879a2d7d4"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T032238371278Z/uart.bin",
+        "sha256": "edd9cfb2832eac49ea909bf3feb41bae1dda4b3d048490a682e32b7818a16178"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T032242233392Z/result.json",
+        "sha256": "44996fb143d6ec521e74f72bfc8c1a8083028552a4a9c194a85daab2ef3118a3"
+      },
+      "status": "PASS",
+      "placement_base": "0x80000000",
+      "bitstream_sha256": "e5503c6902084e82c20eff3c6b8b6f610e45be810c3a9982e7948ea3078ba07e",
+      "measurement": {
+        "iterations": 5000,
+        "cycles": 5925962390,
+        "clock_hz": 100000000,
+        "seconds": 59.2596239,
+        "coremark": 84.37448081745251,
+        "coremark_per_mhz": 0.843744808174525,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "duration_valid": true,
+        "official_submission": false,
+        "cpu_core_luts": 6558,
+        "coremark_per_lut": 0.012865886065485286
+      },
+      "epochs": 2,
+      "coremark_per_cpu_plus_cache_lut": 0.011922351394298786
+    },
+    "cached_repeat": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T040618824861Z/result.json",
+        "sha256": "db8b0ee451a425d925907d354e46975040de6bc09a3a188b94c4f9d4032fff0d"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T040618824861Z/uart.bin",
+        "sha256": "92800c88091ae598358f92b7cb3b2d2aa0e9af5d95f3843ef1c89737c5fc64e6"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T040622265125Z/result.json",
+        "sha256": "065907568d8f7ed152102c35b192286fd3c24133cf7e8ec58cdb6e012b40da58"
+      },
+      "status": "PASS",
+      "placement_base": "0x80000000",
+      "bitstream_sha256": "e5503c6902084e82c20eff3c6b8b6f610e45be810c3a9982e7948ea3078ba07e",
+      "measurement": {
+        "iterations": 5000,
+        "cycles": 5925962602,
+        "clock_hz": 100000000,
+        "seconds": 59.25962602,
+        "coremark": 84.37447779897414,
+        "coremark_per_mhz": 0.8437447779897413,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "duration_valid": true,
+        "official_submission": false,
+        "cpu_core_luts": 6558,
+        "coremark_per_lut": 0.01286588560521106
+      },
+      "epochs": 2,
+      "coremark_per_cpu_plus_cache_lut": 0.011922350967779305
+    },
+    "compile_time_off_failure": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T034724790837Z/result.json",
+        "sha256": "b10e6d112ef80a622e748b6c60b3532b1fb98d452d7722c80d796906d98a7a92"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T034724790837Z/uart.bin",
+        "sha256": "281aa14466ba2e51bec076c53359980b6c6e7cd9ea7ac93c739bbcef2658ca3c"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T034728424509Z/result.json",
+        "sha256": "f1d2ee802e55ba3354c5454ca6cb7afff62bc9e9f473b5463fa1fab46143050b"
+      },
+      "status": "FAIL",
+      "placement_base": "0x80000000",
+      "bitstream_sha256": "2375aea0cf749efaa6b7dac8b8ffb9c111b20539d7e902bc197891e560962217",
+      "error": "physical UART reported failure or trap"
+    },
+    "shared_initial_failure": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T054006432662Z/result.json",
+        "sha256": "1dc1ebe68534ec4574d95c7f576ec31801b2449aa94f4a34b361740bbaeab6a9"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T054006432662Z/uart.bin",
+        "sha256": "d5da974334f9f3a9fde5a8f3f1737785032c4692eda553222eace0a3ebe67161"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T054009831885Z/result.json",
+        "sha256": "2b152d4d9b2d4fd806e26358ef20f119e633fbfca20c7615b6dfa8e78a610b1d"
+      },
+      "status": "FAIL",
+      "placement_base": "0x82000000",
+      "bitstream_sha256": "1f9d010bc39f0d7d5056b07cfa3f5be43a537d71e6b9d78a05c12eae9b9c1886",
+      "error": "physical UART reported failure or trap"
+    },
+    "shared_key0_failure": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T054413192057Z/result.json",
+        "sha256": "ccd9260a23c07705fb12539c648c0a3f8a8bd69d9a51d2981af7e5f1fa2e2c09"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T054413192057Z/uart.bin",
+        "sha256": "88cee5a169d7a223406c8fe2ca6a77360823aa66c99680abf7f46fba25d98c8e"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T054009831885Z/result.json",
+        "sha256": "2b152d4d9b2d4fd806e26358ef20f119e633fbfca20c7615b6dfa8e78a610b1d"
+      },
+      "status": "FAIL",
+      "placement_base": "0x82000000",
+      "bitstream_sha256": "1f9d010bc39f0d7d5056b07cfa3f5be43a537d71e6b9d78a05c12eae9b9c1886",
+      "error": "physical UART reported failure or trap"
+    },
+    "shared_uncached": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T070510083237Z/result.json",
+        "sha256": "ea0edf1cb8592347c002adcc157b9ef99be1253269cb40d3f83cac4a455799f3"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T070510083237Z/uart.bin",
+        "sha256": "4eb468601b856db1102fe41a00b80688be659fc5a85dc12df8e33d604af8cadb"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T070518623041Z/result.json",
+        "sha256": "57155d75788335c80dbef53250b3d761a20dede1680da64cdd81952b652e9b90"
+      },
+      "status": "PASS",
+      "placement_base": "0x82000000",
+      "bitstream_sha256": "1f9d010bc39f0d7d5056b07cfa3f5be43a537d71e6b9d78a05c12eae9b9c1886",
+      "measurement": {
+        "iterations": 5000,
+        "cycles": 48866603284,
+        "clock_hz": 100000000,
+        "seconds": 488.66603284,
+        "coremark": 10.231936873003633,
+        "coremark_per_mhz": 0.10231936873003633,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "duration_valid": true,
+        "official_submission": false,
+        "cpu_core_luts": 6558,
+        "coremark_per_lut": 0.0015602221520286113
+      },
+      "epochs": 1,
+      "coremark_per_cpu_plus_cache_lut": 0.0014458014516043002
+    },
+    "cached_restore_boot_failure": {
+      "result": {
+        "path": "build/soc/ddr-coremark-physical-20261022T072112511118Z/result.json",
+        "sha256": "c2d52753006028b6715bac4090629cc6d84bcd433ed6c01391ae9b10d71354e3"
+      },
+      "uart": {
+        "path": "build/soc/ddr-coremark-physical-20261022T072112511118Z/uart.bin",
+        "sha256": "88cee5a169d7a223406c8fe2ca6a77360823aa66c99680abf7f46fba25d98c8e"
+      },
+      "program_record": {
+        "path": "build/soc/board-ddr-program-20261022T072121260688Z/result.json",
+        "sha256": "1ce4d955bafaf57d253b1fc5c74e30074e957082e87eb656c91f651eb3c4aa39"
+      },
+      "status": "FAIL",
+      "placement_base": "0x80000000",
+      "bitstream_sha256": "e5503c6902084e82c20eff3c6b8b6f610e45be810c3a9982e7948ea3078ba07e",
+      "error": "physical UART reported failure or trap"
+    }
+  },
+  "routes": {
+    "cached": {
+      "manifest": {
+        "path": "build/soc/releases/cpu_ddr_coremark_on_e5503c690208/manifest.json",
+        "sha256": "a1d7e772a63fabbf2bb00df9af9d66d3f5dcb68db2e036d00a6499085b462d89"
+      },
+      "review": {
+        "path": "build/soc/releases/cpu_ddr_coremark_on_e5503c690208/review.json",
+        "sha256": "ab2d0f6501878b6f1c8aa5016e9de30403817e2df3060bb2eacc26a76dee7d4d"
+      },
+      "timing_report": {
+        "path": "build/cpu/ddr-board-route-20261022T030931405664Z/report_timing/triha_cpu_ddr_board_top.rtr",
+        "sha256": "c68d6f7b4e0aabbef026575b46685e44a358cee3d56dcf8ba9f19e472445efe2"
+      },
+      "cpu_only": {
+        "lut": 6558,
+        "registers": 3562,
+        "distributed_ram": 688,
+        "apm": 4,
+        "drm": 0.0
+      },
+      "cache": {
+        "lut": 519,
+        "registers": 763,
+        "distributed_ram": 0,
+        "apm": 0,
+        "drm": 11.0
+      }
+    },
+    "shared_uncached": {
+      "manifest": {
+        "path": "build/soc/releases/cpu_ddr_coremark_shared_1f9d010bc39f/manifest.json",
+        "sha256": "54de85e5d63f2f9a2cc4598394e7602efa4f5b947ba48755f797d00b21a02aab"
+      },
+      "review": {
+        "path": "build/soc/releases/cpu_ddr_coremark_shared_1f9d010bc39f/review.json",
+        "sha256": "1ee736cc03e646a608632bcb8a1f334f6b51f506d0e17337de3be439afbfbb1d"
+      },
+      "timing_report": {
+        "path": "build/cpu/ddr-board-route-20261022T052857828863Z/report_timing/triha_cpu_ddr_board_top.rtr",
+        "sha256": "329160d647123e58d5bf0904372c93bb8fb66bbd5276768e06052163394a7902"
+      },
+      "cpu_only": {
+        "lut": 6558,
+        "registers": 3562,
+        "distributed_ram": 688,
+        "apm": 4,
+        "drm": 0.0
+      },
+      "cache": {
+        "lut": 519,
+        "registers": 763,
+        "distributed_ram": 0,
+        "apm": 0,
+        "drm": 11.0
+      }
+    },
+    "compile_time_off": {
+      "manifest": {
+        "path": "build/soc/releases/cpu_ddr_coremark_off_2375aea0cf74/manifest.json",
+        "sha256": "f8cd850a11b74fa2c4f17dcb0c182457c80b0a356999792d19d505a0667ce0cd"
+      },
+      "review": {
+        "path": "build/soc/releases/cpu_ddr_coremark_off_2375aea0cf74/review.json",
+        "sha256": "e20a92d27f61cf627f9130bf4ffc1837df66688dc3b93879bfe6e3876ef00fb1"
+      },
+      "timing_report": {
+        "path": "build/cpu/ddr-board-route-20261022T032154956555Z/report_timing/triha_cpu_ddr_board_top.rtr",
+        "sha256": "aaa67fe35750f4847804d5ae1f7b6fe901ee1f6ad2aa5ca354497e04d2690120"
+      },
+      "cpu_only": {
+        "lut": 6466,
+        "registers": 3560,
+        "distributed_ram": 688,
+        "apm": 4,
+        "drm": 0.0
+      },
+      "cache": {
+        "lut": 242,
+        "registers": 535,
+        "distributed_ram": 0,
+        "apm": 0,
+        "drm": 0.0
+      }
+    }
+  },
+  "checks": [
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/cpu",
+        "-p",
+        "test_*.py"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/00.log",
+        "sha256": "6fba182c725fc3477b805a5edce0634ba0fc49e92908d933f955827238a7e2e5"
+      }
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/soc",
+        "-p",
+        "test_*.py"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/01.log",
+        "sha256": "850b9040af1b44a9be53e814b6106c2fda4dc020affee09c3d51e18f88f07edc"
+      }
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "scripts/cpu/gen_ddr_board.py",
+        "--check"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/02.log",
+        "sha256": "b66ef94facff33f0e8186858440147b6a9e61bb3a6df935861fa1829f9db6b81"
+      }
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "scripts/cpu/gen_cache_soc.py",
+        "--check"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/03.log",
+        "sha256": "dd3648583cd73928ceb869f9a44b0b8b63f2106814716c8b981cfc7f4b2edb57"
+      }
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "scripts/cpu/check_cache.py"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/04.log",
+        "sha256": "122b2fb8543097b33ff466af7d55bcc338ab2727697433a42427daf984dbe395"
+      }
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/cpu/test_pds_reports.ps1"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/05.log",
+        "sha256": "07a553b458a36ab2d9b76c489d6ff4cdd4de2381e1c4f3d710435e4bd22dca35"
+      }
+    },
+    {
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "scripts/cpu/test_route_reports.ps1"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/06.log",
+        "sha256": "7a1105446462c6485c2251a87912ae143cfc6f81b8b0ecc7a3fe09913c43e1a4"
+      }
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "return_code": 0,
+      "output": {
+        "path": "build/soc/ddr-coremark-final-check-20261022/07.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "comparison": {
+    "private_cached_base": "0x80000000",
+    "shared_uncached_base": "0x82000000",
+    "cache_hardware_present_in_both": true,
+    "same_address_cache_off_on": false,
+    "same_loaded_payload": false,
+    "compiler": "GCC15.2",
+    "optimization": "-O2",
+    "lto": false,
+    "throughput_ratio": 8.246188562799839,
+    "cycles_reduction_percent": 87.87318538274526,
+    "static_configuration_comparison": {
+      "path": "build/cpu/ddr-static-config-compare-20261022/result.json",
+      "sha256": "1dd77b1b529f8ff7f507aace3806eb95552375408b00e60cea54e075b8dd4243"
+    },
+    "static_comparison_scope": "DRM initialization and bitstream time/manufacturer metadata excluded"
+  },
+  "current_board": {
+    "release": "cpu_ddr_coremark_on_e5503c690208",
+    "program_verify": "PASS",
+    "latest_automated_boot": "FAIL DDR init",
+    "flash_written": false,
+    "serial_capture_closed": true,
+    "port": "COM12",
+    "baud": 115200,
+    "format": "8N1",
+    "flow_control": "none"
+  },
+  "protocol": {
+    "shared_success": "User confirmed KEY0 held during Program/Verify then released; one complete successful epoch",
+    "general_fix_proven": false,
+    "counterevidence": "Cached image restoration using reset-held protocol also reported DDR init failure",
+    "user_preference": "No prolonged manual key hold; leave programmed image and free COM12 for user serial assistant and brief reset"
+  },
+  "physical_ipc": null,
+  "official_submission": false,
+  "original_sram_release": {
+    "manifest": {
+      "path": "build/soc/releases/cpu_coremark_6ff82025b53d/manifest.json",
+      "sha256": "9e5d62605eb82d36d288db17cb06110d3455af1f5a6aa1652fdf0e2e98314c8c"
+    },
+    "files_verified": 10
+  },
+  "limitations": [
+    "PLL/training/internal fault cause unknown",
+    "No unconditional startup stability claim",
+    "No shared CPU/NPU/Video fabric admission or full DDR/electrical qualification"
+  ]
+}

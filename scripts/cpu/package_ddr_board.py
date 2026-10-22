@@ -33,6 +33,7 @@ def main():
             raise ValueError('complete post-route timing admission is required')
         terminal=json.loads((route/'result.json').read_text(encoding='utf-8'))
         coremark = terminal.get('firmware_profile') == 'ddr-coremark'
+        shared = coremark and terminal.get('placement_base', 0x80000000) == 0x82000000
         if coremark:
             firmware = json.loads((Path(terminal['firmware_directory'])/'result.json').read_text(encoding='utf-8'))
             if firmware['cpu_core_luts'] != reviewed['resources']['u_core']['lut']:
@@ -79,7 +80,7 @@ def main():
         checked=physical(route)
         if checked!=reviewed or not all(Path(p).is_file() and sha(p)==h for p,h in record['input_hashes'].items()):
             raise ValueError('bitstream inputs changed')
-        prefix = ('cpu_ddr_coremark_'+('on_' if terminal['cache_enable'] else 'off_')) if coremark else 'cpu_ddr_board_'
+        prefix = ('cpu_ddr_coremark_'+('shared_' if shared else 'on_' if terminal['cache_enable'] else 'off_')) if coremark else 'cpu_ddr_board_'
         output=ROOT/'build/soc/releases'/(prefix+sha(bit)[:12])
         output.mkdir(parents=True,exist_ok=False)
         sources={p.name:p for p in [bit,mask,route/'rom.hex',route/'sram.hex',route/'firmware.elf',
@@ -142,6 +143,11 @@ this package's generation is not a physical score or official submission.
 No instruction-retirement CSR is implemented: do not claim measured board IPC.
 Not programmed by this packager. No Flash, shared SoC fabric or Video/NPU.
 '''
+            if shared:
+                readme = readme.replace('enters private DDR0x80000000', 'enters shared uncached DDR0x82000000')
+                readme = readme.replace('below0x80020000 are in private DDR', 'below0x82020000 are in shared uncached DDR')
+                readme += '\nAll benchmark I/D requests bypass Cache through shared-region attributes.\nCache hardware remains present. This is not same-address compile-time Cache off/on.\n'
+            readme += '\nDDR payload base: '+hex(terminal.get('placement_base', 0x80000000))+'\n'
         (output/'README.md').write_text(readme,encoding='utf-8',newline='\n')
         files={p.name:sha(p) for p in output.iterdir() if p.is_file()}
         manifest=dict(status='PASS',target='cpu_ddr_board',firmware_profile='ddr-coremark' if coremark else 'ddr-diagnostic',
@@ -151,6 +157,7 @@ Not programmed by this packager. No Flash, shared SoC fabric or Video/NPU.
             cpu_only_resources=reviewed['resources']['u_core'])
         if coremark:
             manifest.update(cache_enable=terminal['cache_enable'],
+                placement_base=terminal.get('placement_base', 0x80000000),
                 payload_sha256=sha(route/'payload/firmware.bin'), iterations=5000,
                 cache_resources=reviewed['resources']['u_cache'])
         save(output/'manifest.json',manifest)

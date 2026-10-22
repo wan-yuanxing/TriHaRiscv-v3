@@ -1,8 +1,10 @@
-最新DDR板测：独立诊断三次自检通过；带Cache的5000次CoreMark实际两次为84.374481/84.374478，0.843745/MHz，CPU6558LUT，CRC和至少10秒检查均通过，非官方提交。裁掉Cache的镜像虽通过100MHz却在板上DDR初始化失败，无有效分数；已切回成功的带Cache镜像。用户选择保留Cache硬件，以共享区不缓存属性补齐对照，需披露地址属性变化。原SRAM部署包10文件未变；未写Flash。证据docs/verification/cpu/id_cache_board_coremark_checkpoint.md及JSON。
+最新DDR板测对照已取得有效结果，但启动可靠性未解决。带Cache的5000次CoreMark实际两次为84.374481/84.374478，0.843745/MHz；保留相同Cache硬件、使用共享区不缓存属性的实际结果为10.231937，0.102319/MHz、488.666033秒。两者CPU-only均6558LUT，CRC和至少10秒检查通过，吞吐比8.246189；地址0x80000000/0x82000000、属性和重新链接载荷不同，不是同地址编译期Cache开关对照，非官方提交。编译期Cache=0没有有效板测分数。共享区一次保持复位下载后跑分通过，但恢复缓存镜像的同流程又出现init失败，不能宣称找到通用修复。当前缓存镜像e5503c690208已完成Program/Verify，最新自动启动FAIL，内部原因未知。用户改为自行打开串口助手短按复位查看，COM12已释放，不再要求长按、不再自动下载或占用串口。原SRAM发布包十文件未变；未写Flash。完整绑定见docs/verification/cpu/id_cache_board_coremark_comparison.md及JSON。
 
 # TriHa CPU 状态
 
 更新：2026-10-22。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+
+以下为逐阶段历史；当前板测、镜像和未解决问题以上述最新记录为准。
 
 缓存CPU独立DDR板级目标已通过实际100MHz后布线准入。控制器复位改由常开125MHz参考时钟的两级寄存器同步释放，并删除此前未承载逻辑的ref_clk整域异步分组，恢复ref→DDR的真实recovery/removal检查；不是扩大豁免。新完整实现CPU Slow/Fast setup +0.213/+3.617ns，hold +0.136/+0.082ns，MPW +3.655/+4.202ns；全部时钟域setup/hold/recovery/removal/MPW无违例，performance slack一致。60条Gray max-delay通过；独立解析同次原生XML，逐行绑定10条FDC约束、每组max/min三位、两corner共20组，skew最差余量+0.966ns、最大实际1.034ns，原2ns要求不变。CPU/Cache RTL哈希与stage4相同，软件O2/无LTO不变；没有新增CoreMark或板级成绩。当前综合上下文CPU-only6558LUT/3562FF/688RAM-LUT已含/0DRM/4APM，不能把整板15825LUT算成CPU。独立诊断包`build/soc/releases/cpu_ddr_board_189c51babb73`已生成并校验，尚未下载、未访问串口、未验证实际DDR训练；原CoreMark部署包10项文件不变。50项Python及既有PDS/STA解析检查通过；见docs/verification/cpu/id_cache_stage5.md/.json。下一步为独立板级DDR验收和后续多主fabric/可见性接入；本目标仍独占native端口。
 

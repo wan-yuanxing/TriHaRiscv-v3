@@ -211,16 +211,21 @@ def digital(directories):
         scope='Real CPU/O2 software with digital DDR/PLL substitutes; no analog training or physical timing claim')
 
 
-def physical(directory):
+def verify_sources(directory, entries, root=ROOT, require_current=True):
+    for name, digest in entries.items():
+        if ((require_current and sha(root/name) != digest) or
+                sha(directory/'src'/name) != digest):
+            raise ValueError('physical source binding drift: '+name)
+
+
+def physical(directory, require_current=True):
     directory = Path(directory).resolve()
     row = json.loads((directory/'result.json').read_text(encoding='utf-8'))
     if (row['flow_status'] != 'PASS' or row['status'] != 'REVIEW_REQUIRED' or
             row['runner_return_code'] != 2 or not all(row[k] for k in
             ['source_unchanged','external_unchanged','evidence_unchanged','hardware_unchanged'])):
         raise ValueError('need completed unchanged native implementation')
-    for name, digest in row['input_hashes'].items():
-        if sha(ROOT/name) != digest or sha(directory/'src'/name) != digest:
-            raise ValueError('physical source binding drift: '+name)
+    verify_sources(directory, row['input_hashes'], require_current=require_current)
     for key in ['external_hashes','evidence_hashes']:
         for name, digest in row[key].items():
             if sha(name) != digest:
