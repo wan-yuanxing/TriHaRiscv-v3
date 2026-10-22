@@ -53,7 +53,17 @@ module display_overlay #(
     // Rectangles are clipped before the inner border is drawn. A degenerate
     // rectangle suppresses all its points. Primary border beats ordinary border;
     // enabled points beat both borders. Lane i corresponds to box/point i.
-    integer i,j,left,top,right,bottom,point_px,point_py;
+    // All lanes share pixel-side bounds instead of adding/subtracting the
+    // radius/width at each signed16 record coordinate. For pixel 0..2047 and
+    // width 1..800 / radius 0..31 the bounds fit signed13 (-800..2847).
+    localparam signed [12:0] BORDER_WIDTH=LINE_WIDTH, POINT_EXTENT=POINT_RADIUS;
+    wire signed [12:0] px=$signed({2'b00,pixel_x}), py=$signed({2'b00,pixel_y});
+    wire signed [12:0] border_x_lo=px-BORDER_WIDTH, border_x_hi=px+BORDER_WIDTH;
+    wire signed [12:0] border_y_lo=py-BORDER_WIDTH, border_y_hi=py+BORDER_WIDTH;
+    wire signed [12:0] point_x_lo=px-POINT_EXTENT, point_x_hi=px+POINT_EXTENT;
+    wire signed [12:0] point_y_lo=py-POINT_EXTENT, point_y_hi=py+POINT_EXTENT;
+    integer i,j;
+    reg signed [15:0] left,top,right,bottom,point_px,point_py;
     reg border_hit, primary_hit, point_hit;
     reg [23:0] selected_rgb;
     reg selected_box, selected_point;
@@ -63,17 +73,14 @@ module display_overlay #(
         for (i=0;i<16;i=i+1) begin
             left=$signed(box_x0[i*16+:16]); top=$signed(box_y0[i*16+:16]);
             right=$signed(box_x1[i*16+:16]); bottom=$signed(box_y1[i*16+:16]);
-            if (left<0) left=0;
-            if (top<0) top=0;
-            if (right>800) right=800;
-            if (bottom>600) bottom=600;
+            if (left<16'sd0) left=16'sd0;
+            if (top<16'sd0) top=16'sd0;
+            if (right>16'sd800) right=16'sd800;
+            if (bottom>16'sd600) bottom=16'sd600;
             if (box_valid[i] && left<right && top<bottom) begin
-                if ($signed({1'b0,pixel_x})>=left && $signed({1'b0,pixel_x})<right &&
-                    $signed({1'b0,pixel_y})>=top && $signed({1'b0,pixel_y})<bottom &&
-                    ($signed({1'b0,pixel_x})-left<LINE_WIDTH ||
-                     right-1-$signed({1'b0,pixel_x})<LINE_WIDTH ||
-                     $signed({1'b0,pixel_y})-top<LINE_WIDTH ||
-                     bottom-1-$signed({1'b0,pixel_y})<LINE_WIDTH)) begin
+                if (px>=left && px<right && py>=top && py<bottom &&
+                    (left>border_x_lo || right<=border_x_hi ||
+                     top>border_y_lo || bottom<=border_y_hi)) begin
                     border_hit=1;
                     if (primary_valid && primary_index==i) primary_hit=1;
                 end
@@ -81,10 +88,8 @@ module display_overlay #(
                     point_px=$signed(point_x[(i*5+j)*16+:16]);
                     point_py=$signed(point_y[(i*5+j)*16+:16]);
                     if (points_enable && point_valid[i*5+j] &&
-                        $signed({1'b0,pixel_x})>=point_px-POINT_RADIUS &&
-                        $signed({1'b0,pixel_x})<=point_px+POINT_RADIUS &&
-                        $signed({1'b0,pixel_y})>=point_py-POINT_RADIUS &&
-                        $signed({1'b0,pixel_y})<=point_py+POINT_RADIUS) point_hit=1;
+                        point_px>=point_x_lo && point_px<=point_x_hi &&
+                        point_py>=point_y_lo && point_py<=point_y_hi) point_hit=1;
                 end
             end
         end

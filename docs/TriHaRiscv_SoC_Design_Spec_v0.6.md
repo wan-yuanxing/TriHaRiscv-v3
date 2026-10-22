@@ -1315,3 +1315,21 @@ core综合setup估计−1.306ns，尚未改善，物理收益另验。原merged�
 不覆盖其他版本/布局。同seed同估计连线模型布局core−2.135ns（改善0.818ns）、
 pixel+0.216ns；core hold−0.027ns/recovery−0.954ns仍失败，扫描输出与内部
 检查路径均未签核。字节版和本轮冻结版route各自保留身份，125MHz时序未闭合。[本轮验证及最新物理状态](verification/video/shadow_address.md)。
+
+### 实施补充：F4c5e overlay共享像素边界
+
+2026-10-22在保持RAW/BOX/AVATAR、16框×5点、全屏800×600和十三级像素流水
+的前提下，将每lane的坐标加减改为共享像素侧阈值比较。signed13像素阈值
+覆盖−800..2847，记录坐标仍为signed16；裁切、退化框抑制、边缘包含规则及
+点/主框/普通框优先级保持。avatar取样与alpha路径、ABI、公共配置及FDC不改。
+
+同目标同版PDS综合：独立overlay由10637降至4641LUT（−56.4%），1645FF不变；
+完整采显扫描组件由32881降至26842LUT（−18.4%），44677FF/69.5DRM。
+完整组件LUT占PG2L100H的40.3%，不是包含CPU/NPU的最终SoC占用。
+固定旧RTL的15输出逐拍四态比较，普通/-O各19场景、181704事件和6个故障
+变体通过，覆盖signed16全部坐标值、模式/消隐/复位及边界。综合和仿真不
+替代后布线或板测，125MHz仍待最终物理报告。[验证记录](verification/video/overlay_geometry.md)。
+
+同seed4/performance布局估计slow core setup−2.102ns、pixel+0.295ns、core
+hold−0.027ns；fast core setup−1.565ns。core关键路径未实质收敛，资源改善
+不能替代时序签核。新冻结布局已单独启动seed11布线，保留旧版独立身份。

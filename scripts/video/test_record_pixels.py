@@ -42,7 +42,9 @@ def main():
             command += [f'-P{manifest["test_top"]}.{key}={value}' for key,value in
                         [('W',width),('H',height),('CASE_ID',case),('PIXEL_HALF',half),('FULL',full),('TIGHT',tight),('BOX_ONLY',int(name=='no_primary'))]]
             run_logged(command+[ROOT/p for p in manifest['sources']+manifest['tests']], work/(name+'_compile.log'))
-            log = run_logged([tool('vvp'),binary,'+DIR='+directory.as_posix()], work/(name+'_simulation.log'),timeout=900)
+            # Full-frame RAW/BOX/AVATAR produces millions of checked slots.
+            # Match the renderer budget; retain the shorter small-case limit.
+            log = run_logged([tool('vvp'),binary,'+DIR='+directory.as_posix()], work/(name+'_simulation.log'),timeout=1800 if full else 900)
             matches = re.findall(r'DISPLAY_RECORD_PIXELS_PASS (.*)', log)
             if len(matches)!=1:
                 raise RuntimeError('Missing precise RTL pass '+name)

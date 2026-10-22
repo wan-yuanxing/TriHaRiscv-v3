@@ -464,12 +464,14 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 在 F4c5c 字节使能基础上，AW 握手时锁存160位绝对字地址选择，每字固定四字节写入；AW/W仍独立缓存，原地址/四态/locked/WSTRB检查、B/R保持、健康和owner、ABI及响应拍数不变，无公共配置/FDC变化。
 - 固定 `2c9c67f` leaf 的53端口、23输出逐周期四态 miter 已覆盖 reset；普通/-O 各11个正常场景和3个有效编译故障变体通过。故障变体包含错误地址、取消BVALID、reset-only输出差异；inout遗漏也会拒绝。完整默认DUT idle、6组health、3组三模式显示及2723写/2883读通过。
 - 完整采显综合：32881 LUT、44678 FF、69.5 DRM；相对F4c5c减少2373 LUT、增加161 FF。core综合setup−1.306 ns仍为负。相同seed/约束布局估计 core setup−2.135 ns、pixel+0.216 ns，较F4c5c core改善0.818 ns；core hold−0.027 ns、recovery−0.954 ns、fast setup−1.306 ns仍未闭合。
-- F4c5c原 merged shadow 版本的真实续跑因Route-4022拥塞、Route-0008无法布线退出，未生成最终STA；不外推到其他版本。F4c5c字节使能版和本轮AW译码版分别保留冻结DB/route身份。新版本完整route仍在运行，不能以布局估计替代签核。
-- [验证记录](../verification/video/shadow_address.md)、[机器证据](../verification/video/evidence/shadow_address.json)。CPU/NPU交付不阻塞本批；无JTAG/COM/Flash/下载/板测。下一步等待新route最终报告，若仍失败则按扫描输出、reset network和内部guard路径分别处理。
-## 2026-10-22 Video F4c5d shadow AW 并行译码
-
-- 在 F4c5c 字节使能基础上，AW 握手时锁存160位绝对字地址选择，每字固定四字节写入；AW/W仍独立缓存，原地址/四态/locked/WSTRB检查、B/R保持、健康和owner、ABI及响应拍数不变，无公共配置/FDC变化。
-- 固定 `2c9c67f` leaf 的53端口、23输出逐周期四态 miter 已覆盖 reset；普通/-O 各11个正常场景和3个有效编译故障变体通过。故障变体包含错误地址、取消BVALID、reset-only输出差异；inout遗漏也会拒绝。完整默认DUT idle、6组health、3组三模式显示及2723写/2883读通过。
-- 完整采显综合：32881 LUT、44678 FF、69.5 DRM；相对F4c5c减少2373 LUT、增加161 FF。core综合setup−1.306 ns仍为负。相同seed/约束布局估计 core setup−2.135 ns、pixel+0.216 ns，较F4c5c core改善0.818 ns；core hold−0.027 ns、recovery−0.954 ns、fast setup−1.306 ns仍未闭合。
 - F4c5c原 merged shadow 版本的真实续跑因Route-4022拥塞、Route-0008无法布线退出，未生成最终STA；不外推到其他版本。本轮AW译码版route在第10次迭代后进程消失，最后43247个未布通net，没有routed DB/STA，记为interrupted且不推断原因。F4c5c字节使能版和本轮AW译码版分别保留冻结DB/route身份，布局估计不能替代签核。
 - [验证记录](../verification/video/shadow_address.md)、[机器证据](../verification/video/evidence/shadow_address.json)。CPU/NPU交付不阻塞本批；无JTAG/COM/Flash/下载/板测。下一步等待新route最终报告，若仍失败则按扫描输出、reset network和内部guard路径分别处理。
+
+## 2026-10-22 Video F4c5e overlay共享像素边界
+
+- 保留RAW/BOX/AVATAR、16框×5点及13级像素流水，把每lane加减改为共享signed13像素阈值；记录坐标仍signed16，裁切/退化框/点和主框优先级不变，avatar/alpha、ABI及FDC未改。
+- 固定2463d01旧RTL，15输出逐拍四态比较；普通/-O各19场景、181704事件、6个编译故障变体通过。覆盖signed16全部65536坐标值、全部lane、边界、模式/消隐/复位和指定X组合。修复测试覆盖缺口及mutation覆写正向dump问题，38份正向dump独立重放并核验全部哈希。
+- 同目标PDS综合：独立overlay10637→4641LUT（−56.4%），1645FF不变；完整采显32881→26842LUT（−6039/18.4%），44677FF/69.5DRM，占PG2L100H LUT40.3%。完整快照仅overlay源改变，不是含CPU/NPU的最终SoC资源。
+- 像素16场景、renderer14仲裁/6显示、scanout6交接/3扫描和真实C↔RTL采显联动3场景通过；全尺寸像素2440179、scanout3360000逐像素检查。两份早启FULL像素仿真900秒超时原样保留，FULL预算改1800秒后完整通过，小场景仍900秒；时钟/仿真周期/DUT/检查不变。部分外层汇总因无关测试脚本在运行中变化而拒绝，未改写为PASS；最终逐项核验内层真实依赖、工具和输出哈希。
+- 同seed4/performance估计连线布局：slow core setup−2.102ns、pixel+0.295ns、core hold−0.027ns，fast core setup−1.565ns。core仅改善0.033ns，fast恶化0.259ns，不能称时序收敛；扫描输出和reset/enable路径仍需处理。新冻结布局已用seed11独立布线，旧AW版保留自身DB和结果，未取得最终routed DB/STA，125MHz仍未闭合。
+- [验证记录](../verification/video/overlay_geometry.md)、[机器证据](../verification/video/evidence/overlay_geometry.json)。94项无关非STATUS条目保持；共享台账只追加，提交投影另去除上批重复F4c5d段，保留NPU未提交内容。无CPU/NPU迁入、JTAG/COM/Flash或板测，不改变当前板卡镜像。

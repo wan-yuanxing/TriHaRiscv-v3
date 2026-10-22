@@ -1,0 +1,969 @@
+{
+  "schema_version": 1,
+  "phase": "F4c5e",
+  "observed_at_utc": "2026-10-22T14:39:31.336724+00:00",
+  "baseline_commit": "2463d01adbcb468d4953a4d98628a8d4235035f4",
+  "abi_changed": false,
+  "fdc_changed": false,
+  "added_pipeline_cycles": 0,
+  "cpu_npu_imported": false,
+  "board_actions": false,
+  "timing_closed": false,
+  "physical_route_verified": false,
+  "miter_runs": [
+    {
+      "python_optimized": false,
+      "result": {
+        "path": "build/video/overlay_geometry/20261022T133624_266298Z/result.json",
+        "sha256": "2c4b5f3421937bc70516b37eecf0f81362526acfcb80dc85dc94a40b66950893"
+      },
+      "positive_cases": 19,
+      "compared_outputs": [
+        "avatar_req_valid",
+        "avatar_req_addr",
+        "out_rgb",
+        "out_x",
+        "out_y",
+        "out_frame_id",
+        "out_de",
+        "out_hs",
+        "out_vs",
+        "out_sof",
+        "out_box",
+        "out_point",
+        "out_avatar",
+        "out_fault",
+        "overlay_fault"
+      ],
+      "input_events": 181704,
+      "mutations": [
+        {
+          "name": "point_color",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "last_column",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "primary_priority",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "point_inclusive",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "box_exclusive",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "point_unsigned",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        }
+      ],
+      "scope": "Every output four-state each rising edge+1ns including reset; selected traffic, not formal proof."
+    },
+    {
+      "python_optimized": true,
+      "result": {
+        "path": "build/video/overlay_geometry/20261022T133625_108299Z/result.json",
+        "sha256": "c891fd8f32c649c95d86aaa29a7daeae888a26845bca296a4ebe5e467b7422a6"
+      },
+      "positive_cases": 19,
+      "compared_outputs": [
+        "avatar_req_valid",
+        "avatar_req_addr",
+        "out_rgb",
+        "out_x",
+        "out_y",
+        "out_frame_id",
+        "out_de",
+        "out_hs",
+        "out_vs",
+        "out_sof",
+        "out_box",
+        "out_point",
+        "out_avatar",
+        "out_fault",
+        "overlay_fault"
+      ],
+      "input_events": 181704,
+      "mutations": [
+        {
+          "name": "point_color",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "last_column",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "primary_priority",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "point_inclusive",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "box_exclusive",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        },
+        {
+          "name": "point_unsigned",
+          "status": "rejected",
+          "exit_code": 1,
+          "events": 21687
+        }
+      ],
+      "scope": "Every output four-state each rising edge+1ns including reset; selected traffic, not formal proof."
+    }
+  ],
+  "synthesis": {
+    "overlay_before": {
+      "result": {
+        "path": "build/video/pds/20261022T132429_985013Z/result.json",
+        "sha256": "c6db05a05520f7d3427b7454635b05783ded4049cf651db2179d847c215554e7"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T132429_985013Z/synthesize/display_overlay.snr",
+        "sha256": "d3691a107dd27d7d333b1e09fd748c6b2501a2bacd986d59dc389f1c61548f0d"
+      },
+      "resources": {
+        "lut": 10637.0,
+        "registers": 1645.0,
+        "drm": 0.0
+      },
+      "pds_version": "2022.2-SP6.4",
+      "target": "video_overlay"
+    },
+    "overlay_after": {
+      "result": {
+        "path": "build/video/pds/20261022T133034_510968Z/result.json",
+        "sha256": "76ce7da7f764f3ff4df90175197a7ca1aff97ce849941c05dc54f84daaf160b8"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T133034_510968Z/synthesize/display_overlay.snr",
+        "sha256": "407f5a496f9c1f5b061b704881718a5f4b4c0f60dc649dc69738897168e28e47"
+      },
+      "resources": {
+        "lut": 4641.0,
+        "registers": 1645.0,
+        "drm": 0.0
+      },
+      "pds_version": "2022.2-SP6.4",
+      "target": "video_overlay"
+    },
+    "full_before": {
+      "result": {
+        "path": "build/video/pds/20261022T115009_858784Z/result.json",
+        "sha256": "e8db527a9d3dcc77e34628dc778954b25e78c443da8d19dfd027e5fec5b8bba2"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T115009_858784Z/synthesize/video_record_probe.snr",
+        "sha256": "ab5a2a33a99c122c7aca6f776df8a4075101937a8d349f4e1434b64a4424f8ee"
+      },
+      "resources": {
+        "lut": 32881.0,
+        "registers": 44678.0,
+        "drm": 69.5
+      },
+      "pds_version": "2022.2-SP6.4",
+      "target": "video_record_probe"
+    },
+    "full_after": {
+      "result": {
+        "path": "build/video/pds/20261022T133201_885026Z/result.json",
+        "sha256": "ab1e714969ffc44410cc51e01f62344119fd16eba723ea12b9510c4a309af992"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T133201_885026Z/synthesize/video_record_probe.snr",
+        "sha256": "ab682e4773a3a20df917f95fd5a8384bb8c2d7ca8b6f6ce1939a856353d7e72e"
+      },
+      "resources": {
+        "lut": 26842.0,
+        "registers": 44677.0,
+        "drm": 69.5
+      },
+      "pds_version": "2022.2-SP6.4",
+      "target": "video_record_probe"
+    }
+  },
+  "integration": {
+    "record_pixels": {
+      "status": "pass",
+      "result": {
+        "path": "build/video/record_pixels/20261022T135108_587283Z/result.json",
+        "sha256": "2e5fa8e107fbf7ef9bc2e2560a04107b29a31e1cda62899d41d574300dba3394"
+      },
+      "cases": {
+        "normal": {
+          "rtl": {
+            "case": 0,
+            "commits": 8,
+            "retires": 4,
+            "applies": 8,
+            "pixels": 83795,
+            "requests": 15360
+          },
+          "oracle": {
+            "pixels": 83795,
+            "requests": 15360,
+            "box": 5632,
+            "point": 4736,
+            "avatar": 15360,
+            "fault": 0
+          }
+        },
+        "ratio": {
+          "rtl": {
+            "case": 0,
+            "commits": 8,
+            "retires": 4,
+            "applies": 8,
+            "pixels": 83795,
+            "requests": 15360
+          },
+          "oracle": {
+            "pixels": 83795,
+            "requests": 15360,
+            "box": 5632,
+            "point": 4736,
+            "avatar": 15360,
+            "fault": 0
+          }
+        },
+        "tight": {
+          "rtl": {
+            "case": 0,
+            "commits": 8,
+            "retires": 4,
+            "applies": 8,
+            "pixels": 71699,
+            "requests": 15360
+          },
+          "oracle": {
+            "pixels": 71699,
+            "requests": 15360,
+            "box": 5632,
+            "point": 4736,
+            "avatar": 15360,
+            "fault": 0
+          }
+        },
+        "header": {
+          "rtl": {
+            "case": 1,
+            "commits": 0,
+            "retires": 0,
+            "applies": 0,
+            "pixels": 1369,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 1369,
+            "requests": 0,
+            "box": 0,
+            "point": 0,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "asset_key": {
+          "rtl": {
+            "case": 2,
+            "commits": 2,
+            "retires": 0,
+            "applies": 2,
+            "pixels": 5421,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 5421,
+            "requests": 0,
+            "box": 0,
+            "point": 1840,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "sample_fault": {
+          "rtl": {
+            "case": 3,
+            "commits": 2,
+            "retires": 0,
+            "applies": 3,
+            "pixels": 5433,
+            "requests": 1013
+          },
+          "oracle": {
+            "pixels": 5433,
+            "requests": 1013,
+            "box": 0,
+            "point": 900,
+            "avatar": 0,
+            "fault": 1009
+          }
+        },
+        "reset": {
+          "rtl": {
+            "case": 4,
+            "commits": 1,
+            "retires": 0,
+            "applies": 1,
+            "pixels": 8144,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 8144,
+            "requests": 0,
+            "box": 0,
+            "point": 953,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "unknown": {
+          "rtl": {
+            "case": 5,
+            "commits": 0,
+            "retires": 0,
+            "applies": 0,
+            "pixels": 1369,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 1369,
+            "requests": 0,
+            "box": 0,
+            "point": 0,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "late_fault": {
+          "rtl": {
+            "case": 6,
+            "commits": 3,
+            "retires": 0,
+            "applies": 3,
+            "pixels": 5470,
+            "requests": 1042
+          },
+          "oracle": {
+            "pixels": 5470,
+            "requests": 1042,
+            "box": 0,
+            "point": 900,
+            "avatar": 36,
+            "fault": 1004
+          }
+        },
+        "generation_wait": {
+          "rtl": {
+            "case": 7,
+            "commits": 1,
+            "retires": 0,
+            "applies": 1,
+            "pixels": 5395,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 5395,
+            "requests": 0,
+            "box": 0,
+            "point": 0,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "new_source_asset_wait": {
+          "rtl": {
+            "case": 8,
+            "commits": 4,
+            "retires": 1,
+            "applies": 4,
+            "pixels": 10771,
+            "requests": 2903
+          },
+          "oracle": {
+            "pixels": 10771,
+            "requests": 2903,
+            "box": 0,
+            "point": 900,
+            "avatar": 2899,
+            "fault": 0
+          }
+        },
+        "core_fault_pending": {
+          "rtl": {
+            "case": 9,
+            "commits": 1,
+            "retires": 0,
+            "applies": 1,
+            "pixels": 5470,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 5470,
+            "requests": 0,
+            "box": 0,
+            "point": 0,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "same_frame_generation": {
+          "rtl": {
+            "case": 10,
+            "commits": 4,
+            "retires": 1,
+            "applies": 4,
+            "pixels": 10771,
+            "requests": 2903
+          },
+          "oracle": {
+            "pixels": 10771,
+            "requests": 2903,
+            "box": 0,
+            "point": 900,
+            "avatar": 2899,
+            "fault": 0
+          }
+        },
+        "sparse": {
+          "rtl": {
+            "case": 0,
+            "commits": 8,
+            "retires": 4,
+            "applies": 8,
+            "pixels": 71699,
+            "requests": 15360
+          },
+          "oracle": {
+            "pixels": 71699,
+            "requests": 15360,
+            "box": 1408,
+            "point": 0,
+            "avatar": 15360,
+            "fault": 0
+          }
+        },
+        "no_primary": {
+          "rtl": {
+            "case": 0,
+            "commits": 2,
+            "retires": 0,
+            "applies": 2,
+            "pixels": 23955,
+            "requests": 0
+          },
+          "oracle": {
+            "pixels": 23955,
+            "requests": 0,
+            "box": 954,
+            "point": 200,
+            "avatar": 0,
+            "fault": 0
+          }
+        },
+        "full": {
+          "rtl": {
+            "case": 0,
+            "commits": 3,
+            "retires": 0,
+            "applies": 3,
+            "pixels": 2440179,
+            "requests": 960023
+          },
+          "oracle": {
+            "pixels": 2440179,
+            "requests": 960023,
+            "box": 21504,
+            "point": 1184,
+            "avatar": 960019,
+            "fault": 0
+          }
+        }
+      }
+    },
+    "record_renderer": {
+      "status": "pass",
+      "result": {
+        "path": "build/video/record_renderer/20261022T133215_010999Z/result.json",
+        "sha256": "d590bf5c4407dedf6c1898fc48671256ddf7d505ffb74dd201dfd597ed7e6a49"
+      },
+      "arbiter": {
+        "0": {
+          "case": 0,
+          "raw": 12,
+          "asset": 12,
+          "masters": 24,
+          "code": 0
+        },
+        "1": {
+          "case": 1,
+          "raw": 12,
+          "asset": 12,
+          "masters": 24,
+          "code": 0
+        },
+        "2": {
+          "case": 2,
+          "raw": 12,
+          "asset": 12,
+          "masters": 24,
+          "code": 0
+        },
+        "3": {
+          "case": 3,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 1
+        },
+        "4": {
+          "case": 4,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 5
+        },
+        "5": {
+          "case": 5,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 6
+        },
+        "6": {
+          "case": 6,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 9
+        },
+        "7": {
+          "case": 7,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 4
+        },
+        "8": {
+          "case": 8,
+          "raw": 0,
+          "asset": 0,
+          "masters": 0,
+          "code": 3
+        },
+        "9": {
+          "case": 9,
+          "raw": 0,
+          "asset": 0,
+          "masters": 0,
+          "code": 3
+        },
+        "10": {
+          "case": 10,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 7
+        },
+        "11": {
+          "case": 11,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 9
+        },
+        "13": {
+          "case": 13,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 2
+        },
+        "14": {
+          "case": 14,
+          "raw": 1,
+          "asset": 0,
+          "masters": 1,
+          "code": 8
+        }
+      },
+      "renderer": {
+        "probe": {
+          "case": 0,
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 5138,
+          "box_pixels": 5120,
+          "avatar_pixels": 5120,
+          "commits": 4,
+          "retires": 1,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        },
+        "ratio": {
+          "case": 0,
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 5133,
+          "box_pixels": 5120,
+          "avatar_pixels": 5120,
+          "commits": 4,
+          "retires": 1,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        },
+        "wait": {
+          "case": 3,
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 5138,
+          "box_pixels": 5120,
+          "avatar_pixels": 10240,
+          "commits": 5,
+          "retires": 2,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        },
+        "crc": {
+          "case": 4,
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 0,
+          "box_pixels": 0,
+          "avatar_pixels": 0,
+          "commits": 0,
+          "retires": 0,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        },
+        "reset": {
+          "case": 5,
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 5138,
+          "box_pixels": 5120,
+          "avatar_pixels": 5120,
+          "commits": 4,
+          "retires": 1,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        },
+        "full": {
+          "case": 0,
+          "w": 800,
+          "h": 600,
+          "raw_pixels": 480018,
+          "box_pixels": 480000,
+          "avatar_pixels": 480000,
+          "commits": 4,
+          "retires": 1,
+          "raw_reads": 65616,
+          "asset_reads": 1025,
+          "native": 5126
+        }
+      }
+    },
+    "record_scanout": {
+      "status": "pass",
+      "result": {
+        "path": "build/video/record_scanout/20261022T133339_776273Z/result.json",
+        "sha256": "8be4dba9fcabb9067bc257acbed14354383df5000153826eeddf40ab6cd1bde0"
+      },
+      "link": {
+        "0": {
+          "case": 0,
+          "commits": 4,
+          "retires": 1,
+          "fault": 1
+        },
+        "1": {
+          "case": 1,
+          "commits": 0,
+          "retires": 0,
+          "fault": 1
+        },
+        "2": {
+          "case": 2,
+          "commits": 1,
+          "retires": 0,
+          "fault": 1
+        },
+        "3": {
+          "case": 3,
+          "commits": 1,
+          "retires": 0,
+          "fault": 1
+        },
+        "4": {
+          "case": 4,
+          "commits": 4,
+          "retires": 1,
+          "fault": 1
+        },
+        "5": {
+          "case": 5,
+          "commits": 1,
+          "retires": 0,
+          "fault": 1
+        }
+      },
+      "scanout": {
+        "probe": {
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 20480,
+          "box_pixels": 10240,
+          "avatar_pixels": 10240,
+          "commits": 5,
+          "releases": 2,
+          "scanner_pixels": 40960,
+          "raw_commits": 3,
+          "overlap": 360819,
+          "raw_reads": 546,
+          "asset_reads": 1025,
+          "native": 1571
+        },
+        "ratio": {
+          "w": 80,
+          "h": 64,
+          "raw_pixels": 20480,
+          "box_pixels": 5120,
+          "avatar_pixels": 10240,
+          "commits": 5,
+          "releases": 2,
+          "scanner_pixels": 35840,
+          "raw_commits": 3,
+          "overlap": 360663,
+          "raw_reads": 478,
+          "asset_reads": 1025,
+          "native": 1503
+        },
+        "full": {
+          "w": 800,
+          "h": 600,
+          "raw_pixels": 1920000,
+          "box_pixels": 480000,
+          "avatar_pixels": 960000,
+          "commits": 5,
+          "releases": 2,
+          "scanner_pixels": 3360000,
+          "raw_commits": 3,
+          "overlap": 359185,
+          "raw_reads": 42653,
+          "asset_reads": 1025,
+          "native": 43678
+        }
+      }
+    },
+    "record_pipeline": {
+      "status": "pass",
+      "result": {
+        "path": "build/video/record_pipeline/20261022T133340_688965Z/result.json",
+        "sha256": "91f51ac576a82ad5ae35acb8857a67cca220a7afdd84afae72278dfef523424b"
+      },
+      "cases": {
+        "bad_eof": {
+          "rpc_counts": {
+            "R": 37,
+            "W": 7,
+            "F": 2,
+            "A": 1,
+            "E": 1
+          },
+          "passes": {
+            "rtl": "VIDEO_RECORD_PIPELINE_RTL_PASS case=1 requests=1 captures=0 records=0 feedbacks=0 retires=0 bytes=71104 pixels=0 overlap=0 held=0 contested=0 Rgrants=385 Wgrants=383 underflows=0 commands=48",
+            "host": "VIDEO_RECORD_PIPELINE_C_PASS failure=1 frames=0 modes=0 releases=0 checks=75 R=37 W=7 F=2 A=1"
+          },
+          "mode_pixels": {
+            "raw": 0,
+            "box": 0,
+            "avatar": 0,
+            "assets": 0
+          }
+        },
+        "corrupt": {
+          "rpc_counts": {
+            "R": 30,
+            "W": 7,
+            "F": 2,
+            "A": 1,
+            "E": 1
+          },
+          "passes": {
+            "rtl": "VIDEO_RECORD_PIPELINE_RTL_PASS case=2 requests=1 captures=0 records=0 feedbacks=0 retires=0 bytes=256 pixels=0 overlap=0 held=0 contested=0 Rgrants=2 Wgrants=1 underflows=0 commands=41",
+            "host": "VIDEO_RECORD_PIPELINE_C_PASS failure=1 frames=0 modes=0 releases=0 checks=68 R=30 W=7 F=2 A=1"
+          },
+          "mode_pixels": {
+            "raw": 0,
+            "box": 0,
+            "avatar": 0,
+            "assets": 0
+          }
+        },
+        "normal": {
+          "rpc_counts": {
+            "R": 129,
+            "W": 836,
+            "F": 17,
+            "A": 7,
+            "V": 7,
+            "S": 2,
+            "E": 1
+          },
+          "passes": {
+            "rtl": "VIDEO_RECORD_PIPELINE_RTL_PASS case=0 requests=2 captures=2 records=2 feedbacks=5 retires=1 bytes=4214400 pixels=2880000 overlap=1191697 held=0 contested=8 Rgrants=37584 Wgrants=19146 underflows=0 commands=999",
+            "host": "VIDEO_RECORD_PIPELINE_C_PASS failure=0 frames=2 modes=3 releases=1 checks=1928 R=129 W=836 F=17 A=7"
+          },
+          "mode_pixels": {
+            "raw": 1920000,
+            "box": 480000,
+            "avatar": 480000,
+            "assets": 1
+          }
+        }
+      }
+    }
+  },
+  "positive_oracle_replay": {
+    "path": "build/video/overlay_geometry_delivery/positive_oracle_replay.json",
+    "sha256": "d12c321b31612b493986c3628692921996ffcdc176132461ab22a6ad26907a4d"
+  },
+  "full_synthesis_snapshot_changes": [
+    "rtl/video/display_overlay.sv"
+  ],
+  "resource_summary": {
+    "full_lut_before": 32881,
+    "full_lut_after": 26842,
+    "full_lut_saved": 6039,
+    "full_lut_reduction_percent": 18.366229737538397,
+    "device_lut_capacity": 66600,
+    "full_lut_utilization_percent": 40.3033033033033,
+    "overlay_lut_before": 10637,
+    "overlay_lut_after": 4641,
+    "overlay_in_full_hierarchy_before": 11401,
+    "overlay_in_full_hierarchy_after": 5424
+  },
+  "overlay_regression": {
+    "result": {
+      "path": "build/video/regression/20261022T135152_255284Z/result.json",
+      "sha256": "e567e624782d3863f5864918fed6a1ba96ca9f245a03f11f112a2e4d221cc759"
+    },
+    "status": "pass",
+    "scenarios": 12
+  },
+  "first_full_pixel_timeout": {
+    "result": {
+      "path": "build/video/record_pixels/20261022T133100_124561Z/result.json",
+      "sha256": "bd3d36bd5fbc896d06ec4398659934339f7ab834fe89a4d25a1011cb36e26412"
+    },
+    "status": "timeout",
+    "completed_small_cases": 15,
+    "seconds": 900,
+    "retry_budget_seconds": 1800,
+    "scope": "No RTL assertion failure; first full-frame simulation exceeded wall-clock budget."
+  },
+  "second_old_budget_timeout": {
+    "path": "build/video/record_pixels/20261022T134007_626550Z/result.json",
+    "sha256": "11402919223a1f1107a03187731095c839a371985868d51b1a228fc836ac7172"
+  },
+  "outer_wrapper_hash_rejections": {
+    "record_renderer": {
+      "result": {
+        "path": "build/video/regression/20261022T133214_854353Z/result.json",
+        "sha256": "5cd74d7ee5575f737432a74e80395dc459c3a2ec8fd7d624a8686d5a6114ebb2"
+      },
+      "error": "Inputs changed during regression: scripts/video/test_overlay_geometry.py",
+      "inner_related_inputs_tools_and_outputs_reverified": true
+    },
+    "record_scanout": {
+      "result": {
+        "path": "build/video/regression/20261022T133339_588492Z/result.json",
+        "sha256": "3e3c4ace0d71cf7e74f448f771a10691575138b0ca3d9c329718c245f857be60"
+      },
+      "error": "Inputs changed during regression: scripts/video/test_overlay_geometry.py, scripts/video/test_record_pixels.py",
+      "inner_related_inputs_tools_and_outputs_reverified": true
+    },
+    "record_pipeline": {
+      "result": {
+        "path": "build/video/regression/20261022T133340_513198Z/result.json",
+        "sha256": "0728293028362214cb02fe5da248e9008dbe85484ec336baca3f8320bc51cdf8"
+      },
+      "error": "Inputs changed during regression: scripts/video/test_overlay_geometry.py, scripts/video/test_record_pixels.py",
+      "inner_related_inputs_tools_and_outputs_reverified": true
+    }
+  },
+  "placement": {
+    "status": "measured",
+    "directory": "build/video/overlay_geometry_place/20261022T133925_107915Z",
+    "model": "report_place_timing estimated interconnect, seed4/performance, not routed STA",
+    "result": {
+      "path": "build/video/overlay_geometry_place/20261022T133925_107915Z/result.json",
+      "sha256": "9b8a361180771ead3b8590e05ec21f32ed2edc66b8e06e291febd911f4b3c9c3"
+    },
+    "report": {
+      "path": "build/video/overlay_geometry_place/20261022T133925_107915Z/place_route/video_record_probe.rtr",
+      "sha256": "4ca96f2fb33e45171cc950a47b173fa99e25ba36175ffd824c56cc67d14b4054"
+    },
+    "selected_native_slacks_ns": {
+      "slow_core_setup": -2.102,
+      "slow_pixel_setup": 0.295,
+      "slow_core_hold": -0.027,
+      "slow_core_recovery": 0.785,
+      "slow_core_removal": 0.338,
+      "fast_core_setup": -1.565,
+      "fast_pixel_setup": 1.771,
+      "fast_core_hold": 0.007,
+      "fast_core_recovery": 0.898,
+      "fast_core_removal": 0.493
+    }
+  },
+  "old_seed11_route_observation": {
+    "path": "build/video/overlay_geometry_delivery/old_seed11_observation.json",
+    "sha256": "c5fe63834c710318010ae4df1f2fe357f6cab52226d6527d8e47261112fcee9e"
+  },
+  "new_seed11_route_observation": {
+    "path": "build/video/overlay_geometry_delivery/new_seed11_observation.json",
+    "sha256": "74760f09841b453ea08b56a29da0ec8f4e140c89f68ef1dfad9f4a4b023e4e01"
+  },
+  "protected_file_audit": {
+    "snapshot_entries": 97,
+    "unrelated_non_status_entries": 94,
+    "unexpected_changes": [],
+    "shared_status": "index projection only"
+  },
+  "status": "functional_and_synthesis_verified_placement_measured_route_open"
+}
