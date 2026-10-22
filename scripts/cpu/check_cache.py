@@ -30,7 +30,7 @@ def validate(root=ROOT):
     cfg = load('config/cpu_cache.json')
     if cfg['schema_version'] != 1 or cfg['clock_hz'] != 100000000 or cfg['icache'] != dict(bytes=16384, ways=2, line_bytes=32):
         raise ValueError('Cache geometry/clock mismatch')
-    if cfg['dcache'] != dict(bytes=16384, ways=2, line_bytes=32, write_policy='write_through', write_allocate=False, posted_writes=False):
+    if cfg['dcache'] != dict(bytes=16384, ways=2, line_bytes=32, write_policy='write_back', write_allocate=True, posted_writes=False):
         raise ValueError('D Cache policy mismatch')
     if (cfg['private_ddr_base'],cfg['private_ddr_bytes'],cfg['shared_ddr_base'],cfg['shared_ddr_bytes']) != (0x80000000,0x2000000,0x82000000,0x6000000):
         raise ValueError('Cache private/shared address contract mismatch')

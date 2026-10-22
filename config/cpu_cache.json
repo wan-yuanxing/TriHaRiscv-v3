@@ -2,7 +2,7 @@
   "schema_version": 1,
   "clock_hz": 100000000,
   "icache": {"bytes": 16384, "ways": 2, "line_bytes": 32},
-  "dcache": {"bytes": 16384, "ways": 2, "line_bytes": 32, "write_policy": "write_through", "write_allocate": false, "posted_writes": false},
+  "dcache": {"bytes": 16384, "ways": 2, "line_bytes": 32, "write_policy": "write_back", "write_allocate": true, "posted_writes": false},
   "private_ddr_base": 2147483648,
   "private_ddr_bytes": 33554432,
   "shared_ddr_base": 2181038080,

@@ -49,11 +49,21 @@ class CachePreflightTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'address'):
             validate(target)
 
-    def test_writeback_policy_cannot_silently_replace_write_through(self):
+    def test_writeback_policy_is_explicitly_bound(self):
         target = self.copy()
         path = target/'config/cpu_cache.json'
         cfg = json.loads(path.read_text(encoding='utf-8'))
         cfg['dcache']['write_policy'] = 'write_back'
+        cfg['dcache']['write_allocate'] = True
+        path.write_text(json.dumps(cfg), encoding='utf-8', newline='\n')
+        self.assertEqual(validate(target)['status'], 'PASS')
+
+    def test_writeback_requires_write_allocate(self):
+        target = self.copy()
+        path = target/'config/cpu_cache.json'
+        cfg = json.loads(path.read_text(encoding='utf-8'))
+        cfg['dcache']['write_policy'] = 'write_back'
+        cfg['dcache']['write_allocate'] = False
         path.write_text(json.dumps(cfg), encoding='utf-8', newline='\n')
         with self.assertRaisesRegex(ValueError, 'policy'):
             validate(target)

@@ -33,22 +33,23 @@
     "rtl/cpu/triha_dcache.v": {
       "base": "rtl/cpu/vendor/src/dcache/dcache_core.v",
       "base_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
-      "derived_sha256": "9fde3d4a85c9d2ba1d9313fd46787767ecab0fe522e9494e21bba06e52ac86cd",
+      "derived_sha256": "7d08168ca725fde8254bc233061c6333cc47d4d67c6df8c007ccd67e7703173e",
       "changes": [
-        "Retain two-way 256-set/32B-line synchronous tag/data organization and replacement",
-        "Specialize controller to blocking write-through/no-write-allocate; remove dirty/eviction/writeback state",
-        "Wait real lower store response before byte update; invalidate hit on error",
-        "Discard partial/failed refill; enforce CPU-private DDR cacheability; preserve response tags",
-        "Dispatch stores without unused lookup and acknowledge in update cycle after the actual lower response; retain registered load data"
+        "Retain two-way 256-set/32B-line synchronous tag/data RAM and registered load response",
+        "Private DDR write-back/write-allocate; shared DDR and explicit uncached accesses bypass",
+        "Adapt upstream valid/dirty/tag storage, victim address reconstruction, and line maintenance",
+        "Response-checked scalar writeback words; retain entire dirty line after any failed write",
+        "DWRITEBACK cleans one line, DINVALIDATE discards one line, DFLUSH cleans and invalidates all lines",
+        "Discard failed allocation; preserve request tag and enforce private address range"
       ]
     },
     "rtl/cpu/triha_dcache_tag_ram.v": {
       "base": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
       "base_sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
-      "derived_sha256": "2a9df8c5dbeacb31414d07533b41196361d2df627894e2f16a274fe15c7b2eb8",
+      "derived_sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
       "changes": [
-        "TriHa name; remove unused dirty bit; explicit block RAM",
-        "Use synchronous read-first with controller relookup instead of write-first blocking assignment"
+        "TriHa name; restore upstream 21-bit valid/dirty/tag storage; explicit block RAM",
+        "Synchronous read-first; controller waits/relooks up after writes"
       ]
     },
     "rtl/cpu/triha_dcache_data_ram.v": {
@@ -63,7 +64,7 @@
   },
   "new_files": {
     "rtl/soc/triha_cpu_cache_axi.v": "a21d7a62fc7f2bcd05d09fed96b048fcd752358592e442469a6d6b2e1face6f9",
-    "rtl/cpu/triha_cache_subsystem.v": "38e129df40a0975a552bf18251e122c0b21070de1ec365df602865bed4507953",
+    "rtl/cpu/triha_cache_subsystem.v": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
     "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
     "rtl/cpu/triha_cached_core.v": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
     "fpga/pg2l100h/rtl/triha_cache_map_top.v": "f28d739af237c4604fe50d09ee17b51b6673e3c574abd3cece636885c19eca6d"

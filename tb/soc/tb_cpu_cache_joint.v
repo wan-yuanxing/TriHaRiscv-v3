@@ -7,6 +7,7 @@ module tb_cpu_cache_joint;
     reg [31:0] rng = 32'h763d93e1;
     integer cycles = 0, checks = 0, reads = 0, writes = 0;
     reg [31:0] memory [0:131071];
+    reg [31:0] arch_memory [0:131071];
     task check;
         input ok;
         input [511:0] message;
@@ -169,7 +170,7 @@ module tb_cpu_cache_joint;
         reg [31:0] expected;
         reg [10:0] expected_tag;
         begin
-            expected = memory[word_index(address)];
+            expected = arch_memory[word_index(address)];
             @(negedge clk); d_addr = address; d_wr = mask; d_wdata = value;
             d_rd = mask == 0; d_cacheable = cacheable; d_tag = d_tag + 1; expected_tag = d_tag;
             guard = 0;
@@ -188,6 +189,9 @@ module tb_cpu_cache_joint;
             check(d_error === expect_error, "D error completion");
             check(d_resp_tag === expected_tag, "D preserved response tag");
             if (mask == 0 && !expect_error) check(d_data === expected, "D returned load word");
+            if (mask != 0 && !expect_error)
+                for (lane=0;lane<4;lane=lane+1)
+                    if (mask[lane]) arch_memory[word_index(address)][lane*8+:8]=value[lane*8+:8];
             @(negedge clk);
         end
     endtask
@@ -202,14 +206,20 @@ module tb_cpu_cache_joint;
             end
             @(negedge clk); d_inval = 0; d_flush = 0; d_writeback = 0;
             guard = 0;
-            while (!d_ack) begin @(negedge clk); guard = guard + 1; if (guard > 1000) fail("D maintenance timeout"); end
+            while (!d_ack) begin @(negedge clk); guard = guard + 1; if (guard > 20000) fail("D maintenance timeout"); end
             check(!d_error, "D clean maintenance response");
             @(negedge clk);
         end
     endtask
+    integer cpu_d_acks=0;
+    always @(posedge clk) if(rst_n && d_ack) cpu_d_acks=cpu_d_acks+1;
+    integer saved_acks;
     integer n, before_count;
     initial begin
-        for (n = 0; n < 131072; n = n + 1) memory[n] = 32'h3155a72b ^ (n*32'h8721345);
+        for (n = 0; n < 131072; n = n + 1) begin
+            memory[n] = 32'h3155a72b ^ (n*32'h8721345);
+            arch_memory[n] = memory[n];
+        end
         repeat (4) @(negedge clk); rst_n = 1;
         i_read(32'h80000028, 0); before_count = i_reads;
         i_read(32'h80000028, 0); check(i_reads == before_count, "joint I hit");
@@ -217,12 +227,12 @@ module tb_cpu_cache_joint;
         d_access(32'h80000100, 0, 0, 1, 0); check(d_reads == before_count, "joint D hit");
         d_access(32'h80000100, 4'b1010, 32'h12345678, 1, 0); before_count = d_reads;
         d_access(32'h80000100, 0, 0, 1, 0); check(d_reads == before_count, "joint store updates hit");
-        write_error = 1; d_access(32'h80000100, 4'hf, 32'hdeadbeef, 1, 1); write_error = 0;
+        write_error = 1; d_access(32'h82000100, 4'hf, 32'hdeadbeef, 1, 1); write_error = 0;
         before_count = d_reads; d_access(32'h80000100, 0, 0, 1, 0);
-        check(d_reads == before_count + 1, "joint failed store invalidates");
+        check(d_reads == before_count, "failed shared store preserves independent private dirty hit");
         before_count = d_reads; d_access(32'h80000800, 4'hf, 32'h98765432, 1, 0);
-        check(d_reads == before_count, "joint store miss no refill");
-        d_access(32'h80000800, 0, 0, 1, 0); check(d_reads == before_count + 1, "joint store miss no allocate");
+        check(d_reads == before_count + 1, "joint store miss refills");
+        d_access(32'h80000800, 0, 0, 1, 0); check(d_reads == before_count + 1, "joint store miss allocates");
         for (n = 0; n < 2; n = n + 1) begin
             read_error_beat = n;
             i_read(32'h80003000 + n*32, 1); d_access(32'h80003800+n*32, 0, 0, 1, 1);
@@ -254,8 +264,41 @@ module tb_cpu_cache_joint;
         @(negedge clk); i_flush = 0;
         while (!i_accept) @(negedge clk);
         i_read(32'h80000028, 0);
+        // A fence arriving during a D write-allocate miss must preserve the
+        // original CPU completion/tag, then consume maintenance internally.
+        saved_acks=cpu_d_acks;
+        fork
+            d_access(32'h80005400,4'hf,32'h3817ace5,1,0);
+            begin
+                wait(arvalid && arid==2);
+                @(negedge clk); i_flush=1;
+                @(negedge clk); i_flush=0;
+            end
+        join
+        while(!i_accept) @(negedge clk);
+        check(cpu_d_acks==saved_acks+1,"fence drains owned D response without leaking internal ack");
+        check(memory[word_index(32'h80005400)]===32'h3817ace5,"fence cleans accepted store after allocation drains");
         d_maintenance(0); d_maintenance(1); d_maintenance(2);
-        check(!protocol_fault && i_reads > 0 && d_reads > 0 && writes == 7, "joint coverage and protocol");
+        check(!protocol_fault && i_reads > 0 && d_reads > 0 && writes >= 8, "joint coverage and protocol");
+        // FENCE.I has no error-response wire. A failed dirty clean must raise
+        // the sticky fault and prohibit any new fetch or data acceptance.
+        d_access(32'h80000600,4'hf,32'h654321ab,1,0);
+        write_error=1;
+        @(negedge clk); i_flush=1;
+        @(negedge clk); i_flush=0;
+        before_count=0;
+        while(!protocol_fault) begin
+            @(negedge clk); before_count=before_count+1;
+            if(before_count>20000) fail("failing FENCE.I did not surface fault");
+        end
+        repeat(20) begin
+            @(negedge clk);
+            check(!i_accept && !d_accept && !d_ack,"failing fence cannot falsely complete or execute stale code");
+        end
+        @(negedge clk); rst_n=0; write_error=0;
+        repeat(4) @(negedge clk); rst_n=1;
+        while(!i_accept || !d_accept) @(negedge clk);
+        check(!protocol_fault,"coordinated reset recovers fence fault");
         $display("CPU_CACHE_JOINT_PASS checks=%0d reads=%0d writes=%0d I_reads=%0d D_reads=%0d", checks, reads, writes, i_reads, d_reads);
         $finish;
     end

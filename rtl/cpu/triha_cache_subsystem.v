@@ -70,6 +70,42 @@ module triha_cache_subsystem #(
     wire [3:0] p_wr;
     wire [7:0] p_len;
     wire [31:0] p_addr, p_wdata, p_rdata;
+    // FENCE.I is a pulse without a completion channel. Drain the previously
+    // accepted D operation, flush dirty data, then invalidate I before allowing
+    // the next fetch. A failed clean is fail-stop until coordinated reset;
+    // returning stale instructions would falsely complete the fence.
+    reg fence_pending_q, fence_active_q, fence_seen_q, fence_i_flush_q, fence_fault_q;
+    wire dc_accept, dc_ack, dc_error;
+    wire [31:0] dc_data;
+    wire [10:0] dc_tag;
+    wire transport_fault;
+    wire fence_request_w = inst_flush_i || inst_invalidate_i;
+    wire fence_start_w = fence_request_w && !fence_seen_q;
+    wire fence_block_w = fence_start_w || fence_pending_q || fence_active_q || fence_i_flush_q || fence_fault_q;
+    wire fence_take_w = fence_pending_q && !fence_active_q && dc_accept;
+    wire data_allow_w = !fence_block_w;
+    assign data_accept_o = dc_accept && data_allow_w;
+    assign data_ack_o = dc_ack && !fence_active_q;
+    assign data_error_o = dc_error;
+    assign data_rdata_o = dc_data;
+    assign data_resp_tag_o = dc_tag;
+    assign protocol_fault_o = transport_fault || fence_fault_q;
+    always @(posedge clk_i or negedge rst_ni) begin
+        if (!rst_ni) begin
+            fence_pending_q <= 0; fence_active_q <= 0; fence_seen_q <= 0;
+            fence_i_flush_q <= 0; fence_fault_q <= 0;
+        end else begin
+            fence_seen_q <= fence_request_w;
+            fence_i_flush_q <= 0;
+            if (fence_start_w) fence_pending_q <= 1;
+            if (fence_take_w) begin fence_pending_q <= 0; fence_active_q <= 1; end
+            if (fence_active_q && dc_ack) begin
+                fence_active_q <= 0;
+                if (dc_error) fence_fault_q <= 1;
+                else fence_i_flush_q <= 1;
+            end
+        end
+    end
     wire want_cached_w = ICACHE_ENABLE && inst_addr_i >= 32'h80000000 && inst_addr_i < 32'h82000000;
     reg owner_cached_q;
     reg [2:0] pending_q;
@@ -83,7 +119,7 @@ module triha_cache_subsystem #(
     wire [63:0] u_data;
     wire [31:0] u_araddr;
     wire accepted_w = inst_req_i && inst_accept_o;
-    assign inst_accept_o = !hold_target_w && (want_cached_w ? c_accept : u_accept);
+    assign inst_accept_o = !fence_block_w && !hold_target_w && (want_cached_w ? c_accept : u_accept);
     assign inst_valid_o = owner_cached_q ? c_valid : u_valid;
     assign inst_error_o = owner_cached_q ? c_error : u_error;
     assign inst_rdata_o = owner_cached_q ? c_data : u_data;
@@ -104,9 +140,9 @@ module triha_cache_subsystem #(
     triha_icache #(.AXI_ID(1)) u_icache (
         .clk_i(clk_i),
         .rst_ni(rst_ni),
-        .req_rd_i(inst_req_i && want_cached_w && !hold_target_w),
-        .req_flush_i(inst_flush_i),
-        .req_invalidate_i(inst_invalidate_i),
+        .req_rd_i(inst_req_i && want_cached_w && !hold_target_w && !fence_block_w),
+        .req_flush_i(fence_i_flush_q),
+        .req_invalidate_i(1'b0),
         .req_pc_i(inst_addr_i),
         .axi_awready_i(1'b0),
         .axi_wready_i(1'b0),
@@ -152,7 +188,7 @@ module triha_cache_subsystem #(
         assign c_rready = 0;
     end endgenerate
     triha_ifetch_uncached u_uncached_i (
-        .clk_i(clk_i), .rst_ni(rst_ni), .req_rd_i(inst_req_i && !want_cached_w && !hold_target_w),
+        .clk_i(clk_i), .rst_ni(rst_ni), .req_rd_i(inst_req_i && !want_cached_w && !hold_target_w && !fence_block_w),
         .req_pc_i(inst_addr_i), .req_accept_o(u_accept), .req_valid_o(u_valid),
         .req_error_o(u_error), .req_inst_o(u_data), .arvalid_o(u_arvalid), .araddr_o(u_araddr),
         .arready_i(i_arready && !owner_cached_q), .rvalid_i(i_rvalid && !owner_cached_q),
@@ -163,18 +199,18 @@ module triha_cache_subsystem #(
         .rst_ni(rst_ni),
         .mem_addr_i(data_addr_i),
         .mem_data_wr_i(data_wdata_i),
-        .mem_rd_i(data_re_i),
-        .mem_wr_i(data_wstrb_i),
+        .mem_rd_i(data_re_i && data_allow_w),
+        .mem_wr_i(data_wstrb_i & {4{data_allow_w}}),
         .mem_cacheable_i(data_cacheable_i),
         .mem_req_tag_i(data_req_tag_i),
-        .mem_invalidate_i(data_invalidate_i),
-        .mem_writeback_i(data_writeback_i),
-        .mem_flush_i(data_flush_i),
-        .mem_data_rd_o(data_rdata_o),
-        .mem_accept_o(data_accept_o),
-        .mem_ack_o(data_ack_o),
-        .mem_error_o(data_error_o),
-        .mem_resp_tag_o(data_resp_tag_o),
+        .mem_invalidate_i(data_invalidate_i && data_allow_w),
+        .mem_writeback_i(data_writeback_i && data_allow_w),
+        .mem_flush_i((data_flush_i && data_allow_w) || fence_take_w),
+        .mem_data_rd_o(dc_data),
+        .mem_accept_o(dc_accept),
+        .mem_ack_o(dc_ack),
+        .mem_error_o(dc_error),
+        .mem_resp_tag_o(dc_tag),
         .outport_accept_i(p_accept),
         .outport_ack_i(p_ack),
         .outport_error_i(p_error),
@@ -208,7 +244,7 @@ module triha_cache_subsystem #(
         .d_ack_o(p_ack),
         .d_error_o(p_error),
         .d_rdata_o(p_rdata),
-        .protocol_fault_o(protocol_fault_o),
+        .protocol_fault_o(transport_fault),
         .axi_awvalid_o(axi_awvalid_o),
         .axi_awaddr_o(axi_awaddr_o),
         .axi_awid_o(axi_awid_o),

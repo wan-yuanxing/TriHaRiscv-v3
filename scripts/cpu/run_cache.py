@@ -26,7 +26,7 @@ def save(path, value):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test', choices=['components', 'transport', 'joint', 'cpu', 'coremark'], default='components')
+    parser.add_argument('--test', choices=['components', 'writeback', 'transport', 'joint', 'cpu', 'coremark'], default='components')
     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
     parser.add_argument('--bypass-caches', action='store_true')
@@ -82,12 +82,14 @@ def main():
         cfg = json.loads((ROOT / 'config/cpu_cache.json').read_text(encoding='utf-8'))
         assert cfg['schema_version'] == 1 and cfg['clock_hz'] == 100000000
         assert all(cfg[k] == dict(bytes=16384, ways=2, line_bytes=32) for k in ['icache'])
-        assert cfg['dcache'] == dict(bytes=16384, ways=2, line_bytes=32, write_policy='write_through', write_allocate=False, posted_writes=False)
+        assert cfg['dcache'] == dict(bytes=16384, ways=2, line_bytes=32, write_policy='write_back', write_allocate=True, posted_writes=False)
         assert cfg['private_ddr_base'] == 0x80000000 and cfg['private_ddr_bytes'] == 0x2000000
         assert cfg['shared_ddr_base'] == 0x82000000 and cfg['shared_ddr_bytes'] == 0x6000000
         sources = [p.strip() for p in (ROOT / 'config/cpu_cache_sources.f').read_text(encoding='utf-8').splitlines() if p.strip() and not p.startswith('#')]
         tb = 'tb/cpu/tb_cpu_cache.v'
-        if args.test == 'transport':
+        if args.test == 'writeback':
+            tb = 'tb/cpu/tb_cpu_dcache_writeback.v'
+        elif args.test == 'transport':
             sources = ['rtl/soc/triha_cpu_cache_axi.v']
             tb = 'tb/soc/tb_cpu_cache_axi.v'
         elif args.test in ['joint', 'cpu', 'coremark']:
@@ -168,7 +170,7 @@ def main():
         output = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc', *generics,
                         '-gCORRUPT_DATA=' + str(int(args.fault == 'data')), 'work.' + Path(tb).stem,
                         '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation', timeout=600 if args.test == 'coremark' else 90)
-        marker = {'components': 'CPU_CACHE_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
+        marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
         if marker not in output or any(token in output for token in ['CPU_CACHE_FAIL', '** Error', '** Fatal']):
             raise RuntimeError('Paired-cache self-check failed')
         if args.test == 'coremark':

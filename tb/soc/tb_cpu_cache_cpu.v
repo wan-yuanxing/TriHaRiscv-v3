@@ -113,7 +113,9 @@ module tb_cpu_cache_cpu;
             end
             if (read_pending && !rvalid && (COREMARK_MODE || rng[6])) begin
                 rvalid <= 1; rlast <= read_beat == read_count - 1;
-                rresp <= (read_beat == read_error_beat || (!COREMARK_MODE && (saved_araddr == 32'h80018000 || saved_araddr == 32'h80018200))) ? 2'b10 : 0;
+                // Cached stores fault synchronously on failed write allocation;
+                // a later dirty writeback failure is reported by maintenance.
+                rresp <= (read_beat == read_error_beat || (!COREMARK_MODE && (saved_araddr == 32'h80018000 || saved_araddr == 32'h80018020 || saved_araddr == 32'h80018200))) ? 2'b10 : 0;
                 for (lane = 0; lane < 4; lane = lane + 1)
                     rdata[lane*32 +: 32] <= memory[word_index(saved_araddr)+read_beat*4+lane] ^ CORRUPT_DATA;
             end

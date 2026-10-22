@@ -47,6 +47,10 @@ def main():
         return output.decode('utf-8',errors='replace')
     try:
         generate(check=True)
+        from check_cache import validate
+        checked = validate(ROOT)
+        cache_policy = json.loads((ROOT/'config/cpu_cache.json').read_text(encoding='utf-8'))
+        row['dcache_write_policy'] = cache_policy['dcache']['write_policy']
         row['binding'] = materialize(work)
         row['external_hashes'][row['binding']['git']] = row['binding']['git_sha256']
         base = json.loads((ROOT/'fpga/pg2l100h/project/cpu_cached_soc.json').read_text(encoding='utf-8'))
@@ -60,6 +64,7 @@ def main():
             'scripts/cpu/prepare_ddr.py','scripts/cpu/gen_ddr_board.py','scripts/cpu/run_modelsim.do',
             'config/cpu_ddr_board.json','config/cpu_ddr.json','config/cpu_toolchain.json',
             'config/cpu_primitives.json','fpga/pg2l100h/project/cpu_cached_soc.json']
+        paths += checked['validated_paths']
         primitives=[]
         for entry in json.loads((ROOT/'config/cpu_primitives.json').read_text(encoding='utf-8'))['simulation_models']:
             if sha(entry['path']) != entry['sha256']:

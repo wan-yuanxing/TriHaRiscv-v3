@@ -188,7 +188,18 @@ def digital(directories):
         text = (directory/'simulation.log').read_text(encoding='utf-8')
         expected_codes = {'no-init':'e0', 'init-loss':'e1', 'clock-stop':'e4', 'cpu-pll-loss':'e5'}
         if negative:
-            if row['test'] != 'boot' or 'CPU_TRAP cause=00000007 value=80010000' not in text or 'CPU_DDR_BOARD_FAIL first software run' not in text:
+            # The cached private writes coalesce under WB. This probe reaches
+            # its first response-checked external store at the shared region.
+            policy = row.get('dcache_write_policy', 'write_through')
+            if policy not in ['write_through', 'write_back']:
+                raise ValueError('unknown negative-test cache policy')
+            macro = 'SHARED' if policy == 'write_back' else 'PRIVATE'
+            header = (directory/'src/sw/runtime/cpu_ddr_board.h').read_text(encoding='utf-8')
+            expected = re.findall(r'(?m)^#define TRIHA_DDR_BOARD_'+macro+r'_TEST_BASE 0x([0-9a-fA-F]{8})u$',header)
+            if len(expected) != 1:
+                raise ValueError('missing frozen negative-test address')
+            trap = 'CPU_TRAP cause=00000007 value='+expected[0].lower()
+            if row['test'] != 'boot' or trap not in text or 'CPU_DDR_BOARD_FAIL first software run' not in text:
                 raise ValueError('negative did not exercise real store visibility failure')
             key = 'corrupt-data'
         elif row['test'] == 'boot':

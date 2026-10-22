@@ -1,5 +1,11 @@
 # CPU I/D Cache subsystem design
 
+Current candidate update, 2026-10-22: private-DDR write-back/write-allocate is
+now authorized. Its maintenance/error/FENCE.I contract and evidence are in
+`../verification/cpu/dcache_writeback.md`. The write-through contract below
+is the preserved deployed baseline; the new candidate supersedes it only
+within the private cached data path.
+
 2026-10-21. User approved implementing I-Cache and D-Cache together, with the existing six-stage single-issue CPU. Backup: `cpu-before-id-cache-20261021` at `e4eae68`. Work remains in `D:/FPGA/TriHaRiscv-cpu-windows`, branch `cpu/windows-baseline`; preserve the deployed release and the main worktree's independent Video changes.
 
 ## Contract

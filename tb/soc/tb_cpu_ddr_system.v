@@ -119,15 +119,18 @@ module tb_cpu_ddr_system;
         status_polls <= 0; local_writes <= 0; trap_count <= 0;
         boot_seen <= 0; private_exec <= 0; shared_exec <= 0; serial_count = 0;
     end else begin
-        if (u_dut.u_soc.data_accept && (|u_dut.u_soc.data_wstrb) && u_dut.u_soc.data_addr >= 32'h80000000) begin
-            check(!store_pending, "blocking CPU store ownership");
+        // Check the actual external writeback/uncached boundary, rather than
+        // demanding an external DDR write for every private cached CPU store.
+        if (u_dut.u_soc.u_router.u_cache.p_accept && (|u_dut.u_soc.u_router.u_cache.p_wr)) begin
+            check(!store_pending, "blocking external store ownership");
             store_pending = 1; native_written = 0; verify_active = 0; native_verified = 0;
-            store_addr = u_dut.u_soc.data_addr; store_data = u_dut.u_soc.data_wdata;
-            store_strobe = u_dut.u_soc.data_wstrb; store_tag = u_dut.u_soc.data_req_tag;
+            store_addr = u_dut.u_soc.u_router.u_cache.p_addr;
+            store_data = u_dut.u_soc.u_router.u_cache.p_wdata;
+            store_strobe = u_dut.u_soc.u_router.u_cache.p_wr;
         end
-        if (store_pending && u_dut.u_soc.data_ack && u_dut.u_soc.data_resp_tag == store_tag) begin
-            if (!u_dut.u_soc.data_error) begin
-                check(native_written && native_verified, "each successful store waits for native write and readback");
+        if (store_pending && u_dut.u_soc.u_router.u_cache.p_ack) begin
+            if (!u_dut.u_soc.u_router.u_cache.p_error) begin
+                check(native_written && native_verified, "each external write waits for native write and readback");
                 store_observed = u_memory.stored_beat(store_native_addr);
                 for (store_lane = 0; store_lane < 4; store_lane = store_lane+1)
                     if (store_strobe[store_lane])
@@ -169,7 +172,7 @@ module tb_cpu_ddr_system;
         check(status_polls >= 4 && local_writes > 0 && fault && !ddr_ready, "DDR init and failure coverage");
         check(trap_count == 3 && !protocol_fault, "three owned access faults with intact AXI protocol");
         check(serial_count == 2, "two slow MMIO UART transactions");
-        check(completed_stores == 22 && bridge_code == 1, "store coverage and actual bridge init-loss detection");
+        check(completed_stores == (CACHE_ENABLE ? 35 : 22) && bridge_code == 1, "store coverage and actual bridge init-loss detection");
         check(live_resets == 1, "full CPU/cache/CDC/bridge/native coordinated live reset");
         check(stored_private[31:0] == 32'h1357a5df, "true lower byte store");
         check(stored_shared[31:0] == 32'h2468ace0, "true shared lower store");

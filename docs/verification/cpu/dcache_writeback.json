@@ -1,0 +1,457 @@
+{
+  "schema_version": 1,
+  "status": "PASS_FUNCTIONAL_AND_100MHZ",
+  "date": "2026-10-22",
+  "reviewer": {
+    "path": "build/cpu/review-writeback-terminal-20261022.py",
+    "sha256": "529a5d5ebfb319d742781b6a443ba7c6b520fb96d8983a57689c92c01a8480cf"
+  },
+  "scope": "Private-DDR writeback, standalone CPU/DDR implementation; no physical board score or shared-fabric admission",
+  "backup_tag": "cpu-before-writeback-20261022",
+  "backup_commit": "942e405",
+  "write_policy": "write_back",
+  "write_allocate": true,
+  "private_ddr": [
+    2147483648,
+    2181038080
+  ],
+  "shared_uncached_ddr": [
+    2181038080,
+    2281701376
+  ],
+  "line_writeback": "Eight individually response-checked scalar words; no new burst writer",
+  "functional_tests": {
+    "writeback": {
+      "result": {
+        "path": "build/cpu/cache-writeback-20261022T134735986736Z/result.json",
+        "sha256": "bc4b3e5e770a635bf8947aa435ae3cb522c07bdae49fed77c00e94fc8a8ce2cf"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-writeback-20261022T134735986736Z/simulation.log",
+        "sha256": "6c4626ed8156de069e1aa32bb5e5b3711303f0e80c720209e12dbea87a122de0"
+      }
+    },
+    "joint_and_fence": {
+      "result": {
+        "path": "build/cpu/cache-joint-20261022T134735253426Z/result.json",
+        "sha256": "e3fa26bb25dde04173cdc6ceb6e0e6af248dc3a6ae841ee300353d9069a6e3f4"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-joint-20261022T134735253426Z/simulation.log",
+        "sha256": "d4d2e7115489755d27fd561d5a3184ab5a898267798ecaa3d80e8392e74982a2"
+      }
+    },
+    "registered_load_boundary": {
+      "result": {
+        "path": "build/cpu/cache-components-20261022T134539112956Z/result.json",
+        "sha256": "3274e536b83cabf1cab2fd24a8173e076599ee5b82747fa88e4d2f4e1fff0815"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-components-20261022T134539112956Z/simulation.log",
+        "sha256": "f5f10de44df3479434371b60da40d8a179b767cb53eaa1242e114f8ca36062c6"
+      }
+    },
+    "transport": {
+      "result": {
+        "path": "build/cpu/cache-transport-20261022T132520822917Z/result.json",
+        "sha256": "73f8f0c0ef6fb296e8e07dd441a8698afdd0148db58338c99ee85220010dfa0f"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-transport-20261022T132520822917Z/simulation.log",
+        "sha256": "01eb32423d163a44ebadb84ca2a9301e290571c6366082547bf6b3a666a15534"
+      }
+    },
+    "cpu": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T132758910433Z/result.json",
+        "sha256": "2249e3a8d8001915bb8d5f1be303271b86bf2bbdbf79f1322f133ffcdc7a1501"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T132758910433Z/simulation.log",
+        "sha256": "2b6c609d6dfc0dc30efd6ac4abd252b88879481d7fb273592578c36506534026"
+      }
+    },
+    "cpu_bypass": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T133248944646Z/result.json",
+        "sha256": "09b1810db99c1bde823a341f1ff3c61cef2a9bbdec200bdda5447d26f58f2547"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T133248944646Z/simulation.log",
+        "sha256": "1e3fc5b02937db8bb3aa72a89027c962d629deedcda52b77f8e562d8877497ad"
+      }
+    },
+    "soc": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261022T133040560919Z/result.json",
+        "sha256": "7ce9672f9dd4fb7819320c338fdddc6cadcfd160a0b3a56ff60347ca9ed2b149"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261022T133040560919Z/simulation.log",
+        "sha256": "62740d0e66af55ead3629eb149ad5699eea4ad1659ca0a68287c57594e4c6255"
+      }
+    },
+    "soc_bypass": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261022T133357518180Z/result.json",
+        "sha256": "105fb1fa391b98283d14809f71d6c03320696129ea29f0bfb03b8a45212e216d"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261022T133357518180Z/simulation.log",
+        "sha256": "5d042688009863552e6ab084b8ce3ae7a0c6a324804096c3306417ea047ba70e"
+      }
+    },
+    "native_ddr": {
+      "result": {
+        "path": "build/cpu/ddr-system-20261022T133513190889Z/result.json",
+        "sha256": "35838c227efa77b04a645399af30eccc81fcf922f028aa37eb8d9c18138b3137"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-system-20261022T133513190889Z/simulation.log",
+        "sha256": "d705d5edf7fb45513b39c86f2754198cbbf66df485e6abdcb1fb95f00d6c027f"
+      }
+    },
+    "native_ddr_bypass": {
+      "result": {
+        "path": "build/cpu/ddr-system-20261022T133858749587Z/result.json",
+        "sha256": "3a3f6049f14cdb5b5f029bfc4e5ce2c8b16687982c1792d39f96287c56dffcb4"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-system-20261022T133858749587Z/simulation.log",
+        "sha256": "3a0746fb1b093809fcfb7b9f807aa0ea9bb5016eba3380580efddb84152bd008"
+      }
+    },
+    "board_digital_two_boots": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135003212875Z/result.json",
+        "sha256": "9fd772d87cd17151eff51ec7603ee43aa4a706468b0f7afcc83b9399c3cf6d35"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135003212875Z/simulation.log",
+        "sha256": "167b6081c6fdcd1fc0069d94548faea25f3a4b70b15cb4f11333843a1d7aa679"
+      }
+    },
+    "board_no_init": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135124019587Z/result.json",
+        "sha256": "f15a90a5001ce3271999eececbb126015556990efba19b7d4ef9a3c49996faf0"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135124019587Z/simulation.log",
+        "sha256": "18705f777910c780b9e72662e314b51c0616a95830b252f41ae591ab7e3f6327"
+      }
+    },
+    "board_init_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135127876307Z/result.json",
+        "sha256": "00103ecbd19505cb1eab315e829215bda0d851e2cf7efb693941663fa30597ed"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135127876307Z/simulation.log",
+        "sha256": "e478d937040fe12da03194684583753a086c4fb09b56d6d9a761b3e8cde4cc0f"
+      }
+    },
+    "board_clock_stop": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135131745350Z/result.json",
+        "sha256": "b81f1a0c995ec7d7bcb273c5564efb4e1b0bbc9fb1fa8e2d369dd9e7e595758b"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135131745350Z/simulation.log",
+        "sha256": "8f5507b96ea44444d1433582724d7957216bbc2d7692cc41a8026f3a153ec922"
+      }
+    },
+    "board_cpu_pll_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135135315838Z/result.json",
+        "sha256": "ccea1177c6424c6b3706a8395cab29206929bf8980d30d71ad4e92e5ddd9871d"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135135315838Z/simulation.log",
+        "sha256": "6ab6e4c6149314c7e0759b410b8ae0caa17a1383ffbaf7ab54e50c0f85e4e106"
+      }
+    },
+    "coremark_five_iterations": {
+      "result": {
+        "path": "build/cpu/ddr-coremark-20261022T133145924907Z/result.json",
+        "sha256": "5b830bd007fdc77bfe2ce4cd3a9dcd50c44b8c1b55bd020d0cfee9612cba6f9d"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-coremark-20261022T133145924907Z/simulation.log",
+        "sha256": "6276618fa7cf73819051e1657afa8d330fd7a7ed5ad86d3cbd1f42783f6d4576"
+      }
+    },
+    "matching_board_preflight": {
+      "result": {
+        "path": "build/cpu/ddr-coremark-20261022T133836028841Z/result.json",
+        "sha256": "6be10fac3cb934190aee21d7393ec90206a7b3c29c9b9829cd3385520fb25465"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-coremark-20261022T133836028841Z/simulation.log",
+        "sha256": "2ae1b9d262d09c796047ebad05139e48d546922f064df39dc2f9c1d612e9417c"
+      }
+    }
+  },
+  "expected_negatives": {
+    "corrupt_writeback_data": {
+      "result": {
+        "path": "build/cpu/cache-writeback-20261022T135351701454Z/result.json",
+        "sha256": "c3fb33d0620731ae1d22ac28096af902fea0b90f8126551efe1f7645fee78357"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-writeback-20261022T135351701454Z/simulation.log",
+        "sha256": "8bdb3380215259c60dea231065d37ec0c5d7ce1ee73fd4d015103e98e7f25d1d"
+      }
+    },
+    "corrupt_cpu_data": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T135352471908Z/result.json",
+        "sha256": "d32fa33223bfbdf88de804bf35799a55f5e00e7222b9f4aa8d807b5c97a3b5fa"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T135352471908Z/simulation.log",
+        "sha256": "53b67da12e6013faadc229a7530335c78c36fde7b9fc83c8c04198763d329159"
+      }
+    },
+    "corrupt_native_ddr_data": {
+      "result": {
+        "path": "build/cpu/ddr-system-20261022T133859575987Z/result.json",
+        "sha256": "05c2e48257fba609472664f21b04c1a57e2575ee3cbcc71f4bf1e0057691e0b7"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/ddr-system-20261022T133859575987Z/simulation.log",
+        "sha256": "ce7db9df14e0796b9c1ccb78b98e52762518ddfdbea8a78eb607338d3ffab12a"
+      }
+    },
+    "corrupt_board_native_readback": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T135003955491Z/result.json",
+        "sha256": "f6b5fc454847df3359b4714e4fd2d3e8f5f2e640389d164b375db954caa59f99"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T135003955491Z/simulation.log",
+        "sha256": "7d4b321533601ed2e87aa429acdbedbcaa309cc43e609abc9fa3a344b1d07878"
+      }
+    }
+  },
+  "digital_board_review": {
+    "path": "build/cpu/ddr-writeback-board-digital-review-20261022.json",
+    "sha256": "b4e4684a44a94ca3656ea4d445ffda7c9f731a7a47866403e032d42044e03f04"
+  },
+  "python_unit_tests": {
+    "cpu": 68,
+    "soc": 45,
+    "failures": 0
+  },
+  "performance_comparison": {
+    "path": "build/cpu/ddr-writeback-review-20261022T133834923712Z/result.json",
+    "sha256": "16cc6db7fa961c13853651f501b309e0d967f6576c7f6601cad2cf7472af7a99"
+  },
+  "before_cycles": 3899101,
+  "after_cycles": 2158431,
+  "coremark_per_mhz_short_rtl": 2.3164974928547637,
+  "modeled_throughput_gain_percent": 80.64515381775001,
+  "timed_stores": 70840,
+  "timed_lower_writes_before": 70840,
+  "timed_lower_writes_after": 0,
+  "traces": {
+    "cpu-cache.wb.log": {
+      "events": 1448453,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "9612e4112e09e7ca43a9b6128dd5aca148e6395b74d16c74ecdd2c5ed300fe79",
+      "cached_sha256": "843e02ab8b929630205fc3ef893085484846f171ddd42e9be390d9978dc5325a",
+      "uncached_sha256": "3068f2f062b43a18cd2f898284d45da8a89f1d60aae239984472294d9b48df84"
+    },
+    "cpu-cache.store.log": {
+      "events": 70840,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "964aecd69786f902f808c23760356baedaa4b958f83ffad75c6ace4ae63b497f",
+      "cached_sha256": "e9a7182dd2213348dc22dd449691794d74da5eb1b2b215c9036c23f623f3b350",
+      "uncached_sha256": "52a9938739ef1f5e1bf75842a433ebeef7d6126cf4c222910c511b2b0a83da47"
+    }
+  },
+  "dirty_data_cached_at_timer_stop": true,
+  "physical_review": {
+    "path": "build/cpu/ddr-board-route-20261022T134054417226Z-independent-review.json",
+    "sha256": "cf4bb1a7a7407212076b7672351b87c199bd7cb62f2cabda634e945fd96fa32e"
+  },
+  "timing_report": {
+    "path": "build/cpu/ddr-board-route-20261022T134054417226Z/report_timing/triha_cpu_ddr_board_top.rtr",
+    "sha256": "cf6fe189e0d23fd7e24d828fbcc8782b1f65d4c682696f621a51967d3821f9d6"
+  },
+  "timing_cpu": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.134,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22755
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.153,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22755
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 5.912,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3445
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.235,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3445
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4222
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.629,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22755
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.1,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22755
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 7.229,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3445
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.132,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3445
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4222
+    }
+  ],
+  "gray_maxdelay_met": true,
+  "gray_skew_worst_slack_ns": 1.323,
+  "cpu_only": {
+    "lut": 6459,
+    "registers": 3562,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_and_transport": {
+    "lut": 671,
+    "registers": 807,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  },
+  "prepared_release": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_418eb7d376c5/manifest.json",
+    "sha256": "2f701e1aeecb73c6c56a9d7d631c23e07f2faf4335547f35232a48a927980771"
+  },
+  "package_result": {
+    "path": "build/cpu/ddr-board-package-20261022T135123299138Z/result.json",
+    "sha256": "ed2cdd0871ed4b7eb8d1471d8124973414eb7b2808d51462bef826ec5dde8867"
+  },
+  "prepared_bitstream": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_418eb7d376c5/triha_cpu_ddr_board_top.sbit",
+    "sha256": "418eb7d376c50c68dd5914dfb4374f8fb26df3c8f0ea909e0d8f0ba84ae3d178"
+  },
+  "board_programmed": false,
+  "board_score_improvement_proven": false,
+  "current_board_image": "cpu_ddr_coremark_on_32019ccd2f69",
+  "com12_accessed": false,
+  "flash_written": false,
+  "main_worktree_modified": false
+}

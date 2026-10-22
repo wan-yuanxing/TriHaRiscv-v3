@@ -13,8 +13,9 @@ integer wb = 0, stores = 0, dc_reads = 0, dc_writes = 0;
 integer read_hits = 0, read_misses = 0, uncached_reads = 0;
 integer store_hits = 0, store_misses = 0, uncached_writes = 0;
 integer refills = 0, lower_writes = 0;
+integer writeback_words = 0, uncached_lower_writes = 0;
 integer native_aw = 0, native_ar = 0, native_wbeats = 0, native_rbeats = 0;
-integer dc_state_cycles [0:13];
+integer dc_state_cycles [0:17];
 integer bridge_state_cycles [0:13];
 integer n;
 integer wb_file, store_file;
@@ -22,10 +23,8 @@ initial begin
     wb_file = $fopen("ddr-profile.wb.log", "w");
     store_file = $fopen("ddr-profile.store.log", "w");
     if (!wb_file || !store_file) $fatal(1, "CPU_DDR_PROFILE_FAIL trace_open");
-    for (n = 0; n < 14; n = n + 1) begin
-        dc_state_cycles[n] = 0;
-        bridge_state_cycles[n] = 0;
-    end
+    for (n = 0; n < 18; n = n + 1) dc_state_cycles[n] = 0;
+    for (n = 0; n < 14; n = n + 1) bridge_state_cycles[n] = 0;
 end
 always @(posedge u_dut.ddr_clk) if (active) begin
     if (`PBRIDGE.h_awvalid && `PBRIDGE.h_awready) native_aw = native_aw + 1;
@@ -62,7 +61,7 @@ always @(posedge u_dut.cpu_clk) if (u_dut.u_system.cpu_rst_n) begin
             stores = stores + 1;
             $fwrite(store_file, "%08h %h %08h\n", `SOC.data_addr, `SOC.data_wstrb, `SOC.data_wdata);
         end
-        if ((^`PDC.state_q === 1'bx) || `PDC.state_q > 13 ||
+        if ((^`PDC.state_q === 1'bx) || `PDC.state_q > 17 ||
             (^`PBRIDGE.state === 1'bx) || `PBRIDGE.state > 13)
             $fatal(1, "CPU_DDR_PROFILE_FAIL unknown_state");
         dc_state_cycles[`PDC.state_q] = dc_state_cycles[`PDC.state_q] + 1;
@@ -71,7 +70,7 @@ always @(posedge u_dut.cpu_clk) if (u_dut.u_system.cpu_rst_n) begin
             if (`PDC.mem_rd_i) dc_reads = dc_reads + 1;
             if (|`PDC.mem_wr_i) dc_writes = dc_writes + 1;
         end
-        if ((`PDC.state_q == 2 || `PDC.state_q == 7) && !classified) begin
+        if (`PDC.state_q == 2 && !classified) begin
             classified = 1;
             if (|`PDC.write_mask_q) begin
                 if (!`PDC.cacheable_q) uncached_writes = uncached_writes + 1;
@@ -82,7 +81,11 @@ always @(posedge u_dut.cpu_clk) if (u_dut.u_system.cpu_rst_n) begin
             else read_misses = read_misses + 1;
         end
         if (`PDC.outport_accept_i && `PDC.outport_rd_o && `PDC.state_q == 3) refills = refills + 1;
-        if (`PDC.outport_accept_i && |`PDC.outport_wr_o) lower_writes = lower_writes + 1;
+        if (`PDC.outport_accept_i && |`PDC.outport_wr_o) begin
+            lower_writes = lower_writes + 1;
+            if (`PDC.state_q == 14) writeback_words = writeback_words + 1;
+            else uncached_lower_writes = uncached_lower_writes + 1;
+        end
     end
     if (`PDC.state_q == 1) classified = 0;
     if (`PCORE.u_csr.opcode_valid_i &&
@@ -106,8 +109,9 @@ initial begin
         $fatal(1, "CPU_DDR_PROFILE_FAIL CSR_window");
     $display("CPU_DDR_PROFILE_WINDOW cycles=%0d start=%0d stop=%0d reads=%0d",timed_cycles,started,stopped,reads);
     $display("CPU_DDR_PROFILE_ISSUE issue=%0d cancel=%0d lsu=%0d pipe=%0d div=%0d csr=%0d frontend=%0d unit=%0d dependency=%0d other=%0d wb=%0d stores=%0d",issue,cancel,lsu,pipe_wait,div_wait,csr_wait,frontend,unit_wait,dependency,other,wb,stores);
-    $display("CPU_DDR_PROFILE_DC reads=%0d writes=%0d read_hits=%0d read_misses=%0d uncached_reads=%0d store_hits=%0d store_misses=%0d uncached_writes=%0d refills=%0d lower_writes=%0d",dc_reads,dc_writes,read_hits,read_misses,uncached_reads,store_hits,store_misses,uncached_writes,refills,lower_writes);
-    $display("CPU_DDR_PROFILE_DC_STATES idle=%0d lookup=%0d refill_req=%0d refill=%0d relookup=%0d response=%0d write_req=%0d write_wait=%0d store_update=%0d uncached_req=%0d uncached_wait=%0d reset=%0d invalidate=%0d flush=%0d",dc_state_cycles[1],dc_state_cycles[2],dc_state_cycles[3],dc_state_cycles[4],dc_state_cycles[5],dc_state_cycles[6],dc_state_cycles[7],dc_state_cycles[8],dc_state_cycles[9],dc_state_cycles[10],dc_state_cycles[11],dc_state_cycles[0],dc_state_cycles[12],dc_state_cycles[13]);
+    $display("CPU_DDR_PROFILE_POLICY write_back=1");
+    $display("CPU_DDR_PROFILE_DC reads=%0d writes=%0d read_hits=%0d read_misses=%0d uncached_reads=%0d store_hits=%0d store_misses=%0d uncached_writes=%0d refills=%0d lower_writes=%0d writeback_words=%0d uncached_lower_writes=%0d",dc_reads,dc_writes,read_hits,read_misses,uncached_reads,store_hits,store_misses,uncached_writes,refills,lower_writes,writeback_words,uncached_lower_writes);
+    $display("CPU_DDR_PROFILE_DC_STATES reset=%0d idle=%0d lookup=%0d refill_req=%0d refill=%0d relookup=%0d response=%0d store_update=%0d uncached_req=%0d uncached_wait=%0d invalidate=%0d maint_check=%0d maint_adv=%0d wb_read=%0d wb_req=%0d wb_wait=%0d maint_read=%0d clean=%0d",dc_state_cycles[0],dc_state_cycles[1],dc_state_cycles[2],dc_state_cycles[3],dc_state_cycles[4],dc_state_cycles[5],dc_state_cycles[6],dc_state_cycles[7],dc_state_cycles[8],dc_state_cycles[9],dc_state_cycles[10],dc_state_cycles[11],dc_state_cycles[12],dc_state_cycles[13],dc_state_cycles[14],dc_state_cycles[15],dc_state_cycles[16],dc_state_cycles[17]);
     $display("CPU_DDR_PROFILE_BRIDGE idle=%0d collect=%0d wpre=%0d waddr=%0d wdata=%0d vpre=%0d vaddr=%0d vdata=%0d raddr=%0d rdata=%0d rpre=%0d rresp=%0d bresp=%0d quarantine=%0d native_aw=%0d native_ar=%0d native_wbeats=%0d native_rbeats=%0d",bridge_state_cycles[0],bridge_state_cycles[1],bridge_state_cycles[2],bridge_state_cycles[3],bridge_state_cycles[4],bridge_state_cycles[5],bridge_state_cycles[6],bridge_state_cycles[7],bridge_state_cycles[8],bridge_state_cycles[9],bridge_state_cycles[10],bridge_state_cycles[11],bridge_state_cycles[12],bridge_state_cycles[13],native_aw,native_ar,native_wbeats,native_rbeats);
 end
 `undef PCORE

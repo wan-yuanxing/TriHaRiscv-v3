@@ -9,6 +9,7 @@ module tb_cpu_cache;
     always #5 clk = !clk;
     reg rst_n = 0;
     reg [31:0] memory [0:65535];
+    reg [31:0] arch_memory [0:65535];
     integer checks = 0, i_reads = 0, d_reads = 0, d_writes = 0;
     integer i_hits = 0, d_hits = 0, simultaneous = 0;
     reg [31:0] rng = 32'h31872ac5;
@@ -81,7 +82,8 @@ module tb_cpu_cache;
     integer d_error_beat = -1, d_captured_error;
     reg store_error = 0, captured_store_error;
     reg store_ack_due = 0;
-    always @(posedge clk) store_ack_due <= rst_n && p_ack && d_pending_write;
+    always @(posedge clk) store_ack_due <= rst_n && p_ack && d_pending_write &&
+        u_d.state_q == 9 && !u_d.cacheable_q;
     always @(negedge clk) if ((FAST_RESPONSE_CHECK || STORE_RESPONSE_CHECK) && store_ack_due)
         check(d_ack, "store responds directly after the real lower acknowledgement");
     triha_dcache u_d (
@@ -181,7 +183,8 @@ module tb_cpu_cache;
         reg [31:0] expected;
         reg [10:0] expected_tag;
         begin
-            expected = memory[address[17:2]];
+            expected = cacheable && address >= 32'h80000000 && address < 32'h82000000 ?
+                       arch_memory[address[17:2]] : memory[address[17:2]];
             @(negedge clk); d_addr = address; d_wr = mask; d_wdata = value;
             d_rd = mask == 0; d_cacheable = cacheable; d_tag = d_tag + 1; expected_tag = d_tag;
             guard = 0;
@@ -193,8 +196,9 @@ module tb_cpu_cache;
                 end
             end
             @(negedge clk); d_rd = 0; d_wr = 0;
-            if ((FAST_RESPONSE_CHECK || STORE_RESPONSE_CHECK) && mask != 0)
-                check(p_wr == mask && p_addr == address, "store dispatch has no unused tag-lookup bubble");
+            if ((FAST_RESPONSE_CHECK || STORE_RESPONSE_CHECK) && mask != 0 && cacheable &&
+                address >= 32'h80000000 && address < 32'h82000000)
+                check(p_wr == 0, "cached store is not dispatched as write-through");
             if (FAST_RESPONSE_CHECK && expect_fast_load)
                 check(d_ack, "resident load responds in synchronous lookup cycle");
             if (STORE_RESPONSE_CHECK && expect_fast_load)
@@ -206,6 +210,9 @@ module tb_cpu_cache;
             check(d_error === expect_error, "D error completion");
             check(d_resp_tag === expected_tag, "D preserved response tag");
             if (mask == 0 && !expect_error) check(d_data === expected, "D returned load word");
+            if (mask != 0 && !expect_error)
+                for (lane = 0; lane < 4; lane = lane + 1)
+                    if (mask[lane]) arch_memory[address[17:2]][lane*8 +: 8] = value[lane*8 +: 8];
             @(negedge clk);
         end
     endtask
@@ -220,14 +227,17 @@ module tb_cpu_cache;
             end
             @(negedge clk); d_inval = 0; d_flush = 0; d_writeback = 0;
             guard = 0;
-            while (!d_ack) begin @(negedge clk); guard = guard + 1; if (guard > 1000) fail("D maintenance timeout"); end
+            while (!d_ack) begin @(negedge clk); guard = guard + 1; if (guard > 20000) fail("D maintenance timeout"); end
             check(!d_error, "D clean maintenance response");
             @(negedge clk);
         end
     endtask
     integer n, before_count;
     initial begin
-        for (n = 0; n < 65536; n = n + 1) memory[n] = (n * 32'h971acb35) ^ 32'h52a8c319;
+        for (n = 0; n < 65536; n = n + 1) begin
+            memory[n] = (n * 32'h971acb35) ^ 32'h52a8c319;
+            arch_memory[n] = memory[n];
+        end
         repeat (4) @(negedge clk); rst_n = 1;
         i_read(32'h80000028, 0); before_count = i_reads;
         i_read(32'h80000028, 0); check(i_reads == before_count, "I second access must hit"); i_hits = i_hits + 1;
@@ -242,11 +252,15 @@ module tb_cpu_cache;
         d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count, "D successful store retains updated hit"); d_hits = d_hits + 1;
         before_count = d_reads;
         d_access(32'h800060ac, 4'b1111, 32'h98765432, 1, 0);
-        check(d_reads == before_count, "D write miss must not refill");
-        d_access(32'h800060ac, 0, 0, 1, 0); check(d_reads == before_count + 1, "D write miss must not allocate");
+        check(d_reads == before_count + 1, "D write miss allocates a line");
+        before_count = d_reads;
+        d_access(32'h800060ac, 0, 0, 1, 0); check(d_reads == before_count, "D allocated store hit avoids reread");
+        // Two clean ways are filled before a conflicting line forces the dirty victim out.
+        d_access(32'h800160ac, 0, 0, 1, 0);
+        d_access(32'h800260ac, 0, 0, 1, 0); check(memory[(32'h800060ac >> 2) & 16'hffff] === arch_memory[(32'h800060ac >> 2) & 16'hffff], "dirty victim is written back");
+        d_access(32'h800160ac, 4'b1111, 32'hdeadbeef, 1, 0);
         store_error = 1;
-        d_access(32'h80000048, 4'b1111, 32'hdeadbeef, 1, 1); store_error = 0; before_count = d_reads;
-        d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count + 1, "D failed store invalidates old hit");
+        d_access(32'h800360ac, 0, 0, 1, 1); store_error = 0;
         for (n = 0; n < 8; n = n + 1) begin
             d_error_beat = n;
             d_access(32'h80008000 + n*32, 0, 0, 1, 1); d_error_beat = -1; before_count = d_reads;
@@ -296,9 +310,10 @@ module tb_cpu_cache;
             begin d_access(32'h8001e014, 0, 0, 1, 0); d_access(32'h8001e034, 0, 0, 1, 0); end
         join
         check(simultaneous > 0, "joint I/D outstanding coverage");
-        check(i_hits > 0 && d_hits > 0 && d_writes == 3, "paired cache coverage");
+        check(i_hits > 0 && d_hits > 0 && d_writes >= 8, "paired cache coverage");
         check(!i_pending && !d_pending, "drain before reset");
         @(negedge clk); rst_n = 0; repeat (3) @(negedge clk); rst_n = 1;
+        d_maintenance(1);
         before_count = d_reads; d_access(32'h80000048, 0, 0, 1, 0);
         check(d_reads == before_count + 1, "reset clears D validity");
         before_count = i_reads; i_read(32'h80000028, 0);

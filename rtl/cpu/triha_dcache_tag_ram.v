@@ -32,11 +32,11 @@ module triha_dcache_tag_ram
     ,input           clk1_i
     ,input           rst1_i
     ,input  [  7:0]  addr1_i
-    ,input  [ 19:0]  data1_i
+    ,input  [ 20:0]  data1_i
     ,input           wr1_i
 
     // Outputs
-    ,output [ 19:0]  data0_o
+    ,output [ 20:0]  data0_o
 );
 
 
@@ -46,10 +46,10 @@ module triha_dcache_tag_ram
 // Mode: Read First; controller relookup covers tag writes
 //-----------------------------------------------------------------
 /* verilator lint_off MULTIDRIVEN */
-(* syn_ramstyle = "block_ram" *) reg [19:0]   ram [255:0] /*verilator public*/;
+(* syn_ramstyle = "block_ram" *) reg [20:0]   ram [255:0] /*verilator public*/;
 /* verilator lint_on MULTIDRIVEN */
 
-reg [19:0] ram_read0_q;
+reg [20:0] ram_read0_q;
 
 always @ (posedge clk1_i)
 begin

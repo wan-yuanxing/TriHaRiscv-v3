@@ -13,6 +13,21 @@ CPU_DDR_PROFILE_BRIDGE idle=25 collect=5 wpre=2 waddr=3 wdata=5 vpre=2 vaddr=8 v
 
 
 class ProfileTests(unittest.TestCase):
+    def test_writeback_classifies_write_allocation_and_coalesced_stores(self):
+        from ddr_profile import DC_STATES_WB
+        text = log().replace('refills=1 lower_writes=2',
+            'refills=1 lower_writes=0 writeback_words=0 uncached_lower_writes=0')
+        states = ' '.join(k+'='+str(100 if k=='idle' else 0) for k in DC_STATES_WB)
+        text = '\n'.join(('CPU_DDR_PROFILE_DC_STATES '+states if line.startswith('CPU_DDR_PROFILE_DC_STATES ') else line)
+            for line in text.splitlines())+'\nCPU_DDR_PROFILE_POLICY write_back=1\n'
+        row = parse_profile(text, 100)
+        self.assertEqual(row['dcache']['lower_writes'], 0)
+        self.assertEqual(row['write_policy'], 'write_back')
+        for bad in (text.replace('lower_writes=0', 'lower_writes=1', 1),
+                    text.replace('refills=1', 'refills=2')):
+            with self.assertRaises(ValueError):
+                parse_profile(bad, 100)
+
     def test_exact_window_and_distinct_overlapping_observations(self):
         row = parse_profile(log(), 100)
         self.assertEqual(row['cycles'], 100)
