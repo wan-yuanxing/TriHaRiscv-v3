@@ -32,6 +32,11 @@ def main():
         if not reviewed['timing_closed'] or reviewed['timing_status']!='PASS':
             raise ValueError('complete post-route timing admission is required')
         terminal=json.loads((route/'result.json').read_text(encoding='utf-8'))
+        coremark = terminal.get('firmware_profile') == 'ddr-coremark'
+        if coremark:
+            firmware = json.loads((Path(terminal['firmware_directory'])/'result.json').read_text(encoding='utf-8'))
+            if firmware['cpu_core_luts'] != reviewed['resources']['u_core']['lut']:
+                raise ValueError('UART CPU-only LUT denominator differs from the actual mapped image')
         pds=Path(next(k for k in terminal['external_hashes'] if Path(k).name=='pds_shell.exe'))
         record['input_hashes']={str(Path(__file__).resolve()):sha(__file__),
             str(ROOT/'scripts/cpu/review_ddr_board.py'):sha(ROOT/'scripts/cpu/review_ddr_board.py'),
@@ -74,7 +79,8 @@ def main():
         checked=physical(route)
         if checked!=reviewed or not all(Path(p).is_file() and sha(p)==h for p,h in record['input_hashes'].items()):
             raise ValueError('bitstream inputs changed')
-        output=ROOT/'build/soc/releases'/('cpu_ddr_board_'+sha(bit)[:12])
+        prefix = ('cpu_ddr_coremark_'+('on_' if terminal['cache_enable'] else 'off_')) if coremark else 'cpu_ddr_board_'
+        output=ROOT/'build/soc/releases'/(prefix+sha(bit)[:12])
         output.mkdir(parents=True,exist_ok=False)
         sources={p.name:p for p in [bit,mask,route/'rom.hex',route/'sram.hex',route/'firmware.elf',
             Path(terminal['firmware_directory'])/'firmware.map',
@@ -82,6 +88,10 @@ def main():
             route/'src/fpga/pg2l100h/constraints/cpu_ddr_board.fdc']}
         sources['route-result.json']=route/'result.json'
         sources['triha_cpu_ddr_board_top_pnr.adf']=frozen
+        if coremark:
+            sources['coremark.elf'] = route/'payload/firmware.elf'
+            sources['coremark.map'] = route/'payload/firmware.map'
+            sources['coremark.bin'] = route/'payload/firmware.bin'
         for name,source in sources.items():
             shutil.copyfile(source,output/name)
             if sha(output/name)!=sha(source):raise ValueError('package copy drift: '+name)
@@ -109,13 +119,40 @@ Any later board operation requires separate authorization; no Flash writes.
 The matching smsk is provided for verification. rtr.db is native PDS XML,
 including complete Slow/Fast skew groups; review.json binds it and the text report.
 '''
+        if coremark:
+            readme = '''# TriHa DDR CoreMark image
+
+PG2L100H/FBG676/-6, CPU100MHz, DDR125MHz. Actual multi-corner post-route
+setup/hold/recovery/removal/pulse width and complete Gray max-delay/skew passed.
+Six-stage single-issue RV32IM/CSR, BTB512/BHT512/RAS4, GShare off.
+'''
+            readme += 'Paired I/D Cache: '+('ON, 16KiB each, two ways, 32B lines.\n' if terminal['cache_enable'] else 'OFF, compile-time bypass.\n')
+            readme += '''
+SRAM starts the system, waits for DDR, copies and verifies the exact payload,
+executes FENCE.I and enters private DDR0x80000000. Code/data and the16KiB stack
+below0x80020000 are in private DDR. No other native DDR owner may run.
+The benchmark is CoreMark1.0, GCC15.2-O2/noLTO,5000iterations,2000bytes.
+SRAM0x16ff0 holds only the CPU-only LUT denominator, read after timing;
+this metadata does not change the off/on loaded DDR benchmark bytes.
+
+UART C24, COM12/115200/8N1/no flow control. KEY0 reruns the workload.
+Expected: CPU_DDR_COREMARK_PAYLOAD_PASS, standard CRCs, precise cycle/score
+and CoreMark/LUTs, CPU_COREMARK_BOARD_PASS. Raw board capture is required;
+this package's generation is not a physical score or official submission.
+No instruction-retirement CSR is implemented: do not claim measured board IPC.
+Not programmed by this packager. No Flash, shared SoC fabric or Video/NPU.
+'''
         (output/'README.md').write_text(readme,encoding='utf-8',newline='\n')
         files={p.name:sha(p) for p in output.iterdir() if p.is_file()}
-        manifest=dict(status='PASS',target='cpu_ddr_board',firmware_profile='ddr-diagnostic',
+        manifest=dict(status='PASS',target='cpu_ddr_board',firmware_profile='ddr-coremark' if coremark else 'ddr-diagnostic',
             route_directory=str(route),package_work_directory=str(work),timing_closed=True,
             programmed=False,board_validated=False,physical_ddr_training_validated=False,
             bitstream_sha256=sha(bit),verify_mask_sha256=sha(mask),files=files,
             cpu_only_resources=reviewed['resources']['u_core'])
+        if coremark:
+            manifest.update(cache_enable=terminal['cache_enable'],
+                payload_sha256=sha(route/'payload/firmware.bin'), iterations=5000,
+                cache_resources=reviewed['resources']['u_cache'])
         save(output/'manifest.json',manifest)
         record.update(status='PASS',runner_return_code=0,release_directory=str(output),
             release_manifest_sha256=sha(output/'manifest.json'))

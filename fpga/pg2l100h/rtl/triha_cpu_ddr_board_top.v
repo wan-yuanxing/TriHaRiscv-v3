@@ -7,6 +7,7 @@
 module triha_cpu_ddr_board_top #(
     parameter ROM_FILE = "rom.hex",
     parameter SRAM_FILE = "sram.hex",
+    parameter integer CACHE_ENABLE = 1,
     parameter integer STARTUP_CYCLES = `TRIHA_DDR_BOARD_STARTUP_CYCLES,
     parameter integer INIT_TIMEOUT_CYCLES = `TRIHA_DDR_BOARD_INIT_TIMEOUT_CYCLES,
     parameter integer CLOCK_TIMEOUT_CYCLES = `TRIHA_DDR_BOARD_CLOCK_TIMEOUT_CYCLES,
@@ -67,7 +68,7 @@ module triha_cpu_ddr_board_top #(
     wire [31:0] axi_wstrb;
     wire done_w, cpu_fault_w, protocol_fault_w;
     wire [7:0] exit_code_w, bridge_code_w;
-    triha_cpu_ddr #(.ROM_FILE(ROM_FILE), .SRAM_FILE(SRAM_FILE)) u_system (
+    triha_cpu_ddr #(.ROM_FILE(ROM_FILE), .SRAM_FILE(SRAM_FILE), .CACHE_ENABLE(CACHE_ENABLE)) u_system (
         .cpu_clk_i(cpu_clk), .ddr_clk_i(ddr_clk), .rst_ni(epoch_n), .external_irq_i(1'b0),
         .ddr_ready_i(native_ready), .ddr_fault_i(board_error || ip_init_fail || align_error),
         .cpu_ddr_fault_o(cpu_fault_w), .protocol_fault_o(protocol_fault_w), .bridge_fault_code_o(bridge_code_w),

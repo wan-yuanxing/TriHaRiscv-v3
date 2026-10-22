@@ -1,3 +1,5 @@
+最新DDR板测：独立诊断三次自检通过；带Cache的5000次CoreMark实际两次为84.374481/84.374478，0.843745/MHz，CPU6558LUT，CRC和至少10秒检查均通过，非官方提交。裁掉Cache的镜像虽通过100MHz却在板上DDR初始化失败，无有效分数；已切回成功的带Cache镜像。用户选择保留Cache硬件，以共享区不缓存属性补齐对照，需披露地址属性变化。原SRAM部署包10文件未变；未写Flash。证据docs/verification/cpu/id_cache_board_coremark_checkpoint.md及JSON。
+
 # TriHa CPU 状态
 
 更新：2026-10-22。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。

@@ -13,17 +13,23 @@ from run import sha, save
 PDS = Path('D:/pango/PDS_2022.2-SP6.4/bin')
 
 
+def image_top(manifest):
+    return 'triha_cpu_ddr_board_top' if manifest['target'] == 'cpu_ddr_board' else 'triha_cpu_board_top'
+
+
 def validate_package(directory):
     manifest = json.loads((directory / 'manifest.json').read_text(encoding='utf-8'))
-    if manifest.get('status') != 'PASS' or not manifest.get('timing_closed') or manifest.get('target') not in ('cpu_board', 'cpu_coremark'):
+    if manifest.get('status') != 'PASS' or not manifest.get('timing_closed') or manifest.get('target') not in ('cpu_board', 'cpu_coremark', 'cpu_ddr_board'):
         raise ValueError('need a passing 100MHz CPU board package')
-    required = {'triha_cpu_board_top.sbit', 'triha_cpu_board_top.smsk', 'review.json', 'result.json'}
+    top = image_top(manifest)
+    required = {top+'.sbit', top+'.smsk', 'review.json',
+                'route-result.json' if manifest['target'] == 'cpu_ddr_board' else 'result.json'}
     if not required.issubset(manifest['files']):
         raise ValueError('incomplete package')
     for name, digest in manifest['files'].items():
         if Path(name).name != name or sha(directory / name) != digest:
             raise ValueError('package file changed: ' + name)
-    if sha(directory / 'triha_cpu_board_top.sbit') != manifest['bitstream_sha256'] or sha(directory / 'triha_cpu_board_top.smsk') != manifest['verify_mask_sha256']:
+    if sha(directory / (top+'.sbit')) != manifest['bitstream_sha256'] or sha(directory / (top+'.smsk')) != manifest['verify_mask_sha256']:
         raise ValueError('bitstream/mask identity mismatch')
     return manifest
 
@@ -42,12 +48,22 @@ def main():
     args = parser.parse_args()
     package = args.package.resolve()
     manifest = validate_package(package)
-    from review_board import review
-    if not review(Path(manifest['route_directory']))['timing_closed']:
+    if manifest['target'] == 'cpu_ddr_board':
+        import sys
+        sys.path.insert(0, str(ROOT / 'scripts/cpu'))
+        from review_ddr_board import physical
+        reviewed = json.loads(json.dumps(physical(Path(manifest['route_directory']))))
+        if reviewed != json.loads((package / 'review.json').read_text(encoding='utf-8')):
+            raise ValueError('DDR package does not match complete independent physical review')
+    else:
+        from review_board import review
+        reviewed = review(Path(manifest['route_directory']))
+    if not reviewed['timing_closed']:
         raise ValueError('independent route review failed')
-    work = ROOT / 'build/soc' / ('board-coremark-program-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
+    prefix = 'board-ddr-program-' if manifest['target'] == 'cpu_ddr_board' else 'board-coremark-program-'
+    work = ROOT / 'build/soc' / (prefix + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     work.mkdir()
-    bit = package / 'triha_cpu_board_top.sbit'
+    bit = package / (image_top(manifest)+'.sbit')
     result = dict(status='RUNNING', operation='volatile_cpu_program_verify', directory=str(work),
                   program_script_sha256=sha(Path(__file__)),
                   package=str(package), manifest_sha256=sha(package / 'manifest.json'),

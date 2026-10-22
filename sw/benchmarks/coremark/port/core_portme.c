@@ -121,10 +121,19 @@ void portable_fini(core_portable *port)
               (ee_u32)(ticks >> 32), (ee_u32)ticks);
     print_fixed("CoreMark       : ", (uint64_t)ITERATIONS * 100000000u * 1000000u / ticks);
     print_fixed("CoreMark/MHz   : ", (uint64_t)ITERATIONS * 1000000u * 1000000u / ticks);
-#if TRIHA_CPU_CORE_LUTS > 0
-    ee_printf("CPU core LUTs  : %lu\n", (ee_u32)TRIHA_CPU_CORE_LUTS);
-    print_fixed("CoreMark/LUTs  : ",
-                ((uint64_t)ITERATIONS * 100000000u * 1000000u / ticks) / TRIHA_CPU_CORE_LUTS);
+#if TRIHA_CPU_CORE_LUTS > 0 || TRIHA_COREMARK_DDR_BOARD
+#if TRIHA_COREMARK_DDR_BOARD
+    /* Loader metadata is outside code/data/stack and outside timed accesses.
+     * Keeping it out of this payload preserves identical off/on program bytes. */
+    ee_u32 cpu_luts = *(volatile ee_u32 *)0x00016ff0u;
+#else
+    ee_u32 cpu_luts = TRIHA_CPU_CORE_LUTS;
+#endif
+    if (cpu_luts != 0) {
+        ee_printf("CPU core LUTs  : %lu\n", cpu_luts);
+        print_fixed("CoreMark/LUTs  : ",
+                    ((uint64_t)ITERATIONS * 100000000u * 1000000u / ticks) / cpu_luts);
+    }
 #endif
     if (short_run || ticks < 1000000000u) {
 #if TRIHA_COREMARK_PREFLIGHT

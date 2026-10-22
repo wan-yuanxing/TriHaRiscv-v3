@@ -294,10 +294,13 @@ def physical(directory):
     resources = {n:hierarchy(snr,n) for n in ['triha_cpu_ddr_board_top','I_ips_ddr_top','u_supervisor','u_core','u_cache','u_cdc','u_bridge','u_memory']}
     compile_log = (directory/'compile/run.log').read_text(encoding='utf-8')
     elaborated = {}
-    expected = {'u_system/u_soc':{'CACHE_ENABLE':1}, 'u_system/u_soc/u_core':{'DUAL_ISSUE':0},
+    cache_enable = row.get('cache_enable', 1)
+    if cache_enable not in (0, 1):
+        raise ValueError('invalid bound Cache enable')
+    expected = {'u_system/u_soc':{'CACHE_ENABLE':cache_enable}, 'u_system/u_soc/u_core':{'DUAL_ISSUE':0},
         'u_system/u_soc/u_core/u_cpu':{'SUPPORT_DUAL_ISSUE':0, 'NUM_BTB_ENTRIES':512,
             'NUM_BHT_ENTRIES':512,'NUM_RAS_ENTRIES':4,'GSHARE_ENABLE':0,'EARLY_MUL_BYPASS':1},
-        'u_system/u_soc/u_router/u_cache':{'ICACHE_ENABLE':1,'DCACHE_ENABLE':1}}
+        'u_system/u_soc/u_router/u_cache':{'ICACHE_ENABLE':cache_enable,'DCACHE_ENABLE':cache_enable}}
     for channel, width in [('aw',49),('w',145),('b',6),('ar',49),('r',135)]:
         expected['u_system/u_cdc/u_'+channel+'_fifo'] = {'DATA_WIDTH':width,'ADDR_WIDTH':2}
     for scope, values in expected.items():

@@ -49,6 +49,9 @@ def project():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--firmware-dir', type=Path, required=True)
+    parser.add_argument('--coremark-preflight', type=Path,
+        help='One-iteration native DDR preflight matching a full 5000-iteration build')
+    parser.add_argument('--map-only', action='store_true', help='Area metadata only; never timing admission')
     args = parser.parse_args()
     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     work = ROOT/'build/cpu'/('ddr-board-route-'+stamp)
@@ -101,19 +104,29 @@ def main():
         heartbeat('validation')
         generate(check=True)
         firmware_dir = args.firmware_dir.resolve()
-        firmware = verify_run(firmware_dir)
-        if (firmware['test'] != 'boot' or firmware['fault'] != 'none' or not firmware['pinned_unchanged'] or
-                '-O2' not in firmware['compiler_flags'] or '-flto' in firmware['compiler_flags']):
-            raise ValueError('need passing unchanged O2 two-boot board simulation')
-        sim = (firmware_dir/'simulation.log').read_text(encoding='utf-8')
-        if ('CPU_DDR_BOARD_PASS boots=2 tested_private=8192 tested_shared=8192' not in sim or
-                'Errors: 0, Warnings: 0' not in sim):
-            raise ValueError('missing complete clean two-boot test')
+        if args.coremark_preflight:
+            from ddr_coremark_review import pair
+            firmware, short = pair(firmware_dir, args.coremark_preflight)
+            row.update(firmware_profile='ddr-coremark', cache_enable=firmware['cache_enable'],
+                coremark_preflight=str(args.coremark_preflight.resolve()))
+            for name in ['result.json', *short['output_hashes']]:
+                row['evidence_hashes'][str(args.coremark_preflight.resolve()/name)] = sha(args.coremark_preflight.resolve()/name)
+        else:
+            firmware = verify_run(firmware_dir)
+            if (firmware['test'] != 'boot' or firmware['fault'] != 'none' or not firmware['pinned_unchanged'] or
+                    '-O2' not in firmware['compiler_flags'] or '-flto' in firmware['compiler_flags']):
+                raise ValueError('need passing unchanged O2 two-boot board simulation')
+            sim = (firmware_dir/'simulation.log').read_text(encoding='utf-8')
+            if ('CPU_DDR_BOARD_PASS boots=2 tested_private=8192 tested_shared=8192' not in sim or
+                    'Errors: 0, Warnings: 0' not in sim):
+                raise ValueError('missing complete clean two-boot test')
         row['firmware_directory'] = str(firmware_dir)
         for name in ['result.json', *firmware['output_hashes']]:
             row['evidence_hashes'][str(firmware_dir/name)] = sha(firmware_dir/name)
         for name in ['rom.hex', 'sram.hex', 'firmware.elf']:
             shutil.copyfile(firmware_dir/name, work/name)
+        if args.coremark_preflight:
+            shutil.copytree(firmware_dir/'payload', work/'payload')
         row['binding'] = materialize(work)
         row['external_hashes'][row['binding']['git']] = row['binding']['git_sha256']
         recipe_name, recipe, base, sources = project()
@@ -131,6 +144,8 @@ def main():
             'scripts/cpu/gen_ddr_board.py', 'scripts/cpu/review_cache_soc.py', 'scripts/cpu/compare_cache_runs.py',
             'scripts/soc/board_pll.py', 'scripts/soc/gen_board.py', 'scripts/soc/run.py', 'scripts/soc/gen_config.py',
             'scripts/video/gen_ddr.py', 'scripts/video/common.py', 'scripts/video/prepare_reference.py']
+        if args.coremark_preflight:
+            names += ['scripts/cpu/ddr_coremark_review.py', 'scripts/cpu/ddr_coremark_firmware.py']
         for name in sorted(set(names)):
             path = Path(name)
             if path.is_absolute() or '..' in path.parts or ':' in name:
@@ -174,13 +189,17 @@ def main():
         lines += ['add_design '+tcl(p) for p in hardware]
         lines += ['add_constraint '+tcl(work/'src'/n) for n in recipe['constraints']]
         includes = [work/'src/rtl/soc/include', work/'src/rtl/cpu/vendor/src/core']
-        lines += [f'compile -system_verilog -top_module {top} -include_path '+'{'+ ' '.join(tcl(p) for p in includes)+'}',
+        parameters = (' -defined_parameters {CACHE_ENABLE '+str(row['cache_enable'])+'}') if args.coremark_preflight else ''
+        lines += [f'compile -system_verilog -top_module {top} -include_path '+'{'+ ' '.join(tcl(p) for p in includes)+'}'+parameters,
             'synthesize -ads -write_verilog TRUE', 'dev_map -detail',
             f'pnr -action_timeout {config["pnr_action_minutes"]} -optimize_multi_corner_timing -fix_hold_violation '
             '-fix_hold_violation_iterations 5 -gplace_seed 1 -dump_router_congestion_plot TRUE '
             '-slack_prior_in_global_router TRUE -refineplacement_iteration 40 '
             '-logic_optimize_lut6d_combing_strategy 3 -mode performance -plc_decongestion 1',
             'report_timing -max_path 64 -report_max_skew -report_exception TRUE']
+        if args.map_only:
+            lines = lines[:-2]
+            row['area_only'] = True
         script = work/'build.tcl'
         script.write_text('\n'.join(lines)+'\n', encoding='utf-8', newline='\n')
         row['frozen_hardware_hashes']['build.tcl'] = sha(script)
@@ -189,11 +208,15 @@ def main():
         output = native(pds, ['-file', script, '-work_dir', work, '-project_name', 'cpu_ddr_board'],
             'pds', config['outer_seconds'])
         stages = {}
-        for stage in ['compile', 'synthesize', 'dev_map', 'pnr', 'report_timing']:
+        for stage in (['compile', 'synthesize', 'dev_map'] if args.map_only else ['compile', 'synthesize', 'dev_map', 'pnr', 'report_timing']):
             stages[stage] = bool(re.search(r'(?m)^Executing : '+stage+r'(?: [^\r\n]*)? successfully\.\s*$', output))
         row['stages'] = stages
         if not all(stages.values()) or re.search(r'(?im)^\s*(?:E:|ERROR:|FATAL:)', output):
             raise RuntimeError('native PDS errors or missing actual stage success')
+        if args.map_only:
+            row.update(flow_status='MAPPED', status='MAPPED', runner_return_code=0,
+                review_required='Area-only native map; no post-route timing or board admission')
+            return 0
         report = work/'report_timing'/(top+'.rtr')
         if not report.is_file():
             raise ValueError('missing final route timing report')
