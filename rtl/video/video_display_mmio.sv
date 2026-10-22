@@ -30,6 +30,7 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
     localparam [1:0] IDLE=0,CHECK=1,OFFER=2;
     reg [1:0] phase;
     reg [31:0] shadow[0:159];wire [5119:0] record_data;
+    reg [159:0] shadow_select;
     generate for(genvar s=0;s<160;s=s+1)begin:record_words
         assign record_data[s*32+:32]=shadow[s];
     end endgenerate
@@ -80,7 +81,8 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
         do_shadow=0;do_mode=0;do_seq=0;do_mask=0;do_submit=0;do_ack=0;
         if(!valid_address(awaddr))write_response=3;
         else if((^{wdata,wstrb})===1'bx)write_response=2;
-        else if(write_offset>=`VDISP_SHADOW_OFFSET&&write_offset<`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES)begin
+        else if({32'd0,awaddr}>=(64'd0+`VDISP_BASE+`VDISP_SHADOW_OFFSET)&&
+                {32'd0,awaddr}<(64'd0+`VDISP_BASE+`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES))begin
             if(wstrb!=0)begin
                 if(locked)write_response=2;
                 else do_shadow=1;
@@ -177,14 +179,12 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
             default:read_response=3;
         endcase
     end
-    integer k;
     always @(posedge clk_i or negedge rst_ni)begin
         if(!rst_ni)begin
             aw_full<=0;w_full<=0;awaddr<=0;wdata<=0;wstrb<=0;
             s_axi_bvalid_o<=0;s_axi_bresp_o<=0;s_axi_rvalid_o<=0;s_axi_rresp_o<=0;s_axi_rdata_o<=0;
             request_mode<=0;request_seq<=0;mode_only<=0;phase<=IDLE;guard_start<=0;
             irq_mask<=0;reject_pending<=0;reject_code<=0;reject_seq<=0;guard_rejected<=0;external_error<=0;
-            for(k=0;k<160;k=k+1)shadow[k]<=0;
         end else begin
             if(EXTERNAL_HEALTH!=0&&external_fault_i!==1'b0)external_error<=1;
             guard_start<=0;
@@ -197,11 +197,6 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
             if(execute_write)begin
                 aw_full<=0;w_full<=0;s_axi_bvalid_o<=1;s_axi_bresp_o<=write_response;
                 if(write_response==0)begin
-                    // Per-byte enables avoid a 160-word read mux on the write path.
-                    if(do_shadow)begin
-                        for(k=0;k<4;k=k+1)if(wstrb[k])
-                            shadow[(write_offset-`VDISP_SHADOW_OFFSET)>>2][k*8+:8]<=wdata[k*8+:8];
-                    end
                     if(do_mode)request_mode<=merged;
                     if(do_seq)request_seq<=merged;
                     if(do_mask)irq_mask<=merged[3:0];
@@ -219,5 +214,22 @@ module video_display_mmio #(parameter integer EXTERNAL_HEALTH=0)(
             end
         end
     end
+    // Decode accepted AW in parallel; each word has a fixed byte-write port.
+    generate for(genvar word=0;word<160;word=word+1)begin:shadow_writes
+        localparam [63:0] WORD_ADDRESS=64'd0+`VDISP_BASE+`VDISP_SHADOW_OFFSET+4*word;
+        integer byte_lane;
+        always @(posedge clk_i or negedge rst_ni)begin
+            if(!rst_ni)begin shadow_select[word]<=0;shadow[word]<=0;end
+            else begin
+                if(s_axi_awvalid_i&&s_axi_awready_o)
+                    shadow_select[word]<=s_axi_awaddr_i==WORD_ADDRESS;
+                // do_shadow is asserted only for a checked, unlocked OKAY write.
+                if(execute_write&&do_shadow&&shadow_select[word])begin
+                    for(byte_lane=0;byte_lane<4;byte_lane=byte_lane+1)
+                        if(wstrb[byte_lane])shadow[word][8*byte_lane+:8]<=wdata[8*byte_lane+:8];
+                end
+            end
+        end
+    end endgenerate
 endmodule
 `default_nettype wire

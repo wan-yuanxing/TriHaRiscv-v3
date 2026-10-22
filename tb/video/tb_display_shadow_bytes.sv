@@ -41,7 +41,7 @@ module tb_display_shadow_bytes;
             repeat(delay_cycles)@(negedge clk_i);
             @(negedge clk_i);awaddr=address;awvalid=1;
             @(posedge clk_i);while(!awready)@(posedge clk_i);
-            @(negedge clk_i);awvalid=0;
+            @(negedge clk_i);awvalid=0;awaddr=32'hxxxxxxxx;
         end
     endtask
     task automatic send_w(input [31:0] value,input [3:0] strobes,input integer delay_cycles);
@@ -49,7 +49,7 @@ module tb_display_shadow_bytes;
             repeat(delay_cycles)@(negedge clk_i);
             @(negedge clk_i);wdata=value;wstrb=strobes;wvalid=1;
             @(posedge clk_i);while(!wready)@(posedge clk_i);
-            @(negedge clk_i);wvalid=0;
+            @(negedge clk_i);wvalid=0;wdata=32'hxxxxxxxx;wstrb=4'bxxxx;
         end
     endtask
     task automatic write_word(input [31:0] address,value,input [3:0] strobes,

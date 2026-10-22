@@ -459,3 +459,10 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 同扫描边界新版综合35254LUT/44517FF/69.5DRM，比旧版少67LUT/1FF。相同seed4/performance及估计连线模型布局core−2.953/pixel−1.184ns，旧版−2.841/−1.393ns；最差路径由15降13级但core未改善，地址计算和高扇出写控制仍需处理。普通report_timing读placement DB的零连线正值单列，不能签核。
 - 初次route中断诚实留存；旧冻结版和字节使能版分别独立布线，最终报告均未取得。旧helper额外绑定的当前验证器变化有旧副本/哈希审计，不能将其expected hash拒绝改为helper成功。新wrapper/FDC/manifest与冻结版完全相同。125MHz系统时序仍未闭合。
 - [验证记录](../verification/video/record_probe.md)、[机器证据](../verification/video/evidence/record_probe.json)；CPU交付不阻塞本批。95项既有状态中94项非STATUS条目未变，台账只追加并按index projection仅提交本段，保留CPU/NPU/技术报告修改。无CPU/NPU迁入、JTAG/COM/Flash或板测；后续先取得真实route，再按实际关键路径继续收敛。
+## 2026-10-22 Video F4c5d shadow AW 并行译码
+
+- 在 F4c5c 字节使能基础上，AW 握手时锁存160位绝对字地址选择，每字固定四字节写入；AW/W仍独立缓存，原地址/四态/locked/WSTRB检查、B/R保持、健康和owner、ABI及响应拍数不变，无公共配置/FDC变化。
+- 固定 `2c9c67f` leaf 的53端口、23输出逐周期四态 miter 已覆盖 reset；普通/-O 各11个正常场景和3个有效编译故障变体通过。故障变体包含错误地址、取消BVALID、reset-only输出差异；inout遗漏也会拒绝。完整默认DUT idle、6组health、3组三模式显示及2723写/2883读通过。
+- 完整采显综合：32881 LUT、44678 FF、69.5 DRM；相对F4c5c减少2373 LUT、增加161 FF。core综合setup−1.306 ns仍为负。相同seed/约束布局估计 core setup−2.135 ns、pixel+0.216 ns，较F4c5c core改善0.818 ns；core hold−0.027 ns、recovery−0.954 ns、fast setup−1.306 ns仍未闭合。
+- F4c5c原 merged shadow 版本的真实续跑因Route-4022拥塞、Route-0008无法布线退出，未生成最终STA；不外推到其他版本。F4c5c字节使能版和本轮AW译码版分别保留冻结DB/route身份。新版本完整route仍在运行，不能以布局估计替代签核。
+- [验证记录](../verification/video/shadow_address.md)、[机器证据](../verification/video/evidence/shadow_address.json)。CPU/NPU交付不阻塞本批；无JTAG/COM/Flash/下载/板测。下一步等待新route最终报告，若仍失败则按扫描输出、reset network和内部guard路径分别处理。

@@ -1,0 +1,680 @@
+{
+  "schema_version": 1,
+  "phase": "F4c5d",
+  "status": "functional_and_synthesis_verified_placement_measured_route_open",
+  "observed_at_utc": "2026-10-22T12:43:21.598028+00:00",
+  "baseline_commit": "2c9c67f1797470fe038ec3de9b0cbcb2986b7daa",
+  "timing_closed": false,
+  "physical_route_verified": false,
+  "board_actions": false,
+  "cpu_npu_imported": false,
+  "abi_changed": false,
+  "added_response_cycles": 0,
+  "fdc_changed": false,
+  "implementation": "Accepted AW locks 160 exact absolute word selects; static per-word byte stores; original error/lock checks retained.",
+  "miter_scope": "All 23 outputs, four-state comparison 1ns after each core rising edge including reset; selected traffic simulation, not formal proof.",
+  "miter_runs": [
+    {
+      "python_optimized": false,
+      "result": {
+        "path": "build/video/shadow_decode/20261022T120644_283321Z/result.json",
+        "sha256": "3d404a8fb8b91c644a7b42b8c926d535b322ec1f204f7e8593b78a5a876caffc"
+      },
+      "cases": [
+        {
+          "name": "mmio_0",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_1",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_2",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_3",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_4",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_5",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_6",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_7",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_8",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_9",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "bytes",
+          "exit_code": 0,
+          "status": "pass"
+        }
+      ],
+      "mutations": [
+        {
+          "name": "wrong_aw",
+          "exit_code": 1,
+          "status": "rejected"
+        },
+        {
+          "name": "missing_bvalid",
+          "exit_code": 1,
+          "status": "rejected"
+        },
+        {
+          "name": "reset_fault_code",
+          "exit_code": 1,
+          "status": "rejected"
+        }
+      ],
+      "compared_outputs": [
+        "s_axi_awready_o",
+        "s_axi_wready_o",
+        "s_axi_bresp_o",
+        "s_axi_bvalid_o",
+        "s_axi_arready_o",
+        "s_axi_rdata_o",
+        "s_axi_rresp_o",
+        "s_axi_rvalid_o",
+        "cmd_valid_o",
+        "cmd_mode_only_o",
+        "cmd_slot_o",
+        "cmd_mode_o",
+        "cmd_frame_o",
+        "cmd_generation_o",
+        "cmd_base_o",
+        "cmd_stride_o",
+        "cmd_seq_o",
+        "cmd_data_o",
+        "feedback_ready_o",
+        "retire_ready_o",
+        "irq_o",
+        "fault_o",
+        "fault_code_o"
+      ],
+      "reference_commit": "2c9c67f1797470fe038ec3de9b0cbcb2986b7daa",
+      "reference_sha256": "c2b19d17561dba583734edafb88191ae41b9211c8ca9d10aa801321054885532",
+      "native_driver": {
+        "path": "build/video/display_driver/20261022T120644_626044Z/result.json",
+        "sha256": "76f9c5201c6576cd966e48935e818a2452a352e5208ab42e5c02c53671483c7c"
+      },
+      "copied_trace": {
+        "path": "build/video/shadow_decode/20261022T120644_283321Z/driver_writes.hex",
+        "sha256": "0abdd1d112e2d8d40238ac2b26d539d99c057d9cbcbd4ec43f4daae0e522446c"
+      }
+    },
+    {
+      "python_optimized": true,
+      "result": {
+        "path": "build/video/shadow_decode/20261022T120734_883797Z/result.json",
+        "sha256": "14290592971fae8eb2507c542f063740a638ee758fa533f9f2c7f2fa63e7edd1"
+      },
+      "cases": [
+        {
+          "name": "mmio_0",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_1",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_2",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_3",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_4",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_5",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_6",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_7",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_8",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "mmio_9",
+          "exit_code": 0,
+          "status": "pass"
+        },
+        {
+          "name": "bytes",
+          "exit_code": 0,
+          "status": "pass"
+        }
+      ],
+      "mutations": [
+        {
+          "name": "wrong_aw",
+          "exit_code": 1,
+          "status": "rejected"
+        },
+        {
+          "name": "missing_bvalid",
+          "exit_code": 1,
+          "status": "rejected"
+        },
+        {
+          "name": "reset_fault_code",
+          "exit_code": 1,
+          "status": "rejected"
+        }
+      ],
+      "compared_outputs": [
+        "s_axi_awready_o",
+        "s_axi_wready_o",
+        "s_axi_bresp_o",
+        "s_axi_bvalid_o",
+        "s_axi_arready_o",
+        "s_axi_rdata_o",
+        "s_axi_rresp_o",
+        "s_axi_rvalid_o",
+        "cmd_valid_o",
+        "cmd_mode_only_o",
+        "cmd_slot_o",
+        "cmd_mode_o",
+        "cmd_frame_o",
+        "cmd_generation_o",
+        "cmd_base_o",
+        "cmd_stride_o",
+        "cmd_seq_o",
+        "cmd_data_o",
+        "feedback_ready_o",
+        "retire_ready_o",
+        "irq_o",
+        "fault_o",
+        "fault_code_o"
+      ],
+      "reference_commit": "2c9c67f1797470fe038ec3de9b0cbcb2986b7daa",
+      "reference_sha256": "c2b19d17561dba583734edafb88191ae41b9211c8ca9d10aa801321054885532",
+      "native_driver": {
+        "path": "build/video/display_driver/20261022T120735_261970Z/result.json",
+        "sha256": "f0515da2d910a24453195813409986d1a16942dad36ff45f3e9ea03e5dd21bab"
+      },
+      "copied_trace": {
+        "path": "build/video/shadow_decode/20261022T120734_883797Z/driver_writes.hex",
+        "sha256": "0abdd1d112e2d8d40238ac2b26d539d99c057d9cbcbd4ec43f4daae0e522446c"
+      }
+    }
+  ],
+  "unit_tests": [
+    {
+      "path": "build/video/shadow_decode_delivery/miter_green.log",
+      "sha256": "a4cdf8ffa595c4305c2be551d6e49cef57a40a9ac4e6141e557ae35e9b47506e",
+      "tests": 3,
+      "python_optimized": false
+    },
+    {
+      "path": "build/video/shadow_decode_delivery/miter_green_optimized.log",
+      "sha256": "4101d124ea3fb990717854b800a3d4732ff0cfafdb10cd368773cb0e56656b29",
+      "tests": 3,
+      "python_optimized": true
+    }
+  ],
+  "red_gate": {
+    "path": "build/video/shadow_decode_delivery/miter_red.log",
+    "sha256": "4d74eff5514f9b7c226b486d5f1000e1fccc27c493acebfb559b4a3559c3c1ab"
+  },
+  "record_mmio": {
+    "result": {
+      "path": "build/video/record_mmio/20261022T115010_741309Z/result.json",
+      "sha256": "046d151aaab120a209d7f718a2f3b1a574478f0a563ad8eaea15a46de7999cf2"
+    },
+    "health_cases": 6,
+    "display_cases": 3
+  },
+  "default_probe_smoke": {
+    "result": {
+      "path": "build/video/record_probe_sim/20261022T120143_971124Z/result.json",
+      "sha256": "15a726bd377d621205bd97c03703df0fff544224a3603f7e119bb417fe616b59"
+    },
+    "cases": [
+      {
+        "name": "boundary",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "wrong_input_bit",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "wrong_capture_priority",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "swapped_scalar_outputs",
+        "status": "rejected",
+        "exit_code": 1
+      },
+      {
+        "name": "real_default_dut_idle",
+        "status": "pass",
+        "exit_code": 0
+      },
+      {
+        "name": "shadow_byte_strobes",
+        "status": "pass",
+        "exit_code": 0,
+        "writes": 2723,
+        "reads": 2883
+      }
+    ]
+  },
+  "synthesis": {
+    "result": {
+      "path": "build/video/pds/20261022T115009_858784Z/result.json",
+      "sha256": "e8db527a9d3dcc77e34628dc778954b25e78c443da8d19dfd027e5fec5b8bba2"
+    },
+    "report": {
+      "path": "build/video/pds/20261022T115009_858784Z/synthesize/video_record_probe.snr",
+      "sha256": "ab5a2a33a99c122c7aca6f776df8a4075101937a8d349f4e1434b64a4424f8ee"
+    },
+    "resources": {
+      "lut": 32881.0,
+      "registers": 44678.0,
+      "drm": 69.5
+    },
+    "delta_from_byte_enable": {
+      "lut": -2373,
+      "registers": 161,
+      "drm": 0
+    },
+    "setup_slow": [
+      {
+        "launch_clock": "core_clk",
+        "capture_clock": "core_clk",
+        "wns_ns": -1.306,
+        "tns_ns": -806.058,
+        "failing_endpoints": 2195,
+        "endpoints": 67395
+      },
+      {
+        "launch_clock": "pixel_clk",
+        "capture_clock": "core_clk",
+        "wns_ns": 4.934,
+        "tns_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 207
+      },
+      {
+        "launch_clock": "pixel_clk",
+        "capture_clock": "pixel_clk",
+        "wns_ns": 11.103,
+        "tns_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 21205
+      },
+      {
+        "launch_clock": "core_clk",
+        "capture_clock": "pixel_clk",
+        "wns_ns": 5.047,
+        "tns_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4177
+      }
+    ],
+    "qualification": "Synthesis estimate, not physical STA; core setup remains negative."
+  },
+  "placement": {
+    "stage": "placement_only",
+    "interconnect_model": "report_place_timing estimated interconnect",
+    "report": {
+      "path": "build/video/shadow_static_place/20261022T115440_021751Z/place_route/video_record_probe.rtr",
+      "sha256": "16670d0fae689f9f9122b1d73933913419f3e8a854ffa93fa380fc9194464910"
+    },
+    "summaries": {
+      "setup": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": -2.135,
+            "tns_ns": -5409.329,
+            "failing_endpoints": 12465,
+            "endpoints": 83786
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 1.626,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.216,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21364
+          },
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.876,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 4177
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": -1.306,
+            "tns_ns": -692.073,
+            "failing_endpoints": 2822,
+            "endpoints": 83786
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 1.851,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 1.494,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21364
+          },
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.982,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 4177
+          }
+        ]
+      },
+      "hold": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": -0.027,
+            "tns_ns": -0.036,
+            "failing_endpoints": 2,
+            "endpoints": 83786
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.178,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21364
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 0.007,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 83786
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.14,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21364
+          }
+        ]
+      },
+      "recovery": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": -0.954,
+            "tns_ns": -1.491,
+            "failing_endpoints": 2,
+            "endpoints": 26194
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 17.938,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9938
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": -0.724,
+            "tns_ns": -0.999,
+            "failing_endpoints": 2,
+            "endpoints": 26194
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 18.051,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9938
+          }
+        ]
+      },
+      "removal": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 0.351,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26194
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.364,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9938
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 0.506,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26194
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.519,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9938
+          }
+        ]
+      },
+      "pulse_width": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 3.04,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 29317
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 11.54,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 10969
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "wns_ns": 3.345,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 29317
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 11.845,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 10969
+          }
+        ]
+      }
+    },
+    "first_path": {
+      "startpoint": "core_output_q[0]/opit_0_inv_L6Q/CLK",
+      "endpoint": "core_scan_o (port)",
+      "group": "core_clk",
+      "type": "max (slow corner)",
+      "logic_levels": 2
+    },
+    "timing_closed": false,
+    "limited_reported_internal_core_paths": [
+      {
+        "startpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[3]/opit_0_inv_L6QL5Q/CLK",
+        "endpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[1]/opit_0_inv_L6QL5Q/CE",
+        "slack_ns": -1.551
+      },
+      {
+        "startpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[3]/opit_0_inv_L6QL5Q/CLK",
+        "endpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[3]/opit_0_inv_L6QL5Q/CE",
+        "slack_ns": -1.551
+      },
+      {
+        "startpoint": "u_pipeline/u_display/u_mmio/shadow[33][0]/opit_0_inv/CLK",
+        "endpoint": "u_pipeline/u_display/u_mmio/u_owner/slot_state[1][2]/opit_0_inv_L6Q/I5",
+        "slack_ns": -1.51
+      }
+    ]
+  },
+  "placement_result": {
+    "path": "build/video/shadow_static_place/20261022T115440_021751Z/result.json",
+    "sha256": "09ad4b90b1782245d1e39d53d08d4d4f1881a9f36b502ff74bb6d23dbfbfdd00"
+  },
+  "estimated_interconnect_result": {
+    "path": "build/video/shadow_static_estimate/20261022T120421_846095Z/result.json",
+    "sha256": "36211c7c6ba38fafc3a2b5a34b5d36e46c4c08255ca0f9876dfab4618d9060f7"
+  },
+  "zero_data_net_report": {
+    "path": "build/video/shadow_static_place/20261022T115440_021751Z/report_timing/video_record_probe.rtr",
+    "sha256": "0e17020e23540ed9f632e8bc663a108874aaf41bdf8703ece211eca04d11bcd0",
+    "qualification": "Direct report_timing on plc DB uses zero data-net delays; never routed/estimated-interconnect closure."
+  },
+  "old_merged_route_failure": {
+    "path": "build/video/shadow_decode_delivery/old_route_failure.json",
+    "sha256": "d9a9eb993f89f525a0db46eed738b33313be5dd74d747c8d93c8eacd1c462037"
+  },
+  "byte_enable_route": {
+    "status_at_observation": "running",
+    "directory": "build/video/record_probe_optimized_route/20261022T113029_324117Z",
+    "metadata_snapshot": {
+      "path": "build/video/shadow_decode_delivery/byte_route_observation.json",
+      "sha256": "3b48e27892c8b3244940deddfddc8d2615891d1bf1e464d590056fab9277a89c"
+    },
+    "locator": "build/video/record_probe_delivery/latest_optimized_route.json"
+  },
+  "static_aw_route": {
+    "status_at_observation": "running",
+    "directory": "build/video/shadow_static_route/20261022T121238_111984Z",
+    "metadata_snapshot": {
+      "path": "build/video/shadow_decode_delivery/static_route_observation.json",
+      "sha256": "84a4ffbb30e40240e5a458c7a478a71ad7ccf625a80b6d46491aba0072c139ca"
+    },
+    "locator": "build/video/shadow_decode_delivery/latest_static_route.json"
+  },
+  "review": {
+    "path": "build/video/shadow_decode_review/REVIEW.md",
+    "sha256": "6a4e8191ca9633eea3faeef420896708cd6233e6fa9ef70e3e853dc0f606ac47"
+  },
+  "protected_existing_entries": 95,
+  "protected_excluding_status_unchanged": 94,
+  "source_hashes": {
+    "rtl/video/video_display_mmio.sv": "860a9b9bd46bce3bd2218ab02bff0533401b123cb7093ca54e548ebb59ef1dd0",
+    "tb/video/tb_display_shadow_bytes.sv": "d7559811d8486b7f88deafbbff8b4c8e0d9bf408993b892ce75d2a4d9ca492fe",
+    "scripts/video/test_shadow_decode.py": "e578f2784e28816e467b7ab38d2d48c79a32d1ade66dd26c3a9be739c94f55f8",
+    "tb/video/test_shadow_miter.py": "614958a9f305da79dfc9929f925223e6ed497a232adb42069758ac5ada491100"
+  },
+  "open": [
+    "No final routed STA for current static AW-decode version",
+    "Original merged-write route failed due to congestion; byte-enable version has its own run",
+    "System CPU/fabric/physical DDR/CDC and board/continuous HDMI/real model/frame rate remain separate"
+  ]
+}

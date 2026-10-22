@@ -86,7 +86,9 @@
 
 原 mapped/placed DB 以独立隐藏进程续跑详细布线，定位
 `build/video/record_probe_delivery/latest_resume.json`。它使用旧版冻结 RTL，
-即使最终测得报告，也不能签核新字节使能版。
+即使最终测得报告，也不能签核新字节使能版。该 merged shadow 版本随后真实
+结束并报 Route-4022 拥塞/Route-0008 无法布线，没有最终 STA；这个结果只
+代表该冻结布局和策略，不外推到其他版本。
 
 续跑 helper 额外绑定了当前生成器；审查期间只修改生成器的拒绝逻辑，三个
 物理生成物完全不变。旧生成器副本、前后哈希、全部 47 项冻结输入及独立审计
@@ -96,7 +98,8 @@
 字节使能版的 frozen mapped/placed DB 已独立启动完整布线，定位
 `build/video/record_probe_delivery/latest_optimized_route.json`。初次启动因 helper
 误用 routed DB 后缀而主动中止，记录为 interrupted；核对本版 PDS 实际使用
-`_pnr.adf` 后重新启动。没有改写 DB、约束或产品 RTL。两版最终报告均仍待取得。
+`_pnr.adf` 后重新启动。没有改写 DB、约束或产品 RTL。新 AW 并行译码版的
+布局和 route 状态另记在 `shadow_address.md`；不能把任何布局估计当作最终签核。
 
 新版布局脚本只使用新版综合的冻结源。探索 PDS post-synth 导入、设备不支持
 的 top_module 选项和同脚本显式 DB 报告的失败均保留；最终使用完整原生流程
