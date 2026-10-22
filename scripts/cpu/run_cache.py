@@ -30,7 +30,13 @@ def main():
     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
     parser.add_argument('--bypass-caches', action='store_true')
+    parser.add_argument('--fast-response-check', action='store_true', help='Require component resident-read lookup response latency')
+    parser.add_argument('--store-response-check', action='store_true', help='Require direct store dispatch/completion and the original registered load response')
     args = parser.parse_args()
+    if (args.fast_response_check or args.store_response_check) and args.test != 'components':
+        parser.error('fast response latency check is a cache component test')
+    if args.fast_response_check and args.store_response_check:
+        parser.error('select one read-response contract')
     cpu_test = args.test in ['cpu', 'coremark']
     if args.bypass_caches and not cpu_test:
         parser.error('--bypass-caches is a real CPU comparison mode')
@@ -156,6 +162,8 @@ def main():
         includes = ['+incdir+' + (work/'src/rtl/cpu/vendor/src/core').as_posix()] if cpu_test else []
         native(SIM / 'vlog.exe', ['-work', 'work', *includes, *[work / 'src' / p for p in sources + [tb]], *primitive_sources], 'compile')
         generics = ['-gCACHE_ENABLE=' + str(int(not args.bypass_caches))] if cpu_test else []
+        if args.fast_response_check: generics += ['-gFAST_RESPONSE_CHECK=1']
+        if args.store_response_check: generics += ['-gSTORE_RESPONSE_CHECK=1']
         if args.test == 'coremark': generics += ['-gCOREMARK_MODE=1']
         output = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc', *generics,
                         '-gCORRUPT_DATA=' + str(int(args.fault == 'data')), 'work.' + Path(tb).stem,

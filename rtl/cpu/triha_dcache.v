@@ -5,6 +5,8 @@
  *             Synchronous tag/data organization and two-way replacement are
  *             adapted from the fixed source recorded in CACHE_ADAPTATIONS.json.
  *             Complete stores only after lower response; invalidate on failure.
+ *             Stores bypass unused lookup/response bubbles; load data retains
+ *             its response register to isolate Cache RAM from CPU bypass logic.
  * SPDX-License-Identifier: Apache-2.0
  * Derived storage/lookup organization: Copyright 2020 Ultra-Embedded.com.
  */
@@ -120,7 +122,7 @@ module triha_dcache #(
         .addr1_i(data_write_addr_w), .data1_i(data_write_w), .wr1_i(data1_mask_w), .data1_o()
     );
     assign mem_accept_o = rst_ni && state_q == IDLE;
-    assign mem_ack_o = rst_ni && state_q == RESPONSE;
+    assign mem_ack_o = rst_ni && (state_q == STORE_UPDATE || state_q == RESPONSE);
     assign mem_error_o = response_error_q;
     assign mem_data_rd_o = response_data_q;
     assign mem_resp_tag_o = request_tag_q;
@@ -156,7 +158,8 @@ module triha_dcache #(
                     else if (mem_writeback_i) state_q <= RESPONSE;
                     else if (mem_addr_i[1:0] != 0 || (mem_rd_i && |mem_wr_i)) begin
                         response_error_q <= 1; state_q <= RESPONSE;
-                    end else state_q <= LOOKUP;
+                    end else if (|mem_wr_i) state_q <= WRITE_REQ;
+                    else state_q <= LOOKUP;
                 end
                 LOOKUP: begin
                     if (|write_mask_q) state_q <= WRITE_REQ;
@@ -176,7 +179,7 @@ module triha_dcache #(
                 RELOOKUP: state_q <= LOOKUP;
                 WRITE_REQ: if (outport_accept_i) state_q <= WRITE_WAIT;
                 WRITE_WAIT: begin end
-                STORE_UPDATE: state_q <= RESPONSE;
+                STORE_UPDATE: state_q <= IDLE;
                 UNCACHED_REQ: if (outport_accept_i) state_q <= UNCACHED_WAIT;
                 UNCACHED_WAIT: begin end
                 INVALIDATE: state_q <= RESPONSE;

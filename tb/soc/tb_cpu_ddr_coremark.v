@@ -3,6 +3,7 @@
  * accelerated; timing scores come from cycle CSRs, not simulator wall time. */
 module tb_cpu_ddr_coremark;
     parameter integer CACHE_ENABLE = 1;
+    parameter integer PROFILE_ENABLE = 0;
     parameter [31:0] PAYLOAD_BASE = 32'h80000000;
     reg ref_clk = 0, free_clk = 0, rst_n = 0;
     always #4 ref_clk = !ref_clk;
@@ -50,4 +51,7 @@ module tb_cpu_ddr_coremark;
             CACHE_ENABLE, ddr_fetches, ddr_data, cycles);
         $finish;
     end
+    generate if (PROFILE_ENABLE && CACHE_ENABLE) begin: g_profile
+        `include "cpu_ddr_coremark_profile.vh"
+    end endgenerate
 endmodule

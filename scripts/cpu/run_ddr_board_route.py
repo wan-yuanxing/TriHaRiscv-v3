@@ -46,12 +46,23 @@ def project():
     return name, recipe, base, sources
 
 
+def pnr_command(minutes, seed):
+    if type(seed) is not int or not 1 <= seed <= 20:
+        raise ValueError('placement seed must be an integer in1..20')
+    return (f'pnr -action_timeout {minutes} -optimize_multi_corner_timing -fix_hold_violation '
+        f'-fix_hold_violation_iterations 5 -gplace_seed {seed} -dump_router_congestion_plot TRUE '
+        '-slack_prior_in_global_router TRUE -refineplacement_iteration 40 '
+        '-logic_optimize_lut6d_combing_strategy 3 -mode performance -plc_decongestion 1')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--firmware-dir', type=Path, required=True)
     parser.add_argument('--coremark-preflight', type=Path,
         help='One-iteration native DDR preflight matching a full 5000-iteration build')
     parser.add_argument('--map-only', action='store_true', help='Area metadata only; never timing admission')
+    parser.add_argument('--placement-seed', type=int, choices=range(1,21), default=1,
+        help='One explicit bounded placement comparison; all timing constraints remain unchanged')
     args = parser.parse_args()
     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     work = ROOT/'build/cpu'/('ddr-board-route-'+stamp)
@@ -60,7 +71,7 @@ def main():
     row = dict(schema_version=1, status='RUNNING', flow_status='RUNNING', timing_closed=False,
         input_hashes={}, external_hashes={}, evidence_hashes={}, frozen_hardware_hashes={}, output_hashes={},
         commands=[], programmed=False, bitstream_generated=False, board_validated=False,
-        runner_return_code=None, directory=str(work), started_utc=datetime.now(timezone.utc).isoformat())
+        runner_return_code=None, placement_seed=args.placement_seed, directory=str(work), started_utc=datetime.now(timezone.utc).isoformat())
     print('CPU_DDR_BOARD_ROUTE_RUN', work, flush=True)
     save(work/'result.json', row)
 
@@ -193,10 +204,7 @@ def main():
         parameters = (' -defined_parameters {CACHE_ENABLE '+str(row['cache_enable'])+'}') if args.coremark_preflight else ''
         lines += [f'compile -system_verilog -top_module {top} -include_path '+'{'+ ' '.join(tcl(p) for p in includes)+'}'+parameters,
             'synthesize -ads -write_verilog TRUE', 'dev_map -detail',
-            f'pnr -action_timeout {config["pnr_action_minutes"]} -optimize_multi_corner_timing -fix_hold_violation '
-            '-fix_hold_violation_iterations 5 -gplace_seed 1 -dump_router_congestion_plot TRUE '
-            '-slack_prior_in_global_router TRUE -refineplacement_iteration 40 '
-            '-logic_optimize_lut6d_combing_strategy 3 -mode performance -plc_decongestion 1',
+            pnr_command(config['pnr_action_minutes'], args.placement_seed),
             'report_timing -max_path 64 -report_max_skew -report_exception TRUE']
         if args.map_only:
             lines = lines[:-2]

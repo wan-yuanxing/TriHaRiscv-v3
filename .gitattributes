@@ -29,5 +29,9 @@ rtl/cpu/triha_decode.v -whitespace
 rtl/cpu/triha_npc.v -whitespace
 # Preserve measured Windows test/provenance bytes in frozen receipts.
 rtl/cpu/ADAPTATIONS.json -text whitespace=cr-at-eol
+rtl/cpu/CACHE_ADAPTATIONS.json -text whitespace=cr-at-eol
 tb/cpu/tb_cpu_equivalence.v -text whitespace=cr-at-eol
 sw/benchmarks/coremark/src/** -text -whitespace
+
+# Unified diagnostic patches contain required blank context-line prefixes.
+docs/verification/cpu/ddr_fast_response_diagnostic.patch -whitespace

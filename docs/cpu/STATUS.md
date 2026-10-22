@@ -1,3 +1,7 @@
+最新 DDR 性能候选已通过实际后布线 100MHz 并生成待板测包，尚未下载。保留原 load 返回寄存边界，仅缩短 store 派发和真实下级响应后的等待；DDR masked readback、写直达/写不分配和六级单发射不变。同一载荷的五次数字模型 CoreMark 为 3,899,101 周期，较 4,077,640 少 178,539 周期，吞吐 +4.578979%；完整计时 WB/store 观察对照通过。CPU-only 为 6477 LUT/3562 FF/688 RAM-LUT（已含）/0 DRM/4 APM，Cache/传输为 492 LUT/763 FF/11 DRM。最终 CPU Slow/Fast setup +0.314/+3.623 ns、hold +0.147/+0.100 ns、MPW +3.655/+4.202 ns，全部时钟域和 Gray delay/skew 均通过。包位于 build/soc/releases/cpu_ddr_coremark_on_32019ccd2f69，17 项文件及串口分母 6477 已核验。66 项 CPU、45 项 SoC Python 和配置/PDS/STA 检查通过。快读试验及 D Cache 整体区域约束未选用；完整失败记录保留。用户补交的现有缓存镜像有效板测仍是 84.374476888 CoreMark、0.843744769/MHz；新候选分数仅为 RTL/数字 DDR 模型，不能替代板测。当前板上仍为 e5503c690208，COM12 保留给用户串口助手，未编程或写 Flash。详细绑定见 docs/verification/cpu/ddr_performance.md 及 JSON。
+
+以下为此前的板测对照及启动失败历史，均保留：
+
 最新DDR板测对照已取得有效结果，但启动可靠性未解决。带Cache的5000次CoreMark实际两次为84.374481/84.374478，0.843745/MHz；保留相同Cache硬件、使用共享区不缓存属性的实际结果为10.231937，0.102319/MHz、488.666033秒。两者CPU-only均6558LUT，CRC和至少10秒检查通过，吞吐比8.246189；地址0x80000000/0x82000000、属性和重新链接载荷不同，不是同地址编译期Cache开关对照，非官方提交。编译期Cache=0没有有效板测分数。共享区一次保持复位下载后跑分通过，但恢复缓存镜像的同流程又出现init失败，不能宣称找到通用修复。当前缓存镜像e5503c690208已完成Program/Verify，最新自动启动FAIL，内部原因未知。用户改为自行打开串口助手短按复位查看，COM12已释放，不再要求长按、不再自动下载或占用串口。原SRAM发布包十文件未变；未写Flash。完整绑定见docs/verification/cpu/id_cache_board_coremark_comparison.md及JSON。
 
 # TriHa CPU 状态

@@ -21,12 +21,15 @@ from run_ddr_board_route import project, save
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cache-enable', type=int, choices=[0, 1], default=1)
-    parser.add_argument('--iterations', type=int, choices=[1, 5000], default=1)
+    parser.add_argument('--iterations', type=int, choices=[1, 5, 5000], default=1)
     parser.add_argument('--fault', choices=['none', 'crc'], default='none')
     parser.add_argument('--build-only', action='store_true')
     parser.add_argument('--cpu-core-luts', type=int, default=0)
     parser.add_argument('--uncached-shared', action='store_true', help='Keep Cache hardware; execute code/data in shared uncached DDR')
+    parser.add_argument('--profile', action='store_true', help='Observe the exact timed software window in simulation only')
     args = parser.parse_args()
+    if args.profile and (args.build_only or args.cache_enable != 1):
+        parser.error('profiling requires a digital simulation with Cache hardware present')
     if args.uncached_shared and args.cache_enable != 1:
         parser.error('shared-attribute comparison retains the successful Cache hardware')
     base_address = 0x82000000 if args.uncached_shared else 0x80000000
@@ -36,7 +39,7 @@ def main():
     work = ROOT / 'build/cpu' / ('ddr-coremark-' + stamp)
     work.mkdir(parents=True)
     row = dict(status='RUNNING', test='coremark', fault=args.fault, cache_enable=args.cache_enable,
-        iterations=args.iterations, build_only=args.build_only, directory=str(work),
+        iterations=args.iterations, build_only=args.build_only, profile_enabled=args.profile, directory=str(work),
         input_hashes={}, external_hashes={}, output_hashes={}, commands=[],
         source_unchanged=False, external_unchanged=False, runner_return_code=None,
         programmed=False, scope='O2 DDR CoreMark build/digital ModelSim; not a physical board score')
@@ -68,7 +71,7 @@ def main():
         return text
 
     try:
-        validate(ROOT)
+        checked = validate(ROOT)
         row['binding'] = materialize(work)
         _, recipe, base, sources = project()
         names = sources + base['headers'] + recipe['headers'] + [
@@ -83,10 +86,11 @@ def main():
             'scripts/cpu/prepare_ddr.py', 'scripts/cpu/check_cache.py', 'scripts/cpu/run_cache.py',
             'scripts/cpu/run_ddr_board_route.py', 'fpga/pg2l100h/project/cpu_ddr_board.json',
             'scripts/soc/run.py', 'scripts/soc/gen_config.py', 'scripts/soc/coremark_board.py',
-            'tb/soc/tb_cpu_ddr_coremark.v', 'tb/soc/cpu_board_pll_model.v',
+            'tb/soc/tb_cpu_ddr_coremark.v', 'tb/soc/cpu_ddr_coremark_profile.vh', 'scripts/cpu/ddr_profile.py', 'tb/soc/cpu_board_pll_model.v',
             'tb/video/models/ddr_board_ip_model.sv']
         upstream = json.loads((ROOT / 'sw/benchmarks/coremark/UPSTREAM.json').read_text(encoding='utf-8'))
         names += ['sw/benchmarks/coremark/src/' + name for name in upstream['files']]
+        names += checked['validated_paths']
         for name in sorted(set(names)):
             row['input_hashes'][name] = sha(ROOT / name)
             target = work / 'src' / name
@@ -115,17 +119,22 @@ def main():
             native(SIM / 'vmap.exe', ['-c'], 'vmap')
             native(SIM / 'vlib.exe', ['work'], 'vlib')
             native(SIM / 'vlog.exe', ['+incdir+' + (work / 'src/rtl/soc/include').as_posix(),
+                '+incdir+' + (work / 'src/tb/soc').as_posix(),
                 '+incdir+' + (work / 'src/rtl/cpu/vendor/src/core').as_posix(),
                 work / 'pinned/rtl/video/video_async_fifo.sv', work / 'pinned/rtl/video/axi128_hmic256.sv',
                 work / 'pinned/tb/video/models/ddr_native_model.sv', work / 'ddr_board_model.sv',
                 work / 'src/tb/soc/cpu_board_pll_model.v', *[work / 'src' / n for n in sources],
                 work / 'src/tb/soc/tb_cpu_ddr_coremark.v', *primitives], 'compile')
             text = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc',
-                '-gCACHE_ENABLE=' + str(args.cache_enable), "-gPAYLOAD_BASE=32'h"+f'{base_address:08x}', 'work.tb_cpu_ddr_coremark',
+                '-gCACHE_ENABLE=' + str(args.cache_enable), '-gPROFILE_ENABLE=' + str(int(args.profile)),
+                "-gPAYLOAD_BASE=32'h"+f'{base_address:08x}', 'work.tb_cpu_ddr_coremark',
                 '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation', 900)
             sys.path.insert(0, str(ROOT / 'scripts/soc'))
             from coremark_board import review_output
             row['measurement'] = review_output(text, allow_short=True)
+            if args.profile:
+                from ddr_profile import parse_profile
+                row['profile'] = parse_profile(text, row['measurement']['cycles'])
             if ('CPU_DDR_COREMARK_PAYLOAD_PASS' not in text or 'CPU_DDR_COREMARK_SIM_PASS' not in text or
                     any(v in text for v in ['CPU_DDR_COREMARK_SIM_FAIL', 'CPU_DDR_COREMARK_FAIL', '** Error', '** Fatal'])):
                 raise ValueError('missing complete DDR software execution')

@@ -2,6 +2,9 @@
 // Independent byte-mask memory oracle; both caches operate in the same run.
 module tb_cpu_cache;
     parameter integer CORRUPT_DATA = 0;
+    parameter integer FAST_RESPONSE_CHECK = 0;
+    parameter integer STORE_RESPONSE_CHECK = 0;
+    reg expect_fast_load = 0;
     reg clk = 0;
     always #5 clk = !clk;
     reg rst_n = 0;
@@ -77,6 +80,10 @@ module tb_cpu_cache;
     integer d_beat = 0, d_count, d_wait = 0, store_delay = 40;
     integer d_error_beat = -1, d_captured_error;
     reg store_error = 0, captured_store_error;
+    reg store_ack_due = 0;
+    always @(posedge clk) store_ack_due <= rst_n && p_ack && d_pending_write;
+    always @(negedge clk) if ((FAST_RESPONSE_CHECK || STORE_RESPONSE_CHECK) && store_ack_due)
+        check(d_ack, "store responds directly after the real lower acknowledgement");
     triha_dcache u_d (
         .clk_i(clk), .rst_ni(rst_n), .mem_addr_i(d_addr), .mem_data_wr_i(d_wdata),
         .mem_rd_i(d_rd), .mem_wr_i(d_wr), .mem_cacheable_i(d_cacheable),
@@ -186,6 +193,12 @@ module tb_cpu_cache;
                 end
             end
             @(negedge clk); d_rd = 0; d_wr = 0;
+            if ((FAST_RESPONSE_CHECK || STORE_RESPONSE_CHECK) && mask != 0)
+                check(p_wr == mask && p_addr == address, "store dispatch has no unused tag-lookup bubble");
+            if (FAST_RESPONSE_CHECK && expect_fast_load)
+                check(d_ack, "resident load responds in synchronous lookup cycle");
+            if (STORE_RESPONSE_CHECK && expect_fast_load)
+                check(!d_ack, "resident load retains response register boundary");
             while (!d_ack) begin
                 @(negedge clk); guard = guard + 1;
                 if (guard > 4000) fail("D response timeout");
@@ -222,7 +235,9 @@ module tb_cpu_cache;
         i_read(32'h80000028, 0); check(i_reads == before_count, "I two ways resident"); i_hits = i_hits + 1;
         i_read(32'h80004028, 0);
         d_access(32'h80000048, 0, 0, 1, 0); before_count = d_reads;
+        expect_fast_load = 1;
         d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count, "D second access must hit"); d_hits = d_hits + 1;
+        expect_fast_load = 0;
         d_access(32'h80000048, 4'b0101, 32'h12345678, 1, 0); before_count = d_reads;
         d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count, "D successful store retains updated hit"); d_hits = d_hits + 1;
         before_count = d_reads;

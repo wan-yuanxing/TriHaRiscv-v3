@@ -1,0 +1,153 @@
+diff --git a/rtl/cpu/CACHE_ADAPTATIONS.json b/rtl/cpu/CACHE_ADAPTATIONS.json
+index 8409722..27288b2 100644
+--- a/rtl/cpu/CACHE_ADAPTATIONS.json
++++ b/rtl/cpu/CACHE_ADAPTATIONS.json
+@@ -33,12 +33,13 @@
+     "rtl/cpu/triha_dcache.v": {
+       "base": "rtl/cpu/vendor/src/dcache/dcache_core.v",
+       "base_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+-      "derived_sha256": "3bb2bc9d2be4b7a4c7300ae80cd1628b5994c495055d3dfd108719d983f8112f",
++      "derived_sha256": "f816b84cd240276d7209c5209dcb85c8cdd90c0082b5dd90142e30277655a8ac",
+       "changes": [
+         "Retain two-way 256-set/32B-line synchronous tag/data organization and replacement",
+         "Specialize controller to blocking write-through/no-write-allocate; remove dirty/eviction/writeback state",
+         "Wait real lower store response before byte update; invalidate hit on error",
+-        "Discard partial/failed refill; enforce CPU-private DDR cacheability; preserve response tags"
++        "Discard partial/failed refill; enforce CPU-private DDR cacheability; preserve response tags",
++        "Return resident reads in synchronous lookup; dispatch stores without unused lookup and acknowledge in update cycle only after actual lower response"
+       ]
+     },
+     "rtl/cpu/triha_dcache_tag_ram.v": {
+diff --git a/rtl/cpu/triha_dcache.v b/rtl/cpu/triha_dcache.v
+index fbfb30c..592f651 100644
+--- a/rtl/cpu/triha_dcache.v
++++ b/rtl/cpu/triha_dcache.v
+@@ -5,6 +5,8 @@
+  *             Synchronous tag/data organization and two-way replacement are
+  *             adapted from the fixed source recorded in CACHE_ADAPTATIONS.json.
+  *             Complete stores only after lower response; invalidate on failure.
++ *             Resident reads respond in synchronous lookup, as in the fixed
++ *             cache controller; stores bypass an unused pre-write lookup cycle.
+  * SPDX-License-Identifier: Apache-2.0
+  * Derived storage/lookup organization: Copyright 2020 Ultra-Embedded.com.
+  */
+@@ -65,6 +67,12 @@ module triha_dcache #(
+         (state_q == WRITE_WAIT || (state_q == WRITE_REQ && outport_accept_i));
+     wire uncached_response_w = outport_ack_i &&
+         (state_q == UNCACHED_WAIT || (state_q == UNCACHED_REQ && outport_accept_i));
++    reg read_hit_response_r;
++    always @* begin
++        read_hit_response_r = 0;
++        if (state_q == LOOKUP && cacheable_q && !(|write_mask_q) && hit_w)
++            read_hit_response_r = 1;
++    end
+ 
+     reg tag0_write_r, tag1_write_r;
+     reg [19:0] tag_write_data_r;
+@@ -120,9 +128,9 @@ module triha_dcache #(
+         .addr1_i(data_write_addr_w), .data1_i(data_write_w), .wr1_i(data1_mask_w), .data1_o()
+     );
+     assign mem_accept_o = rst_ni && state_q == IDLE;
+-    assign mem_ack_o = rst_ni && state_q == RESPONSE;
++    assign mem_ack_o = rst_ni && (read_hit_response_r || state_q == STORE_UPDATE || state_q == RESPONSE);
+     assign mem_error_o = response_error_q;
+-    assign mem_data_rd_o = response_data_q;
++    assign mem_data_rd_o = read_hit_response_r ? (hit0_w ? data0_w : data1_w) : response_data_q;
+     assign mem_resp_tag_o = request_tag_q;
+     assign outport_rd_o = rst_ni && (state_q == REFILL_REQ || state_q == UNCACHED_REQ);
+     assign outport_wr_o = rst_ni && state_q == WRITE_REQ ? write_mask_q : 4'b0;
+@@ -156,14 +164,14 @@ module triha_dcache #(
+                     else if (mem_writeback_i) state_q <= RESPONSE;
+                     else if (mem_addr_i[1:0] != 0 || (mem_rd_i && |mem_wr_i)) begin
+                         response_error_q <= 1; state_q <= RESPONSE;
+-                    end else state_q <= LOOKUP;
++                    end else if (|mem_wr_i) state_q <= WRITE_REQ;
++                    else state_q <= LOOKUP;
+                 end
+                 LOOKUP: begin
+                     if (|write_mask_q) state_q <= WRITE_REQ;
+                     else if (!cacheable_q) state_q <= UNCACHED_REQ;
+                     else if (hit_w) begin
+-                        response_data_q <= hit0_w ? data0_w : data1_w;
+-                        state_q <= RESPONSE;
++                        state_q <= IDLE;
+                     end else begin
+                         fill_way_q <= choose_way_w;
+                         fill_beat_q <= 0;
+@@ -176,7 +184,7 @@ module triha_dcache #(
+                 RELOOKUP: state_q <= LOOKUP;
+                 WRITE_REQ: if (outport_accept_i) state_q <= WRITE_WAIT;
+                 WRITE_WAIT: begin end
+-                STORE_UPDATE: state_q <= RESPONSE;
++                STORE_UPDATE: state_q <= IDLE;
+                 UNCACHED_REQ: if (outport_accept_i) state_q <= UNCACHED_WAIT;
+                 UNCACHED_WAIT: begin end
+                 INVALIDATE: state_q <= RESPONSE;
+diff --git a/scripts/cpu/run_cache.py b/scripts/cpu/run_cache.py
+index 521f882..e8822e7 100644
+--- a/scripts/cpu/run_cache.py
++++ b/scripts/cpu/run_cache.py
+@@ -30,7 +30,10 @@ def main():
+     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
+     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
+     parser.add_argument('--bypass-caches', action='store_true')
++    parser.add_argument('--fast-response-check', action='store_true', help='Require component resident-read lookup response latency')
+     args = parser.parse_args()
++    if args.fast_response_check and args.test != 'components':
++        parser.error('fast response latency check is a cache component test')
+     cpu_test = args.test in ['cpu', 'coremark']
+     if args.bypass_caches and not cpu_test:
+         parser.error('--bypass-caches is a real CPU comparison mode')
+@@ -156,6 +159,7 @@ def main():
+         includes = ['+incdir+' + (work/'src/rtl/cpu/vendor/src/core').as_posix()] if cpu_test else []
+         native(SIM / 'vlog.exe', ['-work', 'work', *includes, *[work / 'src' / p for p in sources + [tb]], *primitive_sources], 'compile')
+         generics = ['-gCACHE_ENABLE=' + str(int(not args.bypass_caches))] if cpu_test else []
++        if args.fast_response_check: generics += ['-gFAST_RESPONSE_CHECK=1']
+         if args.test == 'coremark': generics += ['-gCOREMARK_MODE=1']
+         output = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc', *generics,
+                         '-gCORRUPT_DATA=' + str(int(args.fault == 'data')), 'work.' + Path(tb).stem,
+diff --git a/tb/cpu/tb_cpu_cache.v b/tb/cpu/tb_cpu_cache.v
+index 55d4bdd..465d1cd 100644
+--- a/tb/cpu/tb_cpu_cache.v
++++ b/tb/cpu/tb_cpu_cache.v
+@@ -2,6 +2,8 @@
+ // Independent byte-mask memory oracle; both caches operate in the same run.
+ module tb_cpu_cache;
+     parameter integer CORRUPT_DATA = 0;
++    parameter integer FAST_RESPONSE_CHECK = 0;
++    reg expect_fast_load = 0;
+     reg clk = 0;
+     always #5 clk = !clk;
+     reg rst_n = 0;
+@@ -77,6 +79,10 @@ module tb_cpu_cache;
+     integer d_beat = 0, d_count, d_wait = 0, store_delay = 40;
+     integer d_error_beat = -1, d_captured_error;
+     reg store_error = 0, captured_store_error;
++    reg store_ack_due = 0;
++    always @(posedge clk) store_ack_due <= rst_n && p_ack && d_pending_write;
++    always @(negedge clk) if (FAST_RESPONSE_CHECK && store_ack_due)
++        check(d_ack, "store responds directly after the real lower acknowledgement");
+     triha_dcache u_d (
+         .clk_i(clk), .rst_ni(rst_n), .mem_addr_i(d_addr), .mem_data_wr_i(d_wdata),
+         .mem_rd_i(d_rd), .mem_wr_i(d_wr), .mem_cacheable_i(d_cacheable),
+@@ -186,6 +192,10 @@ module tb_cpu_cache;
+                 end
+             end
+             @(negedge clk); d_rd = 0; d_wr = 0;
++            if (FAST_RESPONSE_CHECK && mask != 0)
++                check(p_wr == mask && p_addr == address, "store dispatch has no unused tag-lookup bubble");
++            if (FAST_RESPONSE_CHECK && expect_fast_load)
++                check(d_ack, "resident load responds in synchronous lookup cycle");
+             while (!d_ack) begin
+                 @(negedge clk); guard = guard + 1;
+                 if (guard > 4000) fail("D response timeout");
+@@ -222,7 +232,9 @@ module tb_cpu_cache;
+         i_read(32'h80000028, 0); check(i_reads == before_count, "I two ways resident"); i_hits = i_hits + 1;
+         i_read(32'h80004028, 0);
+         d_access(32'h80000048, 0, 0, 1, 0); before_count = d_reads;
++        expect_fast_load = 1;
+         d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count, "D second access must hit"); d_hits = d_hits + 1;
++        expect_fast_load = 0;
+         d_access(32'h80000048, 4'b0101, 32'h12345678, 1, 0); before_count = d_reads;
+         d_access(32'h80000048, 0, 0, 1, 0); check(d_reads == before_count, "D successful store retains updated hit"); d_hits = d_hits + 1;
+         before_count = d_reads;
