@@ -1239,3 +1239,22 @@ owner协议错误优先。历史事件仍可ACK；已接纳事务不自动撤销
 PIX/EOF，没有新增物理HDMI、布局布线或板测。core8ns综合setup估计显示组合
 −2.090ns、采显组合−3.337ns，125MHz尚未闭合。CPU仍持有全局帧/graph所有权，
 物理可见性、连续采集及真实模型输出各自验收。见[验证记录](verification/video/record_mmio.md)。
+
+### 实施补充：F4c5a CPU控制路由
+
+2026-10-22新增`video_axil_decode`，一个同钟AXI-Lite入口路由到ABI2采集
+0x20012000/4KiB与显示0x20011000/4KiB。地址使用既有生成宏；旧ABI1、空洞及
+不对齐请求本地DECERR。AW/W独立缓存，读写各一笔，可并行且目标锁存到响应。
+不改采集/显示ABI、记录布局或C驱动，reset仍须协调，不隐含CPU/DDR跨域。
+
+冻结8a2a07c CPU数字诊断实际执行三个C驱动，经新路由和既有三模式采显共享DDR
+链完成两帧800×600、三次同帧MODE、五次显示反馈和一次旧槽退休；每seq核验
+完整有效像素，坏采帧不发布，断控制及实际内存损坏被拒绝。CPU采用轮询，
+cycle CSR延时保留完整光栅；素材平台旁带，固定框点不代表NPU执行。
+
+CPU仍从固定Git对象导出到build，未合入本目录生产CPU；ROM/SRAM、共用core时钟、
+可背压PIX/EOF及数字内存模型仅为测试边界。正式CPU/DDR CDC、全局fabric/物理
+可见性、连续HDMI及板测另验。原采集核为ModelSim兼容仅提前同一net声明，无
+逻辑修改。新译码综合89LUT/120FF/0DRM/APM，8ns加2ns I/O预算下setup估计
+−3.676ns、hold−1.970ns，无布线，不宣称125MHz系统闭合。
+[具体结果和限制](verification/video/cpu_record.md)。

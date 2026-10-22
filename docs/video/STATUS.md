@@ -295,6 +295,22 @@ core8ns setup估计−2.090/−3.337ns，pixel25ns +11.549/+11.128ns，hold最�
 平台旁带、封存至协调reset，源仍为core域可背压PIX/EOF。下一步推进正式内部
 互连/板级wrapper和时序收敛，CPU仍负责全局帧/graph所有权。
 
+## F4c5a CPU控制路由与真实采显固件
+
+新增同钟video_axil_decode，lane0接ABI2采集20012000，lane1接显示20011000；
+旧ABI1/孔/不对齐本地DECERR，AW/W独立缓存、读写独立、目标保持到响应。
+118项定向/3父变异及独立64项/2变异通过。冻结8a2a07c真实CPU执行未改三个
+C驱动，经新路由和原三模式采显共享DDR链完成2帧/3MODE/5反馈/1退休，逐像素
+核对5025920有效输出，欠载0；坏EOF不显示，断控制与实际内存损坏被拒绝。
+原采集核仅提前同一3行net声明以兼容ModelSim，表达式不变；rearm20/cpu_axil2120用例
+通过。已修复审查发现的Python -O移除assert假通过，普通/优化模式各10项验证。
+
+新译码综合89LUT/120FF/0DRM/APM/锁存器，8ns+2ns I/O预算setup估计−3.676ns、
+hold−1.970ns，无布线/板测或125MHz闭合结论。CPU仍导出到build作固定数字诊断，
+未合入生产CPU；当前轮询、同钟、仿真ROM/SRAM、平台素材和core域可背压源。
+正式CPU CDC/fabric、物理可见性和NPU执行仍待各自集成。
+[验证记录](../verification/video/cpu_record.md)及机器证据绑定当前结果与范围。
+
 ## 本批已交付
 
 | 编号 | 工作 | 状态/证据 |

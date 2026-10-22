@@ -106,14 +106,14 @@ module video_three_branch_capture #(
     wire pixel_offer=packet_present&&pixel_kind&&pixel_legal&&!stopping;
     assign preview_ready=preview_pixel_ready&&!transport_stop;
     assign input_ready=input_pixel_ready&&!transport_stop;
+    wire rearm_healthy=init_done && !abort && !source_fault && !overflow &&
+        !error && !fault_pending && !(|writer_fault) && !arb_fault && !bvalid;
+    wire rearm_empty=port_drained && (&req_ready_vec) && !m_valid && !accepted_valid;
     assign req_ready=reset_n&&state==IDLE&&init_done&&!abort&&!error&&!fault_pending&&!(|writer_fault)&&!arb_fault&&!bvalid&&
         (!ENABLE_REARM||(rearm_healthy&&rearm_empty&&!completion_valid));
     // An opted-in source must stop after EOF and use matching rearm semantics.
     // No request may hide stale input, outstanding events or writer ownership.
     wire job_clear=ENABLE_REARM && req_valid && req_ready;
-    wire rearm_healthy=init_done && !abort && !source_fault && !overflow &&
-        !error && !fault_pending && !(|writer_fault) && !arb_fault && !bvalid;
-    wire rearm_empty=port_drained && (&req_ready_vec) && !m_valid && !accepted_valid;
     assign cancel=error||fault_pending;
     assign busy=state!=IDLE&&state!=DONE;
     assign port_drained=reset_n&&((requested&~retired)==0)&&arb_idle;

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "target": "video_control_decode",
+  "top": "video_axil_decode",
+  "test_top": "tb_video_axil_decode",
+  "sources": [
+    "rtl/soc/video_axil_decode.v"
+  ],
+  "tests": [
+    "tb/soc/tb_video_axil_decode.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_control_decode.fdc"
+  ],
+  "scope": "Same-clock one-read/one-write AXI-Lite route to ABI2 capture and display only. No CPU import, CDC, DDR fabric, routing or board."
+}

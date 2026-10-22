@@ -603,3 +603,27 @@ STATUS bit6和ERROR_CODE=0xf0报告；owner协议错误优先。`fault_o/fault_c
 只提交新显示context，不重发RAW扫描命令。实际扫描器与像素退休证明联合成立后
 才送owner退休，release ACK成功后才能结束Video引用；CPU仍负责全局帧/graph、
 NPU引用、跨master可见性及最终FREE。[验证与综合边界](../verification/video/record_mmio.md)。
+
+## F4c5a 单控制入口译码
+
+`rtl/soc/video_axil_decode.v`为同钟AXI-Lite 1入2出，展平总线lane0接ABI2采集，
+lane1接显示。输入完整32bit地址，输出按原字节地址转发；地址分别取
+VCAP_MMIO_BASE/VCAP_MMIO_BYTES与VDISP_BASE/VDISP_REGION_BYTES生成宏。
+当前为0x20012000和0x20011000的各4KiB窗口。旧ABI1、其余孔、非字对齐与未知
+地址均本地DECERR；读错误数据0。不是全0x2001xxxx窗口广播或旧采集地址别名。
+
+AW/W各自一项缓冲，任意先后到达；两项齐备才向锁存目标发布。下游AW/W可分别
+背压，地址/PROT/数据/掩码保持，W不按实时AWADDR改路由。收齐本地错误请求后
+才返回B。AR独立锁存，读写各一在途，可并行不同目标；B/R握手前不重用各自
+route，非选中端点的VALID不能触发上游完成。合法下游SLVERR/DECERR原样传递。
+reset须与CPU、端点及在途DMA协调，不提供局部取消、自动超时回滚或独立CDC。
+
+真实CPU诊断连接`cpu_native_axil`默认Video窗口与该译码，再接原
+`video_record_pipeline`双端点。CPU保持全局frame_pool所有权，事件与release ACK
+仍由原驱动处理。素材由平台sideband装载，轮询固件intr绑0，不提供PLIC/中断优先级
+结论。CPU和Video同钟仅为数字诊断，产品100MHz与DDR core125MHz跨域另设计。
+原native桥其他路线的未提交MMIO_PREFIX参数保持原字节，不依赖其非默认值。
+
+ModelSim2020.4要求rearm资格net先声明；原采集核只把同一3行wire声明提前，
+不改表达式或状态机。该字节级受控移动、独立协议反例及真实CPU证据见
+[验证记录](../verification/video/cpu_record.md)。

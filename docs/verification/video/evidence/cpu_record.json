@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "status": "control_decoder_and_real_CPU_three_mode_capture_display_verified",
+  "base_head": "536d8c6115756861c053d9a58f7443625ba29051",
+  "owned": [
+    "rtl/soc/video_axil_decode.v",
+    "rtl/video/video_three_branch_capture.sv",
+    "tb/soc/tb_video_axil_decode.sv",
+    "tb/soc/tb_cpu_record_firmware.sv",
+    "tb/soc/test_cpu_record_runner.py",
+    "scripts/soc/test_control_decode.py",
+    "scripts/soc/run_cpu_record.py",
+    "scripts/video/run.py",
+    "scripts/video/build_pds.py",
+    "sw/tests/video_record/start.S",
+    "sw/tests/video_record/main.c",
+    "sw/tests/video_record/link.ld",
+    "fpga/pg2l100h/project/video_control_decode.json",
+    "fpga/pg2l100h/constraints/video_control_decode.fdc",
+    "docs/superpowers/specs/2026-10-22-cpu-record-design.md",
+    "docs/superpowers/plans/2026-10-22-cpu-record.md",
+    "docs/video/README.md",
+    "docs/interfaces/video.md",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+    "docs/video/STATUS.md",
+    "docs/verification/video/cpu_record.md",
+    "docs/verification/video/evidence/cpu_record.json"
+  ],
+  "source_hashes": {
+    "rtl/soc/video_axil_decode.v": "3c61a538376bbe37a9fee56f7d5c4f5280e32846b18ef6d38a32fbf134e50866",
+    "rtl/video/video_three_branch_capture.sv": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+    "tb/soc/tb_video_axil_decode.sv": "291b1661bda9918f37bdda0e777d084d052306b5a54f8fac8b5e5e78cdb7b414",
+    "tb/soc/tb_cpu_record_firmware.sv": "6aded0485eed89ae2ba19c9360861496be505ef0ff3b4771bee25b43d34706d1",
+    "tb/soc/test_cpu_record_runner.py": "06bc7da941d219d2b3eb12958a1d5b20780f34a1cbae0be22fc1ce64d8ae595b",
+    "scripts/soc/test_control_decode.py": "2243a2134487da7bfeba5e655ccf82edaa912bba03f58bc273e6920ed18ee89a",
+    "scripts/soc/run_cpu_record.py": "5af2d1aac59874e6077906b3027dd6e31039e81e6577f0cec9242e7e49f3994c",
+    "scripts/video/run.py": "659befbfb8a72e81cc465ca7494c61839cf8a945f928c0802b667a4bfa88b037",
+    "scripts/video/build_pds.py": "b40afa3e7a3df631049c053655bdd6f8febc74288fb5df410d8a3cfba0615bdc",
+    "sw/tests/video_record/start.S": "7c8ecac3906ef04d3daa7d2f9e587a5f95d1740b82c2ff84ca96de03f1e343f8",
+    "sw/tests/video_record/main.c": "189566efd788744277733f8aac32efdaf1548cfaab9ea9d06fbd99bfa3cedfa1",
+    "sw/tests/video_record/link.ld": "79afe6d1c75f402ffe4b8db019b3824aa65e726becb36eba113ea7ec0bd3475b",
+    "fpga/pg2l100h/project/video_control_decode.json": "1bba0f2326301b6927fa1b2681839bed0039057c49bd847b066d57006e335ad0",
+    "fpga/pg2l100h/constraints/video_control_decode.fdc": "838fc4c25268261f28bdbc94a8129da2c1edf5521d6a5d961dc136e800e73c83",
+    "docs/superpowers/specs/2026-10-22-cpu-record-design.md": "acc40629620dd27d839816a6a7d792e9f795a07bbc337400a18273b24e46f910",
+    "docs/superpowers/plans/2026-10-22-cpu-record.md": "2a0b43972aeda489426d42d7e1e52801cfd87c77194d65d5abe356fa751afa81",
+    "docs/video/README.md": "98c3fe46fedf36bf8fd4fb1f31a6e5fac954135874e484a440b2baec44940d34",
+    "docs/interfaces/video.md": "78746d9350ec440ff09e0667321c8d28a3683de6e5711fdc200929a30d6005a8",
+    "docs/TriHaRiscv_SoC_Design_Spec_v0.6.md": "f125109a599f0a86621f9064d9f3d6eda5ddd1fd69833d578a81a06e71d936aa",
+    "docs/video/STATUS.md": "7040516c0faf2107196f61566f5df4299eff1b95184036cd20a348ca13bfec94",
+    "docs/verification/video/cpu_record.md": "91c589e7ff0238b789ed214d52b40b7694038f042f223035c45da6e36bffef48"
+  },
+  "refs": {
+    "baseline": {
+      "path": "build/video/cpu_record_baseline/result.json",
+      "sha256": "dcbd40eff5cd32c27420b1ca9c09e79b78aaf490c4a6d1e229b934f4cc4f8200"
+    },
+    "audit": {
+      "path": "build/video/audit_cpu_record.py",
+      "sha256": "720ca739862d60dc6c109a3eadf602cec6f2f84556db8d1f933158c976ac9567"
+    },
+    "review": {
+      "path": "build/video/cpu_record_review/20261022T021658_612680Z/final_review.json",
+      "sha256": "c802d498f9653e48a57770e8fdfb02157669e8725dc317c40488717ec6816462"
+    },
+    "control_regression": {
+      "path": "build/video/regression/20261022T022051_179583Z/result.json",
+      "sha256": "1080f9abb81dcac04f297a79c7e52be356a56da63d155359044b6167283834cd"
+    },
+    "control_component": {
+      "path": "build/video/control_decode/20261022T022051_287502Z/result.json",
+      "sha256": "c7b56e706d4e2ebd571857d5c702fbef5f73d02dab5ff30707fa9c46425106ff"
+    },
+    "cpu_firmware": {
+      "path": "build/video/cpu_record/20261022T022241_782525Z/result.json",
+      "sha256": "31e4ea78cc7609bbb10b6322c1ba80f3284d02012d893b30bade6bc025408cf5"
+    },
+    "runner_checks": {
+      "path": "build/video/cpu_record_runner_checks/20261022T022334_550296Z/result.json",
+      "sha256": "8ae172eab92b72f7447dd42d57da3d953025aae2f125bf8e70c4612fd75d7b73"
+    },
+    "synthesis": {
+      "path": "build/video/pds/20261022T021424_630189Z/result.json",
+      "sha256": "3c7d8355649189cad9750c89b7a7662a93d9b9cc7a8c21f6d3128b7baea7f11a"
+    },
+    "constraints": {
+      "path": "build/video/pds/20261022T021424_630189Z/constraint_check/constraint_check.ccr",
+      "sha256": "c2a6b5d81a440212250659d9310e60c4843ec57be0efbffd9020b565ff8d38a8"
+    },
+    "STATUS_projection": {
+      "path": "build/video/cpu_record_delivery/status_partial.json",
+      "sha256": "e5a44716e14b876013c71f45894adb4a7485734cd207887877067f8ffd20828f"
+    },
+    "absence_RED": {
+      "path": "build/video/cpu_record_red/current_tb_RED.json",
+      "sha256": "566fe94be27177ebd3371c11b7123db8fd8945f6f76e693c1671ca7ce252140d"
+    },
+    "runner_optimization_RED": {
+      "path": "build/video/cpu_record_runner_red/optimized.log",
+      "sha256": "dc8330d817017676ac8b8ee3c30e58749bd10bb5b70e13014c7865d035ff1999"
+    },
+    "cpu_axil": {
+      "path": "build/video/regression/20261022T021520_093416Z/result.json",
+      "sha256": "2faf69f336170bd7868e2f65226e7f7af1995323c71216e9f66516dd7c7b44b5"
+    },
+    "capture_rearm": {
+      "path": "build/video/regression/20261022T021509_919313Z/result.json",
+      "sha256": "2032f7dad737aee9a0250d6d7db5e8e99f60d8c7120cadf2cfd71c1c0e538191"
+    },
+    "declaration_compatibility_compile_RED": {
+      "path": "build/video/cpu_record/20261022T021047_052307Z/result.json",
+      "sha256": "11b7f02910430e4838db43767ac1b9056365ed12d56aa7fb5aa23b902a4876a0"
+    }
+  },
+  "STATUS_partial_stage": {
+    "path": "docs/video/STATUS.md",
+    "worktree_sha256": "4ea43d2cbf698e3ff6fab9b2026e2a96168ec385246c668e56c64f06285f35fe",
+    "committed_content_sha256": "7040516c0faf2107196f61566f5df4299eff1b95184036cd20a348ca13bfec94",
+    "retained_delta_sha256": "62920e9722257a3ff3c959ce00f1a5c06169de7c1e8d73775cae901d360969db",
+    "other_route_STATUS_changes_retained_unstaged": true
+  },
+  "protected_paths_unchanged": 538,
+  "other_route_paths_unchanged": 73,
+  "declaration_only_compatibility": {
+    "path": "rtl/video/video_three_branch_capture.sv",
+    "original_sha256": "a9997901eab8aa78ba9e7935994a4fe9a77e6af5c74e0a8283fecdc7c5f5e8f9",
+    "current_sha256": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+    "expressions_and_other_bytes_unchanged": true
+  },
+  "old_entrypoint_bytes_exact_outside_hooks": true,
+  "native_bridge_external_change_preserved": true,
+  "ABI_configuration_unchanged": true,
+  "C_drivers_unchanged": true,
+  "decoder_counts": {
+    "checks": 118,
+    "cap_w": 33,
+    "disp_w": 18,
+    "cap_r": 18,
+    "disp_r": 33
+  },
+  "parent_mutations": 3,
+  "independent_protocol_checks": 64,
+  "independent_mutations": 2,
+  "review_open_findings": [],
+  "resolved_review_findings": [
+    "Python optimization must not remove verification gates"
+  ],
+  "runner_tests": {
+    "normal": 10,
+    "optimized": 10
+  },
+  "affected_cases": {
+    "cpu_axil": 2120,
+    "capture_rearm": 20
+  },
+  "cpu_revision": "8a2a07cf02ae758131a0235887ea244b16c5a1f4",
+  "cpu_executed": true,
+  "cpu_product_imported": false,
+  "polling_only": true,
+  "IRQ_PLIC_verified": false,
+  "CPU_DDR_CDC_verified": false,
+  "cpu_cases": {
+    "no_control": {
+      "status": "rejected",
+      "reason": "CPU_RECORD_FAIL timeout"
+    },
+    "bad_eof": {
+      "status": "pass",
+      "signature": [
+        1129337414,
+        99,
+        3,
+        0,
+        0,
+        0,
+        14,
+        0,
+        37,
+        7,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "case": 1,
+        "cycles": 169395,
+        "native": 13754,
+        "errors": 3,
+        "captures": 0,
+        "feedbacks": 0,
+        "retires": 0,
+        "pixels": 0,
+        "raw": 0,
+        "box": 0,
+        "avatar": 0,
+        "bytes": 71104,
+        "underflows": 0
+      },
+      "firmware_bytes": 7304
+    },
+    "normal": {
+      "status": "pass",
+      "signature": [
+        1129337414,
+        99,
+        3,
+        2,
+        3,
+        1,
+        56,
+        0,
+        129,
+        836,
+        17,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counts": {
+        "case": 0,
+        "cycles": 23728049,
+        "native": 957785,
+        "errors": 3,
+        "captures": 2,
+        "feedbacks": 5,
+        "retires": 1,
+        "pixels": 5025920,
+        "raw": 3105920,
+        "box": 960000,
+        "avatar": 960000,
+        "bytes": 4214400,
+        "underflows": 0
+      },
+      "firmware_bytes": 11536
+    },
+    "bad_memory": {
+      "status": "rejected",
+      "reason": "PIPELINE_FAULT"
+    }
+  },
+  "material_platform_sideband": true,
+  "material_immutable_until_reset": true,
+  "CPU_global_owner": true,
+  "global_FREE_verified": false,
+  "real_NPU": false,
+  "physical_visibility_verified": false,
+  "continuous_HDMI_verified": false,
+  "physical_board": false,
+  "routed": false,
+  "flash_written": false,
+  "synthesis": {
+    "lut": 89.0,
+    "registers": 120.0,
+    "drm": 0.0,
+    "apm": 0,
+    "latches": 0,
+    "interface_bits": 458,
+    "constraints": 5,
+    "constraint_warnings": 40,
+    "core_period_ns": 8,
+    "input_output_max_ns": 2,
+    "input_output_min_ns": 0.5,
+    "setup_estimate_ns": -3.676,
+    "hold_estimate_ns": -1.97,
+    "recovery_estimate_ns": 6.629,
+    "removal_estimate_ns": -0.263,
+    "timing_closed": false
+  }
+}

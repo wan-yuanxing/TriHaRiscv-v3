@@ -563,3 +563,27 @@ python scripts/video/build_pds.py --target video_record_pipeline --stage synth
 逐像素核对同一字节内存产生的RGB，详见[验证记录](../verification/video/record_mmio.md)。
 本机C不代表CPU执行，框/点为固定夹具，不代表NPU执行。两目标已综合，core8ns
 setup估计分别−2.090/−3.337ns，尚未闭合125MHz；没有新布线、物理HDMI或板测。
+
+## F4c5a CPU控制路由与固件
+
+```powershell
+python scripts/video/run.py --suite control_decode
+python scripts/soc/run_cpu_record.py
+python scripts/video/build_pds.py --target video_control_decode --stage synth
+python -O -m unittest discover -s tb/soc -p test_*.py -v
+```
+
+新增`video_axil_decode`在一个AXI-Lite控制入口后绑定两个目标：lane0为ABI2采集
+0x20012000/4KiB，lane1为显示0x20011000/4KiB。读写各一笔，AW/W独立缓存，
+目标持有到响应握手；旧ABI1地址0x20010000、孔和不对齐访问本地DECERR。
+地址直接来自既有生成头，不改ABI/C驱动。
+
+`run_cpu_record.py`从原冻结8a2a07c Git对象导出CPU，执行实际RV32固件及未改
+capture/display/frame_pool驱动，经过原native桥、新译码、原三模式采显共享DDR
+链，验证两帧800×600、同帧三MODE、五次实际显示反馈及联合退休。CPU用实际
+cycle CSR留出完整光栅，独立核验每seq至少480000有效像素；固定框点仍是测试
+夹具，没有执行NPU。[详细验证](../verification/video/cpu_record.md)。
+
+这是同钟、轮询、仿真ROM/SRAM和core域PIX/EOF数字集成。CPU产品尚未合入本目录；
+正式时钟CDC、ROM/SRAM/fabric、物理DDR可见性、布局布线和板测另验。译码综合
+89LUT/120FF，8ns加I/O max2/min0.5ns预算的setup估计−3.676ns，时序尚未闭合。
