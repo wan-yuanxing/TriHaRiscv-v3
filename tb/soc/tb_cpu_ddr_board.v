@@ -35,6 +35,17 @@ module tb_cpu_ddr_board;
             $fatal(1,"CPU_DDR_BOARD_FAIL unsynchronized free reset release");
     end
     integer ddr_release_edges = 0;
+    integer reference_release_edges = 0;
+    always @(negedge u_dut.epoch_n) reference_release_edges = 0;
+    always @(posedge ref_clk) begin
+        if (!u_dut.epoch_n) reference_release_edges = 0;
+        else begin
+            reference_release_edges = reference_release_edges+1;
+            #1;
+            if (reference_release_edges < 2 && u_dut.I_ips_ddr_top.resetn !== 0)
+                $fatal(1,"CPU_DDR_BOARD_FAIL unsynchronized controller reset release");
+        end
+    end
     always @(negedge u_dut.epoch_n) ddr_release_edges = 0;
     always @(posedge u_dut.ddr_clk) begin
         if (!u_dut.epoch_n) ddr_release_edges = 0;

@@ -2,6 +2,8 @@
 
 2026-10-22，父提交`6c40346`。本节点完成实际板级边界和两轮完整物理实现，**100MHz尚未通过**。小型机器索引见`id_cache_stage4.json`。原部署`build/soc/releases/cpu_coremark_6ff82025b53d`保留，未生成新位流、打开串口、编程、合并或推送。
 
+后续追记：stage5已在同次PDS原生XML中找到skew检查表；本节点的UNKNOWN是当时文本审核范围，不表示工具没有检查。原失败记录保留，stage5记录新的复位实现及完整100MHz准入结果。
+
 ## 板级边界
 
 `triha_cpu_ddr_board_top`连接原本地缓存CPU、五通道CDC、固定native256桥及实际DDR控制器/PHY。独立27MHz时钟负责启动、初始化超时、时钟停止和锁定状态观测；N3/N2的125MHz差分参考只经过一个输入缓冲，同时供CPU PLL与DDR IP使用。CPU PLL沿用已验证的HIGH带宽125→100MHz参数。DDR实例名`I_ips_ddr_top`、71个mem管脚属性、PHY时钟/site和两条priority net保持固定来源字节/层次契约。

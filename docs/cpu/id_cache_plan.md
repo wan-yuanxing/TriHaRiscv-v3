@@ -41,9 +41,9 @@
 
 ## 6. Physical and integration admission
 
-- [ ] Measure bare-core, Cache/transport and combined resources with native PDS. Run one original100MHz complete implementation and independent frozen-binding/Slow-Fast setup/hold/MPW review. Preserve failed intermediate evidence; no timing claims from synthesis estimates.
+- [x] Measure bare-core, Cache/transport and combined resources with native PDS. Run one original100MHz complete implementation and independent frozen-binding/Slow-Fast setup/hold/MPW review. Stage5 closes the standalone physical target; all failed intermediate evidence is retained. Shared-fabric/board gates remain separate.
 - [ ] Bind the actual main-project DDR version and integrate through its existing shared fabric/CDC boundary; independently validate write visibility and reset with other masters before claiming system closure. Do not modify or copy another route's implementation silently.
-- [ ] Update `docs/cpu/STATUS.md` and `docs/verification/cpu/id_cache.*`, commit only this CPU work. Retain known-good release; no automatic programming, COM12, Flash, merge or push.
+- [x] Update `docs/cpu/STATUS.md` and `docs/verification/cpu/id_cache.*`, commit only this CPU work. Stage5 records the standalone physical checkpoint; integration/board gates below remain open. Retain known-good release; no automatic programming, COM12, Flash, merge or push.
 
 Checkpoint2026-10-21: `docs/verification/cpu/id_cache_stage1.md/.json` binds functional and native-area results; accepted image unchanged. CPU+Cache context6890LUT/4326FF/688RAM-LUT(included)/11DRM36K-equivalent/4APM; same-boundary bypass6632/4096/688/0/4. Actual100MHz and realDDR/board gates remain open.
 
@@ -56,7 +56,7 @@ Second checkpoint2026-10-21: `docs/verification/cpu/id_cache_stage2.md/.json` bi
 - [x] Independently check all channel payload bits, ordering, arbitrary backpressure and live reset at nominal100/125MHz plus two inverse stress ratios. Corruption/watchdog negatives return1.
 - [x] Compose `triha_cpu_ddr.v`: local cached CPU, CDC and the pinned exclusive native bridge. Actual existing O2 software passes with Cache on/off; all22 successful stores wait for native write plus readback; real bridge init-loss and three CPU access faults are observed. Reset after an accepted native write and before CPU completion, then successfully restart the entire program.
 - [x] Run native compile/synthesize/dev_map and independently re-read frozen files, actual elaboration, output hashes and CPU/Cache/CDC/bridge area. `docs/verification/cpu/id_cache_stage3.md/.json` records10671LUT/7942FF/33.5DRM/4APM excluding scan logic; CPU6218LUT, Cache514LUT, CDC67LUT/153FF/6DRM, bridge3691LUT/3358FF. Context differs from stage2; do not claim a core optimization.
-- [ ] Bind the physical DDR controller/clock/pin top and reviewed CDC physical constraints, then run the original100MHz multi-corner post-route checks. No area fixture is a timing boundary.
+- [x] Bind the physical DDR controller/clock/pin top and reviewed CDC physical constraints, then run the original100MHz multi-corner post-route checks. Stage5 passes actual all-clock summaries plus native XML Gray max/min skew groups. No area fixture is a timing boundary.
 - [ ] Integrate CPU/NPU/Video arbitration upstream of the one native bridge and prove other-master write visibility. The exclusive CPU wrapper is not that shared fabric. Board admission remains separate; no automatic programming or COM12 access.
 
 ## 8. Standalone physical DDR board boundary
@@ -66,5 +66,7 @@ Second checkpoint2026-10-21: `docs/verification/cpu/id_cache_stage2.md/.json` bi
 - [x] Correct PDS wide-cell versus mapped-bit Gray selectors; independently verify20 three-bit selections and six first-stage synchronizer selections. Keep only scoped asynchronous control exceptions; second-stage D paths remain timed.
 - [x] Reproduce unsynchronized board-state release with an executable failing check; use local two-stage free/DDR releases for LEDs, heartbeat and fault synchronizers. Repeat all board digital tests after the repair.
 - [x] Run two fresh complete compile/synthesize/dev_map/place/route/report_timing implementations under original100MHz/IO/hold/multicorner budgets. Independently re-read bindings, actual stages, all clock summaries, CPU-only hierarchy and max-delay paths. Stage4 records actual failures, not admission.
-- [ ] Close the actual remaining CPU setup path (-0.155ns/two endpoints), vendor phase-adjust FSM reset recovery (five endpoints), and explicitly verify Gray skew. Existing complete paths are not sufficient skew-report evidence. Preserve all failed runs; no CPU cycles/ISA/predictor changes in this checkpoint.
+- [x] Close the actual remaining CPU setup path (-0.155ns/two endpoints), vendor phase-adjust FSM reset recovery (five endpoints), and explicitly verify Gray skew. Stage5 uses reference-clock reset release with stricter clock relationships; CPU RTL/cycles/ISA/predictor are unchanged. Native XML supplies complete skew evidence, not an inference from max-delay.
 - [ ] Shared-fabric/other-master visibility, physical DDR training and board admission remain separate gates. The previous deployment stays intact; no COM12, programming, Flash, merge or push.
+
+Stage5 checkpoint2026-10-22: actual standalone CPU100MHz/DDR125MHz implementation passed all constrained clocks and corners, including recovery/removal and all Gray groups. CPU setup+0.213/+3.617ns, hold+0.136/+0.082ns, MPW+3.655/+4.202ns; worst skew slack+0.966ns. Two real software boots/four fault cases and corruption negative pass with the new reference release. Timing-admitted diagnostic bitstream/mask/ELF/images/reports are packaged as`cpu_ddr_board_189c51babb73`; no board operation. Details and frozen hashes:`docs/verification/cpu/id_cache_stage5.md/.json`.

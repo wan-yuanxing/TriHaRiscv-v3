@@ -1,0 +1,618 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "date": "2026-10-22",
+  "parent_commit": "4076496",
+  "branch": "cpu/windows-baseline",
+  "scope": "Standalone cached CPU/CDC/exclusive native DDR actual board target post-route timing only",
+  "digital_status": "PASS",
+  "physical_flow_status": "PASS",
+  "timing_status": "PASS",
+  "timing_closed": true,
+  "physical_admitted": true,
+  "bitstream_generated": true,
+  "programmed": false,
+  "board_validated": false,
+  "physical_ddr_training_validated": false,
+  "shared_fabric_admitted": false,
+  "new_coremark_score": false,
+  "physical_review": {
+    "path": "build/cpu/ddr-board-reference-reset-final-review-20261022.json",
+    "sha256": "2b92c81c79cb12c2b887d804d1c4ab611266960761a58fa5dff9730be6b4aa54"
+  },
+  "digital_review": {
+    "path": "build/cpu/ddr-board-reference-reset-digital-review-20261022.json",
+    "sha256": "c69d59da6162633bd682d136613376efa4d32c53fbbf3cff0f01fa965154f174"
+  },
+  "source_binding": {
+    "path": "build/cpu/ddr-board-route-20261022T015952541297Z/result.json",
+    "sha256": "0571ce25e876b7fbca725a0eb43dd133f97bb9884d93d30bf61289c019bfd3d9"
+  },
+  "actual_timing_report": {
+    "path": "build/cpu/ddr-board-route-20261022T015952541297Z/report_timing/triha_cpu_ddr_board_top.rtr",
+    "sha256": "b720e0297856ae8628420948b545c90b89042ea7384c1c8f58f25e2a1cb601a5"
+  },
+  "actual_timing_xml": {
+    "path": "build/cpu/ddr-board-route-20261022T015952541297Z/report_timing/rtr.db",
+    "sha256": "3fe9b76b306351dd7b545c3dcad2af3f40ef4f4706c1f311fc6578436264c5f1"
+  },
+  "review_tool": {
+    "path": "scripts/cpu/review_ddr_board.py",
+    "sha256": "68dadeae57ae4d4591142e6ff05f6f1412752d783589d029eab7b8c52a85315c"
+  },
+  "package_tool": {
+    "path": "scripts/cpu/package_ddr_board.py",
+    "sha256": "50a1b3886f4a7ee0454cb97667b3064f0feb3c0113167ab3587c920ea68c260e"
+  },
+  "actual_stage_markers": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true,
+    "pnr": true,
+    "report_timing": true
+  },
+  "native_pds_return_code": 0,
+  "raw_runner_status": "REVIEW_REQUIRED",
+  "raw_runner_return_code": 2,
+  "raw_runner_explanation": "Unchanged REVIEW_REQUIRED/2 record; independent final review supplies timing admission",
+  "binding_counts": {
+    "input_hashes": 73,
+    "external_hashes": 4,
+    "evidence_hashes": 109,
+    "frozen_hardware_hashes": 128,
+    "output_hashes": 535
+  },
+  "actual_elaboration": {
+    "u_system/u_soc": {
+      "CACHE_ENABLE": 1
+    },
+    "u_system/u_soc/u_core": {
+      "DUAL_ISSUE": 0
+    },
+    "u_system/u_soc/u_core/u_cpu": {
+      "SUPPORT_DUAL_ISSUE": 0,
+      "NUM_BTB_ENTRIES": 512,
+      "NUM_BHT_ENTRIES": 512,
+      "NUM_RAS_ENTRIES": 4,
+      "GSHARE_ENABLE": 0,
+      "EARLY_MUL_BYPASS": 1
+    },
+    "u_system/u_soc/u_router/u_cache": {
+      "ICACHE_ENABLE": 1,
+      "DCACHE_ENABLE": 1
+    },
+    "u_system/u_cdc/u_aw_fifo": {
+      "DATA_WIDTH": 49,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_w_fifo": {
+      "DATA_WIDTH": 145,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_b_fifo": {
+      "DATA_WIDTH": 6,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_ar_fifo": {
+      "DATA_WIDTH": 49,
+      "ADDR_WIDTH": 2
+    },
+    "u_system/u_cdc/u_r_fifo": {
+      "DATA_WIDTH": 135,
+      "ADDR_WIDTH": 2
+    }
+  },
+  "resources": {
+    "triha_cpu_ddr_board_top": {
+      "lut": 15825,
+      "registers": 13223,
+      "distributed_ram": 859,
+      "apm": 4,
+      "drm": 33.5
+    },
+    "I_ips_ddr_top": {
+      "lut": 4690,
+      "registers": 5144,
+      "distributed_ram": 43,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_supervisor": {
+      "lut": 111,
+      "registers": 105,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_core": {
+      "lut": 6558,
+      "registers": 3562,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 0.0
+    },
+    "u_cache": {
+      "lut": 519,
+      "registers": 763,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 11.0
+    },
+    "u_cdc": {
+      "lut": 67,
+      "registers": 153,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 6.0
+    },
+    "u_bridge": {
+      "lut": 3634,
+      "registers": 3354,
+      "distributed_ram": 128,
+      "apm": 0,
+      "drm": 0.0
+    },
+    "u_memory": {
+      "lut": 153,
+      "registers": 89,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 16.5
+    }
+  },
+  "resource_note": "Native hierarchy; RAM-LUT is already included in LUT. CPU-only u_core excludes Cache/CDC/bridge/DDR/board; synthesis contexts cannot establish an area optimization.",
+  "cpu_timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.213,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22877
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.136,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22877
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 4.715,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3451
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.267,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3451
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4228
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.617,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22877
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.082,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22877
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 6.444,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3451
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.164,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3451
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4228
+    }
+  ],
+  "all_clock_summary_row_count": 74,
+  "all_clock_violations": [],
+  "performance_slack_ns": 0.213,
+  "performance_consistent": true,
+  "reference_to_ddr_reset_checks": [
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "ref_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": 2.077,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 34
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "ref_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": 1.815,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 34
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "ref_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": 4.838,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 34
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "ref_clk",
+        "ddrphy_sysclk"
+      ],
+      "slack_ns": 0.48,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 34
+    }
+  ],
+  "worst_cpu_setup_paths": [
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/rd_ptr_q[0]/opit_0_inv_L6Q_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_issue/pc_x_q[31]/opit_0_inv_L6Q_perm/I5",
+      "slack_ns": 0.213
+    },
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/rd_ptr_q[0]/opit_0_inv_L6Q_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_issue/pc_x_q[31]/opit_0_inv_L6Q_perm/CE",
+      "slack_ns": 0.229
+    },
+    {
+      "startpoint": "u_system/u_soc/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/rd_ptr_q[0]/opit_0_inv_L6Q_perm/CLK",
+      "endpoint": "u_system/u_soc/u_core/u_cpu/u_exec0/result_q[11]/opit_0_inv_L6Q_perm/I5",
+      "slack_ns": 0.25
+    }
+  ],
+  "gray": {
+    "actual_maxdelay_paths": 60,
+    "maxdelay_ns": 8.0,
+    "maxdelay_all_met": true,
+    "largest_reported_datapath_ns": 1.134,
+    "requested_skew_ns": 2.0,
+    "skew_groups": 20,
+    "skew_status": "PASS",
+    "largest_actual_skew_ns": 1.034,
+    "worst_skew_slack_ns": 0.966,
+    "source": "Bound native rtr.db XML; ten FDC-bound groups per corner, max/min three bits each"
+  },
+  "reference_release_netlist_audit": {
+    "netlist": {
+      "path": "build/cpu/ddr-board-route-20261022T015952541297Z/synthesize/triha_cpu_ddr_board_top_syn.vm",
+      "sha256": "3e3b9cae38d0917ca5bac922d6182dc2ffdb0562a200be20dd412a096700b63c"
+    },
+    "status": "PASS",
+    "controller_reset": "reference_release_q[1]",
+    "flip_flops": [
+      {
+        "instance": "reference_release_q[0]",
+        "primitive": "GTP_DFF_C",
+        "init": 0,
+        "grs_enable": true,
+        "ports": {
+          "Q": "reference_release_q[0]",
+          "C": "N3",
+          "CLK": "reference_reset_clk",
+          "D": "1'b1"
+        }
+      },
+      {
+        "instance": "reference_release_q[1]",
+        "primitive": "GTP_DFF_C",
+        "init": 0,
+        "grs_enable": true,
+        "ports": {
+          "Q": "reference_release_q[1]",
+          "C": "N3",
+          "CLK": "reference_reset_clk",
+          "D": "reference_release_q[0]"
+        }
+      }
+    ]
+  },
+  "unchanged_cpu_cache_rtl": {
+    "parent_binding": {
+      "path": "build/cpu/ddr-board-route-20261021T163448972576Z/result.json",
+      "sha256": "02e0ccd42f5f00429549019e8594a5f957f6a4ec67ca7691ae12c791add09efc"
+    },
+    "status": "PASS",
+    "participating_files": 33,
+    "hashes": {
+      "rtl/cpu/ADAPTATIONS.json": "2325a576e02f36a1768ca2b9b5d2fb191cb9c660d6d96d75aaed6a6bd0533cdc",
+      "rtl/cpu/CACHE_ADAPTATIONS.json": "da4b293cb95f3232736bc8c1a6610903deff3f9c1e0ed8a9d8d2f2ae03f68750",
+      "rtl/cpu/triha_btb.v": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+      "rtl/cpu/triha_cache_subsystem.v": "38e129df40a0975a552bf18251e122c0b21070de1ec365df602865bed4507953",
+      "rtl/cpu/triha_core.v": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+      "rtl/cpu/triha_cpu.v": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+      "rtl/cpu/triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+      "rtl/cpu/triha_dcache.v": "3bb2bc9d2be4b7a4c7300ae80cd1628b5994c495055d3dfd108719d983f8112f",
+      "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+      "rtl/cpu/triha_dcache_tag_ram.v": "2a9df8c5dbeacb31414d07533b41196361d2df627894e2f16a274fe15c7b2eb8",
+      "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "rtl/cpu/triha_frontend.v": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+      "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+      "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+      "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+      "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+      "rtl/cpu/triha_issue.v": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+      "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+      "rtl/cpu/triha_multiplier.v": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+      "rtl/cpu/triha_npc.v": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+      "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+      "rtl/cpu/vendor/UPSTREAM.json": "0ec4b9a2d06cbe37eb8de7b607e4e363c1f2addbddf3ecbb737b2565ec651d04",
+      "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+      "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+      "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+      "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+      "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+      "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+      "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+      "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9"
+    },
+    "all_tracked_cpu_soc_files_unchanged_from_commit": "4076496",
+    "no_untracked_cpu_soc_files": true
+  },
+  "digital_runs": {
+    "boot": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T015856596664Z",
+    "no-init": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T020035331385Z",
+    "init-loss": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T020039302202Z",
+    "clock-stop": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T020043274260Z",
+    "cpu-pll-loss": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T020047637014Z",
+    "corrupt-data": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-20261022T020052032959Z"
+  },
+  "digital_scope": "Actual CPU/O2 software, digital DDR/PLL substitutes; two full boots with 8192 private/shared bytes and FENCE.I; not analog DDR or CoreMark",
+  "red_controller_release": {
+    "result": {
+      "path": "build/cpu/ddr-board-20261022T015801704172Z/result.json",
+      "sha256": "5f98f694df23f618df174026ddd7000b4d3e965525d31db5b8ff40eda8be7fe2"
+    },
+    "log": {
+      "path": "build/cpu/ddr-board-20261022T015801704172Z/simulation.log",
+      "sha256": "11cf93e8dfae5c9a99d90c47f660c769e14c56d670d2839ba8cb1e96e37a278e"
+    },
+    "runner_return_code": 1,
+    "reason": "unsynchronized controller reset release"
+  },
+  "rejected_syn_preserve": {
+    "log": {
+      "path": "build/cpu/ddr-preserve-state-probe-20261022/console.log",
+      "sha256": "1ab5f8438b9539be1d91a2256de68f8969e8d0d3fcb52ce50621c125543ee20a"
+    },
+    "return_code": {
+      "path": "build/cpu/ddr-preserve-state-probe-20261022/return_code.txt",
+      "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    "native_return_code": 1,
+    "reason": "Attribute syn_preserve is invalid; never adopted"
+  },
+  "rejected_stale_package": {
+    "result": {
+      "path": "build/cpu/ddr-board-package-20261022T021613497594Z/result.json",
+      "sha256": "88ddb1dd9441254864910c9c572ac09f9d90f2fc3a1541d082571fadc0d968ce"
+    },
+    "runner_return_code": 1,
+    "reason": "physical source binding drift: fpga/pg2l100h/constraints/cpu_ddr_board.fdc"
+  },
+  "package": {
+    "result": {
+      "path": "build/cpu/ddr-board-package-20261022T021613572893Z/result.json",
+      "sha256": "67bca81c617647c55a5eef3a432861da10a9c99e7fe157117c584519ae844be4"
+    },
+    "native_return_code": 0,
+    "runner_return_code": 0,
+    "release": "build/soc/releases/cpu_ddr_board_189c51babb73",
+    "manifest": {
+      "path": "build/soc/releases/cpu_ddr_board_189c51babb73/manifest.json",
+      "sha256": "d4fedcc2520b7c660884b70b183be728e584c4f244d63c2689d7156ec9482e29"
+    },
+    "verified_files": 13,
+    "files": {
+      "cpu_ddr_board.fdc": "b9ebf6eaf4b39ada1d043e4183889ad9054952127cf90e6d262472335fa26290",
+      "firmware.elf": "d8e15d772e7f1105b23043411c7109d9f55bbc5b5fa72011e0164772ce6896ca",
+      "firmware.map": "9ef52d022e6a40e310939cb8e002c60c6881b0c3922fb04d2e0cc82fa0042331",
+      "README.md": "8f02bceb7bf69e45ae365d70d48deff022e73202a659a8912f650d652756db7c",
+      "review.json": "2b92c81c79cb12c2b887d804d1c4ab611266960761a58fa5dff9730be6b4aa54",
+      "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "route-result.json": "0571ce25e876b7fbca725a0eb43dd133f97bb9884d93d30bf61289c019bfd3d9",
+      "rtr.db": "3fe9b76b306351dd7b545c3dcad2af3f40ef4f4706c1f311fc6578436264c5f1",
+      "sram.hex": "b96b2492237b7b70939997eaaeaf88ecebea7848f8cb340be2cdcfe2c3e05522",
+      "triha_cpu_ddr_board_top.rtr": "b720e0297856ae8628420948b545c90b89042ea7384c1c8f58f25e2a1cb601a5",
+      "triha_cpu_ddr_board_top.sbit": "189c51babb73ef6b97daf02c7ccc5a95177e07838de8a094a8ec20fe7f3ee79d",
+      "triha_cpu_ddr_board_top.smsk": "3e5d9740fd4bd48e5b63702eb517ffd3ae156063420645ead0c9726cedf4f8f5",
+      "triha_cpu_ddr_board_top_pnr.adf": "62665ded406f236f215b54c13cde31c4ef324741b654d268e940e2e7a6b361ed"
+    }
+  },
+  "verification": {
+    "python_unittest_count": 50,
+    "checks": {
+      "python-tests": {
+        "status": "PASS",
+        "command": [
+          "D:\\miniconda3\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/cpu",
+          "-p",
+          "test_*.py"
+        ],
+        "return_code": 0,
+        "log": {
+          "path": "build/cpu/ddr-stage5-verification-20261022/python-tests.log",
+          "sha256": "b5bb7e062c7fdb9b189673a6b13f68ed34ea8770341033da2e17cc07ad2c635f"
+        }
+      },
+      "generated-config": {
+        "status": "PASS",
+        "command": [
+          "D:\\miniconda3\\python.exe",
+          "scripts/cpu/gen_ddr_board.py",
+          "--check"
+        ],
+        "return_code": 0,
+        "log": {
+          "path": "build/cpu/ddr-stage5-verification-20261022/generated-config.log",
+          "sha256": "b66ef94facff33f0e8186858440147b6a9e61bb3a6df935861fa1829f9db6b81"
+        }
+      },
+      "original-sources": {
+        "status": "PASS",
+        "command": [
+          "D:\\miniconda3\\python.exe",
+          "scripts/cpu/check_cache.py"
+        ],
+        "return_code": 0,
+        "log": {
+          "path": "build/cpu/ddr-stage5-verification-20261022/original-sources.log",
+          "sha256": "122b2fb8543097b33ff466af7d55bcc338ab2727697433a42427daf984dbe395"
+        }
+      },
+      "pds-report-tests": {
+        "status": "PASS",
+        "command": [
+          "pwsh",
+          "-NoProfile",
+          "-File",
+          "scripts/cpu/test_pds_reports.ps1"
+        ],
+        "return_code": 0,
+        "log": {
+          "path": "build/cpu/ddr-stage5-verification-20261022/pds-report-tests.log",
+          "sha256": "07a553b458a36ab2d9b76c489d6ff4cdd4de2381e1c4f3d710435e4bd22dca35"
+        }
+      },
+      "route-report-tests": {
+        "status": "PASS",
+        "command": [
+          "pwsh",
+          "-NoProfile",
+          "-File",
+          "scripts/cpu/test_route_reports.ps1"
+        ],
+        "return_code": 0,
+        "log": {
+          "path": "build/cpu/ddr-stage5-verification-20261022/route-report-tests.log",
+          "sha256": "7a1105446462c6485c2251a87912ae143cfc6f81b8b0ecc7a3fe09913c43e1a4"
+        }
+      }
+    },
+    "physical_review_revalidated": true,
+    "digital_review_revalidated": true
+  },
+  "preserved_release": {
+    "manifest": {
+      "path": "build/soc/releases/cpu_coremark_6ff82025b53d/manifest.json",
+      "sha256": "9e5d62605eb82d36d288db17cb06110d3455af1f5a6aa1652fdf0e2e98314c8c"
+    },
+    "verified_files": 10,
+    "files": {
+      "firmware.elf": "8f981818ddb312dd4f2eedd48fbea000f643e8c2b01e946a6e69b652fb728a86",
+      "firmware.map": "90829a32e7e74f7788e3766ba886be2a14a977830755153d1d26addd23b14032",
+      "README.md": "0f86936f6946044961ea23b41c15120ed1d599272c489d9b0818fa5f0c824450",
+      "result.json": "29d1b2fbef577e7af533c4da039e9deb7d2e83fad044c13d0679e9f20ec60d95",
+      "review.json": "c50e6b80e6f5fcc855eb2cd4b730dc69d2bfcbb5fbb6ad60e0e1b008a58acb7d",
+      "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "sram.hex": "234565dc606a8f60cd36e17341249a0921723c0e859430a07455fadb28139089",
+      "triha_cpu_board_top.rtr": "a3b65c907e624413b0c9c0466b68a38b775d6019cf7ad6c6526f4d7d943b55a8",
+      "triha_cpu_board_top.sbit": "6ff82025b53d071827fb093a1f97dc417628f89fdc22db6dc0736eabd7404cd9",
+      "triha_cpu_board_top.smsk": "6b1ae6a18985198d20955dd4d18bc899c1d569c62a187a54ec9af92b060e1adf"
+    }
+  },
+  "open_gates": [
+    "Physical DDR training and two-boot board acceptance",
+    "Shared fabric, other-master write visibility and coordinated ownership/reset",
+    "Hardware hit/miss observations and system-level performance measurement"
+  ]
+}

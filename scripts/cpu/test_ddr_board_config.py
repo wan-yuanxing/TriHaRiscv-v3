@@ -47,6 +47,11 @@ class BoardConfigTests(unittest.TestCase):
                         self.assertIsNotNone(re.fullmatch(selection, name))
                 self.assertIsNone(re.fullmatch(selection, 'u_system/u_cdc/u_aw_fifo/wr_gray_rd_sync1[0]/Q'))
 
+    def test_reference_clock_reset_release_is_timed_against_ddr(self):
+        text = generated()['fpga/pg2l100h/constraints/cpu_ddr_board.fdc']
+        self.assertNotIn('set_clock_groups -name ref_clk -asynchronous', text)
+        self.assertIn('reference_release_q*/C', text)
+
 
 if __name__ == '__main__':
     unittest.main()

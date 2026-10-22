@@ -20,6 +20,13 @@ def generated(root=ROOT):
         raise ValueError('exclusive diagnostic scratch window mismatch')
     base = (root/cfg['pin_template']).read_text(encoding='utf-8')
     text = base.split('# Bounded bundled-data CDC.')[0]
+    # The reference now clocks the controller's reset-release registers.
+    # Keep it related to the derived DDR clocks so recovery/removal are
+    # actually checked; do not inherit the unused-reference clock cut.
+    reference_group = 'set_clock_groups -name ref_clk -asynchronous -group [get_clocks {ref_clk}]\n'
+    if text.count(reference_group) != 1:
+        raise ValueError('reference clock group template changed')
+    text = text.replace(reference_group, '')
     names = {'ref_clk_p':'ref_clk_pi','ref_clk_n':'ref_clk_ni','sys_clk':'sys_clk_i',
         'rst_in':'rst_ni','uart_tx':'uart_tx_o','heart_beat_led':'led_o[0]',
         'ddr_init_done':'led_o[1]','init_over_rx':'led_o[2]','hdmi_int_led':'led_o[3]'}
@@ -44,7 +51,7 @@ set_false_path -to [get_pins {u_system.u_cdc.ready_meta_q/D* u_system.u_cdc.faul
 # Free-domain epoch launch reaches asynchronous reset pins only. Same-domain
 # release-register recovery/removal and all D/CE/RAM data paths remain timed.
 set_false_path -from [get_ports {rst_ni}] -to [get_pins {u_supervisor.free_release_q*/C}]
-set_false_path -from [get_clocks {free_clk}] -to [get_pins {u_supervisor.ddr_release_q*/C u_system.u_cdc.cpu_release_q*/C u_system.u_cdc.ddr_release_q*/C I_ips_ddr_top.u_ddrc_rstn_sync.sig_async_r*/C}]
+set_false_path -from [get_clocks {free_clk}] -to [get_pins {reference_release_q*/C u_supervisor.ddr_release_q*/C u_system.u_cdc.cpu_release_q*/C u_system.u_cdc.ddr_release_q*/C I_ips_ddr_top.u_ddrc_rstn_sync.sig_async_r*/C}]
 # Preserve the pinned vendor phase-adjust reset protocol and startup hold.
 set_false_path -from [get_clocks {free_clk}] -to [get_pins {I_ips_ddr_top.u_ddrphy_top.u_ips2l_ddrphy_rst_clk_phase_adj.*/C I_ips_ddr_top.u_ddrphy_top.u_ips2l_ddrphy_rst_clk_phase_adj.*/P}]
 '''

@@ -29,6 +29,17 @@ module triha_cpu_ddr_board_top #(
     wire free_clk, reference_clk, cpu_clk, ddr_clk, cpu_pll_locked, epoch_n, free_rst_n, ddr_rst_n;
     GTP_CLKBUFG u_free_buffer (.CLKIN(sys_clk_i), .CLKOUT(free_clk));
     GTP_INBUFDS u_reference (.I(ref_clk_pi), .IB(ref_clk_ni), .O(reference_clk));
+    // The PHY PLLs require reset before their own clocks exist. Release
+    // their controller reset on the always-running reference clock;
+    // do not wait for the generated DDR clock and create a startup loop.
+    wire reference_reset_clk, controller_rst_n;
+    GTP_CLKBUFG u_reset_reference_buffer (.CLKIN(reference_clk), .CLKOUT(reference_reset_clk));
+    (* ASYNC_REG = "TRUE", syn_preserve = 1 *) reg [1:0] reference_release_q;
+    always @(posedge reference_reset_clk or negedge epoch_n) begin
+        if (!epoch_n) reference_release_q <= 0;
+        else reference_release_q <= {reference_release_q[0],1'b1};
+    end
+    assign controller_rst_n = reference_release_q[1];
     cpu_board_pll u_cpu_pll (.clkin1(reference_clk), .clkout0(cpu_clk), .lock(cpu_pll_locked));
     wire pll_lock, phy_pll_lock, gpll_lock, rst_gpll_lock, ddrphy_cpd_lock;
     wire ip_init_done, ip_init_fail, align_error;
@@ -68,7 +79,7 @@ module triha_cpu_ddr_board_top #(
     );
     ddr3_test #(.MEM_ROW_WIDTH(15),.MEM_COLUMN_WIDTH(10),.MEM_BANK_WIDTH(3),
         .MEM_DQ_WIDTH(32),.MEM_DM_WIDTH(4),.MEM_DQS_WIDTH(4),.CTRL_ADDR_WIDTH(28)) I_ips_ddr_top(
-        .ref_clk(reference_clk),.resetn(epoch_n),.core_clk(ddr_clk),
+        .ref_clk(reference_clk),.resetn(controller_rst_n),.core_clk(ddr_clk),
         .pll_lock(pll_lock),.phy_pll_lock(phy_pll_lock),.gpll_lock(gpll_lock),
         .rst_gpll_lock(rst_gpll_lock),.ddrphy_cpd_lock(ddrphy_cpd_lock),.ddr_init_done(ip_init_done),
         .axi_awaddr(axi_awaddr),.axi_awuser_ap(1'b0),.axi_awuser_id(axi_awuser_id),

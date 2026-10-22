@@ -1,11 +1,98 @@
 """Independent review of CPU/DDR board digital and physical evidence."""
 import argparse
 import json
+import math
 from pathlib import Path
 import re
+import xml.etree.ElementTree as ET
 
 from run_cache import ROOT, sha, save
 from review_cache_soc import verify_run, hierarchy
+
+
+def parse_skew(xml_source, fdc):
+    """Read native XML groups omitted from PDS's plain-text report.
+
+    Bind each group to the exact FDC line and require all three physical
+    bit paths for both max/min analysis, in both process corners.
+    """
+    expected = {}
+    for number, line in enumerate(fdc.splitlines(), 1):
+        if not line.startswith('set_max_skew '):
+            continue
+        match = re.fullmatch(r'set_max_skew 2\.000 -from \[get_pins -regexp -hsc / \{([^}]+)\}\] -to \[get_pins -regexp -hsc / \{([^}]+)\}\]', line)
+        if match is None:
+            raise ValueError('unexpected skew constraint')
+        expected[number] = match.groups()
+    if len(expected) != 10 or len(set(expected.values())) != 10:
+        raise ValueError('need ten distinct Gray skew constraints')
+    headers = ['Path','Slack','Logic Levels','High Fanout','Start Point','End Point',
+        'Launch Clock','Capture Clock','Clock Skew','Data Delay','Required Skew',
+        'Actual Skew','Relative Delay','Relative CPR']
+    groups, seen_corners = [], set()
+    for event, table in ET.iterparse(xml_source, events=['end']):
+        if table.tag != 'table':
+            continue
+        match = re.fullmatch(r'report_timing_(slow|fast)_path_max_skew',table.get('id',''))
+        if match is None:
+            # Clear completed unrelated tables to bound XML memory usage.
+            # Path row data is outside its nested arrival/require tables.
+            table.clear()
+            continue
+        corner = match[1]
+        if corner in seen_corners or [d.text for d in table.findall('column_headers/data')] != headers:
+            raise ValueError('duplicate corner or unexpected skew schema')
+        seen_corners.add(corner)
+        seen_lines = set()
+        for group in table.findall('row'):
+            values = [d.text for d in group.findall('data')]
+            if len(values) != len(headers):
+                raise ValueError('incomplete skew group')
+            label = re.fullmatch(r'MaxSkew Path 2\.000ns, Line Num (\d+)', values[0] or '')
+            line = int(label[1]) if label else -1
+            if line not in expected or line in seen_lines:
+                raise ValueError('skew group is not bound to a unique frozen constraint')
+            seen_lines.add(line)
+            slack, required, actual = (float(values[i]) for i in [1,10,11])
+            if (not all(math.isfinite(v) for v in [slack,required,actual]) or required != 2.0 or
+                    actual < 0 or abs(required-actual-slack) > 0.0011):
+                raise ValueError('inconsistent native skew values')
+            sections = group.findall('row')
+            if {s.findtext('data') for s in sections} != {'skew for max path','skew for min path'} or len(sections) != 2:
+                raise ValueError('missing max/min skew analysis')
+            paths = []
+            for section in sections:
+                bits = set()
+                for path in section.findall('row'):
+                    fields = [d.text for d in path.findall('data')]
+                    if len(fields) != len(headers):
+                        raise ValueError('incomplete skew path')
+                    source, target = fields[4:6]
+                    normalized = []
+                    for point in [source, target]:
+                        pin = re.fullmatch(r'(u_system/u_cdc/u_(?:aw|w|b|ar|r)_fifo/(?:wr_gray|rd_gray)(?:_rd_sync1|_wr_sync1)?\[([012])\])/(?:[^/]+/)*(Q|D)',point or '')
+                        if pin is None:
+                            raise ValueError('unexpected physical skew endpoint')
+                        normalized.append((pin[1]+'/'+pin[3],pin[2]))
+                    if (not re.fullmatch(expected[line][0],normalized[0][0]) or
+                            not re.fullmatch(expected[line][1],normalized[1][0]) or
+                            normalized[0][1] != normalized[1][1] or normalized[0][1] in bits):
+                        raise ValueError('skew path does not reach the matched first-stage bit')
+                    bits.add(normalized[0][1])
+                    paths.append(dict(analysis=section.findtext('data'), startpoint=source, endpoint=target))
+                if bits != {'0','1','2'}:
+                    raise ValueError('not all Gray bits were analyzed')
+            groups.append(dict(corner=corner, constraint_line=line, slack_ns=slack,
+                required_skew_ns=required, actual_skew_ns=actual, paths=paths))
+        if seen_lines != set(expected):
+            raise ValueError('incomplete native skew group coverage')
+        table.clear()
+    if seen_corners != {'slow','fast'}:
+        raise ValueError('missing native skew corner')
+    return dict(met=all(g['slack_ns'] >= 0 for g in groups), groups=groups,
+        worst_slack_ns=min(g['slack_ns'] for g in groups),
+        largest_actual_skew_ns=max(g['actual_skew_ns'] for g in groups),
+        scope='Native post-route XML; ten frozen constraints, three bits, max/min paths, Slow/Fast')
 
 
 def matched_pins(text):
@@ -174,8 +261,8 @@ def physical(directory):
             exceptions.append(dict(startpoint=block.splitlines()[0], endpoint=block.splitlines()[1].split(': ',1)[1],
                 corner=re.search(r'Path Type   : max \((slow|fast) corner\)',block)[1],
                 arrival_ns=float(arrival[1]), slack_ns=float(slack[2]), met=slack[1]=='MET'))
-    # The tool emitted datapath-only MaxDelay checks, but no distinct skew
-    # check section in this first report. Never infer missing checks passed.
+    # PDS omits skew details from the text file; its bound native XML
+    # contains both corners, all groups and the actual max/min bit paths.
     timing['gray_reported_maxdelay_paths'] = exceptions
     covered = set()
     for path in exceptions:
@@ -191,7 +278,16 @@ def physical(directory):
         for channel in ['aw','w','b','ar','r'] for pointer in ['wr_gray','rd_gray'] for bit in range(3)}
     timing['gray_maxdelay_coverage_complete'] = covered == expected_paths
     timing['gray_maxdelay_met'] = covered == expected_paths and all(p['met'] and p['slack_ns'] >= 0 for p in exceptions)
-    timing['gray_skew_status'] = 'UNKNOWN: no explicit skew check section observed'
+    skew = parse_skew(directory/'report_timing/rtr.db',fdc)
+    timing['gray_skew'] = skew
+    timing['gray_skew_status'] = 'PASS' if skew['met'] else 'FAIL'
+    if 'reference_release_q' in (directory/'src/fpga/pg2l100h/rtl/triha_cpu_ddr_board_top.v').read_text(encoding='utf-8'):
+        if 'set_clock_groups -name ref_clk -asynchronous' in fdc:
+            raise ValueError('reference-clock reset paths were cut')
+        reference_checks = [r for r in timing['rows'] if r['check'] == 'Recovery'
+            and r['clocks'] == ('ref_clk','ddrphy_sysclk')]
+        if len(reference_checks) != 2 or any(r['endpoints'] < 5 for r in reference_checks):
+            raise ValueError('missing actual reference-to-DDR reset recovery checks')
     snr = (directory/'synthesize/triha_cpu_ddr_board_top.snr').read_text(encoding='utf-8')
     if not re.search(r'(?m)^Total Latches: 0\s*$', snr):
         raise ValueError('unexpected inferred latch')
@@ -218,11 +314,14 @@ def physical(directory):
         if 'max (slow corner)' in block[:350] and 'sequential timing path' in block[:500] and re.search(r'(?m)^Path Group  : cpu_clk$', block):
             worst.append(dict(startpoint=block.splitlines()[0], endpoint=block.splitlines()[1].split(': ',1)[1],
                 slack_ns=float(re.search(r'Slack \((?:MET|VIOLATED)\)\s+(-?[\d.]+)', block)[1])))
-    return dict(status='PASS', timing_status='FAIL' if not timing['summary_met'] else 'REVIEW_REQUIRED',
-        timing_closed=False, physical_admitted=False, board_validated=False,
+    closed = timing['summary_met'] and timing['gray_maxdelay_met'] and skew['met']
+    timing['physical_admitted'] = closed
+    return dict(status='PASS', timing_status='PASS' if closed else 'FAIL',
+        timing_closed=closed, physical_admitted=closed, board_validated=False,
         bound_result=str(directory/'result.json'), bound_result_sha256=sha(directory/'result.json'),
         timing_report=str(directory/'report_timing/triha_cpu_ddr_board_top.rtr'),
         timing_report_sha256=sha(directory/'report_timing/triha_cpu_ddr_board_top.rtr'),
+        timing_xml=str(directory/'report_timing/rtr.db'), timing_xml_sha256=sha(directory/'report_timing/rtr.db'),
         resources=resources, timing=timing, constraints=constraints, elaborated=elaborated,
         reviewed_reference_pin_notices=critical, worst_cpu_setup_paths=sorted(worst,key=lambda r:r['slack_ns'])[:3],
         scope='Independent terminal binding and actual post-route review; review PASS does not mean timing PASS; DDR external AC/training and shared fabric not admitted')
