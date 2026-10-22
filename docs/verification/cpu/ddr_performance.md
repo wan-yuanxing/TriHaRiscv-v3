@@ -1,5 +1,13 @@
 # DDR CoreMark performance diagnosis
 
+Physical follow-up, authorized after this implementation checkpoint: release
+32019ccd2f69 is now programmed/readback-verified and has one complete real
+5000-iteration run:86.508181684CoreMark,0.865081817/MHz,0.013356211/CPU LUT6477.
+Throughput+2.528851% versus the previous user-provided board run; CPU-LUT
+efficiency+3.811055%. COM12 released, no Flash. See ddr_store_response_board.md
+and its independently bound JSON. The remainder records the earlier digital/
+physical-gate checkpoint; its packaging-stage unprogrammed status is historical.
+
 2026-10-22. Worktree cpu/windows-baseline; backup cpu-before-ddr-profile-20261022
 at977e151. Native Windows ModelSim/PDS/GCC15.2, -O2/noLTO;100MHz unchanged.
 No JTAG/UART access or replacement of the user's current volatile image.

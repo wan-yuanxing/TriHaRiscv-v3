@@ -110,3 +110,13 @@ manifest-listed file hashes verified.66CPU/45SoC Python checks and original
 configuration/PDS/route parser checks pass. Store-only selected; fast-load and
 D-cache-region experiments excluded. Next is separately authorized physical
 measurement with the user's serial assistant; no new board-score claim yet.
+
+Subsequent user authorization: "上板测试一下". Volatile Program/Verify of
+32019ccd2f69 and one complete raw UART5000-iteration board run now pass:
+5779800133cycles,57.79800133seconds,86.508181684CoreMark,0.865081817/MHz,
+0.013356211/CPU LUT6477. Physical throughput+2.528851%, CPU-LUT efficiency
++3.811055%; the full loaded payload matches the previous image. COM12 is closed,
+new image retained, no Flash or long KEY0 hold. Initial implementation UART/JTAG
+exclusions above applied before this explicit board-test request. Independent
+physical evidence is ddr_store_response_board.md/.json; prior startup failures
+and the absence of a repeated-reset stability test remain explicit.

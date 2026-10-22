@@ -1,0 +1,117 @@
+{
+  "status": "PASS_BOARD_COREMARK",
+  "reviewed_utc": "2026-10-22T12:00:42.992029+00:00",
+  "reviewer": {
+    "path": "build/cpu/review-ddr-store-board-20261022.py",
+    "sha256": "fa3478732b44322828214ebd3c0c2ce87595a5f2cd7ef38bc21da87f6146a44f"
+  },
+  "source_commit": "7b97a86",
+  "capture_result": {
+    "path": "build/soc/ddr-coremark-physical-20261022T115703162826Z/result.json",
+    "sha256": "0dabd541ef9ee9f68bbb6d3d014e118cfb494adee497cdded7237dc1cdc4b96f"
+  },
+  "raw_uart": {
+    "path": "build/soc/ddr-coremark-physical-20261022T115703162826Z/uart.bin",
+    "sha256": "f0dc4197258254854ee561ba35b7a43b51dafa44a3f008ea91785ba33b042559"
+  },
+  "complete_epoch_uart": {
+    "path": "build/soc/ddr-coremark-physical-20261022T115703162826Z/measurement-uart.txt",
+    "sha256": "1ba3352070bc92c93679ed8e55eec27ce4af1812776099d589a12a378d74b483"
+  },
+  "program_record": {
+    "path": "build/soc/board-ddr-program-20261022T115707081040Z/result.json",
+    "sha256": "4a02c683c98eaa9be86e20b306f2a247cdf97fe9c424f4ced9ee98466a17b545"
+  },
+  "program_log": {
+    "path": "build/soc/board-ddr-program-20261022T115707081040Z/program_verify.log",
+    "sha256": "7263b094c14321d0b9b6c172a202c241f959bdfd8582f6f9a85263dff9b5c1a0"
+  },
+  "package_manifest": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_32019ccd2f69/manifest.json",
+    "sha256": "adfd4a2fb80a2e395948b3717d216e6b7208d3868ec5a010bdc5bad4c325fb53"
+  },
+  "timing_review": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_32019ccd2f69/review.json",
+    "sha256": "beb871892d82899b5464b0ebef98c0ea050e32c7c3b72fb889a71c2bf2a4e70a"
+  },
+  "baseline_result": {
+    "path": "build/soc/ddr-coremark-user-20261022/result.json",
+    "sha256": "6bb55ddb4b27b2c412d053570d5b28c81c72d1c6081d12e01c37ec4f4e0ec109"
+  },
+  "baseline_uart": {
+    "path": "build/soc/ddr-coremark-user-20261022/uart-user.txt",
+    "sha256": "459ec1076907b2beee0d5e168fec4031829b23cc8e9fbb6a3d93dfabb8e5c872"
+  },
+  "baseline_evidence_kind": "User-provided serial-assistant text; no independent raw byte capture",
+  "new_evidence_kind": "Independent raw UART capture started before authorized volatile Program/Verify",
+  "measurement": {
+    "iterations": 5000,
+    "cycles": 5779800133,
+    "clock_hz": 100000000,
+    "seconds": 57.79800133,
+    "coremark": 86.5081816835205,
+    "coremark_per_mhz": 0.8650818168352051,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 6477,
+    "coremark_per_lut": 0.013356211468815889
+  },
+  "baseline_measurement": {
+    "iterations": 5000,
+    "cycles": 5925962666,
+    "clock_hz": 100000000,
+    "seconds": 59.25962666,
+    "coremark": 84.37447688773543,
+    "coremark_per_mhz": 0.8437447688773543,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 6558,
+    "coremark_per_lut": 0.012865885466260357
+  },
+  "throughput_gain_percent": 2.5288509920175124,
+  "cycles_saved": 146162533,
+  "coremark_per_cpu_lut_gain_percent": 3.8110552424966566,
+  "cpu_resources": {
+    "lut": 6477,
+    "registers": 3562,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_resources": {
+    "lut": 492,
+    "registers": 763,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  },
+  "same_loaded_payload": true,
+  "payload_sha256": "04c2ae6b5d6efdb45a7432244d4f68c28441dbbf02937c9ed6f105ed14257216",
+  "actual_postroute_100mhz": true,
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "port_released": true,
+  "capture_exit_code": 0,
+  "complete_measured_runs": 1,
+  "incomplete_programming_epochs": 1,
+  "physical_key0_test": false,
+  "repeated_boot_stability_proven": false,
+  "frequency_scope": "Nominal100MHz; not independent instrument calibration",
+  "physical_ipc": null,
+  "official_submission": false,
+  "retained_board_release": "cpu_ddr_coremark_on_32019ccd2f69",
+  "scope": "One complete physical private-DDR 5000-iteration GCC15.2-O2/noLTO Cache-on run. Not repeated-reset training, shared-fabric or full-ISA acceptance."
+}
