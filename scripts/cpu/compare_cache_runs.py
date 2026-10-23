@@ -54,13 +54,13 @@ def started_symbol(path):
     return found[0]
 
 
-def compare_traces(cached,uncached):
+def compare_traces(cached,uncached,trace_names=('cpu-cache.wb.log','cpu-cache.store.log')):
     output = {}
     initial_values = None
     start_addr = started_symbol(cached/'firmware.elf')
     if start_addr != started_symbol(uncached/'firmware.elf'):
         raise ValueError('timing storage address changed')
-    for name in ['cpu-cache.wb.log','cpu-cache.store.log']:
+    for name in trace_names:
         digest = hashlib.sha256()
         with (cached/name).open('rb') as a,(uncached/name).open('rb') as b:
             for count,(x,y) in enumerate(zip_longest(a,b),1):

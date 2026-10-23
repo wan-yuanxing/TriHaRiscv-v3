@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "status": "FOUR_MODE_RTL_COMPARISON_PASS",
+  "implementation_commit": "e649aef",
+  "iterations": 5,
+  "optimization": "-O2, no LTO",
+  "scope": "Same loaded program, AXI128 modeled DDR; TCM results separate; no new board/official score or actual timing admission",
+  "ddr_measurements": [
+    {
+      "issue_mode": "single",
+      "cache_enable": false,
+      "cycles": 10613264,
+      "coremark_per_mhz": 0.47110860523209447,
+      "wb_observation_ipc": 0.13647526340624336,
+      "memory_observation": {
+        "instruction_reads": 925692,
+        "data_reads": 279511,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 0,
+        "lower_writes": 73296,
+        "protocol_fault": 0
+      },
+      "directory": "build/cpu/cache-coremark-20261023T113622402282Z",
+      "result_sha256": "322b168bfcd5551787f0af3b144f7ce8b8f962450afdc6355a11ef02d8e240d6"
+    },
+    {
+      "issue_mode": "single",
+      "cache_enable": true,
+      "cycles": 2014969,
+      "coremark_per_mhz": 2.4814277539753715,
+      "wb_observation_ipc": 0.7188438134780237,
+      "memory_observation": {
+        "instruction_reads": 391,
+        "data_reads": 134,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 73294,
+        "lower_writes": 0,
+        "protocol_fault": 0
+      },
+      "directory": "build/cpu/cache-coremark-20261023T112219934835Z",
+      "result_sha256": "83f26de7e69c1da0c2f92a7ef8e2005581057e8394f89c428d532b1a48acc5ed"
+    },
+    {
+      "issue_mode": "dual",
+      "cache_enable": false,
+      "cycles": 10892242,
+      "coremark_per_mhz": 0.4590423165405249,
+      "wb_observation_ipc": 0.13297978506169805,
+      "memory_observation": {
+        "instruction_reads": 967047,
+        "data_reads": 279511,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 0,
+        "lower_writes": 73296,
+        "protocol_fault": 0
+      },
+      "directory": "build/cpu/cache-coremark-20261023T113622400023Z",
+      "result_sha256": "78ec1ab0963f9a9c87c85017e5ce7eaefcea86445053b2c12d5df2fcf3cbf940"
+    },
+    {
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "cycles": 1781952,
+      "coremark_per_mhz": 2.8059117192831233,
+      "wb_observation_ipc": 0.8128434435944403,
+      "memory_observation": {
+        "instruction_reads": 391,
+        "data_reads": 134,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 73294,
+        "lower_writes": 0,
+        "protocol_fault": 0
+      },
+      "directory": "build/cpu/cache-coremark-20261023T112230076790Z",
+      "result_sha256": "04af1da3ceb6f9a92c9b3446cbbfade4b97eba489ea0f67eb93b7d3f201e3796"
+    }
+  ],
+  "single_cache_comparison": {
+    "status": "PASS",
+    "scope": "Same-loaded-program five-iteration RTL comparison; modeled AXI DDR, not board or official score",
+    "cached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T112219934835Z",
+    "uncached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T113622402282Z",
+    "cached_result_sha256": "83f26de7e69c1da0c2f92a7ef8e2005581057e8394f89c428d532b1a48acc5ed",
+    "uncached_result_sha256": "322b168bfcd5551787f0af3b144f7ce8b8f962450afdc6355a11ef02d8e240d6",
+    "loaded_image_sha256": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+    "elf_raw_equal": false,
+    "differing_nonloaded_sections": [
+      ".strtab"
+    ],
+    "trace_comparison": {
+      "cpu-cache.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "79ad486ba36966c360ba5bc96986916160b878ab9d1b08567a7dca753c66555f",
+        "cached_sha256": "4898498fb606bb557a53576c646252fee2662d4b4b1e177946647852472ed9b6",
+        "uncached_sha256": "afe729be10285e1741faeb5de8392db1c8b87b5efc9cb0fbbc27f0c67f0e3a72"
+      },
+      "cpu-cache.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+        "cached_sha256": "efa930da76b2784a0a97508b8f44a5c9fb159552d604b66a1a5bd6b39eb1df07",
+        "uncached_sha256": "655117c3e4acf5d70d034e48919e2cff0c64789acc75b489b8ddcf8c8cca7eb4"
+      }
+    },
+    "cached": {
+      "cycles": 2014969,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 2.4814277539753715,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "uncached": {
+      "cycles": 10613264,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 0.47110860523209447,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "memory_model": {
+      "axi_bits": 128,
+      "deterministic_ready": true,
+      "model_write_wait_cycles": 30,
+      "refill_bytes": 32,
+      "physical_ddr_latency_validated": false
+    },
+    "iterations": 5,
+    "cycles_reduced_percent": 81.01461529648184,
+    "throughput_gain_percent": 426.72095699735337,
+    "actual_postroute_100mhz": false,
+    "board_score_validated": false,
+    "programmed": false,
+    "runner_return_code": 0
+  },
+  "dual_cache_comparison": {
+    "status": "PASS",
+    "scope": "Same-loaded-program five-iteration RTL comparison; modeled AXI DDR, not board or official score",
+    "cached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T112230076790Z",
+    "uncached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T113622400023Z",
+    "cached_result_sha256": "04af1da3ceb6f9a92c9b3446cbbfade4b97eba489ea0f67eb93b7d3f201e3796",
+    "uncached_result_sha256": "78ec1ab0963f9a9c87c85017e5ce7eaefcea86445053b2c12d5df2fcf3cbf940",
+    "loaded_image_sha256": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+    "elf_raw_equal": false,
+    "differing_nonloaded_sections": [
+      ".strtab"
+    ],
+    "trace_comparison": {
+      "cpu-cache.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "79ad486ba36966c360ba5bc96986916160b878ab9d1b08567a7dca753c66555f",
+        "cached_sha256": "972609a171912411dd6bfeaa5de7e128fb39531ce7541d33ee21ec5b6ee1fa5a",
+        "uncached_sha256": "dc507afad52f2a68fd41478f7543418789dc79ccbcc2cb973f4a4852946cbb78"
+      },
+      "cpu-cache.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+        "cached_sha256": "e4386f0bc3c78929cbfe2220da14cfa012fded06acf4b7f203520b9032281361",
+        "uncached_sha256": "569705158e6c0841028645ebfa771bb6b9e0aea078339001321c5dcaa2306f72"
+      }
+    },
+    "cached": {
+      "cycles": 1781952,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 2.8059117192831233,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "uncached": {
+      "cycles": 10892242,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 0.4590423165405249,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "memory_model": {
+      "axi_bits": 128,
+      "deterministic_ready": true,
+      "model_write_wait_cycles": 30,
+      "refill_bytes": 32,
+      "physical_ddr_latency_validated": false
+    },
+    "iterations": 5,
+    "cycles_reduced_percent": 83.64017251911957,
+    "throughput_gain_percent": 511.2533895413569,
+    "actual_postroute_100mhz": false,
+    "board_score_validated": false,
+    "programmed": false,
+    "runner_return_code": 0
+  },
+  "tcm_comparison": {
+    "evidence": {
+      "directory": "build/cpu/firmware-coremark-20261023T1103533439788Z",
+      "result_sha256": "bf516cb1dfbd1086e64cd630c1192140d31081eab6aeac52e4401f24b5d4a12d",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 69,
+      "output_count": 29,
+      "input_output_hashes_verified": true,
+      "input_snapshot": null,
+      "current_worktree_hashes_verified": true
+    },
+    "same_elf_sha256": "ea7a3cc47b58759d92cf64b336759835493bb4361110bdf9c572e1fe2e5fa1a5",
+    "executions": [
+      {
+        "mode": "single",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1646469,
+          "wb_completed": 1448448,
+          "observed_ipc": 0.8797298947019349,
+          "coremark_per_mhz_short_estimate": 3.0368017861253387,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1696192,
+          "issued": 1490364,
+          "paired_cycles": 0,
+          "issued_is_not_instret": true
+        }
+      },
+      {
+        "mode": "dual",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1411226,
+          "wb_completed": 1448448,
+          "observed_ipc": 1.0263756478409554,
+          "coremark_per_mhz_short_estimate": 3.5430186235230927,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1454102,
+          "issued": 1490364,
+          "paired_cycles": 312186,
+          "issued_is_not_instret": true
+        }
+      }
+    ]
+  },
+  "primary_target": {
+    "boundary": "on-chip SRAM/TCM",
+    "coremark_per_mhz_strictly_greater_than": 4.0,
+    "current_dual": 3.5430186235230927,
+    "five_iteration_cycles_at_most": 1249999,
+    "additional_cycles_to_remove": 161227,
+    "target_met": false
+  },
+  "board_accessed": false,
+  "pds_executed": false,
+  "actual_postroute_100mhz": false
+}

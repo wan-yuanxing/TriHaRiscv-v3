@@ -35,3 +35,5 @@ sw/benchmarks/coremark/src/** -text -whitespace
 
 # Unified diagnostic patches contain required blank context-line prefixes.
 docs/verification/cpu/ddr_fast_response_diagnostic.patch -whitespace
+docs/verification/cpu/dualissue_narrow_mul_diagnostic.patch -whitespace
+docs/verification/cpu/dualissue_pairing_diagnostic.patch -whitespace

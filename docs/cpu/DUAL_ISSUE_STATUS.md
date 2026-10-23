@@ -21,3 +21,21 @@ CPU-only 单/双映射比较 FF 四读两写寄存器堆成本，再决定 Pango
 完整证据及重现命令：[模拟基线](../verification/cpu/dualissue_cached_baseline.md)。
 后续准入需继续覆盖精确异常/中断、依赖与共享资源互锁、ISA、完整 Cache
 维护语义，以及多 corner 物理时序；本功能基线不替代这些门槛。
+
+## TCM 主目标与 Cache 对照（2026-10-23）
+
+用户明确最高性能目标以 SRAM/TCM 为主，要求超过 4 CoreMark/MHz。
+已完成 DDR Cache-off/on 四组短测；双发射分别为 0.459042 / 2.805912。
+TCM 双发射基线 3.543019，隔离窄 MUL 转发候选 3.658271，尚未达标。
+候选全计时 WB/store 对照及定向、有序执行、中断自检通过，生产 RTL 保持不变。
+详见 [TCM 诊断](../verification/cpu/dualissue_tcm_profile.md) 与
+[Cache 矩阵](../verification/cpu/dualissue_cache_matrix.md)。
+
+## 配对优化短测达到门槛（2026-10-23）
+
+隔离候选TCM **1,249,840周期 / 4.000512 CoreMark/MHz**，同固件-O2，
+不带observer复现相同cycle；比双发射初始基线吞吐提高12.912533%。
+DDR Cache开/关分别为3.078298 / 0.459491。完整WB/store、定向负例、
+有序异常/IRQ回归和独立只读评审已完成。仅RTL短测达标，非官方/板级成绩；
+CPU-only资源与实际100MHz仍UNKNOWN，生产RTL和集成工程未改。
+见[配对优化证据](../verification/cpu/dualissue_pairing_performance.md)。

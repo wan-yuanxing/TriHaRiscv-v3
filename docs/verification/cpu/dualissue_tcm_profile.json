@@ -1,0 +1,123 @@
+{
+  "scope": "Diagnostic five-iteration RTL TCM measurement, not board or official score",
+  "target_memory": "SRAM/TCM",
+  "target_coremark_per_mhz_strictly_greater_than": 4,
+  "target_met": false,
+  "baseline_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\tcm-profile-20261023T114617284347Z",
+  "candidate_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\tcm-profile-20261023T115158326460Z",
+  "baseline_result_sha256": "b5b7877c8359375e62d822118b6b2a65e9a4a4d25bbd74af88f45a02fe7f19ef",
+  "candidate_result_sha256": "dafd7a6630045dba63e8fe1f56ceef8147df433f108178da34b6582ca4d91f17",
+  "baseline": {
+    "cycles": 1411226,
+    "wb": 1448448,
+    "stores": 70839,
+    "issued": 1144315,
+    "paired": 304133,
+    "frontend": 91904,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 3,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 175004,
+    "false_a": 35,
+    "false_b": 2910,
+    "pair_no_word": 520727,
+    "pair_structure": 120156,
+    "pair_dependency": 199299,
+    "narrow_mul_opportunity": 44460
+  },
+  "candidate": {
+    "cycles": 1366766,
+    "wb": 1448448,
+    "stores": 70839,
+    "issued": 1144315,
+    "paired": 304133,
+    "frontend": 91904,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 3,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 130544,
+    "false_a": 35,
+    "false_b": 2910,
+    "pair_no_word": 520727,
+    "pair_structure": 120156,
+    "pair_dependency": 199299,
+    "narrow_mul_opportunity": 0
+  },
+  "baseline_score": 3.5430186235230927,
+  "candidate_score": 3.6582706915448586,
+  "cycles_saved": 44460,
+  "throughput_gain_percent": 3.2529342989216836,
+  "remaining_cycles_to_remove": 116767,
+  "trace_comparison": {
+    "cpu-cache.wb.log": {
+      "events": 1448448,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "79ac42851341dc7a54b13a0d5fe4d5615148429b846e0236277c51718a27de85",
+      "cached_sha256": "f3088fba12b8bd2324277c86d22c38c7d5d08943ecda85a15a7aa8c97ec17bc3",
+      "uncached_sha256": "e2b721378abf5246fe8042845fa067a3802d3e7289bd6dd391a7c7a1eff5b87b"
+    },
+    "cpu-cache.store.log": {
+      "events": 70839,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+      "cached_sha256": "73899649cadc7d5faf635f541b84f33954d1bd52d025831e66a17e4e80c2fcac",
+      "uncached_sha256": "2ee4b7ce20a1a28e24828413e444e00ff2d205e3b90a1aaa68fe2964b6584b53"
+    }
+  },
+  "regressions": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-dualmulforward-20261023T1155055733040Z",
+      "status": "FAIL",
+      "result_sha256": "340fb36c5450dd981632d54530ab9d65166227b6b5fa1bfee98cc3371e64969f",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-dualmulforward-20261023T1153551163508Z",
+      "status": "PASS",
+      "result_sha256": "5a0ebe6f5659d362df42ce5f5da2625766cc4c9db33a06b85b8c270f9468ed47",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-dualmulforward-20261023T1153581058718Z",
+      "status": "FAIL",
+      "result_sha256": "81bf3cd843a0fe796199d6aae25b56a2dd59438164df6b7e380cd6c37196cbd6",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261023T1155090427099Z",
+      "status": "PASS",
+      "result_sha256": "b76fb968ff9eada882e5288379150132602d6833763e621251aec7283d8385d7",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261023T1155194726561Z",
+      "status": "PASS",
+      "result_sha256": "0ed0fa55ad119833a6a089af1f49a30ae619dafb727045ea4a21ed08b50ce762",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261023T1155292809727Z",
+      "status": "PASS",
+      "result_sha256": "0dbbd3a72a18081dc564b73b5d09287223c9083dbd0c623abd2d311fe9450f51",
+      "current_inputs_verified": true,
+      "outputs_verified": true
+    }
+  ],
+  "limitations": [
+    "IRQ self-check passes; no exact IRQ golden/candidate trace comparison",
+    "WB count is observation, not architectural minstret",
+    "CPU-only resources and actual postroute 100MHz UNKNOWN",
+    "Production RTL unchanged; candidate only in isolated build snapshot"
+  ]
+}

@@ -243,6 +243,11 @@ module tb_triha_core #(
         #1 rst_ni = 1'b1;
     end
 
+    // Decode source roles independently for the same-packet hazard assertion.
+    // Immediates/upper immediates are not register operands.
+    wire [6:0] pair_b_major = u_dut.u_cpu.u_issue.opcode_b_r[6:0];
+    wire pair_b_rs1 = pair_b_major != 7'h37 && pair_b_major != 7'h17 && pair_b_major != 7'h6f;
+    wire pair_b_rs2 = pair_b_major == 7'h33 || pair_b_major == 7'h23 || pair_b_major == 7'h63;
     // 负边沿采样在下一上升沿被核接纳的实际 CSR 和 issue 控制。
     always @(negedge clk) begin
         if (rst_ni) begin
@@ -263,9 +268,9 @@ module tb_triha_core #(
                 end
                 if (u_dut.u_cpu.u_issue.issue_a_sb_alloc_w &&
                     (u_dut.u_cpu.u_issue.issue_a_rd_idx_w != 5'd0) &&
-                    ((u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_ra_idx_w) ||
-                     (u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_rb_idx_w) ||
-                     (u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_rd_idx_w))) begin
+                    ((pair_b_rs1 && u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_ra_idx_w) ||
+                     (pair_b_rs2 && u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_rb_idx_w) ||
+                     (u_dut.u_cpu.u_issue.issue_b_sb_alloc_w && u_dut.u_cpu.u_issue.issue_a_rd_idx_w == u_dut.u_cpu.u_issue.issue_b_rd_idx_w))) begin
                     $display("CPU_SMOKE_FAIL reason=pair_dependency");
                     $finish;
                 end

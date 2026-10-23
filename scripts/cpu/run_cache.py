@@ -31,6 +31,7 @@ def parse_args(argv=None):
     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
     parser.add_argument('--issue-mode', choices=['single', 'dual'], default='single')
     parser.add_argument('--bypass-caches', action='store_true')
+    parser.add_argument('--cpu-snapshot', type=Path)
     parser.add_argument('--fast-response-check', action='store_true', help='Require component resident-read lookup response latency')
     parser.add_argument('--store-response-check', action='store_true', help='Require direct store dispatch/completion and the original registered load response')
     args = parser.parse_args(argv)
@@ -39,6 +40,8 @@ def parse_args(argv=None):
     if args.fast_response_check and args.store_response_check:
         parser.error('select one read-response contract')
     cpu_test = args.test in ['cpu', 'coremark']
+    if args.cpu_snapshot and not cpu_test:
+        parser.error('--cpu-snapshot requires a real CPU boundary')
     if args.bypass_caches and not cpu_test:
         parser.error('--bypass-caches is a real CPU comparison mode')
     if args.fault == 'crc' and args.test != 'coremark':
@@ -48,13 +51,30 @@ def parse_args(argv=None):
     return args
 
 
+# Only maintained processor modules can be substituted. Cache, transport and
+# vendor modules retain their validated origin; a missing CPU file is an error.
+CPU_MODULES = {'triha_frontend.v', 'triha_npc.v', 'triha_btb.v', 'triha_decode.v',
+    'triha_issue.v', 'triha_regfile.v', 'triha_divider.v', 'triha_multiplier.v',
+    'triha_csr.v', 'triha_lsu.v', 'triha_pipe_ctrl.v', 'triha_cpu.v', 'triha_core.v'}
+
+
+def source_origin(root, name, snapshot):
+    path = Path(name)
+    if snapshot and path.parent.as_posix() == 'rtl/cpu' and path.name in CPU_MODULES:
+        candidate = Path(snapshot).resolve() / path.name
+        if not candidate.is_file():
+            raise FileNotFoundError('Incomplete CPU snapshot: ' + str(candidate))
+        return candidate
+    return root / name
+
+
 def main():
     args = parse_args()
     cpu_test = args.test in ['cpu', 'coremark']
     work = ROOT / 'build/cpu' / ('cache-' + args.test + '-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     work.mkdir(parents=True)
     row = dict(status='RUNNING', directory=str(work), test=args.test, fault=args.fault,
-               input_hashes={}, external_hashes={}, output_hashes={}, commands=[],
+               input_hashes={}, input_origins={}, external_hashes={}, output_hashes={}, commands=[],
                source_unchanged=False, external_unchanged=False, runner_return_code=None,
                scope='Paired-cache RTL components; no full CPU, DDR hardware or timing acceptance')
     row['cache_enable'] = not args.bypass_caches
@@ -133,8 +153,9 @@ def main():
             if (ROOT / optional).exists():
                 local.append(optional)
         for name in local:
-            path = ROOT / name
+            path = source_origin(ROOT, name, args.cpu_snapshot)
             if path.exists():
+                row['input_origins'][name] = str(path)
                 row['input_hashes'][name] = sha(path)
                 frozen = work / 'src' / name
                 frozen.parent.mkdir(parents=True, exist_ok=True)
@@ -216,7 +237,7 @@ def main():
     except Exception as error:
         row.update(status='FAIL', error=str(error), runner_return_code=1)
     finally:
-        row['source_unchanged'] = all((ROOT / p).is_file() and sha(ROOT / p) == h for p, h in row['input_hashes'].items())
+        row['source_unchanged'] = all(Path(row['input_origins'][p]).is_file() and sha(row['input_origins'][p]) == h for p, h in row['input_hashes'].items())
         row['external_unchanged'] = all(sha(p) == h for p, h in row['external_hashes'].items())
         if not row['source_unchanged'] or not row['external_unchanged']:
             row.update(status='FAIL', runner_return_code=1, error='Input changed during run')

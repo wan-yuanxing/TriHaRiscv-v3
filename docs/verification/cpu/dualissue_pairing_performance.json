@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "status": "TCM_SHORT_RTL_TARGET_MET_PHYSICAL_PENDING",
+  "target": {
+    "memory": "128KiB simulation TCM",
+    "coremark_per_mhz_gt": 4,
+    "optimization": "GCC15.2 -O2, no LTO",
+    "iterations": 5
+  },
+  "tcm": {
+    "status": "PASS",
+    "scope": "RTL short TCM comparison, not board/official score or timing acceptance",
+    "baseline_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\tcm-profile-20261023T114617284347Z",
+    "candidate_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261023T134816666469Z",
+    "baseline_result_sha256": "b5b7877c8359375e62d822118b6b2a65e9a4a4d25bbd74af88f45a02fe7f19ef",
+    "candidate_result_sha256": "aee9e18e53811ce592289e7d009451c92f7b2475685c9c6ae010ad56edd617a8",
+    "firmware_sha256": "ea7a3cc47b58759d92cf64b336759835493bb4361110bdf9c572e1fe2e5fa1a5",
+    "iterations": 5,
+    "trace_comparison": {
+      "tcm.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "79ac42851341dc7a54b13a0d5fe4d5615148429b846e0236277c51718a27de85",
+        "cached_sha256": "f3088fba12b8bd2324277c86d22c38c7d5d08943ecda85a15a7aa8c97ec17bc3",
+        "uncached_sha256": "42eb8b9f3708689258481d3b6ac8c935537a3cf28c70e79119894ba090f80c89"
+      },
+      "tcm.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+        "cached_sha256": "73899649cadc7d5faf635f541b84f33954d1bd52d025831e66a17e4e80c2fcac",
+        "uncached_sha256": "80c6d41452643532bda42626765c0c40649b99cc338d1852194cb6b84f12d7eb"
+      }
+    },
+    "baseline": {
+      "cycles": 1411226,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1144315,
+      "paired": 304133,
+      "frontend": 91904,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 0,
+      "dependency": 175004,
+      "false_a": 35,
+      "false_b": 2910,
+      "pair_no_word": 520727,
+      "pair_structure": 120156,
+      "pair_dependency": 199299,
+      "narrow_mul_opportunity": 44460
+    },
+    "candidate": {
+      "cycles": 1249840,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1027466,
+      "paired": 420982,
+      "frontend": 91172,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 0,
+      "dependency": 131199,
+      "false_a": 0,
+      "false_b": 0,
+      "pair_no_word": 290573,
+      "pair_structure": 69843,
+      "pair_dependency": 246068,
+      "narrow_mul_opportunity": 0
+    },
+    "baseline_score": 3.5430186235230927,
+    "candidate_score": 4.00051206554439,
+    "cycles_saved": 161386,
+    "throughput_gain_percent": 12.912532804198928,
+    "tcm_short_target_met": true,
+    "actual_postroute_100mhz": false,
+    "board_validated": false
+  },
+  "ddr": {
+    "status": "PASS",
+    "scope": "Same-loaded-program five-iteration RTL comparison; modeled AXI DDR, not board or official score",
+    "cached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T134841871712Z",
+    "uncached_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261023T134841880456Z",
+    "cached_result_sha256": "23078b61803c3e5e52f0872ef4e0b10694af46c600e9d0cbc851f8db1bb7edcd",
+    "uncached_result_sha256": "da0bbf560ddd1394af591a66c42b956957f55a918d9850a9403fe05803a23d91",
+    "loaded_image_sha256": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+    "elf_raw_equal": false,
+    "differing_nonloaded_sections": [
+      ".strtab"
+    ],
+    "trace_comparison": {
+      "cpu-cache.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "79ad486ba36966c360ba5bc96986916160b878ab9d1b08567a7dca753c66555f",
+        "cached_sha256": "c03021609c23abc01234b6622341ffde9ff5d829622fcef3a1d09988ad18bc50",
+        "uncached_sha256": "1cfa850cf0df9d214dc915bee2ed2f047af871530bd379a4a0eee6cc3fe94e6e"
+      },
+      "cpu-cache.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+        "cached_sha256": "8ad93ed5566bc80e69ea9e32f6bbe93721026ac33c386e35a89106b6920cce29",
+        "uncached_sha256": "0f9e926f78fe680cedc94100da09623b32a6a25d9516b2b7858d986cb5962f63"
+      }
+    },
+    "cached": {
+      "cycles": 1624274,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 3.0782983659160954,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "uncached": {
+      "cycles": 10881596,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 0.4594914201924056,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "memory_model": {
+      "axi_bits": 128,
+      "deterministic_ready": true,
+      "model_write_wait_cycles": 30,
+      "refill_bytes": 32,
+      "physical_ddr_latency_validated": false
+    },
+    "iterations": 5,
+    "cycles_reduced_percent": 85.07320065916801,
+    "throughput_gain_percent": 569.9359837071823,
+    "actual_postroute_100mhz": false,
+    "board_score_validated": false,
+    "programmed": false,
+    "runner_return_code": 0
+  },
+  "candidate_manifest": "docs/verification/cpu/dualissue_pairing_sources.json",
+  "candidate_manifest_sha256": "8a22f04361efabb1e6bcfcc150cf0adecb52a4f8571c730a15c1375001add221",
+  "runs": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134816666469Z",
+      "result_sha256": "aee9e18e53811ce592289e7d009451c92f7b2475685c9c6ae010ad56edd617a8",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/cache-coremark-20261023T134841871712Z",
+      "result_sha256": "23078b61803c3e5e52f0872ef4e0b10694af46c600e9d0cbc851f8db1bb7edcd",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/cache-coremark-20261023T134841880456Z",
+      "result_sha256": "da0bbf560ddd1394af591a66c42b956957f55a918d9850a9403fe05803a23d91",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T135054035892Z",
+      "result_sha256": "64af435b6abdf45ebda2e6e90fe7eac60cb7eda1e238330b6d2ba1cc09a8000c",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134741840506Z",
+      "result_sha256": "30e09bbd40c35fa75ac716fec6b36dd984f940949e742d1f8b6d0be235808308",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134814189615Z",
+      "result_sha256": "64e26e7ea4cec0c05abaaad2a9bbb25cf6d390cdee1fe3eaf16f00893526cba0",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T133350566947Z",
+      "result_sha256": "23d8a2a975935fe49842a4f13d52acd302fc0e08027d08a425edd8732a1e3947",
+      "outputs_verified": true,
+      "inputs_verified": "frozen snapshot"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261023T1353380654981Z",
+      "result_sha256": "e96c2584db4ecd0630def306ab6e47bc19c1abe3b688d5dee82c96942ccad3f5",
+      "outputs_verified": true,
+      "inputs_verified": "current original inputs"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261023T1354133970519Z",
+      "result_sha256": "149093f46ff15622e0c06f73026603733702a3d4630b2501d385fe5acc7369ee",
+      "outputs_verified": true,
+      "inputs_verified": "current original inputs"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261023T1354133815355Z",
+      "result_sha256": "537f23772f61818a05868db308f235ba37c580d2b561bc4d7a24aa012cb83051",
+      "outputs_verified": true,
+      "inputs_verified": "current original inputs"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T135730362311Z",
+      "result_sha256": "2da42cc4f7a5b12a384359e363f177649f8de151e1b71409b054a2a3fad1033a",
+      "inputs_verified": "frozen snapshot",
+      "outputs_verified": true
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T140008357115Z",
+      "result_sha256": "923aaa3382386783fedd2a0ed7a84381153fd108cb1739b373d392e137740478",
+      "inputs_verified": "frozen snapshot",
+      "outputs_verified": true
+    }
+  ],
+  "limitations": [
+    "RTL short estimates, not official or board scores",
+    "100MHz postroute and CPU-only area UNKNOWN",
+    "Not promoted into production RTL; SoC integration, PDS, board untouched",
+    "WB observations are not architectural minstret",
+    "IRQ self-checks; exact IRQ trace equality is intentionally not required",
+    "CSR/empty/flush component boundary and IRQ during pending fetch tested; not exhaustive interrupt-state proof",
+    "64 branch+LSU pairs are aggregate coverage, not individually tagged per fault PC",
+    "CSR hint component forces already-masked pending interrupt and stalls execution; full masks/trap are exercised separately in ordered IRQ"
+  ],
+  "physical_risks": [
+    "Resolved branch comparator now gates second-lane issue",
+    "Cross-packet queue adds PC/data/metadata selection and compaction logic"
+  ],
+  "implementation": [
+    "Existing narrow-MUL early forwarding extended to both producer lanes",
+    "Resolved not-taken conditional branch may pair with ALU/LSU/MUL, faults and second branch excluded",
+    "Four-word queue compacts remaining words, preserving PC/fault/CSR metadata and sequential pairing",
+    "Hazards use real ISA register roles with separate shared-LSU interlock"
+  ],
+  "expected_negative_runs": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T133330982143Z",
+      "result_sha256": "6fcc64566594def803609f4e2710929031b1b6674435c757114998d232360739",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T133403089281Z",
+      "result_sha256": "570b39e625a1dd3a165c83704f484c7c7b1171fa921b3e3e78ca1fc78b032432",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134039545594Z",
+      "result_sha256": "972f2ea74acfd7eec29e3eb3ba96534d99d95f46ca14b07afbe3d75505fdb866",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134305426556Z",
+      "result_sha256": "f3f63430fe630b0f053726aacd5132408c4bb5a462c29228d7ff11db73078b36",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134656484902Z",
+      "result_sha256": "f46b4d6b1ccf55868763a064dec38e2982c434c3890e551af364979a8418337c",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T134812059192Z",
+      "result_sha256": "4eabc27b0e92df2bcb6d047fb3f220919ef4a103e4ceef35f9459626812c615c",
+      "error": "Diagnostic/program check failed"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261023T140010532286Z",
+      "result_sha256": "ba1a50a1395c5b0eec579d814af7c5ca83a593deb4deebde424096d6416f8eaf",
+      "error": "Diagnostic/program check failed"
+    }
+  ],
+  "irq_coverage": "branch_lsu_pairs=64 irq_fetch_pending_cycles=10",
+  "nonobserver": {
+    "cycles": 1249840,
+    "wb_observations": 1448448,
+    "cycle_reads": 2,
+    "crc": "e9f5/e714/1fd7/8e3a/f24c",
+    "same_firmware": true,
+    "source": "build/cpu/dual-diagnostic-20261023T135730362311Z"
+  },
+  "independent_review": "No blocking issue for bounded diagnostic acceptance; physical/ISA admission pending"
+}

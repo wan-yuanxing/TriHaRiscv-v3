@@ -10,7 +10,8 @@
 module tb_cpu_ordered #(
     parameter integer DUAL_ISSUE=0,
     parameter integer IRQ_TEST=0,
-    parameter integer BROKEN=0
+    parameter integer BROKEN=0,
+    parameter integer CHECK_BRANCH_PAIR=0
 );
     reg clk=0, rst=1, irq=0;
     reg [7:0] image [0:131071];
@@ -18,6 +19,7 @@ module tb_cpu_ordered #(
     reg [31:0] rng, fetch_fault_pc;
     integer ignored, file_handle, image_size, index, byte_lane;
     integer cycles=0, retired=0, stores=0, delayed=0, i_stalls=0, d_stalls=0;
+    integer branch_lsu_pairs=0, irq_fetch_pending=0;
     integer wb_file, store_file, exception_file;
     reg [8:0] trap_mask=0;
     reg fetch_fault_seen=0;
@@ -75,6 +77,10 @@ module tb_cpu_ordered #(
     // Fault-detection negative changes real load data, not a host expectation.
     wire [31:0] read_xor=(BROKEN!=0) ? 32'h1 : 32'h0;
     always @(posedge clk) if (!rst) begin
+        if(irq && i_pending) irq_fetch_pending=irq_fetch_pending+1;
+        if(CHECK_BRANCH_PAIR && u_dut.u_issue.dual_issue_w &&
+           u_dut.u_issue.issue_a_branch_w && u_dut.u_issue.issue_b_lsu_w)
+            branch_lsu_pairs=branch_lsu_pairs+1;
         rng<={rng[30:0],rng[31]^rng[21]^rng[1]^rng[0]};
         i_valid<=0;
         d_ack<=0;
@@ -182,7 +188,10 @@ module tb_cpu_ordered #(
             $fclose(wb_file);
             $fclose(store_file);
             $fclose(exception_file);
-            $display("CPU_ORDER_PASS dual=%0d cycles=%0d traps=%0d retired=%0d stores=%0d delayed=%0d",
+            if(CHECK_BRANCH_PAIR && branch_lsu_pairs<4)
+                    $fatal(1,"CPU_ORDER_FAIL missing_branch_lsu_pair_coverage pairs=%0d",branch_lsu_pairs);
+                $display("CPU_PAIR_COVERAGE branch_lsu_pairs=%0d irq_fetch_pending_cycles=%0d",branch_lsu_pairs,irq_fetch_pending);
+                $display("CPU_ORDER_PASS dual=%0d cycles=%0d traps=%0d retired=%0d stores=%0d delayed=%0d",
                 DUAL_ISSUE,cycles,trap_mask,retired,stores,delayed);
             $finish;
         end
