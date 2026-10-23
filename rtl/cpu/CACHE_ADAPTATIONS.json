@@ -33,14 +33,15 @@
     "rtl/cpu/triha_dcache.v": {
       "base": "rtl/cpu/vendor/src/dcache/dcache_core.v",
       "base_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
-      "derived_sha256": "7d08168ca725fde8254bc233061c6333cc47d4d67c6df8c007ccd67e7703173e",
+      "derived_sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
       "changes": [
         "Retain two-way 256-set/32B-line synchronous tag/data RAM and registered load response",
         "Private DDR write-back/write-allocate; shared DDR and explicit uncached accesses bypass",
         "Adapt upstream valid/dirty/tag storage, victim address reconstruction, and line maintenance",
         "Response-checked scalar writeback words; retain entire dirty line after any failed write",
         "DWRITEBACK cleans one line, DINVALIDATE discards one line, DFLUSH cleans and invalidates all lines",
-        "Discard failed allocation; preserve request tag and enforce private address range"
+        "Discard failed allocation; preserve request tag and enforce private address range",
+        "Overlap a successful cached-load registered response with next request capture and synchronous lookup; serialize store updates and errors"
       ]
     },
     "rtl/cpu/triha_dcache_tag_ram.v": {

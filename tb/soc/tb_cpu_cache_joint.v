@@ -213,6 +213,9 @@ module tb_cpu_cache_joint;
     endtask
     integer cpu_d_acks=0;
     always @(posedge clk) if(rst_n && d_ack) cpu_d_acks=cpu_d_acks+1;
+    integer fence_response_collisions=0;
+    always @(posedge clk) if(rst_n && u_dut.fence_take_w && u_dut.dc_ack)
+        fence_response_collisions=fence_response_collisions+1;
     integer saved_acks;
     integer n, before_count;
     initial begin
@@ -278,6 +281,20 @@ module tb_cpu_cache_joint;
         while(!i_accept) @(negedge clk);
         check(cpu_d_acks==saved_acks+1,"fence drains owned D response without leaking internal ack");
         check(memory[word_index(32'h80005400)]===32'h3817ace5,"fence cleans accepted store after allocation drains");
+        // A cached load response now offers a slot for the pending internal
+        // fence flush on the very same edge. Its CPU response must win first.
+        saved_acks=cpu_d_acks;
+        fork
+            d_access(32'h80005820,0,0,1,0);
+            begin
+                wait(arvalid && arid==2);
+                @(negedge clk); i_flush=1;
+                @(negedge clk); i_flush=0;
+            end
+        join
+        while(!i_accept) @(negedge clk);
+        check(fence_response_collisions>0,"exercise response-edge internal fence acceptance");
+        check(cpu_d_acks==saved_acks+1,"overlapped internal fence preserves sole original CPU ack/tag");
         d_maintenance(0); d_maintenance(1); d_maintenance(2);
         check(!protocol_fault && i_reads > 0 && d_reads > 0 && writes >= 8, "joint coverage and protocol");
         // FENCE.I has no error-response wire. A failed dirty clean must raise

@@ -63,13 +63,18 @@ module triha_dcache #(
                      mem_writeback_i || mem_flush_i;
     wire private_address_w = mem_addr_i >= 32'h80000000 &&
                              mem_addr_i < 32'h82000000;
+    // Reuse the completion edge for the next synchronous lookup. Old data
+    // and tag still come from response registers. Keep writes and errors
+    // serialized: read-first RAM must not hide a just-written dirty bit.
+    wire accept_phase_w = state_q == IDLE ||
+        (state_q == RESPONSE && mem_rd_q && cacheable_q && !response_error_q);
     wire maintenance_state_w = state_q == MAINT_CHECK || state_q == MAINT_ADV || state_q == MAINT_READ;
     wire [7:0] lookup_set_w = maintenance_state_w ? sweep_q :
-                               (state_q == IDLE ? mem_addr_i[12:5] : addr_q[12:5]);
+                               (accept_phase_w ? mem_addr_i[12:5] : addr_q[12:5]);
     wire [10:0] lookup_word_w = (state_q == WB_READ || state_q == WB_REQ ||
                                  state_q == WB_WAIT) ?
                                 {wb_base_q[12:5], wb_word_q} :
-                                (state_q == IDLE ? mem_addr_i[12:2] : addr_q[12:2]);
+                                (accept_phase_w ? mem_addr_i[12:2] : addr_q[12:2]);
     wire [20:0] tag0_w, tag1_w;
     wire hit0_w = tag0_w[20] && tag0_w[18:0] == addr_q[31:13];
     wire hit1_w = tag1_w[20] && tag1_w[18:0] == addr_q[31:13];
@@ -169,7 +174,7 @@ module triha_dcache #(
     );
     wire [31:0] wb_data_w = wb_way_q ? data1_w : data0_w;
 
-    assign mem_accept_o = rst_ni && state_q == IDLE;
+    assign mem_accept_o = rst_ni && accept_phase_w;
     assign mem_ack_o = rst_ni && (state_q == STORE_UPDATE || state_q == RESPONSE);
     assign mem_error_o = response_error_q;
     assign mem_data_rd_o = response_data_q;
@@ -198,21 +203,7 @@ module triha_dcache #(
                     sweep_q <= sweep_q + 1'b1;
                     if (sweep_q == 8'hff) state_q <= IDLE;
                 end
-                IDLE: if (request_w) begin
-                    addr_q <= mem_addr_i; write_data_q <= mem_data_wr_i;
-                    write_mask_q <= mem_wr_i; request_tag_q <= mem_req_tag_i;
-                    mem_rd_q <= mem_rd_i; response_error_q <= 0; response_data_q <= 0;
-                    cacheable_q <= CACHE_ENABLE && mem_cacheable_i && private_address_w;
-                    if (mem_flush_i) begin
-                        sweep_q <= 0; sweep_way_q <= 0;
-                        state_q <= MAINT_READ;
-                    end else if (mem_writeback_i) begin
-                        state_q <= CLEAN;
-                    end else if (mem_invalidate_i) state_q <= INVALIDATE;
-                    else if (mem_addr_i[1:0] != 0 || (mem_rd_i && |mem_wr_i)) begin
-                        response_error_q <= 1; state_q <= RESPONSE;
-                    end else state_q <= LOOKUP;
-                end
+                IDLE: begin end
                 LOOKUP: begin
                     if (!cacheable_q) state_q <= UNCACHED_REQ;
                     else if (|write_mask_q) begin
@@ -270,6 +261,21 @@ module triha_dcache #(
                 RESPONSE: state_q <= IDLE;
                 default: state_q <= RESET;
             endcase
+            if (mem_accept_o && request_w) begin
+                    addr_q <= mem_addr_i; write_data_q <= mem_data_wr_i;
+                    write_mask_q <= mem_wr_i; request_tag_q <= mem_req_tag_i;
+                    mem_rd_q <= mem_rd_i; response_error_q <= 0; response_data_q <= 0;
+                    cacheable_q <= CACHE_ENABLE && mem_cacheable_i && private_address_w;
+                    if (mem_flush_i) begin
+                        sweep_q <= 0; sweep_way_q <= 0;
+                        state_q <= MAINT_READ;
+                    end else if (mem_writeback_i) begin
+                        state_q <= CLEAN;
+                    end else if (mem_invalidate_i) state_q <= INVALIDATE;
+                    else if (mem_addr_i[1:0] != 0 || (mem_rd_i && |mem_wr_i)) begin
+                        response_error_q <= 1; state_q <= RESPONSE;
+                    end else state_q <= LOOKUP;
+            end
             if (wb_response_w) begin
                     if (outport_error_i) begin response_error_q <= 1'b1; state_q <= RESPONSE; end
                     else if (wb_word_q == 7) begin

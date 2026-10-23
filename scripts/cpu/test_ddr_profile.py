@@ -13,6 +13,14 @@ CPU_DDR_PROFILE_BRIDGE idle=25 collect=5 wpre=2 waddr=3 wdata=5 vpre=2 vaddr=8 v
 
 
 class ProfileTests(unittest.TestCase):
+    def test_optional_overlap_observation_is_bound(self):
+        text=log()+'CPU_DDR_PROFILE_OVERLAP accepted=2\n'
+        self.assertEqual(parse_profile(text,100)['dcache_overlap']['accepted'],2)
+        for bad in (text+'CPU_DDR_PROFILE_OVERLAP accepted=2\n',
+                    text.replace('accepted=2','accepted=999')):
+            with self.assertRaises(ValueError):
+                parse_profile(bad,100)
+
     def test_writeback_classifies_write_allocation_and_coalesced_stores(self):
         from ddr_profile import DC_STATES_WB
         text = log().replace('refills=1 lower_writes=2',

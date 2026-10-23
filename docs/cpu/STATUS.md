@@ -1,3 +1,5 @@
+D-Cache 响应重叠优化（2026-10-23）：成功 cached load 的响应周期可接纳下一请求，保留返回寄存器，驻留 load 启动间隔由3拍降为2拍。相同 GCC15.2/-O2/无LTO 载荷的5次 RTL/native-DDR CoreMark 周期2158431→2018576，短测2.316497493→2.476993683/MHz，模型吞吐+6.928399%；完整WB/store观察流及外部访存计数一致。实际100MHz后布线独立复核通过：CPU Slow/Fast setup +0.309/+3.551ns、hold +0.151/+0.099ns、MPW +3.655/+4.202ns；全部时钟域和Gray约束通过。CPU-only6507LUT/3562FF/688RAM-LUT已含/0DRM/4APM（相对父版+48LUT），Cache/传输668LUT/807FF/11DRM。5000次镜像 cpu_ddr_coremark_on_478149ee9e63 已打包并核验，UART的CPU-LUT分母为6507；尚未上板，不能作为板测分数。69项CPU与45项SoC Python回归、专项正负例和终态绑定通过。备份 cpu-before-dcache-overlap-20261022，证据见 docs/verification/cpu/dcache_overlap.md/.json。主工程未修改，板上仍保留 cpu_ddr_coremark_on_32019ccd2f69，COM12未访问、Flash未写。下一步为新版5000次板测。以下为历史检查点。
+
 Write-back 候选（2026-10-22）：私有 DDR 改为写回/写分配，共享 DDR/MMIO 继续不缓存，CPU 六级单发射、预测器、100MHz 和 GCC -O2 不变。组件、联合 I/D、真实 CPU、FENCE.I、SoC 和原生 DDR 测试通过。五次同程序数字模型周期 3899101→2158431（减少44.642855%，吞吐+80.645154%），70840次CPU store在计时区间不再产生外部写，完整观察流一致；不是实际板测分数。CPU-only 原生映射6459LUT/3562FF，Cache/传输671LUT/807FF/11DRM；实际100MHz后布线及完整冻结证据复核通过（Slow/Fast setup +0.134/+3.629ns，hold +0.153/+0.100ns，脉宽 +3.655/+4.202ns，全部Gray检查通过）。备份cpu-before-writeback-20261022；已生成cpu_ddr_coremark_on_418eb7d376c5的5000次CoreMark镜像（CPU-LUT分母6459），尚未上板；板上保留上一已验证镜像、COM12未占用。合同和证据见 docs/verification/cpu/dcache_writeback.md/.json。以下为历史已部署检查点。
 
 最新 DDR store 优化版已完成实际上板 CoreMark 验收。PG2L100H/00602899 易失 Program/Verify 均成功，当前保留 cpu_ddr_coremark_on_32019ccd2f69，未写 Flash；COM12 已释放。独立原始 UART 捕获的 5000 次结果为 5,779,800,133 周期、57.79800133 秒、86.508181684 CoreMark、0.865081817/MHz、0.013356211/CPU LUT6477，标准 CRC 和 BOARD_PASS 通过。相比用户此前有效板测 84.374476888，吞吐 +2.528851%，CPU-LUT 效率 +3.811055%；两版 DDR 可加载程序字节完全相同，GCC15.2/-O2/无LTO 不变。该实际提升小于数字模型的 +4.578979%，以板测为准。CPU-only6477LUT/3562FF/688RAM-LUT已含/0DRM/4APM，Cache/传输492LUT/763FF/11DRM；实际100MHz后布线和完整哈希再核验通过。本次自动启动正常、无按键操作；原始记录含下载期间的一个不完整启动和一个完整跑分，不作为两次成功启动或重复训练稳定性证明。详细绑定见 docs/verification/cpu/ddr_store_response_board.md 及 JSON。此前性能实现及失败试验见 ddr_performance.md/.json；未合入主工程。
@@ -8,7 +10,7 @@ Write-back 候选（2026-10-22）：私有 DDR 改为写回/写分配，共享 D
 
 # TriHa CPU 状态
 
-更新：2026-10-22。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
+更新：2026-10-23。分支 `cpu/windows-baseline`，工作树 `D:/FPGA/TriHaRiscv-cpu-windows`。
 
 以下为逐阶段历史；当前板测、镜像和未解决问题以上述最新记录为准。
 

@@ -26,7 +26,7 @@ def save(path, value):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test', choices=['components', 'writeback', 'transport', 'joint', 'cpu', 'coremark'], default='components')
+    parser.add_argument('--test', choices=['components', 'writeback', 'overlap', 'transport', 'joint', 'cpu', 'coremark'], default='components')
     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
     parser.add_argument('--bypass-caches', action='store_true')
@@ -89,6 +89,8 @@ def main():
         tb = 'tb/cpu/tb_cpu_cache.v'
         if args.test == 'writeback':
             tb = 'tb/cpu/tb_cpu_dcache_writeback.v'
+        elif args.test == 'overlap':
+            tb = 'tb/cpu/tb_cpu_dcache_overlap.v'
         elif args.test == 'transport':
             sources = ['rtl/soc/triha_cpu_cache_axi.v']
             tb = 'tb/soc/tb_cpu_cache_axi.v'
@@ -170,7 +172,7 @@ def main():
         output = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc', *generics,
                         '-gCORRUPT_DATA=' + str(int(args.fault == 'data')), 'work.' + Path(tb).stem,
                         '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation', timeout=600 if args.test == 'coremark' else 90)
-        marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
+        marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'overlap': 'CPU_DCACHE_OVERLAP_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
         if marker not in output or any(token in output for token in ['CPU_CACHE_FAIL', '** Error', '** Fatal']):
             raise RuntimeError('Paired-cache self-check failed')
         if args.test == 'coremark':

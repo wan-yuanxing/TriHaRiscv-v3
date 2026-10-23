@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "status": "PASS_FUNCTIONAL_AND_100MHZ",
+  "date": "2026-10-23",
+  "execution_date": "2026-10-22",
+  "scope": "Successful registered cached-load response/request overlap; standalone CPU/DDR, not board score or shared fabric admission",
+  "reviewer": {
+    "path": "build/cpu/review-overlap-terminal-20261022.py",
+    "sha256": "7d7c942784bcf81af9a664bae6f8f4d9eb5199af6eb0c2bb90bb50f60d139274"
+  },
+  "backup_tag": "cpu-before-dcache-overlap-20261022",
+  "parent_commit": "43e0428",
+  "functional_tests": {
+    "overlap": {
+      "result": {
+        "path": "build/cpu/cache-overlap-20261022T150939844789Z/result.json",
+        "sha256": "c3072886e21d2213fb60a53a2c3af4a4a1e49baf593603cdaeea7bb75442d3bf"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-overlap-20261022T150939844789Z/simulation.log",
+        "sha256": "e3774f3287562a85b775d2c9a4b2177ecb6827d50f9e8535cc458870dc9fcdc4"
+      }
+    },
+    "parent_missing_feature_red": {
+      "result": {
+        "path": "build/cpu/cache-overlap-20261022T143520075231Z/result.json",
+        "sha256": "cc6125e3fb3d4002362d55311bb12f026ee92e6c615f24009226485018b61ea4"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-overlap-20261022T143520075231Z/simulation.log",
+        "sha256": "00aa642dcbf49ba67b0090111c7487f9709f475f1ac43603a63d809855fe2f3c"
+      }
+    },
+    "writeback": {
+      "result": {
+        "path": "build/cpu/cache-writeback-20261022T144020816377Z/result.json",
+        "sha256": "99f0b69f171d145e47a2ded1e9cc58d6ca8449d50d72a651c74c5662b6a2d9b8"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-writeback-20261022T144020816377Z/simulation.log",
+        "sha256": "92446cddeb7685af874f18eca190e6f48baaf6b869ec804f707f166623c28311"
+      }
+    },
+    "registered_load": {
+      "result": {
+        "path": "build/cpu/cache-components-20261022T144023080609Z/result.json",
+        "sha256": "7fe66a58b26d27941de3d1043e226586d1711895c0a336dea146728409b6a096"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-components-20261022T144023080609Z/simulation.log",
+        "sha256": "b1f19480388796a936e60802434dc6241fd8e4a80d130792edecabebd173011f"
+      }
+    },
+    "joint_fence_collision": {
+      "result": {
+        "path": "build/cpu/cache-joint-20261022T144759614566Z/result.json",
+        "sha256": "5f1ea89142fe22295de8d8a33fc875eec709ece233fda7fe8421379d5589e054"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-joint-20261022T144759614566Z/simulation.log",
+        "sha256": "8b2ee8377a9892398bc5fc9d0abf6d397f250ea9ccbe4bd0a2bb0170482846cc"
+      }
+    },
+    "cpu": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T144020156496Z/result.json",
+        "sha256": "6931500afec92f3cd981c4f12545c1cae6945151b46d76865b34b06cbd6e154c"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T144020156496Z/simulation.log",
+        "sha256": "f4cab2f1fcdf7d0614e38ce6e05a35f51a3039526c77ee79c488a5c695228988"
+      }
+    },
+    "cpu_bypass": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T145433655341Z/result.json",
+        "sha256": "67fe11f2a0d59107ff5f4cb0d1a8a301e0360f44a027099cada4ea4611de820f"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T145433655341Z/simulation.log",
+        "sha256": "b05692b45a50f60034b1d20b08eaf308104b479ca8aa0d1c4c7642b0e7bd841a"
+      }
+    },
+    "soc": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261022T144143291882Z/result.json",
+        "sha256": "d0e8b1dad33e0210c751b1a006d450c1dfabfd9a973f2198f01fc7f986fd6ce0"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261022T144143291882Z/simulation.log",
+        "sha256": "0e157d916f391db2c4446d006ee172d8fe42d37b8b7a7c877e12f4d97a1148a2"
+      }
+    },
+    "soc_bypass": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261022T145427828656Z/result.json",
+        "sha256": "d12ac155746b8f7abe2bda977fc041e9fd560545708b0d58059be77565dd4c64"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261022T145427828656Z/simulation.log",
+        "sha256": "e833e63a48e98f14c19285546f96699e5a1fbd00057873a69ab44bf5d5f8d23f"
+      }
+    },
+    "native_ddr": {
+      "result": {
+        "path": "build/cpu/ddr-system-20261022T145159469180Z/result.json",
+        "sha256": "8c9e4e765986773b833be4416929f4545a7bf49c5972dbcc06cfe484cd3bcbd1"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-system-20261022T145159469180Z/simulation.log",
+        "sha256": "6cf60940ac85aadb26f43d53ae0b6cc393826398cc1f5e6d8cf8062ca741c0e4"
+      }
+    },
+    "board_two_boots": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T144146642977Z/result.json",
+        "sha256": "047d4abf65f90d29f097b9d130e8f68361b32cca73566d796a657ca750de4611"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T144146642977Z/simulation.log",
+        "sha256": "c5c5ad8d46af1ab3a86eb44e6844a4b248a66b8f9bdf6cc2f717aa3e110c4046"
+      }
+    },
+    "board_no_init": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T150520696343Z/result.json",
+        "sha256": "023f6f13901456655f137f4674ed7e5a9fa0cacdb41295b1ea1c7ab4e32851b5"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T150520696343Z/simulation.log",
+        "sha256": "6e8353190bcca93589e1838a07fe227d0cf0eff1afafc5d6f5ea6af0f0acbba0"
+      }
+    },
+    "board_init_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T150524614702Z/result.json",
+        "sha256": "8d2c53099dd12e810794ebe211d11a29182754457712caebb29eded2cfde3e2d"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T150524614702Z/simulation.log",
+        "sha256": "cc75c89c0581d306781a75e81f256c6fea2469dda164294010591ed8f4b048c6"
+      }
+    },
+    "board_clock_stop": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T150529769996Z/result.json",
+        "sha256": "db494a07e205e4a532f90bb7da75af940d92b2656c8e46f00ec4d5b684439183"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T150529769996Z/simulation.log",
+        "sha256": "50c6ea5fe6ec329e6e2491861517709625dfb8592c4f641254936d427f28b819"
+      }
+    },
+    "board_cpu_pll_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T150533704481Z/result.json",
+        "sha256": "d9e73c6c2a090ea4873c9d0e792003ca66b0c74152183ce8974ac74bb1c89d07"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T150533704481Z/simulation.log",
+        "sha256": "a3fbdbb58464bb724a8e1b80a0d3107119667eea6a80433ec9fbb4d89ea257e9"
+      }
+    },
+    "coremark_five": {
+      "result": {
+        "path": "build/cpu/ddr-coremark-20261022T144143278308Z/result.json",
+        "sha256": "925c8a105cede06381c5d5cca4dbbcd064f7f132f36546a412863de601a51084"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-coremark-20261022T144143278308Z/simulation.log",
+        "sha256": "d25a7df96fe2268ae100cb2e9fc6a3ae84cec60170659e5a34c07a52c0bd1540"
+      }
+    },
+    "matching_preflight": {
+      "result": {
+        "path": "build/cpu/ddr-coremark-20261022T150520126974Z/result.json",
+        "sha256": "065ea331801efaadc2dd5db86a9e2b6de6b98f7c31186f0f72ed2922e68d5764"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-coremark-20261022T150520126974Z/simulation.log",
+        "sha256": "49068aa2e0894a427d24586940e077308a3ae41b207fbc326660d31bcc75990c"
+      }
+    }
+  },
+  "expected_negatives": {
+    "overlap_data": {
+      "result": {
+        "path": "build/cpu/cache-overlap-20261022T150940555542Z/result.json",
+        "sha256": "5b4a31f5171c0ced55cd2fc1c4258f624aab56406355e5f5be953c8d02a4702d"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-overlap-20261022T150940555542Z/simulation.log",
+        "sha256": "b93aff8765c4e11221167b7542c9c2dce2c5428e7bf95f784c05c1e983642f27"
+      }
+    },
+    "cpu_data": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261022T145429466121Z/result.json",
+        "sha256": "d56f60188ed0b53ffdbf2eb121dd0f613d87e5aece64f4d30301b0c1b124913e"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261022T145429466121Z/simulation.log",
+        "sha256": "8f958c0bb43645cc3ba58e7d11cd990528500f2b3aee8687ea7b78a66d849d29"
+      }
+    },
+    "board_readback": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261022T145430746360Z/result.json",
+        "sha256": "e1033ddb0decaa4bf559fc5ee7ad14d3946b00113f2ad7227a52d78d40ef5f52"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261022T145430746360Z/simulation.log",
+        "sha256": "9fa21101e1bbe2cc6b3119fa7e5290373acbc85be5b5722d593ad7559d1e67fa"
+      }
+    }
+  },
+  "digital_board_review": {
+    "path": "build/cpu/ddr-overlap-board-digital-review-20261022.json",
+    "sha256": "98fd8cd080b604dbd1366e9217ec1ab04b023ae60efcb85abb159fd925e8d420"
+  },
+  "python_unit_tests": {
+    "cpu": 69,
+    "soc": 45,
+    "failures": 0
+  },
+  "performance_review": {
+    "path": "build/cpu/ddr-overlap-review-20261022T145315703760Z/result.json",
+    "sha256": "cae9c88c8219bd4b227f85b92006a094cb5fbbfeec97342fbfbe212890eae917"
+  },
+  "same_loaded_payload": true,
+  "before_cycles": 2158431,
+  "after_cycles": 2018576,
+  "coremark_per_mhz_short_rtl": 2.4769936826753116,
+  "modeled_throughput_gain_percent": 6.928399029811105,
+  "overlaps": 75408,
+  "trace_comparison": {
+    "cpu-cache.wb.log": {
+      "events": 1448453,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "9612e4112e09e7ca43a9b6128dd5aca148e6395b74d16c74ecdd2c5ed300fe79",
+      "cached_sha256": "3068f2f062b43a18cd2f898284d45da8a89f1d60aae239984472294d9b48df84",
+      "uncached_sha256": "69043d2eb256d911044ecefb357a0a8d4c02315a34349cedf8e1cb37e3bfe2ae"
+    },
+    "cpu-cache.store.log": {
+      "events": 70840,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "964aecd69786f902f808c23760356baedaa4b958f83ffad75c6ace4ae63b497f",
+      "cached_sha256": "52a9938739ef1f5e1bf75842a433ebeef7d6126cf4c222910c511b2b0a83da47",
+      "uncached_sha256": "11cbcf7486ea54c68191eb2e9d82e2096c8bdbf17a6cbcea49d4bae7920398cb"
+    }
+  },
+  "memory_events_unchanged": true,
+  "resident_read_initiation_interval_cycles": {
+    "parent": 3,
+    "candidate": 2
+  },
+  "load_return_register_retained": true,
+  "store_updates_serialized": true,
+  "physical_review": {
+    "path": "build/cpu/ddr-board-route-20261022T150815081810Z-independent-review.json",
+    "sha256": "e864e8b33c14c1dbc62026006e346a3be4ce818e6159cd368027d581653fe535"
+  },
+  "timing_report": {
+    "path": "build/cpu/ddr-board-route-20261022T150815081810Z/report_timing/triha_cpu_ddr_board_top.rtr",
+    "sha256": "8c80e092ae82ff702aab0aa668fb0b26efcb09107ca8469a5abfce1167bd3e62"
+  },
+  "cpu_timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.309,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22678
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.151,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22678
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 4.907,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3457
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.177,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3457
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4234
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.551,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22678
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.099,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 22678
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 6.546,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3457
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.102,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3457
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 4234
+    }
+  ],
+  "gray_maxdelay_met": true,
+  "gray_skew_worst_slack_ns": 1.211,
+  "cpu_only": {
+    "lut": 6507,
+    "registers": 3562,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_and_transport": {
+    "lut": 668,
+    "registers": 807,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  },
+  "package_result": {
+    "path": "build/cpu/ddr-board-package-20261022T154526724916Z/result.json",
+    "sha256": "df822f0daf078bb03167dbc9fe7e78519ec49498d73c3bdf818d4c5a1eb9b0a1"
+  },
+  "prepared_release": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_478149ee9e63/manifest.json",
+    "sha256": "e35b9fc787afc7d0d189c61f0918089b7731f947403e640eec9dfef14c9b7350"
+  },
+  "bitstream": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_478149ee9e63/triha_cpu_ddr_board_top.sbit",
+    "sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561"
+  },
+  "board_programmed": false,
+  "board_score_improvement_proven": false,
+  "current_board_image": "cpu_ddr_coremark_on_32019ccd2f69",
+  "com12_accessed": false,
+  "flash_written": false,
+  "main_worktree_modified": false
+}

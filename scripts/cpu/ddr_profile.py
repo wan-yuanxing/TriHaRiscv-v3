@@ -50,8 +50,14 @@ def parse_profile(text, measured_cycles):
         raise ValueError('D-cache write-through transport count mismatch')
     cached_reads = dc['read_hits'] + dc['read_misses']
     dc['read_hit_rate'] = dc['read_hits']/cached_reads if cached_reads else None
-    return dict(cycles=cycles, window=window, issue=issue, dcache=dc,
+    result = dict(cycles=cycles, window=window, issue=issue, dcache=dc,
         write_policy='write_back' if write_back else 'write_through',
         dcache_states=states, bridge_states={k: bridge[k] for k in BRIDGE_STATES},
         native_events={k: bridge[k] for k in NATIVE}, physical_board_profile=False,
         scope='Digital native-DDR model; issue buckets partition CPU cycles. Cache and bridge occupancy overlap issue buckets. Native events sampled at DDR clock with the CPU window gate.')
+    if 'CPU_DDR_PROFILE_OVERLAP' in text:
+        overlap = fields('OVERLAP', ['accepted'])
+        if overlap['accepted'] > dc['reads'] + dc['writes'] or overlap['accepted'] > cycles:
+            raise ValueError('overlap observation exceeds accepted requests or window')
+        result['dcache_overlap'] = overlap
+    return result

@@ -15,7 +15,7 @@ from compare_cache_runs import compare_traces, verify_outputs
 from ddr_profile import parse_profile
 
 
-def review(baseline, candidate, work):
+def review(baseline, candidate, work, change='writeback'):
     directories = [Path(p).resolve() for p in (baseline, candidate)]
     rows = [verify_outputs(p) for p in directories]
     if not all(r['test'] == 'coremark' and r['iterations'] == 5 and r['cache_enable'] == 1
@@ -48,8 +48,19 @@ def review(baseline, candidate, work):
         for entry in row['binding']['files'].values():
             if sha(entry['path']) != entry['sha256']:
                 raise ValueError('pinned DDR input drift')
-    if [p['write_policy'] for p in profiles] != ['write_through', 'write_back']:
-        raise ValueError('need distinct actual policies')
+    expected_policies = ['write_through', 'write_back'] if change == 'writeback' else ['write_back', 'write_back']
+    if change not in ['writeback', 'overlap'] or [p['write_policy'] for p in profiles] != expected_policies:
+        raise ValueError('actual policies differ from selected optimization')
+    if change == 'overlap':
+        if (profiles[0]['dcache'] != profiles[1]['dcache'] or
+                profiles[0]['native_events'] != profiles[1]['native_events'] or
+                profiles[1].get('dcache_overlap', {}).get('accepted', 0) <= 0):
+            raise ValueError('overlap must preserve memory events and exercise response-edge acceptance')
+    before, after = [r['measurement']['cycles'] for r in rows]
+    if after >= before:
+        raise ValueError('candidate did not improve modeled cycles')
+    if change == 'writeback' and profiles[1]['dcache']['lower_writes'] >= profiles[0]['dcache']['lower_writes']:
+        raise ValueError('writeback did not reduce lower write traffic')
     work = Path(work)
     work.mkdir(parents=True, exist_ok=False)
     aliases = []
@@ -62,10 +73,8 @@ def review(baseline, candidate, work):
             shutil.copyfile(source/original, folder/alias)
         aliases.append(folder)
     traces = compare_traces(*aliases)
-    before, after = [r['measurement']['cycles'] for r in rows]
-    if after >= before or profiles[1]['dcache']['lower_writes'] >= profiles[0]['dcache']['lower_writes']:
-        raise ValueError('writeback did not improve modeled cycles and lower write traffic')
     row = dict(status='PASS_DIGITAL_DIAGNOSTIC',
+        optimization=change,
         scope='Same-payload five-iteration RTL/native DDR model; no official or physical board score',
         reviewer_sha256=sha(__file__),
         results=[dict(path=str(p/'result.json'), sha256=sha(p/'result.json')) for p in directories],
@@ -88,7 +97,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline',type=Path,required=True)
     parser.add_argument('--candidate',type=Path,required=True)
+    parser.add_argument('--change',choices=['writeback','overlap'],default='writeback')
     args = parser.parse_args()
-    work = ROOT/'build/cpu'/('ddr-writeback-review-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
-    row = review(args.baseline,args.candidate,work)
+    work = ROOT/'build/cpu'/('ddr-'+args.change+'-review-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
+    row = review(args.baseline,args.candidate,work,args.change)
     print('CPU_DDR_WRITEBACK_REVIEW',row['status'],work/'result.json')
