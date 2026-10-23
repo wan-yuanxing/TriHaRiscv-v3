@@ -38,3 +38,10 @@ interfaces; first measure stalls and pair rejection before choosing RTL work.
 - [x] Explicit branch/LSU exception, pending-fetch IRQ and CSR idle-boundary checks.
 - [x] Preserve a byte-reproducible diagnostic patch/manifest and independent review.
 - [ ] Physical resource/timing admission and board scores; shared integration tools untouched.
+
+## Latest scope correction
+
+- DDR Cache-off is historical only; no further performance work or acceptance there.
+- TCM >4 is provisional until actual postroute 100MHz passes for the same candidate.
+- Prepare the dual-issue physical boundary; the old route runner only accepts single issue.
+- Preserve active SoC physical work; do not infer tool availability from a single process snapshot.
