@@ -1,10 +1,11 @@
-/* TriHa six-stage single-issue CPU with paired I/D Cache and AXI128.
+/* TriHa six-stage CPU with selectable issue width, paired I/D Cache and AXI128.
  * Opt-in DDR-execution boundary. Local ROM/SRAM/MMIO routing, DDR init and
  * CDC/fabric/board admission remain enclosing-system responsibilities.
  */
 module triha_cached_core #(
     parameter [31:0] RESET_VECTOR = 32'h80000000,
-    parameter integer CACHE_ENABLE = 1
+    parameter integer CACHE_ENABLE = 1,
+    parameter integer DUAL_ISSUE = 0
 ) (
     input wire clk_i,
     input wire rst_ni,
@@ -62,7 +63,7 @@ module triha_cached_core #(
     wire data_ack;
     wire data_error;
     wire [10:0] data_resp_tag;
-    triha_core #(.RESET_VECTOR(RESET_VECTOR), .DUAL_ISSUE(0)) u_core (
+    triha_core #(.RESET_VECTOR(RESET_VECTOR), .DUAL_ISSUE(DUAL_ISSUE)) u_core (
         .clk_i(clk_i),
         .rst_ni(rst_ni),
         .external_irq_i(external_irq_i),

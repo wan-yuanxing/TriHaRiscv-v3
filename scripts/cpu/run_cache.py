@@ -24,15 +24,16 @@ def save(path, value):
                     encoding='utf-8', newline='\n')
 
 
-def main():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--test', choices=['components', 'writeback', 'overlap', 'transport', 'joint', 'cpu', 'coremark'], default='components')
     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
+    parser.add_argument('--issue-mode', choices=['single', 'dual'], default='single')
     parser.add_argument('--bypass-caches', action='store_true')
     parser.add_argument('--fast-response-check', action='store_true', help='Require component resident-read lookup response latency')
     parser.add_argument('--store-response-check', action='store_true', help='Require direct store dispatch/completion and the original registered load response')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if (args.fast_response_check or args.store_response_check) and args.test != 'components':
         parser.error('fast response latency check is a cache component test')
     if args.fast_response_check and args.store_response_check:
@@ -42,6 +43,14 @@ def main():
         parser.error('--bypass-caches is a real CPU comparison mode')
     if args.fault == 'crc' and args.test != 'coremark':
         parser.error('CRC corruption requires the real CoreMark program')
+    if args.issue_mode != 'single' and not cpu_test:
+        parser.error('--issue-mode dual requires a real CPU or CoreMark test')
+    return args
+
+
+def main():
+    args = parse_args()
+    cpu_test = args.test in ['cpu', 'coremark']
     work = ROOT / 'build/cpu' / ('cache-' + args.test + '-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     work.mkdir(parents=True)
     row = dict(status='RUNNING', directory=str(work), test=args.test, fault=args.fault,
@@ -49,8 +58,9 @@ def main():
                source_unchanged=False, external_unchanged=False, runner_return_code=None,
                scope='Paired-cache RTL components; no full CPU, DDR hardware or timing acceptance')
     row['cache_enable'] = not args.bypass_caches
+    row['issue_mode'] = args.issue_mode
     if cpu_test:
-        row['scope'] = 'Real six-stage single-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance'
+        row['scope'] = f'Real six-stage {args.issue_mode}-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance'
     if args.test == 'coremark':
         row['memory_model'] = dict(axi_bits=128, deterministic_ready=True,
             model_write_wait_cycles=30, refill_bytes=32, physical_ddr_latency_validated=False)
@@ -165,7 +175,8 @@ def main():
         # Missing expected files deliberately reach the compiler in RED runs.
         includes = ['+incdir+' + (work/'src/rtl/cpu/vendor/src/core').as_posix()] if cpu_test else []
         native(SIM / 'vlog.exe', ['-work', 'work', *includes, *[work / 'src' / p for p in sources + [tb]], *primitive_sources], 'compile')
-        generics = ['-gCACHE_ENABLE=' + str(int(not args.bypass_caches))] if cpu_test else []
+        dual = int(args.issue_mode == 'dual')
+        generics = ['-gCACHE_ENABLE=' + str(int(not args.bypass_caches)), '-gDUAL_ISSUE=' + str(dual)] if cpu_test else []
         if args.fast_response_check: generics += ['-gFAST_RESPONSE_CHECK=1']
         if args.store_response_check: generics += ['-gSTORE_RESPONSE_CHECK=1']
         if args.test == 'coremark': generics += ['-gCOREMARK_MODE=1']
@@ -175,6 +186,20 @@ def main():
         marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'overlap': 'CPU_DCACHE_OVERLAP_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
         if marker not in output or any(token in output for token in ['CPU_CACHE_FAIL', '** Error', '** Fatal']):
             raise RuntimeError('Paired-cache self-check failed')
+        if cpu_test:
+            configs = re.findall(r'CPU_CACHE_ISSUE_CONFIG requested=(\d+) actual=(\d+)', output)
+            observations = re.findall(r'CPU_CACHE_ISSUE_OBSERVATION mode=(\d+) pairs_total=(\d+) lane1_wb_total=(\d+)', output)
+            if configs != [(str(dual), str(dual))] or len(observations) != 1:
+                raise RuntimeError('Missing, duplicate or wrong actual CPU issue configuration')
+            actual_mode, pairs, lane1 = map(int, observations[0])
+            if actual_mode != dual or (dual and (pairs <= 0 or lane1 <= 0)) or (not dual and (pairs != 0 or lane1 != 0)):
+                raise RuntimeError('Actual paired issue/completion does not match selected CPU mode')
+            row['issue_observation'] = dict(actual_mode=actual_mode, paired_cycles_total=pairs, lane1_wb_total=lane1)
+            memory = re.findall(r'CPU_CACHE_MEMORY_OBSERVATION I_reads=(\d+) D_reads=(\d+) stores=(\d+) cached_store_updates=(\d+) lower_writes=(\d+) protocol_fault=(\d+)', output)
+            if len(memory) != 1:
+                raise RuntimeError('Missing or duplicate actual CPU memory coverage')
+            row['memory_observation'] = dict(zip(['instruction_reads', 'data_reads', 'timed_stores',
+                'cached_store_updates_total', 'lower_writes', 'protocol_fault'], map(int, memory[0])))
         if args.test == 'coremark':
             match = re.search(r'CPU_CACHE_COREMARK_PASS cycles=(\d+) wb=(\d+) stores=(\d+)', output)
             cycles, wb, stores = map(int, match.groups())

@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "status": "CACHED_FUNCTIONAL_BASELINE_PASS",
+  "recorded_utc": "2026-10-23T11:31:48.088509+00:00",
+  "branch": "cpu/dualissue-windows",
+  "base_commit": "340bcc222da9c39cb1ad42de3b3baa74ce3f8a5c",
+  "scope": "Five-iteration six-stage CPU RTL comparison with paired caches and modeled AXI DDR; not official, board or routed timing acceptance",
+  "production_default_issue_width": 1,
+  "configuration": {
+    "main_stages": 6,
+    "isa": "RV32IM/CSR",
+    "issue": "in-order, existing legal pairing table",
+    "btb_entries": 512,
+    "bht_entries": 512,
+    "ras_entries": 4,
+    "gshare": false,
+    "cache_bytes_each": 16384,
+    "cache_ways": 2,
+    "line_bytes": 32,
+    "data_write_policy": "write_back/write_allocate",
+    "shared_ddr": "uncached"
+  },
+  "compiler": "GCC15.2.0, -O2, no LTO",
+  "memory_model": {
+    "axi_bits": 128,
+    "deterministic_ready": true,
+    "model_write_wait_cycles": 30,
+    "refill_bytes": 32,
+    "physical_ddr_latency_validated": false
+  },
+  "iterations": 5,
+  "loaded_image_sha256": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+  "elf_raw_equal": false,
+  "single_elf_sha256": "1c113a6d80a466459f77bc21cc24e6c172f0a9e5e7458cf26e9fb1fbe5686fae",
+  "dual_elf_sha256": "1843e0f1f6bd85150d9d38a23db4781307f43abaf4e2dd559ab50475cf4043d9",
+  "differing_nonloaded_sections": [
+    ".strtab"
+  ],
+  "matching_load_segments": [
+    {
+      "vaddr": 2147483648,
+      "paddr": 2147483648,
+      "filesz": 16532,
+      "memsz": 16532,
+      "flags": 5,
+      "sha256": "8307b39c292a97e320e5601c0f8277f2ef954de2bbd4ebdfb9248421d8cb234d"
+    },
+    {
+      "vaddr": 2147500180,
+      "paddr": 2147500180,
+      "filesz": 12,
+      "memsz": 40,
+      "flags": 6,
+      "sha256": "df73d15f7c7af1bb44f7eff5bba179cc61ade5595d3d0699449282cba6fa6e67"
+    }
+  ],
+  "measurements": {
+    "single": {
+      "cycles": 2014969,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 2.4814277539753715,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false,
+      "wb_observation_ipc": 0.7188438134780237,
+      "issue_observation": {
+        "actual_mode": 0,
+        "paired_cycles_total": 0,
+        "lane1_wb_total": 0
+      },
+      "memory_observation": {
+        "instruction_reads": 391,
+        "data_reads": 134,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 73294,
+        "lower_writes": 0,
+        "protocol_fault": 0
+      },
+      "evidence": {
+        "directory": "build/cpu/cache-coremark-20261023T112219934835Z",
+        "result_sha256": "83f26de7e69c1da0c2f92a7ef8e2005581057e8394f89c428d532b1a48acc5ed",
+        "status": "PASS",
+        "runner_return_code": 0,
+        "input_count": 92,
+        "output_count": 137,
+        "input_output_hashes_verified": true,
+        "input_snapshot": "src",
+        "current_worktree_hashes_verified": true
+      }
+    },
+    "dual": {
+      "cycles": 1781952,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 2.8059117192831233,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false,
+      "wb_observation_ipc": 0.8128434435944403,
+      "issue_observation": {
+        "actual_mode": 1,
+        "paired_cycles_total": 311626,
+        "lane1_wb_total": 311626
+      },
+      "memory_observation": {
+        "instruction_reads": 391,
+        "data_reads": 134,
+        "timed_stores": 70839,
+        "cached_store_updates_total": 73294,
+        "lower_writes": 0,
+        "protocol_fault": 0
+      },
+      "evidence": {
+        "directory": "build/cpu/cache-coremark-20261023T112230076790Z",
+        "result_sha256": "04af1da3ceb6f9a92c9b3446cbbfade4b97eba489ea0f67eb93b7d3f201e3796",
+        "status": "PASS",
+        "runner_return_code": 0,
+        "input_count": 92,
+        "output_count": 134,
+        "input_output_hashes_verified": true,
+        "input_snapshot": "src",
+        "current_worktree_hashes_verified": true
+      }
+    }
+  },
+  "trace_comparison": {
+    "cpu-cache.wb.log": {
+      "events": 1448448,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "79ad486ba36966c360ba5bc96986916160b878ab9d1b08567a7dca753c66555f",
+      "single_sha256": "4898498fb606bb557a53576c646252fee2662d4b4b1e177946647852472ed9b6",
+      "dual_sha256": "972609a171912411dd6bfeaa5de7e128fb39531ce7541d33ee21ec5b6ee1fa5a"
+    },
+    "cpu-cache.store.log": {
+      "events": 70839,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "315c8039785e3bdec82a863bc326e37f6c5ff9bdf757ec59799e64ceb62ae7e9",
+      "single_sha256": "efa930da76b2784a0a97508b8f44a5c9fb159552d604b66a1a5bd6b39eb1df07",
+      "dual_sha256": "e4386f0bc3c78929cbfe2220da14cfa012fded06acf4b7f203520b9032281361"
+    }
+  },
+  "cycles_saved": 233017,
+  "cycles_reduced_percent": 11.564297018961579,
+  "throughput_gain_percent": 13.0765026218439,
+  "checks": {
+    "directed_cached_single": {
+      "directory": "build/cpu/cache-cpu-20261023T112326732537Z",
+      "result_sha256": "49f4b39031bdb644f61345c5d255e362af1873f096fb4207c39f30dea1ae4a62",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 86,
+      "output_count": 124,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "PASS",
+      "memory_observation": {
+        "instruction_reads": 28,
+        "data_reads": 12,
+        "timed_stores": 9,
+        "cached_store_updates_total": 7,
+        "lower_writes": 33,
+        "protocol_fault": 0
+      }
+    },
+    "directed_cached_dual": {
+      "directory": "build/cpu/cache-cpu-20261023T112329962374Z",
+      "result_sha256": "491381c80e43bfeb5a020a7e3eef722bdf75cd4daac2a388315b4cd41d83af93",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 86,
+      "output_count": 121,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "PASS",
+      "memory_observation": {
+        "instruction_reads": 28,
+        "data_reads": 12,
+        "timed_stores": 9,
+        "cached_store_updates_total": 7,
+        "lower_writes": 33,
+        "protocol_fault": 0
+      }
+    },
+    "directed_bypass_single": {
+      "directory": "build/cpu/cache-cpu-20261023T112421280074Z",
+      "result_sha256": "e76d0f88ad0a974f247dd8dab1f34ec25276c4e2b8b46be09e0dbc3b500d798e",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 86,
+      "output_count": 121,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "PASS",
+      "memory_observation": {
+        "instruction_reads": 119,
+        "data_reads": 14,
+        "timed_stores": 9,
+        "cached_store_updates_total": 0,
+        "lower_writes": 9,
+        "protocol_fault": 0
+      }
+    },
+    "directed_bypass_dual": {
+      "directory": "build/cpu/cache-cpu-20261023T112424441612Z",
+      "result_sha256": "41ddbad2a80f80e32f4ff04fa3445cb9730cc98b146cc56a6847ecd8d1cacff2",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 86,
+      "output_count": 121,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "PASS",
+      "memory_observation": {
+        "instruction_reads": 117,
+        "data_reads": 14,
+        "timed_stores": 9,
+        "cached_store_updates_total": 0,
+        "lower_writes": 9,
+        "protocol_fault": 0
+      }
+    },
+    "writeback_component": {
+      "directory": "build/cpu/cache-writeback-20261023T112332987377Z",
+      "result_sha256": "3fd7bb0be5a8f23a8fa141defb282a80df84885d43b65a1a88e99f2ec3aed05b",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 67,
+      "output_count": 96,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "PASS"
+    },
+    "crc_corruption_rejected": {
+      "directory": "build/cpu/cache-coremark-20261023T112240295186Z",
+      "result_sha256": "d516b52c9c23957e9a4b37e11b54a08010937e8e77ef1b1b22e185f1f1944a06",
+      "status": "FAIL",
+      "runner_return_code": 1,
+      "input_count": 92,
+      "output_count": 134,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "FAIL"
+    },
+    "data_corruption_rejected": {
+      "directory": "build/cpu/cache-cpu-20261023T112737111528Z",
+      "result_sha256": "192ebdc1130be95ec15b8de1b1298bb25bc809dbef761cc5cf50f3f37f40dde7",
+      "status": "FAIL",
+      "runner_return_code": 1,
+      "input_count": 86,
+      "output_count": 121,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "FAIL",
+      "rejection_reason": "Corrupted instruction/data memory fails to complete; transport watchdog at cycle 100001, not a direct data-mismatch diagnosis"
+    },
+    "dual_elaboration_red": {
+      "directory": "build/cpu/cache-cpu-20261023T111250672161Z",
+      "result_sha256": "f04f584ef38389b8bda90301b67e73f46a0443bfcc0faeee17bcbcc3dad308dd",
+      "status": "FAIL",
+      "runner_return_code": 1,
+      "input_count": 86,
+      "output_count": 119,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "FAIL"
+    },
+    "old_lower_write_check_red": {
+      "directory": "build/cpu/cache-coremark-20261023T112111609276Z",
+      "result_sha256": "c7ac6c1faeda86f148b2955fee998bef1e174da45dec6d6019ae066c30ad92fe",
+      "status": "FAIL",
+      "runner_return_code": 1,
+      "input_count": 92,
+      "output_count": 134,
+      "input_output_hashes_verified": true,
+      "input_snapshot": "src",
+      "current_worktree_hashes_verified": false,
+      "expected_status": "FAIL"
+    }
+  },
+  "tcm_comparison": {
+    "evidence": {
+      "directory": "build/cpu/firmware-coremark-20261023T1103533439788Z",
+      "result_sha256": "bf516cb1dfbd1086e64cd630c1192140d31081eab6aeac52e4401f24b5d4a12d",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 69,
+      "output_count": 29,
+      "input_output_hashes_verified": true,
+      "input_snapshot": null,
+      "current_worktree_hashes_verified": true
+    },
+    "same_elf_sha256": "ea7a3cc47b58759d92cf64b336759835493bb4361110bdf9c572e1fe2e5fa1a5",
+    "executions": [
+      {
+        "mode": "single",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1646469,
+          "wb_completed": 1448448,
+          "observed_ipc": 0.8797298947019349,
+          "coremark_per_mhz_short_estimate": 3.0368017861253387,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1696192,
+          "issued": 1490364,
+          "paired_cycles": 0,
+          "issued_is_not_instret": true
+        }
+      },
+      {
+        "mode": "dual",
+        "status": "PASS",
+        "program_exit_code": 0,
+        "measurement": {
+          "cycles": 1411226,
+          "wb_completed": 1448448,
+          "observed_ipc": 1.0263756478409554,
+          "coremark_per_mhz_short_estimate": 3.5430186235230927,
+          "crc": [
+            "e9f5",
+            "e714",
+            "1fd7",
+            "8e3a"
+          ],
+          "short_duration_warning": true,
+          "official_score": false
+        },
+        "issue_observation": {
+          "total_cycles": 1454102,
+          "issued": 1490364,
+          "paired_cycles": 312186,
+          "issued_is_not_instret": true
+        }
+      }
+    ]
+  },
+  "firmware_checks": {
+    "runtime": {
+      "directory": "build/cpu/firmware-runtime-20261023T1103533438219Z",
+      "result_sha256": "3caa90d30cdabd2595d7ddd00b0602227640a4fde5e200543be433c3314d4485",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 69,
+      "output_count": 27,
+      "input_output_hashes_verified": true,
+      "input_snapshot": null,
+      "current_worktree_hashes_verified": true
+    },
+    "wb_probe": {
+      "directory": "build/cpu/firmware-retire-20261023T1104001070434Z",
+      "result_sha256": "e4e32c480bfeee8211b470a02d08fcb645a017097cf43304fe45516fbdc08772",
+      "status": "PASS",
+      "runner_return_code": 0,
+      "input_count": 69,
+      "output_count": 31,
+      "input_output_hashes_verified": true,
+      "input_snapshot": null,
+      "current_worktree_hashes_verified": true
+    }
+  },
+  "test_log_sha256": {
+    "cache-issue-mode-parser-red.log": "804b7d86a4d25555ff98870368b4a25fcd8a398caf223b0de87d220a4edfa42a",
+    "dual-cached-python-final.log": "dfcb01dfe5a6c2332f57a7602de34dfd9fe434219df3e2baa5b6b389d0eef89a",
+    "dual-cached-python-optimized.log": "638d287c0b0a39696192d173099f90dfd19c0b1b2df974802576f431e7c9eb0b",
+    "dual-cached-preflight-final.log": "122b2fb8543097b33ff466af7d55bcc338ab2727697433a42427daf984dbe395"
+  },
+  "python_tests_passed": 74,
+  "review": "Independent read-only review of source, full traces, ELF segments and saved hashes: no blocking findings",
+  "cpu_only_resources": null,
+  "actual_postroute_100mhz": false,
+  "physical_timing_status": "UNKNOWN",
+  "official_score": false,
+  "architectural_retirement_ipc_status": "UNKNOWN; reported IPC is WB observations",
+  "board_score": false,
+  "programmed": false,
+  "next_gate": "Native CPU-only mapping and register-file cost assessment, scheduled after active SoC PDS work; then actual post-route timing",
+  "audit_script": "build/cpu/record_dual_cached_baseline.py",
+  "audit_script_sha256": "26b8d14d797e0109bf089f9895fe4c50d1d7aeb31d01b762cb35dcb5e37700f0"
+}

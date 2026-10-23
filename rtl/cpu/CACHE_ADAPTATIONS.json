@@ -67,7 +67,7 @@
     "rtl/soc/triha_cpu_cache_axi.v": "a21d7a62fc7f2bcd05d09fed96b048fcd752358592e442469a6d6b2e1face6f9",
     "rtl/cpu/triha_cache_subsystem.v": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
     "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
-    "rtl/cpu/triha_cached_core.v": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
+    "rtl/cpu/triha_cached_core.v": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
     "fpga/pg2l100h/rtl/triha_cache_map_top.v": "f28d739af237c4604fe50d09ee17b51b6673e3c574abd3cece636885c19eca6d"
   }
 }

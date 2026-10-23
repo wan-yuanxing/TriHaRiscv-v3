@@ -4,6 +4,7 @@ module tb_cpu_cache_cpu;
     parameter integer CORRUPT_DATA = 0;
     parameter integer CACHE_ENABLE = 1;
     parameter integer COREMARK_MODE = 0;
+    parameter integer DUAL_ISSUE = 0;
     reg clk = 0, rst_n = 0;
     always #5 clk = !clk;
     reg [31:0] rng = 32'h763d93e1;
@@ -54,7 +55,7 @@ module tb_cpu_cache_cpu;
     reg write_error = 0;
     integer read_error_beat = -1;
     wire d_ack = u_dut.u_core.data_ack_i;
-    triha_cached_core #(.CACHE_ENABLE(CACHE_ENABLE)) u_dut (
+    triha_cached_core #(.CACHE_ENABLE(CACHE_ENABLE), .DUAL_ISSUE(DUAL_ISSUE)) u_dut (
         .clk_i(clk), .rst_ni(rst_n), .external_irq_i(1'b0),
         .protocol_fault_o(protocol_fault),
         .axi_awvalid_o(awvalid), .axi_awaddr_o(awaddr), .axi_awid_o(awid), .axi_awlen_o(awlen),
@@ -123,11 +124,14 @@ module tb_cpu_cache_cpu;
     end
     integer n, wb_file, store_file, wb_count = 0, store_count = 0;
     integer cycle_reads = 0, timed_cycles = 0;
+    integer paired_cycles_total = 0, lane1_wb_total = 0;
+    integer cached_store_updates = 0;
     reg [31:0] cycle_started = 0, cycle_elapsed = 0;
     `define CORE u_dut.u_core.u_cpu
     initial begin
         #1;
-        check(u_dut.CACHE_ENABLE == CACHE_ENABLE && u_dut.u_core.DUAL_ISSUE == 0,
+        check((DUAL_ISSUE == 0 || DUAL_ISSUE == 1) &&
+            u_dut.CACHE_ENABLE == CACHE_ENABLE && u_dut.u_core.DUAL_ISSUE == DUAL_ISSUE,
             "actual CPU/cache elaboration parameters");
         wb_file = $fopen("cpu-cache.wb.log", "w");
         store_file = $fopen("cpu-cache.store.log", "w");
@@ -135,9 +139,19 @@ module tb_cpu_cache_cpu;
         for (n = 0; n < 131072; n = n + 1) memory[n] = 32'h3155a72b ^ (n*32'h8721345);
         $readmemh("firmware.hex", memory, 0, 32767);
         repeat (6) @(negedge clk); rst_n = 1;
-        $display("CPU_CACHE_CPU_CONFIG single=1 cache_enable=%0d modeled_axi128=1 directed_faults=%0d coremark=%0d", CACHE_ENABLE, !COREMARK_MODE, COREMARK_MODE);
+        $display("CPU_CACHE_CPU_CONFIG single=%0d cache_enable=%0d modeled_axi128=1 directed_faults=%0d coremark=%0d", !DUAL_ISSUE, CACHE_ENABLE, !COREMARK_MODE, COREMARK_MODE);
+        $display("CPU_CACHE_ISSUE_CONFIG requested=%0d actual=%0d", DUAL_ISSUE, u_dut.u_core.DUAL_ISSUE);
     end
     always @(posedge clk) if (rst_n) begin
+        if (u_dut.u_cache.u_dcache.store_update_w &&
+            (|u_dut.u_cache.u_dcache.data0_mask_w || |u_dut.u_cache.u_dcache.data1_mask_w))
+            cached_store_updates = cached_store_updates + 1;
+        if (`CORE.u_issue.dual_issue_w) begin
+            check(DUAL_ISSUE != 0 && `CORE.u_issue.opcode_a_accept_r &&
+                `CORE.u_issue.opcode_b_accept_r, "paired issue requires both accepted slots");
+            paired_cycles_total = paired_cycles_total + 1;
+        end
+        if (`CORE.u_issue.pipe1_valid_wb_w) lane1_wb_total = lane1_wb_total + 1;
         if (!COREMARK_MODE || cycle_reads == 1) begin
         if (COREMARK_MODE) timed_cycles = timed_cycles + 1;
         if (`CORE.u_issue.pipe0_valid_wb_w) begin
@@ -146,6 +160,13 @@ module tb_cpu_cache_cpu;
                 `CORE.u_issue.pipe0_opc_wb_w, `CORE.u_issue.pipe0_rd_wb_w,
                 (|`CORE.u_issue.pipe0_rd_wb_w) ? `CORE.u_issue.pipe0_result_wb_w : 32'b0,
                 `CORE.u_issue.pipe0_exception_wb_w);
+        end
+        if (`CORE.u_issue.pipe1_valid_wb_w) begin
+            wb_count = wb_count + 1;
+            $fwrite(wb_file, "%08h %08h %02h %08h %02h\n", `CORE.u_issue.pipe1_pc_wb_w,
+                `CORE.u_issue.pipe1_opc_wb_w, `CORE.u_issue.pipe1_rd_wb_w,
+                (|`CORE.u_issue.pipe1_rd_wb_w) ? `CORE.u_issue.pipe1_result_wb_w : 32'b0,
+                `CORE.u_issue.pipe1_exception_wb_w);
         end
         if ((|u_dut.u_core.data_wstrb_o) && u_dut.u_core.data_accept_i) begin
             store_count = store_count + 1;
@@ -161,7 +182,7 @@ module tb_cpu_cache_cpu;
         end
     end
     always @(negedge clk) if (rst_n) begin
-        if (`CORE.u_issue.pipe1_valid_wb_w) check(0, "unexpected dual completion");
+        if (!DUAL_ISSUE && `CORE.u_issue.pipe1_valid_wb_w) check(0, "unexpected dual completion");
         if (`CORE.u_csr.u_csrfile.csr_waddr_i == 12'h8b2 && `CORE.u_csr.u_csrfile.exception_i == 0 &&
             `CORE.u_csr.u_csrfile.csr_wdata_i[31:24] == 1)
             $write("%c", `CORE.u_csr.u_csrfile.csr_wdata_i[7:0]);
@@ -169,7 +190,20 @@ module tb_cpu_cache_cpu;
             `CORE.u_csr.u_csrfile.csr_wdata_i[31:24] == 0) begin
             $fclose(wb_file); $fclose(store_file);
             check(`CORE.u_csr.u_csrfile.csr_wdata_i[7:0] == 0, "software cache/fault check returned nonzero checkpoint");
-            check(!protocol_fault && i_reads > 0 && d_reads > 0 && writes > 0, "real CPU exercised both caches and writes");
+            check(!DUAL_ISSUE || (paired_cycles_total > 0 && lane1_wb_total > 0),
+                "dual CPU must actually pair and complete a second slot");
+            $display("CPU_CACHE_ISSUE_OBSERVATION mode=%0d pairs_total=%0d lane1_wb_total=%0d",
+                DUAL_ISSUE, paired_cycles_total, lane1_wb_total);
+            $display("CPU_CACHE_MEMORY_OBSERVATION I_reads=%0d D_reads=%0d stores=%0d cached_store_updates=%0d lower_writes=%0d protocol_fault=%0d",
+                i_reads, d_reads, store_count, cached_store_updates, writes, protocol_fault);
+            check(!protocol_fault && i_reads > 0 && d_reads > 0 && store_count > 0,
+                "real CPU exercised instruction/data reads and stores");
+            check(!CACHE_ENABLE || cached_store_updates > 0, "cached stores updated data RAM");
+            // A resident write-back CoreMark working set need not evict dirty
+            // lines. The directed maintenance/fault program and uncached mode
+            // still require completed lower-memory writes.
+            check((COREMARK_MODE && CACHE_ENABLE) || writes > 0,
+                "directed or uncached CPU must complete lower-memory writes");
             if (COREMARK_MODE) begin
                 check(cycle_reads == 2 && cycle_elapsed > 0 && timed_cycles == cycle_elapsed, "CoreMark actual cycle window");
                 $display("CPU_CACHE_COREMARK_PASS cycles=%0d wb=%0d stores=%0d I_reads=%0d D_reads=%0d lower_writes=%0d", cycle_elapsed, wb_count, store_count, i_reads, d_reads, writes);
