@@ -1,0 +1,28 @@
+{
+  "status": "FUNCTIONAL_PASS_PERFORMANCE_BELOW_TARGET_PHYSICAL_PENDING",
+  "simulation": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261023T144435134145Z",
+  "result_sha256": "e7ea043e20e56324f0a54f94703792f2298c1e99a2b2ffcdf1eda92a577652ce",
+  "measurement": {
+    "cycles": 1253888,
+    "wb_completed": 1448448,
+    "observed_ipc": 1.1551653736218865,
+    "coremark_per_mhz_short_estimate": 3.9875969783585137,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "physical_package": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-physical-sram-v1",
+  "prepared_sha256": "f10858c192375877ef8fb639d627f61db4cd87f5a7c725f1498f3a867c64a89c",
+  "period_ns": 10,
+  "pds_started": false,
+  "timing_pass": false,
+  "reason_not_started": "SoC integration PDS process active; preserve exclusive physical workflow",
+  "memory": "8KiB boot ROM and 32KiB real synchronous SRAM plus MMIO",
+  "prior_tcm_cycles": 1249840,
+  "extra_cycles": 4048,
+  "remaining_cycles_to_strict_gt4": 3889
+}

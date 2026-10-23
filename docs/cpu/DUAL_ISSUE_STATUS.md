@@ -47,3 +47,10 @@ CPU-only资源与实际100MHz仍UNKNOWN，生产RTL和集成工程未改。
 优先完成冻结候选的真实100MHz物理验收，再依据关键路径与停顿计数提高分数。
 已核查旧run_route.ps1硬编码单发射，不能直接用于本候选；集成侧仍在推进PDS相关工作，
 本轮未启动竞争性实现任务。
+
+## 真实SRAM边界纠正（2026-10-23）
+
+可综合本地SoC（8KiB ROM/32KiB SRAM/MMIO）双发射-O2短测1253888周期，
+**3.987597/MHz，尚未超过4**；与此前128KiB仿真TCM为不同链接/存储边界。
+物理快照已准备，原100MHz/IO/hold约束不变；集成PDS占用期间未执行本路线PDS。
+见[物理准备证据](../verification/cpu/dualissue_sram_physical_preparation.md)。
