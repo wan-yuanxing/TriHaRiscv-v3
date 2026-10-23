@@ -28,7 +28,11 @@ module video_live_engine #(
     input wire axi_awready,axi_arready,
     output wire [255:0] axi_wdata,output wire [31:0] axi_wstrb,
     input wire axi_wready,input wire [3:0] axi_wusero_id,input wire axi_wusero_last,
-    input wire [255:0] axi_rdata,input wire [3:0] axi_rid,input wire axi_rlast,axi_rvalid
+    input wire [255:0] axi_rdata,input wire [3:0] axi_rid,input wire axi_rlast,axi_rvalid,
+    // Pixel-domain context is already registered with out_rgb by raw_display.
+    // Consumers must use these ports rather than core-domain commit telemetry.
+    output wire out_context_valid,output wire [31:0] out_frame_id,out_generation,
+    output wire [1:0] out_slot,output wire [10:0] out_x,out_y,output wire out_sof
 );
     localparam [2:0] CAPTURE_REQUEST=0,CAPTURE_WAIT=1,CAPTURE_DRAIN=2,SUBMIT=3,WAIT_COMMIT=4,FAILED=5;
     localparam [31:0] RAW_STRIDE=(FRAME_WIDTH*3+15)&32'hfffffff0;
@@ -82,6 +86,8 @@ module video_live_engine #(
         .core_clk(clk),.core_reset_n(reset_n),.pixel_clk(pixel_clk),.pixel_reset_n(pixel_reset_n),
         .ddr_ready(init_done&&!error),.record_valid(state==SUBMIT&&!error&&fault_now==0),.record_ready(display_ready),
         .record_generation(32'd1),.record_base(raw_base),.record_stride(RAW_STRIDE),.record_frame_id(capture_frame_id),.record_slot(capture_slot),
+        .out_context_valid(out_context_valid),.out_frame_id(out_frame_id),.out_generation(out_generation),
+        .out_slot(out_slot),.out_x(out_x),.out_y(out_y),.out_sof(out_sof),
         .record_reject_valid(display_reject_valid),.record_reject_ready(1'b1),
         .record_reject_code(display_reject_code),.rejected_records(display_rejected_records),
         .commit_valid(display_commit_valid),.commit_ready(1'b1),.commit_frame_id(commit_frame_id),.commit_slot(commit_slot),

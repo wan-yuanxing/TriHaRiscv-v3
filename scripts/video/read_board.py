@@ -269,6 +269,35 @@ def qualify_live_board(records):
                for a,b in zip(live,live[1:]))
 
 
+def qualify_live_mode_board(records):
+    current=[]
+    for row in reversed(records):
+        if (row.get('type') not in (9,10,11,12) or row.get('phase')!=0xa5 or row.get('error_code')!=0
+                or any(row.get(k) is not True for k in ('init_done','busy','done','all_pll_locked','rx_mode_good','tx_done'))
+                or any(row.get(k) is not False for k in ('error','overflow'))):break
+        if row['type']==10:
+            fields=('mode_state','request_seq','committed_seq','request_count','commit_count','coalesced_count')
+            if any(type(row.get(k)) is not int or not 0<=row[k]<=0xffffffff for k in fields):break
+            state=row['mode_state']
+            if (state>0xffff or state&0xee60 or state&0x190!=0x190 or state&3>=3
+                    or (state>>2)&3!=state&3 or row['request_seq']!=row['committed_seq']):break
+        current.append(row)
+    current.reverse()
+    # MODE packets also delimit reset/staleness. Check their epoch before
+    # projecting the lifecycle packets for the RAW progress qualifier.
+    if any(not 0<((b['heartbeat']-a['heartbeat'])&0xffffffff)<0x80000000
+           for a,b in zip(current,current[1:])):return False
+    positions=[i for i,r in enumerate(current) if r['type']==10][-2:]
+    if len(positions)!=2 or positions[0]<3:return False
+    kinds=[r['type'] for r in current[positions[0]-3:positions[1]+1]]
+    tail=[r['type'] for r in current[positions[1]+1:]]
+    if kinds!=[12,9,11,10]*2 or tail!=[12,9,11][:len(tail)]:return False
+    a,b=(current[i] for i in positions)
+    if any(a[k]!=b[k] for k in ('request_seq','committed_seq','request_count','commit_count','coalesced_count')):return False
+    if (a['mode_state']&~0x1000)!=(b['mode_state']&~0x1000):return False
+    return qualify_live_board([r for r in current if r['type']!=10])
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -334,6 +363,7 @@ try {
         result['physical_raw_fullscreen_readback_verified']=qualify_raw_board(records)
         result['physical_mode_fullscreen_readback_verified']=qualify_mode_board(records)
         result['physical_live_raw_progress_verified']=qualify_live_board(records)
+        result['physical_live_mode_progress_verified']=qualify_live_mode_board(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

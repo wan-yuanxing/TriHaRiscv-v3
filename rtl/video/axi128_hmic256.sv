@@ -138,12 +138,11 @@ module axi128_hmic256 #(
      (((h_rvalid!==1'b0 && h_rvalid!==1'b1)||
        (h_arvalid && h_arready!==1'b0 && h_arready!==1'b1))===1'b1);
 
- // Only COLLECT writes the private expected/mask cache. A bad AXI LAST
- // still faults and drains via collect_phase_poisoned, without publishing a
- // native command. Its unused scratch write need not gate this wide cache.
- // Keep the existing online, sticky-fault and unexpected-R guards.
- wire collect_poisoned=fault||(seen_online && init_done!==1'b1)||
-                       (h_rvalid!==1'b0);
+ // Only COLLECT writes this private scratch cache. All fault checks remain
+ // on retirement and WPRE, before any native address can be offered. Thus a
+ // faulted burst may still fill scratch while its owned AXI W beats drain:
+ // these bytes are never published and quarantine prevents buffer reuse.
+ // Do not fan immediate native health out to every scratch byte enable.
  // Read and write native phases are exclusive. Factor the write-mask guard
  // from that phase's faults so the 256-bit readback comparison cannot feed
  // native WSTRB. This is the same immediate first-fault suppression as
@@ -200,7 +199,7 @@ module axi128_hmic256 #(
     end
     COLLECT:if(w_take) begin
      // Rejected LEN may be 255: never use its count to index these RAMs.
-     if(legal_q&&!collect_poisoned) begin
+     if(legal_q) begin
       if(!lane[0]) begin
        expected[lane[4:1]]<={128'b0,wdata};
        masks[lane[4:1]]<={16'b0,wstrb};

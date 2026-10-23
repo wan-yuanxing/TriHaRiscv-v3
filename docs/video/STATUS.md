@@ -495,3 +495,13 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 故障测试要求明确首错码，停止新发布并等待已承诺读写排空。专用 UART11 记录捕获/提交/释放/扫描数，UART12 是进行中捕获观察，UART9 是显示观察；不宣称每帧 DDR CRC 读回。
 125 MHz/40 MHz 的实际板级目标已通过综合（16121 LUT / 16481 FF / 9.5 DRM），完整尺寸仿真3次提交/96万输出像素通过；最终内部布线时序slow setup/hold +0.049/+0.137ns，fast +2.926/+0.099ns，位流644852dd6321已打包。新增release束34端点两角均通过6ns约束。
 连续 RAW 实体板测已通过；初次JTAG线缆列表为空；用户重新连接后，PG2L100H识别及易失Program/Verify通过，首段60秒及一次KEY0后连续114秒健康，欠载/溢出/错误均为0；实测新图30.16fps、输出扫描约60.32Hz。用户确认全屏内容自动更新，单次KEY0后恢复并继续更新。串口已关闭，板卡保持镜像运行；后续连续BOX/AVATAR及真实NPU另行交付。详见 [连续 RAW 记录](../verification/video/live_raw.md)。
+
+## 连续 RAW / BOX / AVATAR 实体交付（2026-10-23）
+
+新增独立 `video_live_mode_board`：沿用800×600、40MHz扫描、125MHz核心和raw/preview/320×320 BGR NCHW三分支；A/B旧槽仍待真实release后才复用。扫描器输出同拍像素身份，KEY1在有效图像SOF按RAW→BOX→AVATAR→RAW循环，pad首像素退休后反馈；叠加不持有旧DDR槽、不新增整帧写回。框/五点和256×256 RGBA贴图均为人工诊断数据，未接真实NPU或CPU统一帧池。
+
+变化帧独立像素/Alpha oracle、完整板壳、命令到达SOF相位、pad退休反馈变异、两次复位及四类UART历史失效检查通过。桥接器215例、共享DDR、原连续RAW、原静态模式和完整NCHW回归通过；故障期间只允许私有scratch填充，错误B/WPRE/native发布检查和QUARANTINE保持。规格书移除“双窗仍为当前实现”的旧进度断言，实际状态以台账和验收记录为准。
+
+前两轮物理失败记录保留；定宽NCHW掩码、去掉故障控制对宽scratch CE的扇出，并为新存活的generation字段补齐原握手6ns约束。最终 `build/video/pds/20261023T042858_495450Z` 内部布线时序通过，slow setup/hold +0.063/+0.129ns、fast +2.911/+0.097ns，recovery/removal均通过。16770LUT /18150FF /73.5DRM，其中64DRM为测试纹理；release34、generation1、MODE3、素材2个存活CDC端点两角均通过6ns，原数据库及报告哈希保持。
+
+位流 `50ea2b124300` 已Program/Verify，未写Flash。用户确认完整RAW连续更新，三次单独KEY1后BOX、AVATAR和返回RAW均正常且底图保持动态；一次KEY0后恢复完整动态RAW。持续串口共514包，复位后连续健康87.000秒，新图30.1548fps，欠载/溢出/错误为0。串口已关闭，开发板保持新镜像运行。详见[连续三模式记录](../verification/video/live_modes.md)和[机器证据](../verification/video/evidence/live_modes.json)。本阶段实体交付关闭；下一步接真实NPU结果与正式CPU/共享DDR契约，不能以本诊断测试替代整机推理验收。

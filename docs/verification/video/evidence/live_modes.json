@@ -1,0 +1,470 @@
+{
+  "status": "pass",
+  "scope": "Physical continuous Video RAW/BOX/AVATAR diagnostic delivery, no real NPU inference or CPU/fabric fence signoff",
+  "base_commit": "62d1ade95b7a8653a32bf0c88b88410cec59b2bc",
+  "regressions": {
+    "axi_bridge": {
+      "directory": "build\\video\\regression\\20261023T042858_487167Z",
+      "locator_sha256": "b0dcad22bdc04990954b37908c2338c957758043befbccbe4972d543f43b0e87",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    },
+    "live_modes": {
+      "directory": "build\\video\\regression\\20261023T042858_508821Z",
+      "locator_sha256": "ac0aa60b6aea3b0b9d600562801a3e39f48132f155b392e4304bf870a0d87910",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    },
+    "live_board": {
+      "directory": "build\\video\\regression\\20261023T042858_537303Z",
+      "locator_sha256": "344d2ae1b35a3a612ac18e07f92dc24a0cdb39d7e410b6d02500dc166f48b9ff",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    },
+    "nchw_dma": {
+      "directory": "build\\video\\regression\\20261023T042208_002523Z",
+      "locator_sha256": "b0d1b94d77c091f9b8d3b14c4eeddbf21febc0257cf28df776f38e5fb646ac7b",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    },
+    "mode_output": {
+      "directory": "build\\video\\regression\\20261023T043041_543266Z",
+      "locator_sha256": "19c06cb80eb4be3a9064e916c4c1699cc828e1a6f8ed5aebcc5c53cb42853433",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    },
+    "shared_video": {
+      "directory": "build\\video\\regression\\20261023T043041_552873Z",
+      "locator_sha256": "97f474ac24653a05900f2e7fa580a90f97a635c671ed28c2b3e8f12b25e924c4",
+      "status": "pass",
+      "inputs_current": true,
+      "artifacts_current": true
+    }
+  },
+  "bridge_cases": 215,
+  "red_control": {
+    "static_mode_identity": "build/video/live_modes/20261023T040209_069391Z",
+    "early_ack_mutation": "LIVE_MODE_ACK_BEFORE_VISIBLE_RETIREMENT"
+  },
+  "physical_build": {
+    "directory": "build\\video\\pds\\20261023T042858_495450Z",
+    "resources": {
+      "lut": 16770.0,
+      "registers": 18150.0,
+      "drm": 73.5
+    },
+    "internal_timing_met": true,
+    "input_snapshot_verified_before_and_after_build": true,
+    "inputs": {
+      "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+      "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
+      "fpga/pg2l100h/constraints/video_ddr_bist.fdc": "197c010f093649875be9cc89fb6afb14d8b1f1a55629ba729baaa8510d29cf27",
+      "fpga/pg2l100h/constraints/video_ddr_bist.rcf": "01a316eaa22fb40512d6d7948533b18296e2cc2860469bbf1ae8dbf0fe872002",
+      "fpga/pg2l100h/constraints/video_hdmi_capture.fdc": "2df24e663a5fbadface0e93217b624d222f616dcf320ca4f2248d3290a69b69b",
+      "fpga/pg2l100h/constraints/video_live_board.fdc": "7370ba6ac3a74287cc844e977753fc325d8caacbcfb751a97589c6c9edbe1822",
+      "fpga/pg2l100h/constraints/video_live_mode_board.fdc": "bf7e682123ed254ab6b03cbacffd7a606567c25197a008a2ec1f66c5ab042559",
+      "fpga/pg2l100h/ip/video_ddr_manifest.json": "9f2521e8b4dc38e8de44b0c74ad4776d0623745a09267d4b3f7430ab12fdb7ee",
+      "fpga/pg2l100h/ip/video_mode_key_manifest.json": "b7bb33ebb89c161475b0e8feb92c516e84b254754c032492b20246ad816b9f48",
+      "fpga/pg2l100h/ip/video_reference_manifest.json": "1c3c76ea537b9b771b6cfb512392f31db41c14fdada347f7043e4186dcfd9fd2",
+      "fpga/pg2l100h/project/video_live_mode_board.json": "3d38ce264bda1195796b22e781163f1eb6174f2dc8a3576da480b449aec3b97e",
+      "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+      "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+      "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv": "5566b0714dcaea648989c5975f5068005b7b4af6e22c0028ee65b5d7a03f81cc",
+      "fpga/pg2l100h/rtl/video_diag_uart.sv": "4248bbacc41b18570f7294fc5ea8a627a4469e2f54fa5b84b0262fe1d832f1ac",
+      "fpga/pg2l100h/rtl/video_live_mode_board_top.sv": "d72e4073581d1eeb72956e53f66d0bf162af55dbcf56aef60cb78277ca114d08",
+      "fpga/pg2l100h/rtl/video_live_mode_output.sv": "77a22a2063c11c47ccdb8a605541042374dc664712cb6b26cce0ba23a430a278",
+      "fpga/pg2l100h/rtl/video_preview_clock_reset.sv": "8768971f5be5afc421350dc2eb043e60c4d567d8526d7344336f73da8cccf8bc",
+      "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+      "rtl/video/avatar_sample_map.sv": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+      "rtl/video/avatar_texture_cache.sv": "f96e208969a8c5b763d9038812cab51edeb5357928208e423af57d97ce2003b7",
+      "rtl/video/axi128_hmic256.sv": "128febb0a3c2b2084594971ab6ef08b4e69ab4c421784c2807389470c41d05cd",
+      "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+      "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+      "rtl/video/detect_nchw_dma.sv": "5f24996e1537a7ea5579cd2275a88da09d6d48fa15dd67c5a94b2530e0e66c02",
+      "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+      "rtl/video/display_mode_control.sv": "ff5782e9505cf46702efdefaba0400dfe28c4a78fe1166a91954ea038eb9a969",
+      "rtl/video/display_overlay.sv": "303b2bbb91fe0fa1b956759c8c2378433ac06445445a2b4ca69f8c35982ccdb4",
+      "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+      "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+      "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+      "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+      "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+      "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+      "rtl/video/video_button_debounce.sv": "1cf1b6eb03e5b6e49a7d91d1b62757889974f8f9f09230080a25abe6368abb29",
+      "rtl/video/video_capture_ingress.sv": "172188fc8dd869d1799471ed9a66579e3925cdac45f41a13594595ca83a6054e",
+      "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
+      "rtl/video/video_live_engine.sv": "cdde4fb8129ac3a92a0585fa29d9cb19a9cb6ed67df3e7aec91f809a49eb7761",
+      "rtl/video/video_memory_scheduler.sv": "27795643f33e04a7560049e016a9cced5937a12609f134dea856ed20f6e86aa0",
+      "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+      "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+      "rtl/video/video_shared_ddr.sv": "6b0a282bfbcf58dc1cb6ff2c96a478c19bd8689b4776443bc1220334b6bdd8e6",
+      "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+      "rtl/video/video_three_branch_capture.sv": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+      "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+      "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+      "scripts/video/build_pds.py": "ee4b6e433ae01778b1d19d860f4ce3698113b7df0fbb9c6107f178f2d58d8b8f",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/gen_config.py": "4df4ebec7a26189e88db4372304275667774dd094145986763a5cfac41cd5270",
+      "scripts/video/gen_ddr.py": "8b4924d3e1513fc585e0f7d34cfb7e4598675f80018c799bd9d2199622e8dad2",
+      "scripts/video/gen_edid.py": "e8d089439adb24e9a983a61384a2c39d4bce699004c208a5a8ad0db5ea8df19a",
+      "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+      "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+      "scripts/video/record_probe_timing.py": "1f27c5537dc20e721f7845c3154e549549009c40b6a3b9d79d46a9171ff068f5",
+      "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe"
+    },
+    "artifact": "build\\video\\pds\\20261023T042858_495450Z\\generate_bitstream\\video_live_mode_board_top.sbit",
+    "artifact_sha256": "50ea2b1243009df38472c3aace5f7fa0930ba398b65cfd5156bd6f9e447af3f5",
+    "verify_mask": "build\\video\\pds\\20261023T042858_495450Z\\generate_bitstream\\video_live_mode_board_top.smsk",
+    "verify_mask_sha256": "ea0ca104c324a273ec56de7aa78168aa78a7dac6fa28a46eb1a1bce8fb588bbc",
+    "timing_report": "build\\video\\pds\\20261023T042858_495450Z\\report_timing\\video_live_mode_board_top.rtr",
+    "pds_version": "2022.2-SP6.4",
+    "pnr_configuration": {
+      "seed_start": 5,
+      "seed_count": 1,
+      "mode": "performance"
+    }
+  },
+  "timing_summary": {
+    "setup": {
+      "slow": {
+        "minimum_slack_ns": 0.063,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 0.063,
+          "endpoints": 47948
+        }
+      },
+      "fast": {
+        "minimum_slack_ns": 2.911,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 2.911,
+          "endpoints": 47948
+        }
+      }
+    },
+    "hold": {
+      "slow": {
+        "minimum_slack_ns": 0.129,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 0.129,
+          "endpoints": 47948
+        }
+      },
+      "fast": {
+        "minimum_slack_ns": 0.097,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 0.097,
+          "endpoints": 47948
+        }
+      }
+    },
+    "recovery": {
+      "slow": {
+        "minimum_slack_ns": 3.999,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 3.999,
+          "endpoints": 7491
+        }
+      },
+      "fast": {
+        "minimum_slack_ns": 5.326,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 5.326,
+          "endpoints": 7491
+        }
+      }
+    },
+    "removal": {
+      "slow": {
+        "minimum_slack_ns": 0.319,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 0.319,
+          "endpoints": 7491
+        }
+      },
+      "fast": {
+        "minimum_slack_ns": 0.21,
+        "core": {
+          "launch": "ddrphy_sysclk",
+          "capture": "ddrphy_sysclk",
+          "slack_ns": 0.21,
+          "endpoints": 7491
+        }
+      }
+    }
+  },
+  "cdc": {
+    "status": "pass",
+    "groups": {
+      "release": {
+        "bound_ns": 6,
+        "sources": 34,
+        "destinations": 34,
+        "endpoint_coverage": {
+          "slow": 34,
+          "fast": 34
+        },
+        "minimum_slack_ns": {
+          "slow": 4.431,
+          "fast": 5.044
+        },
+        "report_sha256": "9db882469e342534c4774a65ab2d2c9fa9ad5dbfcaf023feac70190ccf92c8bc"
+      },
+      "generation": {
+        "bound_ns": 6,
+        "sources": 1,
+        "destinations": 1,
+        "endpoint_coverage": {
+          "slow": 1,
+          "fast": 1
+        },
+        "minimum_slack_ns": {
+          "slow": 5.123,
+          "fast": 5.484
+        },
+        "report_sha256": "33dc1097fef3a0f9e2a1c0e1d84f3c392040003fb895e2836d15f838e67f2e7f"
+      },
+      "mode": {
+        "bound_ns": 6,
+        "sources": 37,
+        "destinations": 3,
+        "endpoint_coverage": {
+          "slow": 3,
+          "fast": 3
+        },
+        "minimum_slack_ns": {
+          "slow": 4.638,
+          "fast": 5.177
+        },
+        "report_sha256": "1a972d6cbf87b0335fcfffae990fbd5701b091f3d09306af362691b54ac30e83"
+      },
+      "material": {
+        "bound_ns": 6,
+        "sources": 2,
+        "destinations": 2,
+        "endpoint_coverage": {
+          "slow": 2,
+          "fast": 2
+        },
+        "minimum_slack_ns": {
+          "slow": 5.063,
+          "fast": 5.452
+        },
+        "report_sha256": "30a6aa66ff25c56b6359ce5734ddbb9fc8c70236dabd29970169097f7578b598"
+      }
+    },
+    "original_hashes": {
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261023T042858_495450Z\\place_route\\video_live_mode_board_top_pnr.adf": "93d65b1fd4705bd44b5d4a24b66a8a2345701067cf50f08a9a53d1d684320d47",
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261023T042858_495450Z\\video_live_mode_board.pds": "58bb18438ce3220dba5565343cb773e1317c2d36f2bc4935a18b64b9b6022425",
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261023T042858_495450Z\\place_route\\video_live_mode_board_top_pnr.netlist": "eb96ae51d9e444a8f5efe74ba96788edbc452006aaefc3c10229675cf388c8a4",
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261023T042858_495450Z\\report_timing\\video_live_mode_board_top.rtr": "28fd49163d456720c24ba63c0723b73a33985313ef3412da43c97c7dfe889225"
+    },
+    "originals_unchanged": true
+  },
+  "package": {
+    "status": "pass",
+    "target": "video_live_mode_board",
+    "directory": "build\\video\\releases\\video_live_mode_board_50ea2b124300",
+    "bitstream_sha256": "50ea2b1243009df38472c3aace5f7fa0930ba398b65cfd5156bd6f9e447af3f5",
+    "verify_mask_sha256": "ea0ca104c324a273ec56de7aa78168aa78a7dac6fa28a46eb1a1bce8fb588bbc",
+    "physical_board": false
+  },
+  "program": {
+    "directory": "build\\video\\board_program\\20261023T043841_272916Z",
+    "status": "pass",
+    "target": "video_live_mode_board",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "bitstream_sha256": "50ea2b1243009df38472c3aace5f7fa0930ba398b65cfd5156bd6f9e447af3f5",
+    "verify_mask_sha256": "ea0ca104c324a273ec56de7aa78168aa78a7dac6fa28a46eb1a1bce8fb588bbc",
+    "log_sha256": "d65a5fba6f155cefbcc22c0b1ed88521a3f6e62874e614c2efca7a41f5885a4d"
+  },
+  "board": {
+    "trace_directory": "build/video/live_mode_board_trace/20261023T043913_669627Z",
+    "raw_uart_sha256": "fd66ffb0737558e31360e87d514ea31367fa5007875d39d5d0da251c905ac95e",
+    "packets": 514,
+    "observed_resets": 1,
+    "post_reset_healthy_seconds": 87.0,
+    "post_reset_lifecycle_observation_seconds": 84.0,
+    "new_frames_per_second": 30.154762,
+    "output_scans_per_second": 60.321429,
+    "post_reset_first_lifecycle": {
+      "type": 11,
+      "flags": 119,
+      "phase": 165,
+      "error_code": 0,
+      "frame_id": 25,
+      "captures": 25,
+      "commits": 25,
+      "releases": 24,
+      "completed_scans": 48,
+      "underflows": 0,
+      "heartbeat": 5,
+      "init_done": true,
+      "busy": true,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false,
+      "elapsed_ms": 426892.371
+    },
+    "post_reset_last_lifecycle": {
+      "type": 11,
+      "flags": 119,
+      "phase": 165,
+      "error_code": 0,
+      "frame_id": 2558,
+      "captures": 2558,
+      "commits": 2558,
+      "releases": 2557,
+      "completed_scans": 5115,
+      "underflows": 0,
+      "heartbeat": 173,
+      "init_done": true,
+      "busy": true,
+      "done": true,
+      "error": false,
+      "all_pll_locked": true,
+      "rx_mode_good": true,
+      "tx_done": true,
+      "overflow": false,
+      "elapsed_ms": 510893.165
+    },
+    "mode_snapshots": {
+      "raw_baseline": {
+        "packets": 80,
+        "mode": 0,
+        "request_seq": 0,
+        "request_count": 0,
+        "commit_count": 1,
+        "frame_id": 2787,
+        "commits": 2787,
+        "releases": 2786,
+        "completed_scans": 5572,
+        "snapshot_sha256": "3090d38bac9744aa045a2890aea9fd6bcc6dd1c498371da51d1938090867bea3"
+      },
+      "box_snapshot": {
+        "packets": 130,
+        "mode": 1,
+        "request_seq": 1,
+        "request_count": 1,
+        "commit_count": 2,
+        "frame_id": 4234,
+        "commits": 4234,
+        "releases": 4233,
+        "completed_scans": 8467,
+        "snapshot_sha256": "e2b264dfa5eba19934c22bb5b443adafe738e7da19b4ede51ed59666b5f568f9"
+      },
+      "avatar_snapshot": {
+        "packets": 181,
+        "mode": 2,
+        "request_seq": 2,
+        "request_count": 2,
+        "commit_count": 3,
+        "frame_id": 5802,
+        "commits": 5802,
+        "releases": 5801,
+        "completed_scans": 11603,
+        "snapshot_sha256": "12c02c742a36fc5dd7f436d30ad8e69e8a3e932c74cfbb499b0cd12ac2469281"
+      },
+      "raw_return_snapshot": {
+        "packets": 223,
+        "mode": 0,
+        "request_seq": 3,
+        "request_count": 3,
+        "commit_count": 4,
+        "frame_id": 6918,
+        "commits": 6918,
+        "releases": 6917,
+        "completed_scans": 14257,
+        "snapshot_sha256": "c1ecadc0832aae5b23b44b31e34e52cc65b6ccab4ccfc93612ec7e42ca53af32"
+      }
+    },
+    "human_events": [
+      {
+        "event": "raw_motion_confirmed",
+        "note": "User observed full live source motion; no keys pressed",
+        "utc": "2026-10-23T04:40:23.218208+00:00",
+        "elapsed_ms_approx": 70218.208
+      },
+      {
+        "event": "request_key1_box",
+        "note": "Ask one KEY1; source motion held active",
+        "utc": "2026-10-23T04:40:41.589189+00:00",
+        "elapsed_ms_approx": 88589.189
+      },
+      {
+        "event": "box_motion_confirmed",
+        "note": "User pressed KEY1 once; boxes and five points correct; full background remains live",
+        "utc": "2026-10-23T04:41:14.580811+00:00",
+        "elapsed_ms_approx": 121580.811
+      },
+      {
+        "event": "request_key1_avatar",
+        "note": "Ask next single KEY1 while maintaining source motion",
+        "utc": "2026-10-23T04:41:32.920544+00:00",
+        "elapsed_ms_approx": 139920.544
+      },
+      {
+        "event": "avatar_motion_confirmed",
+        "note": "User pressed KEY1 once; diagnostic texture correct; full background remains live",
+        "utc": "2026-10-23T04:42:01.224826+00:00",
+        "elapsed_ms_approx": 168224.826
+      },
+      {
+        "event": "request_key1_raw",
+        "note": "Ask next single KEY1 to return RAW; continuous source motion",
+        "utc": "2026-10-23T04:42:22.125250+00:00",
+        "elapsed_ms_approx": 189125.25
+      },
+      {
+        "event": "raw_return_confirmed",
+        "note": "User pressed KEY1 once; all overlays removed; full RAW remains live",
+        "utc": "2026-10-23T04:42:47.869752+00:00",
+        "elapsed_ms_approx": 214869.752
+      },
+      {
+        "event": "request_key0",
+        "note": "Ask one coordinated KEY0 reset after completed three-mode cycle",
+        "utc": "2026-10-23T04:43:05.430474+00:00",
+        "elapsed_ms_approx": 232430.47400000002
+      },
+      {
+        "event": "key0_motion_confirmed",
+        "note": "User pressed KEY0 once; full RAW recovered and continues automatic updates",
+        "utc": "2026-10-23T04:46:30.704165+00:00",
+        "elapsed_ms_approx": 437704.165
+      }
+    ],
+    "errors": 0,
+    "overflows": 0,
+    "underflows": 0,
+    "serial_closed": true
+  },
+  "remaining": [
+    "Real NPU detections/avatar assets",
+    "CPU frame-pool and fabric visibility integration",
+    "External HDMI AC signoff"
+  ]
+}

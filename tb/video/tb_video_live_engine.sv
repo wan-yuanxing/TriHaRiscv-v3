@@ -17,6 +17,8 @@ module tb_video_live_engine;
         else pixel_x<=pixel_x+1'b1;
     end
     wire [23:0] out_rgb;wire out_hs,out_vs,out_de;
+    wire out_context_valid,out_sof;wire [31:0] out_frame_id,out_generation;
+    wire [1:0] out_slot;wire [10:0] out_x,out_y;
     reg cv=0,fb=0,fe=0,fg=1,mode_good=1;
     reg [10:0] cx=0,cy=0;reg [23:0] crgb=0;
     wire fv,fr,m_valid,m_ready,arm_toggle,cancel,source_fault,overflow;

@@ -10,7 +10,7 @@ from common import BUILD, ROOT, sha256, write_json
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_mode_board'),default='video_board_smoke')
+    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_live_mode_board','video_mode_board'),default='video_board_smoke')
     args=parser.parse_args([] if argv is None else argv)
     for path in (BUILD/'latest_package.json', BUILD/f'latest_package_{args.target}.json'):
         write_json(path,{"status":"running","target":args.target,"physical_board":False})
@@ -55,7 +55,8 @@ def package_current(target='video_board_smoke'):
         f"Scope: {result.get('scope','See manifest')}\n"
         "Internal routed timing passed. External board AC timing is not signed off.\n"
         "Device/board operation requires separate hardware evidence.\n"+
-        ("Live RAW fullscreen: LED0 heartbeat; LED1 calibrated; LED2 automatic progress; LED3 error. UART11 lifecycle/12 capture/9 scan at115200.\n" if target=='video_live_board' else
+        ("Live modes: KEY1 C23 RAW/BOX/AVATAR, changing raw frames with generated same-frame test boxes and sealed test texture. UART12/9/11/10.\n" if target=='video_live_mode_board' else
+         "Live RAW fullscreen: LED0 heartbeat; LED1 calibrated; LED2 automatic progress; LED3 error. UART11 lifecycle/12 capture/9 scan at115200.\n" if target=='video_live_board' else
          "MODE fullscreen: KEY1 C23 cycles RAW/BOX/AVATAR test texture; LED0 heartbeat; LED1 calibrated; LED2 readback PASS; LED3 error. UART type6/9/8/10 C24 at115200.\n" if target=='video_mode_board' else
          "Raw fullscreen: LED0 heartbeat; LED1 calibrated; LED2 readback/display PASS; LED3 error. UART type6/9/8 C24 at115200.\n" if target=='video_raw_board' else
          "Three-branch readback: LED0 heartbeat; LED1 calibrated; LED2 readback/display PASS; LED3 error. UART type6/7/8 C24 at115200.\n" if target=='video_three_board' else
@@ -66,7 +67,8 @@ def package_current(target='video_board_smoke'):
          "LED0 heartbeat; LED1 PLL lock; LED2 input mode good; LED3 init error. UART C24 at115200.\n" if target=='video_rx_board'
          else "LED0 A20 heartbeat; LED1 C18 PLL lock; LED2 C19 error; LED3 E18 init done.\n")+
         "KEY0 C22 active-low reset.\n"+
-        ("Continuous raw frames, A/B slots reused only after display release; three capture branches. No full-frame diagnostic readback. KEY0 resets and restarts continuous operation.\n" if target=='video_live_board' else
+        ("Continuous three-mode diagnostic; source keeps updating in all modes. KEY0 resets to RAW and restarts capture. No true NPU or CPU ownership/fence.\n" if target=='video_live_mode_board' else
+         "Continuous raw frames, A/B slots reused only after display release; three capture branches. No full-frame diagnostic readback. KEY0 resets and restarts continuous operation.\n" if target=='video_live_board' else
          "Static raw frame with artificial boxes/points and locally loaded sealed test texture. MODE does not recapture; KEY0 resets modes/material and recaptures while preserving HDMI initialization.\n" if target=='video_mode_board' else
          "Raw/preview/input writes retire before readback and full-resolution raw scanout. Single static frame; KEY0 recaptures while preserving HDMI initialization.\n" if target=='video_raw_board' else
          "Raw/preview/input writes retire before CRC/checksum readback and two preview windows. Input checksum is not an independent arbitrary-scene numerical proof.\n" if target=='video_three_board' else

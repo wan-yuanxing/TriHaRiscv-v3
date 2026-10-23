@@ -223,6 +223,27 @@ module tb_axi128_hmic256;
   // Init loss while collecting: WREADY remains available to drain ownership.
   restart;start_write(32'h80000000,4,3,4,1);@(negedge clk);init_done=0;
   send_write(4,4,0,0,1);finish_b(2,3,0);check(fault&&aw_commands==0,"collect abort/native side effects");
+  // Scratch writes may continue during a faulted COLLECT drain. No contents
+  // from that request may reach native DDR, including a fault at the last W.
+  for(mode=0;mode<3;mode=mode+1) for(half=0;half<2;half=half+1)
+   for(k=0;k<4;k=k+1) begin
+    restart;start_write(32'h80000000+half*16,4,3,4,1);
+    fork
+     send_write(4,44,2,0,1);
+     begin
+      wait(collected_w==k);@(negedge clk);
+      case(mode)
+       0:init_done=0;
+       1:inject_r=1;
+       2:inject_r=1'bx;
+      endcase
+     end
+    join
+    finish_b(2,3,2);
+    check(fault&&fault_code==(mode==0?8'h01:mode==1?8'h03:8'h0b),"collect first fault code");
+    check(aw_commands==0&&ar_commands==0&&write_beats==0&&!awready&&!arready,
+          "faulted scratch cache published or reused");
+   end
   restart;@(negedge clk);init_done=0;repeat(3) @(negedge clk);
   check(fault&&!awready&&!arready,"idle init loss");init_done=1;repeat(4) @(negedge clk);check(fault&&!awready,"fault cleared without reset");
   // Keep a completed B and R stable when initialization subsequently drops.

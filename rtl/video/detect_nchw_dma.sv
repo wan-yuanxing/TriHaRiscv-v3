@@ -131,15 +131,20 @@ module detect_nchw_dma #(
                 TAKE:begin
                     pack_data[lane*8+:8]<=selected_byte;
                     if(lane==15||read_x==WIDTH-1)begin
-                        pack_keep<=16'hffff>>(15-lane);pack_last<=read_x==WIDTH-1;state<=SEND;
+                        pack_keep<=16'hffff>>(4'd15-lane);pack_last<=read_x==WIDTH-1;state<=SEND;
                     end else begin lane<=lane+1'b1;read_x<=read_x+1'b1;state<=READ;end
                 end
                 SEND:if(dma_s_ready)begin
                     if(pack_last)state<=WAIT_ROW;
                     else if(padding)begin
                         read_x<=read_x+12'd16;
-                        pack_keep<=16'hffff>>(16-(remaining-16>=16?16:remaining-16));
-                        pack_last<=remaining<=32;
+                        // A non-final padding beat has remaining >=17. At
+                        // >=32 the next beat is full; for17..31 its byte count
+                        // is remaining[3:0]. Keep the shift count five bits to
+                        // avoid a 32-bit subtract/compare chain on read_x.
+                        pack_keep<=remaining>=13'd32 ? 16'hffff :
+                            16'hffff>>(5'd16-{1'b0,remaining[3:0]});
+                        pack_last<=remaining<=13'd32;
                     end else begin read_x<=read_x+1'b1;lane<=0;pack_data<=0;state<=READ;end
                 end
                 RESULT:if(result_ready)state<=IDLE;
