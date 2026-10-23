@@ -1,0 +1,337 @@
+{
+  "reviewer": {
+    "path": "build/cpu/review-store-overlap-terminal-20261023.py",
+    "sha256": "39baf69bf51fdfe03b3aa701cc5d17c6114d9a81325e16135d77ff7944212343"
+  },
+  "python_tests": {
+    "cpu": 70,
+    "soc": 45,
+    "failures": 0
+  },
+  "status": "DIAGNOSTIC_COMPLETE_NOT_SELECTED",
+  "date": "2026-10-23",
+  "parent_commit": "febadb3",
+  "backup_tag": "cpu-before-store-overlap-20261023",
+  "functional": {
+    "store_overlap": {
+      "result": {
+        "path": "build/cpu/cache-store-overlap-20261023T021810002396Z/result.json",
+        "sha256": "6a34070730fb6b06b93ec46cfd87062f490a56f151cef963826d6cb74b1e765c"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-store-overlap-20261023T021810002396Z/simulation.log",
+        "sha256": "1f99516a133c08f6bebf706a48c95937e480a0b0baa81ffc17f1427618331490"
+      }
+    },
+    "load_overlap": {
+      "result": {
+        "path": "build/cpu/cache-overlap-20261023T020825586849Z/result.json",
+        "sha256": "1e836278bedf6616cdad3b274e612dc61e4a2e8572298c378ca4f84f3aeeab7b"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-overlap-20261023T020825586849Z/simulation.log",
+        "sha256": "eb0d9f8f16620eeaa71a3e40f67d9c251007510e967ebcd1938a785ed1ead2a5"
+      }
+    },
+    "writeback": {
+      "result": {
+        "path": "build/cpu/cache-writeback-20261023T020828487261Z/result.json",
+        "sha256": "37063651ba0f7c4f31781841ad1aa1b576c8b41872f16482d3d0541b2ab60bfc"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-writeback-20261023T020828487261Z/simulation.log",
+        "sha256": "a78929c6a46261575a3d3e3c9c0dc652030131c33e705ab8c282c5f39541e7ec"
+      }
+    },
+    "registered_load": {
+      "result": {
+        "path": "build/cpu/cache-components-20261023T020831286931Z/result.json",
+        "sha256": "f0763aaea42b934c48389dc0e37d4c5a91d65aa88bbb4e469dc2388e84e10fb7"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-components-20261023T020831286931Z/simulation.log",
+        "sha256": "4463fde0c15e2638afe44daef09683bb0ab2548da062616a2e91b8b2771153f7"
+      }
+    },
+    "joint_fence": {
+      "result": {
+        "path": "build/cpu/cache-joint-20261023T020833932850Z/result.json",
+        "sha256": "8a354ea444030650c2a992f1ab411bb5964f20a6fa892a0c4bc88b668f69cbb5"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-joint-20261023T020833932850Z/simulation.log",
+        "sha256": "723d8b9e8c07b980b9bb787e371e0d34649f3adee34e32a1d25cb8d680609464"
+      }
+    },
+    "cpu": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261023T020826381549Z/result.json",
+        "sha256": "acd9979bb0e2d8c0eba04c4d6ad5f54fd2c399ccc06470d91462af494764bada"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261023T020826381549Z/simulation.log",
+        "sha256": "60bb9c5fb92de995286790252dea7205923f1d0bb21457b7f0ef3f10ff7189e6"
+      }
+    },
+    "cpu_bypass": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261023T020830122936Z/result.json",
+        "sha256": "5e51c5e8d0625fd6e3a950b7108d33032e929a70c9159e4464e93bafd8afce7c"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261023T020830122936Z/simulation.log",
+        "sha256": "427954b90261e10a83f7e40ab86a099b405fe65fd960a14e2527260f1c441b55"
+      }
+    },
+    "soc": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261023T021025976204Z/result.json",
+        "sha256": "d095f332a33f91900b5e3af74590efe4ad47c48f3516fce0a6cf6d97cddcd696"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261023T021025976204Z/simulation.log",
+        "sha256": "12de81e2672c6fb234f4189fa48dc2c6623270a9eb72df42b44b7acc6fd8b903"
+      }
+    },
+    "soc_bypass": {
+      "result": {
+        "path": "build/cpu/cache-soc-runtime-20261023T021032181288Z/result.json",
+        "sha256": "c24ca1f0cc3b576c750b8ba6eed3b45fa9b750dda94ae8ff00de2dfb5cd29467"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/cache-soc-runtime-20261023T021032181288Z/simulation.log",
+        "sha256": "3c0e3a48d55593b6bde19a90d366c267b1e4a1745aefdc20eb800258786a66bc"
+      }
+    },
+    "native_system": {
+      "result": {
+        "path": "build/cpu/ddr-system-20261023T021126340093Z/result.json",
+        "sha256": "5d02e453d787511d14e6374da36b1ec8acb5b49b090889adbbfee85394aa56d0"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-system-20261023T021126340093Z/simulation.log",
+        "sha256": "28b2a7af3d6e6cff9c665fddedc13bb77325642edb156efb88baaf07677db10d"
+      }
+    },
+    "digital_board": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021027319117Z/result.json",
+        "sha256": "3ac6092e61b348ba94f81b1b14628e9397383f54de3981b374351706b2cac96e"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021027319117Z/simulation.log",
+        "sha256": "be07ad4c648a7510cc93339f9e28e0825b73f516ba8831af7b828184ca25d791"
+      }
+    },
+    "no_init": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021100139319Z/result.json",
+        "sha256": "16d54d27fd8e8138c65be0e693569e3033f1de44288a2640174c062afb73784d"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021100139319Z/simulation.log",
+        "sha256": "f294d1d4b65533678ec387ead6c8014b436427df8d31ec20e5a679e093e5af0f"
+      }
+    },
+    "init_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021106620013Z/result.json",
+        "sha256": "7c274020850fad88998c93b70eb816770e60f9a7090e859fbe24275822329092"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021106620013Z/simulation.log",
+        "sha256": "6d8ef747dd813c4718534694a283bab6ba174e32e6636add7296b4bfa1ba3d7f"
+      }
+    },
+    "clock_stop": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021113317071Z/result.json",
+        "sha256": "9f817f045f067d7639a76d70d318047c83e619fb6962d5494d08d2ea8e14c2ef"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021113317071Z/simulation.log",
+        "sha256": "bbc9e50aa136eeebc7afeae4ee43c1141f0846b4335a94a2c9750fa872efcc57"
+      }
+    },
+    "cpu_pll_loss": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021121323524Z/result.json",
+        "sha256": "050afddf9966f6f4d60cb9e190d24e29085304bb58600c961b6147a5370c3ebb"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021121323524Z/simulation.log",
+        "sha256": "824677186a5a06ef0c99f680af6b53a1692da1cbc916b605abd15aa700a9bb28"
+      }
+    },
+    "coremark": {
+      "result": {
+        "path": "build/cpu/ddr-coremark-20261023T020824984650Z/result.json",
+        "sha256": "19deace90aa1c782d60972d8bc5f033669f09192b0897a3edf8250cd37ab5951"
+      },
+      "status": "PASS",
+      "transcript": {
+        "path": "build/cpu/ddr-coremark-20261023T020824984650Z/simulation.log",
+        "sha256": "7cdecc5356929572f83740ed7caf116252ef4f397aaccee7cb03a8c18c081053"
+      }
+    }
+  },
+  "expected_negatives": {
+    "parent_missing_feature": {
+      "result": {
+        "path": "build/cpu/cache-store-overlap-20261023T020630079640Z/result.json",
+        "sha256": "56b7b6fb06b7953d8f65434452d5012eceb9b680b1340408bbc1ffd800253755"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-store-overlap-20261023T020630079640Z/simulation.log",
+        "sha256": "ae6dcfe231a955119d074551a796a24da707673a7b781e9865fb0747a8ea820c"
+      }
+    },
+    "corrupt_data": {
+      "result": {
+        "path": "build/cpu/cache-store-overlap-20261023T020826969246Z/result.json",
+        "sha256": "02f4fa96aa64f22009f50583d97c4291aa0cd31316a5e82fe204620705d2c183"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-store-overlap-20261023T020826969246Z/simulation.log",
+        "sha256": "f543a0c3072e086a5c31a954211582663efbfdda44ebb1ca3b404e7df43027be"
+      }
+    },
+    "cpu_data": {
+      "result": {
+        "path": "build/cpu/cache-cpu-20261023T021213906577Z/result.json",
+        "sha256": "242c0238991e78799e6e2ab8996d2d43db24eb51b27558e6317903d7ece20b82"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/cache-cpu-20261023T021213906577Z/simulation.log",
+        "sha256": "526425f2be3b5552b602fe2ad61fd971b8bb90233daab570af480eb5070f2f51"
+      }
+    },
+    "board_readback": {
+      "result": {
+        "path": "build/cpu/ddr-board-20261023T021159063416Z/result.json",
+        "sha256": "b837f638e5b88d128e6fd8f7182da96980c2e895f342e973b341ccb24cfee2ba"
+      },
+      "status": "FAIL",
+      "transcript": {
+        "path": "build/cpu/ddr-board-20261023T021159063416Z/simulation.log",
+        "sha256": "50c31de4c412ac9c3b8bc49e7661271c9319f5c9bfa0e0549232ba635a637ee2"
+      }
+    }
+  },
+  "scope": "Different-set store response overlap experiment. No new production hardware or physical admission.",
+  "selection_reason": "Modeled throughput gain is smaller than same-boundary CPU-only LUT growth",
+  "before_cycles": 2018576,
+  "after_cycles": 2003870,
+  "throughput_gain_percent": 0.7338799423116216,
+  "store_edge_accepts": 9972,
+  "same_set_waits": 3085,
+  "performance_review": {
+    "path": "build/cpu/ddr-store-overlap-review-20261023T021445729961Z/result.json",
+    "sha256": "bee104057932ba428693997b46822cdbdfdf0b8c3eae255e820b07e91180d3bd"
+  },
+  "complete_normalized_traces": {
+    "cpu-cache.wb.log": {
+      "events": 1448453,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "9612e4112e09e7ca43a9b6128dd5aca148e6395b74d16c74ecdd2c5ed300fe79",
+      "cached_sha256": "69043d2eb256d911044ecefb357a0a8d4c02315a34349cedf8e1cb37e3bfe2ae",
+      "uncached_sha256": "796366bedb98b662f755eac1e0b340efd215d29a2d1e277e69c636d140d5d46c"
+    },
+    "cpu-cache.store.log": {
+      "events": 70840,
+      "identical_except_initial_absolute_cycle": true,
+      "normalized_tail_sha256": "964aecd69786f902f808c23760356baedaa4b958f83ffad75c6ace4ae63b497f",
+      "cached_sha256": "11cbcf7486ea54c68191eb2e9d82e2096c8bdbf17a6cbcea49d4bae7920398cb",
+      "uncached_sha256": "d9a7bd10f2fbc8608b3a5e9e86e9dab8eac1c84f575f7060fdbcc1af97bada4f"
+    }
+  },
+  "candidate_resources": {
+    "u_core": {
+      "lut": 6571,
+      "registers": 3562,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm": 0.0
+    },
+    "u_cache": {
+      "lut": 677,
+      "registers": 807,
+      "distributed_ram": 0,
+      "apm": 0,
+      "drm": 11.0
+    }
+  },
+  "parent_cpu_luts": 6507,
+  "parent_cache_luts": 668,
+  "cpu_lut_efficiency_gain_percent": -0.24724444002104384,
+  "cpu_plus_cache_efficiency_gain_percent": -0.28068590147820593,
+  "same_synthesis_boundary": true,
+  "same_rom_sram": true,
+  "only_changed_compiled_hardware": "rtl/cpu/triha_dcache.v",
+  "area_result": {
+    "path": "build/cpu/ddr-board-route-20261023T021433808724Z/result.json",
+    "sha256": "1ba4c67fae4e29d27f511c6658585eebf9d149cb90b0890a8c7b2d31f3cd0a39"
+  },
+  "area_report": {
+    "path": "build/cpu/ddr-board-route-20261023T021433808724Z/synthesize/triha_cpu_ddr_board_top.snr",
+    "sha256": "24f6d15ab2128ad52d54121020f59dceda9a4a04c56bbbb2aa157d8cd1f2a9cf"
+  },
+  "archive": {
+    "path": "build/cpu/store-overlap-archive-20261023/result.json",
+    "sha256": "010cb311161c0587298e405e0a1cac406ebd24f35ba27ec63dc2c7b78370f715"
+  },
+  "replay_patch": {
+    "path": "docs/verification/cpu/dcache_store_overlap_diagnostic.patch",
+    "sha256": "c9eab145989b3f346255b855acffe897cf51de8ced9d341363d440c3ac12f23e"
+  },
+  "production_rtl_restored": true,
+  "parent_actual_100mhz_rechecked": true,
+  "parent_worst_setup_ns": 0.309,
+  "candidate_actual_100mhz": "UNKNOWN_NOT_RUN",
+  "candidate_programmed": false,
+  "retained_board_release": "cpu_ddr_coremark_on_478149ee9e63",
+  "actual_parent_board_review": {
+    "path": "docs/verification/cpu/dcache_overlap_board.json",
+    "sha256": "efa07d62bf86cecf94ee1b77ba24584f7e880582c17309c149e298a1c92f2414"
+  },
+  "actual_parent_board_measurement": {
+    "iterations": 5000,
+    "cycles": 2002053973,
+    "clock_hz": 100000000,
+    "seconds": 20.02053973,
+    "coremark": 249.74351677980462,
+    "coremark_per_mhz": 2.497435167798046,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 6507,
+    "coremark_per_lut": 0.03838074639308508
+  },
+  "flash_written": false,
+  "port_released": true,
+  "main_worktree_modified": false,
+  "independent_code_review": "No remaining findings after failed-refill retry lower-read assertion; final test384checksPASS"
+}

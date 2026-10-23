@@ -13,6 +13,17 @@ CPU_DDR_PROFILE_BRIDGE idle=25 collect=5 wpre=2 waddr=3 wdata=5 vpre=2 vaddr=8 v
 
 
 class ProfileTests(unittest.TestCase):
+    def test_optional_store_overlap_is_bounded_by_completions(self):
+        text=log()+'CPU_DDR_PROFILE_STORE_OVERLAP accepted=1 same_set_wait=1\n'
+        row=parse_profile(text,100)
+        self.assertEqual(row['dcache_store_overlap'],dict(accepted=1,same_set_wait=1))
+        for bad in (text+text.splitlines()[-1]+'\n',
+                    text.replace('accepted=1','accepted=3'),
+                    text.replace('same_set_wait=1','same_set_wait=2'),
+                    text.replace('accepted=1','accepted=-1')):
+            with self.subTest(text=bad), self.assertRaises(ValueError):
+                parse_profile(bad,100)
+
     def test_optional_overlap_observation_is_bound(self):
         text=log()+'CPU_DDR_PROFILE_OVERLAP accepted=2\n'
         self.assertEqual(parse_profile(text,100)['dcache_overlap']['accepted'],2)

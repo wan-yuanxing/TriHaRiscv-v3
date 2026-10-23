@@ -1,0 +1,436 @@
+diff --git a/rtl/cpu/CACHE_ADAPTATIONS.json b/rtl/cpu/CACHE_ADAPTATIONS.json
+index 7320837..15d2935 100644
+--- a/rtl/cpu/CACHE_ADAPTATIONS.json
++++ b/rtl/cpu/CACHE_ADAPTATIONS.json
+@@ -33,7 +33,7 @@
+     "rtl/cpu/triha_dcache.v": {
+       "base": "rtl/cpu/vendor/src/dcache/dcache_core.v",
+       "base_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+-      "derived_sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
++      "derived_sha256": "05e297f6a8f53e16f2cdadfcfcc228a56f7ab856da69b7968a7a86cf8080076a",
+       "changes": [
+         "Retain two-way 256-set/32B-line synchronous tag/data RAM and registered load response",
+         "Private DDR write-back/write-allocate; shared DDR and explicit uncached accesses bypass",
+@@ -41,7 +41,8 @@
+         "Response-checked scalar writeback words; retain entire dirty line after any failed write",
+         "DWRITEBACK cleans one line, DINVALIDATE discards one line, DFLUSH cleans and invalidates all lines",
+         "Discard failed allocation; preserve request tag and enforce private address range",
+-        "Overlap a successful cached-load registered response with next request capture and synchronous lookup; serialize store updates and errors"
++        "Overlap a successful cached-load registered response with next request capture and synchronous lookup; serialize same-set store updates, maintenance after stores and errors",
++        "Accept ordinary different-set successors on successful cached store-update completion; preserve old write bytes, way and dirty tag"
+       ]
+     },
+     "rtl/cpu/triha_dcache_tag_ram.v": {
+diff --git a/rtl/cpu/triha_dcache.v b/rtl/cpu/triha_dcache.v
+index cd7d664..d087c50 100644
+--- a/rtl/cpu/triha_dcache.v
++++ b/rtl/cpu/triha_dcache.v
+@@ -64,10 +64,15 @@ module triha_dcache #(
+     wire private_address_w = mem_addr_i >= 32'h80000000 &&
+                              mem_addr_i < 32'h82000000;
+     // Reuse the completion edge for the next synchronous lookup. Old data
+-    // and tag still come from response registers. Keep writes and errors
+-    // serialized: read-first RAM must not hide a just-written dirty bit.
++    // and tag still come from response registers. A completing store may
++    // overlap a different-set lookup; same-set reads must see its updated
++    // bytes and dirty tag after the read-first RAM collision has cleared.
++    wire store_accept_phase_w = state_q == STORE_UPDATE && cacheable_q &&
++        !response_error_q && !mem_flush_i && !mem_writeback_i &&
++        !mem_invalidate_i && mem_addr_i[12:5] != addr_q[12:5];
+     wire accept_phase_w = state_q == IDLE ||
+-        (state_q == RESPONSE && mem_rd_q && cacheable_q && !response_error_q);
++        (state_q == RESPONSE && mem_rd_q && cacheable_q && !response_error_q) ||
++        store_accept_phase_w;
+     wire maintenance_state_w = state_q == MAINT_CHECK || state_q == MAINT_ADV || state_q == MAINT_READ;
+     wire [7:0] lookup_set_w = maintenance_state_w ? sweep_q :
+                                (accept_phase_w ? mem_addr_i[12:5] : addr_q[12:5]);
+diff --git a/scripts/cpu/ddr_profile.py b/scripts/cpu/ddr_profile.py
+index 5bd258e..3a0d00d 100644
+--- a/scripts/cpu/ddr_profile.py
++++ b/scripts/cpu/ddr_profile.py
+@@ -60,4 +60,10 @@ def parse_profile(text, measured_cycles):
+         if overlap['accepted'] > dc['reads'] + dc['writes'] or overlap['accepted'] > cycles:
+             raise ValueError('overlap observation exceeds accepted requests or window')
+         result['dcache_overlap'] = overlap
++    if 'CPU_DDR_PROFILE_STORE_OVERLAP' in text:
++        overlap = fields('STORE_OVERLAP', ['accepted', 'same_set_wait'])
++        if (sum(overlap.values()) > states['store_update'] or
++                overlap['accepted'] > dc['reads'] + dc['writes']):
++            raise ValueError('store overlap observation exceeds completion opportunities')
++        result['dcache_store_overlap'] = overlap
+     return result
+diff --git a/scripts/cpu/review_ddr_writeback.py b/scripts/cpu/review_ddr_writeback.py
+index 8979ce7..9f720bd 100644
+--- a/scripts/cpu/review_ddr_writeback.py
++++ b/scripts/cpu/review_ddr_writeback.py
+@@ -49,13 +49,17 @@ def review(baseline, candidate, work, change='writeback'):
+             if sha(entry['path']) != entry['sha256']:
+                 raise ValueError('pinned DDR input drift')
+     expected_policies = ['write_through', 'write_back'] if change == 'writeback' else ['write_back', 'write_back']
+-    if change not in ['writeback', 'overlap'] or [p['write_policy'] for p in profiles] != expected_policies:
++    if change not in ['writeback', 'overlap', 'store-overlap'] or [p['write_policy'] for p in profiles] != expected_policies:
+         raise ValueError('actual policies differ from selected optimization')
+-    if change == 'overlap':
++    if change in ['overlap', 'store-overlap']:
+         if (profiles[0]['dcache'] != profiles[1]['dcache'] or
+                 profiles[0]['native_events'] != profiles[1]['native_events'] or
+                 profiles[1].get('dcache_overlap', {}).get('accepted', 0) <= 0):
+             raise ValueError('overlap must preserve memory events and exercise response-edge acceptance')
++        if change == 'store-overlap' and (
++                profiles[0].get('dcache_store_overlap', {}).get('accepted', 0) != 0 or
++                profiles[1].get('dcache_store_overlap', {}).get('accepted', 0) <= 0):
++            raise ValueError('store overlap must add observed store-edge acceptance')
+     before, after = [r['measurement']['cycles'] for r in rows]
+     if after >= before:
+         raise ValueError('candidate did not improve modeled cycles')
+@@ -97,7 +101,7 @@ if __name__ == '__main__':
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--baseline',type=Path,required=True)
+     parser.add_argument('--candidate',type=Path,required=True)
+-    parser.add_argument('--change',choices=['writeback','overlap'],default='writeback')
++    parser.add_argument('--change',choices=['writeback','overlap','store-overlap'],default='writeback')
+     args = parser.parse_args()
+     work = ROOT/'build/cpu'/('ddr-'+args.change+'-review-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
+     row = review(args.baseline,args.candidate,work,args.change)
+diff --git a/scripts/cpu/run_cache.py b/scripts/cpu/run_cache.py
+index 43b6b67..13462aa 100644
+--- a/scripts/cpu/run_cache.py
++++ b/scripts/cpu/run_cache.py
+@@ -26,7 +26,7 @@ def save(path, value):
+
+ def main():
+     parser = argparse.ArgumentParser()
+-    parser.add_argument('--test', choices=['components', 'writeback', 'overlap', 'transport', 'joint', 'cpu', 'coremark'], default='components')
++    parser.add_argument('--test', choices=['components', 'writeback', 'overlap', 'store-overlap', 'transport', 'joint', 'cpu', 'coremark'], default='components')
+     parser.add_argument('--fault', choices=['none', 'data', 'crc'], default='none')
+     parser.add_argument('--iterations', type=int, choices=[1, 5], default=5)
+     parser.add_argument('--bypass-caches', action='store_true')
+@@ -91,6 +91,8 @@ def main():
+             tb = 'tb/cpu/tb_cpu_dcache_writeback.v'
+         elif args.test == 'overlap':
+             tb = 'tb/cpu/tb_cpu_dcache_overlap.v'
++        elif args.test == 'store-overlap':
++            tb = 'tb/cpu/tb_cpu_dcache_store_overlap.v'
+         elif args.test == 'transport':
+             sources = ['rtl/soc/triha_cpu_cache_axi.v']
+             tb = 'tb/soc/tb_cpu_cache_axi.v'
+@@ -172,7 +174,7 @@ def main():
+         output = native(SIM / 'vsim.exe', ['-c', '-onfinish', 'exit', '-voptargs=+acc', *generics,
+                         '-gCORRUPT_DATA=' + str(int(args.fault == 'data')), 'work.' + Path(tb).stem,
+                         '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation', timeout=600 if args.test == 'coremark' else 90)
+-        marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'overlap': 'CPU_DCACHE_OVERLAP_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
++        marker = {'components': 'CPU_CACHE_PASS', 'writeback': 'CPU_DCACHE_WB_PASS', 'overlap': 'CPU_DCACHE_OVERLAP_PASS', 'store-overlap': 'CPU_DCACHE_STORE_OVERLAP_PASS', 'transport': 'CPU_CACHE_AXI_PASS', 'joint': 'CPU_CACHE_JOINT_PASS', 'cpu': 'CPU_CACHE_CPU_PASS', 'coremark': 'CPU_CACHE_COREMARK_PASS'}[args.test]
+         if marker not in output or any(token in output for token in ['CPU_CACHE_FAIL', '** Error', '** Fatal']):
+             raise RuntimeError('Paired-cache self-check failed')
+         if args.test == 'coremark':
+diff --git a/scripts/cpu/test_ddr_profile.py b/scripts/cpu/test_ddr_profile.py
+index db3983d..58eb0e4 100644
+--- a/scripts/cpu/test_ddr_profile.py
++++ b/scripts/cpu/test_ddr_profile.py
+@@ -13,6 +13,17 @@ CPU_DDR_PROFILE_BRIDGE idle=25 collect=5 wpre=2 waddr=3 wdata=5 vpre=2 vaddr=8 v
+
+
+ class ProfileTests(unittest.TestCase):
++    def test_optional_store_overlap_is_bounded_by_completions(self):
++        text=log()+'CPU_DDR_PROFILE_STORE_OVERLAP accepted=1 same_set_wait=1\n'
++        row=parse_profile(text,100)
++        self.assertEqual(row['dcache_store_overlap'],dict(accepted=1,same_set_wait=1))
++        for bad in (text+text.splitlines()[-1]+'\n',
++                    text.replace('accepted=1','accepted=3'),
++                    text.replace('same_set_wait=1','same_set_wait=2'),
++                    text.replace('accepted=1','accepted=-1')):
++            with self.subTest(text=bad), self.assertRaises(ValueError):
++                parse_profile(bad,100)
++
+     def test_optional_overlap_observation_is_bound(self):
+         text=log()+'CPU_DDR_PROFILE_OVERLAP accepted=2\n'
+         self.assertEqual(parse_profile(text,100)['dcache_overlap']['accepted'],2)
+diff --git a/tb/soc/cpu_ddr_coremark_profile.vh b/tb/soc/cpu_ddr_coremark_profile.vh
+index 0de0a12..1a26f4c 100644
+--- a/tb/soc/cpu_ddr_coremark_profile.vh
++++ b/tb/soc/cpu_ddr_coremark_profile.vh
+@@ -15,6 +15,7 @@ integer store_hits = 0, store_misses = 0, uncached_writes = 0;
+ integer refills = 0, lower_writes = 0;
+ integer writeback_words = 0, uncached_lower_writes = 0;
+ integer overlap_accepts = 0;
++integer store_overlap_accepts = 0, store_same_set_wait = 0;
+ integer native_aw = 0, native_ar = 0, native_wbeats = 0, native_rbeats = 0;
+ integer dc_state_cycles [0:17];
+ integer bridge_state_cycles [0:13];
+@@ -71,7 +72,12 @@ always @(posedge u_dut.cpu_clk) if (u_dut.u_system.cpu_rst_n) begin
+             if (`PDC.mem_rd_i) dc_reads = dc_reads + 1;
+             if (|`PDC.mem_wr_i) dc_writes = dc_writes + 1;
+             if (`PDC.state_q == 6) overlap_accepts = overlap_accepts + 1;
++            if (`PDC.state_q == 7) store_overlap_accepts = store_overlap_accepts + 1;
+         end
++        if (`PDC.state_q == 7 && `PDC.cacheable_q && !`PDC.response_error_q &&
++            `PDC.request_w && !`PDC.mem_flush_i && !`PDC.mem_writeback_i &&
++            !`PDC.mem_invalidate_i && `PDC.mem_addr_i[12:5] == `PDC.addr_q[12:5])
++            store_same_set_wait = store_same_set_wait + 1;
+         if (`PDC.state_q == 2 && !classified) begin
+             classified = 1;
+             if (|`PDC.write_mask_q) begin
+@@ -113,6 +119,7 @@ initial begin
+     $display("CPU_DDR_PROFILE_ISSUE issue=%0d cancel=%0d lsu=%0d pipe=%0d div=%0d csr=%0d frontend=%0d unit=%0d dependency=%0d other=%0d wb=%0d stores=%0d",issue,cancel,lsu,pipe_wait,div_wait,csr_wait,frontend,unit_wait,dependency,other,wb,stores);
+     $display("CPU_DDR_PROFILE_POLICY write_back=1");
+     $display("CPU_DDR_PROFILE_OVERLAP accepted=%0d",overlap_accepts);
++    $display("CPU_DDR_PROFILE_STORE_OVERLAP accepted=%0d same_set_wait=%0d",store_overlap_accepts,store_same_set_wait);
+     $display("CPU_DDR_PROFILE_DC reads=%0d writes=%0d read_hits=%0d read_misses=%0d uncached_reads=%0d store_hits=%0d store_misses=%0d uncached_writes=%0d refills=%0d lower_writes=%0d writeback_words=%0d uncached_lower_writes=%0d",dc_reads,dc_writes,read_hits,read_misses,uncached_reads,store_hits,store_misses,uncached_writes,refills,lower_writes,writeback_words,uncached_lower_writes);
+     $display("CPU_DDR_PROFILE_DC_STATES reset=%0d idle=%0d lookup=%0d refill_req=%0d refill=%0d relookup=%0d response=%0d store_update=%0d uncached_req=%0d uncached_wait=%0d invalidate=%0d maint_check=%0d maint_adv=%0d wb_read=%0d wb_req=%0d wb_wait=%0d maint_read=%0d clean=%0d",dc_state_cycles[0],dc_state_cycles[1],dc_state_cycles[2],dc_state_cycles[3],dc_state_cycles[4],dc_state_cycles[5],dc_state_cycles[6],dc_state_cycles[7],dc_state_cycles[8],dc_state_cycles[9],dc_state_cycles[10],dc_state_cycles[11],dc_state_cycles[12],dc_state_cycles[13],dc_state_cycles[14],dc_state_cycles[15],dc_state_cycles[16],dc_state_cycles[17]);
+     $display("CPU_DDR_PROFILE_BRIDGE idle=%0d collect=%0d wpre=%0d waddr=%0d wdata=%0d vpre=%0d vaddr=%0d vdata=%0d raddr=%0d rdata=%0d rpre=%0d rresp=%0d bresp=%0d quarantine=%0d native_aw=%0d native_ar=%0d native_wbeats=%0d native_rbeats=%0d",bridge_state_cycles[0],bridge_state_cycles[1],bridge_state_cycles[2],bridge_state_cycles[3],bridge_state_cycles[4],bridge_state_cycles[5],bridge_state_cycles[6],bridge_state_cycles[7],bridge_state_cycles[8],bridge_state_cycles[9],bridge_state_cycles[10],bridge_state_cycles[11],bridge_state_cycles[12],bridge_state_cycles[13],native_aw,native_ar,native_wbeats,native_rbeats);
+diff --git a/tb/cpu/tb_cpu_dcache_store_overlap.v b/tb/cpu/tb_cpu_dcache_store_overlap.v
+new file mode 100644
+--- /dev/null
++++ b/tb/cpu/tb_cpu_dcache_store_overlap.v
+@@ -0,0 +1,251 @@
++`timescale 1ns/1ps
++// Independent lower-memory oracle. Only the public request/response interface
++// is used for throughput, response ownership and registered-latency checks.
++module tb_cpu_dcache_store_overlap;
++    parameter integer CORRUPT_DATA=0;
++    reg clk=0, rst_n=0;
++    always #5 clk=!clk;
++    integer cycles=0, checks=0, reads=0, writes=0;
++    reg [31:0] memory[0:65535];
++    reg [31:0] addr=0, wdata=0, random_q=32'h93b781af;
++    reg rd=0, cacheable=1, inval=0, clean=0, flush=0;
++    reg [3:0] mask=0;
++    reg [10:0] tag=0;
++    wire accept, ack, error;
++    wire [10:0] resp_tag;
++    wire [31:0] rdata, lower_addr, lower_data;
++    wire lower_rd;
++    wire [3:0] lower_wr;
++    wire [7:0] lower_len;
++    reg lower_ack=0, lower_error=0, pending=0;
++    reg [31:0] lower_rdata=0, saved_addr, saved_data;
++    reg [3:0] saved_mask;
++    integer beat=0, last=0, delay_count=0;
++    wire lower_accept=!pending && !lower_ack && random_q[2];
++    reg fail_read=0, fail_write=0, malformed_next=0;
++    task check;
++        input ok;
++        input [511:0] message;
++        begin
++            checks=checks+1;
++            if(ok!==1'b1) begin
++                $display("CPU_DCACHE_STORE_OVERLAP_FAIL %0s cycle=%0d",message,cycles);
++                $fatal(1);
++            end
++        end
++    endtask
++    triha_dcache u_dut (
++        .clk_i(clk),.rst_ni(rst_n),.mem_addr_i(addr),.mem_data_wr_i(wdata),
++        .mem_rd_i(rd),.mem_wr_i(mask),.mem_cacheable_i(cacheable),.mem_req_tag_i(tag),
++        .mem_invalidate_i(inval),.mem_writeback_i(clean),.mem_flush_i(flush),
++        .mem_data_rd_o(rdata),.mem_accept_o(accept),.mem_ack_o(ack),
++        .mem_error_o(error),.mem_resp_tag_o(resp_tag),
++        .outport_accept_i(lower_accept),.outport_ack_i(lower_ack),
++        .outport_error_i(lower_error),.outport_read_data_i(lower_rdata),
++        .outport_rd_o(lower_rd),.outport_wr_o(lower_wr),.outport_len_o(lower_len),
++        .outport_addr_o(lower_addr),.outport_write_data_o(lower_data)
++    );
++    integer lane;
++    always @(posedge clk) begin
++        cycles<=cycles+1;
++        random_q<={random_q[30:0],random_q[31]^random_q[21]^random_q[1]^random_q[0]};
++        if(cycles>100000) check(0,"watchdog");
++        if(!rst_n) begin pending<=0; lower_ack<=0; lower_error<=0; end
++        else begin
++            lower_ack<=0; lower_error<=0;
++            if(lower_accept && (lower_rd || |lower_wr)) begin
++                pending<=1; saved_addr<=lower_addr; saved_data<=lower_data;
++                saved_mask<=lower_wr; beat<=0; last<=lower_len; delay_count<=3;
++                if(lower_rd) reads<=reads+1; else writes<=writes+1;
++            end
++            if(pending && !lower_ack) begin
++                if(delay_count>0) delay_count<=delay_count-1;
++                else if(random_q[4]) begin
++                    lower_ack<=1; lower_error<=saved_mask==0 ? fail_read : fail_write;
++                    lower_rdata<=memory[(saved_addr[17:2]+beat)&65535]^CORRUPT_DATA;
++                    for(lane=0;lane<4;lane=lane+1)
++                        if(saved_mask[lane] && !fail_write) memory[saved_addr[17:2]][lane*8+:8]<=saved_data[lane*8+:8];
++                    if(beat==last) pending<=0; else beat<=beat+1;
++                end
++            end
++        end
++    end
++    task send;
++        input [31:0] a;
++        input [3:0] m;
++        input [31:0] value;
++        input cached;
++        input expect_error;
++        input [31:0] expected;
++        reg [10:0] saved_tag;
++        integer guard;
++        begin
++            @(negedge clk); addr=a; mask=m; wdata=value; rd=m==0; cacheable=cached;
++            tag=tag+1; saved_tag=tag; guard=0;
++            begin: await_accept
++                forever begin @(posedge clk); if(accept) disable await_accept; end
++            end
++            @(negedge clk); rd=0; mask=0;
++            while(!ack) begin @(negedge clk); guard=guard+1; if(guard>20000) check(0,"response timeout"); end
++            check(resp_tag===saved_tag && error===expect_error,"serialized response ownership/error");
++            if(!expect_error && m==0) check(rdata===expected,"serialized architectural load");
++            if(expect_error || !cached) check(!accept,"error and uncached response remain serialized");
++            @(negedge clk);
++        end
++    endtask
++    // The completing store and successor are offered on consecutive source
++    // cycles. Only public handshakes determine acceptance and response order.
++    task store_pair;
++        input [31:0] a;
++        input [3:0] m;
++        input [31:0] value;
++        input [31:0] next_a;
++        input [3:0] next_m;
++        input [31:0] next_value;
++        input next_cached;
++        input integer maintenance;
++        input expected_overlap;
++        input expected_error;
++        input [31:0] expected_load;
++        reg [10:0] old_tag, next_tag;
++        integer guard;
++        begin
++            @(negedge clk); addr=a; mask=m; wdata=value; rd=0; cacheable=1;
++            tag=tag+1; old_tag=tag;
++            begin: first_accept
++                forever begin @(posedge clk); if(accept) disable first_accept; end
++            end
++            @(negedge clk);
++            addr=next_a; mask=next_m; wdata=next_value; cacheable=next_cached;
++            rd=(maintenance==0 && next_m==0) || malformed_next;
++            clean=maintenance==1; inval=maintenance==2; flush=maintenance==3;
++            tag=tag+1; next_tag=tag; guard=0;
++            while(!ack) begin @(negedge clk); guard=guard+1; if(guard>30000) check(0,"first store timeout"); end
++            check(!error && resp_tag===old_tag,"old store owns completion tag");
++            check(accept===expected_overlap,"different-set store response acceptance contract");
++            @(posedge clk);
++            check(ack && !error && resp_tag===old_tag,"store response stable through completion edge");
++            if(!expected_overlap) begin
++                @(negedge clk);
++                check(!ack,"serial successor does not reuse old ack");
++                begin: serial_accept
++                    forever begin @(posedge clk); if(accept) disable serial_accept; end
++                end
++            end
++            @(negedge clk); rd=0; mask=0; clean=0; inval=0; flush=0;
++            if(expected_error) begin
++                addr=32'h80001e04; mask=4'hf; wdata=32'hdeadbeef; tag=tag+1;
++            end
++            while(!ack) begin @(negedge clk); guard=guard+1; if(guard>30000) check(0,"successor timeout"); end
++            check(error===expected_error && resp_tag===next_tag,"successor response tag/error ownership");
++            if(!expected_error && maintenance==0 && next_m==0)
++                check(rdata===expected_load,"successor load gets exact architectural bytes");
++            if(expected_error) check(!accept,"failed successor remains serialized");
++            @(negedge clk); mask=0;
++        end
++    endtask
++    task maintenance_op;
++        input [31:0] a;
++        input integer operation;
++        reg [10:0] saved_tag;
++        begin
++            @(negedge clk); addr=a; tag=tag+1; saved_tag=tag;
++            rd=0; mask=0; clean=operation==1; inval=operation==2; flush=operation==3;
++            begin: take_maintenance
++                forever begin @(posedge clk); if(accept) disable take_maintenance; end
++            end
++            @(negedge clk); clean=0; inval=0; flush=0;
++            while(!ack) @(negedge clk);
++            check(!error && resp_tag===saved_tag,"maintenance succeeds with own tag");
++            @(negedge clk);
++        end
++    endtask
++    integer n, before_reads, before_writes;
++    reg [31:0] expected_a;
++    initial begin
++        for(n=0;n<65536;n=n+1) memory[n]=32'h3157c8a9^(n*32'h7acd139);
++        repeat(4) @(negedge clk); rst_n=1;
++        // Two resident ways at each of two different sets.
++        send(32'h80000100,0,0,1,0,memory['h40]);
++        send(32'h80002100,0,0,1,0,memory['h840]);
++        send(32'h80000204,0,0,1,0,memory['h81]);
++        send(32'h80002204,0,0,1,0,memory['h881]);
++        store_pair(32'h80000100,4'hf,32'h12345678,32'h80000204,0,0,1,0,1,0,memory['h81]);
++        send(32'h80000100,0,0,1,0,32'h12345678);
++        // Partial-byte old store and second-way destination, then both dirty
++        // ways are read and cleaned to prove old data and dirty tag survived.
++        store_pair(32'h80002100,4'h5,32'h89abcdef,32'h80002204,4'hf,32'h68123745,1,0,1,0,0);
++        expected_a=(memory['h840]&32'hff00ff00)|32'h00ab00ef;
++        send(32'h80002100,0,0,1,0,expected_a);
++        send(32'h80002204,0,0,1,0,32'h68123745);
++        maintenance_op(32'h80000100,1); maintenance_op(32'h80002100,1);
++        check(memory['h40]===32'h12345678 && memory['h840]===expected_a,"both old-store ways retain dirty writeback");
++        // Same set stays serial for same word, different word and other tag.
++        store_pair(32'h80000100,4'hf,32'h96abc738,32'h80000100,0,0,1,0,0,0,32'h96abc738);
++        store_pair(32'h80000100,4'h3,32'h10293847,32'h80000104,0,0,1,0,0,0,memory['h41]);
++        store_pair(32'h80000100,4'hf,32'h1badc0de,32'h80002100,0,0,1,0,0,0,expected_a);
++        // A different-set miss may enter normal refill or dirty eviction.
++        store_pair(32'h80000100,4'hf,32'h432189ab,32'h80000a00,0,0,1,0,1,0,memory['h280]);
++        send(32'h80000300,4'hf,32'h33abcd55,1,0,0);
++        send(32'h80002300,4'hf,32'h5512cdef,1,0,0);
++        fail_write=1;
++        store_pair(32'h80000100,4'hf,32'hffff5555,32'h80004300,0,0,1,0,1,1,0);
++        fail_write=0; before_reads=reads;
++        send(32'h80000300,0,0,1,0,32'h33abcd55);
++        send(32'h80002300,0,0,1,0,32'h5512cdef);
++        check(reads==before_reads,"failed overlapped eviction preserves dirty victims");
++        send(32'h80004300,0,0,1,0,memory['h10c0]);
++        // Shared and explicitly uncached successors still traverse lower RAM.
++        before_reads=reads;
++        store_pair(32'h80000100,4'hf,32'h267abdce,32'h82000b00,0,0,1,0,1,0,memory['h2c0]);
++        store_pair(32'h80000100,4'hf,32'h8756abcd,32'h80000c00,0,0,0,0,1,0,memory['h300]);
++        check(reads==before_reads+2,"uncached successors issue lower transactions");
++        // No maintenance can be injected on a store-completion edge.
++        store_pair(32'h80000100,4'hf,32'h789abcde,32'h80002204,0,0,1,1,0,0,0);
++        store_pair(32'h80000100,4'hf,32'h78abcdef,32'h80002204,0,0,1,2,0,0,0);
++        store_pair(32'h80000100,4'hf,32'h76543210,32'h80000000,0,0,1,3,0,0,0);
++        check(memory['h40]===32'h76543210,"full flush sees last completed store");
++        // Failed refill and malformed address are accepted after a resident
++        // store, but must own an error response and preserve the old store.
++        send(32'h80000100,0,0,1,0,memory['h40]);
++        fail_read=1;
++        store_pair(32'h80000100,4'hf,32'h3456abcd,32'h80000d00,0,0,1,0,1,1,0);
++        fail_read=0;
++        send(32'h80000100,0,0,1,0,32'h3456abcd);
++        before_reads=reads;
++        send(32'h80000d00,0,0,1,0,memory['h340]);
++        check(reads==before_reads+1,"failed overlapped refill must allocate again on retry");
++        store_pair(32'h80000100,4'hf,32'h1234abcd,32'h80000e02,0,0,1,0,1,1,0);
++        send(32'h80000100,0,0,1,0,32'h1234abcd);
++        malformed_next=1;
++        store_pair(32'h80000100,4'hf,32'h3badc0de,32'h80000f00,4'hf,32'hdead1234,1,0,1,1,0);
++        malformed_next=0;
++        send(32'h80000100,0,0,1,0,32'h3badc0de);
++        send(32'h80000f00,0,0,1,0,memory['h3c0]);
++        send(32'h80001e04,0,0,1,0,memory['h781]);
++        // Coordinated reset immediately after a store+successor acceptance
++        // discards the cache epoch. Neither dirty data nor a stale ACK may
++        // cross reset; the younger store has not reached STORE_UPDATE.
++        @(negedge clk); addr=32'h80000100; mask=4'hf; wdata=32'hf00dabcd;
++        rd=0; cacheable=1; tag=tag+1;
++        begin: reset_first_accept
++            forever begin @(posedge clk); if(accept) disable reset_first_accept; end
++        end
++        @(negedge clk); addr=32'h80000200; mask=4'hf; wdata=32'hfade1234;
++        tag=tag+1;
++        while(!ack) @(negedge clk);
++        check(accept && !error,"exercise reset after store-edge successor acceptance");
++        @(posedge clk);
++        @(negedge clk); rst_n=0; mask=0;
++        repeat(3) begin
++            @(negedge clk);
++            check(!ack && !accept,"reset suppresses old response and acceptance");
++        end
++        rst_n=1;
++        while(!accept) begin @(negedge clk); check(!ack,"no response leaks into reset sweep"); end
++        send(32'h80000100,0,0,1,0,memory['h40]);
++        send(32'h80000200,0,0,1,0,memory['h80]);
++        $display("CPU_DCACHE_STORE_OVERLAP_PASS checks=%0d reads=%0d writes=%0d",checks,reads,writes);
++        $finish;
++    end
++endmodule

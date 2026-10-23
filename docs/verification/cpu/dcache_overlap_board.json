@@ -1,0 +1,118 @@
+{
+  "status": "PASS_BOARD_COREMARK",
+  "reviewed_utc": "2026-10-23T02:25:48.422528+00:00",
+  "reviewer": {
+    "path": "build/cpu/review-dcache-overlap-board-20261023.py",
+    "sha256": "adfed4f11acb5705fb438365b967fb53fbe23e9eb1bebf591d0a656e47c985b0"
+  },
+  "source_commit": "febadb3",
+  "capture_result": {
+    "path": "build/soc/ddr-coremark-physical-20261023T020247339677Z/result.json",
+    "sha256": "32a86f084b49d8b4cbfbefdcf46824052b937dabb5aba27e8ba6da4accfd261b"
+  },
+  "raw_uart": {
+    "path": "build/soc/ddr-coremark-physical-20261023T020247339677Z/uart.bin",
+    "sha256": "ac0aa98c6b9053c4476551e9b3f84bb107da060d732082f48eee1ad074b2f64e"
+  },
+  "complete_epoch_uart": {
+    "path": "build/soc/ddr-coremark-physical-20261023T020247339677Z/measurement-uart.txt",
+    "sha256": "d05ba913f4d34f46b4879669022095b170fa47f9241bb3ee907b29f34b00fdf6"
+  },
+  "program_record": {
+    "path": "build/soc/board-ddr-program-20261023T020251383504Z/result.json",
+    "sha256": "238cba89363ae055da40ac9d56bae4c3187d2a19e525cccef33ab917aad57dd0"
+  },
+  "program_log": {
+    "path": "build/soc/board-ddr-program-20261023T020251383504Z/program_verify.log",
+    "sha256": "57a02a18c775c3d0444202b1a0f1f6a74901733441bb5ce81be6a5660fb3fd45"
+  },
+  "package_manifest": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_478149ee9e63/manifest.json",
+    "sha256": "e35b9fc787afc7d0d189c61f0918089b7731f947403e640eec9dfef14c9b7350"
+  },
+  "timing_review": {
+    "path": "build/soc/releases/cpu_ddr_coremark_on_478149ee9e63/review.json",
+    "sha256": "e864e8b33c14c1dbc62026006e346a3be4ce818e6159cd368027d581653fe535"
+  },
+  "baseline_result": {
+    "path": "build/soc/ddr-coremark-physical-20261022T115703162826Z/result.json",
+    "sha256": "0dabd541ef9ee9f68bbb6d3d014e118cfb494adee497cdded7237dc1cdc4b96f"
+  },
+  "baseline_uart": {
+    "path": "build/soc/ddr-coremark-physical-20261022T115703162826Z/measurement-uart.txt",
+    "sha256": "1ba3352070bc92c93679ed8e55eec27ce4af1812776099d589a12a378d74b483"
+  },
+  "baseline_evidence_kind": "Prior independently captured raw UART, not a fresh alternating-image trial",
+  "new_evidence_kind": "Independent raw UART capture started before authorized volatile Program/Verify",
+  "measurement": {
+    "iterations": 5000,
+    "cycles": 2002053973,
+    "clock_hz": 100000000,
+    "seconds": 20.02053973,
+    "coremark": 249.74351677980462,
+    "coremark_per_mhz": 2.497435167798046,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 6507,
+    "coremark_per_lut": 0.03838074639308508
+  },
+  "baseline_measurement": {
+    "iterations": 5000,
+    "cycles": 5779800133,
+    "clock_hz": 100000000,
+    "seconds": 57.79800133,
+    "coremark": 86.5081816835205,
+    "coremark_per_mhz": 0.8650818168352051,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 6477,
+    "coremark_per_lut": 0.013356211468815889
+  },
+  "throughput_gain_percent": 188.69352229996048,
+  "cycles_saved": 3777746160,
+  "coremark_per_cpu_lut_gain_percent": 187.36252404131614,
+  "cpu_resources": {
+    "lut": 6507,
+    "registers": 3562,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_resources": {
+    "lut": 668,
+    "registers": 807,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  },
+  "same_loaded_payload": true,
+  "payload_sha256": "04c2ae6b5d6efdb45a7432244d4f68c28441dbbf02937c9ed6f105ed14257216",
+  "actual_postroute_100mhz": true,
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "port_released": true,
+  "capture_exit_code": 0,
+  "complete_measured_runs": 1,
+  "incomplete_programming_epochs": 1,
+  "physical_key0_test": false,
+  "repeated_boot_stability_proven": false,
+  "frequency_scope": "Nominal100MHz; not independent instrument calibration",
+  "physical_ipc": null,
+  "official_submission": false,
+  "retained_board_release": "cpu_ddr_coremark_on_478149ee9e63",
+  "optimization": "Combined write-back and registered-load response overlap versus accepted write-through store-response image",
+  "scope": "One complete physical private-DDR 5000-iteration GCC15.2-O2/noLTO Cache-on run. Not repeated-reset training, shared-fabric or full-ISA acceptance."
+}

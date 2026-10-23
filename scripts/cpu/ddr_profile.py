@@ -60,4 +60,10 @@ def parse_profile(text, measured_cycles):
         if overlap['accepted'] > dc['reads'] + dc['writes'] or overlap['accepted'] > cycles:
             raise ValueError('overlap observation exceeds accepted requests or window')
         result['dcache_overlap'] = overlap
+    if 'CPU_DDR_PROFILE_STORE_OVERLAP' in text:
+        overlap = fields('STORE_OVERLAP', ['accepted', 'same_set_wait'])
+        if (sum(overlap.values()) > states['store_update'] or
+                overlap['accepted'] > dc['reads'] + dc['writes']):
+            raise ValueError('store overlap observation exceeds completion opportunities')
+        result['dcache_store_overlap'] = overlap
     return result

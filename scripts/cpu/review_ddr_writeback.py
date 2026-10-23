@@ -49,13 +49,17 @@ def review(baseline, candidate, work, change='writeback'):
             if sha(entry['path']) != entry['sha256']:
                 raise ValueError('pinned DDR input drift')
     expected_policies = ['write_through', 'write_back'] if change == 'writeback' else ['write_back', 'write_back']
-    if change not in ['writeback', 'overlap'] or [p['write_policy'] for p in profiles] != expected_policies:
+    if change not in ['writeback', 'overlap', 'store-overlap'] or [p['write_policy'] for p in profiles] != expected_policies:
         raise ValueError('actual policies differ from selected optimization')
-    if change == 'overlap':
+    if change in ['overlap', 'store-overlap']:
         if (profiles[0]['dcache'] != profiles[1]['dcache'] or
                 profiles[0]['native_events'] != profiles[1]['native_events'] or
                 profiles[1].get('dcache_overlap', {}).get('accepted', 0) <= 0):
             raise ValueError('overlap must preserve memory events and exercise response-edge acceptance')
+        if change == 'store-overlap' and (
+                profiles[0].get('dcache_store_overlap', {}).get('accepted', 0) != 0 or
+                profiles[1].get('dcache_store_overlap', {}).get('accepted', 0) <= 0):
+            raise ValueError('store overlap must add observed store-edge acceptance')
     before, after = [r['measurement']['cycles'] for r in rows]
     if after >= before:
         raise ValueError('candidate did not improve modeled cycles')
@@ -97,7 +101,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline',type=Path,required=True)
     parser.add_argument('--candidate',type=Path,required=True)
-    parser.add_argument('--change',choices=['writeback','overlap'],default='writeback')
+    parser.add_argument('--change',choices=['writeback','overlap','store-overlap'],default='writeback')
     args = parser.parse_args()
     work = ROOT/'build/cpu'/('ddr-'+args.change+'-review-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     row = review(args.baseline,args.candidate,work,args.change)
