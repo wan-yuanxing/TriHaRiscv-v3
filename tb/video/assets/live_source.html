@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>TriHa continuous HDMI test</title>
+<style>html,body{margin:0;overflow:hidden;background:#000}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas id="image" width="800" height="600"></canvas>
+<script>
+const canvas=document.getElementById('image'), c=canvas.getContext('2d');
+const started=performance.now();
+function draw(now){
+  const seconds=(now-started)/1000;
+  ['#b92332','#168444','#2247aa','#d7ad14'].forEach((color,i)=>{
+    c.fillStyle=color;c.fillRect((i%2)*400,Math.floor(i/2)*300,400,300);
+  });
+  c.strokeStyle='white';c.lineWidth=4;c.strokeRect(2,2,796,596);
+  c.fillStyle='white';c.font='bold 32px monospace';
+  c.fillText('TL',16,42);c.fillText('TR',738,42);c.fillText('BL',16,578);c.fillText('BR',738,578);
+  c.fillStyle='#111';c.fillRect(80,218,640,135);
+  c.fillStyle='white';c.font='bold 30px monospace';
+  c.fillText('CONTINUOUS RAW',240,258);
+  c.fillText('TIME '+seconds.toFixed(2)+' s',230,304);
+  c.fillStyle='white';c.fillRect(20+(seconds*180)%720,390,40,100);
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>

@@ -484,3 +484,14 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 同目标综合26881LUT/44681FF/69.5DRM，比F4c5e多39LUT/4FF。综合快照仅probeRTL/FDC/manifest和生成器变化，产品RTL保持。相同seed4/performance估计连线布局slow core setup−1.720ns（改善0.382）、pixel+1.896ns、fast core setup−0.869ns；slow core setup失败端点11454→1167、TNS−4265.597→−409.002ns。
 - slow core hold仍−0.027ns，失败端点2→6、THS−0.035→−0.143ns，不能称时序闭合。最差setup已转到guard的lane[3]→lane[1]/CE，9级、扇出1030、估计连线7.567ns；下一批先拆分该内部选择/错误判定，再做完整route，不把placement或旧未完成route作为最终STA。
 - 两份旧seed11 locator仍写running，但日志已停更且无routed DB/STA，保留原文件身份、不推断退出原因。本批无新完整route、CPU/NPU迁入、JTAG/COM/Flash或板测。94项无关条目保持，工作台账只追加，index投影仅提交本段。详见[验证记录](../verification/video/probe_reset_io.md)及[机器证据](../verification/video/evidence/probe_reset_io.json)。
+
+## 连续 RAW 上板主线（2026-10-23，已上板验收）
+
+用户已批准优先交付无需 KEY0 的连续 RAW，随后再接连续 BOX/AVATAR；暂停不阻塞实际板级目标的 LUT/探针优化。
+新增独立 `video_live_board`，A/B 双槽在显示 release 后才复用，保留 raw/preview/320×320 BGR NCHW 三分支。
+新帧在帧边界替换，允许跳过输入帧；不提前承诺 60 个新帧每秒。板级控制器独占 Video DDR，最终 CPU/NPU 所有权和可见性契约不变。
+
+旧引擎对照在提交第 1 帧后停止更新，新的变化源端到端及板级数字仿真已验证自动换帧、完整像素和复位。
+故障测试要求明确首错码，停止新发布并等待已承诺读写排空。专用 UART11 记录捕获/提交/释放/扫描数，UART12 是进行中捕获观察，UART9 是显示观察；不宣称每帧 DDR CRC 读回。
+125 MHz/40 MHz 的实际板级目标已通过综合（16121 LUT / 16481 FF / 9.5 DRM），完整尺寸仿真3次提交/96万输出像素通过；最终内部布线时序slow setup/hold +0.049/+0.137ns，fast +2.926/+0.099ns，位流644852dd6321已打包。新增release束34端点两角均通过6ns约束。
+连续 RAW 实体板测已通过；初次JTAG线缆列表为空；用户重新连接后，PG2L100H识别及易失Program/Verify通过，首段60秒及一次KEY0后连续114秒健康，欠载/溢出/错误均为0；实测新图30.16fps、输出扫描约60.32Hz。用户确认全屏内容自动更新，单次KEY0后恢复并继续更新。串口已关闭，板卡保持镜像运行；后续连续BOX/AVATAR及真实NPU另行交付。详见 [连续 RAW 记录](../verification/video/live_raw.md)。

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "target": "video_live_board",
+  "top": "video_live_board_top",
+  "test_top": "tb_video_live_board",
+  "sources": [
+    "rtl/video/video_timing.sv",
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv",
+    "rtl/video/video_rx.sv",
+    "rtl/video/video_rx_measure.sv",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv",
+    "fpga/pg2l100h/rtl/video_diag_uart.sv",
+    "rtl/video/axi128_hmic256.sv",
+    "rtl/video/rgb888_packer.sv",
+    "rtl/video/video_write_dma.sv",
+    "fpga/pg2l100h/rtl/video_ddr_snapshot_cdc.sv",
+    "rtl/video/video_async_fifo.sv",
+    "rtl/video/video_capture_ingress.sv",
+    "rtl/video/video_capture_startup_guard.sv",
+    "rtl/video/video_stream_register.sv",
+    "rtl/video/preview_downscale.sv",
+    "rtl/video/raw_display.sv",
+    "rtl/video/axi_write_arbiter3.sv",
+    "rtl/video/detect_bilinear.sv",
+    "rtl/video/detect_nchw_dma.sv",
+    "rtl/video/video_three_branch_capture.sv",
+    "rtl/video/video_memory_scheduler.sv",
+    "rtl/video/video_shared_ddr.sv",
+    "rtl/video/video_live_engine.sv",
+    "fpga/pg2l100h/rtl/video_live_board_top.sv"
+  ],
+  "vendor_sources": [
+    "source/hdmi/ms7210_ctl.v",
+    "source/hdmi/iic_dri.v",
+    "source/hdmi/ms7200_ctl.v"
+  ],
+  "ddr_ip": "fpga/pg2l100h/ip/video_ddr_manifest.json",
+  "generated_ip_instance": "I_ips_ddr_top",
+  "tests": [
+    "tb/video/models/ddr_native_model.sv",
+    "tb/video/models/ddr_board_ip_model.sv",
+    "tb/video/models/video_pll_model.sv",
+    "tb/video/tb_video_live_board.sv",
+    "tb/video/tb_video_preview_clock_reset.sv",
+    "tb/video/tb_video_capture_startup_guard.sv",
+    "tb/video/tb_video_stream_register.sv"
+  ],
+  "constraints": [
+    "fpga/pg2l100h/constraints/video_ddr_bist.fdc",
+    "fpga/pg2l100h/constraints/video_ddr_bist.rcf",
+    "fpga/pg2l100h/constraints/video_hdmi_capture.fdc",
+    "fpga/pg2l100h/constraints/video_live_board.fdc"
+  ],
+  "scope": "Autonomous Video-only continuous RAW, A/B slots released before reuse; HDMI800x60060.32Hz,125MHz DDR,three capture branches. UART11 lifecycle/12 capture/9 scan. No per-frame DDR CRC readback, CPU/NPU or SoC visibility fence; new-frame rate measured on board, external AC signoff separate."
+}

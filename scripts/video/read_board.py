@@ -53,6 +53,13 @@ def decode_packets(data):
                     'input_pixels','input_written_bytes','input_checked_bytes','input_ddr_crc','heartbeat')
             record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
             flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
+        elif packet[4] in (11,12):
+            fields=(('type','flags','phase','error_code','frame_id','captures','commits',
+                     'releases','completed_scans','underflows','heartbeat') if packet[4]==11 else
+                    ('type','flags','phase','error_code','capture_frame_id','source_crc','captured_pixels',
+                     'preview_written_bytes','input_written_bytes','fifo_peak','heartbeat'))
+            record=dict(zip(fields,struct.unpack('<4B7I',packet[4:36])))
+            flags=('init_done','busy','done','error','all_pll_locked','rx_mode_good','tx_done','overflow')
         elif packet[4]==10:
             fields=('type','flags','phase','error_code','mode_state','request_seq','committed_seq',
                     'request_count','commit_count','coalesced_count','heartbeat')
@@ -239,6 +246,29 @@ def qualify_mode_board(records):
     if modes[0]['heartbeat']==modes[1]['heartbeat']:return False
     return qualify_raw_board([r for r in current if r.get('type')!=10])
 
+def qualify_live_board(records):
+    current=[]
+    for row in reversed(records):
+        if (row.get('type') not in (9,11,12) or row.get('phase')!=0xa5
+                or row.get('error_code')!=0
+                or any(row.get(k) is not True for k in ('init_done','busy','done','all_pll_locked','rx_mode_good','tx_done'))
+                or any(row.get(k) is not False for k in ('error','overflow'))):break
+        current.append(row)
+    current.reverse()
+    if any(not 0<((b['heartbeat']-a['heartbeat'])&0xffffffff)<0x80000000
+           for a,b in zip(current,current[1:])):return False
+    live=[r for r in current if r['type']==11]
+    if len(live)<3 or not {9,11,12}.issubset(r['type'] for r in current):return False
+    for row in live:
+        fields=('frame_id','captures','commits','releases','completed_scans','underflows')
+        if any(type(row.get(k)) is not int for k in fields):return False
+        if (row['underflows']!=0 or row['frame_id']!=row['commits']
+                or row['captures']-row['commits'] not in (0,1)
+                or row['commits']-row['releases'] not in (1,2)):return False
+    return all(all(b[k]>a[k] for k in ('captures','commits','releases','completed_scans'))
+               for a,b in zip(live,live[1:]))
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
@@ -303,6 +333,7 @@ try {
         result['physical_three_branch_readback_verified']=qualify_three_readback(records)
         result['physical_raw_fullscreen_readback_verified']=qualify_raw_board(records)
         result['physical_mode_fullscreen_readback_verified']=qualify_mode_board(records)
+        result['physical_live_raw_progress_verified']=qualify_live_board(records)
         print(json.dumps(latest,ensure_ascii=True))
     except (OSError,RuntimeError,subprocess.TimeoutExpired) as error:
         result.update(status='fail',reason=str(error));print(str(error),file=sys.stderr)

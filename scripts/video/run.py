@@ -29,7 +29,7 @@ def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, par
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "display_scanout", "frame_pool", "video_pipeline", "record_pixels", "avatar_ddr", "record_renderer", "record_scanout", "record_mmio", "record_pipeline", "control_decode", "all"), default="all")
+    parser.add_argument("--suite", choices=("config", "timing", "clocks", "tx_init", "tx_init_full", "board", "rx", "rx_init", "rx_measure", "rx_board", "ddr_bist", "ddr_board", "axi_bridge", "write_dma", "axi_capture", "axi_capture_board", "capture_ingress", "capture_startup", "capture_pipe", "capture_engine", "hdmi_capture_board", "preview_scale", "preview_capture", "preview_display", "preview_crc", "preview_clocks", "preview_board", "detect_scale", "input_format", "detect_bilinear", "nchw_dma", "three_capture", "capture_rearm", "three_board", "capture_mmio", "capture_v2", "shared_video", "cpu_axil", "raw_display", "raw_board", "live_board", "mode_control", "overlay", "mode_resources", "mode_output", "mode_board", "display_slots", "display_mmio", "display_scanout", "frame_pool", "video_pipeline", "record_pixels", "avatar_ddr", "record_renderer", "record_scanout", "record_mmio", "record_pipeline", "control_decode", "all"), default="all")
     args = parser.parse_args()
     work = fresh_run("regression")
     latest = BUILD / f"latest_{args.suite}.json"
@@ -770,6 +770,14 @@ def main():
             artifacts.append(log)
             result['mode_board_artifacts'] = input_hashes(artifacts)
             result['passed'].append('mode_board')
+        if args.suite in ('live_board','all'):
+            run_logged([sys.executable,ROOT/'scripts/video/test_live_video.py'],work/'live_board.log',timeout=1800)
+            live=json.loads((BUILD/'latest_live_video.json').read_text(encoding='utf-8'))
+            if live['status']!='pass' or set(live['cases'])!={'delayed','fast','source_fault','read_stall','wide','board'}:
+                raise RuntimeError('Incomplete live board suite')
+            add_inputs(result,[ROOT/p for p in live['inputs']])
+            result['live_board']=live
+            result['passed'].append('live_board')
         if args.suite in ('raw_board','all'):
             target=ROOT/'fpga/pg2l100h/project/video_raw_board.json'
             board=json.loads(target.read_text(encoding='utf-8'))
