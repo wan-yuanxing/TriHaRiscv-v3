@@ -1333,3 +1333,22 @@ pixel+0.216ns；core hold−0.027ns/recovery−0.954ns仍失败，扫描输出�
 同seed4/performance布局估计slow core setup−2.102ns、pixel+0.295ns、core
 hold−0.027ns；fast core setup−1.565ns。core关键路径未实质收敛，资源改善
 不能替代时序签核。新冻结布局已单独启动seed11布线，保留旧版独立身份。
+
+### 实施补充：F4c5f组件复位释放与I/O输出寄存器
+
+2026-10-23仅在组件验证外壳加入core/pixel独立的两级复位同步释放链：异步
+断言仍立即清零，释放后第二个本域上升沿更新后释放本域reset，第三个沿才
+接受scan/capture；扫描位序、稳态拍数及默认完整DUT保持。不作为产品SoC
+复位架构或单域运行中CDC复位恢复证明，不改CPU/NPU和产品Video RTL。
+
+`core_scan_o`增加工具支持的I/O寄存器属性；native网表转换为
+`PAP_IO_REGISTER=TRUE`，器件映射确认core输出FF实际打包到IOL的OFF。8/25ns、
+I/O2/0.5ns、uncertainty及原16条CDC例外均保持，无新增reset时序切断。
+综合26881LUT/44681FF/69.5DRM，比F4c5e多39LUT/4FF。普通/-O各12项unit
+通过，实际每轮编译11个RTL场景含7个故障变体。产品RTL保持，组件布局/布线
+另验，未取得最终物理报告前仍不宣称125MHz闭合。[验证记录](verification/video/probe_reset_io.md)。
+
+同seed4/performance估计连线布局slow core setup−1.720ns（改善0.382ns）、
+pixel+1.896ns、fast core setup−0.869ns；slow hold仍−0.027ns且失败端点
+2→6。最差setup已转为显示记录guard内部lane选择/错误判定路径，125MHz
+仍未闭合；后续先处理该内部路径，再做新版本完整布线验证。

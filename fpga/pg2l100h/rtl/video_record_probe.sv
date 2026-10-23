@@ -15,12 +15,18 @@ module video_record_probe (
     input wire pixel_capture_i,
     output wire pixel_scan_o
 );
+    reg [1:0] core_reset_sync;
+    wire core_local_reset_n = core_reset_sync[1];
+    always @(posedge clk_i or negedge rst_ni) begin
+        if (!rst_ni) core_reset_sync <= 2'b00;
+        else core_reset_sync <= {core_reset_sync[0], 1'b1};
+    end
     reg [707:0] core_input_q;
     reg [1147:0] core_output_q;
     wire [1147:0] core_sampled;
     assign core_scan_o = core_output_q[0];
-    always @(posedge clk_i or negedge rst_ni) begin
-        if (!rst_ni) begin
+    always @(posedge clk_i or negedge core_local_reset_n) begin
+        if (!core_local_reset_n) begin
             core_input_q <= 0;
             core_output_q <= 0;
         end else begin
@@ -29,12 +35,18 @@ module video_record_probe (
             else if (core_shift_i) core_output_q <= {1'b0, core_output_q[1147:1]};
         end
     end
+    reg [1:0] pixel_reset_sync;
+    wire pixel_local_reset_n = pixel_reset_sync[1];
+    always @(posedge pixel_clk or negedge pixel_reset_n) begin
+        if (!pixel_reset_n) pixel_reset_sync <= 2'b00;
+        else pixel_reset_sync <= {pixel_reset_sync[0], 1'b1};
+    end
     reg [25:0] pixel_input_q;
     reg [340:0] pixel_output_q;
     wire [340:0] pixel_sampled;
     assign pixel_scan_o = pixel_output_q[0];
-    always @(posedge pixel_clk or negedge pixel_reset_n) begin
-        if (!pixel_reset_n) begin
+    always @(posedge pixel_clk or negedge pixel_local_reset_n) begin
+        if (!pixel_local_reset_n) begin
             pixel_input_q <= 0;
             pixel_output_q <= 0;
         end else begin
@@ -45,9 +57,9 @@ module video_record_probe (
     end
     video_record_pipeline u_pipeline (
         .clk_i(clk_i),
-        .rst_ni(rst_ni),
+        .rst_ni(core_local_reset_n),
         .pixel_clk(pixel_clk),
-        .pixel_reset_n(pixel_reset_n),
+        .pixel_reset_n(pixel_local_reset_n),
         .online(core_input_q[0 +: 1]),
         .display_urgent(core_input_q[1 +: 1]),
         .source_fault(core_input_q[2 +: 1]),

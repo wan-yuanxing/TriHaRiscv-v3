@@ -637,7 +637,8 @@
           "offset": 1140
         }
       ],
-      "output_bits": 1148
+      "output_bits": 1148,
+      "reset_release_edges": 2
     },
     "pixel": {
       "clock": "pixel_clk",
@@ -842,10 +843,14 @@
           "offset": 309
         }
       ],
-      "output_bits": 341
+      "output_bits": 341,
+      "reset_release_edges": 2
     }
   },
   "generator": "scripts/video/gen_record_probe.py",
+  "io_register_ports": [
+    "core_scan_o"
+  ],
   "source_manifest": "fpga/pg2l100h/project/video_record_pipeline.json",
   "scope": "Full default record pipeline with separate core/pixel registered scan boundaries; component routing only. No legal-traffic, CPU/NPU, DDR visibility, board or full-system timing claim."
 }

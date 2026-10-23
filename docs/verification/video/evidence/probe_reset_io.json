@@ -1,0 +1,611 @@
+{
+  "schema_version": 1,
+  "phase": "F4c5f",
+  "observed_at_utc": "2026-10-23T02:14:57.027310+00:00",
+  "baseline_commit": "ab63ea6a95fca801f811008a926d129b57229b82",
+  "status": "functional_and_synthesis_verified_placement_measured_route_open",
+  "timing_closed": false,
+  "physical_route_verified": false,
+  "board_actions": false,
+  "cpu_npu_imported": false,
+  "product_rtl_changed": false,
+  "abi_changed": false,
+  "steady_state_scan_cycles_added": 0,
+  "reset_release_edges_per_domain": 2,
+  "first_scan_accept_edge_after_reset_release": 3,
+  "io_register_ports": [
+    "core_scan_o"
+  ],
+  "timing_budgets_changed": false,
+  "miter_or_formal_proof": false,
+  "new_full_route_started": false,
+  "next_timing_target": "display_record_guard dynamic lane selection and error decision before another full route",
+  "unit_verification": {
+    "result": {
+      "path": "build/video/probe_reset_io_delivery/units.json",
+      "sha256": "bfb73da97c89e11f7932f862b45975063173f14d7cf152e9f92a633f261946c9"
+    },
+    "inputs": {
+      "build/video/probe_reset_io_delivery/verify_units.py": "49de46363a53e0b91d42091e90393ef60b7f981eab3023cd35c44db0b788e820",
+      "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+      "scripts/video/gen_record_probe.py": "0d1402089e9b5967033f813fe0f54289eaf265b48d8b761c1e5f1b796cd9f8cb",
+      "scripts/video/run_record_probe.py": "639a2bb15e1efbb40b1ba8e5898e4404527e6151838648e8c6252bb36c2741e6",
+      "tb/video/test_record_probe.py": "30f6cec491eafac98e9c9226d5518cef880611802096fdb67f8f739a2407e7db"
+    },
+    "python_tool": {
+      "path": "D:\\miniconda3\\python.exe",
+      "sha256": "f3c05e11e9fc3fc0941fda221b1dfb0aac39d6ef298078054a5d949d620f3d6c",
+      "version": "3.13.13 | packaged by Anaconda, Inc. | (main, Apr 14 2026, 06:12:50) [MSC v.1942 64 bit (AMD64)]"
+    }
+  },
+  "unit_runs": [
+    {
+      "python_optimized": false,
+      "tests": 12,
+      "log": {
+        "path": "build/video/probe_reset_io_units/20261023T020732_725796Z/ordinary.log",
+        "sha256": "0afb64798a9f0f8c972c0647a422f7d553f09eb92ffe2ff4ccde6a4420e8436f"
+      },
+      "simulation": {
+        "path": "build/video/record_probe_sim/20261023T020732_993859Z/result.json",
+        "sha256": "7836353b0f78529dffc545f0571a438740882cf25bbf11e7edadbd358f8ae561"
+      },
+      "cases": [
+        {
+          "name": "boundary",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "wrong_input_bit",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "wrong_capture_priority",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "swapped_scalar_outputs",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "real_default_dut_idle",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "shadow_byte_strobes",
+          "status": "pass",
+          "exit_code": 0,
+          "writes": 2723,
+          "reads": 2883
+        },
+        {
+          "name": "reset_release",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "reset_bypass",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_early",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_cross_domain",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_no_async",
+          "status": "rejected",
+          "exit_code": 1
+        }
+      ],
+      "scope": "Boundary wiring with explicit stub; real full DUT reset/idle and actual display shadow byte stores. No full-pipeline legal-traffic or board claim."
+    },
+    {
+      "python_optimized": true,
+      "tests": 12,
+      "log": {
+        "path": "build/video/probe_reset_io_units/20261023T020732_725796Z/optimized.log",
+        "sha256": "d3c55d51be41cec64038929486326e15f1dd57d75c63a44c0dc9d531973f66fc"
+      },
+      "simulation": {
+        "path": "build/video/record_probe_sim/20261023T020753_316507Z/result.json",
+        "sha256": "2c669556d61f001248ec52c7e77401e88936d776af8a781439b760a050f97c01"
+      },
+      "cases": [
+        {
+          "name": "boundary",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "wrong_input_bit",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "wrong_capture_priority",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "swapped_scalar_outputs",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "real_default_dut_idle",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "shadow_byte_strobes",
+          "status": "pass",
+          "exit_code": 0,
+          "writes": 2723,
+          "reads": 2883
+        },
+        {
+          "name": "reset_release",
+          "status": "pass",
+          "exit_code": 0
+        },
+        {
+          "name": "reset_bypass",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_early",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_cross_domain",
+          "status": "rejected",
+          "exit_code": 1
+        },
+        {
+          "name": "reset_no_async",
+          "status": "rejected",
+          "exit_code": 1
+        }
+      ],
+      "scope": "Boundary wiring with explicit stub; real full DUT reset/idle and actual display shadow byte stores. No full-pipeline legal-traffic or board claim."
+    }
+  ],
+  "initial_red": {
+    "result": {
+      "path": "build/video/probe_reset_io_delivery/red.json",
+      "sha256": "d60c4987e9b84019d15e4eb54801092c7bfef40fc3ab91d3e07f079d04ce8828"
+    },
+    "compile_log": {
+      "path": "build/video/probe_reset_red/20261022T145509_870963Z/compile.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "failure_log": {
+      "path": "build/video/probe_reset_red/20261022T145509_870963Z/run.log",
+      "sha256": "8eb2479dee7d5a3d6b7f7605fd94717ae1c53edfb9e83b8e0a7a4f1aa76b6ee0"
+    }
+  },
+  "synthesis": {
+    "before": {
+      "result": {
+        "path": "build/video/pds/20261022T133201_885026Z/result.json",
+        "sha256": "ab1e714969ffc44410cc51e01f62344119fd16eba723ea12b9510c4a309af992"
+      },
+      "report": {
+        "path": "build/video/pds/20261022T133201_885026Z/synthesize/video_record_probe.snr",
+        "sha256": "ab682e4773a3a20df917f95fd5a8384bb8c2d7ca8b6f6ce1939a856353d7e72e"
+      },
+      "resources": {
+        "lut": 26842.0,
+        "registers": 44677.0,
+        "drm": 69.5
+      },
+      "version": "2022.2-SP6.4"
+    },
+    "after": {
+      "result": {
+        "path": "build/video/pds/20261023T015212_102832Z/result.json",
+        "sha256": "b043fc7c08c7787c13c1bf950b47ebc7838d2ef5899c0c6f320a0e0f74ff4a41"
+      },
+      "report": {
+        "path": "build/video/pds/20261023T015212_102832Z/synthesize/video_record_probe.snr",
+        "sha256": "7b80608bb1b7075b0d11402cb4298066e4c491bc028048c866c6b82306f074fe"
+      },
+      "resources": {
+        "lut": 26881.0,
+        "registers": 44681.0,
+        "drm": 69.5
+      },
+      "version": "2022.2-SP6.4"
+    }
+  },
+  "git_baseline_crlf_only_files": [
+    "rtl/video/video_display_mmio.sv"
+  ],
+  "synthesis_snapshot_changes": [
+    "fpga/pg2l100h/rtl/video_record_probe.sv",
+    "fpga/pg2l100h/constraints/video_record_probe.fdc",
+    "fpga/pg2l100h/project/video_record_probe.json",
+    "scripts/video/gen_record_probe.py"
+  ],
+  "native_netlist": {
+    "result": {
+      "path": "build/video/probe_reset_io_delivery/native_netlist_check.json",
+      "sha256": "c7e52dbcf2eecdfd882d037d71e4ebdd6c5c95b0ee04e69a7d2deaf8c6a4b892"
+    },
+    "core_scan_io_property": "PAP_IO_REGISTER=TRUE",
+    "reset_stages_preserved": 4
+  },
+  "device_mapping": {
+    "core_scan_output_packed": true,
+    "report": {
+      "path": "build/video/probe_reset_io_place/20261023T015604_685417Z/device_map/run.log",
+      "sha256": "1b3f5e73150c550c9aa84748de07145625d34833cdebbb638ac23edb14d314de"
+    },
+    "exact_native_message": "Flip-Flop \"core_output_q[0]/opit_0_inv\" has been packed in \"OFF\" of IOL \"core_scan_o_obuf/opit_1\" success."
+  },
+  "placement": {
+    "status": "measured",
+    "directory": "build/video/probe_reset_io_place/20261023T015604_685417Z",
+    "scope": "Estimated interconnect report_place_timing, not routed STA; seed4/performance",
+    "result": {
+      "path": "build/video/probe_reset_io_place/20261023T015604_685417Z/result.json",
+      "sha256": "6f1617c7aa51d20e670bfaf2e44bf0781c124ba49656c749f12029af19d78220"
+    },
+    "report": {
+      "path": "build/video/probe_reset_io_place/20261023T015604_685417Z/place_route/video_record_probe.rtr",
+      "sha256": "8224cd7a40943692f494c6d9d3a80f554d2ed344e5061e782a9462bacf35c958"
+    },
+    "summaries": {
+      "setup": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -1.72,
+            "total_negative_slack_ns": -409.002,
+            "failing_endpoints": 1167,
+            "endpoints": 84385
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.98,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 1.896,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21367
+          },
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 0.867,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 4177
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -0.869,
+            "total_negative_slack_ns": -17.626,
+            "failing_endpoints": 74,
+            "endpoints": 84385
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 1.245,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 2.756,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21367
+          },
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 1.007,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 4177
+          }
+        ]
+      },
+      "hold": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": -0.027,
+            "total_negative_slack_ns": -0.143,
+            "failing_endpoints": 6,
+            "endpoints": 84385
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 0.178,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21367
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.007,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 84385
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 0.14,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 21367
+          }
+        ]
+      },
+      "recovery": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.074,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26601
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 20.718,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9939
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 2.418,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26601
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 20.937,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9939
+          }
+        ]
+      },
+      "removal": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.397,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26601
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 0.393,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9939
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 0.321,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 26601
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 0.317,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 9939
+          }
+        ]
+      },
+      "pulse_width": {
+        "slow": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 3.04,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 29724
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 11.54,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 10970
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "core_clk",
+            "capture_clock": "core_clk",
+            "worst_slack_ns": 3.345,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 29724
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "worst_slack_ns": 11.845,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 10970
+          }
+        ]
+      }
+    },
+    "reported_path_count": 400,
+    "worst_reported_paths": {
+      "max (slow corner) / sequential timing path": {
+        "startpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[3]/opit_0_inv_L6QL5Q/CLK",
+        "endpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[1]/opit_0_inv_L6QL5Q/CE",
+        "type": "max (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": -1.72
+      },
+      "min (slow corner) / sequential timing path": {
+        "startpoint": "u_pipeline/u_capture/u_raw_packer/reservoir[1]/opit_0_inv_L6Q/CLK",
+        "endpoint": "u_pipeline/u_capture/g_dma[0].u_dma/data_buffer_0/ram32x2d/DIH",
+        "type": "min (slow corner)",
+        "class": "sequential timing path",
+        "slack_ns": -0.027
+      },
+      "max (slow corner) / async timing path": {
+        "startpoint": "core_reset_sync[0]/opit_0_inv_srl/CLK",
+        "endpoint": "u_pipeline/u_display/u_raw/N6_m2/gopapm/RST_Y",
+        "type": "max (slow corner)",
+        "class": "async timing path",
+        "slack_ns": 2.074
+      },
+      "min (slow corner) / async timing path": {
+        "startpoint": "pixel_reset_sync[0]/opit_0_inv_srl/CLK",
+        "endpoint": "u_pipeline/u_display/u_renderer/u_pixels/active_data[5007]/opit_0_inv/RS",
+        "type": "min (slow corner)",
+        "class": "async timing path",
+        "slack_ns": 0.393
+      },
+      "max (fast corner) / sequential timing path": {
+        "startpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[3]/opit_0_inv_L6QL5Q/CLK",
+        "endpoint": "u_pipeline/u_display/u_mmio/u_guard/lane[1]/opit_0_inv_L6QL5Q/CE",
+        "type": "max (fast corner)",
+        "class": "sequential timing path",
+        "slack_ns": -0.869
+      },
+      "min (fast corner) / sequential timing path": {
+        "startpoint": "u_pipeline/u_capture/u_raw_packer/reservoir[1]/opit_0_inv_L6Q/CLK",
+        "endpoint": "u_pipeline/u_capture/g_dma[0].u_dma/data_buffer_0/ram32x2d/DIH",
+        "type": "min (fast corner)",
+        "class": "sequential timing path",
+        "slack_ns": 0.007
+      },
+      "max (fast corner) / async timing path": {
+        "startpoint": "core_reset_sync[0]/opit_0_inv_srl/CLK",
+        "endpoint": "u_pipeline/u_display/u_raw/N6_m2/gopapm/RST_Y",
+        "type": "max (fast corner)",
+        "class": "async timing path",
+        "slack_ns": 2.418
+      },
+      "min (fast corner) / async timing path": {
+        "startpoint": "pixel_reset_sync[0]/opit_0_inv_srl/CLK",
+        "endpoint": "u_pipeline/u_display/u_renderer/u_pixels/active_data[5007]/opit_0_inv/RS",
+        "type": "min (fast corner)",
+        "class": "async timing path",
+        "slack_ns": 0.317
+      }
+    },
+    "path_list_scope": "One worst reported path per corner/type/class; full native report separately hashed."
+  },
+  "previous_routes": [
+    {
+      "locator": {
+        "path": "build/video/overlay_geometry_delivery/latest_route.json",
+        "sha256": "4b7dd91e6e5b6101860cf848ca6ed99dd928056d47dcd1f5fd1ebbb22e7cd070"
+      },
+      "declared_status": "running",
+      "directory": "build/video/overlay_geometry_route_seed11/20261022T135755_641683Z",
+      "final_report_present": false,
+      "routed_db_present": false,
+      "observation": "Prior locator still says running; no completion inferred from this stale state.",
+      "log": {
+        "path": "build/video/overlay_geometry_route_seed11/20261022T135755_641683Z/place_route/run.log",
+        "sha256": "3c6522120d29b3420eb04519797fe430121464fbfe39263c02cb6464bf4c0781"
+      },
+      "log_tail": [
+        "    forward max bucket size 42443 , backward 53049.",
+        "        Unrouted nets 27143 at the end of iteration 30.",
+        "    route iteration 30, CPU time elapsed 202.578125 sec.",
+        "    forward max bucket size 40100 , backward 17842.",
+        "        Unrouted nets 26908 at the end of iteration 31.",
+        "    route iteration 31, CPU time elapsed 216.671875 sec."
+      ]
+    },
+    {
+      "locator": {
+        "path": "build/video/shadow_decode_delivery/latest_static_route_seed11.json",
+        "sha256": "bbc4d618bb28a9b2b7d420e61c0b5886e7d131bf5eb1f069bc8c281839766f46"
+      },
+      "declared_status": "running",
+      "directory": "build/video/shadow_static_route_seed11/20261022T130314_643623Z",
+      "final_report_present": false,
+      "routed_db_present": false,
+      "observation": "Prior locator still says running; no completion inferred from this stale state.",
+      "log": {
+        "path": "build/video/shadow_static_route_seed11/20261022T130314_643623Z/place_route/run.log",
+        "sha256": "378b007f8be141b0201ed00d855a01fd937955829c50526237b66d2ef2e6b1da"
+      },
+      "log_tail": [
+        "    forward max bucket size 35222 , backward 54863.",
+        "        Unrouted nets 30553 at the end of iteration 35.",
+        "    route iteration 35, CPU time elapsed 285.671875 sec.",
+        "    forward max bucket size 21804 , backward 57312.",
+        "        Unrouted nets 30369 at the end of iteration 36.",
+        "    route iteration 36, CPU time elapsed 301.359375 sec."
+      ]
+    }
+  ],
+  "protected_unrelated_entries": 94,
+  "unrelated_changes": [],
+  "evidence_collector": {
+    "path": "build/video/probe_reset_io_delivery/collect.py",
+    "sha256": "0754707adb5054463c6315a662a13bb12e81cc03ff267df6f05c62083e9e097b"
+  }
+}

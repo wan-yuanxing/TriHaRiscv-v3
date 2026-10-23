@@ -32,6 +32,7 @@ def boundary_fixture(source, mapping):
     for d,b in mapping.items():
         ni,no=b['input_bits'],b['output_bits']
         tb += [f'reg {d}_scan_i=0,{d}_shift_i=0,{d}_capture_i=0;',f'wire {d}_scan_o;',
+               f"reg [1:0] expected_{d}_release=0;",
                f'reg [{ni-1}:0] expected_{d}_input=0;', f'reg [{no-1}:0] expected_{d}_output=0;',
                f'wire [{no-1}:0] expected_{d}_sampled;']
     input_expressions={p['name']:f"expected_{d}_input[{p['offset']} +: {p['width']}]"
@@ -52,20 +53,26 @@ def boundary_fixture(source, mapping):
         for p in b['outputs']:
             expression=f"expected_{d}_sampled[{p['offset']} +: {p['width']}]"
             tb += [f"if(u_probe.{d}_sampled[{p['offset']} +: {p['width']}] !== ({expression})) $fatal(1,\"record probe output port {p['name']} mismatch\");"]
-    for n in ('clk_i','rst_ni','pixel_clk','pixel_reset_n'):
+    for n in ('clk_i','pixel_clk'):
         tb += [f'if(u_probe.u_pipeline.{n} !== {n}) $fatal(1,"record probe direct port {n} mismatch");']
+    for d,b in mapping.items():
+        tb += [f"if(u_probe.u_pipeline.{b['reset']} !== expected_{d}_release[1]) $fatal(1,\"record probe {d} reset release mismatch\");"]
     tb+=['checks=checks+1;end endtask']
     for d,b in mapping.items():
         ni,no=b['input_bits'],b['output_bits'];clock=b['clock']
-        tb += [f'task tick_{d};reg [{no-1}:0] old_sample;begin',
+        tb += [f'task tick_{d};reg [{no-1}:0] old_sample;reg was_ready;begin',
                f'old_sample=expected_{d}_sampled;',
+               f'was_ready=expected_{d}_release[1];',
                f'#3;{clock}=1;',
+               f"expected_{d}_release={{expected_{d}_release[0],1'b1}};",
+               f'if(!was_ready) begin expected_{d}_input=0;expected_{d}_output=0;end else begin',
                f'if({d}_shift_i) expected_{d}_input={{{d}_scan_i,expected_{d}_input[{ni-1}:1]}};',
                f'if({d}_capture_i) expected_{d}_output=old_sample;',
                f"else if({d}_shift_i) expected_{d}_output={{1'b0,expected_{d}_output[{no-1}:1]}};",
-               f'#1;check_all();#3;{clock}=0;end endtask']
+               f'end #1;check_all();#3;{clock}=0;end endtask']
     tb+=['initial begin rst_ni=1;pixel_reset_n=1;#1;rst_ni=0;pixel_reset_n=0;',
-         '#1;check_all();#1;rst_ni=1;pixel_reset_n=1;']
+         '#1;check_all();#1;rst_ni=1;pixel_reset_n=1;',
+         'tick_core();tick_core();tick_pixel();tick_pixel();']
     for d,b in mapping.items():
         tb += [f'{d}_shift_i=1;',f'for(i=0;i<{b["input_bits"]+2};i=i+1) begin',
                f'{d}_scan_i=(i==0);{d}_capture_i=(i%17==0);tick_{d}();end',
@@ -75,8 +82,8 @@ def boundary_fixture(source, mapping):
         tb += [f'{d}_shift_i=1;{d}_scan_i=0;repeat({b["output_bits"]+2}) tick_{d}();',
                f'{d}_scan_i=1;{d}_capture_i=1;tick_{d}();',
                f'{d}_shift_i=0;{d}_capture_i=0;tick_{d}();']
-    tb += ['rst_ni=0;expected_core_input=0;expected_core_output=0;#1;check_all();',
-           'pixel_reset_n=0;expected_pixel_input=0;expected_pixel_output=0;#1;check_all();',
+    tb += ['rst_ni=0;expected_core_release=0;expected_core_input=0;expected_core_output=0;#1;check_all();',
+           'pixel_reset_n=0;expected_pixel_release=0;expected_pixel_input=0;expected_pixel_output=0;#1;check_all();',
            '$display("RECORD_PROBE_BOUNDARY_PASS checks=%0d",checks);$finish;end',
            'initial begin #1000000;$fatal(1,"record probe boundary timeout");end','endmodule','']
     return stub,'\n'.join(tb)
@@ -97,7 +104,7 @@ def main():
             'rtl/video/include/video_cfg.vh','rtl/video/include/video_capture_v2.vh',
             'rtl/video/include/video_display.vh','scripts/video/run_record_probe.py',
             'scripts/video/gen_record_probe.py','scripts/video/common.py',
-            'tb/video/tb_display_shadow_bytes.sv']
+            'tb/video/tb_display_shadow_bytes.sv','tb/video/tb_record_probe_reset.sv']
         result['inputs']=input_hashes(ROOT/n for n in names)
         for n in names:
             p=work/'src'/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((ROOT/n).read_bytes())
@@ -152,6 +159,33 @@ def main():
             raise ValueError('Shadow byte-store regression did not finish')
         result['cases'].append({'name':'shadow_byte_strobes','status':'pass','exit_code':0,
                                 'writes':2723,'reads':2883})
+        # A second fixture checks release edges without reading the DUT chain.
+        source=(work/'src/rtl/video/video_record_pipeline.sv').read_text(encoding='utf-8')
+        reset_stub=source.split(');',1)[0]+');\n'
+        for p in interface(source):
+            if p['direction']=='output': reset_stub+=f"assign {p['name']} = '1;\n"
+        (work/'reset_stub.sv').write_text(reset_stub+'endmodule\n',encoding='utf-8')
+        mutations=[('reset_release',original,False)]
+        for label,old,new in [
+            ('reset_bypass','.rst_ni(core_local_reset_n)','.rst_ni(rst_ni)'),
+            ('reset_early','wire core_local_reset_n = core_reset_sync[1]','wire core_local_reset_n = core_reset_sync[0]'),
+            ('reset_cross_domain','.pixel_reset_n(pixel_local_reset_n)','.pixel_reset_n(core_local_reset_n)'),
+            ('reset_no_async','posedge clk_i or negedge rst_ni','posedge clk_i')]:
+            if original.count(old)!=1:raise ValueError('Reset mutation anchor changed: '+label)
+            mutations.append((label,original.replace(old,new),True))
+        for label,wrapper,negative in mutations:
+            directory=work/label;directory.mkdir();path=directory/'probe.sv';path.write_text(wrapper,encoding='utf-8')
+            exe=directory/'sim.vvp'
+            run_logged([compiler,'-g2012','-s','tb_record_probe_reset','-o',exe,path,
+                        work/'reset_stub.sv',work/'src/tb/video/tb_record_probe_reset.sv'],directory/'compile.log')
+            process=subprocess.run([runtime,exe],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=60)
+            (directory/'run.log').write_bytes(process.stdout)
+            if negative:
+                if process.returncode==0 or b'PROBE_RESET ' not in process.stdout:
+                    raise ValueError('Reset mutation not detected: '+label)
+            elif process.returncode or b'PROBE_RESET_PASS' not in process.stdout:
+                raise ValueError('Reset release simulation failed: '+process.stdout.decode(errors='replace'))
+            result['cases'].append({'name':label,'status':'rejected' if negative else 'pass','exit_code':process.returncode})
         for name,expected in result['inputs'].items():
             if sha256(ROOT/name)!=expected or sha256(work/'src'/name)!=expected:
                 raise ValueError('Simulation source changed: '+name)

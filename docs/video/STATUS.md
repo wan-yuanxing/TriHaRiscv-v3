@@ -475,3 +475,12 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 像素16场景、renderer14仲裁/6显示、scanout6交接/3扫描和真实C↔RTL采显联动3场景通过；全尺寸像素2440179、scanout3360000逐像素检查。两份早启FULL像素仿真900秒超时原样保留，FULL预算改1800秒后完整通过，小场景仍900秒；时钟/仿真周期/DUT/检查不变。部分外层汇总因无关测试脚本在运行中变化而拒绝，未改写为PASS；最终逐项核验内层真实依赖、工具和输出哈希。
 - 同seed4/performance估计连线布局：slow core setup−2.102ns、pixel+0.295ns、core hold−0.027ns，fast core setup−1.565ns。core仅改善0.033ns，fast恶化0.259ns，不能称时序收敛；扫描输出和reset/enable路径仍需处理。新冻结布局已用seed11独立布线，旧AW版保留自身DB和结果，未取得最终routed DB/STA，125MHz仍未闭合。
 - [验证记录](../verification/video/overlay_geometry.md)、[机器证据](../verification/video/evidence/overlay_geometry.json)。94项无关非STATUS条目保持；共享台账只追加，提交投影另去除上批重复F4c5d段，保留NPU未提交内容。无CPU/NPU迁入、JTAG/COM/Flash或板测，不改变当前板卡镜像。
+
+## 2026-10-23 Video F4c5f组件复位释放与I/O输出寄存器
+
+- 仅改默认完整采显组件外壳：core/pixel独立两级异步断言/同步释放链，第二沿后释放本域reset，第三沿接受scan/capture；扫描位序、稳态拍数、产品RTL、ABI及CPU/NPU不变。不把stub单域复位测试写成产品CDC复位恢复证明。
+- core_scan_o的syn_useioff由native网表转PAP_IO_REGISTER=TRUE，器件映射确认core_output_q[0]实际打包到IOL的OFF；四个同步FF和CLK/D/Q连接保留。原8/25ns、I/O2/0.5ns、uncertainty和16条CDC例外保持，没有新增reset切断或板级pin。
+- 普通/-O各12项unit、每轮11个实际RTL场景通过：2250次映射检查、真实默认DUT idle、2723写/2883读shadow、停钟/错相/短脉冲/域间隔离reset，7个有效编译故障变体均拒绝。保留旧实现预期RED和开发时两项失败；独立审查发现的证据绑定缺口已修复，最终重新封存unit/Python/工具/快照/产物与报告哈希。
+- 同目标综合26881LUT/44681FF/69.5DRM，比F4c5e多39LUT/4FF。综合快照仅probeRTL/FDC/manifest和生成器变化，产品RTL保持。相同seed4/performance估计连线布局slow core setup−1.720ns（改善0.382）、pixel+1.896ns、fast core setup−0.869ns；slow core setup失败端点11454→1167、TNS−4265.597→−409.002ns。
+- slow core hold仍−0.027ns，失败端点2→6、THS−0.035→−0.143ns，不能称时序闭合。最差setup已转到guard的lane[3]→lane[1]/CE，9级、扇出1030、估计连线7.567ns；下一批先拆分该内部选择/错误判定，再做完整route，不把placement或旧未完成route作为最终STA。
+- 两份旧seed11 locator仍写running，但日志已停更且无routed DB/STA，保留原文件身份、不推断退出原因。本批无新完整route、CPU/NPU迁入、JTAG/COM/Flash或板测。94项无关条目保持，工作台账只追加，index投影仅提交本段。详见[验证记录](../verification/video/probe_reset_io.md)及[机器证据](../verification/video/evidence/probe_reset_io.json)。

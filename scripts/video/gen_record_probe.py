@@ -133,11 +133,20 @@ def render(root=ROOT):
     connections = {name: name for name in DIRECT}
     for domain, data in boundary.items():
         ni, no = data['input_bits'], data['output_bits']
-        lines += [f'    reg [{ni-1}:0] {domain}_input_q;', f'    reg [{no-1}:0] {domain}_output_q;',
+        data['reset_release_edges'] = 2
+        local_reset = domain+'_local_reset_n'
+        connections[data['reset']] = local_reset
+        lines += [f'    reg [1:0] {domain}_reset_sync;',
+                  f'    wire {local_reset} = {domain}_reset_sync[1];',
+                  f"    always @(posedge {data['clock']} or negedge {data['reset']}) begin",
+                  f"        if (!{data['reset']}) {domain}_reset_sync <= 2'b00;",
+                  f"        else {domain}_reset_sync <= {{{domain}_reset_sync[0], 1'b1}};",
+                  '    end',
+                  f'    reg [{ni-1}:0] {domain}_input_q;', f'    reg [{no-1}:0] {domain}_output_q;',
                   f'    wire [{no-1}:0] {domain}_sampled;',
                   f'    assign {domain}_scan_o = {domain}_output_q[0];',
-                  f"    always @(posedge {data['clock']} or negedge {data['reset']}) begin",
-                  f"        if (!{data['reset']}) begin", f"            {domain}_input_q <= 0;",
+                  f"    always @(posedge {data['clock']} or negedge {local_reset}) begin",
+                  f"        if (!{local_reset}) begin", f"            {domain}_input_q <= 0;",
                   f"            {domain}_output_q <= 0;", '        end else begin',
                   f'            if ({domain}_shift_i) {domain}_input_q <= {{{domain}_scan_i, {domain}_input_q[{ni-1}:1]}};',
                   f'            if ({domain}_capture_i) {domain}_output_q <= {domain}_sampled;',
@@ -151,7 +160,9 @@ def render(root=ROOT):
     lines += ['        .'+p['name']+'('+connections[p['name']]+')'+(',' if i<len(ports)-1 else '')
               for i,p in enumerate(ports)]
     lines += ['    );', 'endmodule', '`default_nettype wire', '']
-    fdc = ['# Generated component scan boundary. No physical board or global CDC claim.'] + timing
+    fdc = ['# Generated component scan boundary. No physical board or global CDC claim.',
+           '# PDS scopeattr.tcl: port-level I/O ring register packing preference.',
+           'define_attribute {p:core_scan_o} {syn_useioff} {1}'] + timing
     for domain, data in boundary.items():
         fdc += [f'set_clock_uncertainty -setup 0.100 [get_clocks {{{domain}_clk}}]',
                 f'set_clock_uncertainty -hold 0.050 [get_clocks {{{domain}_clk}}]']
@@ -162,6 +173,7 @@ def render(root=ROOT):
                 'test_top':'tb_record_probe_idle', 'sources':[WRAPPER]+base['sources'],
                 'tests':['tb/video/tb_record_probe_idle.sv'], 'constraints':[FDC],
                 'boundary':boundary, 'generator':'scripts/video/gen_record_probe.py',
+                'io_register_ports':['core_scan_o'],
                 'source_manifest':BASE,
                 'scope':'Full default record pipeline with separate core/pixel registered scan boundaries; component routing only. No legal-traffic, CPU/NPU, DDR visibility, board or full-system timing claim.'}
     return {WRAPPER:'\n'.join(lines), FDC:'\n'.join(fdc)+'\n',

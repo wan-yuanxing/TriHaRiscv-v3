@@ -99,6 +99,11 @@ class RecordProbeTests(unittest.TestCase):
         self.assertEqual(text.count('set_clock_uncertainty'),4)
         self.assertEqual(text.count('set_input_delay'),4)
         self.assertEqual(text.count('set_output_delay'),4)
+        self.assertEqual(text.count('define_attribute'),1)
+        self.assertIn('define_attribute {p:core_scan_o} {syn_useioff} {1}',text)
+        for domain in ('core','pixel'):
+            self.assertIn(f'set_output_delay 2.000 -clock [get_clocks {{{domain}_clk}}]',text)
+            self.assertIn(f'set_output_delay 0.500 -clock [get_clocks {{{domain}_clk}}]',text)
 
     def test_manifest_is_explicit_and_keeps_default_full_dut(self):
         files = probe.render(ROOT)
@@ -107,6 +112,9 @@ class RecordProbeTests(unittest.TestCase):
         self.assertEqual(manifest['sources'][1:],base['sources'])
         self.assertEqual(manifest['sources'][0],'fpga/pg2l100h/rtl/video_record_probe.sv')
         self.assertEqual(manifest['top'],'video_record_probe')
+        self.assertEqual(manifest['io_register_ports'],['core_scan_o'])
+        for domain in ('core','pixel'):
+            self.assertEqual(manifest['boundary'][domain]['reset_release_edges'],2)
         wrapper = files[manifest['sources'][0]]
         self.assertIn('video_record_pipeline u_pipeline', wrapper)
         self.assertNotIn('FRAME_HEIGHT',wrapper)

@@ -1,4 +1,6 @@
 # Generated component scan boundary. No physical board or global CDC claim.
+# PDS scopeattr.tcl: port-level I/O ring register packing preference.
+define_attribute {p:core_scan_o} {syn_useioff} {1}
 create_clock -name core_clk -period 8.000 [get_ports {clk_i}]
 create_clock -name pixel_clk -period 25.000 [get_ports {pixel_clk}]
 set_false_path -from [get_clocks {core_clk}] -to [get_cells {u_pipeline.u_display.u_raw.record_sync1 u_pipeline.u_display.u_raw.done_sync1* u_pipeline.u_display.u_raw.commit_ack_sync1 u_pipeline.u_display.u_raw.release_ack_sync1 u_pipeline.u_display.u_raw.fault_sync1}]
