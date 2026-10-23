@@ -54,3 +54,13 @@ CPU-only资源与实际100MHz仍UNKNOWN，生产RTL和集成工程未改。
 **3.987597/MHz，尚未超过4**；与此前128KiB仿真TCM为不同链接/存储边界。
 物理快照已准备，原100MHz/IO/hold约束不变；集成PDS占用期间未执行本路线PDS。
 见[物理准备证据](../verification/cpu/dualissue_sram_physical_preparation.md)。
+
+## 真实SRAM停顿诊断与布线入口（2026-10-23）
+
+非observer及两次observer均为1253888周期、3.987597/MHz；加载ROM/SRAM字节相同，
+两次完整WB/store轨迹一致。取指空等82216周期，依赖等待123103周期；配对受阻中
+79704次为共享LSU冲突、237834次为同对真实RAW，不能直接放宽互锁。
+下一步量化取指队列占用和满队列回压，再决定是否修改RTL。
+`run_dual_route.ps1`已完成预检及冻结绑定/报告解析单测，实际PDS路径尚未执行；
+当前100MHz、CPU-only面积均UNKNOWN，整体验收未通过。详见
+[SRAM诊断](../verification/cpu/dualissue_sram_profile.md)。

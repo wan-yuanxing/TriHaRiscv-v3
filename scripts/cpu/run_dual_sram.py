@@ -57,8 +57,11 @@ def main():
     parser.add_argument("--test", choices=["memory", "runtime", "coremark"], required=True)
     parser.add_argument("--fault", choices=["none", "read", "crc", "timeout"], default="none")
     parser.add_argument('--cpu-snapshot',type=Path,required=True)
+    parser.add_argument('--profile',action='store_true',help='Passive cycle partition and ordered trace observer')
     args = parser.parse_args()
     if args.test=='memory': parser.error('Use original runner for memory-only tests')
+    if args.profile and (args.test!='coremark' or args.fault!='none'):
+        parser.error('Passive profile supports only coremark with fault none')
     work = ROOT / "build/cpu/dual-sram" / (args.test + "-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ"))
     work.mkdir(parents=True)
     print(f"SOC_RUN directory={work}", flush=True)
@@ -98,6 +101,9 @@ def main():
         tb = "tb/soc/tb_soc_memory.v" if args.test == "memory" else "tb/cpu/tb_dual_sram.v"
         if args.test != "memory":
             rtl += core["sources"] + ["rtl/soc/triha_minimal_soc.v"]
+        if args.profile:
+            rtl += [tb]
+            tb = 'tb/cpu/tb_dual_sram_profile.v'
         inputs = rtl + [tb, "config/soc_map.json", "rtl/soc/include/soc_map.vh", "scripts/cpu/run_dual_sram.py", "scripts/soc/gen_config.py",
                         "scripts/cpu/run_modelsim.do", "rtl/cpu/ADAPTATIONS.json", "rtl/cpu/vendor/UPSTREAM.json",
                         "fpga/pg2l100h/project/cpu_core.json", "config/cpu_primitives.json"] + core["headers"]
@@ -182,7 +188,7 @@ def main():
                 result["external_hashes"][row["path"]] = row["sha256"]
                 primitive_sources.append(row["path"])
         native(SIM / "vlog.exe", ["+incdir+" + str(work / "src/rtl/soc/include"), "+incdir+" + str(work / "src/rtl/cpu/vendor/src/core")] + [work / "src" / n for n in rtl + [tb]] + primitive_sources, "rtl-build")
-        top = "tb_dual_sram"
+        top = "tb_dual_sram_profile" if args.profile else "tb_dual_sram"
         arguments = ["-c", "-onfinish", "exit", "-t", "1ps", "-voptargs=+acc", "work." + top]
         if args.fault == "read":
             arguments += ["+FAULT_READ=1"]
@@ -208,6 +214,14 @@ def main():
                 assert "CPU_COREMARK_STATUS errors=0 short=1" in output
                 result["measurement"] = dict(cycles=ticks, wb_completed=int(measure[2]), observed_ipc=int(measure[2]) / ticks,
                     coremark_per_mhz_short_estimate=5000000 / ticks, crc=expected, official_score=False)
+        if args.profile:
+            matches=re.findall(r'SRAM_PROFILE_PASS (.*)',output)
+            if len(matches)!=1 or 'SRAM_PROFILE_FAIL' in output:
+                raise ValueError('Missing or failed SRAM profile')
+            result['profile']={k:int(v) for k,v in (field.split('=') for field in matches[0].strip().split())}
+            if result['profile']['cycles']!=result['measurement']['cycles'] or result['profile']['wb']!=result['measurement']['wb_completed']:
+                raise ValueError('Profile window differs from software/WB')
+        result['profile_enabled']=args.profile
         result["status"] = "PASS"
     except Exception as error:
         result["status"] = "FAIL"

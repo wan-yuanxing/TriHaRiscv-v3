@@ -45,3 +45,13 @@ interfaces; first measure stalls and pair rejection before choosing RTL work.
 - TCM >4 is provisional until actual postroute 100MHz passes for the same candidate.
 - Prepare the dual-issue physical boundary; the old route runner only accepts single issue.
 - Preserve active SoC physical work; do not infer tool availability from a single process snapshot.
+
+## Real SRAM continuation
+
+- [x] Bind the candidate to actual synthesizable ROM/SRAM/MMIO boundary.
+- [x] Repeat nonobserver measurement with passive cycle and pair-rejection partitions.
+- [x] Verify loaded images and repeated full WB/store trace equality.
+- [x] Prepare frozen dual-route execution wrapper; preflight and parser checks only.
+- [ ] Quantify queue occupancy/full-response backpressure before further RTL changes.
+- [ ] Execute fresh PDS when integration has released the physical tools; extract CPU-only area.
+- [ ] Meet >4/MHz and actual 100MHz with the same candidate; current SRAM 3.987597, timing UNKNOWN.

@@ -11,6 +11,57 @@ ROOT=Path(__file__).resolve().parents[2]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def verify_file_hashes(work, row):
+    work=Path(work).resolve()
+    if row['cpu_mode']!=1 or row['period_ns']!=10:
+        raise ValueError('Expected dual issue at original 100MHz')
+    for base,entries in [(work/'src',row['input_hashes']),(work,row['files'])]:
+        for name,digest in entries.items():
+            path=(base/name).resolve()
+            if Path(name).is_absolute() or not path.is_relative_to(base.resolve()):
+                raise ValueError('Frozen path escapes package')
+            if sha(path)!=digest:raise ValueError('Frozen input drift: '+name)
+    return row
+
+
+def verify_package(work):
+    work=Path(work).resolve()
+    row=json.loads((work/'prepared.json').read_text(encoding='utf-8'))
+    required={'simulation','simulation_result_sha256','status','pds_started','cpu_mode','period_ns','input_hashes','files'}
+    if not required.issubset(row) or row['status']!='PREPARED_NOT_EXECUTED' or row['pds_started']:
+        raise ValueError('Missing mandatory bound simulation/preparation evidence')
+    if set(row['files'])!={'build.tcl','rom.hex','sram.hex','firmware.elf'}:
+        raise ValueError('Incomplete physical firmware/Tcl evidence')
+    verify_file_hashes(work,row)
+    simulation=Path(row['simulation'])
+    if sha(simulation/'result.json')!=row['simulation_result_sha256']:
+        raise ValueError('Bound simulation result drift')
+    evidence=json.loads((simulation/'result.json').read_text(encoding='utf-8'))
+    actual=re.findall(r'SOC_DUAL_CONFIG actual=(\d+) pairs=(\d+)',(simulation/'simulation.log').read_text(encoding='utf-8'))
+    if len(actual)!=1 or actual[0][0]!='1' or int(actual[0][1])<=0:
+        raise ValueError('Bound simulation lacks actual dual pairing')
+    check_simulation(dict(evidence,actual_dual_issue=int(actual[0][0])))
+    for name,digest in evidence['output_hashes'].items():
+        if sha(simulation/name)!=digest:raise ValueError('Bound simulation output drift: '+name)
+    for name in ('rom.hex','sram.hex','firmware.elf'):
+        if row['files'][name]!=evidence['output_hashes'][name]:
+            raise ValueError('Physical firmware differs from measured image: '+name)
+    core=json.loads((simulation/'src/fpga/pg2l100h/project/cpu_core.json').read_text(encoding='utf-8'))
+    recipe=json.loads((ROOT/'fpga/pg2l100h/project/cpu_minimal_soc.json').read_text(encoding='utf-8'))
+    names=set(core['sources']+core['headers']+recipe['sources']+recipe['headers'])
+    if set(row['input_hashes'])!=names|{recipe['constraints']}:
+        raise ValueError('Physical source set differs from measured boundary')
+    for name in names:
+        if row['input_hashes'][name]!=evidence['input_hashes'][name]:
+            raise ValueError('Physical input differs from measured source: '+name)
+    if row['input_hashes'][recipe['constraints']]!=sha(ROOT/recipe['constraints']):
+        raise ValueError('Physical constraints differ from original system constraints')
+    expected=tcl(work,core,core['sources']+recipe['sources'],recipe['constraints'])
+    if (work/'build.tcl').read_text(encoding='utf-8')!=expected:
+        raise ValueError('Physical Tcl differs from bounded route recipe')
+    return row
+
+
 def check_simulation(row):
     if row.get('status')!='PASS' or not row.get('source_unchanged') or not row.get('external_unchanged') or row.get('runner_return_code')!=0:
         raise ValueError('Need successful unchanged real-memory simulation')
@@ -78,5 +129,10 @@ def prepare(simulation,output):
     return prepared
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path)
-    args=parser.parse_args();print(prepare(args.simulation,args.output)['status'])
+    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true')
+    args=parser.parse_args()
+    if args.verify:
+        verify_package(args.simulation);print('FROZEN_PACKAGE_PASS')
+    else:
+        if args.output is None:parser.error('output is required for preparation')
+        print(prepare(args.simulation,args.output)['status'])

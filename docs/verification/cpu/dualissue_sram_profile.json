@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "scope": "Passive real-SRAM RTL diagnostic only; no physical or board acceptance",
+  "runs": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261023T144435134145Z",
+      "result_sha256": "e7ea043e20e56324f0a54f94703792f2298c1e99a2b2ffcdf1eda92a577652ce"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261023T145400053925Z",
+      "result_sha256": "4f11b521d95015f417d3a034143857530e4982728829c19f1fe7bf4758bbc165"
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261023T150713992393Z",
+      "result_sha256": "cde460df05da9066d76f592618a8aab1e1b725c3756542b85b0224f2a8910530"
+    }
+  ],
+  "loaded_sram_sha256": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+  "same_loaded_rom_sram": true,
+  "elf_identical": false,
+  "elf_note": "ELF differs; loaded ROM/SRAM images match byte-for-byte. Do not claim same ELF.",
+  "profile": {
+    "cycles": 1253888,
+    "wb": 1448448,
+    "stores": 70839,
+    "issued": 1048566,
+    "paired": 399882,
+    "frontend": 82216,
+    "lsu": 0,
+    "pipe": 0,
+    "div": 0,
+    "csr": 3,
+    "cancel": 0,
+    "unit": 0,
+    "dependency": 123103,
+    "false_a": 0,
+    "false_b": 0,
+    "pair_no_word": 282991,
+    "pair_structure": 96581,
+    "pair_dependency": 269112,
+    "narrow_mul_opportunity": 0,
+    "structure_lsu_pair": 79704,
+    "structure_branch_a": 16876,
+    "structure_other": 1,
+    "pair_raw": 237834,
+    "pair_waw": 0,
+    "pair_older": 31278
+  },
+  "measurement": {
+    "cycles": 1253888,
+    "wb_completed": 1448448,
+    "observed_ipc": 1.1551653736218865,
+    "coremark_per_mhz_short_estimate": 3.9875969783585137,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "observer_matches_nonobserver": true,
+  "profile_trace_repeat_identical": true,
+  "postroute_100mhz": "UNKNOWN",
+  "cpu_only_area": "UNKNOWN",
+  "pds_started": false,
+  "cycles_to_strictly_exceed_four": 3889
+}
