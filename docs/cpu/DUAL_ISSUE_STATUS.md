@@ -30,7 +30,9 @@ hold+0.110/+0.099ns、脉宽+3.655/+4.202ns，native0/verifier2；CPU8775LUT/422
 真实最差转指令类别→LSU载荷→store格式；v29将剩余五个静态类别随原队列保存，完整队列与
 新整核SRAM/Cache-on/有序/IRQ均通过且周期/轨迹不变；IO版setup−0.763ns、原始版−0.895ns，
 两版hold/MPW通过，native0/verifier2。30类别元数据FF及实际LSU选择cone均已核验。
-同源现有compact+IO对照正在PDS；v30合法性/CSR前移的完整四态与队列/有序/IRQ已过，整核回归中。
+同源compact+IO终态setup−1.222ns且hold−0.078/−0.066ns，不采用。v30合法性/CSR前移完整
+四态、队列/有序/IRQ及整核性能/轨迹通过，6legalFF与实际CSR/invalidcone已核，但后布线setup
+−1.238ns仍未过；主瓶颈是SRAM返回→E2旁路→分支比较→PC。本路线当前无PDS运行。
 见[零标志终态](../verification/cpu/dualissue_rf_zero_metadata.json)、
 [类别队列I/O版](../verification/cpu/dualissue_queued_unit_classes.json)与
 [同源原始I/O版](../verification/cpu/dualissue_queued_unit_classes_original.json)。

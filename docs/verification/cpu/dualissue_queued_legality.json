@@ -1,0 +1,338 @@
+{
+  "status": "RTL_PASS_TIMING_FAIL",
+  "scope": "Original opcode-only legality before queue; same four-state valid/CSR/fault behavior without live decoder after queue",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_queued_legality_sources.json",
+  "comparison": {
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T155446542854Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T121406867416Z",
+      "result_sha256": "a8538431815308d496432b4b3f06193b2d36da4c9cff7415d2c36fa58e34f41c",
+      "parent_result_sha256": "aaef949dea015a2dfa10811ac7ec931d9f9d29e259042a1590173ef4fbec6b0a",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T155446543813Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T121406873592Z",
+      "result_sha256": "f5a7f181c42fdfa630dc24a5b770d399aedfdec8c0a08e1a3b2ceb02f9c64ac9",
+      "parent_result_sha256": "787d0e314c8523006605dbc99712e62d1bd5e4e3a660914e1dfa21c1d0dc5ffe",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  },
+  "directed": [
+    {
+      "label": "full151bit+18ALU MULDIV1",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155426916058Z",
+      "status": "PASS",
+      "result_sha256": "f43a6e083b8deac2abfdcfb71f01de76440bc669e636804fb6f5c6d89b9b66de"
+    },
+    {
+      "label": "full151bit+18ALU MULDIV0",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155426923869Z",
+      "status": "PASS",
+      "result_sha256": "68c12eb11c36633e3248622fb0c47eafcbf03ec6effbdcbfecb5d05439ca21f4"
+    },
+    {
+      "label": "full151bit+18ALU EXTRA1",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155426923851Z",
+      "status": "PASS",
+      "result_sha256": "7ff33f04c0f62dd03ec6ee6aa48d429f08ffe508abaea9ea7d6c60790c301e77"
+    },
+    {
+      "label": "actual queued legality-state corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155426945267Z",
+      "status": "FAIL",
+      "result_sha256": "ae16fe1941add80f3f8ef9df340f7e79aad09f7dd43660cfbbc8b4d7ee0de6eb"
+    },
+    {
+      "label": "CSR scalar256 all4state property on parent",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155236611202Z",
+      "status": "PASS",
+      "result_sha256": "4b899f82fd698af21f1b53c6f7762fe9f718e0caf8ab6fb9e4aa220c93c76871"
+    },
+    {
+      "label": "CSR scalar property corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T155236615362Z",
+      "status": "FAIL",
+      "result_sha256": "ae6278d1040e47de2ec8804d63b2ff6d0abbf1ecb0bc5aa01e0c5cd14ff7e1a9"
+    },
+    {
+      "label": "ordered",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1554468783843Z",
+      "status": "PASS",
+      "result_sha256": "e3acb2538c755024dea567650cde31f306cded9effae4ebcee12ae7dc0a7fbab",
+      "parent_result_sha256": "2133d56fea9e78e5691ea41197ec262237a31680d7ca55e0083a985463d7bcf4",
+      "same_program_seed_executions_and_complete_traces": true
+    },
+    {
+      "label": "irq",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1554469100472Z",
+      "status": "PASS",
+      "result_sha256": "99089648834def1ead11b3d7c18cff43147b7305cc2d1b9913ac8840a3705f3a",
+      "parent_result_sha256": "ad50270885d9934e393215aab48adb5cd7021408b541eee77c3673dfa336d5e1",
+      "same_program_seed_executions_and_complete_traces": true
+    }
+  ],
+  "manifest_sha256": "ae1632b48839fd29fbf42c1d22905b777101f31e03a84df249a91421f68e4075",
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-queued-legality-io-physical-v30",
+    "prepared_sha256": "004afa439847cf5d057cca5e3f58fa1fe07adaa5d00080dc948d8093b92f2781",
+    "status": "TIMING_FAIL",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "physical_constraints": [
+      "fpga/pg2l100h/constraints/cpu_io_registers.fdc"
+    ],
+    "timing_closed": false,
+    "launcher_pid": 22416,
+    "launch_console": "build/cpu/dual-queued-legality-route-console.log",
+    "launch_stderr": "build/cpu/dual-queued-legality-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-queued-legality-route-launch-exit.json",
+    "name": "dual-queued-legality-io-physical-v30",
+    "source_unchanged": true,
+    "result_sha256": "7844120ae6a4380a4cebe8af98dc4dc8af23441069f1d306c87e1b07d5b9959a",
+    "native_exit": 0,
+    "native_seconds": 521.059,
+    "runner_return_code": 2,
+    "actual_launcher_exit": 2,
+    "transport_hashes": {
+      "launch_console": "e3bb6f7b18fd35baebb26c29dd437ff2b56160448a606234257fd7eed4d0e1d0",
+      "launch_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "launch_exit": "08e16b8c0fea26430556cd1bdf30798a426f13108d8417f882f048b76e5ba53b"
+    },
+    "verified_output_files": 666,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.238,
+          "total_negative_slack_ns": -406.786,
+          "failing_endpoints": 1298,
+          "endpoints": 23359
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.092,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23359
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4037
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.612,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23359
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.054,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23359
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4037
+        }
+      ],
+      "performance_slack_ns": -1.238,
+      "worst_setup_ns": -1.238,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "actual_error": null,
+    "same_source_sram_measurement": {
+      "cycles": 1240606,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1675326413059424,
+      "coremark_per_mhz_short_estimate": 4.0302884235607435,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "report_sha256": "d3857e8d22c880a29c1a436b79835d48b5f166fe8f6c43605b3ebece74ce6fd8",
+    "cpu_synthesis_resources": {
+      "lut": 8818,
+      "ff": 4252,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "worst_path": {
+      "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+      "end": "u_core/u_cpu/u_issue/pc_x_q[29]/opit_0_inv_L6Q_perm/I0",
+      "slack_ns": -1.238,
+      "logic_levels": 11,
+      "logic_ns": 3.099,
+      "route_ns": 7.632,
+      "actual_launch_net": "u_memory/ram_data [47]"
+    },
+    "worst_cpu_path": {
+      "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][15]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_core/u_cpu/u_exec0/result_q[30]/opit_0_inv_L6Q_perm/I3",
+      "slack_ns": -1.193,
+      "logic_levels": 12,
+      "logic_ns": 2.171,
+      "route_ns": 8.652,
+      "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [15]"
+    },
+    "reported_slow_setup_paths": [
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[29]/opit_0_inv_L6Q_perm/I0",
+        "slack_ns": -1.238,
+        "logic_levels": 11,
+        "logic_ns": 3.099,
+        "route_ns": 7.632,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][15]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_exec0/result_q[30]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -1.193,
+        "logic_levels": 12,
+        "logic_ns": 2.171,
+        "route_ns": 8.652,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [15]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[27]/opit_0_inv_L6Q_perm/I2",
+        "slack_ns": -1.16,
+        "logic_levels": 11,
+        "logic_ns": 3.087,
+        "route_ns": 7.61,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[21]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.114,
+        "logic_levels": 11,
+        "logic_ns": 3.121,
+        "route_ns": 7.644,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[23]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.112,
+        "logic_levels": 11,
+        "logic_ns": 3.087,
+        "route_ns": 7.675,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[17]/opit_0_inv_L6Q_perm/I0",
+        "slack_ns": -1.103,
+        "logic_levels": 10,
+        "logic_ns": 3.013,
+        "route_ns": 7.587,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[19]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.079,
+        "logic_levels": 11,
+        "logic_ns": 3.087,
+        "route_ns": 7.648,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      },
+      {
+        "start": "u_memory/u_sram/memory_10/gopdrm_36k/CLKA[0]",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[6]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.067,
+        "logic_levels": 11,
+        "logic_ns": 3.109,
+        "route_ns": 7.615,
+        "actual_launch_net": "u_memory/ram_data [47]"
+      }
+    ],
+    "reported_slow_setup_path_count": 200
+  },
+  "limits": [
+    "Five-iteration RTL estimates only; not official/board scores. WB observation IPC is not architectural minstret.",
+    "Only EXTRA0 decoder changed from v29, all old18bit observed controls/full history checked with frozen reference; CSR256 scalar proof is separate from actual legality-state corruption.",
+    "Original10ns/IO/hold/multicorner with existing IO packing, no region. Actual native legality paths and all six timing checks required.",
+    "No production/integration/board/serial changes."
+  ],
+  "independent_review": "Source invariants, full terminal input/output/external hashes and exact runtime images/streams/profile plus original10ns frozen package independently reviewed before launch",
+  "mapping_observations": {
+    "audit_file": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\review_v30_queued_legality_mapping.json",
+    "sha256": "0f01f79d6fd8491a6ed4735a562da5ea887644f419c10bc17a74c0f19cc5eec7",
+    "status": "INDEPENDENT_EFFECTIVE_CONE_PASS",
+    "legal_metadataFF": 6,
+    "INIT": 0,
+    "same_original_entry_enable_clock_reset": true,
+    "actual_invalid_CSR_raw_opcode_FF": 0,
+    "scope": "CSR/invalid cone contains legal metadata, CSRbase, faults, count and PC continuity/selection; does not claim all downstream issue cones opcode-free",
+    "removed_late_decoders": true,
+    "native_cpu_synthesis_resources": {
+      "lut": 8818,
+      "ff": 4252,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "ff_delta": "6 legality bits minus2 automatic index copies",
+    "timing_admission": false
+  }
+}

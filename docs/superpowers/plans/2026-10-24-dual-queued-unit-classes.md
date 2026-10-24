@@ -20,4 +20,6 @@ Independent source/terminal/package review passed. Original10ns/noRegion20min PD
 
 Both base variants terminal-verified: native0/verification2. IO Slow/Fast setup -.763/+2.647ns, hold +.113/+.068ns, MPW +3.655/+4.202ns; original setup -.895/+2.012ns, hold +.110/+.103ns, same MPW. Complete source/output/actual-exit/helper/stage hashes rechecked. u_core8896LUT/4248FF/752RAM-LUT(included)/4APM/0DRM in both synth/map. All30 metadata FF retained with matched original queue control; actual A classes/LSU payload cone has no raw opcodeFF. No100MHz acceptance.
 
-- [ ] Complete same-source existing compact-region+IO physical-only diagnostic in dual-queued-unit-classes-compact-physical-v29, with original budgets and separate final records.
+- [x] Complete same-source existing compact-region+IO physical-only diagnostic in dual-queued-unit-classes-compact-physical-v29, with original budgets and separate final records.
+
+Compact+IO also failed: native0/verification2, Slow/Fast setup -1.222/+2.625ns, hold -.078/-.066ns, MPW +3.655/+4.202ns. Full terminal hashes checked. Worst paths start actual ROM/SRAM load data; compact did not fix the memory-return/forwarding path and introduced a hold violation. Not selected.
