@@ -22,7 +22,16 @@ Other A branches issue alone. No speculative memory effects or new stages.
       package,20min PNR/1500s outer; preflight PASS.
 - [x] Independent source/coverage/frozen package review and resolve findings.
 - [x] Launch private PDS independently, without modifying integration jobs.
-- [ ] Rehash terminal evidence; verify fresh stages, six Slow/Fast STA rows,
+- [x] Rehash terminal evidence; verify fresh stages, six Slow/Fast STA rows,
       performance slack and CPU-only area; inspect actual worst path.
 - [ ] Only admit the same above4 candidate after actual100MHz passes;
       otherwise continue from the measured critical path.
+
+## Measured continuation v13
+
+v12 final setup-1.276ns/hold PASS/MPW PASS. Actual path ends at FIFO entry1
+after remaining arithmetic (11levels,1.584ns logic/9.347ns route). New
+mapping/layout, no100MHz admission. Compose exact v9/v11 enable-predecode
+triha_decode.v with v12; no new RTL formula or policy. Recheck integrated
+ordered/IRQ and SRAM/Cache complete streams, review original10ns/no-region
+physical package, route independently, then inspect all final timing rows.

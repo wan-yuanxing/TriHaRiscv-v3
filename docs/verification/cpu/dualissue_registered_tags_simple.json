@@ -1,0 +1,111 @@
+{
+  "status": "PHYSICAL_RUNNING",
+  "scope": "Registered qualified bypass tags on physically better v12 FIFO, same six stages/policy/commit behavior; production unchanged",
+  "manifest": "docs/verification/cpu/dualissue_registered_tags_simple_sources.json",
+  "manifest_sha256": "831597a81f8570d79a41dd4cbebd186834dc47f883da187b06c2ec56f110a3b0",
+  "comparison": {
+    "status": "PASS",
+    "candidate": "v14b registered qualified tags on better v12 FIFO",
+    "scope": "Complete same-cycle RTL comparison to v12; actual100MHz pending",
+    "actual_postroute_100mhz": false,
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T094923717203Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T085520474146Z",
+      "result_sha256": "b28aafaee022196493680f836441a57899d06347ebbdd21909499d02c09d4ee4",
+      "parent_result_sha256": "a50b95a7aa7a7b13d4a56e6e23eb985c2faeb4d89ca90150609c034bdb85552d",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T094923755466Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T090235897134Z",
+      "result_sha256": "42d638aaf74a3c1593c7afe794c4f8daff64bd0c713c41fa56463199f25b1c0e",
+      "parent_result_sha256": "89014519d025aad566e61f8a795e764bdf90e8428c041597e288ccd5382d6827",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    },
+    "directed_and_ordered": [
+      {
+        "label": "registered tags40003",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T094923738311Z",
+        "status": "PASS",
+        "result_sha256": "2900fac6f83cc9ea09d909c186b9027907716bb9d064bd1d5a5ef53e641ebdc5",
+        "outputs_verified": 72
+      },
+      {
+        "label": "zero-pair6166",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T094926070783Z",
+        "status": "PASS",
+        "result_sha256": "77fa221e55cdd03ddeb4ce022b118c876b74ea761a9187cd7ce52864347b731e",
+        "outputs_verified": 72
+      },
+      {
+        "label": "ordered both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T0949240636794Z",
+        "status": "PASS",
+        "result_sha256": "5de1c5d407a88cb280c4c617f1a5b3c0af841049815b06a80275818cdb09f907",
+        "outputs_verified": 38
+      },
+      {
+        "label": "IRQ both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T0949344606937Z",
+        "status": "PASS",
+        "result_sha256": "f0715b1fce8e2ff68dc8812e1ce758ff218e4920ca851bacc7fbedea26f4e430",
+        "outputs_verified": 38
+      }
+    ]
+  },
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-registered-tags-simple-physical-v14b",
+    "status": "RUNNING",
+    "prepared_sha256": "8c514d45ca05b9c3c8bb5558dc2cf557d76b45f0a5cc5fa41a119fb056be42bc",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "extra_physical_constraint": null,
+    "timing_closed": false,
+    "launcher_pid": 24340,
+    "launch_console": "build/cpu/dual-registered-tags-simple-route-console.log",
+    "launch_stderr": "build/cpu/dual-registered-tags-simple-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-registered-tags-simple-route-launch-exit.json"
+  },
+  "independent_review": "Source state invariants, exact v12 rebase, full images/streams/profile and original10ns frozen physical package reviewed before launch; diagnostic only",
+  "limits": [
+    "Randomized tag oracle is not exhaustive proof; no equivalence for arbitrary forced metadata or before reset.",
+    "WB observation IPC is not architectural minstret.",
+    "Five-iteration RTL estimates are not official scores or board evidence.",
+    "Actual native register mapping and Slow/Fast setup/hold/MPW/performance remain required."
+  ],
+  "overall_target_met": false
+}

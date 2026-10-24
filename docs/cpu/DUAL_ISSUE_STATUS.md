@@ -153,6 +153,17 @@ v10原生2W4R寄存器堆保留完整SRAM/Cache-on性能与轨迹，CPU-only由v
 完整分支执行及异常/RAW/WAW/IRQ门控保持。SRAM1240606周期、短测4.030288/MHz，
 Cache-on DDR模型1621119周期、3.084289/MHz；各1448448写回/70839存储完整对照通过，
 仅验证过的初始绝对cycle及对应started存储归一化。6166定向检查、负例、有序异常及IRQ
-自检通过；独立评审通过，原10ns/no-region/20min PDS已启动；最终时序待验收。
+自检通过；独立评审通过，原10ns/no-region/20min PDS已结束：Slow setup-1.276ns、hold+0.115ns、MPW+3.655ns；Fast为+1.788/+0.088/+4.202ns。原生0/验收2，787输出核验，100MHz尚未通过。
 这些仍是五次迭代RTL估计，非官方分数/板测，观察IPC不是架构minstret。
 生产RTL和集成工程未变，整体验收仍未通过。见[本轮证据](../verification/cpu/dualissue_zero_pair.json)。
+
+
+v12新关键路径为WB操作码bit7→RA旁路→literal-zero判断→FIFO remove_b→剩余数算术→entry1载荷捕获，11级、logic1.584ns/route9.347ns。下一v13仅组合已验证的FIFO使能预译码，保持v12分支策略和原生RF；重新核对性能与完整轨迹后再跑原约束。
+
+v13新整核/IRQ和完整SRAM/Cache对照均通过，周期/所有轨迹/profile与v12完全一致；独立评审后已启动原10ns/no-region/20min PDS。并行v14仅注册同级E1/E2/WB合格目的标签以去除晚到mask，原表达式时钟可达oracle40003检查及负例通过，整核/IRQ及完整SRAM/Cache性能/轨迹均与v13相同，独立物理准入评审待完成。
+
+
+v13最终原10ns时序退步：Slow setup-2.659/hold+0.112/MPW+3.655ns，Fast+1.459/+0.100/+4.202ns；CPU-only8772LUT/4078FF。native0/verifier2，553输出核验。实际路径为fetch0指令→旁路→通用分支比较→issue.pc_x_q。拒绝把该FIFO组合当时序策略，v14已准备但暂不执行PDS；v14b将相同寄存标签改动放回v12更好的FIFO父版，重新测量绑定。
+
+
+v14b相对v12仅寄存同级合格标签，恢复原FIFO；新完整SRAM/Cache镜像、WB/store、周期/profile与v12完全相同。独立源码与冻结物理包评审通过，原10ns/no-region/20min PDS已启动。尚未通过100MHz，不提升生产RTL。见[寄存标签证据](../verification/cpu/dualissue_registered_tags_simple.json)。
