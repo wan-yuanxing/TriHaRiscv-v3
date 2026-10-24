@@ -3,6 +3,7 @@
 param(
     [Parameter(Mandatory)][string] $PreparedDirectory,
     [switch] $Execute,
+    [switch] $AllowConcurrentPds,
     [string] $PdsShell='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe'
 )
 Set-StrictMode -Version Latest
@@ -18,14 +19,17 @@ if($prepared.status -ne 'PREPARED_NOT_EXECUTED' -or $prepared.pds_started){throw
 & python (Join-Path $PSScriptRoot 'prepare_dual_physical.py') $work --verify
 if($LASTEXITCODE -ne 0){throw 'Frozen package verification failed.'}
 if(-not $Execute){Write-Host 'DUAL_ROUTE_PREFLIGHT_PASS PDS_NOT_STARTED';exit 0}
-# This guard is additional to checking the integration task's activity. It is
-# not a scheduler or permission to compete between successive integration runs.
+# Concurrent independent PDS runs require explicit opt-in. Never stop other runs.
 $busy=@(Get-CimInstance Win32_Process|Where-Object {$_.Name -match '^pds_shell\.exe$|^pnr\.exe$'})
-if($busy.Count){throw 'PDS is occupied; preserve the active integration run.'}
+if($busy.Count -and -not $AllowConcurrentPds){throw 'PDS is occupied; use explicit AllowConcurrentPds for an isolated concurrent run.'}
 if(Test-Path -LiteralPath (Join-Path $work 'result.json')){throw 'Do not overwrite a prior route attempt.'}
 foreach($directory in @('compile','synthesize','device_map','place_route','report_timing')){
     if(Test-Path -LiteralPath (Join-Path $work $directory)){throw 'Prior tool output exists; prepare a fresh package.'}
 }
+# TEMP/TMP changes are local to this runner process and its children.
+$privateTemp=Join-Path $work 'native-temp'
+[IO.Directory]::CreateDirectory($privateTemp)|Out-Null
+$env:TEMP=$privateTemp;$env:TMP=$privateTemp
 $toolHashes=[ordered]@{}
 $verificationSnapshot=Join-Path $work 'verification-src'
 [IO.Directory]::CreateDirectory($verificationSnapshot)|Out-Null
@@ -35,6 +39,7 @@ foreach($name in @('run_dual_route.ps1','prepare_dual_physical.py','firmware_com
 }
 $commands=[Collections.Generic.List[object]]::new()
 $row=[ordered]@{status='RUNNING';flow_status='RUNNING';timing_closed=$false;source_unchanged=$false
+    concurrent_pds_allowed=[bool]$AllowConcurrentPds;other_pds_at_launch=@($busy|Select-Object ProcessId,Name,CommandLine);private_temp=$privateTemp
     prepared_sha256=$preparedHash;verification_tool_hashes=$toolHashes;native_commands=$commands;output_hashes=[ordered]@{}
     timing=$null;error=$null;runner_return_code=$null;board_validated=$false
     cpu_only_resources=$null;cpu_area_status='UNKNOWN: system resources are not CPU-only'

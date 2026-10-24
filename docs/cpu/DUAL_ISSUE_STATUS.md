@@ -64,3 +64,17 @@ CPU-only资源与实际100MHz仍UNKNOWN，生产RTL和集成工程未改。
 `run_dual_route.ps1`已完成预检及冻结绑定/报告解析单测，实际PDS路径尚未执行；
 当前100MHz、CPU-only面积均UNKNOWN，整体验收未通过。详见
 [SRAM诊断](../verification/cpu/dualissue_sram_profile.md)。
+
+## 首轮独立PDS终态（2026-10-24核验）
+
+用户允许与集成侧并行启动；已加入显式AllowConcurrentPds选项与私有TEMP/TMP。
+实际启动时未发现其他PDS，因此本轮验证了独立运行，未实证双实例同时负载。
+PDS完整compile/synthesize/map/place/route/report成功，实际耗时469.074秒，
+原生PDS退出0；验收器因时序FAIL退出2，冻结输入和输出哈希均已核验。
+Slow setup -3.015ns、hold 0.000ns、MPW +3.655ns；Fast setup +1.827ns、
+hold +0.103ns、MPW +4.202ns。100MHz尚未通过。
+最差路径从取指FIFO头PC，经payload选择、寄存器索引/操作数选择与旁路、
+第二执行通道分支判断，到分支PC寄存器；25级逻辑，逻辑3.720ns/布线8.984ns。
+下一步优先切短该控制与操作数选择链，不能仅靠扩大队列提高仿真分数。
+整系统10328LUT/5005FF/16.5DRM/4APM不属于CPU-only统计；核面积待单独提取。
+原始报告和哈希见[物理终态证据](../verification/cpu/dualissue_sram_route.json)。
