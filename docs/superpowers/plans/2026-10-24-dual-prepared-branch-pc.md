@@ -12,6 +12,8 @@ Evidence: v20 original best -0.805ns launches RF written metadata through B sign
 - [x] Reconstruct v20 into isolated v21; keep2complete result nets and change only their consumers. Preserve22-source patch/manifest.
 - [x] Complete137-bit oracle/negatives, packet/pending/coherent B-MUL, ordered/IRQ and fresh SRAM/Cache-on full stream/profile comparison.
 - [x] Independent source/evidence/frozen-package review, then new original10ns private PDS.
-- [ ] Actual mapping must retain arithmetic results before late decision; final six timing checks plus same-source >4/MHz remain mandatory.
+- [x] Actual mapping must retain arithmetic results before late decision; final six timing checks plus same-source >4/MHz remain mandatory.
 
 Independent source/terminal/package review passed. Original10ns/noRegion/noIO20min PDS launched privately; actual topology and final six STA pending. Same short4.030288 SRAM and3.084289 Cache-on estimates/complete streams/profile preserved.
+
+Terminal original10ns: -1.168ns setup; native0/verifier2, 427 outputs rehashed. CPU-only {'lut': 8772, 'ff': 4055, 'distributed_ram': 752, 'apm': 4, 'drm36k_equivalent': 0.0}. All scores/streams unchanged,100MHz failed; no adoption or production promotion. See bound JSON for all six exact rows.

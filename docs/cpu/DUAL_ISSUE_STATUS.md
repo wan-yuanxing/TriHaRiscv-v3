@@ -208,3 +208,9 @@ v20两套已终态：原方案setup-0.805ns为当前最好，Slow/Fast hold+0.11
 
 
 v21完整target/PC+4结果保留与v22原生RF live-bank编码为两个独立v20父版诊断；前者全137bit执行输出/PC负控、后者8200存储与bank归属/写入负控、完整操作数单/双模式均通过。两者有序/IRQ和新SRAM/Cache-on运行镜像、完整轨迹、周期/profile均与v20相同。独立源码和冻结包评审后分别启动原10ns/no-region/noIO20min PDS；实际映射与最终六项时序待核，不合并未测改动。
+
+
+v21终态setup-1.168ns、Slow/Fast hold-0.075/-0.064ns，MPW通过，CPU8772LUT/4055FF；提前完整地址结果的映射确实形成最终mux，但整体验收退步。v22终态setup-1.114ns、hold+0.059/+0.030ns，MPW通过，CPU8687LUT/4052FF；最差转为PC选择→分支→issue PC，route8.682ns占82%。均native0/verifier2，未超过v20-0.805ns，不采用。下一v23复用v20准确RTL/固件和已有compact区域/IO属性，时钟/IO/hold预算保持；区域增量对照同源IO版-1.198ns，最终实际时序仍须全部通过。
+
+
+v23 exact-v20 compact物理包58c1910a...经独立核验后启动。只新增已有CPU区域和输出FF打包属性，原10ns/IO/hold/multicorner预算保持字节相同。该区域增量对照v20 IO版-1.198ns，原无属性最好-0.805ns仍保留；待实际报告，不能将区域利用率当频率验收。

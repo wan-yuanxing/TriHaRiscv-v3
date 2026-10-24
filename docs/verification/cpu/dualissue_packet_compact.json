@@ -1,0 +1,89 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "scope": "Exact measured v20 RTL/image, existing CPU clock-region/IO implementation attributes only; original timing budgets",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_packet_dependency_sources.json",
+  "manifest_sha256": "b1338cd199052c0fad25e14f901dc98a6fa20bdd951b494a8e2320e67c5f2eb0",
+  "comparison": {
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T121406867416Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T115343049725Z",
+      "result_sha256": "aaef949dea015a2dfa10811ac7ec931d9f9d29e259042a1590173ef4fbec6b0a",
+      "parent_result_sha256": "c1e93111982bb6e6d0c21bcbd2885ead099ca0e1813e6ad84b08d4dfc120221e",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T121406873592Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T115343048139Z",
+      "result_sha256": "787d0e314c8523006605dbc99712e62d1bd5e4e3a660914e1dfa21c1d0dc5ffe",
+      "parent_result_sha256": "17c3f4937891402fc28d7f1708807eb0f2c02f6c96e770020fb485348b048420",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  },
+  "reused_rtl_evidence": {
+    "path": "docs/verification/cpu/dualissue_packet_dependency.json",
+    "sha256": "4ee39a16e1eca4f2cd02818bf6ab5c02809fde69435fa8f7e97b15524bcbd18f"
+  },
+  "independent_review": "29common frozen sources/FDC and firmware equal v20; exact existing compact attribute only; verify_package and independent prelaunch review PASS",
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-packet-compact-physical-v23",
+    "prepared_sha256": "58c1910ad5f30c0d9ed4821124a1b99d8cf372b7fe2f871cfd03db1a46dc07c1",
+    "status": "RUNNING",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "physical_constraints": [
+      "fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc"
+    ],
+    "timing_closed": false,
+    "launcher_pid": 17340,
+    "launch_console": "build/cpu/dual-packet-compact-route-console.log",
+    "launch_stderr": "build/cpu/dual-packet-compact-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-packet-compact-route-launch-exit.json"
+  },
+  "comparison_boundaries": {
+    "region_increment_parent": "dual-packet-dependency-io-physical-v20",
+    "region_increment_parent_setup_ns": -1.198,
+    "best_no_attribute_parent_setup_ns": -0.805,
+    "note": "Compact includes outputFF packing, so compare its regional increment against the same-source IO variant. New map/place each run."
+  },
+  "limits": [
+    "Five-iteration RTL estimates only; not official or board scores. WB observation IPC is not architectural minstret.",
+    "Exact v20 measured source and firmware reused. Existing CPU PAP_REGION and outputFF packing only; no change to10ns/IO/hold/multicorner budgets.",
+    "Actual fresh compile/map/place/route and final six Slow/Fast checks plus performance consistency required.",
+    "No production RTL, main integration, board or serial operations. Physical attributes do not by themselves prove a frequency benefit."
+  ]
+}

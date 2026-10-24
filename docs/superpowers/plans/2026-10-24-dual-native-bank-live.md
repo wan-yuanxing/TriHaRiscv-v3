@@ -16,6 +16,8 @@ Native-stage caveat from independent review: v20 N1537_6[0] already packs the wr
 - [x] Reconstruct isolated v22 and replace only metadata encoding/read qualification; preserve22-source patch/manifest.
 - [x] Ownership/storage/unknown/reset/collision, complete operand and coherent B-MUL, ordered/IRQ, fresh SRAM/Cache-on full streams/profile.
 - [x] Independent state-invariant and frozen package review before PDS.
-- [ ] Actual bank gating topology, CPU-only area and final six STA checks; >4/MHz same-source mandatory.
+- [x] Actual bank gating topology, CPU-only area and final six STA checks; >4/MHz same-source mandatory.
 
 Independent source/terminal/package review passed. Original10ns/noRegion/noIO20min PDS launched privately; actual topology and final six STA pending. Same short4.030288 SRAM and3.084289 Cache-on estimates/complete streams/profile preserved.
+
+Terminal original10ns: -1.114ns setup; native0/verifier2, 495 outputs rehashed. CPU-only {'lut': 8687, 'ff': 4052, 'distributed_ram': 752, 'apm': 4, 'drm36k_equivalent': 0.0}. All scores/streams unchanged,100MHz failed; no adoption or production promotion. See bound JSON for all six exact rows.
