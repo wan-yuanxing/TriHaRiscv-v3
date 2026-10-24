@@ -12,6 +12,7 @@ Production RTL, board configuration and SoC integration sources are unchanged.
 | Independent packet hazards v3b, 10min | Unknown | 10154 | 4916 | PNR timeout during hold repair |
 | Same v3b RTL, fresh 20min flow | -2.212ns | 10154 | 4916 | Improved, timing FAIL |
 | Relative position select v4 | -2.124ns | 10100 | 4916 | Best completed, timing FAIL |
+| Early LSU payload v5b | -1.692ns | 9965 | 4916 | Best completed, timing FAIL |
 
 The v3b completed report gives Slow hold +0.133ns/MPW +3.655ns and Fast
 setup +1.733ns/hold +0.103ns/MPW +4.202ns. Performance slack equals the
@@ -118,5 +119,14 @@ Directed14checks, unauthorized-store corruption negative, ordered and IRQ
 self-checks pass. Actual SRAM1253888cycles and Cache-on1624274cycles remain
 unchanged, with loaded images and complete measured WB/store streams matching
 their parents. `build/cpu/lsu-prepare-v5b-comparison.json` binds these comparisons.
-Independent source/evidence review passed; original-FDC no-region20min PDS is
-running under build/cpu/dual-lsu-prepare-physical-v5b. Final STA is pending.
+Independent source/evidence review passed. Original-FDC no-region20min PDS
+completed under build/cpu/dual-lsu-prepare-physical-v5b: Slow setup/hold/MPW
+-1.692/+0.154/+3.655ns, Fast +2.087/+0.100/+4.202ns. Native exit0/verifier2;
+681 frozen outputs verified. CPU-only synthesis9965LUT/4916FF/624RAM-LUT
+(included)/4APM/0DRM. New mapping and placement;100MHz remains unaccepted.
+
+The worst real path is now fetch1 instruction[15] through operand bypass and
+exec0 branch comparison to FIFO compaction/capture:12levels,2.022ns logic and
+9.177ns routing. The next experiment replaces dynamic destination compaction
+with fixed entry muxes while retaining the four-word contract, then measures
+six words separately. No pop-dependent ready path is introduced.

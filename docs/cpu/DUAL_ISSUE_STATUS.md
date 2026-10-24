@@ -104,4 +104,19 @@ LUT包含624个分布式RAM LUT，CPU无DRM；新网表/布局，100MHz仍未通
 起点物理cell虽名pc_wb_q，实际launch net是ctrl_wb_q[7]，不能按PC数据路径分析。
 v5b提前准备LSU payload并保留实际issue许可，已修复invalid-B/class-X门控，
 CSR三类Cache维护保留A。定向/负例/ordered/IRQ、真实SRAM及Cache-on完整轨迹均通过，
-分数与父版相同。无区域约束20分钟原100MHz物理包已准备，独立评审通过，PDS已启动，尚无本轮最终STA。
+分数与父版相同。无区域约束20分钟原100MHz PDS已完成：Slow setup-1.692ns、
+hold+0.154ns、MPW+3.655ns，Fast setup+2.087ns、hold+0.100ns、MPW+4.202ns。
+原生0/验收2，681项输出哈希核验；CPU-only9965LUT/4916FF/4APM，LUT含624RAM-LUT。
+当前最好setup仍负，100MHz尚未通过。下一实测路径为fetch1指令→旁路/分支→FIFO更新，
+继续固定表项写入实现诊断，并将六word容量作为独立性能实验。
+
+## 固定表项取指队列与六word短测（2026-10-24）
+
+同容量固定表项实现保留完整队列状态/有效与idle历史，SRAM/Cache-on周期不变。
+独立六word候选真实32KiB SRAM为1222884周期、短测**4.088695 CoreMark/MHz**，
+关闭observer复现相同周期；较四word少31004周期。Cache-on DDR模型为1604946周期、
+3.115370/MHz。完整WB/store除已验证的初始cycle与started存储外一致，WB观察IPC1.184452，
+不等于架构minstret，不是板级或官方分数。
+完整队列状态与独立顺序oracle、容量RED/GREEN/负例、整核有序/IRQ及独立评审通过。
+原100MHz/IO/hold约束、无区域约束的新PDS已启动，CPU-only面积与最终时序待验收，
+**整体目标仍未通过**。详见[取指队列证据](../verification/cpu/dualissue_fetch_queue.md)。

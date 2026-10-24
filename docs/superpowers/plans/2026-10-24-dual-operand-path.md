@@ -30,5 +30,5 @@
 - [x] v5 early LSU payload preparation, then v5b invalid-B unknown-class RED/GREEN fix.
 - [x] v5b actual SRAM and Cache-on whole-stream comparisons; cycles unchanged.
 - [x] v5b independent admission review; fresh no-region20min PDS started.
-- [ ] Inspect v5b final six STA rows and next real path; retain original100MHz/IO/hold.
+- [x] Inspect v5b final six STA rows and next real path: setup-1.692ns, FIFO update; original100MHz/IO/hold.
 - [ ] Achieve both actual100MHz and >4/MHz; currently neither combined gate is met.

@@ -1,6 +1,6 @@
 /* Independent word-stream oracle for paired packet FIFO compaction. */
 `timescale 1ns/1ps
-module tb_fifo_cross_pair #(parameter BROKEN=0);
+module tb_fifo_cross_pair #(parameter BROKEN=0,parameter DEPTH=2);
     reg clk=0,rst=1,flush=0,push=0,pop0=0,pop1=0;
     reg [31:0] pc=32'h80001000;
     reg [63:0] data=64'h2222222211111111;
@@ -17,7 +17,7 @@ module tb_fifo_cross_pair #(parameter BROKEN=0);
     reg [31:0] rng=32'h12345679;
     reg expected_second;
     always #5 clk=~clk;
-    triha_fetch_fifo #(.OPC_INFO_W(10)) u_dut (
+    triha_fetch_fifo #(.OPC_INFO_W(10),.DEPTH(DEPTH)) u_dut (
         .clk_i(clk),.rst_i(rst),.flush_i(flush),.push_i(push),.pc_in_i(pc),
         .pred_in_i(pred),.data_in_i(data),.info0_in_i(info0),.info1_in_i(info1),.accept_o(accept),
         .valid0_o(v0),.pc0_out_o(p0),.data0_out_o(d0),.info0_out_o(i0),.pop0_i(pop0),
@@ -49,7 +49,7 @@ module tb_fifo_cross_pair #(parameter BROKEN=0);
     task check;
         begin
             #1;checks=checks+1;
-            if(accept !== (count<=2)) $fatal(1,"FIFO_CROSS_FAIL accept count=%0d accept=%b",count,accept);
+            if(accept !== (count<=2*DEPTH-2)) $fatal(1,"FIFO_CROSS_FAIL accept count=%0d accept=%b",count,accept);
             expected_second=(count>1) && qp[1]==qp[0]+4;
             if(v0 !== (count!=0) || v1 !== expected_second)
                 $fatal(1,"FIFO_CROSS_FAIL valid count=%0d actual=%b%b expected_second=%b",count,v0,v1,expected_second);
@@ -57,7 +57,7 @@ module tb_fifo_cross_pair #(parameter BROKEN=0);
                 $fatal(1,"FIFO_CROSS_FAIL head got=%h expected=%h",p0,qp[0]);
             if(v1 && {p1,d1,i1,h1} !== {qp[1],qd[1],qi[1],qh[1]})
                 $fatal(1,"FIFO_CROSS_FAIL second got=%h expected=%h",p1,qp[1]);
-            if(count>4) $fatal(1,"FIFO_CROSS_FAIL overflow");
+            if(count>2*DEPTH) $fatal(1,"FIFO_CROSS_FAIL overflow");
         end
     endtask
     initial begin

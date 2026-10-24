@@ -6,6 +6,7 @@ module tb_dual_sram_profile;
     tb_dual_sram u_tb ();
     `define I u_tb.u_dut.u_core.u_cpu.u_issue
     `define C u_tb.u_dut.u_core.u_cpu.u_csr.u_csrfile
+    `define F u_tb.u_dut.u_core.u_cpu.u_frontend.u_decode.genblk1.u_fifo
     integer reads = 0, wb_file, store_file;
     integer wb_events = 0, stores = 0;
     integer total = 0, issued = 0, paired = 0, frontend = 0, lsu = 0;
@@ -15,6 +16,8 @@ module tb_dual_sram_profile;
     integer a_waw_only=0,b_waw_only=0;
     integer structure_lsu_pair=0, structure_branch_a=0, structure_other=0;
     integer pair_raw=0, pair_waw=0, pair_older=0;
+    integer queue0=0,queue1=0,queue2=0,queue3=0,queue4=0,queue5=0,queue6=0,queue7=0,queue8=0;
+    integer backpressure=0,backpressure_pop=0,frontend_empty=0,frontend_pc=0;
     reg [31:0] start_cycle = 0, elapsed = 0;
     reg printed = 0;
     reg [2:0] a_roles, b_roles;
@@ -85,6 +88,22 @@ module tb_dual_sram_profile;
     task sample_issue;
         begin
             total = total + 1;
+            case (`F.count_q)
+                0: queue0=queue0+1;
+                1: queue1=queue1+1;
+                2: queue2=queue2+1;
+                3: queue3=queue3+1;
+                4: queue4=queue4+1;
+                5: queue5=queue5+1;
+                6: queue6=queue6+1;
+                7: queue7=queue7+1;
+                8: queue8=queue8+1;
+                default: $fatal(1,"SRAM_PROFILE_FAIL queue_occupancy");
+            endcase
+            if (!`F.accept_o && u_tb.u_dut.u_core.u_cpu.u_frontend.fetch_valid_w) begin
+                backpressure=backpressure+1;
+                if (`F.pop_a_w || `F.pop_b_w) backpressure_pop=backpressure_pop+1;
+            end
             a_roles = roles(`I.opcode_a_r, `I.issue_a_invalid_w, `I.opcode_a_fault_r);
             b_roles = roles(`I.opcode_b_r, `I.issue_b_invalid_w, `I.opcode_b_fault_r);
             a_real_busy = busy(`I.opcode_a_r, `I.scoreboard_r, a_roles);
@@ -116,7 +135,11 @@ module tb_dual_sram_profile;
             else if (`I.stall_w) pipe_wait = pipe_wait + 1;
             else if (`I.div_pending_q) div_wait = div_wait + 1;
             else if (`I.csr_pending_q) csr_wait = csr_wait + 1;
-            else if (!`I.opcode_a_valid_r) frontend = frontend + 1;
+            else if (!`I.opcode_a_valid_r) begin
+                frontend = frontend + 1;
+                if (`F.count_q==0) frontend_empty=frontend_empty+1;
+                else frontend_pc=frontend_pc+1;
+            end
             else if ((`I.pipe0_load_e1_w || `I.pipe0_store_e1_w || `I.pipe1_load_e1_w || `I.pipe1_store_e1_w) &&
                      (`I.issue_a_mul_w || `I.issue_a_div_w || `I.issue_a_csr_w)) unit_wait = unit_wait + 1;
             else begin
@@ -148,13 +171,17 @@ module tb_dual_sram_profile;
             if (total != elapsed || total != issued + cancel + lsu + pipe_wait + div_wait + csr_wait + frontend + unit_wait + dependency ||
                 pair_structure != structure_lsu_pair+structure_branch_a+structure_other ||
                 pair_dependency != pair_raw+pair_waw+pair_older ||
+                total != queue0+queue1+queue2+queue3+queue4+queue5+queue6+queue7+queue8 ||
+                frontend != frontend_empty+frontend_pc ||
                 issued != paired + pair_no_word + pair_structure + pair_dependency || wb_events != u_tb.wb_window)
                 $fatal(1, "SRAM_PROFILE_FAIL partition_or_window total=%0d elapsed=%0d wb=%0d parent_wb=%0d", total, elapsed, wb_events, u_tb.wb_window);
-            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d a_waw_only=%0d b_waw_only=%0d",
+            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d a_waw_only=%0d b_waw_only=%0d queue0=%0d queue1=%0d queue2=%0d queue3=%0d queue4=%0d queue5=%0d queue6=%0d queue7=%0d queue8=%0d backpressure=%0d backpressure_pop=%0d frontend_empty=%0d frontend_pc=%0d",
                 total, wb_events, stores, issued, paired, frontend, lsu, pipe_wait, div_wait, csr_wait, cancel, unit_wait,
-                dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older, a_waw_only, b_waw_only);
+                dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older, a_waw_only, b_waw_only,
+                queue0,queue1,queue2,queue3,queue4,queue5,queue6,queue7,queue8,backpressure,backpressure_pop,frontend_empty,frontend_pc);
         end
     end
     `undef I
     `undef C
+    `undef F
 endmodule
