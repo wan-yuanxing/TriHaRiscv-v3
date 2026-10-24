@@ -22,7 +22,7 @@ DDR Cache-off已按用户指示排除。
 v21地址保留、v22RF编码及v23区域试验均已失败，未超过v20；v24预译码也未通过；v25正在核验
 精确opcode/funct分组的组合译码表示。全部原100MHz/IO/hold/multicorner预算不变。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
-本轮证据见[区域诊断](../verification/cpu/dualissue_packet_compact.json)。
+当前运行证据见[分组译码](../verification/cpu/dualissue_exec_class_tree.json)。
 
 更广的ISA、异常/IRQ及Cache维护准入仍需按部署阶段完成；当前隔离功能回归和物理诊断
 不能替代板级SoC验收。初始模拟基线及历史命令见
@@ -229,3 +229,6 @@ v24仅在已有队列info中加入exec类别位；整151bit/12005步对照在MUL
 
 
 v24原10ns终态setup-0.909ns、Slow/Fast hold+0.111/+0.100ns、MPW+3.655/+4.202ns；native0/verifier2，CPU8773LUT/4058FF。6个exec元数据FF实际保留且供给issue/LSU，最差转入队SRAM指令25→预译码5LUT→metadataFF。下一v25按原mask分组opcode/funct，保留I-shift bit25忽略与所有四态结果；17相关位全131072二态组合和X/Z共290336项对照通过。
+
+
+v25按精确opcode/funct掩码分组的组合分类器已完成290336项二态全集/选定X/Z对照、负控、整151bit三配置、packet48768、B-MUL6166及有序/IRQ。新SRAM/Cache运行镜像、完整轨迹、周期/profile均同v20，仍4.030288/3.084289短估计。独立源码与物理包795f966f...终核后，原10ns/no-region/noIO20min PDS已启动；实际拓扑、资源和最终六项时序待验收。

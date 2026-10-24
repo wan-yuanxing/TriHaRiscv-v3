@@ -3379,7 +3379,23 @@
     "cache_enable": true,
     "scope": "Cache-on modeled DDR RTL, not physical or board acceptance"
   },
-  "active_physical": null,
+  "active_physical": [
+    {
+      "name": "dual-exec-class-tree-physical-v25",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-exec-class-tree-physical-v25",
+      "prepared_sha256": "795f966f52578b04f5e48d666ebec4ed0e304d5459d52709028ba5489ddca192",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "physical_constraints": [],
+      "timing_closed": false,
+      "launcher_pid": 36020,
+      "launch_console": "build/cpu/dual-exec-class-tree-route-console.log",
+      "launch_stderr": "build/cpu/dual-exec-class-tree-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-exec-class-tree-route-launch-exit.json"
+    }
+  ],
   "best_completed_worst_setup_ns": -0.805,
   "overall_target_met": false,
   "selected_candidate": {
