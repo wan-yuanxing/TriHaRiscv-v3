@@ -1,0 +1,226 @@
+{
+  "status": "TIMING_FAIL",
+  "scope": "BGE reuses signed LT complement in local licensed execution derivative; original six stages/dataflow otherwise unchanged; production/vendor unchanged",
+  "manifest": "docs/verification/cpu/dualissue_shared_ge_sources.json",
+  "manifest_sha256": "75d40817e4c42ff3e3becc90b75f02c12037f539f6e8a88050e21381403887bc",
+  "comparison": {
+    "status": "PASS",
+    "candidate": "v16 shared signed LT/complement BGE execution derivative",
+    "scope": "Complete same-cycle RTL comparison to v14b; actual100MHz pending",
+    "actual_postroute_100mhz": false,
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T102914382277Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T094923717203Z",
+      "result_sha256": "16fc36e8d73cc80bb15485593989f8aba99c07a4142f262966cb6969966f9696",
+      "parent_result_sha256": "b28aafaee022196493680f836441a57899d06347ebbdd21909499d02c09d4ee4",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T102914392560Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T094923755466Z",
+      "result_sha256": "b0f348d292cf04fe07120b2af4c20c554069fd1a6961056fa065a6f47d0b6dae",
+      "parent_result_sha256": "42d638aaf74a3c1593c7afe794c4f8daff64bd0c713c41fa56463199f25b1c0e",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    },
+    "directed_and_ordered": [
+      {
+        "label": "parent all-output40139",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T103306742540Z",
+        "status": "PASS",
+        "result_sha256": "21dfc5189bada240f9254cdad056912fd45aa897128f128732f9fcf732760846",
+        "outputs_verified": 72
+      },
+      {
+        "label": "derivative all-output40139",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T103308689225Z",
+        "status": "PASS",
+        "result_sha256": "b5b29b62e9cceb9d6d8651f5727d2219c264466862a7b54b0df851945c8c8b8f",
+        "outputs_verified": 72
+      },
+      {
+        "label": "known taken BGE corruption",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T103310633329Z",
+        "status": "FAIL",
+        "result_sha256": "8690b02f8bc29bdc7ec41ee5c22102bdc1b44a4bd2933c9153b59d8910f557fa",
+        "outputs_verified": 72
+      },
+      {
+        "label": "zero-pair6166",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T102914390479Z",
+        "status": "PASS",
+        "result_sha256": "930d1520f0545deeade14a2a63833556e0fc81ef2158a3a5d6192f0b70753dc5",
+        "outputs_verified": 72
+      },
+      {
+        "label": "ordered both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1029146719598Z",
+        "status": "PASS",
+        "result_sha256": "e2170c166dde5582e8fc838a180a183d685028450e43f18a398f5c1027ab3e03",
+        "outputs_verified": 38
+      },
+      {
+        "label": "IRQ both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1029232723203Z",
+        "status": "PASS",
+        "result_sha256": "a66b0abf3c52ca69a68c28d11b498fcaa8f493eb7d1a0b495fa3c113a699d92e",
+        "outputs_verified": 38
+      }
+    ]
+  },
+  "physical": {
+    "name": "dual-shared-ge-physical-v16",
+    "status": "TIMING_FAIL",
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-shared-ge-physical-v16",
+    "source_unchanged": true,
+    "result_sha256": "82720e5f2298d8aff66e0acdf011fb3ec2cdfe3d99a2ae2e2d0fabd265587aa7",
+    "prepared_sha256": "17a0c5ff6dc81b4f333ebed6c94c7eae276c1f0b0c29eee4d46160a22ebd7460",
+    "native_exit": 0,
+    "native_seconds": 361.998,
+    "runner_return_code": 2,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.346,
+          "total_negative_slack_ns": -618.418,
+          "failing_endpoints": 1435,
+          "endpoints": 23709
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.107,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23709
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3877
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 1.96,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23709
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.049,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23709
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3877
+        }
+      ],
+      "performance_slack_ns": -1.346,
+      "worst_setup_ns": -1.346,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "verified_output_files": 453,
+    "other_pds_at_launch": [],
+    "report_sha256": "a53973c298d95236cdc571e3c6eca58f24d06bb85f2a95935c0d37bf214dd8df",
+    "cpu_synthesis_resources": {
+      "lut": 8668,
+      "ff": 4108,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "system_mapped_resources": {
+      "lut": 8811.0,
+      "registers": 4197.0,
+      "drm": 16.5,
+      "apm": 4.0,
+      "io": 13.0
+    },
+    "worst_path": {
+      "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[0][21]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pc_q[3][15]/opit_0_inv_AQ_perm/CE",
+      "logic_levels": 12,
+      "logic_ns": 1.915,
+      "route_ns": 8.875
+    }
+  },
+  "independent_review": "Exact derivative/copy boundaries and two execution locations, four-state proof, 12-output137-bit oracle/known-taken negative, full RTL streams and physical binding reviewed before launch",
+  "execution_oracle": {
+    "checks": 40139,
+    "BGE_taken_observations": 1446,
+    "BGE_not_taken_observations": 1884,
+    "explicit_boundary_cross_product": "8x8 BGE fixed rst0/valid1/hold0, before and after edge",
+    "explicit_four_state_cases": 4,
+    "negative": "n39 known a==b taken BGE request1 corrupted0 detected"
+  },
+  "reference": {
+    "file": "build/cpu/reference-onehot/de92ce54e8a3f24f2adc6b5d04de35e4edb873e5/picorv32.v",
+    "revision": "de92ce54e8a3f24f2adc6b5d04de35e4edb873e5",
+    "sha256": "0836050971b3c6cdd28ac3b1e5719a67fb645161912bef1e472e63995ceb0622",
+    "pattern_lines": "1257-1260 BGE uses !alu_lts; language/arithmetic idiom only, no decoder copied"
+  },
+  "limits": [
+    "Build-only local execution derivative grouped in CPU translation unit; split explicit module/filelist before any production promotion.",
+    "No extra execution unit; original vendor file is unmodified and unused in this hardware hierarchy.",
+    "Short RTL estimates are not official or board scores; WB observation IPC is not architectural minstret.",
+    "Actual native comparison sharing/mapping and final all-corner STA remain required."
+  ],
+  "overall_target_met": false,
+  "cpu_only_resources": {
+    "lut": 8668,
+    "ff": 4108,
+    "distributed_ram": 752,
+    "apm": 4,
+    "drm36k_equivalent": 0.0
+  },
+  "actual_worst_signal_path": "fetch0_instr[21] -> RB forwarding -> zero branch compare -> FIFO remaining/count/capture CE",
+  "comparison_note": "Same original10ns constraints, new mapping/layout; setup improves0.283ns versus v14b but remains negative"
+}

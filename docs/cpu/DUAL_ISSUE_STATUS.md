@@ -173,3 +173,15 @@ v14b原10ns已终态：Slow setup-1.629/hold+0.112/MPW+3.655ns，Fast+1.884/+0.0
 
 
 v15仅将已有onehot旁路输出改为单比特reverse-case，RF默认/x0及所选XZ数据传递保持。parent与新单/双24448项检查及负例、zero6166、有序/IRQ均通过；独立评审确认onehot前提。新SRAM/Cache完整镜像、WB/store、周期及profile与v14b精确相同，独立物理绑定评审通过，原10ns/no-region20min PDS已启动；属性效果与时序仍待实际报告。
+
+
+v15 PDS确实采纳4处parallel_case，但最终setup-2.213ns；Slow hold+0.110/Fast+0.098、MPW通过，native0/verifier2，685输出核验。CPU-only8679LUT/4108FF。该表示法未改善物理结果，实际零分支→FIFO最差-2.213ns，通用分支→pc_x另有-1.881ns；保留失败记录，不选为改进。下一诊断回到v14b，针对BGE额外greater+equality合并改用!less。
+
+
+v16保留vendor，局部执行derivative把BGE改为!signed_LT并删除unused_GT；全12输出/137bit40139检查及known-taken负控、zero/ordered/IRQ与完整SRAM/Cache对照通过。两类短测仍4.030288/3.084289，独立评审后原10ns/no-region20min PDS已启动。该build候选把局部module分组在CPU翻译单元，未提升生产RTL；准入后才独立拆文件维护。
+
+
+v16原100MHz终态setup-1.346ns（比v14b-1.629改善0.283ns，新网表/布局），Slow/Fast hold+0.107/+0.049ns，MPW+3.655/+4.202ns均通过；native0/verifier2、453输出核验。CPU-only8668LUT/4108FF。最差已转为wide RB→zero比较→FIFO CE；v17仅前移scalar零标志，dual/single各84288对照、负控及active zero6166通过，完整性能/轨迹和独立评审运行中。
+
+
+v17 scalar零标志前移已完成真正独立31×64×4payload×2zero-source×BEQ/BNE×2word交叉，parent/dual/single各227136 PASS，负控有效。整核、IRQ及运行镜像/完整WB/store/周期/profile完全同v16；独立准入评审后启动原10ns/no-region20min PDS，最终时序待验收。ELF元数据可不同，物理包绑定v17本次自己的ELF。

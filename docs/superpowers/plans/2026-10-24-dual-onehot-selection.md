@@ -27,5 +27,8 @@ revision/source hash independently; do not change names or production RTL.
 - [x] Preserve full-base patch/22source manifest; reconstruct; fresh actual
       SRAM/Cache-on CoreMark and full images/WB/store/profile comparisons.
 - [x] Independent source and original10ns/no-region physical binding review.
-- [ ] Actual PDS synthesis must accept intended parallel selection; final
+- [x] Actual PDS synthesis must accept intended parallel selection; final
       six STA checks and same-candidate >4/MHz remain mandatory.
+
+Actual PDS logs4 effective directives; native0/verifier2, setup-2.213ns,
+hold/MPW PASS. New mapping/layout, no100MHz acceptance; reject this variant.
