@@ -31,10 +31,16 @@ The unit test controls fetch classes and source data; full CPU traces separately
 cover real instruction execution. It is not an exhaustive ISA proof.
 
 Independent review verified sources, manifests, exact complete traces and
-physical binding. Fresh original10ns/IO/hold/multicorner PDS is running at
+physical binding. Fresh original10ns/IO/hold/multicorner PDS completed at
 `build/cpu/dual-mul-prepare-physical-v8`, no region, PNR20min/outer1500s.
 CPU-only synthesis is10173LUT/5008FF/624RAM-LUT(included)/4APM/0DRM.
-Final routed setup/hold/MPW and frozen-output checks remain mandatory.
+Final Slow setup/hold/MPW are -1.348/+0.113/+3.655ns; Fast
++1.904/+0.102/+4.202ns. Native0/verifier2,485outputs verified. Setup improves
+0.666ns over v7 under the same10ns constraint, with new mapping/placement.
+It is still timing FAIL. The new worst path is fetch0 opcode[15] through RA
+bypass/branch comparison, FIFO remaining_r[0] subtraction and entry3 CE:
+12levels,2.224ns logic/8.562ns routing. Next remove arithmetic occupancy
+dependence from wide-payload enables while retaining the same cycle behavior.
 
 [Bound evidence](dualissue_mul_prepare.json). Production RTL, integration and
 board/serial state remain unchanged.

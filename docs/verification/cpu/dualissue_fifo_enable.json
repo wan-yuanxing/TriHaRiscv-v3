@@ -1,0 +1,119 @@
+{
+  "scope": "Isolated constant occupancy decode for FIFO wide-payload enables, reset-reachable full-state behavior unchanged",
+  "status": "PHYSICAL_PENDING",
+  "manifest": "docs/verification/cpu/dualissue_fifo_enable_sources.json",
+  "manifest_sha256": "c9cbc1f054e1563759e8afaa22ef82367668830f5f20adbd301729265617aa9f",
+  "comparison": {
+    "candidate": "v9 fixed-entry FIFO enable predecode",
+    "status": "PASS",
+    "scope": "Full RTL comparison to v8; native timing pending",
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T070559422407Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T062604027887Z",
+      "result_sha256": "4b437c0623c328fd6a3d47bc36f5faa0e4d066fbfc322a7b977039ab98ca7f95",
+      "measurement": {
+        "cycles": 1222884,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1844524909966931,
+        "coremark_per_mhz_short_estimate": 4.0886952482819305,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "9c7c3cb862f68a00ac786cb8b90b2993237eb00015fe2b24bebe607bc07d3f4b",
+        "sram.store.log": "746ebec1b5db028726f828506d83564e5d220b396eb1bd40831ce68eb37bcfbf"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T070559443173Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T062604026572Z",
+      "result_sha256": "b652871dfb6f307fcc984ec9f68750c942812365afd485f3c3484b2778a1bb08",
+      "measurement": {
+        "cycles": 1604946,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.1153696136817066,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "3ef7ed7d4d83b288afe3e2717fc6ee785bd997ceb8fc8deeeebb8f04903a487f",
+        "cpu-cache.store.log": "7fe3f2d214c470adb675a00b0521e8c317d065bd11733e3661f1aa4ad6acdf9b"
+      }
+    }
+  },
+  "directed_and_ordered": [
+    {
+      "label": "DEPTH3 full-state4006",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T070413812326Z",
+      "status": "PASS",
+      "result_sha256": "f4b01a14e875b4f60494e59c28e630a447292482bae2f1330f132e8304f233bc"
+    },
+    {
+      "label": "DEPTH3 independent-word4005",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T070415661475Z",
+      "status": "PASS",
+      "result_sha256": "66bd21f2efdd905d571399ca1718fb059ffe1fa946c48a864ce9f0d89cceb3e6"
+    },
+    {
+      "label": "corrupt-head negative",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T070559423575Z",
+      "status": "FAIL",
+      "result_sha256": "1fcf6fb985ac6f2789190d5d22187f361ca0bbceced49c45783673dbf92545c9"
+    },
+    {
+      "label": "DEPTH2 full-state4006",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T071159964980Z",
+      "status": "PASS",
+      "result_sha256": "7be8d46c98d5ba0f5634422ed465de9fd0e68ddfcb1b7f50ed904cd50d19f099"
+    },
+    {
+      "label": "DEPTH2 independent-word4005",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T071201855541Z",
+      "status": "PASS",
+      "result_sha256": "ae4e681b874f3cd81c5893ffc02a787127d2953a95b42eba661ef69c5f09a980"
+    },
+    {
+      "label": "ordered both",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T0706016688538Z",
+      "status": "PASS",
+      "result_sha256": "8895987dcd1711a0cc5b2f56eb88d06a8388f70d3d13dc69c5ce088a0fdd2a88"
+    },
+    {
+      "label": "IRQ both",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T0706102152361Z",
+      "status": "PASS",
+      "result_sha256": "2d0f7d1d28eef21faacf496bfeacb2f8fd35d87befbf6a62e41119c97dcb2991"
+    }
+  ],
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-fifo-enable-physical-v9",
+    "status": "RUNNING",
+    "prepared_sha256": "a1799240f63eacbaa3bd0eb5562030bc0c1152ba7bbf545a9d3f76871a2a929e",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "extra_physical_constraint": null,
+    "launcher_pid": 30000,
+    "timing_closed": false
+  },
+  "independent_review": "Formulas, implemented if/else priority, source/manifests, complete state/word oracles, full RTL streams and original10ns package independently verified before launch",
+  "limits": [
+    "Equivalence is for reset-reachable count states and preserves normalized unknown pop/pred/push/flush semantics.",
+    "Small count register still uses remaining arithmetic; new scalar enables remove that dependency only from wide payload.",
+    "RTL score above4 is not timing or board acceptance; no frequency claim from intermediate placement.",
+    "WB observation IPC is not architectural minstret; five iterations not official score."
+  ],
+  "overall_target_met": false
+}

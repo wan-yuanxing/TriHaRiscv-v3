@@ -69,4 +69,15 @@ Continue these measured paths before the independently researched native RF.
       profile and WB/store remain identical to v7. Ordered/IRQ PASS.
 - [x] Independent source/evidence/physical binding review; fresh original
       10ns/no-region20min PDS started for v8.
-- [ ] Inspect v8 final actual six STA checks, output hashes and next path.
+- [x] Inspect v8 final actual six STA checks,485output hashes: setup-1.348ns,
+      hold/MPW pass; next actual path is late pop->remaining arithmetic->FIFO CE.
+
+## Constant occupancy enable predecode v9
+
+- [x] Expand append/survivor enables into constant C comparisons selected by
+      normalized removal0/1/2; retain original procedural priority and history.
+- [x] DEPTH2/3 full-state4006/word4005, corrupt-head negative, ordered/IRQ and
+      complete SRAM/Cache-on comparisons; cycles and observations unchanged.
+- [x] Independent formula/source/hash/physical package review; original10ns
+      no-region20min PDS started for v9.
+- [ ] Inspect v9 final six STA rows, all hashes, CPU-only resources and path.

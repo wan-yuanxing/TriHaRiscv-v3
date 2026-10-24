@@ -132,4 +132,10 @@ ordered/IRQ及完整SRAM/Cache-on轨迹均通过；分数不变。独立评审�
 
 v7实际hold违例已消除，setup仍未过。新的最差路径是分支结果到共享MUL载荷选择，
 v8复用LSU已验证的提前数据选择/实际发射许可分离；真实时钟标签/窄乘积消费/四类符号、
-取消/hold、整核与完整轨迹均通过，分数不变。原100MHz物理包已准备待最终绑定评审。
+取消/hold、整核与完整轨迹均通过，分数不变。原100MHz物理核验已完成：setup-1.348ns、Slow/Fast hold+0.113/+0.102ns、MPW通过；
+原生0/验收2、485项输出核验，setup仍未过。新的实际路径落在FIFO剩余数计算到宽payload CE。
+
+v9将宽payload的append/survivor使能改为常数占用译码，原剩余数算术仅留小计数器。
+DEPTH2/3完整state/独立顺序模型、负例、整核有序/IRQ和完整SRAM/Cache-on对照通过，
+周期不变。独立评审后已启动新原100MHz/no-region PDS，最终时序仍待验收。
+见[当前FIFO使能实验](../verification/cpu/dualissue_fifo_enable.md)。
