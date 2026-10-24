@@ -4,12 +4,13 @@
 分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
 [物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
 
-当前最好的完整后布线候选为 v20：原10ns、无区域/IO属性时 setup **−0.805ns**，
-Slow/Fast hold +0.118/+0.102ns、脉宽 +3.655/+4.202ns；**100MHz尚未通过**。
-CPU-only **8710LUT/4052FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
+当前最好的完整后布线候选为 v26 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
+setup **−0.798ns**，Slow/Fast hold +0.066/+0.030ns、脉宽 +3.655/+4.202ns；
+**100MHz尚未通过**。比v20的−0.805ns仅差7ps，不能据此声称实质频率收益。
+CPU-only **8860LUT/4112FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
 从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
 
-同一v20 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
+同一v26 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
 SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
 开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
 对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
@@ -19,10 +20,12 @@ DDR Cache-off已按用户指示排除。
 两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
 时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
 
-v21地址保留、v22RF编码及v23区域试验均已失败，未超过v20；v24预译码也未通过；v25正在核验
-精确opcode/funct分组的组合译码表示。全部原100MHz/IO/hold/multicorner预算不变。
+v21至v26均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
+54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
+全部原100MHz/IO/hold/multicorner预算不变，当前无本路线PDS运行。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
-当前运行证据见[分组译码](../verification/cpu/dualissue_exec_class_tree.json)。
+最新终态见[ALU控制](../verification/cpu/dualissue_queued_alu_control.json)和
+[同源I/O变体](../verification/cpu/dualissue_queued_alu_control_io.json)。
 
 更广的ISA、异常/IRQ及Cache维护准入仍需按部署阶段完成；当前隔离功能回归和物理诊断
 不能替代板级SoC验收。初始模拟基线及历史命令见
@@ -232,3 +235,8 @@ v24原10ns终态setup-0.909ns、Slow/Fast hold+0.111/+0.100ns、MPW+3.655/+4.202
 
 
 v25按精确opcode/funct掩码分组的组合分类器已完成290336项二态全集/选定X/Z对照、负控、整151bit三配置、packet48768、B-MUL6166及有序/IRQ。新SRAM/Cache运行镜像、完整轨迹、周期/profile均同v20，仍4.030288/3.084289短估计。独立源码与物理包795f966f...终核后，原10ns/no-region/noIO20min PDS已启动；实际拓扑、资源和最终六项时序待验收。
+
+
+v25已终态：Slow setup-0.914ns（首条CPU-0.892ns），Slow/Fast hold+0.111/+0.099ns，MPW+3.655/+4.202ns；CPU8816LUT/4058FF，native0/verifier2。精确组合分组实际6→4节点，但晚ALU控制仍在关键路径。
+
+v26将9bit ALU控制随原队列保存，54元数据FF与两路真实exec静态选择已核实；完整二态/选定四态、队列、对齐、负控与整核轨迹/性能同v20。原版setup-1.187ns，I/O版-0.798ns；两corner hold/MPW通过，均native0/verifier2、全部冻结输入/输出和传输哈希核验。CPU-only8860LUT/4112FF/752RAM-LUT(included)/4APM/0DRM。最差转为fetch1指令索引[21/20]扇出62/61→RF读取/旁路/分支；下一按工具文档局部复制扇出，保留所有reset/flush/idle历史。100MHz仍未通过，不提升生产RTL。

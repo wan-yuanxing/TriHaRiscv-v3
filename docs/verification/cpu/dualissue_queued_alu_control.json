@@ -1,0 +1,364 @@
+{
+  "status": "RTL_PASS_TIMING_FAIL",
+  "scope": "Nine ALU control bits retained with original queue/instruction selector and consumed in actual execution input mux; no cycle/stage change",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_queued_alu_control_sources.json",
+  "comparison": {
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T141936026232Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T121406867416Z",
+      "result_sha256": "18ad04eb2674692d8dd9548a41f924d41ce4da6abc0948ed8a188b30be2d227c",
+      "parent_result_sha256": "aaef949dea015a2dfa10811ac7ec931d9f9d29e259042a1590173ef4fbec6b0a",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T141936002036Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T121406873592Z",
+      "result_sha256": "ebb4f0e90857e1268e9d21412b38245d8dc44bee5abb8788013377a5e8ce3a2f",
+      "parent_result_sha256": "787d0e314c8523006605dbc99712e62d1bd5e4e3a660914e1dfa21c1d0dc5ffe",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  },
+  "directed": [
+    {
+      "label": "parent137bit execution",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141246323429Z",
+      "status": "PASS",
+      "result_sha256": "d00176b5a47f39f07d91f74ccf2e0c2f2023ec56d5148db1613e9bdb6110f82e"
+    },
+    {
+      "label": "parent PC corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141246343474Z",
+      "status": "FAIL",
+      "result_sha256": "6507f38b8d70f43ae16a35a7de1e58c6f15881c4a8e9e4ab9b59295abe481581"
+    },
+    {
+      "label": "actual predecoded137bit",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141554970768Z",
+      "status": "PASS",
+      "result_sha256": "f9abdd06f5eccbfe26068fdada7fe4d0c1540c5a8faac98c0fd7bd04e87225b9"
+    },
+    {
+      "label": "actual ALUcontrol corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141554959917Z",
+      "status": "FAIL",
+      "result_sha256": "382317488ef79c10e557d88f04fdd05ec176df486c76d3df7bd7b58419b6af7c"
+    },
+    {
+      "label": "pure68bit290336 original-decode oracle",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141936019912Z",
+      "status": "PASS",
+      "result_sha256": "9e8110fd1cb5f447857eb43ca3073c51f463a067597bddac80379601f5fcd913"
+    },
+    {
+      "label": "pure control corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141935991290Z",
+      "status": "FAIL",
+      "result_sha256": "6c713c9a35f0e5f2e080a852952fe3f36406b2bda7e1616d53b608e6a317dfe8"
+    },
+    {
+      "label": "whole queue151bit+18metadata M1",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141935974496Z",
+      "status": "PASS",
+      "result_sha256": "d73d72f437d12eac1b43698f4fb40f04e7006ef5a0b422ae303d32e3bf6cd550"
+    },
+    {
+      "label": "whole queue151bit+18metadata M0",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T142101029500Z",
+      "status": "PASS",
+      "result_sha256": "bc575aa6603f3b9ac9d2948738fa643582348de02115040b45e55d3308484067"
+    },
+    {
+      "label": "whole queue151bit+18metadata EXTRA1",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141935980276Z",
+      "status": "PASS",
+      "result_sha256": "cf910ef41a6198297061c4afbc1eccd13d6c0bf1a2f35597f021a84fa8114f94"
+    },
+    {
+      "label": "queue metadata corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T141935993972Z",
+      "status": "FAIL",
+      "result_sha256": "9c34719f9ade307660f98a697ca04d878babcfbe9069e9f36883b0418495b70d"
+    },
+    {
+      "label": "issue A/B control routing38912",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T142352277425Z",
+      "status": "PASS",
+      "result_sha256": "80643cabde3232c2b4e6eaf2307427e30db7637c7982eaf696c87fc63928e152"
+    },
+    {
+      "label": "issue control routing corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T142352310397Z",
+      "status": "FAIL",
+      "result_sha256": "7929e37cecd2daa0845ddd9ecd7766bbd4d0ad25d1854bcf412c17f714d47610"
+    },
+    {
+      "label": "B-MUL operand/capture6166 only",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T142101074583Z",
+      "status": "PASS",
+      "result_sha256": "33f7c1b00331d461e5007659ee842ccca146b14275f202105870b61f4e5605a4"
+    },
+    {
+      "label": "packet48768",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T142101039267Z",
+      "status": "PASS",
+      "result_sha256": "dc818f98f8c4dba27f8a4ccd086c04cd6de65693bd57cd2d8d5243687b967020"
+    },
+    {
+      "label": "ordered",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1421014043073Z",
+      "status": "PASS",
+      "result_sha256": "0ed7ea7bab3182a5133e905f213bf1d34b5653a3ef79ee748da6f9bc9cabe8f0",
+      "parent_result_sha256": "2133d56fea9e78e5691ea41197ec262237a31680d7ca55e0083a985463d7bcf4",
+      "same_program_seed_executions_and_complete_traces": true
+    },
+    {
+      "label": "irq",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1421013924669Z",
+      "status": "PASS",
+      "result_sha256": "94dd45420bcfb900e13136d15c75e60da08ba3acc4c0620c7af9df3f8eb8a67d",
+      "parent_result_sha256": "ad50270885d9934e393215aab48adb5cd7021408b541eee77c3673dfa336d5e1",
+      "same_program_seed_executions_and_complete_traces": true
+    }
+  ],
+  "manifest_sha256": "38daa070a9091c200c3f4fd89f718339454db34a93a0023ea169611fe815de9a",
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-queued-alu-control-physical-v26",
+    "prepared_sha256": "2ec883a230a81ca95e4e916647ebab2a0b1211f3a68858163511f368112de1ee",
+    "status": "TIMING_FAIL",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "physical_constraints": [],
+    "timing_closed": false,
+    "launcher_pid": 31664,
+    "launch_console": "build/cpu/dual-queued-alu-control-route-console.log",
+    "launch_stderr": "build/cpu/dual-queued-alu-control-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-queued-alu-control-route-launch-exit.json",
+    "name": "dual-queued-alu-control-physical-v26",
+    "source_unchanged": true,
+    "result_sha256": "df0ba7adfd3a8e9eeb672edadfcc182dc720f8b87ccac15eafcec67feffa0675",
+    "native_exit": 0,
+    "native_seconds": 280.441,
+    "runner_return_code": 2,
+    "actual_launcher_exit": 2,
+    "transport_hashes": {
+      "launch_console": "96e2dd4582ea6b872fa5b3af2af3013928a8521eb89bc1625e6d11022649ac08",
+      "launch_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "launch_exit": "795929dd74b21d5b59af231e70aa39566bfbe1429f4b7f468ac6e9a2dcf40c93"
+    },
+    "verified_output_files": 389,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.187,
+          "total_negative_slack_ns": -310.619,
+          "failing_endpoints": 1056,
+          "endpoints": 23682
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.114,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23682
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3909
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.019,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23682
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.102,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 23682
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3909
+        }
+      ],
+      "performance_slack_ns": -1.187,
+      "worst_setup_ns": -1.187,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "actual_error": null,
+    "same_source_sram_measurement": {
+      "cycles": 1240606,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1675326413059424,
+      "coremark_per_mhz_short_estimate": 4.0302884235607435,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "report_sha256": "4c72450d102903aec8d9ec2353b5e5bec3f505896edeca6ec96b9e47bcd056fd",
+    "cpu_synthesis_resources": {
+      "lut": 8860,
+      "ff": 4112,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "worst_path": {
+      "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+      "end": "u_core/u_cpu/u_issue/N5933_100[28]/gateop_perm/I4",
+      "slack_ns": -1.187,
+      "logic_levels": 9,
+      "logic_ns": 1.919,
+      "route_ns": 8.799,
+      "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+    },
+    "worst_cpu_path": {
+      "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+      "end": "u_core/u_cpu/u_issue/N5933_100[28]/gateop_perm/I4",
+      "slack_ns": -1.187,
+      "logic_levels": 9,
+      "logic_ns": 1.919,
+      "route_ns": 8.799,
+      "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+    },
+    "reported_slow_setup_paths": [
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[28]/gateop_perm/I4",
+        "slack_ns": -1.187,
+        "logic_levels": 9,
+        "logic_ns": 1.919,
+        "route_ns": 8.799,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[31]/gateop_perm/I2",
+        "slack_ns": -0.997,
+        "logic_levels": 9,
+        "logic_ns": 1.919,
+        "route_ns": 8.529,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[30]/gateop_perm/I4",
+        "slack_ns": -0.943,
+        "logic_levels": 8,
+        "logic_ns": 1.699,
+        "route_ns": 8.774,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[10]/gateop_perm/I3",
+        "slack_ns": -0.927,
+        "logic_levels": 8,
+        "logic_ns": 1.699,
+        "route_ns": 8.737,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/pc_x_q[2]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[3]/gateop_perm/I4",
+        "slack_ns": -0.913,
+        "logic_levels": 13,
+        "logic_ns": 2.547,
+        "route_ns": 7.89,
+        "actual_launch_net": "u_core/u_cpu/u_issue/pc_x_q [2]"
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/pc_x_q[2]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[24]/gateop_perm/I3",
+        "slack_ns": -0.896,
+        "logic_levels": 13,
+        "logic_ns": 2.547,
+        "route_ns": 7.864,
+        "actual_launch_net": "u_core/u_cpu/u_issue/pc_x_q [2]"
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/pc_x_q[2]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[31]/gateop_perm/I4",
+        "slack_ns": -0.89,
+        "logic_levels": 13,
+        "logic_ns": 2.547,
+        "route_ns": 7.875,
+        "actual_launch_net": "u_core/u_cpu/u_issue/pc_x_q [2]"
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1][21]/opit_0_inv_AQ_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/N5933_100[19]/gateop_perm/I3",
+        "slack_ns": -0.884,
+        "logic_levels": 8,
+        "logic_ns": 1.699,
+        "route_ns": 8.641,
+        "actual_launch_net": "u_core/u_cpu/fetch1_instr_w [21]"
+      }
+    ],
+    "reported_slow_setup_path_count": 200
+  },
+  "limits": [
+    "Five-iteration RTL estimates only; not official/board scores. WB observation IPC is not architectural minstret.",
+    "Fresh full native compile/synthesize/map/place/route and actual six Slow/Fast STA checks required. Original10ns/IO/hold/multicorner, no region.",
+    "No production RTL or integration/board/serial changes. Independent candidates based v20; no unmeasured combination.",
+    "Older forced-opcode B-MUL test covers pairing/operand/capture, not ALU-control alignment or consumer arithmetic under unmatched metadata. Separate issue/queue/execution oracles and natural ordered/CoreMark paths cover that new contract."
+  ],
+  "independent_review": "Source invariants, full terminal input/output/external hashes and exact runtime images/streams/profile plus original10ns frozen package independently reviewed before launch"
+}
