@@ -57,6 +57,7 @@ def main():
     parser.add_argument("--test", choices=["memory", "runtime", "coremark"], required=True)
     parser.add_argument("--fault", choices=["none", "read", "crc", "timeout"], default="none")
     parser.add_argument('--cpu-snapshot',type=Path,required=True)
+    parser.add_argument('--candidate-manifest',type=Path,default=Path('docs/verification/cpu/dualissue_pairing_sources.json'))
     parser.add_argument('--profile',action='store_true',help='Passive cycle partition and ordered trace observer')
     args = parser.parse_args()
     if args.test=='memory': parser.error('Use original runner for memory-only tests')
@@ -92,7 +93,11 @@ def main():
 
     try:
         generate(check=True)
-        manifest=json.loads((ROOT/'docs/verification/cpu/dualissue_pairing_sources.json').read_text(encoding='utf-8'))
+        manifest_name=args.candidate_manifest.as_posix()
+        if args.candidate_manifest.is_absolute() or '..' in args.candidate_manifest.parts:
+            raise ValueError('Use a repository-relative candidate manifest')
+        result['candidate_manifest']=manifest_name
+        manifest=json.loads((ROOT/manifest_name).read_text(encoding='utf-8'))
         for name,record in manifest['sources'].items():
             if candidate_sha(args.cpu_snapshot/Path(name).name)!=record['candidate_sha256']:
                 raise ValueError('Candidate drift: '+name)
@@ -104,7 +109,7 @@ def main():
         if args.profile:
             rtl += [tb]
             tb = 'tb/cpu/tb_dual_sram_profile.v'
-        inputs = rtl + [tb, "config/soc_map.json", "rtl/soc/include/soc_map.vh", "scripts/cpu/run_dual_sram.py", "scripts/soc/gen_config.py",
+        inputs = rtl + [manifest_name,tb, "config/soc_map.json", "rtl/soc/include/soc_map.vh", "scripts/cpu/run_dual_sram.py", "scripts/soc/gen_config.py",
                         "scripts/cpu/run_modelsim.do", "rtl/cpu/ADAPTATIONS.json", "rtl/cpu/vendor/UPSTREAM.json",
                         "fpga/pg2l100h/project/cpu_core.json", "config/cpu_primitives.json"] + core["headers"]
         if args.test != "memory":

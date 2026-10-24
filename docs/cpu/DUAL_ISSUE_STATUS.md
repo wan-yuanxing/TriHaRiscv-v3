@@ -78,3 +78,30 @@ hold +0.103ns、MPW +4.202ns。100MHz尚未通过。
 下一步优先切短该控制与操作数选择链，不能仅靠扩大队列提高仿真分数。
 整系统10328LUT/5005FF/16.5DRM/4APM不属于CPU-only统计；核面积待单独提取。
 原始报告和哈希见[物理终态证据](../verification/cpu/dualissue_sram_route.json)。
+
+## 操作数与依赖路径后布线实验（2026-10-24）
+
+已完成三组RTL诊断：B raw v1最差-4.045ns，双槽并行读取v2为-2.654ns，
+四态兼容的同包依赖分解v3b完整后布线为-2.212ns（比父版-3.015改善0.803ns）。
+v3b两corner hold/MPW均通过，100MHz仍未通过。其10分钟前测在hold修复时
+触发工具超时（native exit1，无最终STA），20分钟新跑工具exit0/验收exit2。
+CPU-only综合10154LUT/4916FF/624分布式RAM LUT/4APM，排除ROM/SRAM/MMIO。
+真实SRAM与Cache-on DDR短测分别3.987597/3.078298 CoreMark/MHz，周期和完整轨迹
+均与各自parent相同；本批未提高分数。同RTL紧凑区域约束实验已结束，
+输入只新增工程既有compact FDC，原100MHz/IO/hold不变，PNR20分钟/外层25分钟。
+详见[实验报告](../verification/cpu/dualissue_operand_timing.md)。整体验收尚未通过。
+
+紧凑区域实验已因PNR20分钟超时结束：main detailed最后97次/4458未布通，
+native exit1，无最终STA，放弃该区域约束。随后v4依据FIFO有效second必须连续
+的不变量，将payload raw选择缩为相对PC[2]，完整PC比较继续决定执行valid。
+契约断言/跨包位置/未命中/负例/整核与完整SRAM轨迹通过，周期不变。
+无区域约束的v4 PDS已完成，目录build/cpu/dual-position-select-physical-v4。
+Slow setup/hold/MPW为-2.124/+0.128/+3.655ns，Fast为+1.753/+0.102/+4.202ns；
+原生PDS0/验收2，515项输出哈希已核验。CPU-only综合10100LUT/4916FF/4APM，
+LUT包含624个分布式RAM LUT，CPU无DRM；新网表/布局，100MHz仍未通过。
+
+实际最差路径是WB控制旁路→A分支比较→晚到的B LSU payload选择→store格式→LSU寄存器；
+起点物理cell虽名pc_wb_q，实际launch net是ctrl_wb_q[7]，不能按PC数据路径分析。
+v5b提前准备LSU payload并保留实际issue许可，已修复invalid-B/class-X门控，
+CSR三类Cache维护保留A。定向/负例/ordered/IRQ、真实SRAM及Cache-on完整轨迹均通过，
+分数与父版相同。无区域约束20分钟原100MHz物理包已准备，独立评审通过，PDS已启动，尚无本轮最终STA。

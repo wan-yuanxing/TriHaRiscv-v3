@@ -69,6 +69,23 @@ class PhysicalGateTests(unittest.TestCase):
             (work/'prepared.json').write_text(json.dumps(row))
             with patch.object(m,'ROOT',root):
                 m.verify_package(work)
+                row['pnr_minutes']=20
+                (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc',20))
+                row['files']['build.tcl']=m.sha(work/'build.tcl')
+                (work/'prepared.json').write_text(json.dumps(row))
+                with self.assertRaisesRegex(ValueError,'budget'):m.verify_package(work)
+                row['outer_seconds']=1500
+                (work/'prepared.json').write_text(json.dumps(row))
+                m.verify_package(work)
+                row['pnr_minutes']=True;row['outer_seconds']=360
+                (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc',True))
+                row['files']['build.tcl']=m.sha(work/'build.tcl')
+                (work/'prepared.json').write_text(json.dumps(row))
+                with self.assertRaisesRegex(ValueError,'budget'):m.verify_package(work)
+                del row['pnr_minutes'];del row['outer_seconds']
+                (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc'))
+                row['files']['build.tcl']=m.sha(work/'build.tcl')
+                (work/'prepared.json').write_text(json.dumps(row))
                 (work/'sram.hex').write_text('different program')
                 row['files']['sram.hex']=m.sha(work/'sram.hex')
                 (work/'prepared.json').write_text(json.dumps(row))
@@ -81,6 +98,18 @@ class PhysicalGateTests(unittest.TestCase):
                 row['simulation_result_sha256']=m.sha(sim/'result.json')
                 (work/'prepared.json').write_text(json.dumps(row))
                 with self.assertRaisesRegex(ValueError,'actual dual'):m.verify_package(work)
+
+    def test_extended_budget_preserves_timing_options(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        original=m.tcl(Path('D:/test'),core,['rtl/a.v'],'clock.fdc')
+        extended=m.tcl(Path('D:/test'),core,['rtl/a.v'],'clock.fdc',20)
+        self.assertEqual(extended,original.replace('-action_timeout 10 ','-action_timeout 20 '))
+
+    def test_compact_adds_only_existing_region_constraint(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        normal=m.tcl(Path('D:/test'),core,['rtl/a.v'],'clock.fdc',20)
+        compact=m.tcl(Path('D:/test'),core,['rtl/a.v'],'clock.fdc',20,['compact.fdc'])
+        self.assertEqual(compact,normal.replace('compile -top_module','add_constraint {D:/test/src/compact.fdc}\ncompile -top_module'))
 
     def test_tcl_keeps_multicorner_hold_and_no_programming(self):
         core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')

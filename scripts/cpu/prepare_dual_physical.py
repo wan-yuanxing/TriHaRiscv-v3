@@ -49,14 +49,22 @@ def verify_package(work):
     core=json.loads((simulation/'src/fpga/pg2l100h/project/cpu_core.json').read_text(encoding='utf-8'))
     recipe=json.loads((ROOT/'fpga/pg2l100h/project/cpu_minimal_soc.json').read_text(encoding='utf-8'))
     names=set(core['sources']+core['headers']+recipe['sources']+recipe['headers'])
-    if set(row['input_hashes'])!=names|{recipe['constraints']}:
+    physical=row.get('physical_constraints',[])
+    allowed='fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'
+    if physical not in ([],[allowed]):raise ValueError('Unsupported physical constraint set')
+    for name in physical:
+        if row['input_hashes'].get(name)!=sha(ROOT/name):raise ValueError('Physical region constraint drift')
+    if set(row['input_hashes'])!=names|{recipe['constraints']}|set(physical):
         raise ValueError('Physical source set differs from measured boundary')
     for name in names:
         if row['input_hashes'][name]!=evidence['input_hashes'][name]:
             raise ValueError('Physical input differs from measured source: '+name)
     if row['input_hashes'][recipe['constraints']]!=sha(ROOT/recipe['constraints']):
         raise ValueError('Physical constraints differ from original system constraints')
-    expected=tcl(work,core,core['sources']+recipe['sources'],recipe['constraints'])
+    minutes=row.get('pnr_minutes',10)
+    if ('pnr_minutes' in row)!=('outer_seconds' in row) or type(minutes) is not int or not 1<=minutes<=60 or row.get('outer_seconds',900)!=minutes*60+300:
+        raise ValueError('Invalid bounded PDS execution budget')
+    expected=tcl(work,core,core['sources']+recipe['sources'],recipe['constraints'],minutes,physical)
     if (work/'build.tcl').read_text(encoding='utf-8')!=expected:
         raise ValueError('Physical Tcl differs from bounded route recipe')
     return row
@@ -69,19 +77,21 @@ def check_simulation(row):
         raise ValueError('Need real dual-issue CoreMark evidence')
 
 
-def tcl(work,core,sources,fdc):
+def tcl(work,core,sources,fdc,pnr_minutes=10,physical_constraints=()):
     def path(p):return '{'+(work/'src'/p).as_posix()+'}'
     lines=[f"set_arch -family {core['family']} -device {core['device']} -speedgrade {core['speedgrade']} -package {core['package']}"]
     lines += ['add_design '+path(p) for p in sources]
     lines += ['add_constraint '+path(fdc)]
+    lines += ['add_constraint '+path(name) for name in physical_constraints]
     lines += ['compile -top_module triha_minimal_soc -include_path {'+path('rtl/cpu/vendor/src/core')+' '+path('rtl/soc/include')+'}',
         'synthesize -ads -write_verilog TRUE','dev_map -detail',
-        'pnr -action_timeout 10 -optimize_multi_corner_timing -fix_hold_violation -gplace_seed 1 -dump_router_congestion_plot TRUE',
+        f'pnr -action_timeout {pnr_minutes} -optimize_multi_corner_timing -fix_hold_violation -gplace_seed 1 -dump_router_congestion_plot TRUE',
         'report_timing -max_path 100']
     return '\n'.join(lines)+'\n'
 
 
-def prepare(simulation,output):
+def prepare(simulation,output,pnr_minutes=10,compact=False):
+    if type(pnr_minutes) is not int or not 1<=pnr_minutes<=60:raise ValueError('PNR minutes must be 1..60')
     simulation=simulation.resolve();output=output.resolve()
     if output.exists() or not output.is_relative_to(ROOT/'build/cpu'):
         raise ValueError('Use a new directory below build/cpu')
@@ -100,7 +110,8 @@ def prepare(simulation,output):
         raise ValueError('Missing actual dual mode/pairing')
     core=json.loads((simulation/'src/fpga/pg2l100h/project/cpu_core.json').read_text(encoding='utf-8'))
     recipe=json.loads((ROOT/'fpga/pg2l100h/project/cpu_minimal_soc.json').read_text(encoding='utf-8'))
-    candidate=json.loads((ROOT/'docs/verification/cpu/dualissue_pairing_sources.json').read_text(encoding='utf-8'))
+    manifest_source=simulation/'src'/row['candidate_manifest'] if 'candidate_manifest' in row else ROOT/'docs/verification/cpu/dualissue_pairing_sources.json'
+    candidate=json.loads(manifest_source.read_text(encoding='utf-8'))
     for p,h in candidate['sources'].items():
         if p not in core['sources']:continue
         if sha(simulation/'src'/p)!=h['candidate_sha256']:raise ValueError('CPU differs from benchmark candidate')
@@ -112,11 +123,15 @@ def prepare(simulation,output):
         dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst);frozen[name]=sha(dst)
     fdc=recipe['constraints'];dst=output/'src'/fdc;dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(ROOT/fdc,dst);frozen[fdc]=sha(dst)
+    physical=['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'] if compact else []
+    for name in physical:
+        dst=output/'src'/name;dst.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copyfile(ROOT/name,dst);frozen[name]=sha(dst)
     for name in ['rom.hex','sram.hex','firmware.elf']:
         shutil.copyfile(simulation/name,output/name)
-    (output/'build.tcl').write_text(tcl(output,core,core['sources']+recipe['sources'],fdc),encoding='utf-8',newline='\n')
+    (output/'build.tcl').write_text(tcl(output,core,core['sources']+recipe['sources'],fdc,pnr_minutes,physical),encoding='utf-8',newline='\n')
     prepared=dict(status='PREPARED_NOT_EXECUTED',simulation=str(simulation),simulation_result_sha256=sha(simulation/'result.json'),
-        cpu_mode=1,period_ns=10,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
+        physical_constraints=physical,pnr_minutes=pnr_minutes,outer_seconds=pnr_minutes*60+300,cpu_mode=1,period_ns=10,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
         input_hashes=frozen,files={p.name:sha(p) for p in output.iterdir() if p.is_file()},
         timing_closed=False,pds_started=False,board_validated=False,
         required_acceptance=['compile hierarchy dual=1; six stages and predictor settings bound',
@@ -129,10 +144,10 @@ def prepare(simulation,output):
     return prepared
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true')
+    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true');parser.add_argument('--pnr-minutes',type=int,default=10);parser.add_argument('--compact',action='store_true')
     args=parser.parse_args()
     if args.verify:
         verify_package(args.simulation);print('FROZEN_PACKAGE_PASS')
     else:
         if args.output is None:parser.error('output is required for preparation')
-        print(prepare(args.simulation,args.output)['status'])
+        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact)['status'])

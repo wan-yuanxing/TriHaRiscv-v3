@@ -49,7 +49,8 @@ Save-TrihaJson $result $row
 try {
     $row['pds_shell_sha256']=Get-TrihaHash $PdsShell
     $row['pds_version']=Invoke-TrihaNative $PdsShell @('-version') $work 'pds-version' $commands
-    $output=Invoke-TrihaNative -Executable $PdsShell -CommandArguments @('-file',(Join-Path $work 'build.tcl'),'-work_dir',$work,'-project_name','triha_minimal_soc') -RunDirectory $work -Label 'pds-route' -Records $commands -TimeoutSeconds 900
+    $outerSeconds=if('outer_seconds' -in $prepared.PSObject.Properties.Name){[int]$prepared.outer_seconds}else{900}
+    $output=Invoke-TrihaNative -Executable $PdsShell -CommandArguments @('-file',(Join-Path $work 'build.tcl'),'-work_dir',$work,'-project_name','triha_minimal_soc') -RunDirectory $work -Label 'pds-route' -Records $commands -TimeoutSeconds $outerSeconds
     Assert-TrihaPdsStages $output 'map'
     foreach($stage in @('pnr','report_timing')){
         if($output -notmatch ('(?m)^Executing : '+$stage+'(?: [^\r\n]*)? successfully\.\s*$')){throw "Missing stage: $stage"}

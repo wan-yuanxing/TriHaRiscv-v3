@@ -12,6 +12,7 @@ module tb_dual_sram_profile;
     integer pipe_wait = 0, div_wait = 0, csr_wait = 0, cancel = 0, unit_wait = 0, dependency = 0;
     integer false_a = 0, false_b = 0, pair_no_word = 0, pair_structure = 0, pair_dependency = 0;
     integer early_mul_opportunity = 0;
+    integer a_waw_only=0,b_waw_only=0;
     integer structure_lsu_pair=0, structure_branch_a=0, structure_other=0;
     integer pair_raw=0, pair_waw=0, pair_older=0;
     reg [31:0] start_cycle = 0, elapsed = 0;
@@ -100,6 +101,8 @@ module tb_dual_sram_profile;
                 end
                 else begin
                     pair_dependency = pair_dependency + 1;
+                    if(b_roles[2] && |`I.opcode_b_r[11:7] && `I.scoreboard_r[`I.opcode_b_r[11:7]] &&
+                       !busy(`I.opcode_b_r,`I.scoreboard_r,{1'b0,b_roles[1:0]})) b_waw_only=b_waw_only+1;
                     if (a_roles[2] && |`I.opcode_a_r[11:7] &&
                         ((b_roles[0] && `I.opcode_b_r[19:15]==`I.opcode_a_r[11:7]) ||
                          (b_roles[1] && `I.opcode_b_r[24:20]==`I.opcode_a_r[11:7]))) pair_raw=pair_raw+1;
@@ -118,6 +121,8 @@ module tb_dual_sram_profile;
                      (`I.issue_a_mul_w || `I.issue_a_div_w || `I.issue_a_csr_w)) unit_wait = unit_wait + 1;
             else begin
                 dependency = dependency + 1;
+                if(a_roles[2] && |`I.opcode_a_r[11:7] && `I.scoreboard_r[`I.opcode_a_r[11:7]] &&
+                   !busy(`I.opcode_a_r,`I.scoreboard_r,{1'b0,a_roles[1:0]})) a_waw_only=a_waw_only+1;
                 if (!a_real_busy) false_a = false_a + 1;
                 early0 = `I.writeback_mul_early_valid_i && `I.pipe0_mul_e1_w &&
                     (`I.pipe0_opcode_e1_w & 32'hfe00707f) == 32'h02000033;
@@ -145,9 +150,9 @@ module tb_dual_sram_profile;
                 pair_dependency != pair_raw+pair_waw+pair_older ||
                 issued != paired + pair_no_word + pair_structure + pair_dependency || wb_events != u_tb.wb_window)
                 $fatal(1, "SRAM_PROFILE_FAIL partition_or_window total=%0d elapsed=%0d wb=%0d parent_wb=%0d", total, elapsed, wb_events, u_tb.wb_window);
-            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d",
+            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d a_waw_only=%0d b_waw_only=%0d",
                 total, wb_events, stores, issued, paired, frontend, lsu, pipe_wait, div_wait, csr_wait, cancel, unit_wait,
-                dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older);
+                dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older, a_waw_only, b_waw_only);
         end
     end
     `undef I

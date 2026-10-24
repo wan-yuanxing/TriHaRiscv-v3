@@ -13,15 +13,16 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def prepare(output):
+def prepare(output,manifest_path=None):
     output=output.resolve()
     build=(ROOT/'build/cpu').resolve()
     if not output.is_relative_to(build) or output==build:
         raise ValueError('Candidate must be a new directory below build/cpu')
     if output.exists():
         raise FileExistsError('Candidate directory already exists; preserve it')
-    manifest=json.loads((ROOT/'docs/verification/cpu/dualissue_pairing_sources.json').read_text(encoding='utf-8'))
-    patch=ROOT/'docs/verification/cpu/dualissue_pairing_diagnostic.patch'
+    manifest_path=manifest_path or ROOT/'docs/verification/cpu/dualissue_pairing_sources.json'
+    manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+    patch=ROOT/manifest.get('patch_file','docs/verification/cpu/dualissue_pairing_diagnostic.patch')
     if sha(patch)!=manifest['patch_sha256']:
         raise ValueError('Diagnostic patch drift')
     for name,record in manifest['sources'].items():
@@ -43,5 +44,6 @@ def prepare(output):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('output',type=Path)
+    parser.add_argument('--manifest',type=Path)
     args=parser.parse_args()
-    print('CPU_CANDIDATE_RECONSTRUCTED',prepare(args.output))
+    print('CPU_CANDIDATE_RECONSTRUCTED',prepare(args.output,args.manifest))
