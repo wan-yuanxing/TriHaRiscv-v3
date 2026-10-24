@@ -122,3 +122,9 @@ hold+0.154ns、MPW+3.655ns，Fast setup+2.087ns、hold+0.100ns、MPW+4.202ns。
 Slow/Fast hold-0.068/-0.060ns失败，MPW通过；CPU-only10039LUT/5008FF，含624RAM-LUT。
 原生PDS0/验收2，757项输出核验。当前最差是异常取消→队列更新；hold违例为BTB写地址。
 继续按真实路径处理，**整体目标仍未通过**。详见[取指队列证据](../verification/cpu/dualissue_fetch_queue.md)。
+
+针对实际异常取消和BTB WADDR路径，v7将两路异常先OR再用原if/else选scalar，
+并按block加入原生WADDR保持门。65547异常检查、10066 BTB检查、地址破坏负例、
+ordered/IRQ及完整SRAM/Cache-on轨迹均通过；分数不变。独立评审和物理包预检通过，
+新原100MHz PDS运行中。综合阶段确认全部80地址位为两级LUT、局部WADDR扇出39，
+尚不能替代实际时序。见[本轮核验](../verification/cpu/dualissue_control_hold.md)。
