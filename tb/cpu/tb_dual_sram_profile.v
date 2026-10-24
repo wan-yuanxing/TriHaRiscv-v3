@@ -18,6 +18,7 @@ module tb_dual_sram_profile;
     integer pair_raw=0, pair_waw=0, pair_older=0;
     integer queue0=0,queue1=0,queue2=0,queue3=0,queue4=0,queue5=0,queue6=0,queue7=0,queue8=0;
     integer backpressure=0,backpressure_pop=0,frontend_empty=0,frontend_pc=0;
+    integer branch_pairs=0,branch_zero_eqne=0,branch_zero_signed=0,branch_zero_unsigned=0,branch_nonzero=0;
     reg [31:0] start_cycle = 0, elapsed = 0;
     reg printed = 0;
     reg [2:0] a_roles, b_roles;
@@ -110,6 +111,16 @@ module tb_dual_sram_profile;
             b_real_busy = busy(`I.opcode_b_r, `I.scoreboard_r, b_roles);
             if (`I.opcode_a_issue_r && `I.opcode_a_accept_r) begin
                 issued = issued + 1;
+                if(`I.dual_issue_w && `I.issue_a_branch_w)begin
+                    branch_pairs=branch_pairs+1;
+                    if(`I.opcode_a_r[19:15]==0 || `I.opcode_a_r[24:20]==0)
+                        case(`I.opcode_a_r[14:12])
+                            0,1:branch_zero_eqne=branch_zero_eqne+1;
+                            4,5:branch_zero_signed=branch_zero_signed+1;
+                            6,7:branch_zero_unsigned=branch_zero_unsigned+1;
+                        endcase
+                    else branch_nonzero=branch_nonzero+1;
+                end
                 if (`I.dual_issue_w) paired = paired + 1;
                 else if (!`I.opcode_b_valid_r) pair_no_word = pair_no_word + 1;
                 else if (!`I.dual_issue_ok_w) begin
@@ -173,12 +184,14 @@ module tb_dual_sram_profile;
                 pair_dependency != pair_raw+pair_waw+pair_older ||
                 total != queue0+queue1+queue2+queue3+queue4+queue5+queue6+queue7+queue8 ||
                 frontend != frontend_empty+frontend_pc ||
+                branch_pairs != branch_zero_eqne+branch_zero_signed+branch_zero_unsigned+branch_nonzero ||
                 issued != paired + pair_no_word + pair_structure + pair_dependency || wb_events != u_tb.wb_window)
                 $fatal(1, "SRAM_PROFILE_FAIL partition_or_window total=%0d elapsed=%0d wb=%0d parent_wb=%0d", total, elapsed, wb_events, u_tb.wb_window);
-            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d a_waw_only=%0d b_waw_only=%0d queue0=%0d queue1=%0d queue2=%0d queue3=%0d queue4=%0d queue5=%0d queue6=%0d queue7=%0d queue8=%0d backpressure=%0d backpressure_pop=%0d frontend_empty=%0d frontend_pc=%0d",
+            $display("SRAM_PROFILE_PASS cycles=%0d wb=%0d stores=%0d issued=%0d paired=%0d frontend=%0d lsu=%0d pipe=%0d div=%0d csr=%0d cancel=%0d unit=%0d dependency=%0d false_a=%0d false_b=%0d pair_no_word=%0d pair_structure=%0d pair_dependency=%0d narrow_mul_opportunity=%0d structure_lsu_pair=%0d structure_branch_a=%0d structure_other=%0d pair_raw=%0d pair_waw=%0d pair_older=%0d a_waw_only=%0d b_waw_only=%0d queue0=%0d queue1=%0d queue2=%0d queue3=%0d queue4=%0d queue5=%0d queue6=%0d queue7=%0d queue8=%0d backpressure=%0d backpressure_pop=%0d frontend_empty=%0d frontend_pc=%0d branch_pairs=%0d branch_zero_eqne=%0d branch_zero_signed=%0d branch_zero_unsigned=%0d branch_nonzero=%0d",
                 total, wb_events, stores, issued, paired, frontend, lsu, pipe_wait, div_wait, csr_wait, cancel, unit_wait,
                 dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older, a_waw_only, b_waw_only,
-                queue0,queue1,queue2,queue3,queue4,queue5,queue6,queue7,queue8,backpressure,backpressure_pop,frontend_empty,frontend_pc);
+                queue0,queue1,queue2,queue3,queue4,queue5,queue6,queue7,queue8,backpressure,backpressure_pop,frontend_empty,frontend_pc,
+                branch_pairs,branch_zero_eqne,branch_zero_signed,branch_zero_unsigned,branch_nonzero);
         end
     end
     `undef I

@@ -137,5 +137,22 @@ v8复用LSU已验证的提前数据选择/实际发射许可分离；真实时�
 
 v9将宽payload的append/survivor使能改为常数占用译码，原剩余数算术仅留小计数器。
 DEPTH2/3完整state/独立顺序模型、负例、整核有序/IRQ和完整SRAM/Cache-on对照通过，
-周期不变。独立评审后已启动新原100MHz/no-region PDS，最终时序仍待验收。
+周期不变。独立评审后新原100MHz/no-region PDS已结束，setup-2.258ns，单独采用该方案未改善时序。
 见[当前FIFO使能实验](../verification/cpu/dualissue_fifo_enable.md)。
+
+
+## 原生寄存器堆与分支配对诊断（2026-10-24）
+
+v10原生2W4R寄存器堆保留完整SRAM/Cache-on性能与轨迹，CPU-only由v8的
+10173LUT/5008FF降为8884LUT/4078FF；LUT含752个分布式RAM LUT，另4APM/0DRM。
+新100MHz后布线Slow setup-1.536ns，hold/MPW通过；v11加FIFO使能预译码后为
+8812LUT/4078FF，setup-1.522ns，hold/MPW通过。两个候选均尚未通过100MHz，
+不能把面积下降或仿真4.088695/MHz当整体验收。见[原生存储证据](../verification/cpu/dualissue_native_rf.md)。
+
+当前v12仅让BEQ/BNE且带x0源的A分支使用literal-zero判断配对，其他A分支单独发射；
+完整分支执行及异常/RAW/WAW/IRQ门控保持。SRAM1240606周期、短测4.030288/MHz，
+Cache-on DDR模型1621119周期、3.084289/MHz；各1448448写回/70839存储完整对照通过，
+仅验证过的初始绝对cycle及对应started存储归一化。6166定向检查、负例、有序异常及IRQ
+自检通过；独立评审通过，原10ns/no-region/20min PDS已启动；最终时序待验收。
+这些仍是五次迭代RTL估计，非官方分数/板测，观察IPC不是架构minstret。
+生产RTL和集成工程未变，整体验收仍未通过。见[本轮证据](../verification/cpu/dualissue_zero_pair.json)。
