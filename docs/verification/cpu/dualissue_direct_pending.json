@@ -1,0 +1,189 @@
+{
+  "status": "PHYSICAL_RUNNING",
+  "scope": "Direct known pending producer-ID comparisons replace real issue bitmap reads; unchanged stages, ready semantics and side effects; production unchanged",
+  "manifest": "docs/verification/cpu/dualissue_direct_pending_sources.json",
+  "manifest_sha256": "a104ae704964f0cff93b130890362b082b9082f3b9a781294b1bfeb925032e3f",
+  "comparison": {
+    "status": "PASS",
+    "candidate": "v18 direct pending producer tag comparisons",
+    "scope": "Complete same-cycle RTL comparison to v17; actual100MHz pending",
+    "actual_postroute_100mhz": false,
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T111819357786Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T104040534991Z",
+      "result_sha256": "5c7e5674f9eaa291346ce42c2eb995bcd2c4d1c79c8d1f773cf2c765858b21a3",
+      "parent_result_sha256": "0b6932d2a0ab0ae441b5fed6ae4722eae0cfc0d82004268f10ebfa93198ddcb8",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T111819379537Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T104040532511Z",
+      "result_sha256": "ae65a53486c0e989376c569c3c9a3b0b928e3c8b122aba125816ece7a4d94c62",
+      "parent_result_sha256": "204b02f7fd76d1e4192f44bf18269447b3cde497f10d828fbe5489903daf9ee9",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    },
+    "directed_and_ordered": [
+      {
+        "label": "parent32773 cfg1/1",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T110843915678Z",
+        "status": "PASS",
+        "result_sha256": "ab205329f01b421c1952794d0b7ef7d526787a8a69efb2a34e1f95ec4fa03b9e"
+      },
+      {
+        "label": "parent32773 cfg0/0",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111032172386Z",
+        "status": "PASS",
+        "result_sha256": "951c665445847166c831db41cff93b9f041c35f0a00e9d7ecbe46397484030db"
+      },
+      {
+        "label": "parent32773 cfg0/1",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111032162220Z",
+        "status": "PASS",
+        "result_sha256": "d7da746e76cb359599a7657f48a1e09f7c745aa081216849c18a12c2fe98ed86"
+      },
+      {
+        "label": "parent32773 cfg1/0",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111032174577Z",
+        "status": "PASS",
+        "result_sha256": "60f0e0e1bb030f553cc37cb0189fd1413b4216637f6b25d46afb2566081d6b8c"
+      },
+      {
+        "label": "parent force-accept negative",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T110846537041Z",
+        "status": "FAIL",
+        "result_sha256": "6b421153d989b65efd8c066fee067cf517877ba465262db6e7de424f4f82d51a"
+      },
+      {
+        "label": "new32773 cfg1/1",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111118082989Z",
+        "status": "PASS",
+        "result_sha256": "cdec222d69ec1542eac682cd96b3521719ed93f89468325a4b84fea24992f57c"
+      },
+      {
+        "label": "new32773 cfg0/0",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111216798520Z",
+        "status": "PASS",
+        "result_sha256": "021f4f23d4e2b6d0644b4193f14fe374cf4ddaf57c8f6efb3aab257d52a14ec9"
+      },
+      {
+        "label": "new32773 cfg0/1",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111216837261Z",
+        "status": "PASS",
+        "result_sha256": "71a1ce4bb651b7fdcb0a2f75f4288ea0624450b5361f04cf8806cab729c437fb"
+      },
+      {
+        "label": "new32773 cfg1/0",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111216848497Z",
+        "status": "PASS",
+        "result_sha256": "db3f6f443abbe494ca1918f70eb53393f92390a9ffd9033e2c7bc7a67b7b33d6"
+      },
+      {
+        "label": "new force-accept negative",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111120671204Z",
+        "status": "FAIL",
+        "result_sha256": "2d748fc55806bc2fdbdb19a9266a7ed546320a75e1d82fe425f6db6fefd6bcd1"
+      },
+      {
+        "label": "parent coherent branch6166",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111606453441Z",
+        "status": "PASS",
+        "result_sha256": "9b4127d50c00d38e9c018b62916d2a5084a72c4fdd3f5c0e55da455986295eec"
+      },
+      {
+        "label": "new coherent branch6166",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111608730265Z",
+        "status": "PASS",
+        "result_sha256": "7155b30f825a462f42d2fc0c9cd236529b37f5d16e8805ef518962c0e9cae137"
+      },
+      {
+        "label": "coherent branch corruption negative",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111610998044Z",
+        "status": "FAIL",
+        "result_sha256": "61124848b23f7bc8c82f902ff921d01b6358003f8eaf2f0cf97e8340a0ae2a3a"
+      },
+      {
+        "label": "unchanged packet oracle8207",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T111819414969Z",
+        "status": "PASS",
+        "result_sha256": "46f4771bdc893506414787ba1c5f0c190e5373aa59c4e7220c6bf822099d47f5"
+      },
+      {
+        "label": "ordered both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1118196946953Z",
+        "status": "PASS",
+        "result_sha256": "30a6b65a9456711ebdea06bfce0bb3bcb76fb2e60064d88c65b76675bf5560c2"
+      },
+      {
+        "label": "IRQ both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1118301880076Z",
+        "status": "PASS",
+        "result_sha256": "0088b119c282ce5e8b0af9c53ead35ca0c1216ae9accaa9b0a48c487cc22396d"
+      }
+    ]
+  },
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-direct-pending-physical-v18",
+    "status": "RUNNING",
+    "prepared_sha256": "7de4423ff22140a07e99cf570f7ca1ca20ab7fb2ce4f2bcb1b96795f3638d579",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "extra_physical_constraint": null,
+    "timing_closed": false,
+    "launcher_pid": 7228,
+    "launch_console": "build/cpu/dual-direct-pending-route-console.log",
+    "launch_stderr": "build/cpu/dual-direct-pending-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-direct-pending-route-launch-exit.json"
+  },
+  "independent_review": "Four-state allocation/read equivalence and priorLSU proof, four bypass-config old-bitmap oracle/actual-accept negative, coherent branch/MUL test, full RTL streams and original10ns frozen binding reviewed before launch",
+  "reference": {
+    "repository": "https://github.com/openhwgroup/cv32e40p",
+    "revision": "dbcd1cb3a0caf153e7474488acd0e52898ca258a",
+    "file": "rtl/cv32e40p_id_stage.sv",
+    "sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+    "license": "SHL0.51 notice retained in unmodified ignored reference file",
+    "pattern": "542-550 producer/consumer ID equality qualified by used-role and nonzero consumer",
+    "scope": "Read-only mature matching pattern; actual implementation remains native Verilog, no SV source/toolchain integrated"
+  },
+  "limits": [
+    "Legacy bitmap remains as simulation observer shadow; native actual control cone removal requires inspection.",
+    "Original tests forcing internal scoreboard remain unchanged; new coherent producer-stimulus branch test checks the same acceptance and real B-MUL capture behavior on parent and candidate.",
+    "Short RTL estimates are not official or board scores; WB observation IPC is not architectural minstret.",
+    "ELF metadata may differ; physical package binds exact v18 SRAM ELF, while runtime images/traces are equal.",
+    "No production promotion or board operation; actual final six STA checks remain mandatory."
+  ],
+  "overall_target_met": false
+}

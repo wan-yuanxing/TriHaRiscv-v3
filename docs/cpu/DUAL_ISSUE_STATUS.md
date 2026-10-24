@@ -185,3 +185,9 @@ v16原100MHz终态setup-1.346ns（比v14b-1.629改善0.283ns，新网表/布局�
 
 
 v17 scalar零标志前移已完成真正独立31×64×4payload×2zero-source×BEQ/BNE×2word交叉，parent/dual/single各227136 PASS，负控有效。整核、IRQ及运行镜像/完整WB/store/周期/profile完全同v16；独立准入评审后启动原10ns/no-region20min PDS，最终时序待验收。ELF元数据可不同，物理包绑定v17本次自己的ELF。
+
+
+v17最终setup-1.741ns，Slow/Fast hold+0.109/+0.083、MPW通过，native0/verifier2，551输出核验；CPU-only8902LUT/4108FF。零helper实际使用scalar flags，最差已转E1 opcode31→early MUL decode→older scoreboard32bit插入/索引读取→issue→FIFO；下一v18以少数producer tag直接比较替换真实许可对32bit位图的读回，保留索引X/Z行为与无状态/等周期约束。
+
+
+v18以4个pending producer tag直接比较替换6处真实bitmap读取，不加state/cycle。原indexed-bitmap oracle在4种bypass配置parent/new各32773 PASS，actual-accept及branch-pair负控有效，使用真实pending记录的6166分支/乘法用例通过，旧测试保留。运行镜像/完整WB/store/周期/profile均同v17，独立原10ns/no-region20min包评审通过后PDS已启动。

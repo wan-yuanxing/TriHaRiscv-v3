@@ -24,10 +24,14 @@ For non-parallel operand configurations retain the original full-data check.
       actual SRAM/Cache full traces/profile must match v16 exactly.
 - [x] Preserve/reconstruct patch22/manifest; independently review full-data
       versus prepared-flag four-state equivalence and original10ns binding.
-- [ ] Launch only after source/RTL/physical admission, check actual mapping
+- [x] Launch only after source/RTL/physical admission, check actual mapping
       and all final STA. Do not stop/restart v16 or modify its frozen helpers.
 
 Expanded parent/dual/single227136 checks and corruption negative PASS as
 expected; independent payload_type loop supersedes correlated84288matrix.
 Full streams/profile and fresh performance match v16; review and original
 10ns/no-region physical binding PASS, private PDS launched.
+
+Final native0/verifier2,551outputs; setup-1.741ns,hold/MPW PASS.
+Prepared scalar properties survive mapping. New critical path is older
+scoreboard binary tag ->32bit insertion ->32:1 read -> issue/FIFO.
