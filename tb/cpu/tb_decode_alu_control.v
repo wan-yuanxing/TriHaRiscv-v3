@@ -2,7 +2,7 @@
  * The complete original implementation follows below, module names only changed.
  */
 `timescale 1ns/1ps
-module tb_decode_alu_control #(parameter BROKEN=0,MULDIV=1,EXTRA=0,BROKEN_ALU=0);
+module tb_decode_alu_control #(parameter BROKEN=0,MULDIV=1,EXTRA=0,BROKEN_ALU=0,BROKEN_CLASS=0,BROKEN_LEGAL=0);
     reg clk=0,rst=1,push=0,pop0=0,pop1=0,flush=0,fetch_fault=0,page_fault=0;
     reg [31:0] pc=32'h80001000,rng=32'h6741523b;
     reg [63:0] data=64'h0010009300200113;
@@ -13,6 +13,18 @@ module tb_decode_alu_control #(parameter BROKEN=0,MULDIV=1,EXTRA=0,BROKEN_ALU=0)
     triha_alu_predecode u_expected1 (.opcode_i(ref_out[73:42]),.control_o(expected_control1));
     integer n,checks=0;
     always #5 clk=~clk;
+    generate if(BROKEN_CLASS)begin:g_class_negative
+        initial begin
+            repeat(5)@(negedge clk);
+            force u_dut.genblk1.u_fifo.info_q[0][15]=1'b1;
+        end
+    end endgenerate
+    generate if(BROKEN_LEGAL)begin:g_legal_negative
+        initial begin
+            repeat(5)@(negedge clk);
+            force u_dut.genblk1.u_fifo.info_q[0][17]=1'b0;
+        end
+    end endgenerate
     triha_decode #(.SUPPORT_MULDIV(MULDIV),.EXTRA_DECODE_STAGE(EXTRA)) u_dut (
         .clk_i(clk),.rst_i(rst),.fetch_in_valid_i(push),.fetch_in_instr_i(data),
         .fetch_in_pred_branch_i(pred),.fetch_in_fault_fetch_i(fetch_fault),.fetch_in_fault_page_i(page_fault),

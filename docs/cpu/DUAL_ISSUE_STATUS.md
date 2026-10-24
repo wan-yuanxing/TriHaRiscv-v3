@@ -4,13 +4,13 @@
 分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
 [物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
 
-当前最好的完整后布线候选为 v27 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
-setup **−0.792ns**，Slow/Fast hold +0.114/+0.099ns、脉宽 +3.655/+4.202ns；
-**100MHz尚未通过**。比v20的−0.805ns仅差13ps，不能据此声称实质频率收益。
-CPU-only **8887LUT/4182FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
+当前最好的完整后布线候选为 v29 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
+setup **−0.763ns**，Slow/Fast hold +0.113/+0.068ns、脉宽 +3.655/+4.202ns；
+**100MHz尚未通过**。比v20的−0.805ns仅差42ps，不能据此声称实质频率收益。
+CPU-only **8896LUT/4248FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
 从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
 
-同一v27 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
+同一v29 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
 SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
 开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
 对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
@@ -20,14 +20,20 @@ DDR Cache-off已按用户指示排除。
 两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
 时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
 
-v21至v26均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
+v21至v29均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
 54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
 全部原100MHz/IO/hold/multicorner预算不变。v27局部读索引syn_maxfan16已终态，70个复制Q确实把目标负载拆至每Q≤16，
 但setup仍−0.792ns；最差已转nativeRF bank选择→零判断→队列使能。
 v28把31个寄存器零标志保存在原写回边界，原数据/旁路/发射规则保持；新完整SRAM/Cache-on
 镜像、轨迹、周期/profile相同，有序/IRQ及真实RF四态分支对照通过。实际后布线setup−1.249ns，
 hold+0.110/+0.099ns、脉宽+3.655/+4.202ns，native0/verifier2；CPU8775LUT/4222FF，100MHz仍未过。
-真实最差转指令类别→LSU载荷→store格式；v29将剩余五个静态类别随原队列保存，功能回归中。见[零标志候选](../verification/cpu/dualissue_rf_zero_metadata.json)。
+真实最差转指令类别→LSU载荷→store格式；v29将剩余五个静态类别随原队列保存，完整队列与
+新整核SRAM/Cache-on/有序/IRQ均通过且周期/轨迹不变；IO版setup−0.763ns、原始版−0.895ns，
+两版hold/MPW通过，native0/verifier2。30类别元数据FF及实际LSU选择cone均已核验。
+同源现有compact+IO对照正在PDS；v30合法性/CSR前移的完整四态与队列/有序/IRQ已过，整核回归中。
+见[零标志终态](../verification/cpu/dualissue_rf_zero_metadata.json)、
+[类别队列I/O版](../verification/cpu/dualissue_queued_unit_classes.json)与
+[同源原始I/O版](../verification/cpu/dualissue_queued_unit_classes_original.json)。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
 最新终态见[ALU控制](../verification/cpu/dualissue_queued_alu_control.json)和
 [同源I/O变体](../verification/cpu/dualissue_queued_alu_control_io.json)。
