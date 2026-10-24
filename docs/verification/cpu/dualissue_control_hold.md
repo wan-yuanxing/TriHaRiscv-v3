@@ -34,7 +34,7 @@ the six-word parent exactly. GCC15.2-O2, five iterations; not official or board
 scores. Ordered single/dual and IRQ checks pass. This does not replace full
 ISA proof or physical acceptance.
 
-Original10ns/IO/hold/multicorner no-region physical implementation is running at
+Original10ns/IO/hold/multicorner no-region physical implementation completed at
 `build/cpu/dual-control-hold-physical-v7`; independent source/evidence admission review passed.
 PNR20minutes/outer1500seconds. Final setup/hold/MPW and actual mapped hold gates
 will decide this experiment. Production RTL and integration remain unchanged.
@@ -45,4 +45,13 @@ Native synthesis VM graph check finds both bank definitions: all80write-address
 bits retain two LUT levels from raw low address, each with39 WADDR loads.
 The160logical gates pack into76 named LUT cells. This is synthesis-stage
 connectivity, not final routed minimum delay. CPU-only synthesis is
-10141LUT/5008FF/624RAM-LUT(included)/4APM/0DRM; actual STA still pending.
+10141LUT/5008FF/624RAM-LUT(included)/4APM/0DRM; final STA recorded below.
+
+Final actual STA: Slow setup/hold/MPW -2.014/+0.111/+3.655ns; Fast
++1.890/+0.091/+4.202ns. Native0/verifier2,647outputs verified. Hold is fixed,
+100MHz setup still fails. Source and synthesis mappings differ from v6b; the
+measured improvement is0.214ns under the same10ns constraint, not fixed-layout
+equivalence. New worst path: fetch0 opcode[17] -> RA bypass -> exec0 branch ->
+pipe1_mux_mul_r -> multiplier operand sign/select -> native APM inputX19,
+17levels,2.763ns logic/8.581ns routing. Continue by preparing MUL payload
+before late issue permission, as already validated for LSU.

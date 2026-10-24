@@ -57,3 +57,16 @@ Continue these measured paths before the independently researched native RF.
 - [x] Review complete v7 package; fresh original-FDC20min PDS started.
 - [ ] Inspect actual mapping for160 native hold gates/local write fanout and
       scalar OR use. Recheck every final corner setup/hold/MPW and hashes.
+
+## Actual v7 continuation: shared multiplier payload
+
+- [x] v7 final647output hashes/STA: hold+0.111/+0.091ns fixed; setup-2.014ns.
+- [x] Actual path is branch comparison to late MUL payload/sign/APM input;
+      apply the already validated early LSU payload/real permission separation.
+- [x] Parent RED, real-clock A/B capture/38checks, consumer issue/accept/E1
+      capture, four sign modes, hold, cancellation and actual RA corruption.
+- [x] Reconstruct v8 from full patch; complete SRAM/Cache-on images, cycles,
+      profile and WB/store remain identical to v7. Ordered/IRQ PASS.
+- [x] Independent source/evidence/physical binding review; fresh original
+      10ns/no-region20min PDS started for v8.
+- [ ] Inspect v8 final actual six STA checks, output hashes and next path.
