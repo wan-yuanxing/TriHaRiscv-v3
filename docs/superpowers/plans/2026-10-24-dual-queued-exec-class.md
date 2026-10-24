@@ -12,6 +12,8 @@ v23 region trial did not improve timing: setup-1.283ns, hold/MPW pass. Its actua
 - [x] Reconstruct v24 and connect input exec metadata, grow info by1, replace only output exec consumers. Preserve full22-source patch/manifest.
 - [x] Decoder/FIFO, packet/coherent B-MUL, ordered/IRQ and new SRAM/Cache-on whole images/WB/store/profile comparisons, same cycles and >4/MHz.
 - [x] Independent source/state and frozen physical package review; original10ns noRegion/noIO20min PDS.
-- [ ] Actual metadata/decode mapping, CPU-only resources and final six STA checks; no production/board operation.
+- [x] Actual metadata/decode mapping, CPU-only resources and final six STA checks; no production/board operation.
 
 Independent source/terminal/package review passed. Original10ns/noRegion/noIO20min PDS launched privately; actual topology and final six STA pending. Same short4.030288 SRAM and3.084289 Cache-on estimates/complete streams/profile preserved.
+
+Terminal original10ns: Slow setup-0.909ns,hold+0.111ns,MPW+3.655ns; Fast+1.907/+0.100/+4.202ns. Native0/verifier2, 521 outputs bound. CPU8773LUT/4058FF; actual6metadataFF retained/consumed. Critical moved to incoming SRAM instruction->predecode5LUT->metadataFF; no100MHz acceptance. Next exact opcode/function factorization is independent combinational representation, preserving masks/four-state behavior.

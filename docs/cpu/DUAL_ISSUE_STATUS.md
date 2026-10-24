@@ -19,8 +19,8 @@ DDR Cache-off已按用户指示排除。
 两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
 时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
 
-v21地址保留、v22RF编码及v23区域试验均已失败，未超过v20；v24正在核验将exec类别
-预译码并存入已有队列的等周期候选。全部原100MHz/IO/hold/multicorner预算不变。
+v21地址保留、v22RF编码及v23区域试验均已失败，未超过v20；v24预译码也未通过；v25正在核验
+精确opcode/funct分组的组合译码表示。全部原100MHz/IO/hold/multicorner预算不变。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
 本轮证据见[区域诊断](../verification/cpu/dualissue_packet_compact.json)。
 
@@ -226,3 +226,6 @@ v23最终setup-1.283ns、Slow/Fast hold+0.098/+0.056ns、MPW+3.655/+4.202ns，na
 
 
 v24仅在已有队列info中加入exec类别位；整151bit/12005步对照在MULDIV1/0与EXTRA1均通过，旧/新exec输出破坏负例有效；packet48768、B-MUL6166、有序/IRQ与新完整SRAM/Cache镜像/轨迹/周期/profile均同v20。独立源码与原10ns/no-region/noIO物理包8ff0f7f3...评审后启动，实际元数据FF/映射/后布线结果待核。
+
+
+v24原10ns终态setup-0.909ns、Slow/Fast hold+0.111/+0.100ns、MPW+3.655/+4.202ns；native0/verifier2，CPU8773LUT/4058FF。6个exec元数据FF实际保留且供给issue/LSU，最差转入队SRAM指令25→预译码5LUT→metadataFF。下一v25按原mask分组opcode/funct，保留I-shift bit25忽略与所有四态结果；17相关位全131072二态组合和X/Z共290336项对照通过。
