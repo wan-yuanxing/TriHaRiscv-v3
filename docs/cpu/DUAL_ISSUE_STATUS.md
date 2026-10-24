@@ -4,13 +4,13 @@
 分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
 [物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
 
-当前最好的完整后布线候选为 v26 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
-setup **−0.798ns**，Slow/Fast hold +0.066/+0.030ns、脉宽 +3.655/+4.202ns；
-**100MHz尚未通过**。比v20的−0.805ns仅差7ps，不能据此声称实质频率收益。
-CPU-only **8860LUT/4112FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
+当前最好的完整后布线候选为 v27 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
+setup **−0.792ns**，Slow/Fast hold +0.114/+0.099ns、脉宽 +3.655/+4.202ns；
+**100MHz尚未通过**。比v20的−0.805ns仅差13ps，不能据此声称实质频率收益。
+CPU-only **8887LUT/4182FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
 从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
 
-同一v26 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
+同一v27 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
 SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
 开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
 对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
@@ -22,10 +22,12 @@ DDR Cache-off已按用户指示排除。
 
 v21至v26均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
 54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
-全部原100MHz/IO/hold/multicorner预算不变，当前无本路线PDS运行。
+全部原100MHz/IO/hold/multicorner预算不变。v27局部读索引syn_maxfan16已终态，70个复制Q确实把目标负载拆至每Q≤16，
+但setup仍−0.792ns；最差已转nativeRF bank选择→零判断→队列使能。当前无本路线PDS运行。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
 最新终态见[ALU控制](../verification/cpu/dualissue_queued_alu_control.json)和
 [同源I/O变体](../verification/cpu/dualissue_queued_alu_control_io.json)。
+最新终态见[读索引扇出诊断](../verification/cpu/dualissue_rf_index_fanout.json)。
 
 更广的ISA、异常/IRQ及Cache维护准入仍需按部署阶段完成；当前隔离功能回归和物理诊断
 不能替代板级SoC验收。初始模拟基线及历史命令见
