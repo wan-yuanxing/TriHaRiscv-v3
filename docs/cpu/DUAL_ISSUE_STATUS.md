@@ -23,7 +23,11 @@ DDR Cache-off已按用户指示排除。
 v21至v26均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
 54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
 全部原100MHz/IO/hold/multicorner预算不变。v27局部读索引syn_maxfan16已终态，70个复制Q确实把目标负载拆至每Q≤16，
-但setup仍−0.792ns；最差已转nativeRF bank选择→零判断→队列使能。当前无本路线PDS运行。
+但setup仍−0.792ns；最差已转nativeRF bank选择→零判断→队列使能。
+v28把31个寄存器零标志保存在原写回边界，原数据/旁路/发射规则保持；新完整SRAM/Cache-on
+镜像、轨迹、周期/profile相同，有序/IRQ及真实RF四态分支对照通过。实际后布线setup−1.249ns，
+hold+0.110/+0.099ns、脉宽+3.655/+4.202ns，native0/verifier2；CPU8775LUT/4222FF，100MHz仍未过。
+真实最差转指令类别→LSU载荷→store格式；v29将剩余五个静态类别随原队列保存，功能回归中。见[零标志候选](../verification/cpu/dualissue_rf_zero_metadata.json)。
 用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
 最新终态见[ALU控制](../verification/cpu/dualissue_queued_alu_control.json)和
 [同源I/O变体](../verification/cpu/dualissue_queued_alu_control_io.json)。

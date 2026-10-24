@@ -178,6 +178,30 @@ module tb_issue_prepared_zero #(parameter BROKEN=0,parameter DUAL_ISSUE=0);
                 selected_pc=32'h80000004;#1;check;
             end
         end
+        // Exercise actual RF writes followed by no-bypass zero branches.
+        // Native hold gates normalize Z storage bits into X; the branch and
+        // scalar oracle use that architectural read value independently.
+        for(j=0;j<6;j=j+1)begin tags[j]=0;values[j]=0;end
+        for(index=1;index<32;index=index+1)for(payload_type=0;payload_type<6;payload_type=payload_type+1)begin
+            case(payload_type)
+                0:wr_data=0;
+                1:wr_data=32'b1<<(index%32);
+                2:begin wr_data=0;wr_data[index%32]=1'bx;end
+                3:begin wr_data=0;wr_data[index%32]=1'bz;end
+                4:begin wr_data=32'b1<<((index+1)%32);wr_data[index%32]=1'bx;end
+                5:begin wr_data=32'b1<<((index+1)%32);wr_data[index%32]=1'bz;end
+            endcase
+            wr=index;@(posedge clk);#1;model[index]=wr_data & 32'hffffffff;
+            @(negedge clk);wr=0;
+            for(shape=0;shape<4;shape=shape+1)begin
+                instruction0=32'h00000463;
+                if(shape<2)instruction0[24:20]=index;
+                else instruction0[19:15]=index;
+                instruction0[14:12]=(shape%2);instruction1=instruction0;
+                selected_pc=32'h80000000;#1;check;
+                selected_pc=32'h80000004;#1;check;
+            end
+        end
         $display("PREPARED_ZERO_PASS checks=%0d native_RF_forward_priority_zero_reset_fourstate",checks);$finish;
     end
     initial begin #2000000;$display("PREPARED_ZERO_FAIL timeout");$finish;end

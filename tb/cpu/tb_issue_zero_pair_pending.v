@@ -1,6 +1,6 @@
 /* ISA vectors exercise actual issue gates, including true dependency guards. */
 `timescale 1ns/1ps
-module tb_issue_zero_pair_pending #(parameter DUAL_ISSUE=1, BROKEN=0);
+module tb_issue_zero_pair_pending #(parameter DUAL_ISSUE=1, BROKEN=0, RF_ZERO_META=0);
     reg clk=0, rst=1, clock_run=1;
     reg [31:0] op_a=32'h13, op_b=32'h13, busy=0;
     integer checks=0, f, n, shape;
@@ -20,6 +20,20 @@ module tb_issue_zero_pair_pending #(parameter DUAL_ISSUE=1, BROKEN=0);
         .mem_i_pc_o(),.mem_i_invalidate_o(),.mem_i_flush_o(),.mem_i_rd_o(),
         .mem_d_flush_o(),.mem_d_writeback_o(),.mem_d_invalidate_o(),.mem_d_req_tag_o(),
         .mem_d_cacheable_o(),.mem_d_wr_o(),.mem_d_rd_o(),.mem_d_data_wr_o(),.mem_d_addr_o());
+    // This unit test forces raw RF values below. Their scalar properties must
+    // accompany those same values, just as real RF writes do in the SoC tests.
+    // Match the existing queued ALU controls to the forced instruction words.
+    generate if(RF_ZERO_META)begin:g_coherent_metadata
+        wire [8:0] control_a,control_b;
+        triha_alu_predecode u_a_control(.opcode_i(op_a),.control_o(control_a));
+        triha_alu_predecode u_b_control(.opcode_i(op_b),.control_o(control_b));
+        initial begin
+            force u_dut.u_issue.issue_a_ra_zero_w=(av==32'b0);
+            force u_dut.u_issue.issue_a_rb_zero_w=(bv==32'b0);
+            force u_dut.u_issue.fetch0_alu_decode_i=control_a;
+            force u_dut.u_issue.fetch1_alu_decode_i=control_b;
+        end
+    end endgenerate
     `define I u_dut.u_issue
     task check_pair;
         input expected;
