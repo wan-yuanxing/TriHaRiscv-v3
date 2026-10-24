@@ -202,3 +202,6 @@ v19最终原10ns未通过：Slow setup-1.765ns为done_o端口，首条CPU路径-
 
 
 v20同包RAW/WAW提前到raw-fetch标量，parent/new各48768检查及负控通过；pending32773、实际B-MUL6166、有序/IRQ及完整SRAM/Cache镜像/写回/存储/profile均与v19相同。SRAM短测4.030288/MHz，Cache-on DDR模型3.084289/MHz。两套原10ns/no-region物理包独立评审后并行启动，第二套仅复用syn_useioff打包已有输出FF；原始IO/hold/multicorner预算字节不变。实际时序待验收，生产RTL未变。见[本轮证据](../verification/cpu/dualissue_packet_dependency.json)。
+
+
+v20两套已终态：原方案setup-0.805ns为当前最好，Slow/Fast hold+0.118/+0.102ns、MPW+3.655/+4.202ns；I/O方案setup-1.198ns、hold+0.117/+0.100ns，MPW同值。均native0/verifier2，513/434输出已核；CPU-only8710LUT/4052FF。I/O输出FF实际打包成功，但新映射/布局整体未改善，仍按原方案作物理父版。原方案最差RF written有效标志→B源读/旁路→有符号分支→issue PC；I/O方案另显示分支判断后仍进入PC加法carry。下一步分离诊断完整地址结果保留和原生RF live-bank编码，不合并未测候选、不加周期。

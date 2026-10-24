@@ -12,10 +12,12 @@
 - [x] Reconstruct v19 into private v20 and implement only scalar same-packet preparation. Preserve full-base patch and22-source manifest.
 - [x] Oracle, pending tags, coherent B-MUL, ordered/IRQ and full SRAM/Cache-on images/WB/store/profile comparisons.
 - [x] Independent source/evidence/package review before new private original10ns PDS.
-- [ ] Verify full input/output hashes, CPU-only mapping and actual six corner timing checks; continue from actual remaining path if failing.
+- [x] Verify full input/output hashes, CPU-only mapping and actual six corner timing checks; continue from actual remaining path if failing.
 
 Existing user authorization is to continue isolated timing closure until the same candidate passes timing and >4/MHz. No new architectural stage, toolchain, integration or board action is introduced.
 
 Separately diagnose the observed output-register-to-pad path by explicitly reusing the existing `cpu_io_registers.fdc` option (`syn_useioff=1`), without the old compact-region option. Original clock/IO/hold constraints remain byte-identical. Extend only the physical package whitelist/CLI, with RED/GREEN package gates, then compare fresh no-attribute and I/O-packing routes of the same measured RTL if both packages pass review. Packing existing FFs adds no architectural state. This is distinct from the CPU RTL path improvement.
 
 Both reviewed frozen packages launched independently: original54dad83e... and I/O e9d1254a..., private TEMP/output/logs. Waiting for actual mapping/STA, no timing acceptance.
+
+Both terminal: original setup-0.805ns (best), Slow/Fast hold+0.118/+0.102ns and MPW+3.655/+4.202ns; Fast setup+1.939ns. I/O setup-1.198ns, hold+0.117/+0.100ns, MPW+3.655/+4.202ns; Fast setup+2.835ns. Native0/verifier2 for both,513/434outputs rehashed. CPU8710LUT/4052FF,752RAM-LUT included/4APM/0DRM. Same-source short4.030288/MHz retained;100MHz still failed. I/O FF packing actual success but not selected as overall improvement.
