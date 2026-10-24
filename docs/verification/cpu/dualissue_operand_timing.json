@@ -3180,7 +3180,23 @@
     "cache_enable": true,
     "scope": "Cache-on modeled DDR RTL, not physical or board acceptance"
   },
-  "active_physical": null,
+  "active_physical": [
+    {
+      "name": "dual-queued-exec-class-physical-v24",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-queued-exec-class-physical-v24",
+      "prepared_sha256": "8ff0f7f3d6224c9b2d5d2dd188d29cb1383b6fd9224cfb361475a08750f7ff1d",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "physical_constraints": [],
+      "timing_closed": false,
+      "launcher_pid": 26648,
+      "launch_console": "build/cpu/dual-queued-exec-class-route-console.log",
+      "launch_stderr": "build/cpu/dual-queued-exec-class-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-queued-exec-class-route-launch-exit.json"
+    }
+  ],
   "best_completed_worst_setup_ns": -0.805,
   "overall_target_met": false,
   "selected_candidate": {

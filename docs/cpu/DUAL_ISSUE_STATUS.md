@@ -223,3 +223,6 @@ v23 exact-v20 compact物理包58c1910a...经独立核验后启动。只新增已
 
 
 v23最终setup-1.283ns、Slow/Fast hold+0.098/+0.056ns、MPW+3.655/+4.202ns，native0/verifier2，区域试验未改善。实际fetch1 opcode2→exec类别→LSU payload→load/address/store格式为11级、logic1.923/route9.007ns。下一v24复用已有CSR输入decoder与同队列info，把exec位在原采样点前算好（预计6FF），不改变阶段/周期、其余类别/CSR/invalid/idle历史；已开始完整对照。
+
+
+v24仅在已有队列info中加入exec类别位；整151bit/12005步对照在MULDIV1/0与EXTRA1均通过，旧/新exec输出破坏负例有效；packet48768、B-MUL6166、有序/IRQ与新完整SRAM/Cache镜像/轨迹/周期/profile均同v20。独立源码与原10ns/no-region/noIO物理包8ff0f7f3...评审后启动，实际元数据FF/映射/后布线结果待核。
