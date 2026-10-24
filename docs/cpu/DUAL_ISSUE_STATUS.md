@@ -205,3 +205,6 @@ v20同包RAW/WAW提前到raw-fetch标量，parent/new各48768检查及负控通�
 
 
 v20两套已终态：原方案setup-0.805ns为当前最好，Slow/Fast hold+0.118/+0.102ns、MPW+3.655/+4.202ns；I/O方案setup-1.198ns、hold+0.117/+0.100ns，MPW同值。均native0/verifier2，513/434输出已核；CPU-only8710LUT/4052FF。I/O输出FF实际打包成功，但新映射/布局整体未改善，仍按原方案作物理父版。原方案最差RF written有效标志→B源读/旁路→有符号分支→issue PC；I/O方案另显示分支判断后仍进入PC加法carry。下一步分离诊断完整地址结果保留和原生RF live-bank编码，不合并未测候选、不加周期。
+
+
+v21完整target/PC+4结果保留与v22原生RF live-bank编码为两个独立v20父版诊断；前者全137bit执行输出/PC负控、后者8200存储与bank归属/写入负控、完整操作数单/双模式均通过。两者有序/IRQ和新SRAM/Cache-on运行镜像、完整轨迹、周期/profile均与v20相同。独立源码和冻结包评审后分别启动原10ns/no-region/noIO20min PDS；实际映射与最终六项时序待核，不合并未测改动。

@@ -1,0 +1,130 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "scope": "Keep complete target/sequential PC arithmetic before existing decision selector; no behavior/state/latency change",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_prepared_branch_pc_sources.json",
+  "comparison": {
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T123439655185Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T121406867416Z",
+      "result_sha256": "69d354f7e659e654031ea81e9ff5c78b3a45de6e4fcd6ae48d58bce9d62fb2c8",
+      "parent_result_sha256": "aaef949dea015a2dfa10811ac7ec931d9f9d29e259042a1590173ef4fbec6b0a",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T123439695915Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T121406873592Z",
+      "result_sha256": "4fae3ec9791df404ac7d81ccabef9f96afe7ab634790127059687ff358a21f5f",
+      "parent_result_sha256": "787d0e314c8523006605dbc99712e62d1bd5e4e3a660914e1dfa21c1d0dc5ffe",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  },
+  "directed": [
+    {
+      "label": "parent137bit40139",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123354236165Z",
+      "status": "PASS",
+      "result_sha256": "21147ff25a5435fd4f5eb6f9bb94880d0c5295f79312acde4cdf9da36d018849"
+    },
+    {
+      "label": "parent PC corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123354235268Z",
+      "status": "FAIL",
+      "result_sha256": "a0dda006698ffafbaefbab8408a816abadfeb8dc0d89a65340a8d0f041ae506a"
+    },
+    {
+      "label": "new137bit40139",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123439488763Z",
+      "status": "PASS",
+      "result_sha256": "dbc3b65ba1bd0e1dc93ed053d9ad31d2b0a17f877851011cb77084a2f6ce50ad"
+    },
+    {
+      "label": "new PC corruption",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123439628236Z",
+      "status": "FAIL",
+      "result_sha256": "488c0e7580e880262508bd221bfc5f8d60a22cc37dee7b9894f6ef0a07bf9f43"
+    },
+    {
+      "label": "packet48768",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123439590308Z",
+      "status": "PASS",
+      "result_sha256": "2d363023f4651206b90a4c9c3ba792f9674f7ca7d581021ba11aa04cb5fbc2fd"
+    },
+    {
+      "label": "coherent B-MUL6166",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T123439561405Z",
+      "status": "PASS",
+      "result_sha256": "ced2dc5506f7bd5cda036bf5bc8962dd8dae436de6084b5a8cf321a34e7f1af3"
+    },
+    {
+      "label": "ordered",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1234402458250Z",
+      "status": "PASS",
+      "result_sha256": "0a663f7dc9abfacd3c718909f21b9d8773226dfd077f3325121931324592495b",
+      "parent_result_sha256": "2133d56fea9e78e5691ea41197ec262237a31680d7ca55e0083a985463d7bcf4",
+      "same_program_seed_executions_and_complete_traces": true
+    },
+    {
+      "label": "irq",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1234402440129Z",
+      "status": "PASS",
+      "result_sha256": "f92398ae681e3b960767979598a9b545e6ad301ad856c728a968febf5edcb8ad",
+      "parent_result_sha256": "ad50270885d9934e393215aab48adb5cd7021408b541eee77c3673dfa336d5e1",
+      "same_program_seed_executions_and_complete_traces": true
+    }
+  ],
+  "manifest_sha256": "aecbb826a278d1a9bb324986cf0af733b88ef983b5002be118f7d2fd7140c47d",
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-prepared-branch-pc-physical-v21",
+    "prepared_sha256": "78c713ee7c1148592ee06302cce462c237d4981fb9e7e54afa67e76c59d3f6f3",
+    "status": "RUNNING",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "physical_constraints": [],
+    "timing_closed": false,
+    "launcher_pid": 33204,
+    "launch_console": "build/cpu/dual-prepared-branch-pc-route-console.log",
+    "launch_stderr": "build/cpu/dual-prepared-branch-pc-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-prepared-branch-pc-route-launch-exit.json"
+  },
+  "limits": [
+    "Five-iteration RTL estimates only; not official/board scores. WB observation IPC is not architectural minstret.",
+    "Fresh full native compile/synthesize/map/place/route and actual six Slow/Fast STA checks required. Original10ns/IO/hold/multicorner, no region.",
+    "No production RTL or integration/board/serial changes. Independent candidates based v20; no unmeasured combination."
+  ],
+  "independent_review": "Source invariants, full terminal input/output/external hashes and exact runtime images/streams/profile plus original10ns frozen package independently reviewed before launch"
+}

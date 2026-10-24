@@ -2,14 +2,23 @@
  * port0 collision priority, synchronous reset and unknown-address semantics.
  */
 `timescale 1ns/1ps
-module tb_regfile_dual_storage #(parameter BROKEN=0);
+module tb_regfile_dual_storage #(parameter BROKEN=0,ONEHOT_LIVE=0,BROKEN_LIVE=0);
     reg clk=0,rst=1;
     reg [4:0] rd0=0,rd1=0,ra0=0,rb0=0,ra1=0,rb1=0;
     reg [31:0] wr0=0,wr1=0,rng=32'h2671cdef;
     reg [31:0] model[0:31];
+    reg [31:1] owner0,owner1;
     wire [31:0] va0,vb0,va1,vb1;
     wire [31:0] actual_wr0=BROKEN ? wr0^32'h1 : wr0;
     integer i,n,checks=0;
+    wire [31:1] live0,live1;
+    generate if(ONEHOT_LIVE)begin:g_live_new
+        assign live0=u_dut.g_dual_native.bank0_live_q;
+        assign live1=u_dut.g_dual_native.bank1_live_q;
+    end else begin:g_live_parent
+        assign live0=u_dut.g_dual_native.written_q & ~u_dut.g_dual_native.source_q;
+        assign live1=u_dut.g_dual_native.written_q & u_dut.g_dual_native.source_q;
+    end endgenerate
     always #5 clk=~clk;
     triha_regfile #(.SUPPORT_DUAL_ISSUE(1),.SUPPORT_REGFILE_XILINX(0)) u_dut (
         .clk_i(clk),.rst_i(rst),.rd0_i(rd0),.rd1_i(rd1),.rd0_value_i(actual_wr0),.rd1_value_i(wr1),
@@ -28,13 +37,18 @@ module tb_regfile_dual_storage #(parameter BROKEN=0);
             #1;checks=checks+1;
             if({va0,vb0,va1,vb1}!=={value(ra0),value(rb0),value(ra1),value(rb1)})
                 $fatal(1,"RF_DUAL_STORAGE_FAIL check=%0d rd=%h/%h read=%h/%h/%h/%h",checks,rd0,rd1,ra0,rb0,ra1,rb1);
+            if(live0!==(owner0 ^ (BROKEN_LIVE ? 31'b1 : 31'b0)) || live1!==owner1)
+                $fatal(1,"RF_LIVE_OWNER_FAIL check=%0d actual=%h/%h expected=%h/%h",checks,live0,live1,owner0,owner1);
         end
     endtask
     always @(posedge clk)begin
-        if(rst)for(i=0;i<32;i=i+1)model[i]=0;
+        if(rst)begin
+            for(i=0;i<32;i=i+1)model[i]=0;
+            owner0=0;owner1=0;
+        end
         else for(i=1;i<32;i=i+1)begin
-            if(rd0==i)model[i]=wr0;
-            else if(rd1==i)model[i]=wr1;
+            if(rd0==i)begin model[i]=wr0;owner0[i]=1;owner1[i]=0;end
+            else if(rd1==i)begin model[i]=wr1;owner0[i]=0;owner1[i]=1;end
         end
     end
     task step;

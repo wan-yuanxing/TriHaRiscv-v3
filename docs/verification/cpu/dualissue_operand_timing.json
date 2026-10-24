@@ -2581,7 +2581,38 @@
     "cache_enable": true,
     "scope": "Cache-on modeled DDR RTL, not physical or board acceptance"
   },
-  "active_physical": null,
+  "active_physical": [
+    {
+      "name": "dual-prepared-branch-pc-physical-v21",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-prepared-branch-pc-physical-v21",
+      "prepared_sha256": "78c713ee7c1148592ee06302cce462c237d4981fb9e7e54afa67e76c59d3f6f3",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "physical_constraints": [],
+      "timing_closed": false,
+      "launcher_pid": 33204,
+      "launch_console": "build/cpu/dual-prepared-branch-pc-route-console.log",
+      "launch_stderr": "build/cpu/dual-prepared-branch-pc-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-prepared-branch-pc-route-launch-exit.json"
+    },
+    {
+      "name": "dual-native-bank-live-physical-v22",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-native-bank-live-physical-v22",
+      "prepared_sha256": "33342ff6a571c447a14b6a6421166b3225b426d13741fd15a27165e7265b72ef",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "physical_constraints": [],
+      "timing_closed": false,
+      "launcher_pid": 24004,
+      "launch_console": "build/cpu/dual-native-bank-live-route-console.log",
+      "launch_stderr": "build/cpu/dual-native-bank-live-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-native-bank-live-route-launch-exit.json"
+    }
+  ],
   "best_completed_worst_setup_ns": -0.805,
   "overall_target_met": false,
   "selected_candidate": {

@@ -1,7 +1,7 @@
 /* All-output clocked oracle against unchanged original execution logic. */
 `timescale 1ns / 1ps
 module tb_exec_signed_ge;
-    parameter USE_DERIVATIVE=0, BROKEN=0;
+    parameter USE_DERIVATIVE=0, BROKEN=0, BROKEN_PC=0;
     reg clk=0,rst=1,valid=0,hold=0,invalid=0;
     always #5 clk=~clk;
     reg [31:0] opcode=0,pc=32'h80000000,a=0,b=0,rng=32'h7139b52a;
@@ -106,6 +106,8 @@ module tb_exec_signed_ge;
     task check;
         begin
             observed=got_out;
+            if(BROKEN_PC && valid===1'b1 && opcode[6:0]==7'h63)
+                observed[67]=~observed[67];
             if(BROKEN && opcode[6:0]==7'h63 && opcode[14:12]==3'b101 && ref_out[66]===1'b1)observed[66]=0;
             checks=checks+1;
             if(observed!==ref_out)$fatal(1,"SIGNED_GE_FAIL n=%0d opcode=%h a=%h b=%h ref=%h got=%h",n,opcode,a,b,ref_out,observed);
