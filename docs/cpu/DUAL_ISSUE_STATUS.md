@@ -167,3 +167,9 @@ v13最终原10ns时序退步：Slow setup-2.659/hold+0.112/MPW+3.655ns，Fast+1.
 
 
 v14b相对v12仅寄存同级合格标签，恢复原FIFO；新完整SRAM/Cache镜像、WB/store、周期/profile与v12完全相同。独立源码与冻结物理包评审通过，原10ns/no-region/20min PDS已启动。尚未通过100MHz，不提升生产RTL。见[寄存标签证据](../verification/cpu/dualissue_registered_tags_simple.json)。
+
+
+v14b原10ns已终态：Slow setup-1.629/hold+0.112/MPW+3.655ns，Fast+1.884/+0.099/+4.202ns；native0/verifier2，529输出核验。CPU-only8629LUT/4108FF/752RAM-LUT(included)/4APM/0DRM，30个标签FF实际映射保留。新实际路径为fetch1源索引→旁路选择→通用分支比较→pc_x，18级、logic2.877ns/route8.265ns，100MHz仍未通过。
+
+
+v15仅将已有onehot旁路输出改为单比特reverse-case，RF默认/x0及所选XZ数据传递保持。parent与新单/双24448项检查及负例、zero6166、有序/IRQ均通过；独立评审确认onehot前提。新SRAM/Cache完整镜像、WB/store、周期及profile与v14b精确相同，独立物理绑定评审通过，原10ns/no-region20min PDS已启动；属性效果与时序仍待实际报告。

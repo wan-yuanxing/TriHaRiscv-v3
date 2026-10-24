@@ -1,0 +1,150 @@
+{
+  "status": "PHYSICAL_RUNNING",
+  "scope": "Reverse-case on existing known one-hot forwarding selector; six stages/branch policy/data priority unchanged; production unchanged",
+  "manifest": "docs/verification/cpu/dualissue_onehot_select_sources.json",
+  "manifest_sha256": "40420b0b58eb4349ed3de1a89e3e643669438c9197a9ad3850451e5ad81667eb",
+  "reference": {
+    "repository": "https://github.com/YosysHQ/picorv32",
+    "revision": "de92ce54e8a3f24f2adc6b5d04de35e4edb873e5",
+    "file": "picorv32.v",
+    "sha256": "0836050971b3c6cdd28ac3b1e5719a67fb645161912bef1e472e63995ceb0622",
+    "license": "ISC notice retained in unmodified downloaded reference",
+    "local_file": "build/cpu/reference-onehot/de92ce54e8a3f24f2adc6b5d04de35e4edb873e5/picorv32.v",
+    "scope": "Verilog reverse-case/parallel_case representation idiom only; no CPU architecture migration or decoder code copied"
+  },
+  "invariant": "Procedural hits initialize0 and become1 only on definite equality. Highest known hit uniquely selects, otherwise all zero. Reverse-case direct copies X/Z payload; RF default and x0 override remain.",
+  "directed_and_ordered": [
+    {
+      "label": "parent dual24448",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100603770256Z",
+      "status": "PASS",
+      "result_sha256": "ce59a4f90397cb7111b0a2cdaed9f58b72b249c22b19d65adb1529e547bcbbb4"
+    },
+    {
+      "label": "parent single24448",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100606430247Z",
+      "status": "PASS",
+      "result_sha256": "a00a22d759fdf261be0d22f94843df37897f62a7477b55b8593635b22d12671e"
+    },
+    {
+      "label": "parent corruption negative",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100608978799Z",
+      "status": "FAIL",
+      "result_sha256": "3d46a5af217eb9f5b578be2e274e3c7435dfd057f900ab9db4cd36631fc68766"
+    },
+    {
+      "label": "new dual24448",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100709863154Z",
+      "status": "PASS",
+      "result_sha256": "9c8d3dce0d5321a376b1821473c86d9272c286e1975c156293b8ce2973bfff23"
+    },
+    {
+      "label": "new single24448",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100712379545Z",
+      "status": "PASS",
+      "result_sha256": "6fffd95583ed7f67ee447a042af5cb6a3c77e44568834d33ea5a9cd8f1da0c86"
+    },
+    {
+      "label": "new corruption negative",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100714885918Z",
+      "status": "FAIL",
+      "result_sha256": "9c4b40d44a4b73600cdc34d04d27d6a180bdff7222169edb18db84f914df6782"
+    },
+    {
+      "label": "zero pair6166",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T100744388993Z",
+      "status": "PASS",
+      "result_sha256": "5ea0c5fae1b92ab5e7a3ddeca911f5123778cfe7b683d82a843ca4dd844c94aa"
+    },
+    {
+      "label": "ordered both",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1007446990853Z",
+      "status": "PASS",
+      "result_sha256": "3f58876829416fd8ebdcd4650dfba49838289fd1e0f4dcc374e22ca15693f8e1"
+    },
+    {
+      "label": "IRQ both",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1007532916235Z",
+      "status": "PASS",
+      "result_sha256": "0b0d15d5c04ac72a380a2a760e2df04e64efdf99948a79e783bd1f8a5aedac05"
+    }
+  ],
+  "sram": "build/cpu/dual-sram/coremark-20261024T100744358389Z",
+  "cache_on": "build/cpu/cache-coremark-20261024T100744373718Z",
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-onehot-select-physical-v15",
+    "status": "RUNNING",
+    "prepared_sha256": "fd117b922f57c2c00756b0c4becf3dbc8a3bc2ac44f25a75d739ed1931a32e51",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "extra_physical_constraint": null,
+    "timing_closed": false,
+    "launcher_pid": 9032,
+    "launch_console": "build/cpu/dual-onehot-select-route-console.log",
+    "launch_stderr": "build/cpu/dual-onehot-select-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-onehot-select-route-launch-exit.json"
+  },
+  "actual_postroute_100mhz": false,
+  "overall_target_met": false,
+  "limits": [
+    "No equivalence for artificially forced non-onehot or unknown function-local select state.",
+    "No new full_case promise; explicit default RF is retained.",
+    "Attribute acceptance/mapping effect requires actual native synthesis and STA.",
+    "Short RTL estimates are not official or board scores; WB observation IPC is not architectural minstret."
+  ],
+  "comparison": {
+    "status": "PASS",
+    "candidate": "v15 reverse-case existing onehot bypass",
+    "scope": "Complete same-cycle RTL comparison to v14b; actual100MHz pending",
+    "actual_postroute_100mhz": false,
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T100744358389Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T094923717203Z",
+      "result_sha256": "09bf4d9554c3d4306de683563dddfef3a616954b4cce9c2161dc311ed4ddbbf8",
+      "parent_result_sha256": "b28aafaee022196493680f836441a57899d06347ebbdd21909499d02c09d4ee4",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T100744373718Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T094923755466Z",
+      "result_sha256": "d83015d44a65a5fd5b38110a93fa1079564bfc291b64f32c2b682bf02347478c",
+      "parent_result_sha256": "42d638aaf74a3c1593c7afe794c4f8daff64bd0c713c41fa56463199f25b1c0e",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  },
+  "independent_review": "Known onehot invariant, four-state/XZ priority behavior, fixed reference/notice, complete RTL streams and original10ns frozen binding reviewed; admitted for diagnostic only"
+}

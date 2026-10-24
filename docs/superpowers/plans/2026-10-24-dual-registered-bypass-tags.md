@@ -29,7 +29,7 @@ keeps latency and all opcodes/results unchanged, and targets the measured head.
       compare full SRAM/Cache images, WB/store, cycles/profile to v13.
 - [x] Preserve full-base patch/22source manifest and fresh reconstruction.
 - [x] Review source/state semantics and original10ns/no-region physical binding.
-- [ ] Route privately after admission; final six STA rows and same-source
+- [x] Route privately after admission; final six STA rows and same-source
       >4/MHz gate remain required. Do not promote or program the board.
 
 ## Parent selection update
@@ -41,3 +41,7 @@ SRAM and Cache-on measurement binding and integrated ordered/IRQ checks.
 
 Fresh v14b SRAM/Cache complete images, WB/store, cycles and profile match v12.
 Independent physical binding review PASS; private original10ns PDS launched.
+
+v14b native flow0, timing verifier2; final setup-1.629ns, hold/MPW PASS.
+Qualified tags all mapped to30FF; CPU8629LUT/4108FF. New measured path is
+fetch1 index through forwarding priority and general branch to pc_x (18levels).
