@@ -11,6 +11,14 @@ ROOT=Path(__file__).resolve().parents[2]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def physical_constraints(compact=False,io_registers=False):
+    if compact and io_registers:
+        raise ValueError('Choose region placement or output register packing separately')
+    if compact:return ['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc']
+    if io_registers:return ['fpga/pg2l100h/constraints/cpu_io_registers.fdc']
+    return []
+
+
 def verify_file_hashes(work, row):
     work=Path(work).resolve()
     if row['cpu_mode']!=1 or row['period_ns']!=10:
@@ -50,10 +58,10 @@ def verify_package(work):
     recipe=json.loads((ROOT/'fpga/pg2l100h/project/cpu_minimal_soc.json').read_text(encoding='utf-8'))
     names=set(core['sources']+core['headers']+recipe['sources']+recipe['headers'])
     physical=row.get('physical_constraints',[])
-    allowed='fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'
-    if physical not in ([],[allowed]):raise ValueError('Unsupported physical constraint set')
+    if physical not in ([],physical_constraints(compact=True),physical_constraints(io_registers=True)):
+        raise ValueError('Unsupported physical constraint set')
     for name in physical:
-        if row['input_hashes'].get(name)!=sha(ROOT/name):raise ValueError('Physical region constraint drift')
+        if row['input_hashes'].get(name)!=sha(ROOT/name):raise ValueError('Physical implementation attribute drift')
     if set(row['input_hashes'])!=names|{recipe['constraints']}|set(physical):
         raise ValueError('Physical source set differs from measured boundary')
     for name in names:
@@ -90,8 +98,9 @@ def tcl(work,core,sources,fdc,pnr_minutes=10,physical_constraints=()):
     return '\n'.join(lines)+'\n'
 
 
-def prepare(simulation,output,pnr_minutes=10,compact=False):
+def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False):
     if type(pnr_minutes) is not int or not 1<=pnr_minutes<=60:raise ValueError('PNR minutes must be 1..60')
+    physical=physical_constraints(compact,io_registers)
     simulation=simulation.resolve();output=output.resolve()
     if output.exists() or not output.is_relative_to(ROOT/'build/cpu'):
         raise ValueError('Use a new directory below build/cpu')
@@ -123,7 +132,6 @@ def prepare(simulation,output,pnr_minutes=10,compact=False):
         dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst);frozen[name]=sha(dst)
     fdc=recipe['constraints'];dst=output/'src'/fdc;dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(ROOT/fdc,dst);frozen[fdc]=sha(dst)
-    physical=['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'] if compact else []
     for name in physical:
         dst=output/'src'/name;dst.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(ROOT/name,dst);frozen[name]=sha(dst)
@@ -144,10 +152,13 @@ def prepare(simulation,output,pnr_minutes=10,compact=False):
     return prepared
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true');parser.add_argument('--pnr-minutes',type=int,default=10);parser.add_argument('--compact',action='store_true')
+    parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true');parser.add_argument('--pnr-minutes',type=int,default=10)
+    physical=parser.add_mutually_exclusive_group()
+    physical.add_argument('--compact',action='store_true')
+    physical.add_argument('--io-registers',action='store_true',help='Pack existing port FFs; no region or timing exceptions')
     args=parser.parse_args()
     if args.verify:
         verify_package(args.simulation);print('FROZEN_PACKAGE_PASS')
     else:
         if args.output is None:parser.error('output is required for preparation')
-        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact)['status'])
+        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact,args.io_registers)['status'])

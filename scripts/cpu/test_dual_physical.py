@@ -6,6 +6,14 @@ from pathlib import Path
 import prepare_dual_physical as m
 
 class PhysicalGateTests(unittest.TestCase):
+    def test_output_register_packing_is_explicit_and_separate_from_region(self):
+        self.assertEqual(m.physical_constraints(),[])
+        self.assertEqual(m.physical_constraints(io_registers=True),
+            ['fpga/pg2l100h/constraints/cpu_io_registers.fdc'])
+        self.assertEqual(m.physical_constraints(compact=True),
+            ['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'])
+        with self.assertRaises(ValueError):m.physical_constraints(compact=True,io_registers=True)
+
     def test_rejects_unfinished_or_changed_simulation(self):
         for row in [dict(status='RUNNING'),dict(status='PASS',source_unchanged=False)]:
             with self.assertRaises(ValueError):m.check_simulation(row)
@@ -77,6 +85,21 @@ class PhysicalGateTests(unittest.TestCase):
                 row['outer_seconds']=1500
                 (work/'prepared.json').write_text(json.dumps(row))
                 m.verify_package(work)
+                attribute='fpga/pg2l100h/constraints/cpu_io_registers.fdc'
+                (root/attribute).parent.mkdir(parents=True,exist_ok=True)
+                (root/attribute).write_text('define_global_attribute {syn_useioff} {1}\n')
+                (work/'src'/attribute).parent.mkdir(parents=True,exist_ok=True)
+                (work/'src'/attribute).write_bytes((root/attribute).read_bytes())
+                row['physical_constraints']=[attribute]
+                row['input_hashes'][attribute]=m.sha(root/attribute)
+                (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc',20,[attribute]))
+                row['files']['build.tcl']=m.sha(work/'build.tcl')
+                (work/'prepared.json').write_text(json.dumps(row))
+                m.verify_package(work)
+                row['physical_constraints']=[attribute,'extra.fdc']
+                (work/'prepared.json').write_text(json.dumps(row))
+                with self.assertRaisesRegex(ValueError,'Unsupported physical'):m.verify_package(work)
+                row['physical_constraints']=[];del row['input_hashes'][attribute]
                 row['pnr_minutes']=True;row['outer_seconds']=360
                 (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc',True))
                 row['files']['build.tcl']=m.sha(work/'build.tcl')

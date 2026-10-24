@@ -199,3 +199,6 @@ v18最终setup-1.110ns，为当前最佳；Slow/Fast hold+0.113/+0.100、MPW通�
 v19在原capture/reset/hold/bubble块内寄存2个pipe低MUL类型位及1个共享宽度ready位，保持ready reset1及holdX/Z原采样语义。pipe40003和multiplier全65bit41027对照/负控通过，actual B-MUL/earlyconsumer6166、pending32773、有序/IRQ及完整SRAM/Cache镜像/轨迹/周期/profile均与v18相同。独立评审后原10ns/no-region20min PDS已启动，最终时序待核。
 
 v19最终原10ns未通过：Slow setup-1.765ns为done_o端口，首条CPU路径-1.693ns为pc_x[2]→A目的标签选择→同包RAW/WAW比较→FIFO CE；Fast setup+1.025ns，Slow/Fast hold+0.114/+0.100ns、MPW+3.655/+4.202ns通过。native0/verifier2、563输出哈希已核。CPU-only8736LUT/4052FF/752RAM-LUT(included)/4APM/0DRM；3个预期元数据FF均保留，旧opcode位优化使总FF-56。下一v20把两种raw-fetch目的依赖提前计算后选scalar，保持原发射/四态语义及全部约束；端口违例仍须一起解决。
+
+
+v20同包RAW/WAW提前到raw-fetch标量，parent/new各48768检查及负控通过；pending32773、实际B-MUL6166、有序/IRQ及完整SRAM/Cache镜像/写回/存储/profile均与v19相同。SRAM短测4.030288/MHz，Cache-on DDR模型3.084289/MHz。两套原10ns/no-region物理包独立评审后并行启动，第二套仅复用syn_useioff打包已有输出FF；原始IO/hold/multicorner预算字节不变。实际时序待验收，生产RTL未变。见[本轮证据](../verification/cpu/dualissue_packet_dependency.json)。

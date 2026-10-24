@@ -2207,7 +2207,40 @@
     "cache_enable": true,
     "scope": "Cache-on modeled DDR RTL, not physical or board acceptance"
   },
-  "active_physical": null,
+  "active_physical": [
+    {
+      "name": "dual-packet-dependency-physical-v20",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-packet-dependency-physical-v20",
+      "prepared_sha256": "54dad83efb47ad65fa19694087a967fc160e489254e98aa08e37dd8fbada75cf",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "physical_constraints": [],
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "timing_closed": false,
+      "launcher_pid": 18624,
+      "launch_console": "build/cpu/dual-packet-dependency-route-console.log",
+      "launch_stderr": "build/cpu/dual-packet-dependency-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-packet-dependency-route-launch-exit.json"
+    },
+    {
+      "name": "dual-packet-dependency-io-physical-v20",
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-packet-dependency-io-physical-v20",
+      "prepared_sha256": "e9d1254a1619c19bbd44cdd40775dcfbf6b498bc3612e34e3db890c6db99f956",
+      "status": "RUNNING",
+      "period_ns": 10,
+      "physical_constraints": [
+        "fpga/pg2l100h/constraints/cpu_io_registers.fdc"
+      ],
+      "pnr_minutes": 20,
+      "outer_seconds": 1500,
+      "timing_closed": false,
+      "launcher_pid": 16696,
+      "launch_console": "build/cpu/dual-packet-dependency-io-route-console.log",
+      "launch_stderr": "build/cpu/dual-packet-dependency-io-route-console.stderr.log",
+      "launch_exit": "build/cpu/dual-packet-dependency-io-route-launch-exit.json"
+    }
+  ],
   "best_completed_worst_setup_ns": -1.11,
   "overall_target_met": false,
   "selected_candidate": {
