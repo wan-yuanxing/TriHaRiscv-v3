@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module tb_indexed_btb #(parameter BROKEN=0);
+module tb_indexed_btb #(parameter BROKEN=0,parameter BROKEN_ADDR=0);
     reg clk=0, rst=1, flush=0, train=0, taken=0;
     reg [31:0] source=0, target=0, pc=0, random_q=32'h27182818;
     reg [2:0] kind=0;
@@ -14,6 +14,12 @@ module tb_indexed_btb #(parameter BROKEN=0);
     reg [31:0] expected_target;
     reg [2:0] expected_kind;
     always #5 clk=~clk;
+    generate if(BROKEN_ADDR)begin:g_break_address
+        initial begin
+            wait(checks>=99);
+            force u_dut.g_bank[0].u_bank.g_block[2].write_address_w[0]=~source[3];
+        end
+    end endgenerate
     triha_btb u_dut(.clk_i(clk),.rst_i(rst),.invalidate_i(flush),
         .train_i(train),.taken_i(taken),.source_i(source),.target_i(target),.kind_i(kind),
         .pc_i(pc),.valid_o(hit),.upper_o(upper),.target_o(predicted),.kind_o(predicted_kind));

@@ -118,5 +118,7 @@ hold+0.154ns、MPW+3.655ns，Fast setup+2.087ns、hold+0.100ns、MPW+4.202ns。
 3.115370/MHz。完整WB/store除已验证的初始cycle与started存储外一致，WB观察IPC1.184452，
 不等于架构minstret，不是板级或官方分数。
 完整队列状态与独立顺序oracle、容量RED/GREEN/负例、整核有序/IRQ及独立评审通过。
-原100MHz/IO/hold约束、无区域约束的新PDS已启动，CPU-only面积与最终时序待验收，
-**整体目标仍未通过**。详见[取指队列证据](../verification/cpu/dualissue_fetch_queue.md)。
+原100MHz/IO/hold约束、无区域约束的新PDS已完成，但Slow setup-2.228ns、
+Slow/Fast hold-0.068/-0.060ns失败，MPW通过；CPU-only10039LUT/5008FF，含624RAM-LUT。
+原生PDS0/验收2，757项输出核验。当前最差是异常取消→队列更新；hold违例为BTB写地址。
+继续按真实路径处理，**整体目标仍未通过**。详见[取指队列证据](../verification/cpu/dualissue_fetch_queue.md)。

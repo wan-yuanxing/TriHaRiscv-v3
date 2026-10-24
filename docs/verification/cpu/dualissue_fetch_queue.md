@@ -3,7 +3,7 @@
 Six-word fixed-entry candidate reaches **4.088695 CoreMark/MHz** in the actual
 32KiB synchronous SRAM RTL model, GCC15.2 **-O2**, five iterations. Removing
 the passive observer reproduces the same1,222,884cycles. **Actual100MHz
-postroute acceptance remains pending.** This is not an official or board score.
+postroute acceptance failed.** This is not an official or board score.
 
 | Actual loaded-program boundary | Four words | Six words | Short CoreMark/MHz, six words |
 |---|---:|---:|---:|
@@ -40,9 +40,20 @@ read and corresponding `started` store need normalization. The remaining
 
 Independent review verified source manifests/patch reconstruction, actual runs,
 traces and the physical package. Fresh original10ns/IO/hold/multicorner PDS is
-running under `build/cpu/dual-fifo-six-physical-v6b`, PNR20min/outer1500s,
-no compact region. CPU-only resources for this candidate are pending. Previous
-LSU preparation's -1.692ns/9965LUT cannot be used as this candidate's result.
+completed under `build/cpu/dual-fifo-six-physical-v6b`, PNR20min/outer1500s,
+no compact region. Slow setup/hold/MPW are -2.228/-0.068/+3.655ns; Fast
++1.953/-0.060/+4.202ns. Native PDS0/verifier2;757 frozen outputs verified.
+CPU-only synthesis is10039LUT/5008FF/624RAM-LUT(included)/4APM/0DRM.
+The -1.692ns parent was a different netlist and placement; this version is
+faster in RTL but physically worse. No combined target admission.
+
+Actual worst setup starts valid_e2_q through the wide exception selector,
+exception OR/squash and slot1 validity to remove_b_r(fan220) and queue PC capture.
+Logic2.113ns/routing9.756ns,12levels. The failing hold path is the training
+packet FF directly to native BTB WADDR0 (fan824), with no intervening logic.
+Next diagnose scalar exception-presence selection and actual BTB write-address
+minimum delay. A native dual-bank RF is a researched backup, not the next
+change justified by this report.
 
 [Bound evidence](dualissue_fetch_queue.json) includes exact run directories,
 hashes, measurements, coverage limits and physical admission state. Production

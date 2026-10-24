@@ -30,7 +30,30 @@ candidate so structural timing and performance effects can be assessed.
       WB/store streams. Reject if no benefit or if functional contract fails.
 - [x] Evaluate v5b terminal actual STA; choose the measured reviewed FIFO
       candidate for fresh no-region20min original-FDC PDS.
-- [ ] Verify all frozen inputs/output hashes and actual Slow/Fast six timing
+- [x] Verify all frozen inputs/output hashes and actual Slow/Fast six timing
       checks, performance consistency and CPU-only synth resources.
 - [ ] Record actual results, commit narrowly; no target admission until the
       same physical candidate exceeds4/MHz and passes100MHz.
+
+## Actual terminal continuation: scalar squash and BTB minimum delay
+
+Six-word route completed with setup-2.228ns and Slow/Fast hold-0.068/-0.060ns.
+The actual setup path starts valid_e2_q through wide exception selection/OR,
+squash and queue update. Hold is training FF straight to native BTB WADDR0.
+Continue these measured paths before the independently researched native RF.
+
+- [x] Exhaustive scalar/vector exception oracle on parent;65536 known cases.
+- [x] In an isolated v7 snapshot, pre-reduce both exception sources and select
+      scalar in the same original procedural if/else. Preserve full vector/WB.
+- [x] Extend scalar oracle with X/Z selector, unknown exceptions and stall
+      history. GREEN and corrupted-squash negative observed.
+- [x] Per BTB bank/block use two kept native LUT gates on each of5 WADDR bits:
+      address AND metadata_we, then AND not reset. All actual target writes
+      imply metadata_we; keep original RADDR, WE and valid updates.
+- [x] Existing independent512-entry oracle GREEN; corrupt one actual local
+      WADDR bit and observe wrong-target failure. Functional identity alone
+      does not prove minimum-delay improvement.
+- [x] Verify complete SRAM/Cache-on traces against v6b, cycles and images.
+- [x] Review complete v7 package; fresh original-FDC20min PDS started.
+- [ ] Inspect actual mapping for160 native hold gates/local write fanout and
+      scalar OR use. Recheck every final corner setup/hold/MPW and hashes.
