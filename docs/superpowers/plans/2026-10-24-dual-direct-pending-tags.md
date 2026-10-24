@@ -28,9 +28,13 @@ native synthesis must remove them from real control cones/resources.
 - [x] Component/packet/active pairing/ordered/IRQ and fresh SRAM/Cache full
       images/streams/cycles/profile; preserve/reconstruct22-source package.
 - [x] Independent four-state/control proof and original10ns/no-region review.
-- [ ] Original100MHz PDS and actual all-corner STA, no production promotion.
+- [x] Original100MHz PDS and actual all-corner STA, no production promotion.
 
 Parent and candidate32773 checks in all4 bypass configurations; force-accept
 negative detected x1 RAW. Coherent branch6166/negative and original packet
 oracle pass; full images/WB/store/performance/profile match v17. Physical
 package7de4423f... reviewed and original10ns private PDS launched.
+
+Final native0/verifier2,511outputs; setup-1.110ns (new best), hold/MPW PASS.
+CPU8692LUT/4108FF, no new state. New path is low-MUL decode after E1 flops,
+not32bit scoreboard read; actual fanout98 early-MUL qualification is next.

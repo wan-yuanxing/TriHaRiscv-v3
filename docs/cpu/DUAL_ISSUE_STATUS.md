@@ -191,3 +191,9 @@ v17最终setup-1.741ns，Slow/Fast hold+0.109/+0.083、MPW通过，native0/verif
 
 
 v18以4个pending producer tag直接比较替换6处真实bitmap读取，不加state/cycle。原indexed-bitmap oracle在4种bypass配置parent/new各32773 PASS，actual-accept及branch-pair负控有效，使用真实pending记录的6166分支/乘法用例通过，旧测试保留。运行镜像/完整WB/store/周期/profile均同v17，独立原10ns/no-region20min包评审通过后PDS已启动。
+
+
+v18最终setup-1.110ns，为当前最佳；Slow/Fast hold+0.113/+0.100、MPW通过。native0/verifier2、511输出核验；CPU-only8692LUT/4108FF，较v17少210LUT。新最差为pipe1_opcode_e1[30]→MUL低字类型译码→early_mul(98fanout)→scalarzero→FIFO。下一v19在原采样点寄存low-MUL类型（每pipe1bit）和共享宽度可用性（1bit），无新流水级/周期。
+
+
+v19在原capture/reset/hold/bubble块内寄存2个pipe低MUL类型位及1个共享宽度ready位，保持ready reset1及holdX/Z原采样语义。pipe40003和multiplier全65bit41027对照/负控通过，actual B-MUL/earlyconsumer6166、pending32773、有序/IRQ及完整SRAM/Cache镜像/轨迹/周期/profile均与v18相同。独立评审后原10ns/no-region20min PDS已启动，最终时序待核。

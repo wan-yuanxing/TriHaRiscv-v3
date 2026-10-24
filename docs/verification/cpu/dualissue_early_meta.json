@@ -1,0 +1,155 @@
+{
+  "status": "PHYSICAL_RUNNING",
+  "scope": "Three same-boundary early-MUL eligibility metadata bits; exact previous type/width predicates, no stage or latency change; production unchanged",
+  "manifest": "docs/verification/cpu/dualissue_early_meta_sources.json",
+  "manifest_sha256": "0cb62a8dd25bd946c55e97e8f4a4d7037c90cd884a830e18162df395d4c28c3f",
+  "comparison": {
+    "status": "PASS",
+    "candidate": "v19 early-MUL eligibility metadata at existing E1 capture",
+    "scope": "Complete same-cycle RTL comparison to v18; actual100MHz pending",
+    "actual_postroute_100mhz": false,
+    "sram": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T115343049725Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-sram\\coremark-20261024T111819357786Z",
+      "result_sha256": "c1e93111982bb6e6d0c21bcbd2885ead099ca0e1813e6ad84b08d4dfc120221e",
+      "parent_result_sha256": "5c7e5674f9eaa291346ce42c2eb995bcd2c4d1c79c8d1f773cf2c765858b21a3",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    "cache_on": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T115343048139Z",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-coremark-20261024T111819379537Z",
+      "result_sha256": "17c3f4937891402fc28d7f1708807eb0f2c02f6c96e770020fb485348b048420",
+      "parent_result_sha256": "ae65a53486c0e989376c569c3c9a3b0b928e3c8b122aba125816ece7a4d94c62",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "image_and_complete_trace_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    },
+    "directed_and_ordered": [
+      {
+        "label": "parent pipe40003",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T114935114288Z",
+        "status": "PASS",
+        "result_sha256": "4d804e435f7e4eeff214819287ba7c12ce7aa2c66a4abcb9427dd871f6c70eb0"
+      },
+      {
+        "label": "parent multiplier41027",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T114937123018Z",
+        "status": "PASS",
+        "result_sha256": "809695215eecd747dac1f249e807190a425f4c5a6325682e6e69b77f1d14ca52"
+      },
+      {
+        "label": "parent ready corruption",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T114939466221Z",
+        "status": "FAIL",
+        "result_sha256": "b2b1a30d98bd1fab9fd4a03bfa276b2033f5f1310b42eb94a7d7588db0cb398f"
+      },
+      {
+        "label": "new pipe40003",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115146787231Z",
+        "status": "PASS",
+        "result_sha256": "14273d57ecb266ae2025b04471dcdea751d46c408afae46a6bc6a4bac440f0d3"
+      },
+      {
+        "label": "new low-type corruption",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115148760352Z",
+        "status": "FAIL",
+        "result_sha256": "e39159c5079ecd4b4e7bb12ddffd1ff34ef34b4af708f131e4ed3df618e6124a"
+      },
+      {
+        "label": "new multiplier41027",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115150781508Z",
+        "status": "PASS",
+        "result_sha256": "dd9351d751fbed1e3b2cc172db28fd8e52c97367d5372439eaa71d60f7463f95"
+      },
+      {
+        "label": "new ready corruption",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115152851215Z",
+        "status": "FAIL",
+        "result_sha256": "2adebf0ef675b79f6ccb66791f60b952ad7978bf9e3ac13cee22b34f7c984269"
+      },
+      {
+        "label": "coherent branch/MUL6166",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115343053532Z",
+        "status": "PASS",
+        "result_sha256": "034d294ccf460f054230b347ead9c7617b8ea494077ecfd1ab7887dfe5a606ca"
+      },
+      {
+        "label": "pending32773",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261024T115346269823Z",
+        "status": "PASS",
+        "result_sha256": "3ae9ac5be7f676b285536487645f3c8e92b23a42285808180695ee748d0deb6f"
+      },
+      {
+        "label": "ordered both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1153433710732Z",
+        "status": "PASS",
+        "result_sha256": "3439a9f9bc944ef4bb5d3e361ac7c846e3b0017c98bae0c622f077de215960ff"
+      },
+      {
+        "label": "IRQ both",
+        "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-ordered-20261024T1153532598046Z",
+        "status": "PASS",
+        "result_sha256": "9efca13948e20c27b6a5f79cdb3493a4200750d2ab28207de90a4958af18ac71"
+      }
+    ]
+  },
+  "physical": {
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-early-meta-physical-v19",
+    "status": "RUNNING",
+    "prepared_sha256": "5301112780bd409f6d8e232fbbcf31a80d4e03458167b0c2e56c9d746772946b",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "extra_physical_constraint": null,
+    "timing_closed": false,
+    "launcher_pid": 5740,
+    "launch_console": "build/cpu/dual-early-meta-route-console.log",
+    "launch_stderr": "build/cpu/dual-early-meta-route-console.stderr.log",
+    "launch_exit": "build/cpu/dual-early-meta-route-launch-exit.json"
+  },
+  "independent_review": "Same-branch E1 state invariant, multiplier ready reset1/holdX preservation, frozen golden65bit outputs/boundaries/negatives, all RTL streams/profile and original10ns binding reviewed before launch",
+  "invariants": {
+    "pipe_opcode": "mul_low_e1 equals original full masked comparison on stored opcode; reset/bubble0, holds and capture mirror same original block",
+    "multiplier_width": "early_ready_e1 equals original two upper16-zero comparisons on stored operands; reset1, original else-if(hold) capture semantics retained",
+    "data": "No operand/partial product/result/control field was altered; original result if(~hold) behavior retained"
+  },
+  "limits": [
+    "New metadata may replace obsolete opcode FF in synthesis, so total FF delta need not be exactly3; inspect actual mapped predicates.",
+    "Arbitrary forced internal stored opcode/operand fields do not update the parallel metadata; use clocked/coherent producer tests.",
+    "Short RTL estimates are not official or board scores; WB observation IPC is not architectural minstret.",
+    "ELF metadata may differ; own SRAM ELF and all frozen inputs/outputs bind this attempt.",
+    "Final actual Slow/Fast setup/hold/MPW and performance consistency remain mandatory."
+  ],
+  "overall_target_met": false
+}
