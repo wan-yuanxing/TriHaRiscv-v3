@@ -1,26 +1,32 @@
 # 双发射独立路线状态
 
-更新：2026-10-23。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，
-分支 `cpu/dualissue-windows`，基线 `340bcc2`。主工程和 SoC 集成继续各自推进。
+更新：2026-10-24。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，
+分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
+[物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
 
-已完成现有六级顺序双发射路径的缓存封装接通及模拟功能基线。默认仍为单发射。
-固定 RV32IM/CSR、BTB512/BHT512/RAS4、I/D 各 16KiB/两路/32B 行，D 写回/写分配。
-共享 LSU/乘除法资源与现有接口不变。
+当前最好的完整后布线候选为 v20：原10ns、无区域/IO属性时 setup **−0.805ns**，
+Slow/Fast hold +0.118/+0.102ns、脉宽 +3.655/+4.202ns；**100MHz尚未通过**。
+CPU-only **8710LUT/4052FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
+从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
 
-同一加载程序、GCC15.2 `-O2`、五次 CoreMark、相同 AXI DDR 数字模型下，
-单/双周期 2,014,969 / 1,781,952，短测 CoreMark/MHz 2.481428 / 2.805912，
-吞吐提升 13.076503%。WB 观测 IPC 0.718844 / 0.812843，不是架构 `minstret`。
-完整计时 WB/store 除已核实的绝对起始时间外相同；CRC 和破坏负例通过。
-这是 RTL 仿真，非官方或板级分数。
+同一v20 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
+SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
+开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
+对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
+DDR Cache-off已按用户指示排除。
 
-当前门槛是原生 CPU-only 资源及真实后布线 100MHz；二者均 UNKNOWN，
-尚未开始本路线 PDS 或板测。待集成任务的 PDS 工作释放工具后，先用现有
-CPU-only 单/双映射比较 FF 四读两写寄存器堆成本，再决定 Pango RAM 适配。
-不把旧单发射时序或整板面积作为新双发射的验收结果。
+六级顺序双发射、RV32IM/CSR、BTB512/BHT512/RAS4、GShare关闭；I/D各16KiB、
+两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
+时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
 
-完整证据及重现命令：[模拟基线](../verification/cpu/dualissue_cached_baseline.md)。
-后续准入需继续覆盖精确异常/中断、依赖与共享资源互锁、ISA、完整 Cache
-维护语义，以及多 corner 物理时序；本功能基线不替代这些门槛。
+v21地址保留、v22RF编码及v23区域试验均已失败，未超过v20；v24正在核验将exec类别
+预译码并存入已有队列的等周期候选。全部原100MHz/IO/hold/multicorner预算不变。
+用户已授权独立PDS并行，使用私有目录/TEMP/日志；主工程、集成、板卡和串口未动。
+本轮证据见[区域诊断](../verification/cpu/dualissue_packet_compact.json)。
+
+更广的ISA、异常/IRQ及Cache维护准入仍需按部署阶段完成；当前隔离功能回归和物理诊断
+不能替代板级SoC验收。初始模拟基线及历史命令见
+[模拟基线](../verification/cpu/dualissue_cached_baseline.md)。
 
 ## TCM 主目标与 Cache 对照（2026-10-23）
 
@@ -214,3 +220,6 @@ v21终态setup-1.168ns、Slow/Fast hold-0.075/-0.064ns，MPW通过，CPU8772LUT/
 
 
 v23 exact-v20 compact物理包58c1910a...经独立核验后启动。只新增已有CPU区域和输出FF打包属性，原10ns/IO/hold/multicorner预算保持字节相同。该区域增量对照v20 IO版-1.198ns，原无属性最好-0.805ns仍保留；待实际报告，不能将区域利用率当频率验收。
+
+
+v23最终setup-1.283ns、Slow/Fast hold+0.098/+0.056ns、MPW+3.655/+4.202ns，native0/verifier2，区域试验未改善。实际fetch1 opcode2→exec类别→LSU payload→load/address/store格式为11级、logic1.923/route9.007ns。下一v24复用已有CSR输入decoder与同队列info，把exec位在原采样点前算好（预计6FF），不改变阶段/周期、其余类别/CSR/invalid/idle历史；已开始完整对照。

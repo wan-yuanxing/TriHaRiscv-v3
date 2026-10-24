@@ -10,7 +10,9 @@ The best no-attribute v20 has setup-0.805ns; the same-source I/O-packing v20 has
 
 - [x] Prepare exact v20 source/firmware package with fixed existing physical constraint whitelist; verify original29inputs plus the compact attribute file.
 - [x] Independent package/constraint/source review before launch.
-- [ ] Inspect actual applied region and mapping resources; confirm full fresh stage success and every frozen input/output hash.
-- [ ] Accept only actual Slow/Fast setup/hold/MPW plus consistent performance slack and the bound same-source >4/MHz. Otherwise retain failure and diagnose actual path.
+- [x] Inspect actual applied region and mapping resources; confirm full fresh stage success and every frozen input/output hash.
+- [x] Accept only actual Slow/Fast setup/hold/MPW plus consistent performance slack and the bound same-source >4/MHz. Otherwise retain failure and diagnose actual path.
 
 Prepared58c1910a... independently reviewed; private PDS launched21:18:23, wrapper17340. No new RTL simulation needed because the full accepted v20 source/image hashes are exact. Actual region/STA pending.
+
+Terminal native0/verifier2, original10ns setup-1.283ns, Slow/Fast hold+0.098/+0.056ns andMPW+3.655/+4.202ns; Fastsetup+2.658ns. CPU8710LUT/4052FF. Region was generated/retained but every member coordinate was not proven; actual timing did not improve over same-source IOparent-1.198ns or best-.805ns. Actual worst fetch1opcode2 -> execclass ->LSUpayload ->load/address/storeformat;11levels,logic1.923/route9.007ns. Do not adopt this failed physical experiment.
