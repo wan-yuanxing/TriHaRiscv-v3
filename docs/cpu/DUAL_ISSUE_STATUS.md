@@ -6,14 +6,15 @@
 BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV，变量移位在A，B保留立即移位。
 A分支可与B ALU推测配对，恢复/故障在E1取消年轻结果；B LSU仍只允许原已知不跳转配对。
 
-最新v52完整Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
+最新v53完整Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
 WB观测IPC1.185400。CRC通过，1448448条WB和70839条store与v51逐字相同，运行镜像也相同。
 这是RTL估计，非官方分数或板级结果；WB观察IPC不是架构minstret。
 
 **100MHz尚未通过。**v51原10ns、原IO/hold/multicorner已完成，setup Slow/Fast -0.505/+2.850ns，
 hold +0.110/+0.105ns、脉宽 +3.655/+4.202ns；全部冻结输入与实际输出核验通过。
-v52已通过组件、有序/IRQ和完整SRAM；旧占用数预译码FIFO写入位置，原10ns独立PDS运行中。
-CPU-only综合9077LUT/4648FF/752RAM-LUT（已含LUT）/4APM/0DRM，排除ROM/SRAM/MMIO夹具。
+v52已终态：setup -0.986/+2.681ns，hold +0.112/+0.100ns、脉宽+3.655/+4.202ns，
+时序回退，不采用。v53回到v51，只分离分支的有用地址和与晚方向选择；完整SRAM等周期/等轨迹通过，原10ns PDS运行中。
+v53 CPU-only综合9165LUT/4645FF/752RAM-LUT（已含LUT）/4APM/0DRM，排除ROM/SRAM/MMIO夹具。
 最佳已完成setup是v51的−0.505ns；新版本经过新网表/布局，不能直接当频率收益。
 
 v48已把取指包首个有效字在入队对齐，A固定队头；v49在本独立工作树的本地SoC增加一项取指请求
@@ -22,7 +23,8 @@ CSR/故障/类别历史保持；v51把B能力类型判定随指令保存，消�
 所有新运行均只用SRAM。默认`rtl/cpu`尚未替换，候选由完整生产基线补丁/manifest可重建；
 `rtl/soc/triha_soc_memory.v`的请求缓冲只在本独立分支，主工程/集成工作树未修改，未上板。
 
-见[当前候选](../verification/cpu/dualissue_fifo_append_decode.json)、
+见[当前候选](../verification/cpu/dualissue_branch_target_sums.json)、
+[队列预译码终态](../verification/cpu/dualissue_fifo_append_decode.json)、
 [前版终态](../verification/cpu/dualissue_queued_secondary_class.json)、
 [取指请求缓冲](../verification/cpu/dualissue_sram_instruction_buffer.json)、
 [FIFO存储分离](../verification/cpu/dualissue_fifo_flush_data.json)及

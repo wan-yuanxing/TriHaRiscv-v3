@@ -60,6 +60,7 @@ docs/verification/cpu/dualissue_head_alignment.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_flush_data.patch -text -whitespace
 docs/verification/cpu/dualissue_queued_secondary_class.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_append_decode.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_target_sums.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol

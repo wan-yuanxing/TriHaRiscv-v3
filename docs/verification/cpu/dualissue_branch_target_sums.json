@@ -1,0 +1,2456 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU SRAM/TCM only; useful address sum boundaries precede late branch direction/type selection; no board or official score",
+  "manifest": "docs/verification/cpu/dualissue_branch_target_sums_sources.json",
+  "manifest_sha256": "409e6d4f42107fb9004dda102bfe7c0ea9c191a494db2613d3f5e3de042bbb3b",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "parent": "v51; excludes v52 queue destination predecode regression",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T123015510383Z",
+    "status": "PASS",
+    "result_sha256": "106652a83b130c7b074822b97865052a6f6081008a358602cbbe0342e6b6e66f",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1221907,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1001720,
+      "paired": 451806,
+      "frontend": 61797,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 158386,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 145312,
+      "pair_structure": 104435,
+      "pair_dependency": 300167,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 84000,
+      "structure_branch_a": 20434,
+      "structure_other": 1,
+      "pair_raw": 249663,
+      "pair_waw": 2,
+      "pair_older": 50502,
+      "a_waw_only": 11171,
+      "b_waw_only": 2,
+      "queue0": 61797,
+      "queue1": 31643,
+      "queue2": 94040,
+      "queue3": 316829,
+      "queue4": 411670,
+      "queue5": 250095,
+      "queue6": 55833,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 305928,
+      "backpressure_pop": 283953,
+      "frontend_empty": 61797,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T115800660498Z",
+    "byte_identical_files": [
+      "rom.hex",
+      "sram.hex",
+      "sram.bin",
+      "sram.wb.log",
+      "sram.store.log"
+    ]
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T122920766464Z",
+      "status": "PASS",
+      "result_sha256": "7bf6b0bb8362ab937e760803ea77189805adb47431274c8e6398d9873f200f7d",
+      "output_hashes_verified": 72,
+      "purpose": "Independent30000-case parent address oracle"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T123015479073Z",
+      "status": "PASS",
+      "result_sha256": "d0e9870806c319951777074b3eb357b440f1a6582cd01be902fb57bb6e3019f0",
+      "output_hashes_verified": 72,
+      "purpose": "Candidate30000-case binary/XZ address oracle"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T123015486754Z",
+      "status": "FAIL",
+      "result_sha256": "ea9d51ab442dc1347edf83ca5f8a38478700d10998ca87b5614b9454f2940a51",
+      "output_hashes_verified": 72,
+      "purpose": "Real next-PC bit25 force0 negative"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T123015497289Z",
+      "status": "PASS",
+      "result_sha256": "69cf430bcc5f11d7c5fd3495bac9697d85fd0f5d37674644c290f2e8acf665c8",
+      "output_hashes_verified": 75,
+      "purpose": "Held LSU/recovery and faults"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1230158349646Z",
+      "status": "PASS",
+      "result_sha256": "33f48ffcbd96405dd7398de4fe4c0d5dde1217cedc170c81544be180406dd5a2",
+      "output_hashes_verified": 38,
+      "purpose": "Ordered single/dual seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1230158580341Z",
+      "status": "PASS",
+      "result_sha256": "4813ef96789f8f39d895ab2bbea43ac000209026dc518373f4995f6f8dd15064",
+      "output_hashes_verified": 38,
+      "purpose": "IRQ pair single/dual seed173"
+    }
+  ],
+  "reference": {
+    "path": "D:/FPGA/TriHaRiscv-v3-cpu-dualissue/build/upstream/cva6/core/branch_unit.sv",
+    "sha256": "1c3a9c35d55a9350bfcb5e94dff9299e6a58688b1f27337f9f4aef5182cc64d2",
+    "license": "Solderpad Hardware License0.51",
+    "use": "Complete branch-unit source read for parallel target/next-PC and direction separation; not compiled or imported"
+  },
+  "local_pattern": "Existing triha_issue pc_plus4/8 useful-net syn_keep and docs/cpu/pc_increment_timing_plan.md",
+  "independent_review": "No semantic blocker: only useful address arithmetic boundaries differ from v51; complete JALR sum precedes bit0 clear, original four-state branch priority/state/cycles preserved. Target oracle, negative and recovery hashes independently reviewed; parent/candidate ordered/IRQ and complete SRAM receipts subsequently verified by primary agent.",
+  "mapping": {
+    "status": "LOCAL_NATIVE_CARRY_PASS",
+    "checker": "scripts/cpu/check_branch_target_carry.py",
+    "checker_sha256": "3a06f8a8ac293e5c252d045ff6dbfde3075fcedff9463cb37ea06d8126d1ec8c",
+    "parent_red": [
+      {
+        "path": "build/cpu/branch-target-carry-parent-v51.json",
+        "sha256": "97cc0edfe416ae14a5ee679d95be91dadf79d7ea67c749616bcef27eca00be24",
+        "result": {
+          "status": "FAIL",
+          "scope": "Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate",
+          "netlist": "build\\cpu\\dual-queued-secondary-class-io-physical-v51\\synthesize\\triha_minimal_soc_syn.vm",
+          "netlist_sha256": "716c9db4e1932cdf47df551053988f444bea5a7d89166b00f769b4e24afcfad7",
+          "modules": [
+            {
+              "module": "triha_e1_branch",
+              "carry_outputs_checked": 161,
+              "violations": [
+                {
+                  "cell": "N12_1_2",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_3",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_4",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_5",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_6",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_7",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_8",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_9",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_10",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_11",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_12",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_13",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_14",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_15",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_16",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_17",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_18",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_19",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_20",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_21",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_22",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_23",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_24",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_25",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_26",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_27",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_28",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_29",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_30",
+                  "late_dependencies": [
+                    "opcode_i[2]"
+                  ]
+                },
+                {
+                  "cell": "N159_0_2",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_2",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_3",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_4",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_5",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_6",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_7",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_8",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_9",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_10",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_11",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_12",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_13",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_14",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_15",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_16",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_17",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_18",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_19",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_20",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_21",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_22",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_23",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_24",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_25",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_26",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_27",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_28",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_29",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_30",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                }
+              ]
+            },
+            {
+              "module": "triha_e1_branch_unq4",
+              "carry_outputs_checked": 156,
+              "violations": [
+                {
+                  "cell": "N12_1_2",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_3",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_4",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_5",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_6",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_7",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_8",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_9",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_10",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_11",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_12",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_13",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_14",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_15",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_16",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_17",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_18",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_19",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_20",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_21",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_22",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_23",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_24",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_25",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_26",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_27",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_28",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_29",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_30",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N34_5",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_2",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_3",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_4",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_5",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_6",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_7",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_8",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_9",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_10",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_11",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_12",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_13",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_14",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_15",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_16",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_17",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_18",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_19",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_20",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_21",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_22",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_23",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_24",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_25",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_26",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_27",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_28",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_29",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_30",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N285_4",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "path": "build/cpu/branch-target-carry-parent-v52.json",
+        "sha256": "5c588b4c6e7d93c11e467626a9cf1f6b3bbe5118dadf6f4b7932ae26328cc1b2",
+        "result": {
+          "status": "FAIL",
+          "scope": "Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate",
+          "netlist": "build\\cpu\\dual-fifo-append-decode-io-physical-v52\\synthesize\\triha_minimal_soc_syn.vm",
+          "netlist_sha256": "ee57513f4a090e4ac4f1e6ae7154d783091c0803e98e7d495896ff58a0406d3c",
+          "modules": [
+            {
+              "module": "triha_e1_branch",
+              "carry_outputs_checked": 154,
+              "violations": [
+                {
+                  "cell": "N12_1_2",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_3",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_4",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_5",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_6",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_7",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_8",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_9",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_10",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_11",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_12",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_13",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_14",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_15",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_16",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_17",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_18",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_19",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_20",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_21",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_22",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_23",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_24",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_25",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_26",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_27",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_28",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_29",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_30",
+                  "late_dependencies": [
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N159_0_2",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[2]",
+                    "opcode_i[3]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_2",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_3",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_4",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_5",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_6",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_7",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_8",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_9",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_10",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_11",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_12",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_13",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_14",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_15",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_16",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_17",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_18",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_19",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_20",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_21",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_22",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_23",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_24",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_25",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_26",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_27",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_28",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_29",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                },
+                {
+                  "cell": "N159_8_30",
+                  "late_dependencies": [
+                    "branch_taken_r"
+                  ]
+                }
+              ]
+            },
+            {
+              "module": "triha_e1_branch_unq4",
+              "carry_outputs_checked": 154,
+              "violations": [
+                {
+                  "cell": "N12_1_2",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_3",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_4",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_5",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_6",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_7",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_8",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_9",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_10",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_11",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_12",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_13",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_14",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_15",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_16",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_17",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_18",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_19",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_20",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_21",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_22",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_23",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_24",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_25",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_26",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_27",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_28",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_29",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N12_1_30",
+                  "late_dependencies": [
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_2",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_3",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_4",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_5",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_6",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_7",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_8",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_9",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_10",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_11",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_12",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_13",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_14",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_15",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_16",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_17",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_18",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_19",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_20",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_21",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_22",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_23",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_24",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_25",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_26",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_27",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_28",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_29",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                },
+                {
+                  "cell": "N159_8_30",
+                  "late_dependencies": [
+                    "branch_taken_r",
+                    "opcode_i[0]",
+                    "opcode_i[1]",
+                    "opcode_i[2]",
+                    "opcode_i[3]",
+                    "opcode_i[4]",
+                    "opcode_i[5]",
+                    "opcode_i[6]"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "candidate": {
+      "path": "build/cpu/branch-target-carry-v53.json",
+      "sha256": "55dfd936fc2f902511fb8d3a2906c4c63edf72c4946eb7042fca57a06bb507f8",
+      "result": {
+        "status": "PASS",
+        "scope": "Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate",
+        "netlist": "build\\cpu\\dual-branch-targets-io-physical-v53\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "7b6836e59ada56e9d3a9609faae38a92dc8667c33a2c322b009658038fc249ab",
+        "modules": [
+          {
+            "module": "triha_e1_branch",
+            "carry_outputs_checked": 180,
+            "violations": []
+          },
+          {
+            "module": "triha_e1_branch_unq4",
+            "carry_outputs_checked": 180,
+            "violations": []
+          }
+        ]
+      }
+    }
+  },
+  "physical": {
+    "name": "dual-branch-targets-io-physical-v53",
+    "directory": "build/cpu/dual-branch-targets-io-physical-v53",
+    "status": "RUNNING",
+    "prepared_sha256": "e37bb80cbddc6f7b19244d00d4d422d6097a3ccee7f96c9decd0c320506ed86e",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "cpu_only_synthesis_resources": {
+      "lut": 9165,
+      "ff": 4645,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    }
+  },
+  "comparison": {
+    "parent": "dual-queued-secondary-class-io-physical-v51",
+    "original_period_ns": 10,
+    "parent_slow_setup_ns": -0.505,
+    "parent_fast_setup_ns": 2.85,
+    "note": "New netlist/placement; selected best parent not v52"
+  },
+  "limits": [
+    "Five-iteration RTL estimate only",
+    "No board/default RTL promotion",
+    "Existing misalignment source-PC mtval unchanged",
+    "Local conservative carry graph is not cross-hierarchy proof, equivalence or STA",
+    "All six final setup/hold/MPW checks required"
+  ]
+}
