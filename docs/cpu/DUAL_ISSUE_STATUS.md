@@ -1,16 +1,16 @@
 # 双发射独立路线状态
 
-更新：2026-10-24。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，
+更新：2026-10-25。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，
 分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
 [物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
 
-当前最好的完整后布线候选为 v29 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
-setup **−0.763ns**，Slow/Fast hold +0.113/+0.068ns、脉宽 +3.655/+4.202ns；
-**100MHz尚未通过**。比v20的−0.805ns仅差42ps，不能据此声称实质频率收益。
-CPU-only **8896LUT/4248FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
+当前最好的完整后布线候选为 v32 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
+setup **−0.539ns**，Slow/Fast hold +0.118/+0.101ns、脉宽 +3.655/+4.202ns；
+**100MHz尚未通过**。比此前v29的−0.763ns改善0.224ns，属于新网表/布局的实际结果。
+CPU-only **8869LUT/4252FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
 从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
 
-同一v29 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
+同一v32 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
 SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
 开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
 对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
@@ -32,7 +32,15 @@ hold+0.110/+0.099ns、脉宽+3.655/+4.202ns，native0/verifier2；CPU8775LUT/422
 两版hold/MPW通过，native0/verifier2。30类别元数据FF及实际LSU选择cone均已核验。
 同源compact+IO终态setup−1.222ns且hold−0.078/−0.066ns，不采用。v30合法性/CSR前移完整
 四态、队列/有序/IRQ及整核性能/轨迹通过，6legalFF与实际CSR/invalidcone已核，但后布线setup
-−1.238ns仍未过；主瓶颈是SRAM返回→E2旁路→分支比较→PC。本路线当前无PDS运行。
+−1.238ns仍未过；主瓶颈是SRAM返回→E2旁路→分支比较→PC。
+v31通过增加分支等待切断路径，但SRAM降到3.672145/MHz，已淘汰。v32复用已有
+转发零值标志驱动两路BEQ/BNE-x0执行，无新增周期；完整SRAM/Cache-on镜像和
+WB/store均与v30逐字节一致，保持4.030288/3.084289。两通道及四态回归通过，
+原10ns两套独立PDS已结束：默认setup−0.943ns，I/O打包−0.539ns，
+两套hold/MPW均通过。仍未达到100MHz。v33只加工具支持的局部syn_maxfan16
+属性，复用v32全部功能；SRAM/Cache完整镜像及WB/store逐字节相同，
+原10ns/I/O映射PDS已结束，setup−0.909ns回退，淘汰v33。当前无本路线PDS在运行。详见
+[v32证据](../verification/cpu/dualissue_branch_zero_exec.json)。
 见[零标志终态](../verification/cpu/dualissue_rf_zero_metadata.json)、
 [类别队列I/O版](../verification/cpu/dualissue_queued_unit_classes.json)与
 [同源原始I/O版](../verification/cpu/dualissue_queued_unit_classes_original.json)。
@@ -254,3 +262,17 @@ v25按精确opcode/funct掩码分组的组合分类器已完成290336项二态�
 v25已终态：Slow setup-0.914ns（首条CPU-0.892ns），Slow/Fast hold+0.111/+0.099ns，MPW+3.655/+4.202ns；CPU8816LUT/4058FF，native0/verifier2。精确组合分组实际6→4节点，但晚ALU控制仍在关键路径。
 
 v26将9bit ALU控制随原队列保存，54元数据FF与两路真实exec静态选择已核实；完整二态/选定四态、队列、对齐、负控与整核轨迹/性能同v20。原版setup-1.187ns，I/O版-0.798ns；两corner hold/MPW通过，均native0/verifier2、全部冻结输入/输出和传输哈希核验。CPU-only8860LUT/4112FF/752RAM-LUT(included)/4APM/0DRM。最差转为fetch1指令索引[21/20]扇出62/61→RF读取/旁路/分支；下一按工具文档局部复制扇出，保留所有reset/flush/idle历史。100MHz仍未通过，不提升生产RTL。
+
+
+v32将已有转发零值标志接入两路执行单元的BEQ/BNE-x0判断，无新增流水级。修复了初版仅连接通道0的问题，移除掩盖悬空输入的回退和临时打印。两通道连接红/绿测试、10000组四态分支比较、540400项实际RF/转发标志检查及负控、有序异常/IRQ通过。SRAM 1240606周期、4.030288/MHz；Cache-on 1621119周期、3.084289/MHz；与v30运行镜像及完整WB/store逐字节一致，均为短RTL估计。可重建补丁已核验，原10ns/I/O/hold约束20分钟PDS运行中，尚未通过时序。证据见[零值分支执行](../verification/cpu/dualissue_branch_zero_exec.json)。
+
+v31历史记录审计：实际完整WB/store文件不相同（首个差异为cycle CSR读值及其存储），已撤回未核实的完全一致说法；同固件CRC PASS但周期+9.75%，仍淘汰。已修复其完整生产基线补丁并实测可重建，未改历史运行文件。
+
+
+v32两套终态及全部冻结输入/输出哈希已核：I/O setup Slow/Fast−0.539/+2.835ns，hold+0.118/+0.101ns，MPW+3.655/+4.202ns；默认setup−0.943/+2.023ns，hold+0.123/+0.103ns，MPW同值。native0/verifier2。CPU-only8869LUT/4252FF/752RAM-LUT(included)/4APM/0DRM。I/O最差为pipe1 E1标签→转发选择→有符号分支比较→pc_x，17级，logic2.657ns/route7.339ns。未宣称100MHz通过。
+
+
+v33只在raw forwarding hit/select、branch_taken_r增加ADS手册5.13支持的syn_maxfan16。去除三处注释后逐字符还原v32；新SRAM/Cache完整镜像、WB/store和周期均相同。独立只读审查允许隔离PDS诊断，不代表生产准入；实际复制效果待映射核验。见[局部扇出证据](../verification/cpu/dualissue_forward_control_fanout.json)。
+
+
+v33终态：Slow/Fast setup−0.909/+2.840ns、hold+0.113/+0.100ns、MPW+3.655/+4.202ns；native0/verifier2、全部冻结输入/输出已核。CPU-only8871LUT/4252FF/752RAM-LUT(included)/4APM/0DRM。编译器识别三处新属性，但函数内hit/select属性未保留在综合网表；branch_taken部分复制且carry驱动网络有未复制警告。相比v32 setup退步0.370ns，因此不采用。下一步须先把目标匹配/选择网络显式暴露到模块边界并在综合后验证真正复制，或另行验证分支比较器结构；不盲目重复当前属性方案。

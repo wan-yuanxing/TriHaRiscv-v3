@@ -37,3 +37,12 @@ sw/benchmarks/coremark/src/** -text -whitespace
 docs/verification/cpu/ddr_fast_response_diagnostic.patch -whitespace
 docs/verification/cpu/dualissue_narrow_mul_diagnostic.patch -whitespace
 docs/verification/cpu/dualissue_pairing_diagnostic.patch -whitespace
+# These frozen diagnostic patches/manifests contain measured Windows bytes.
+# Preserve embedded CRLF in patch payloads so reconstruction hashes survive Git.
+docs/verification/cpu/dualissue_branch_interlock.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_zero_exec.patch -text -whitespace
+docs/verification/cpu/dualissue_forward_control_fanout.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
+docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
+docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol
+tb/cpu/tb_issue_branch_zero_sources.v -text whitespace=cr-at-eol

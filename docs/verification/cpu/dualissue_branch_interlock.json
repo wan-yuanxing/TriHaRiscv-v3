@@ -32,11 +32,33 @@
     "cycles_percent": 9.751,
     "coremark_percent": -8.887
   },
-  "reason": "Branch-only E2 load interlock preserves CRC and store/WB trace but loses the required >4 CoreMark/MHz SRAM/TCM gate. No physical timing run started.",
+  "reason": "Branch-only E2 load interlock passes CRC but loses the required >4 CoreMark/MHz SRAM/TCM gate. Full WB/store files differ; no complete trace equivalence is claimed. No physical timing run started.",
   "artifacts": [
     "build/cpu/dual-branch-interlock-v31/rtl/cpu/triha_issue.v",
     "build/cpu/dual-sram/coremark-20261025T055606013771Z/result.json",
     "docs/verification/cpu/dualissue_branch_interlock_sources.json",
     "docs/verification/cpu/dualissue_branch_interlock.patch"
-  ]
+  ],
+  "actual_file_comparison": {
+    "sram.wb.log": {
+      "parent_sha256": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+      "candidate_sha256": "94f012e99a1325cadc2f68e02b59f47892848bc665fd1478a83530a7f6759649",
+      "identical": false
+    },
+    "sram.store.log": {
+      "parent_sha256": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b",
+      "candidate_sha256": "4e789d52e6ead461668c004d16d12f3ff10101214460d7fee62e39fceb8bba26",
+      "identical": false
+    },
+    "sram.bin": {
+      "parent_sha256": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+      "candidate_sha256": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+      "identical": true
+    },
+    "rom.hex": {
+      "parent_sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "candidate_sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "identical": true
+    }
+  }
 }

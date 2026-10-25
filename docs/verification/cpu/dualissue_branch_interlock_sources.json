@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "Branch-only E2 load dependency interlock on queued legality candidate",
-  "patch_sha256": "81f54bb6b5606ce8c83a8f7dc13065c40297549dd303f7b1a1787ae73a89735d",
+  "patch_sha256": "118e1e79c38e5e2b770a70f43d181b2013f138721bc8fedd693c6b05402d422f",
   "sources": {
     "rtl/cpu/triha_btb.v": {
       "base_sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
