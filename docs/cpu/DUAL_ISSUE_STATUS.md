@@ -16,6 +16,15 @@ SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
 对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
 DDR Cache-off已按用户指示排除。
 
+**最新范围收拢：Cache和DDR均暂不接入，全部新增性能/时序验收集中SRAM/TCM。**
+v41预测下一PC元数据已通过请求/缓冲/队列测试与等周期整核；v42用E1既有寄存操作数
+核对冻结预测，切断完整早期分支结果回写expectedPC的路径。新SRAM为1240867cycles、
+**4.029441/MHz**，比v32多261cycles（0.021%）；完整1448448WB/70839store除初始
+绝对cycle外相同。真实错误路径store负例、9拍held E1与一次较老LSU完成/恢复同拍、
+三次A/B分支未对齐异常及不写link检查通过，独立审查无PDS阻塞。原10ns/I/O/hold
+20分钟独立PDS已启动，**100MHz仍待后布线验收**。见[E1边界证据](../verification/cpu/dualissue_e1_branch.json)。
+旧版CSR对取指未对齐mtval沿用源PC，未声称完整ISA或目标地址mtval语义。
+
 六级顺序双发射、RV32IM/CSR、BTB512/BHT512/RAS4、GShare关闭；I/D各16KiB、
 两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
 时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
@@ -48,8 +57,7 @@ v37/v38分组相等比较均通过完整整核，实际carry链消除，
 但setup−0.776/−1.209ns仍未过。整核中部区域因容量检查失败；
 数据通路区域v32/v37也分别−0.723/−0.995ns未过。
 v39局部PC寄存已等周期/等轨迹通过，但setup−1.758ns，淘汰。
-当前v40复用现有FF寄存器堆后端并保留zero元数据；完整SRAM/Cache等周期等轨迹通过，
-原10ns独立PDS运行中。详见
+v40已终态：FF后端setup−1.248ns，CPU10052LUT/5311FF，均弱于v32，淘汰。详见
 [v32证据](../verification/cpu/dualissue_branch_zero_exec.json)。
 见[零标志终态](../verification/cpu/dualissue_rf_zero_metadata.json)、
 [类别队列I/O版](../verification/cpu/dualissue_queued_unit_classes.json)与
@@ -335,3 +343,6 @@ v40基于最佳v32，仅双发射RF改为复用已有vendor FF后端（同步res
 
 
 v40固定版完整SRAM/Cache固件及WB/store同v32，1240606/1621119cycles、4.030288/3.084289短RTL分数保持。原10ns/I/O/hold/multicorner/seed1，20分钟独立PDS已启动。CPU-only映射与最终STA待核，仍不提升生产RTL。见[FF后端对照](../verification/cpu/dualissue_regfile_ff_zero.json)。
+
+
+v40终态：Slow/Fast setup−1.248/+2.647ns、hold+0.107/+0.102ns、MPW+3.655/+4.202ns，native0/verifier2。全部冻结输出已核，CPU-only10052LUT/5311FF/624RAM-LUT(included)/4APM/0DRM。最差pipe1 E2标签→分支/PC。时序与资源均弱于v32，不采用。下一步验证取指预测下一PC的同事务传递，再试E1寄存操作数上的分支恢复边界；不放宽100MHz，不提升生产RTL。

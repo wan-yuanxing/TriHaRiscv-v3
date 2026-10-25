@@ -1,0 +1,82 @@
+{
+  "status": "RTL_PASS_TRANSPORT_ONLY",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_prediction_metadata_sources.json",
+  "manifest_sha256": "1d8e0dad42df0398dff1957dab3354794c8dd3a9958346353877591ff1411c14",
+  "scope": "Accepted-request predicted next PC transport only; not yet consumed by v41 issue",
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T094747856864Z",
+      "status": "FAIL",
+      "result_sha256": "e84dceb8e5e431304694f486fe5128741aacef4183bf4ed9158fdaf4d37eba1f",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095026580941Z",
+      "status": "PASS",
+      "result_sha256": "54efeb2bc22a346ce0a5804c7c19d48249f3917825db42e0cec02cf9fec95992",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095026593030Z",
+      "status": "PASS",
+      "result_sha256": "54b99c13d502e2d7218b952453ff7ecc1bc70599ee706934cc8a7e6ed642aec8",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095026591363Z",
+      "status": "FAIL",
+      "result_sha256": "2000bfc50da870703defe50519945b2bc9cbe5162a7fe4e203acc85b2b5d74dd",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0950270172681Z",
+      "status": "PASS",
+      "result_sha256": "e8ca7aec1329dc3a4810948daf7512d1886263949a13697dbdbb53e29d986ae4",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0950270170436Z",
+      "status": "PASS",
+      "result_sha256": "ab33aee372f2ffbb169c22901c1ccc17b517c74b0bee35ba7f395d46b2bb57d1",
+      "output_hashes_verified": 28
+    }
+  ],
+  "independent_review": "No metadata path blocker; forced predictor transport oracle is not a BTB semantic proof",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T095026617945Z",
+    "status": "PASS",
+    "result_sha256": "2bfe80fd57d8f921a5493ec8dc98a31deaca210a8ef19b3592350eba3ff73b48",
+    "output_hashes_verified": 119,
+    "measurement": {
+      "cycles": 1240606,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1675326413059424,
+      "coremark_per_mhz_short_estimate": 4.0302884235607435,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "complete_images_and_traces_identical": true
+  },
+  "cache_legacy_completed_before_scope_change": {
+    "directory": "build/cpu/cache-coremark-20261025T095026621079Z",
+    "status": "PASS",
+    "result_sha256": "7f8515e03f0780afdb233753fc15918bef701a82e00314e9ef43e575fae0b13d",
+    "output_hashes_verified": 137,
+    "measurement": {
+      "cycles": 1621119,
+      "wb_observations": 1448448,
+      "stores": 70839,
+      "coremark_per_mhz": 3.0842893088045975,
+      "clock_hz_nominal": 100000000,
+      "official_score": false,
+      "board_score": false
+    },
+    "complete_images_and_traces_identical": true
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU without cache or DDR; E1 registered-operand branch boundary; no board/official score",
+  "manifest": "docs/verification/cpu/dualissue_e1_branch_sources.json",
+  "manifest_sha256": "be2b46dfc7b277c8331509ef005b6fb91d1f9cbe5f246ce636df399e66f0e984",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T095704074486Z",
+    "status": "PASS",
+    "result_sha256": "3fda21738c98a15dc1b69fbc5d84664a26850b47c1d03b94c3634c9f8a246214",
+    "output_hashes_verified": 119,
+    "measurement": {
+      "cycles": 1240867,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1672870662206345,
+      "coremark_per_mhz_short_estimate": 4.029440705571186,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "cycles_delta": 261,
+    "cycles_delta_percent": 0.021038105570987082,
+    "firmware_identical": false,
+    "trace_comparison": {
+      "sram.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "92a996b27fa0ca9d87d9d6f18f5e8853d7784b92fb7a739b3f0c9f6638412ae4",
+        "cached_sha256": "675b6d4532686bdae3003c8d2d114a5be3bedd06fe5d4dfc4cd501c7f08a9812",
+        "uncached_sha256": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54"
+      },
+      "sram.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "8c2fc9ec29d8577e69fec58efb63f215041df3211432c9e177458224f97e0afd",
+        "cached_sha256": "52d11bcf7471435faa46632ecb383c58f722cc8871ec38986e981e594001ec5e",
+        "uncached_sha256": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    }
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095423941778Z",
+      "status": "FAIL",
+      "result_sha256": "0c9295447bfe1ca3a9f21ceceb371dd54a0f2b3dae800d8e4880343f27359922",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095631562103Z",
+      "status": "PASS",
+      "result_sha256": "694ae842d1b4a6f6d57262a34cb818521f428ba221d80c4ab3d49fab5c7aa7cb",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T095704075681Z",
+      "status": "FAIL",
+      "result_sha256": "f199c6f1a53f95b965d858c6d31a36c91da137a55e49112b035c0a47259716a0",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0957043604854Z",
+      "status": "PASS",
+      "result_sha256": "c1ed0bed5eb38bd232a2da90b826ea7f86802d16a8da893c868502b12cf9e87f",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0957043604956Z",
+      "status": "PASS",
+      "result_sha256": "37647f1cfaf5c196545e699711ca03e3474f20a89d417695675da2e63b207634",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0957510281248Z",
+      "status": "PASS",
+      "result_sha256": "a92cc5f6fc3bec7573f4bca013245ccc966b24525f76059b052dd744f0180e9b",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0957510427224Z",
+      "status": "PASS",
+      "result_sha256": "6c0f94a89878f571d0c267a42a36c2aa993b2d9e2cffa50ca7d325163e95d066",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T0957510587738Z",
+      "status": "FAIL",
+      "result_sha256": "e26ea93c35cedd42c1a5d1fc0e434e50b94b8195ef0d3469f292438a3924d4da",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T100305650237Z",
+      "status": "PASS",
+      "result_sha256": "12e6efae03f2c59dfcbda0f423c9b79e4f2e939399192a332cea8648b8712f7b",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T100334584429Z",
+      "status": "FAIL",
+      "result_sha256": "a0028920031e5e3ef34a8bdd7b50653af142bf787150e5b7bd83b8f694067499",
+      "output_hashes_verified": 72
+    }
+  ],
+  "wrongpath_negative": {
+    "change": "Removed recovery cancellation from both slot/late gates in separate snapshot",
+    "actual_forbidden_store": "80000210 f 00000007",
+    "branch_pc": "80000040",
+    "wrong_store_pc": "80000044",
+    "golden_forbidden_store_absent": true
+  },
+  "integration": {
+    "cycles": 138,
+    "held_recovery_cycles": 9,
+    "memory_completion_recovery_overlap": 1,
+    "traps": 3,
+    "primary_secondary_misalignment": [
+      2,
+      1
+    ]
+  },
+  "known_limits": [
+    "Short five-iteration RTL estimate, not official or board score",
+    "Existing vendor fetch-misalignment mtval reports source PC; target-valued mtval is not claimed",
+    "Sampled functional coverage; not complete ISA proof"
+  ],
+  "physical": {
+    "directory": "build/cpu/dual-e1-branch-io-physical-v42",
+    "prepared_sha256": "5537ca31b47cd72a70745eaa2f3c6ae5765ba0578bb4098a87805dec98eb5e0d",
+    "status": "RUNNING",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500
+  },
+  "independent_review": "No blocker for isolated original10ns PDS; resolver and real wrongpath store negative plus held-completion/misalignment integration independently reviewed"
+}
