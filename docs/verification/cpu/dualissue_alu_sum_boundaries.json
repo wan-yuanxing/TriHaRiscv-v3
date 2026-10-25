@@ -1,0 +1,864 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU SRAM/TCM only; useful secondary ALU add/sub result boundaries precede original operation selection; no state/cycle/opcode restriction change",
+  "manifest": "docs/verification/cpu/dualissue_alu_sum_boundaries_sources.json",
+  "manifest_sha256": "63843a1b6534ad6700aefee6cacc404a5e01a52af6252739d6e5e677022acf35",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "parent": "v53; excludes v52 queue destination predecode",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T124226532740Z",
+    "status": "PASS",
+    "result_sha256": "05ed00a28d69767fa6a2097352af3dec68ac4df9bb4dcb36c822595774b5d87c",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1221907,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1001720,
+      "paired": 451806,
+      "frontend": 61797,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 158386,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 145312,
+      "pair_structure": 104435,
+      "pair_dependency": 300167,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 84000,
+      "structure_branch_a": 20434,
+      "structure_other": 1,
+      "pair_raw": 249663,
+      "pair_waw": 2,
+      "pair_older": 50502,
+      "a_waw_only": 11171,
+      "b_waw_only": 2,
+      "queue0": 61797,
+      "queue1": 31643,
+      "queue2": 94040,
+      "queue3": 316829,
+      "queue4": 411670,
+      "queue5": 250095,
+      "queue6": 55833,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 305928,
+      "backpressure_pop": 283953,
+      "frontend_empty": 61797,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T123015510383Z",
+    "byte_identical_files": [
+      "rom.hex",
+      "sram.hex",
+      "sram.bin",
+      "sram.wb.log",
+      "sram.store.log"
+    ]
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T124226486804Z",
+      "status": "PASS",
+      "result_sha256": "5cb3586a906531fd6d1deeabdd24d206a068e203452b044b498a7785bb000aa2",
+      "output_hashes_verified": 72,
+      "purpose": "All16 ALU operations/boundaries/random XZ44096 comparisons with untouched vendor"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T124226494245Z",
+      "status": "FAIL",
+      "result_sha256": "280597b07aa3572db15ba6356fbd1fbc94e9e726ec997d6c1230853c806a9685",
+      "output_hashes_verified": 72,
+      "purpose": "Real result bit25 force0 negative"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T124226499691Z",
+      "status": "PASS",
+      "result_sha256": "39d30c5577c10b6a9eed2c7a35f59f5268c85f4a6c058dfdb761a50a08939779",
+      "output_hashes_verified": 75,
+      "purpose": "Secondary variable shift deferral and immediate shift pairing"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T124226529919Z",
+      "status": "PASS",
+      "result_sha256": "be8fe0cae1d182ca86a600fc48fcdace4142926bebb0b2ee57e8ebbac8e8b7b3",
+      "output_hashes_verified": 75,
+      "purpose": "Held LSU/recovery/fault integration"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1242268499818Z",
+      "status": "PASS",
+      "result_sha256": "fde8d0d04dec15016d474e6af913dafff52f37076502bfd6b295db57d3202125",
+      "output_hashes_verified": 38,
+      "purpose": "Ordered single/dual seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1242268646815Z",
+      "status": "PASS",
+      "result_sha256": "bc892d870a197ac93de76ffc34e8ba0c0e318ae325e1224e3f876a7d6fc0e219",
+      "output_hashes_verified": 38,
+      "purpose": "IRQ pair single/dual seed173"
+    }
+  ],
+  "reference": {
+    "path": "rtl/cpu/vendor/src/core/biriscv_alu.v",
+    "sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "license": "Apache2.0",
+    "use": "Complete arithmetic/shift semantics retained and used as independent untouched RTL oracle; secondary maintained derivative only"
+  },
+  "local_pattern": "ADS-documented syn_keep on useful arithmetic outputs, as existing PC boundaries; not global sharing disable or timing exception",
+  "independent_review": "No semantic blocker: maintained secondary ALU only, original 32-bit truncation and four-state behavior, complete sensitivity, no state/cycle/op restriction change. Reviewer verified370 output hashes across six tests and reproduced32/92 connected parent ALU carry outputs depending on sub_res. Primary agent subsequently verified full SRAM images/profile/WB/store unchanged.",
+  "mapping": {
+    "status": "LOCAL_NATIVE_CARRY_PASS",
+    "checker": "scripts/cpu/check_branch_target_carry.py",
+    "checker_sha256": "1825e615eee49c724495c9551b739171f69bcdeafd3a5b598a4f14f64f24e6cd",
+    "parent_red": {
+      "path": "build/cpu/alu-sum-carry-parent-v53.json",
+      "sha256": "485658cfa430a98a321be349613ed21c7d4cac7f0f519051a64edcfc4429478c",
+      "result": {
+        "status": "FAIL",
+        "scope": "Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate",
+        "netlist": "build\\cpu\\dual-branch-targets-io-physical-v53\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "7b6836e59ada56e9d3a9609faae38a92dc8667c33a2c322b009658038fc249ab",
+        "modules": [
+          {
+            "module": "triha_immediate_shift_alu",
+            "carry_outputs_checked": 92,
+            "violations": [
+              {
+                "cell": "N57_1",
+                "late_dependencies": [
+                  "sub_res_w[0]"
+                ]
+              },
+              {
+                "cell": "N57_2",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]"
+                ]
+              },
+              {
+                "cell": "N57_3",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]"
+                ]
+              },
+              {
+                "cell": "N57_4",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]"
+                ]
+              },
+              {
+                "cell": "N57_5",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]"
+                ]
+              },
+              {
+                "cell": "N57_6",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]"
+                ]
+              },
+              {
+                "cell": "N57_7",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]"
+                ]
+              },
+              {
+                "cell": "N57_8",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]"
+                ]
+              },
+              {
+                "cell": "N57_9",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]"
+                ]
+              },
+              {
+                "cell": "N57_10",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_11",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_12",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_13",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_14",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_15",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_16",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_17",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_18",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_19",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_20",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_21",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_22",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_23",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_24",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_25",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_26",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_27",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[26]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_28",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[26]",
+                  "sub_res_w[27]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_29",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[26]",
+                  "sub_res_w[27]",
+                  "sub_res_w[28]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_30",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[26]",
+                  "sub_res_w[27]",
+                  "sub_res_w[28]",
+                  "sub_res_w[29]",
+                  "sub_res_w[2]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "N57_31",
+                "late_dependencies": [
+                  "sub_res_w[0]",
+                  "sub_res_w[10]",
+                  "sub_res_w[11]",
+                  "sub_res_w[12]",
+                  "sub_res_w[13]",
+                  "sub_res_w[14]",
+                  "sub_res_w[15]",
+                  "sub_res_w[16]",
+                  "sub_res_w[17]",
+                  "sub_res_w[18]",
+                  "sub_res_w[19]",
+                  "sub_res_w[1]",
+                  "sub_res_w[20]",
+                  "sub_res_w[21]",
+                  "sub_res_w[22]",
+                  "sub_res_w[23]",
+                  "sub_res_w[24]",
+                  "sub_res_w[25]",
+                  "sub_res_w[26]",
+                  "sub_res_w[27]",
+                  "sub_res_w[28]",
+                  "sub_res_w[29]",
+                  "sub_res_w[2]",
+                  "sub_res_w[30]",
+                  "sub_res_w[3]",
+                  "sub_res_w[4]",
+                  "sub_res_w[5]",
+                  "sub_res_w[6]",
+                  "sub_res_w[7]",
+                  "sub_res_w[8]",
+                  "sub_res_w[9]"
+                ]
+              },
+              {
+                "cell": "alu_p_o_14",
+                "late_dependencies": [
+                  "sub_res_w[31]"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "candidate": {
+      "path": "build/cpu/alu-sum-carry-v54.json",
+      "sha256": "6f87f8145c58e4d75573fab3ebaacf87d5ec7039f6ae36706e748009daa7f695",
+      "result": {
+        "status": "PASS",
+        "scope": "Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate",
+        "netlist": "build\\cpu\\dual-alu-sums-io-physical-v54\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "f6f7dc2889b6553146b3edaa5e279ab47d63c6da24396412b974620a71c822d5",
+        "modules": [
+          {
+            "module": "triha_immediate_shift_alu",
+            "carry_outputs_checked": 79,
+            "violations": []
+          }
+        ]
+      }
+    }
+  },
+  "physical": {
+    "name": "dual-alu-sums-io-physical-v54",
+    "directory": "build/cpu/dual-alu-sums-io-physical-v54",
+    "status": "RUNNING",
+    "prepared_sha256": "b7cc798b32e9196afd2132f0ac8e1a91d509cb1cc149a618ffd4934cc3eb77e0",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "cpu_only_synthesis_resources": {
+      "lut": 9199,
+      "ff": 4646,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    }
+  },
+  "comparison": {
+    "parent": "dual-branch-targets-io-physical-v53",
+    "original_period_ns": 10,
+    "parent_slow_setup_ns": -0.64,
+    "parent_fast_setup_ns": 2.693,
+    "best_slow_setup_ns": -0.505,
+    "note": "New netlist and placement, final STA required"
+  },
+  "limits": [
+    "Five-iteration RTL estimate only",
+    "Default CPU RTL/board/main untouched",
+    "Local conservative mapping check is not cross-hierarchy proof, equivalence or STA",
+    "Original source-PC misalignment mtval unchanged",
+    "All six final setup/hold/MPW checks required"
+  ]
+}

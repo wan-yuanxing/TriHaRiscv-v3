@@ -2,6 +2,7 @@
 `timescale 1ns/1ps
 module tb_immediate_shift_alu;
     parameter BROKEN=0;
+    parameter BROKEN_RESULT=0;
     reg [3:0] op=0;
     reg [31:0] a=0,b=0,rng=32'h7139b52a;
     wire [31:0] old_result,new_result;
@@ -9,6 +10,7 @@ module tb_immediate_shift_alu;
     integer n,f,j,k,checks=0;
     biriscv_alu u_old(.alu_op_i(op),.alu_a_i(a),.alu_b_i(b),.alu_p_o(old_result));
     triha_immediate_shift_alu u_new(.alu_op_i(op),.alu_a_i(a),.alu_b_i(b),.shift_amount_i(shamt),.alu_p_o(new_result));
+    initial if(BROKEN_RESULT)force u_new.alu_p_o[25]=1'b0;
     task check;
         begin
             #1;checks=checks+1;

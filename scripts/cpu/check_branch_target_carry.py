@@ -10,10 +10,11 @@ from pathlib import Path
 import re
 
 
-def inspect(path):
+def inspect(path, alu=False):
     raw = path.read_bytes()
     modules = []
-    for name, block in re.findall(r'\bmodule\s+(triha_e1_branch\w*)\b(.*?)\bendmodule\b', raw.decode('utf-8'), re.S):
+    module_pattern = r'triha_immediate_shift_alu' if alu else r'triha_e1_branch\w*'
+    for name, block in re.findall(r'\bmodule\s+(' + module_pattern + r')\b(.*?)\bendmodule\b', raw.decode('utf-8'), re.S):
         block = re.sub(r'/\*.*?\*/|//[^\n]*', '', block, flags=re.S)
         normalize = lambda x: re.sub(r'\s+', '', x).lstrip('\\')
         drivers, carries = {}, []
@@ -31,9 +32,11 @@ def inspect(path):
             lhs, rhs = normalize(lhs), normalize(rhs)
             if re.fullmatch(r'[\w$/\[\].]+', rhs):
                 drivers[lhs] = [rhs]
-        if 'branch_taken_r' not in block or not carries:
+        token = 'sub_res_w' if alu else 'branch_taken_r'
+        if token not in block or not carries:
             raise ValueError('Missing expected branch direction/carry evidence: ' + name)
-        late = {'branch_taken_r'} | {'opcode_i[' + str(i) + ']' for i in range(7)}
+        late = ({'sub_res_w[' + str(i) + ']' for i in range(32)} if alu else
+                {'branch_taken_r'} | {'opcode_i[' + str(i) + ']' for i in range(7)})
         violations = []
         for instance, root in carries:
             todo, seen = [root], set()
@@ -47,8 +50,8 @@ def inspect(path):
             if seen & late:
                 violations.append(dict(cell=instance, late_dependencies=sorted(seen & late)))
         modules.append(dict(module=name, carry_outputs_checked=len(carries), violations=violations))
-    if len(modules) != 2:
-        raise ValueError('Expected both native E1 branch modules')
+    if len(modules) != (1 if alu else 2):
+        raise ValueError('Missing expected native modules')
     return dict(status='FAIL' if any(m['violations'] for m in modules) else 'PASS',
                 scope='Conservative local native carry support; hierarchy inputs outside inspected modules, CE/control, STA and equivalence are separate',
                 netlist=str(path), netlist_sha256=hashlib.sha256(raw).hexdigest(), modules=modules)
@@ -58,8 +61,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('netlist', type=Path)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--alu', action='store_true', help='Check secondary ALU subtraction-to-other-carry support instead')
     args = parser.parse_args()
-    result = inspect(args.netlist)
+    result = inspect(args.netlist, args.alu)
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8', newline='\n')
     print('BRANCH_TARGET_CARRY_' + result['status'], [(m['module'], len(m['violations'])) for m in result['modules']])
     raise SystemExit(0 if result['status'] == 'PASS' else 1)
