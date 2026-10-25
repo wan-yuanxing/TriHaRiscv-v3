@@ -1,5 +1,5 @@
 {
-  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "status": "RTL_PASS_TIMING_FAIL",
   "overall_target_met": false,
   "scope": "Six-stage dual CPU SRAM/TCM only; documented replication annotation on actual fetch PC register driver; no RTL behavior/state/cycle change",
   "manifest": "docs/verification/cpu/dualissue_pc_read_fanout_sources.json",
@@ -119,7 +119,7 @@
   },
   "independent_review": "No semantic blocker: removing only synthesis attribute restores all v54 CPU source bytes; manifest/patch/candidate and148 test output hashes independently verified. Actual duplication and physical timing must still be checked.",
   "mapping": {
-    "status": "CANDIDATE_PENDING",
+    "status": "LOCAL_NATIVE_SPLIT_PASS",
     "checker": "scripts/cpu/inspect_btb_read_fanout.py",
     "checker_sha256": "1ca50875cb703b9ea8022037056e7abb36a0b30dec9607ba432fb32083713c4a",
     "parent_red": {
@@ -162,16 +162,305 @@
           }
         ]
       }
-    }
+    },
+    "candidate": {
+      "path": "build/cpu/pc-read-fanout-v56.json",
+      "sha256": "dede78d2bad2f4379c5dd40c0235a29550e3dd48776d1b582850825363f25daf",
+      "result": {
+        "status": "PASS",
+        "maximum_allowed": 32,
+        "scope": "Actual query RAM input pins only; not global fanout or STA",
+        "netlist": "build\\cpu\\dual-pc-read-fanout-io-physical-v56\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "766e5643c8a565df24147f466811236c080a372b417b42c64f4c789aad784cf3",
+        "modules": [
+          {
+            "module": "triha_btb_bank",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 40,
+            "maximum_loads": 32,
+            "loads": {
+              "inst_addr[3]": 31,
+              "inst_addr[4]": 31,
+              "inst_addr[5]": 31,
+              "inst_addr[6]": 31,
+              "inst_addr[7]": 31,
+              "inst_addr_17": 32,
+              "inst_addr_18": 32,
+              "inst_addr_19": 32,
+              "inst_addr_20": 32,
+              "inst_addr_21": 32,
+              "inst_addr_22": 32,
+              "inst_addr_23": 1,
+              "inst_addr_3": 32,
+              "inst_addr_31": 32,
+              "inst_addr_32": 32,
+              "inst_addr_33": 32,
+              "inst_addr_34": 32,
+              "inst_addr_35": 32,
+              "inst_addr_36": 32,
+              "inst_addr_37": 1,
+              "inst_addr_4": 32,
+              "inst_addr_45": 32,
+              "inst_addr_46": 32,
+              "inst_addr_47": 32,
+              "inst_addr_48": 32,
+              "inst_addr_49": 32,
+              "inst_addr_5": 32,
+              "inst_addr_50": 32,
+              "inst_addr_51": 1,
+              "inst_addr_59": 32,
+              "inst_addr_6": 32,
+              "inst_addr_60": 32,
+              "inst_addr_61": 32,
+              "inst_addr_62": 32,
+              "inst_addr_63": 32,
+              "inst_addr_64": 32,
+              "inst_addr_65": 1,
+              "inst_addr_7": 32,
+              "inst_addr_8": 32,
+              "inst_addr_9": 1
+            }
+          },
+          {
+            "module": "triha_btb_bank_unq4",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 40,
+            "maximum_loads": 32,
+            "loads": {
+              "inst_addr_10": 32,
+              "inst_addr_11": 32,
+              "inst_addr_12": 32,
+              "inst_addr_13": 32,
+              "inst_addr_14": 32,
+              "inst_addr_15": 32,
+              "inst_addr_16": 2,
+              "inst_addr_23": 31,
+              "inst_addr_24": 32,
+              "inst_addr_25": 32,
+              "inst_addr_26": 32,
+              "inst_addr_27": 32,
+              "inst_addr_28": 32,
+              "inst_addr_29": 32,
+              "inst_addr_30": 1,
+              "inst_addr_37": 31,
+              "inst_addr_38": 32,
+              "inst_addr_39": 32,
+              "inst_addr_40": 32,
+              "inst_addr_41": 32,
+              "inst_addr_42": 32,
+              "inst_addr_43": 32,
+              "inst_addr_44": 1,
+              "inst_addr_51": 31,
+              "inst_addr_52": 32,
+              "inst_addr_53": 32,
+              "inst_addr_54": 32,
+              "inst_addr_55": 32,
+              "inst_addr_56": 32,
+              "inst_addr_57": 32,
+              "inst_addr_58": 1,
+              "inst_addr_65": 31,
+              "inst_addr_66": 32,
+              "inst_addr_67": 32,
+              "inst_addr_68": 32,
+              "inst_addr_69": 32,
+              "inst_addr_70": 32,
+              "inst_addr_71": 32,
+              "inst_addr_72": 1,
+              "inst_addr_9": 30
+            }
+          }
+        ]
+      }
+    },
+    "conclusion": "Query RAM address max224\u219232pins/net per bank. This is not routed delay or total fanout.",
+    "pc_register_instances": [
+      {
+        "version": "dual-alu-sums-io-physical-v54",
+        "pc_register_native_dff_names": 32
+      },
+      {
+        "version": "dual-pc-read-fanout-io-physical-v56",
+        "pc_register_native_dff_names": 138
+      }
+    ]
   },
   "physical": {
     "name": "dual-pc-read-fanout-io-physical-v56",
     "directory": "build/cpu/dual-pc-read-fanout-io-physical-v56",
-    "status": "RUNNING",
+    "status": "TIMING_FAIL",
     "prepared_sha256": "33d445332f26b8e42c4df803147d15a50fff89df44920aba68a82d29d71c30bb",
     "period_ns": 10,
     "pnr_minutes": 20,
-    "outer_seconds": 1500
+    "outer_seconds": 1500,
+    "cpu_only_synthesis_resources": {
+      "lut": 9199,
+      "ff": 4752,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "source_unchanged": true,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.164,
+          "total_negative_slack_ns": -61.634,
+          "failing_endpoints": 276,
+          "endpoints": 25435
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.11,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25435
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4470
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.667,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25435
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.103,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25435
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4470
+        }
+      ],
+      "performance_slack_ns": -1.164,
+      "worst_setup_ns": -1.164,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "timing_closed": false,
+    "native_exit": 0,
+    "runner_return_code": 2,
+    "native_seconds": 1343.616,
+    "verified_output_files": 552,
+    "result_sha256": "6a8b582b0ebde5c2747c2a3404e27c69a13ea5d2f882affa874b51981e7350e6",
+    "report_sha256": "11f54ff67c49be1eb29e20b776d9a991dd7e7da9934fa5c093c96a1224328b1b",
+    "cpu_synthesis_resources": {
+      "lut": 9199,
+      "ff": 4752,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "worst_path": {
+      "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q1_perm/CLK",
+      "end": "u_core/u_cpu/u_csr/exception_e1_q[5]/opit_0_inv_L6Q_perm/I5",
+      "slack_ns": -1.164,
+      "logic_levels": 11,
+      "logic_ns": 2.286,
+      "route_ns": 8.547
+    },
+    "reported_slow_setup_paths": [
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_csr/exception_e1_q[5]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.164,
+        "logic_levels": 11,
+        "logic_ns": 2.286,
+        "route_ns": 8.547
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_csr/exception_e1_q[2]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -0.961,
+        "logic_levels": 11,
+        "logic_ns": 2.286,
+        "route_ns": 8.352
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_csr/exception_e1_q[4]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -0.818,
+        "logic_levels": 11,
+        "logic_ns": 2.286,
+        "route_ns": 8.212
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/early_ready_e1_q/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1]_copy[24]_1/opit_0_inv/D",
+        "slack_ns": -0.796,
+        "logic_levels": 9,
+        "logic_ns": 1.715,
+        "route_ns": 8.725
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/early_ready_e1_q/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1]_copy[24]_2/opit_0_inv/D",
+        "slack_ns": -0.778,
+        "logic_levels": 9,
+        "logic_ns": 1.715,
+        "route_ns": 8.707
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/early_ready_e1_q/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1]_copy[24]_3/opit_0_inv/D",
+        "slack_ns": -0.778,
+        "logic_levels": 9,
+        "logic_ns": 1.715,
+        "route_ns": 8.707
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/early_ready_e1_q/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1]_copy[24]_6/opit_0_inv/D",
+        "slack_ns": -0.778,
+        "logic_levels": 9,
+        "logic_ns": 1.715,
+        "route_ns": 8.707
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/early_ready_e1_q/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/data_q[1]_copy[24]_6/opit_0_inv_1/D",
+        "slack_ns": -0.775,
+        "logic_levels": 9,
+        "logic_ns": 1.715,
+        "route_ns": 8.704
+      }
+    ],
+    "reported_slow_setup_path_count": 100,
+    "same_source_sram_measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
   },
   "comparison": {
     "parent": "dual-alu-sums-io-physical-v54",
