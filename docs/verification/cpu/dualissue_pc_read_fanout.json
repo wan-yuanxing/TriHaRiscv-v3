@@ -1,0 +1,191 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU SRAM/TCM only; documented replication annotation on actual fetch PC register driver; no RTL behavior/state/cycle change",
+  "manifest": "docs/verification/cpu/dualissue_pc_read_fanout_sources.json",
+  "manifest_sha256": "beb6051882d6d1b6eec25bf36ae1b45e1d2ddbdae490356126db927209bc1793",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "parent": "v54; excludes ineffective v55 leaf alias and v52 queue destination predecode",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T130355949968Z",
+    "status": "PASS",
+    "result_sha256": "a452f13ee7303d2381e2c2db44f28ea5e3026c551a7109a72b091835b6706cac",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1221907,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1001720,
+      "paired": 451806,
+      "frontend": 61797,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 158386,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 145312,
+      "pair_structure": 104435,
+      "pair_dependency": 300167,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 84000,
+      "structure_branch_a": 20434,
+      "structure_other": 1,
+      "pair_raw": 249663,
+      "pair_waw": 2,
+      "pair_older": 50502,
+      "a_waw_only": 11171,
+      "b_waw_only": 2,
+      "queue0": 61797,
+      "queue1": 31643,
+      "queue2": 94040,
+      "queue3": 316829,
+      "queue4": 411670,
+      "queue5": 250095,
+      "queue6": 55833,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 305928,
+      "backpressure_pop": 283953,
+      "frontend_empty": 61797,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T124226532740Z",
+    "byte_identical_files": [
+      "rom.hex",
+      "sram.hex",
+      "sram.bin",
+      "sram.wb.log",
+      "sram.store.log"
+    ]
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T130355960652Z",
+      "status": "PASS",
+      "result_sha256": "fcbd585a2f7e53c63cf76b2cdb3de81c1ac3d95095c25bd87d7c8deb36e7363b",
+      "output_hashes_verified": 72,
+      "purpose": "Prediction/class/CSR/fault alignment12383checks"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1303562501388Z",
+      "status": "PASS",
+      "result_sha256": "7d1bd1e457d06e278653ea9260ae9f585d38d60bb5a29e9130ce6812beacda9a",
+      "output_hashes_verified": 38,
+      "purpose": "Ordered single/dual seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1303562633213Z",
+      "status": "PASS",
+      "result_sha256": "7ece92c5db6dd4fd5c5c738fc7aa751c750783380f6ae4a48a51ba9f807ce073",
+      "output_hashes_verified": 38,
+      "purpose": "IRQ pair single/dual seed173"
+    }
+  ],
+  "inverse_proof": {
+    "parent_source": "build/cpu/dual-alu-sums-reconstructed-v54/rtl/cpu/triha_frontend.v",
+    "parent_sha256": "66d6db5a32d02d54651e4df160a28ac9ba36cd22e4f2971b3bd4b549556763c8",
+    "candidate_source": "build/cpu/dual-pc-read-fanout-reconstructed-v56/rtl/cpu/triha_frontend.v",
+    "candidate_sha256": "8602b61d2d2a32cb80ae0b0c1c8f74ae41ab9c1cf055339d8ef65a101c67b2ef",
+    "only_synthesis_annotation": true,
+    "inverse_byte_identical": true
+  },
+  "tool_reference": {
+    "path": "D:/pango/PDS_2022.2-SP6.4/doc/ADS_Synthesis_User_Guide.pdf",
+    "sha256": "9930e586e71fed2faedf239b6af965eda69845f494fd506d2e708cf9f6fed9f0",
+    "section": "5.13 syn_maxfan, printed87-88: register supported; clock/async reset excluded"
+  },
+  "independent_review": "No semantic blocker: removing only synthesis attribute restores all v54 CPU source bytes; manifest/patch/candidate and148 test output hashes independently verified. Actual duplication and physical timing must still be checked.",
+  "mapping": {
+    "status": "CANDIDATE_PENDING",
+    "checker": "scripts/cpu/inspect_btb_read_fanout.py",
+    "checker_sha256": "1ca50875cb703b9ea8022037056e7abb36a0b30dec9607ba432fb32083713c4a",
+    "parent_red": {
+      "path": "build/cpu/btb-read-fanout-parent-v54.json",
+      "sha256": "af34c2b1c1c5cc5e42ec3299b870244f38b347ee6569f213b8bfdb92bf29490b",
+      "result": {
+        "status": "FAIL",
+        "maximum_allowed": 32,
+        "scope": "Actual query RAM input pins only; not global fanout or STA",
+        "netlist": "build\\cpu\\dual-alu-sums-io-physical-v54\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "f6f7dc2889b6553146b3edaa5e279ab47d63c6da24396412b974620a71c822d5",
+        "modules": [
+          {
+            "module": "triha_btb_bank",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 5,
+            "maximum_loads": 224,
+            "loads": {
+              "inst_addr[3]": 224,
+              "inst_addr[4]": 224,
+              "inst_addr[5]": 224,
+              "inst_addr[6]": 224,
+              "inst_addr[7]": 224
+            }
+          },
+          {
+            "module": "triha_btb_bank_unq4",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 5,
+            "maximum_loads": 224,
+            "loads": {
+              "inst_addr[3]": 224,
+              "inst_addr[4]": 224,
+              "inst_addr[5]": 224,
+              "inst_addr[6]": 224,
+              "inst_addr[7]": 224
+            }
+          }
+        ]
+      }
+    }
+  },
+  "physical": {
+    "name": "dual-pc-read-fanout-io-physical-v56",
+    "directory": "build/cpu/dual-pc-read-fanout-io-physical-v56",
+    "status": "RUNNING",
+    "prepared_sha256": "33d445332f26b8e42c4df803147d15a50fff89df44920aba68a82d29d71c30bb",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500
+  },
+  "comparison": {
+    "parent": "dual-alu-sums-io-physical-v54",
+    "original_period_ns": 10,
+    "parent_slow_setup_ns": -0.411,
+    "parent_fast_setup_ns": 2.628,
+    "best_slow_setup_ns": -0.411,
+    "note": "Actual duplication/new placement and all final checks required"
+  },
+  "limits": [
+    "Five-iteration RTL estimate only",
+    "Main/default CPU/board untouched",
+    "Local RAM read input-pin load check is not global fanout or STA",
+    "Original source-PC misalignment mtval unchanged",
+    "All six final setup/hold/MPW checks required"
+  ]
+}

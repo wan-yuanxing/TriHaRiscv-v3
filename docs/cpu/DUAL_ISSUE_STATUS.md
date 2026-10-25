@@ -6,31 +6,32 @@
 BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV。变量移位在A，B保留立即移位。
 A分支可与B ALU推测配对，E1恢复/故障取消年轻结果；B LSU仅保留已验收的不跳转配对。
 
-最新v55 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
+最新v56 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
 WB观察IPC **1.185400**。CRC通过；1448448条WB、70839条store以及运行镜像与v54逐字节一致。
 这是RTL短测估计，非官方分数或板级结果；观察IPC不是架构minstret。
 
 **100MHz尚未通过。**最佳完成版v54在原10ns/IO/hold/multicorner下：setup Slow/Fast
 **-0.411/+2.628ns**，hold **+0.113/+0.099ns**，脉宽 **+3.655/+4.202ns**。
 原生退出0、验收器退出2；372个实际输出哈希和冻结输入均通过复核。
-v55的原约束独立PDS已启动，最终时序和实际复制效果仍待核对。
+v55已终态：属性未实际复制驱动，六项余量与v54完全相同，排除。
+v56改为实际PC寄存器驱动端属性，原约束独立PDS已启动，实际复制及最终时序待核对。
 
 v54 CPU-only综合 **9199 LUT/4646 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
-排除ROM/SRAM/MMIO夹具；v55资源尚待本轮原生报告。
+排除ROM/SRAM/MMIO夹具；v55资源与v54相同；v56资源尚待本轮原生报告。
 
 本批保留的结构调整：请求PC入队对齐、局部指令请求槽、FIFO bulk/flush分离、B能力前译码、
 分支目标和顺序地址独立加法、B ALU有用ADD/SUB结果边界。v53分支carry晚控制依赖59/60→0/0，
 v54减法到另一carry依赖32→0，均经实际原生网表核对；这些局部检查本身不等于时序通过。
 v52队列位置预译码时序回退，未纳入当前候选。
 
-v55只对实测PC[5]467负载到BTB/RAS路径请求局部查询地址复制。等值5-bit alias和属性的
-逆变换与v54源码字节一致；训练读取/WADDR、预测策略和周期未变。实际native分裂仍待检查。
+v55的等值查询地址alias未产生实际复制。v56只在PC寄存器上请求syn_maxfan32，
+移除属性恢复全部v54源码字节。预测策略、训练/WADDR和周期未变；实际native分裂仍待检查。
 
 默认`rtl/cpu`未替换，候选由完整生产基线补丁/manifest重建。
 本独立分支`rtl/soc/triha_soc_memory.v`含单项指令冲突请求槽，主工程/集成工作树未修改，未上板。
 现有限制：旧未对齐mtval报告源PC；未声称完整ISA、任意未知PC或invalid bulk全总线证明。
 
-见[当前候选](../verification/cpu/dualissue_btb_read_fanout.json)、
+见[当前候选](../verification/cpu/dualissue_pc_read_fanout.json)、
 [最佳完成版](../verification/cpu/dualissue_alu_sum_boundaries.json)、
 [取指请求槽](../verification/cpu/dualissue_sram_instruction_buffer.json)和
 [物理汇总](../verification/cpu/dualissue_operand_timing.json)。
