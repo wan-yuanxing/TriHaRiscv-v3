@@ -1,0 +1,193 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU SRAM/TCM only; local replication request on measured BTB query RAM row; no predictor policy/state/cycle change",
+  "manifest": "docs/verification/cpu/dualissue_btb_read_fanout_sources.json",
+  "manifest_sha256": "1497494e44c4853b55d5f1813e8e5fcfd84787abbef15f1c6c79ffdae45acf75",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "parent": "v54; excludes v52 queue destination predecode",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T125611516512Z",
+    "status": "PASS",
+    "result_sha256": "ee394e3f163acdb1a8899940abbd3a092332edd89d8bd9b13f19854c447ce04f",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1221907,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1001720,
+      "paired": 451806,
+      "frontend": 61797,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 158386,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 145312,
+      "pair_structure": 104435,
+      "pair_dependency": 300167,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 84000,
+      "structure_branch_a": 20434,
+      "structure_other": 1,
+      "pair_raw": 249663,
+      "pair_waw": 2,
+      "pair_older": 50502,
+      "a_waw_only": 11171,
+      "b_waw_only": 2,
+      "queue0": 61797,
+      "queue1": 31643,
+      "queue2": 94040,
+      "queue3": 316829,
+      "queue4": 411670,
+      "queue5": 250095,
+      "queue6": 55833,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 305928,
+      "backpressure_pop": 283953,
+      "frontend_empty": 61797,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T124226532740Z",
+    "byte_identical_files": [
+      "rom.hex",
+      "sram.hex",
+      "sram.bin",
+      "sram.wb.log",
+      "sram.store.log"
+    ]
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T125611525713Z",
+      "status": "PASS",
+      "result_sha256": "dc90379c33941c08e44c31065532b0f6cfa9db5f06e476d76af1d1ccf2b972de",
+      "output_hashes_verified": 72,
+      "purpose": "Indexed BTB independent model10066checks"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T125611512949Z",
+      "status": "FAIL",
+      "result_sha256": "19ee41b6b138e661738c7628bbeaffb373a821af134a4f44d52d20607b245e22",
+      "output_hashes_verified": 72,
+      "purpose": "Actual target corruption negative"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1256118541230Z",
+      "status": "PASS",
+      "result_sha256": "1cdfce2ebc2234de4663cbdcf4f10475cb08f2851b846afdd148cce117d1e827",
+      "output_hashes_verified": 38,
+      "purpose": "Ordered single/dual seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1256118290732Z",
+      "status": "PASS",
+      "result_sha256": "5887fa536eaec9de06851f6819c4578f7c2b4b9e1df2d7cf7cc022467b03b1e5",
+      "output_hashes_verified": 38,
+      "purpose": "IRQ pair single/dual seed173"
+    }
+  ],
+  "inverse_proof": {
+    "parent_source": "build/cpu/dual-alu-sums-reconstructed-v54/rtl/cpu/triha_btb.v",
+    "parent_sha256": "ed0b88672f5fe595d9ac7085d55cecb344e3e1783fb7066f4dffdeacf4e116d0",
+    "candidate_source": "build/cpu/dual-btb-read-fanout-reconstructed-v55/rtl/cpu/triha_btb.v",
+    "candidate_sha256": "3f8d9b0bbe44a052eed78eaeaed233b507a1aa19ef203f1d3bbef009b9479e03",
+    "only_equal_width_alias_and_replication_annotation": true,
+    "inverse_byte_identical": true
+  },
+  "independent_review": "No semantic blocker: read alias only, training/WADDR/upper selection and state untouched; inverse equality and220 test output hashes independently reviewed. Actual splitting and physical timing must still be checked.",
+  "mapping": {
+    "status": "CANDIDATE_PENDING",
+    "checker": "scripts/cpu/inspect_btb_read_fanout.py",
+    "checker_sha256": "1ca50875cb703b9ea8022037056e7abb36a0b30dec9607ba432fb32083713c4a",
+    "parent_red": {
+      "path": "build/cpu/btb-read-fanout-parent-v54.json",
+      "sha256": "af34c2b1c1c5cc5e42ec3299b870244f38b347ee6569f213b8bfdb92bf29490b",
+      "result": {
+        "status": "FAIL",
+        "maximum_allowed": 32,
+        "scope": "Actual query RAM input pins only; not global fanout or STA",
+        "netlist": "build\\cpu\\dual-alu-sums-io-physical-v54\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "f6f7dc2889b6553146b3edaa5e279ab47d63c6da24396412b974620a71c822d5",
+        "modules": [
+          {
+            "module": "triha_btb_bank",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 5,
+            "maximum_loads": 224,
+            "loads": {
+              "inst_addr[3]": 224,
+              "inst_addr[4]": 224,
+              "inst_addr[5]": 224,
+              "inst_addr[6]": 224,
+              "inst_addr[7]": 224
+            }
+          },
+          {
+            "module": "triha_btb_bank_unq4",
+            "query_ram_cells": 224,
+            "address_pin_loads": 1120,
+            "distinct_nets": 5,
+            "maximum_loads": 224,
+            "loads": {
+              "inst_addr[3]": 224,
+              "inst_addr[4]": 224,
+              "inst_addr[5]": 224,
+              "inst_addr[6]": 224,
+              "inst_addr[7]": 224
+            }
+          }
+        ]
+      }
+    }
+  },
+  "physical": {
+    "name": "dual-btb-read-fanout-io-physical-v55",
+    "directory": "build/cpu/dual-btb-read-fanout-io-physical-v55",
+    "status": "RUNNING",
+    "prepared_sha256": "5d14cd7a527314fdfcf20642db6e84f0904ccbdb07a1d93047cef968cbab2a83",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500
+  },
+  "comparison": {
+    "parent": "dual-alu-sums-io-physical-v54",
+    "original_period_ns": 10,
+    "parent_slow_setup_ns": -0.411,
+    "parent_fast_setup_ns": 2.628,
+    "best_slow_setup_ns": -0.411,
+    "note": "New native replication/netlist and placement; global fanout and final STA must be checked"
+  },
+  "limits": [
+    "Five-iteration RTL estimate only",
+    "Main/default CPU/board untouched",
+    "Local RAM read input-pin load check is not global fanout or STA",
+    "Original source-PC misalignment mtval unchanged",
+    "All six final setup/hold/MPW checks required"
+  ]
+}

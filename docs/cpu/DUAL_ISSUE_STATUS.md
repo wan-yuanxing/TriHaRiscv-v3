@@ -2,38 +2,39 @@
 
 更新：2026-10-25。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
-当前只推进**不带Cache、不接DDR的SRAM/TCM版本**。六级顺序双发射、RV32IM/CSR、
-BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV，变量移位在A，B保留立即移位。
-A分支可与B ALU推测配对，恢复/故障在E1取消年轻结果；B LSU仍只允许原已知不跳转配对。
+当前只推进**不带Cache、不接DDR的SRAM/TCM版本**。六级顺序双发射、RV32IM/CSR，
+BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV。变量移位在A，B保留立即移位。
+A分支可与B ALU推测配对，E1恢复/故障取消年轻结果；B LSU仅保留已验收的不跳转配对。
 
-最新v54完整Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
-WB观测IPC1.185400。CRC通过，1448448条WB和70839条store与v51逐字相同，运行镜像也相同。
-这是RTL估计，非官方分数或板级结果；WB观察IPC不是架构minstret。
+最新v55 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
+WB观察IPC **1.185400**。CRC通过；1448448条WB、70839条store以及运行镜像与v54逐字节一致。
+这是RTL短测估计，非官方分数或板级结果；观察IPC不是架构minstret。
 
-**100MHz尚未通过。**v51原10ns、原IO/hold/multicorner已完成，setup Slow/Fast -0.505/+2.850ns，
-hold +0.110/+0.105ns、脉宽 +3.655/+4.202ns；全部冻结输入与实际输出核验通过。
-v52已终态：setup -0.986/+2.681ns，hold +0.112/+0.100ns、脉宽+3.655/+4.202ns，
-时序回退，不采用。v53回到v51，只分离分支的有用地址和与晚方向选择；完整SRAM等周期/等轨迹通过，原10ns PDS已终态setup -0.640/+2.693ns，仍未通过。
-v54 CPU-only综合9199LUT/4646FF/752RAM-LUT（已含LUT）/4APM/0DRM，排除ROM/SRAM/MMIO夹具。
-最佳已完成setup是v51的−0.505ns；新版本经过新网表/布局，不能直接当频率收益。
+**100MHz尚未通过。**最佳完成版v54在原10ns/IO/hold/multicorner下：setup Slow/Fast
+**-0.411/+2.628ns**，hold **+0.113/+0.099ns**，脉宽 **+3.655/+4.202ns**。
+原生退出0、验收器退出2；372个实际输出哈希和冻结输入均通过复核。
+v55的原约束独立PDS已启动，最终时序和实际复制效果仍待核对。
 
-v48已把取指包首个有效字在入队对齐，A固定队头；v49在本独立工作树的本地SoC增加一项取指请求
-缓冲，ready由寄存占用驱动，正常读仍一周期，同址写冲突延后服务。v50分开FIFO bulk存储与flush，
-CSR/故障/类别历史保持；v51把B能力类型判定随指令保存，消除新引入的晚类别译码。
-v54正验证B路ALU有用ADD/SUB结果边界，针对真实减法结果再进入第二carry链的路径；
-全ALU四态、实际坏输出、次路移位、有序/IRQ及恢复已通过，完整SRAM等周期/等轨迹通过，原10ns独立PDS运行中。
-所有新运行均只用SRAM。默认`rtl/cpu`尚未替换，候选由完整生产基线补丁/manifest可重建；
-`rtl/soc/triha_soc_memory.v`的请求缓冲只在本独立分支，主工程/集成工作树未修改，未上板。
+v54 CPU-only综合 **9199 LUT/4646 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
+排除ROM/SRAM/MMIO夹具；v55资源尚待本轮原生报告。
 
-见[当前候选](../verification/cpu/dualissue_alu_sum_boundaries.json)、
-[分支目标分离终态](../verification/cpu/dualissue_branch_target_sums.json)、
-[队列预译码终态](../verification/cpu/dualissue_fifo_append_decode.json)、
-[前版终态](../verification/cpu/dualissue_queued_secondary_class.json)、
-[取指请求缓冲](../verification/cpu/dualissue_sram_instruction_buffer.json)、
-[FIFO存储分离](../verification/cpu/dualissue_fifo_flush_data.json)及
-[物理结果汇总](../verification/cpu/dualissue_operand_timing.json)。
-现有限制：旧CSR对取指未对齐mtval仍报告源PC；未声称完整ISA证明、任意未知PC或invalid payload全总线等价。
-下文保留历史批次，其中Cache/DDR记录不代表当前继续执行这些路线。
+本批保留的结构调整：请求PC入队对齐、局部指令请求槽、FIFO bulk/flush分离、B能力前译码、
+分支目标和顺序地址独立加法、B ALU有用ADD/SUB结果边界。v53分支carry晚控制依赖59/60→0/0，
+v54减法到另一carry依赖32→0，均经实际原生网表核对；这些局部检查本身不等于时序通过。
+v52队列位置预译码时序回退，未纳入当前候选。
+
+v55只对实测PC[5]467负载到BTB/RAS路径请求局部查询地址复制。等值5-bit alias和属性的
+逆变换与v54源码字节一致；训练读取/WADDR、预测策略和周期未变。实际native分裂仍待检查。
+
+默认`rtl/cpu`未替换，候选由完整生产基线补丁/manifest重建。
+本独立分支`rtl/soc/triha_soc_memory.v`含单项指令冲突请求槽，主工程/集成工作树未修改，未上板。
+现有限制：旧未对齐mtval报告源PC；未声称完整ISA、任意未知PC或invalid bulk全总线证明。
+
+见[当前候选](../verification/cpu/dualissue_btb_read_fanout.json)、
+[最佳完成版](../verification/cpu/dualissue_alu_sum_boundaries.json)、
+[取指请求槽](../verification/cpu/dualissue_sram_instruction_buffer.json)和
+[物理汇总](../verification/cpu/dualissue_operand_timing.json)。
+下文保留历史批次；历史Cache/DDR记录不代表继续执行这些路线。
 
 v21至v29均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
 54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
