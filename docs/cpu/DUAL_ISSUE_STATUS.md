@@ -22,7 +22,9 @@ v41预测下一PC元数据已通过请求/缓冲/队列测试与等周期整核�
 **4.029441/MHz**，比v32多261cycles（0.021%）；完整1448448WB/70839store除初始
 绝对cycle外相同。真实错误路径store负例、9拍held E1与一次较老LSU完成/恢复同拍、
 三次A/B分支未对齐异常及不写link检查通过，独立审查无PDS阻塞。原10ns/I/O/hold
-20分钟独立PDS已启动，**100MHz仍待后布线验收**。见[E1边界证据](../verification/cpu/dualissue_e1_branch.json)。
+v42后布线已结束：Slow/Fast setup−0.607/+2.639ns，hold+0.118/+0.103ns，
+MPW+3.655/+4.202ns，CPU9464LUT/4604FF/752RAM-LUT(included)/4APM/0DRM，
+原100MHz仍未通过。旧early branch FF已裁掉，最差转E1比较→recovery→FIFO消费/使能。见[E1边界证据](../verification/cpu/dualissue_e1_branch.json)。
 旧版CSR对取指未对齐mtval沿用源PC，未声称完整ISA或目标地址mtval语义。
 
 六级顺序双发射、RV32IM/CSR、BTB512/BHT512/RAS4、GShare关闭；I/D各16KiB、
@@ -346,3 +348,9 @@ v40固定版完整SRAM/Cache固件及WB/store同v32，1240606/1621119cycles、4.
 
 
 v40终态：Slow/Fast setup−1.248/+2.647ns、hold+0.107/+0.102ns、MPW+3.655/+4.202ns，native0/verifier2。全部冻结输出已核，CPU-only10052LUT/5311FF/624RAM-LUT(included)/4APM/0DRM。最差pipe1 E2标签→分支/PC。时序与资源均弱于v32，不采用。下一步验证取指预测下一PC的同事务传递，再试E1寄存操作数上的分支恢复边界；不放宽100MHz，不提升生产RTL。
+
+
+v43只增加合法A分支+B ALU推测配对，E1恢复/故障取消B的E2载荷和标签，不允许新增推测LSU/MUL/分支/CSR。真实wrong-path ALU退休负控检出，有序/IRQ及完整SRAM通过，周期1226007、**4.078280/MHz**、WB IPC1.181435；1448448WB与70839store除绝对初始cycle相同。v44进一步把同拍flush会覆盖的队列dequeue计算从最终recovery取消门控前取出，执行/外部副作用仍取消；1024定向dequeue独立性、恢复/故障/目标寄存器消费及有序/IRQ已过，完整SRAM在跑。两版未作时序通过声明。
+
+
+v44完整SRAM已PASS，1226007cycles/4.078280/MHz/WB IPC1.181435，ROM/SRAM及全部WB/store与v43逐字相同。完整ELF只.strtab不同，全部allocated sections相同；不称整个ELF相同。原100MHz20分钟PDS已开始，CPU-only综合9324LUT/4601FF/752RAM-LUT(included)/4APM/0DRM，最终STA待验。额外seed173随机访存/IRQ也PASS，seed97单/双发射双模式有序对照也PASS。见[队列恢复解耦证据](../verification/cpu/dualissue_e1_queue_ready.json)。

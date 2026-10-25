@@ -1,0 +1,87 @@
+{
+  "status": "RTL_PASS_NOT_ROUTED",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU, SRAM/TCM without cache or DDR; speculative branch+ALU only; no board/official score",
+  "manifest": "docs/verification/cpu/dualissue_e1_branch_pair_sources.json",
+  "manifest_sha256": "c8ea687c3d272a9a80efe3a0cb4458ca85e5714157d385c70142eeae114e1d2a",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T100844552580Z",
+    "status": "PASS",
+    "result_sha256": "3783c9894a4c8717ece96a4513cb5a4d9c7624f53a7e8c9fdc6a8ad288018884",
+    "output_hashes_verified": 119,
+    "measurement": {
+      "cycles": 1226007,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1814353425388273,
+      "coremark_per_mhz_short_estimate": 4.078280140325463,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "cycles_delta_from_v32": -14599,
+    "complete_firmware_identical": false,
+    "trace_comparison": {
+      "sram.wb.log": {
+        "events": 1448448,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "92a996b27fa0ca9d87d9d6f18f5e8853d7784b92fb7a739b3f0c9f6638412ae4",
+        "cached_sha256": "2fb66850c9f8f3088ac0127a78d3a98c672bc2a8a50059fca9bbe56f1abaf97f",
+        "uncached_sha256": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54"
+      },
+      "sram.store.log": {
+        "events": 70839,
+        "identical_except_initial_absolute_cycle": true,
+        "normalized_tail_sha256": "8c2fc9ec29d8577e69fec58efb63f215041df3211432c9e177458224f97e0afd",
+        "cached_sha256": "166f3adba287a4f0a6e2456af7fa91cee55cb416296b0ad3591881f4cff316fe",
+        "uncached_sha256": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    }
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T100719616896Z",
+      "status": "FAIL",
+      "result_sha256": "b0032e369f70289f7cfdf4b64aeffe81a636c6ffdcee84e07db93edd523dbe41",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T100820371583Z",
+      "status": "PASS",
+      "result_sha256": "d7fa7b85af34ffdb29e0345249f72e943a5227d25502a17dedb40efb96196fa2",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T100844533390Z",
+      "status": "FAIL",
+      "result_sha256": "4eaf8b26812c405b13e94d51eec694fb9722c63f61076029c9ec674ae393ebbf",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1008448678539Z",
+      "status": "PASS",
+      "result_sha256": "a64452ecb5934b2149cd8a403f6497c7da87496518131d8c8e24ebc019a7441a",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1008448688316Z",
+      "status": "PASS",
+      "result_sha256": "c99c9c085d42597438a1c2abbcad882a5a5d31e95e81a6d7f1105bb053d7b486",
+      "output_hashes_verified": 28
+    }
+  ],
+  "negative": "Only pipe1 E1 cancellation disconnected; actual wrong-path ALU rd12=99 retires and fails",
+  "independent_review": "No blocker in E1->E2 payload/tag cancellation, stall handling or side-effect exclusions; performance subsequently verified",
+  "physical": {
+    "status": "NOT_STARTED",
+    "reason": "Proceed with actual v42 critical-path queue decoupling in v44 before route"
+  },
+  "known_limits": [
+    "Short five-iteration RTL estimate",
+    "Vendor source-PC mtval compatibility retained",
+    "No physical timing acceptance"
+  ]
+}

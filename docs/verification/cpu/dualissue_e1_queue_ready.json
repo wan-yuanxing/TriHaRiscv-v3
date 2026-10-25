@@ -1,0 +1,109 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "SRAM/TCM only, no cache or DDR, six-stage dual issue; no board or official score",
+  "manifest": "docs/verification/cpu/dualissue_e1_queue_ready_sources.json",
+  "manifest_sha256": "269cdeec77be9941dd212e439dbfd1839cc6f7d541006f17984581a76a1022b1",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T101419406824Z",
+    "status": "PASS",
+    "result_sha256": "f7688d8c12ead644743f15b3c1f8e78fbc3409adc9560eaae227c62feab686c8",
+    "output_hashes_verified": 119,
+    "measurement": {
+      "cycles": 1226007,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1814353425388273,
+      "coremark_per_mhz_short_estimate": 4.078280140325463,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T100844552580Z",
+    "runtime_images_and_complete_traces_byte_identical": true,
+    "allocated_elf_sections_identical": true,
+    "non_runtime_difference": "ELF strtab only; full ELF bytes differ"
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T101229814596Z",
+      "status": "FAIL",
+      "result_sha256": "33b59ca2f19e2ef2e493508dbc63d9e1fb07db81aff8941a5fc8fc8eba571a5f",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T101315360608Z",
+      "status": "PASS",
+      "result_sha256": "ba0232572d66330d18c76c08513d7b3bf576eeb7e25dacdc8a392a5999929929",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T101419362181Z",
+      "status": "PASS",
+      "result_sha256": "87f693db89107476036ec2f6cbeeb766c1209643c3c6d1035870d170ee308d34",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T101617010955Z",
+      "status": "PASS",
+      "result_sha256": "181a8dc7af2c9e1dd7ec3775fda642c0cbb2bddd4bd19273eace295afa852456",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T101617010421Z",
+      "status": "FAIL",
+      "result_sha256": "541e073d95c3a158d91dbd6c750567ea39ece43d01d33ca81241de41197d9e2a",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1014196771517Z",
+      "status": "PASS",
+      "result_sha256": "4b0f19502afeadf80642d30e8ded22c1508a302e4c2bb6caf7dc13e47ab34a93",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1014196781457Z",
+      "status": "PASS",
+      "result_sha256": "4e636c55e5e1e47c7f116015740ef672a7eedb51b8784f2880d0f90dba1128be",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1020220970955Z",
+      "status": "PASS",
+      "result_sha256": "2deff8b1f890949c6a7611a1c4fa5d84fa1d32bd556be9e856eb45513a950844",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1020220957785Z",
+      "status": "PASS",
+      "result_sha256": "74167223a21fd07de6906556ccde0cf3366724c800011b4b608ae04db3ae4436",
+      "output_hashes_verified": 38,
+      "scope": "seed97 both single and dual ordered WB/store/exception comparison"
+    }
+  ],
+  "independent_review": "No block: normal dequeue before recovery cancellation, same-edge flush dominates; final external side effects still cancelled",
+  "physical": {
+    "directory": "build/cpu/dual-e1-queue-ready-io-physical-v44",
+    "name": "dual-e1-queue-ready-io-physical-v44",
+    "status": "RUNNING",
+    "prepared_sha256": "5b5f9e400f1d8701b16f77a4a9a8d29cba3db570423181d2349a943e9c5febf8",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "cpu_only_synthesis_resources": {
+      "lut": 9324,
+      "registers": 4601,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "known_limits": [
+    "Short five-iteration RTL estimate only",
+    "Existing source-PC mtval compatibility, not full ISA proof",
+    "Native synth/placement estimates cannot replace actual timing"
+  ]
+}

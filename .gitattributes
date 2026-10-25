@@ -51,6 +51,8 @@ docs/verification/cpu/dualissue_pc_candidate_registers.patch -text -whitespace
 docs/verification/cpu/dualissue_regfile_ff_zero.patch -text -whitespace
 docs/verification/cpu/dualissue_prediction_metadata.patch -text -whitespace
 docs/verification/cpu/dualissue_e1_branch.patch -text -whitespace
+docs/verification/cpu/dualissue_e1_branch_pair.patch -text -whitespace
+docs/verification/cpu/dualissue_e1_queue_ready.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol
