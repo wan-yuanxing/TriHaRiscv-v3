@@ -1,0 +1,42 @@
+{
+  "status": "REJECTED",
+  "candidate": "dual-branch-interlock-v31",
+  "scope": "isolated RTL SRAM/TCM simulation only; not production RTL and no PDS timing run",
+  "baseline": {
+    "cycles": 1240606,
+    "coremark_per_mhz": 4.030288,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ]
+  },
+  "result": {
+    "cycles": 1361602,
+    "coremark_per_mhz_short_estimate": 3.67214501741331,
+    "observed_ipc": 1.06378222123646,
+    "wb_completed": 1448448,
+    "stores": 70839,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "source_simulation": "PASS",
+    "profile_simulation": "PASS"
+  },
+  "delta": {
+    "cycles": 120996,
+    "cycles_percent": 9.751,
+    "coremark_percent": -8.887
+  },
+  "reason": "Branch-only E2 load interlock preserves CRC and store/WB trace but loses the required >4 CoreMark/MHz SRAM/TCM gate. No physical timing run started.",
+  "artifacts": [
+    "build/cpu/dual-branch-interlock-v31/rtl/cpu/triha_issue.v",
+    "build/cpu/dual-sram/coremark-20261025T055606013771Z/result.json",
+    "docs/verification/cpu/dualissue_branch_interlock_sources.json",
+    "docs/verification/cpu/dualissue_branch_interlock.patch"
+  ]
+}

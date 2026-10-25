@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "scope": "Branch-only E2 load dependency interlock on queued legality candidate",
+  "patch_sha256": "81f54bb6b5606ce8c83a8f7dc13065c40297549dd303f7b1a1787ae73a89735d",
+  "sources": {
+    "rtl/cpu/triha_btb.v": {
+      "base_sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+      "candidate_sha256": "ed0b88672f5fe595d9ac7085d55cecb344e3e1783fb7066f4dffdeacf4e116d0"
+    },
+    "rtl/cpu/triha_cache_subsystem.v": {
+      "base_sha256": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
+      "candidate_sha256": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732"
+    },
+    "rtl/cpu/triha_cached_core.v": {
+      "base_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
+      "candidate_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564"
+    },
+    "rtl/cpu/triha_core.v": {
+      "base_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+      "candidate_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd"
+    },
+    "rtl/cpu/triha_cpu.v": {
+      "base_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+      "candidate_sha256": "4b402abe4674da338ac16aed532f7532ae5a61a0f37cb92923883d6f51b82cb8"
+    },
+    "rtl/cpu/triha_csr.v": {
+      "base_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+      "candidate_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425"
+    },
+    "rtl/cpu/triha_dcache.v": {
+      "base_sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+      "candidate_sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03"
+    },
+    "rtl/cpu/triha_dcache_data_ram.v": {
+      "base_sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+      "candidate_sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01"
+    },
+    "rtl/cpu/triha_dcache_tag_ram.v": {
+      "base_sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+      "candidate_sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b"
+    },
+    "rtl/cpu/triha_decode.v": {
+      "base_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "candidate_sha256": "1c804ccb2dd1462939b3a1bcd5dd62f4c5da19bf21a5b61c708dff4e0023673d"
+    },
+    "rtl/cpu/triha_divider.v": {
+      "base_sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "candidate_sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55"
+    },
+    "rtl/cpu/triha_frontend.v": {
+      "base_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+      "candidate_sha256": "38a5b1e2210b5302252a2ce5179951ad124c7a52325c2c640ef7db51a421036c"
+    },
+    "rtl/cpu/triha_icache.v": {
+      "base_sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+      "candidate_sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9"
+    },
+    "rtl/cpu/triha_icache_data_ram.v": {
+      "base_sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+      "candidate_sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d"
+    },
+    "rtl/cpu/triha_icache_tag_ram.v": {
+      "base_sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+      "candidate_sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a"
+    },
+    "rtl/cpu/triha_ifetch_uncached.v": {
+      "base_sha256": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+      "candidate_sha256": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d"
+    },
+    "rtl/cpu/triha_issue.v": {
+      "base_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+      "candidate_sha256": "29138a7db34fac83cbdf0cd846fe27a28a529999117f37622d05b5308780ee84"
+    },
+    "rtl/cpu/triha_lsu.v": {
+      "base_sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+      "candidate_sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
+    },
+    "rtl/cpu/triha_multiplier.v": {
+      "base_sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+      "candidate_sha256": "44b2570aa99c9345663f0a1f26f91005d99ad33ab30a2d0440819334fec386a5"
+    },
+    "rtl/cpu/triha_npc.v": {
+      "base_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+      "candidate_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4"
+    },
+    "rtl/cpu/triha_pipe_ctrl.v": {
+      "base_sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "candidate_sha256": "8364bda9ecab71bc28ef7f63fa1aa754539440619ae434e658f88aa340750e48"
+    },
+    "rtl/cpu/triha_regfile.v": {
+      "base_sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+      "candidate_sha256": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929"
+    }
+  },
+  "patch_file": "docs/verification/cpu/dualissue_branch_interlock.patch"
+}

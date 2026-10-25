@@ -1,0 +1,57 @@
+diff --git "a/D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-queued-legality-reconstructed-v30\\rtl\\cpu\\triha_issue.v" "b/D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-interlock-v31\\rtl\\cpu\\triha_issue.v"
+index d751792..afec2a7 100644
+--- "a/D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-queued-legality-reconstructed-v30\\rtl\\cpu\\triha_issue.v"
++++ "b/D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-interlock-v31\\rtl\\cpu\\triha_issue.v"
+@@ -708,6 +708,23 @@ wire prior_lsu_unit_wait_w =
+ // binary producer tags directly. Unknown predicates still allocate nothing.
+ reg [3:0] pending_producer_r;
+ wire [19:0] pending_tags_w={pipe1_rd_e2_w,pipe0_rd_e2_w,pipe1_rd_e1_w,pipe0_rd_e1_w};
++// A completed E2 load is available through the normal bypass, but selecting
++// that late SRAM/LSU value directly in a conditional branch creates the
++// critical return-data -> compare -> PC path.  Hold only the dependent
++// conditional branch for one issue cycle so it consumes the registered WB
++// value on the following cycle.  This deliberately leaves ALU, MUL, stores,
++// jumps and unrelated branches on their existing schedule.
++wire branch_a_load_e2_busy_w = writeback_mem_valid_i && issue_a_branch_w && (opcode_a_r[6:0] == 7'h63) &&
++    (((pipe0_load_e2_w && (pipe0_rd_bypass_e2_w != 5'b0)) &&
++      ((pipe0_rd_bypass_e2_w == issue_a_ra_idx_w) || (pipe0_rd_bypass_e2_w == issue_a_rb_idx_w))) ||
++     ((pipe1_load_e2_w && (pipe1_rd_bypass_e2_w != 5'b0)) &&
++      ((pipe1_rd_bypass_e2_w == issue_a_ra_idx_w) || (pipe1_rd_bypass_e2_w == issue_a_rb_idx_w))));
++wire branch_b_load_e2_busy_w = writeback_mem_valid_i && issue_b_branch_w && (opcode_b_r[6:0] == 7'h63) &&
++    (((pipe0_load_e2_w && (pipe0_rd_bypass_e2_w != 5'b0)) &&
++      ((pipe0_rd_bypass_e2_w == issue_b_ra_idx_w) || (pipe0_rd_bypass_e2_w == issue_b_rb_idx_w))) ||
++     ((pipe1_load_e2_w && (pipe1_rd_bypass_e2_w != 5'b0)) &&
++      ((pipe1_rd_bypass_e2_w == issue_b_ra_idx_w) || (pipe1_rd_bypass_e2_w == issue_b_rb_idx_w))));
++wire branch_load_e2_busy_any_w = branch_a_load_e2_busy_w || branch_b_load_e2_busy_w;
+ always @* begin
+     pending_producer_r=4'b0;
+     if(SUPPORT_LOAD_BYPASS==0)begin
+@@ -870,7 +887,7 @@ begin
+     if (lsu_stall_i || stall_w || div_pending_q || csr_pending_q)
+         ;
+     // Primary slot (lsu, branch, alu, mul, div, csr)
+-    else if (opcode_a_valid_r && !prior_lsu_unit_wait_w &&
++    else if (opcode_a_valid_r && !prior_lsu_unit_wait_w && !branch_a_load_e2_busy_w &&
+         !((a_roles_w[0] && pending_operand_busy(issue_a_ra_idx_w,pending_tags_w,pending_producer_r)) || 
+           (a_roles_w[1] && pending_operand_busy(issue_a_rb_idx_w,pending_tags_w,pending_producer_r)) ||
+           (a_roles_w[2] && pending_operand_busy(issue_a_rd_idx_w,pending_tags_w,pending_producer_r))))
+@@ -890,7 +907,7 @@ begin
+         !((b_roles_w[0] && pending_operand_busy(issue_b_ra_idx_w,pending_tags_w,pending_producer_r)) ||
+           (b_roles_w[1] && pending_operand_busy(issue_b_rb_idx_w,pending_tags_w,pending_producer_r)) ||
+           (b_roles_w[2] && pending_operand_busy(issue_b_rd_idx_w,pending_tags_w,pending_producer_r))) &&
+-        !same_packet_busy_r)
++        !same_packet_busy_r && !branch_b_load_e2_busy_w)
+     begin
+         opcode_b_issue_r  = 1'b1;
+         opcode_b_accept_r = 1'b1;
+@@ -940,8 +957,8 @@ assign exec1_opcode_valid_o = opcode_b_issue_r;
+ assign dual_issue_w         = opcode_b_issue_r & opcode_b_accept_r & ~take_interrupt_i;
+ assign single_issue_w       = (opcode_a_issue_r & opcode_a_accept_r) & ~dual_issue_w & ~take_interrupt_i;
+ 
+-assign fetch0_accept_o      = ((slot0_valid_r & opcode_a_accept_r) | slot1_valid_r) & ~take_interrupt_i;
+-assign fetch1_accept_o      = ((slot1_valid_r & opcode_a_accept_r) | (opcode_b_accept_r)) & ~take_interrupt_i;
++assign fetch0_accept_o      = (((slot0_valid_r & opcode_a_accept_r) | slot1_valid_r) & ~branch_load_e2_busy_any_w) & ~take_interrupt_i;
++assign fetch1_accept_o      = (((slot1_valid_r & opcode_a_accept_r) | (opcode_b_accept_r)) & ~branch_load_e2_busy_any_w) & ~take_interrupt_i;
+ 
+ assign stall_w              = pipe0_stall_raw_w | pipe1_stall_raw_w;
+ 
