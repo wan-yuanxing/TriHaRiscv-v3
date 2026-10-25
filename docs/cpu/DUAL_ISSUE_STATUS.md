@@ -354,3 +354,9 @@ v43只增加合法A分支+B ALU推测配对，E1恢复/故障取消B的E2载荷�
 
 
 v44完整SRAM已PASS，1226007cycles/4.078280/MHz/WB IPC1.181435，ROM/SRAM及全部WB/store与v43逐字相同。完整ELF只.strtab不同，全部allocated sections相同；不称整个ELF相同。原100MHz20分钟PDS已开始，CPU-only综合9324LUT/4601FF/752RAM-LUT(included)/4APM/0DRM，最终STA待验。额外seed173随机访存/IRQ也PASS，seed97单/双发射双模式有序对照也PASS。见[队列恢复解耦证据](../verification/cpu/dualissue_e1_queue_ready.json)。
+
+
+v44终态：Slow/Fast setup−1.035/+2.571ns，hold+0.118/+0.110ns、MPW+3.655/+4.202ns，native0/verifier2，完整冻结哈希已核。关键已转LSU pending→SRAM同址写冲突→取指active_q使能，6级/logic0.971ns/route9.637ns。v45只把derived fetch的activation等待策略从REGISTER_REDIRECT复用MMU机制中拆开：实际MMU0沿用vendor非MMU分支激活原则，保持寄存redirect/请求握手/旧响应丢弃；实际MMU1保持原等待策略。启动不accept、后续背压/flush及丢弃破坏负控、有序/IRQ已过，新SRAM在跑。
+
+
+v45完整SRAM再次通过，1226007cycles、4.078280/MHz，完整ROM/SRAM/WB/store与v44逐字相同。原10ns20分钟独立PDS已启动。独立审查限定当前有限延迟且取指无副作用的SRAM边界：启动背压释放时可能接受旧PC请求，必须靠既有branch_w/branch_d_q丢弃其响应；不是取指请求轨迹等价，也不是未来外部不可响应/有副作用接口的准入。实际MMU1等待条件保持。见[启动策略证据](../verification/cpu/dualissue_fetch_activation.json)。

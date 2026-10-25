@@ -1,0 +1,113 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Current finite-latency, side-effect-free local SRAM/TCM instruction interface only; cache and DDR excluded",
+  "manifest": "docs/verification/cpu/dualissue_fetch_activation_sources.json",
+  "manifest_sha256": "d4e40a81baf546cce96075a59a3cb6729c93307a9a967134c537df93b09fe413",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T103200017353Z",
+    "status": "PASS",
+    "result_sha256": "03716d482ee0918de22c0fce5429101eb172f25c78f28abd5a8e197332d0d3db",
+    "output_hashes_verified": 119,
+    "measurement": {
+      "cycles": 1226007,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1814353425388273,
+      "coremark_per_mhz_short_estimate": 4.078280140325463,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T101419406824Z",
+    "runtime_images_and_complete_traces_byte_identical": true
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103128956556Z",
+      "status": "FAIL",
+      "result_sha256": "e28b2a812e8cb8d4b780a7f2d69c5173133d358cc7c3d1b74b362937dc9d8a2a",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103159990802Z",
+      "status": "PASS",
+      "result_sha256": "d921f5338d8c7509a3c3fafdf759ed8413b7b63331c476b61c26693d1afd11d7",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103159997207Z",
+      "status": "PASS",
+      "result_sha256": "0acfc0128204174b2742e0b3412c6c075959d016c3844b1db08255366e8a5281",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103159973646Z",
+      "status": "FAIL",
+      "result_sha256": "1f5f5bae684bb96a75f7e046918f327e23f1c237fe68f708dc359630eb5da09d",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1032003091097Z",
+      "status": "PASS",
+      "result_sha256": "1ac74110d3b15c244dd3226965ad6f31772123b31f06ba02aacf06b6eac040c3",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1032003109113Z",
+      "status": "PASS",
+      "result_sha256": "aca8fa9e5ba0bf4dc6951c75950ba4f4a9dac9229585aed804d34c68e98c0b1f",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103310994205Z",
+      "status": "PASS",
+      "result_sha256": "28d8d5cf3935e6ee025fa3664083f8715e1d198fcf24f501b4695667185e3ba9",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103310996219Z",
+      "status": "PASS",
+      "result_sha256": "ce688966a6d3ac822126498599e14ae35d5094ae682531a1be07ebdb50428233",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T103310990511Z",
+      "status": "PASS",
+      "result_sha256": "033d9c49677a3dc87b87781a13dd8403e10eaa61ba3c053f93bbdb47b2bd0e29",
+      "output_hashes_verified": 72
+    }
+  ],
+  "independent_review": "No blocker for current finite-latency side-effect-free SRAM instruction boundary; actual MMU wait condition preserved",
+  "request_contract_qualification": "Startup while instruction acceptance is blocked may accept a pre-redirect-PC request on release; branch_w/branch_d_q must discard its finite response. Delivered PCs remain checked. Not general admission for side-effectful or potentially nonresponding instruction addresses.",
+  "physical": {
+    "directory": "build/cpu/dual-fetch-activation-io-physical-v45",
+    "name": "dual-fetch-activation-io-physical-v45",
+    "status": "RUNNING",
+    "prepared_sha256": "39572a826e70b3f4ffa6084b79012b81e6077b3733c7096d8d3ef309dced6a16",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500,
+    "cpu_only_synthesis_resources": {
+      "lut": 9325,
+      "registers": 4601,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "known_limits": [
+    "Short five-iteration RTL estimate, not official or board score",
+    "Native source-PC misalignment mtval retained",
+    "No actual100MHz timing acceptance yet"
+  ],
+  "native_mapping": {
+    "synthesis_vm_sha256": "2b4e0c42a622bd7f8e817ed5912e31f8921c2aa64c907cb5f0fd36ce98bd876c",
+    "active_d_lut": "LUT2 INIT1110: active_q OR branch_w",
+    "late_icache_accept_removed_from_active_d": true,
+    "scope": "Actual synthesized driver only; no timing acceptance implied"
+  }
+}
