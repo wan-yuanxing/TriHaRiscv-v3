@@ -1,6 +1,8 @@
 /* TriHa synchronous local data fabric and pipelined instruction port.
  * Only accepted requests have side effects. Local reads respond in one cycle;
  * a slow UART write owns the port until its captured byte has been accepted.
+ * A one-entry instruction request slot absorbs same-word write collisions;
+ * its ready signal depends on registered occupancy, not the data request.
  * Reset is coordinated with the CPU; memory contents survive reset. */
 `include "soc_map.vh"
 module triha_soc_memory #(
@@ -38,9 +40,14 @@ module triha_soc_memory #(
     reg [31:0] mmio_data_q;
     reg [3:0] read_select_q;
     reg inst_sram_q, inst_rom_q;
+    reg inst_pending_q;
+    reg [11:0] inst_word_q;
     reg [31:0] cycle_q;
-    wire i_rom = inst_addr_i >= `TRIHA_ROM_BASE && inst_addr_i < `TRIHA_ROM_BASE + `TRIHA_ROM_BYTES;
-    wire i_sram = inst_addr_i >= `TRIHA_SRAM_BASE && inst_addr_i < `TRIHA_SRAM_BASE + `TRIHA_SRAM_BYTES;
+    // Only a valid SRAM collision can occupy the slot. Its target is implicit;
+    // retain the word address rather than carrying another full address decode.
+    wire [11:0] inst_service_word = inst_pending_q ? inst_word_q : inst_addr_i[14:3];
+    wire i_rom = !inst_pending_q && inst_addr_i >= `TRIHA_ROM_BASE && inst_addr_i < `TRIHA_ROM_BASE + `TRIHA_ROM_BYTES;
+    wire i_sram = inst_pending_q || (inst_addr_i >= `TRIHA_SRAM_BASE && inst_addr_i < `TRIHA_SRAM_BASE + `TRIHA_SRAM_BYTES);
     wire d_rom = data_addr_i >= `TRIHA_ROM_BASE && data_addr_i < `TRIHA_ROM_BASE + `TRIHA_ROM_BYTES;
     wire d_sram = data_addr_i >= `TRIHA_SRAM_BASE && data_addr_i < `TRIHA_SRAM_BASE + `TRIHA_SRAM_BYTES;
     wire d_request = data_re_i || (|data_wstrb_i) || data_invalidate_i || data_writeback_i || data_flush_i;
@@ -59,19 +66,20 @@ module triha_soc_memory #(
                  (d_system && (|data_wstrb_i) && data_addr_i != `TRIHA_SYSTEM_BASE + 4);
     wire d_fire = data_accept_o && d_request;
     wire d_write = d_fire && d_sram && !d_local_bad && (|data_wstrb_i);
-    wire collision = d_write && i_sram && inst_addr_i[14:3] == data_addr_i[14:3];
+    wire collision = d_write && i_sram && inst_service_word == data_addr_i[14:3];
     assign data_accept_o = rst_ni && !uart_pending_q;
-    assign inst_accept_o = rst_ni && !collision;
+    assign inst_accept_o = rst_ni && !inst_pending_q;
     wire i_fire = inst_req_i && inst_accept_o;
+    wire i_service = rst_ni && (inst_pending_q || i_fire) && !collision;
     wire [63:0] ram_inst, ram_data, rom_inst, rom_data;
     wire [7:0] ram_we = d_write ? (data_addr_i[2] ? {data_wstrb_i, 4'b0} : {4'b0, data_wstrb_i}) : 8'b0;
     triha_sram #(.INIT_FILE(SRAM_FILE)) u_sram (
-        .clk_i(clk_i), .inst_en_i(i_fire && i_sram), .inst_addr_i(inst_addr_i[14:3]), .inst_rdata_o(ram_inst),
+        .clk_i(clk_i), .inst_en_i(i_service && i_sram), .inst_addr_i(inst_service_word), .inst_rdata_o(ram_inst),
         .data_en_i(d_fire && d_sram && !d_local_bad), .data_addr_i(data_addr_i[14:3]),
         .data_wdata_i({data_wdata_i, data_wdata_i}), .data_wstrb_i(ram_we), .data_rdata_o(ram_data)
     );
     triha_boot_rom #(.INIT_FILE(ROM_FILE)) u_rom (
-        .clk_i(clk_i), .inst_en_i(i_fire && i_rom), .inst_addr_i(inst_addr_i[12:3]), .inst_rdata_o(rom_inst),
+        .clk_i(clk_i), .inst_en_i(i_service && i_rom), .inst_addr_i(inst_addr_i[12:3]), .inst_rdata_o(rom_inst),
         .data_en_i(d_fire && d_rom && !d_bad), .data_addr_i(data_addr_i[12:3]), .data_rdata_o(rom_data)
     );
     assign inst_rdata_o = inst_rom_q ? rom_inst : inst_sram_q ? ram_inst : 64'b0;
@@ -93,15 +101,22 @@ module triha_soc_memory #(
     always @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin
             inst_valid_o <= 0; inst_error_o <= 0; inst_rom_q <= 0; inst_sram_q <= 0;
+            inst_pending_q <= 0; inst_word_q <= 0;
             uart_pending_q <= 0; uart_byte_q <= 0;
             data_ack_o <= 0; data_error_o <= 0; data_resp_tag_o <= 0;
             mmio_data_q <= 0; read_select_q <= 0;
             done_o <= 0; exit_code_o <= 0; cycle_q <= 0;
         end else begin
             cycle_q <= cycle_q + 1'b1;
-            inst_valid_o <= i_fire;
-            inst_error_o <= i_fire && !(i_rom || i_sram);
-            if (i_fire) begin inst_rom_q <= i_rom; inst_sram_q <= i_sram; end
+            inst_valid_o <= i_service;
+            inst_error_o <= i_service && !(i_rom || i_sram);
+            if (i_service) begin inst_rom_q <= i_rom; inst_sram_q <= i_sram; end
+            if (inst_pending_q) begin
+                if (i_service) inst_pending_q <= 0;
+            end else if (i_fire && collision) begin
+                inst_pending_q <= 1;
+                inst_word_q <= inst_addr_i[14:3];
+            end
             data_ack_o <= 0;
             data_error_o <= 0;
             if (d_fire) begin

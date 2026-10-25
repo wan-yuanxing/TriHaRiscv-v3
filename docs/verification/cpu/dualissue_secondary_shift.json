@@ -1,0 +1,77 @@
+{
+  "status": "RTL_PASS_NOT_ROUTED",
+  "overall_target_met": false,
+  "scope": "Six-stage dual issue with variable shifts on A and immediate shifts still on B; other B classes preserved",
+  "manifest": "docs/verification/cpu/dualissue_secondary_shift_sources.json",
+  "manifest_sha256": "9218e601c594df76a1371895d2f752fe4a4d5a6d57990b629683a59dd7877323",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T105651258217Z",
+    "status": "PASS",
+    "result_sha256": "075fc45e64cfaaad0587947b498c00c06e1735681b2a5a0f1955ba0448e7ef7b",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1226007,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1814353425388273,
+      "coremark_per_mhz_short_estimate": 4.078280140325463,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "runtime_images_and_complete_traces_identical": true
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T105356840882Z",
+      "status": "FAIL",
+      "result_sha256": "2b5c813b60a94291f50617cd06999315c2076a278e8d531e220e374a9b0bac64",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T105546156854Z",
+      "status": "PASS",
+      "result_sha256": "caa68bf7e3ba7825d12a5b108971686f0806b2feabdf4cb75ecfcb8eef61b883",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T105651184150Z",
+      "status": "FAIL",
+      "result_sha256": "783f6d8858d9e4cf709b21f9107dffca295fcccb3422e71e8ae3111dc0183be4",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T105651208232Z",
+      "status": "PASS",
+      "result_sha256": "e71c0f075b367c088eee8846579ba2202ec209aaee7dc9aa34bab0bc828673b4",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T105651214648Z",
+      "status": "FAIL",
+      "result_sha256": "f82e08ce372181b94cfa445cb2a9f21a5b2e0c8ab3a7ab61c1cb07aefd56653d",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1056515684538Z",
+      "status": "PASS",
+      "result_sha256": "7df907f629fefbde312792684f80ec181a26b91061400047b2a08452da48a8d4",
+      "output_hashes_verified": 28
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1056516371659Z",
+      "status": "PASS",
+      "result_sha256": "ce5e3fbb83d776f8a8ed1ef818d8edf80a5d8cd63f71e36bc943b1f049a97305",
+      "output_hashes_verified": 28
+    }
+  ],
+  "negative": "Re-enabled B register shifts only; actual WB ffffef00 vs expected ffffff78 is rejected",
+  "independent_review": "No B scheduling hole; A native ALU, RAW/WAW/IRQ/cancellation preserved; immediate ALU equivalence conditional on shamt=b[4:0]",
+  "physical": {
+    "status": "NOT_STARTED",
+    "reason": "Proceed with v48 head-only alignment addressing observed A selection path first"
+  }
+}

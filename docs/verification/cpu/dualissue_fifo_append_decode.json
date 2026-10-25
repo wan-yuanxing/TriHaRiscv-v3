@@ -1,0 +1,189 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "scope": "Six-stage dual CPU SRAM/TCM only; predecode fixed FIFO append/retain destinations before late dequeue; no board or official score",
+  "manifest": "docs/verification/cpu/dualissue_fifo_append_decode_sources.json",
+  "manifest_sha256": "afca84cb358ed0f20ea256878c5cbe97f1096d532aa600fc51a8b239842bb603",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T121402032878Z",
+    "status": "PASS",
+    "result_sha256": "4b5fca15cc1e49e89bbbe444b57593addb49decab0014b4335368b0ed06be9e8",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1221907,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1001720,
+      "paired": 451806,
+      "frontend": 61797,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 158386,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 145312,
+      "pair_structure": 104435,
+      "pair_dependency": 300167,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 84000,
+      "structure_branch_a": 20434,
+      "structure_other": 1,
+      "pair_raw": 249663,
+      "pair_waw": 2,
+      "pair_older": 50502,
+      "a_waw_only": 11171,
+      "b_waw_only": 2,
+      "queue0": 61797,
+      "queue1": 31643,
+      "queue2": 94040,
+      "queue3": 316829,
+      "queue4": 411670,
+      "queue5": 250095,
+      "queue6": 55833,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 305928,
+      "backpressure_pop": 283953,
+      "frontend_empty": 61797,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T115800660498Z",
+    "byte_identical_files": [
+      "rom.hex",
+      "sram.hex",
+      "sram.bin",
+      "sram.wb.log",
+      "sram.store.log"
+    ]
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121224049956Z",
+      "status": "FAIL",
+      "result_sha256": "b640ea54d635a39b665f1c6970aa28c0418b1e5dc884b0a31692a0f46a6bed6e",
+      "output_hashes_verified": 72,
+      "purpose": "Parent subtract/decode isolation RED"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121313870904Z",
+      "status": "PASS",
+      "result_sha256": "126666f8cb50ad62a2ba634094f26e9aec56c43c1958d36c0c08a2b17f4a9664",
+      "output_hashes_verified": 72,
+      "purpose": "Candidate arithmetic-isolation GREEN"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121313853401Z",
+      "status": "FAIL",
+      "result_sha256": "ba247fa4d9f1445ad0dca7107f2b35b946ee0f64131896c0c0a3d23518629ad1",
+      "output_hashes_verified": 72,
+      "purpose": "Actual data_q[2] force0 negative"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121402044541Z",
+      "status": "PASS",
+      "result_sha256": "bd11b1d0db956167376d0c661da83efc1d3bdcbc35d2b87247b2016787f15e02",
+      "output_hashes_verified": 72,
+      "purpose": "Prediction/class/fault/CSR alignment EXTRA0"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121402033594Z",
+      "status": "PASS",
+      "result_sha256": "bd9ba3f878b34cbbcbc601fd0d17f2cfa8f2899e2c6ce4f4034c858f98f478f4",
+      "output_hashes_verified": 72,
+      "purpose": "Prediction/class/fault/CSR alignment EXTRA1"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121313868951Z",
+      "status": "PASS",
+      "result_sha256": "84f943ac7f33d7c4ec15cde1cb57522150444125c194324c1bb120251fecef40",
+      "output_hashes_verified": 72,
+      "purpose": "Flush metadata and X/Z controls"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121313851232Z",
+      "status": "PASS",
+      "result_sha256": "a2ed7131f38200ca9c2f70516e67735e71ea9b75d3701745bb3b0efd78e8f4ed",
+      "output_hashes_verified": 75,
+      "purpose": "Held LSU/recovery and branch faults"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1214023494471Z",
+      "status": "PASS",
+      "result_sha256": "d945677ab21cf2c3ea5d33ae31dd7a3a8312f9c3335dabfc4602229db8b269e9",
+      "output_hashes_verified": 38,
+      "purpose": "Single/dual ordered seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1214023534042Z",
+      "status": "PASS",
+      "result_sha256": "510257ba47bd477f149870e82783639849569ccc3c31d6925c35183708a3d970",
+      "output_hashes_verified": 38,
+      "purpose": "Single/dual IRQ pair seed173"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121616539581Z",
+      "status": "PASS",
+      "result_sha256": "f7cb9598950475efdf8de40631b6640d974097f095a2d027e8e51d34d8ebe6e2",
+      "output_hashes_verified": 72,
+      "purpose": "v51 survivor oracle 7168 four-state control states"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T121616540167Z",
+      "status": "PASS",
+      "result_sha256": "ee38dc7d3b51deac38859c0d0128cd8ab52a8ae486a87fc7f7ac4552a898ac94",
+      "output_hashes_verified": 72,
+      "purpose": "v52 survivor oracle 7168 four-state control states"
+    }
+  ],
+  "independent_review": "No blocker under reachable occupancy; B-only and four-state removal normalization unchanged; arithmetic poisoning proves only cone isolation, independently checked by survivor/transaction oracles and full CPU traces",
+  "physical": {
+    "name": "dual-fifo-append-decode-io-physical-v52",
+    "directory": "build/cpu/dual-fifo-append-decode-io-physical-v52",
+    "status": "RUNNING",
+    "prepared_sha256": "da3b009b1ca9b9ad9c9837d5332360241f7b04329ebe92f5998a1a84fc48a88d",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500
+  },
+  "comparison": {
+    "parent": "dual-queued-secondary-class-io-physical-v51",
+    "original_period_ns": 10,
+    "parent_slow_setup_ns": -0.505,
+    "parent_fast_setup_ns": 2.85,
+    "note": "New netlist and placement; no frequency gain claimed before actual STA"
+  },
+  "limits": [
+    "Five-iteration RTL estimate; no official/board score",
+    "Valid-qualified CPU contract, inactive bulk history from v50 remains",
+    "Known accepted PC interface; no arbitrary unknown-PC proof",
+    "Original source-PC misalignment mtval remains",
+    "No standalone ASIC/ISA/full formal proof"
+  ],
+  "administrative_reruns": [
+    "121313876097Z and 121313852692Z testbench passed but runner used wrong success marker; corrected fresh runs are cited above"
+  ]
+}

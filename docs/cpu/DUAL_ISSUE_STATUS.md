@@ -1,35 +1,34 @@
 # 双发射独立路线状态
 
-更新：2026-10-25。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，
-分支 `cpu/dualissue-windows`。本页下方按日期保留历史，当前状态以本段及
-[物理验收汇总](../verification/cpu/dualissue_operand_timing.json) 为准。
+更新：2026-10-25。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
-当前最好的完整后布线候选为 v32 I/O：原10ns、无区域约束、已有输出寄存器打包属性，
-setup **−0.539ns**，Slow/Fast hold +0.118/+0.101ns、脉宽 +3.655/+4.202ns；
-**100MHz尚未通过**。比此前v29的−0.763ns改善0.224ns，属于新网表/布局的实际结果。
-CPU-only **8869LUT/4252FF/752RAM-LUT（已含在LUT总数）/4APM/0DRM**，
-从 u_core 综合层级统计，排除ROM/SRAM/MMIO/IO夹具。
+当前只推进**不带Cache、不接DDR的SRAM/TCM版本**。六级顺序双发射、RV32IM/CSR、
+BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV，变量移位在A，B保留立即移位。
+A分支可与B ALU推测配对，恢复/故障在E1取消年轻结果；B LSU仍只允许原已知不跳转配对。
 
-同一v32 RTL、Windows GCC15.2 `-O2`、五次迭代短测：真实模型8KiB ROM/32KiB
-SRAM为1240606周期、**4.030288 CoreMark/MHz**，WB观测IPC1.167533；
-开启I/D Cache的DDR模型为1621119周期、**3.084289/MHz**。两类完整WB/store
-对照通过，属于RTL估计，非官方/板级分数；观察IPC不是架构minstret。
-DDR Cache-off已按用户指示排除。
+最新v52完整Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
+WB观测IPC1.185400。CRC通过，1448448条WB和70839条store与v51逐字相同，运行镜像也相同。
+这是RTL估计，非官方分数或板级结果；WB观察IPC不是架构minstret。
 
-**最新范围收拢：Cache和DDR均暂不接入，全部新增性能/时序验收集中SRAM/TCM。**
-v41预测下一PC元数据已通过请求/缓冲/队列测试与等周期整核；v42用E1既有寄存操作数
-核对冻结预测，切断完整早期分支结果回写expectedPC的路径。新SRAM为1240867cycles、
-**4.029441/MHz**，比v32多261cycles（0.021%）；完整1448448WB/70839store除初始
-绝对cycle外相同。真实错误路径store负例、9拍held E1与一次较老LSU完成/恢复同拍、
-三次A/B分支未对齐异常及不写link检查通过，独立审查无PDS阻塞。原10ns/I/O/hold
-v42后布线已结束：Slow/Fast setup−0.607/+2.639ns，hold+0.118/+0.103ns，
-MPW+3.655/+4.202ns，CPU9464LUT/4604FF/752RAM-LUT(included)/4APM/0DRM，
-原100MHz仍未通过。旧early branch FF已裁掉，最差转E1比较→recovery→FIFO消费/使能。见[E1边界证据](../verification/cpu/dualissue_e1_branch.json)。
-旧版CSR对取指未对齐mtval沿用源PC，未声称完整ISA或目标地址mtval语义。
+**100MHz尚未通过。**v51原10ns、原IO/hold/multicorner已完成，setup Slow/Fast -0.505/+2.850ns，
+hold +0.110/+0.105ns、脉宽 +3.655/+4.202ns；全部冻结输入与实际输出核验通过。
+v52已通过组件、有序/IRQ和完整SRAM；旧占用数预译码FIFO写入位置，原10ns独立PDS运行中。
+CPU-only综合9077LUT/4648FF/752RAM-LUT（已含LUT）/4APM/0DRM，排除ROM/SRAM/MMIO夹具。
+最佳已完成setup是v51的−0.505ns；新版本经过新网表/布局，不能直接当频率收益。
 
-六级顺序双发射、RV32IM/CSR、BTB512/BHT512/RAS4、GShare关闭；I/D各16KiB、
-两路、32B行，D写回/写分配，共享LSU/MUL/DIV。A分支仅BEQ/BNE含x0且已知不跳转
-时允许配对，其他A分支单发射。生产RTL默认单发射，所有候选仍在build快照中。
+v48已把取指包首个有效字在入队对齐，A固定队头；v49在本独立工作树的本地SoC增加一项取指请求
+缓冲，ready由寄存占用驱动，正常读仍一周期，同址写冲突延后服务。v50分开FIFO bulk存储与flush，
+CSR/故障/类别历史保持；v51把B能力类型判定随指令保存，消除新引入的晚类别译码。
+所有新运行均只用SRAM。默认`rtl/cpu`尚未替换，候选由完整生产基线补丁/manifest可重建；
+`rtl/soc/triha_soc_memory.v`的请求缓冲只在本独立分支，主工程/集成工作树未修改，未上板。
+
+见[当前候选](../verification/cpu/dualissue_fifo_append_decode.json)、
+[前版终态](../verification/cpu/dualissue_queued_secondary_class.json)、
+[取指请求缓冲](../verification/cpu/dualissue_sram_instruction_buffer.json)、
+[FIFO存储分离](../verification/cpu/dualissue_fifo_flush_data.json)及
+[物理结果汇总](../verification/cpu/dualissue_operand_timing.json)。
+现有限制：旧CSR对取指未对齐mtval仍报告源PC；未声称完整ISA证明、任意未知PC或invalid payload全总线等价。
+下文保留历史批次，其中Cache/DDR记录不代表当前继续执行这些路线。
 
 v21至v29均未完成100MHz验收。v26已在原队列中保存ALU控制，原生映射确认旧晚译码消失、
 54个新元数据FF保留；实际最差路径转为头部RF读地址的高扇出、旁路、分支到队列更新。
@@ -54,7 +53,7 @@ WB/store均与v30逐字节一致，保持4.030288/3.084289。两通道及四态�
 符号判定+31bit比较，整核镜像与轨迹相同，但setup−0.974ns未过。
 v36基于v35把RF所有者/已写位改为两银行有效位，组件与整核通过，setup−0.662ns仍未过。
 v32/v36种子8对照分别−0.960/−0.706ns，均不采用。
-当前最佳v32−0.539ns；ADS retiming诊断setup−1.095ns且FF+1905，淘汰。
+此历史阶段最佳v32−0.539ns；ADS retiming诊断setup−1.095ns且FF+1905，淘汰。
 v37/v38分组相等比较均通过完整整核，实际carry链消除，
 但setup−0.776/−1.209ns仍未过。整核中部区域因容量检查失败；
 数据通路区域v32/v37也分别−0.723/−0.995ns未过。
@@ -360,3 +359,6 @@ v44终态：Slow/Fast setup−1.035/+2.571ns，hold+0.118/+0.110ns、MPW+3.655/+
 
 
 v45完整SRAM再次通过，1226007cycles、4.078280/MHz，完整ROM/SRAM/WB/store与v44逐字相同。原10ns20分钟独立PDS已启动。独立审查限定当前有限延迟且取指无副作用的SRAM边界：启动背压释放时可能接受旧PC请求，必须靠既有branch_w/branch_d_q丢弃其响应；不是取指请求轨迹等价，也不是未来外部不可响应/有副作用接口的准入。实际MMU1等待条件保持。见[启动策略证据](../verification/cpu/dualissue_fetch_activation.json)。
+
+
+v45终态setup−0.883/+2.836ns，hold+0.117/+0.100ns，MPW+3.655/+4.202ns；启动feedback已除，最差B RF读→74负载移位量。v46仅ALU输入B syn_maxfan16，实际两ALU各53条网络、每条≤16，完整性能/轨迹不变，但setup−1.015/+2.696ns，hold+0.089/+0.050ns，MPW同值；最差A PC字选择179负载→源数选择→移位，不继续盲调属性。v47变量移位统一A、B立即移位直接取指令shamt，3种寄存移位/3种B立即配对、44096四态ALU及真实调度破坏负控、有序/IRQ和完整SRAM全部PASS，1226007cycles/4.078280/MHz，完整镜像/WB/store相同；尚未单独布线。v48继承v47，把请求PC bit2留在既有PC/skid，FIFO先对齐首个有效字，A固定队头、失配重定向；上半字/预测/不同上下指令/fault侧带/背压/EXTRA0与1及负控、整核有序/IRQ/恢复已过，新SRAM在跑。

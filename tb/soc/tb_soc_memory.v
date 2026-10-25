@@ -218,16 +218,44 @@ module tb_soc_memory;
         access(32'h10000000, 32'h42, 0, 1, 0, 0);
         repeat (82) @(negedge clk);
         check(uart_count == 2 && uart_bytes[0] == 8'h41 && uart_bytes[1] == 8'h42, "UART captured bytes once");
-        // Simultaneous same-word store suppresses I-port acceptance for one cycle.
+        // A registered one-entry request slot accepts a colliding fetch, then
+        // waits locally for the store. Producer payload changes cannot replace it.
         @(negedge clk); while (!d_accept) @(negedge clk);
         i_req = 1; i_addr = 32'h10000; d_addr = 32'h10000;
         d_wdata = expected[0]; d_we = 15;
-        #1; check(!i_accept, "read/write collision blocked");
+        #1; check(i_accept, "collision request accepted into independent slot");
         @(posedge clk); #1; check(!i_valid, "collision no spurious valid");
-        @(negedge clk); d_we = 0;
+        @(negedge clk); i_addr = 32'h2000;
+        repeat (3) begin
+            expected[0] = expected[0] + 32'h10203;
+            d_wdata = expected[0];
+            #1; check(!i_accept, "held instruction slot backpressure");
+            @(posedge clk); #1;
+            check(!i_valid && d_ack && !d_error, "repeated collision waits without blocking stores");
+            @(negedge clk);
+        end
+        d_we = 0;
         @(posedge clk); #1;
-        check(i_valid && i_data === {expected[1], expected[0]}, "post-store fetch visible");
+        check(i_valid && !i_error && i_data === {expected[1], expected[0]}, "captured post-store fetch visible");
         @(negedge clk); i_req = 0;
+        @(posedge clk); #1; check(!i_valid, "held instruction responded exactly once");
+        // Upper-half partial collision, followed immediately by a different
+        // address request held while the occupied slot finishes its old word.
+        @(negedge clk);
+        i_req = 1; i_addr = 32'h10000;
+        d_addr = 32'h10004; d_we = 5; d_wdata = 32'h00cc00dd;
+        expected[1] = (expected[1] & 32'hff00ff00) | 32'h00cc00dd;
+        #1; check(i_accept, "partial collision accepts old instruction");
+        @(posedge clk); #1; check(!i_valid, "partial collision waits");
+        @(negedge clk); d_we = 0; i_addr = 32'h10008;
+        #1; check(!i_accept, "different request waits for occupied slot");
+        @(posedge clk); #1;
+        check(i_valid && !i_error && i_data === {expected[1], expected[0]}, "partial updated old word first");
+        @(negedge clk); check(i_accept, "different request accepted after old service");
+        @(posedge clk); #1;
+        check(i_valid && !i_error && i_data === {expected[3], expected[2]}, "different word follows old response");
+        @(negedge clk); i_req = 0;
+        @(posedge clk); #1; check(!i_valid, "different request responds exactly once");
         while (!d_accept) @(negedge clk);
         // Continuous fetches are not serialized by data acknowledgements.
         @(negedge clk); i_req = 1; i_addr = 32'h10000;
@@ -236,6 +264,17 @@ module tb_soc_memory;
             check(i_accept && i_valid && i_data === {expected[1], expected[0]}, "continuous fetch");
         end
         @(negedge clk); i_req = 0;
+        // Reset may cancel an accepted, collision-blocked instruction request.
+        @(negedge clk);
+        i_req = 1; i_addr = 32'h10000;
+        d_addr = 32'h10000; d_we = 15; d_wdata = expected[0];
+        #1; check(i_accept, "pending reset request accepted");
+        @(posedge clk); #1; check(!i_valid, "pending reset request waits");
+        @(negedge clk); rst_n = 0; i_req = 0; d_we = 0;
+        @(negedge clk); check(!i_valid && !i_accept, "reset clears held instruction");
+        rst_n = 1;
+        @(posedge clk); #1; check(!i_valid, "no held response after reset");
+        fetch(32'h10000, 0, {expected[1], expected[0]});
         // Reset discards a pending completion; memory is retained.
         d_addr = 32'h10000; d_re = 1;
         @(posedge clk); #1;

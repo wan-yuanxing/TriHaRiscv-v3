@@ -1,0 +1,101 @@
+{
+  "status": "RTL_PASS_NOT_ROUTED",
+  "overall_target_met": false,
+  "scope": "FIFO bulk-data storage independent of flush; original count and meta(class/fault/CSR) behavior retained, invalid DATA/PC/pred history differs",
+  "manifest": "docs/verification/cpu/dualissue_fifo_flush_data_sources.json",
+  "manifest_sha256": "9cac57f7dedae4dae5afe154c53c5d0631509f71eb089b4348aca2a0370757d1",
+  "reference": {
+    "path": "D:\\FPGA\\TriHaRiscv-v3-cpu-dualissue\\build\\upstream\\cva6\\vendor\\pulp-platform\\common_cells\\src\\fifo_v3.sv",
+    "sha256": "81e19fb19a281a2e41136786401395c39ae8886dab0acf1f0e0a3831e31589d5",
+    "license": "Solderpad Hardware License0.51",
+    "use": "Read complete control/storage separation reference; not compiled or literal SystemVerilog port"
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261025T113809359405Z",
+    "status": "PASS",
+    "result_sha256": "3120abc4dc8a654f012d7a60fda28d033bf68439a02d7dbb8b69d331f51a5328",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "runtime_images_and_complete_traces_identical": true
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113420811886Z",
+      "status": "FAIL",
+      "result_sha256": "49242b8235e30c62f51824e15b4c510dc1f84aaba210ea6aa9bf9c862bdd3ad3",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113541918696Z",
+      "status": "PASS",
+      "result_sha256": "10450a693b2b3f5a52acea2080157d88c4e114f7309a8f770568442724eea593",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113659355298Z",
+      "status": "FAIL",
+      "result_sha256": "6d6e7f7f7301fb9a7d38aeb9270fff2f7923b8273167cb7395b3b7decfebe80e",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113701380901Z",
+      "status": "PASS",
+      "result_sha256": "187c9c7588967592287e849587d9621dbfde82c4d6c7c1291f8e9c66e0e9e5d6",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113809343871Z",
+      "status": "FAIL",
+      "result_sha256": "251acaceb4459e7a99233bcd73f970fb658e490590bd38764f1700da8259a39c",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113809328124Z",
+      "status": "PASS",
+      "result_sha256": "b8db100929bc0ddf237373f28f9fe941a3357e856ac932a9a4098031fadc757e",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113809367205Z",
+      "status": "PASS",
+      "result_sha256": "8628e5da25142517f3b2f3a1cdde5097680ad4eead0e4c70d1d9fc38057a078b",
+      "output_hashes_verified": 72
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261025T113809324093Z",
+      "status": "PASS",
+      "result_sha256": "3ff8cd73a6edc05ff8c359a45a4b63551ecac18a26150d6bab41f7851d9b28e1",
+      "output_hashes_verified": 75
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1138098429876Z",
+      "status": "PASS",
+      "result_sha256": "ddb8503b9e4c17471194beb0a03c4e3e09c08f9c32b6126759330eebb5188406",
+      "output_hashes_verified": 38
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261025T1138098266429Z",
+      "status": "PASS",
+      "result_sha256": "b80241bc4326b555b468816a9dd2d75e8830531b8761e3c335355b3668466619",
+      "output_hashes_verified": 28
+    }
+  ],
+  "independent_review": "No blocker under valid-qualified FIFO contract; metadata/IRQ history and X/Z flush procedural behavior preserved",
+  "initial_failure": "if(!flush) held metadata on X/Z; fixed explicit original if(flush)hold else update before admission",
+  "physical": {
+    "status": "NOT_STARTED",
+    "reason": "Proceed with v51 predecoded new B capability after actual v49 late-class-to-compaction path"
+  }
+}
