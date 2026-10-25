@@ -6,20 +6,22 @@
 BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV。变量移位在A，B保留立即移位。
 A分支可与B ALU推测配对，E1恢复/故障取消年轻结果；B LSU仅保留已验收的不跳转配对。
 
-最新v57 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
+最新v58 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
 WB观察IPC **1.185400**。CRC通过；1448448条WB、70839条store以及运行镜像与v54逐字节一致。
 这是RTL短测估计，非官方分数或板级结果；观察IPC不是架构minstret。
 
-**100MHz尚未通过。**最佳完成版v54在原10ns/IO/hold/multicorner下：setup Slow/Fast
-**-0.411/+2.628ns**，hold **+0.113/+0.099ns**，脉宽 **+3.655/+4.202ns**。
-原生退出0、验收器退出2；372个实际输出哈希和冻结输入均通过复核。
+**100MHz尚未通过。**最佳完成版v57在原10ns/IO/hold/multicorner下：setup Slow/Fast
+**-0.009/+2.663ns**，hold **+0.107/+0.100ns**，脉宽 **+3.655/+4.202ns**。
+原生退出0、验收器退出2；416个实际输出哈希和冻结输入均通过复核。
+完全相同输入的seed8布局对照setup-0.489ns（424输出核验），不继续扫seed。
 v55已终态：属性未实际复制驱动，六项余量与v54完全相同，排除。
 v56实际复制了PC驱动（查询224→32、FF+106），但setup回退到-1.164ns，排除。
-v57回到v54，仅提前BTB命中限定的call/ret窄控制，原约束独立PDS运行中。
+v57回到v54，提前BTB命中限定的call/ret窄控制；v58复用分组相等比较器处理FIFO PC连续性，
+完整SRAM等周期/等轨迹通过，原约束独立PDS运行中。
 
 v54 CPU-only综合 **9199 LUT/4646 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
-排除ROM/SRAM/MMIO夹具；v55资源与v54相同；v56原生9199LUT/4752FF但时序回退；v57原生CPU-only9394LUT/4652FF/752RAM-LUT/4APM/0DRM，
-保留窄限定信号；实际路径与最终STA仍待核对。
+排除ROM/SRAM/MMIO夹具；v55资源与v54相同；v56原生9199LUT/4752FF但时序回退；v57原生CPU-only9394LUT/4652FF/752RAM-LUT/4APM/0DRM；v58原生CPU-only9313LUT/4652FF/752RAM-LUT/4APM/0DRM；
+实际分组比较实例保留，LUT较v57少81、FF不增，最终STA待核。
 
 本批保留的结构调整：请求PC入队对齐、局部指令请求槽、FIFO bulk/flush分离、B能力前译码、
 分支目标和顺序地址独立加法、B ALU有用ADD/SUB结果边界。v53分支carry晚控制依赖59/60→0/0，
@@ -33,8 +35,8 @@ v55等值查询alias未产生实际复制；v56实际复制但时序回退。v57
 本独立分支`rtl/soc/triha_soc_memory.v`含单项指令冲突请求槽，主工程/集成工作树未修改，未上板。
 现有限制：旧未对齐mtval报告源PC；未声称完整ISA、任意未知PC或invalid bulk全总线证明。
 
-见[当前候选](../verification/cpu/dualissue_btb_qualified_kind.json)、
-[最佳完成版](../verification/cpu/dualissue_alu_sum_boundaries.json)、
+见[当前候选](../verification/cpu/dualissue_fifo_pc_compare.json)、
+[最佳完成版](../verification/cpu/dualissue_btb_qualified_kind.json)、
 [取指请求槽](../verification/cpu/dualissue_sram_instruction_buffer.json)和
 [物理汇总](../verification/cpu/dualissue_operand_timing.json)。
 下文保留历史批次；历史Cache/DDR记录不代表继续执行这些路线。
