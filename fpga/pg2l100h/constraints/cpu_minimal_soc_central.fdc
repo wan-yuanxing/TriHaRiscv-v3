@@ -1,0 +1,5 @@
+# Same complete clock-region size as the earlier compact diagnostic, centered
+# on the measured RF/execute/SRAM paths rather than the upper device quarter.
+# Placement and existing IO register packing only; no timing exceptions.
+define_attribute {i:u_core/u_cpu} {PAP_REGION} {soc_cpu_central(0,64,100,149)}
+define_global_attribute {syn_useioff} {1}

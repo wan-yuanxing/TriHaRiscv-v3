@@ -1,0 +1,10 @@
+# Bound only the measured RF/forward/execute/PC datapath and instruction queue.
+# The predictor and multiplier hard blocks remain available outside this box.
+# Placement plus existing IO register packing; no timing exceptions.
+define_attribute {i:u_core/u_cpu/u_issue} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_attribute {i:u_core/u_cpu/u_exec0} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_attribute {i:u_core/u_cpu/gen_dual_exec.u_exec1} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_attribute {i:u_core/u_cpu/u_div} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_attribute {i:u_core/u_cpu/u_lsu} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_attribute {i:u_core/u_cpu/u_frontend/u_decode} {PAP_REGION} {soc_cpu_datapath(0,64,100,149)}
+define_global_attribute {syn_useioff} {1}

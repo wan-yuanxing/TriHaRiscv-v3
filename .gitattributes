@@ -42,6 +42,13 @@ docs/verification/cpu/dualissue_pairing_diagnostic.patch -whitespace
 docs/verification/cpu/dualissue_branch_interlock.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_zero_exec.patch -text -whitespace
 docs/verification/cpu/dualissue_forward_control_fanout.patch -text -whitespace
+docs/verification/cpu/dualissue_forward_explicit_controls.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_sign_compare.patch -text -whitespace
+docs/verification/cpu/dualissue_regfile_bank_valid.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_equality_groups.patch -text -whitespace
+docs/verification/cpu/dualissue_branch_equality_lut6.patch -text -whitespace
+docs/verification/cpu/dualissue_pc_candidate_registers.patch -text -whitespace
+docs/verification/cpu/dualissue_regfile_ff_zero.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol

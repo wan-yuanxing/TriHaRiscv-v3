@@ -1,0 +1,4131 @@
+--- a/rtl/cpu/triha_btb.v
++++ b/rtl/cpu/triha_btb.v
+@@ -72,7 +72,7 @@
+     assign kind_o = metadata[2:0];
+     assign target_o = target_words[read_row_i[7:5]*32 +: 32];
+ 
+-    genvar row, block_index, pair;
++    genvar row, block_index, pair, address_bit;
+     generate
+     for (row=0; row<256; row=row+1) begin: g_valid
+         always @(posedge clk_i or posedge rst_i) begin
+@@ -84,12 +84,25 @@
+     for (block_index=0; block_index<8; block_index=block_index+1) begin: g_block
+         wire metadata_we = write_i && write_row_i[7:5] == block_index;
+         wire target_we = write_target && write_row_i[7:5] == block_index;
++        // Native write-address minimum delay, local to each32-row block.
++        // Any actual metadata/tag/target write implies metadata_we=1,rst=0.
++        // Keep the training tag read address and all read ports unchanged.
++        (* syn_keep = 1 *) wire [4:0] write_address_delay_w;
++        (* syn_keep = 1 *) wire [4:0] write_address_w;
++        for(address_bit=0;address_bit<5;address_bit=address_bit+1) begin:g_write_address_hold
++            (* syn_keep = 1 *) GTP_LUT6 #(.INIT(64'h8888888888888888)) u_first (
++                .I0(write_row_i[address_bit]),.I1(metadata_we),.I2(1'b0),.I3(1'b0),
++                .I4(1'b0),.I5(1'b0),.Z(write_address_delay_w[address_bit]));
++            (* syn_keep = 1 *) GTP_LUT6 #(.INIT(64'h2222222222222222)) u_second (
++                .I0(write_address_delay_w[address_bit]),.I1(rst_i),.I2(1'b0),.I3(1'b0),
++                .I4(1'b0),.I5(1'b0),.Z(write_address_w[address_bit]));
++        end
+         wire [23:0] write_metadata = {write_tag_i, write_kind_i};
+         wire [21:0] write_tag_data = {1'b0, write_tag_i};
+         for (pair=0; pair<12; pair=pair+1) begin: g_metadata
+             GTP_RAM32X2DP #(.INIT_0(32'b0), .INIT_1(32'b0)) u_ram (
+                 .DO(metadata_words[block_index*24+pair*2 +: 2]), .DI(write_metadata[pair*2 +: 2]),
+-                .RADDR(read_row_i[4:0]), .WADDR(write_row_i[4:0]), .WCLK(clk_i), .WE(metadata_we)
++                .RADDR(read_row_i[4:0]), .WADDR(write_address_w), .WCLK(clk_i), .WE(metadata_we)
+             );
+         end
+         // Independent training read keeps a known target on not-taken updates.
+@@ -97,13 +110,13 @@
+         for (pair=0; pair<11; pair=pair+1) begin: g_write_tag
+             GTP_RAM32X2DP #(.INIT_0(32'b0), .INIT_1(32'b0)) u_ram (
+                 .DO(write_tag_words[block_index*22+pair*2 +: 2]), .DI(write_tag_data[pair*2 +: 2]),
+-                .RADDR(write_row_i[4:0]), .WADDR(write_row_i[4:0]), .WCLK(clk_i), .WE(metadata_we)
++                .RADDR(write_row_i[4:0]), .WADDR(write_address_w), .WCLK(clk_i), .WE(metadata_we)
+             );
+         end
+         for (pair=0; pair<16; pair=pair+1) begin: g_target
+             GTP_RAM32X2DP #(.INIT_0(32'b0), .INIT_1(32'b0)) u_ram (
+                 .DO(target_words[block_index*32+pair*2 +: 2]), .DI(write_target_i[pair*2 +: 2]),
+-                .RADDR(read_row_i[4:0]), .WADDR(write_row_i[4:0]), .WCLK(clk_i), .WE(target_we)
++                .RADDR(read_row_i[4:0]), .WADDR(write_address_w), .WCLK(clk_i), .WE(target_we)
+             );
+         end
+     end
+--- a/rtl/cpu/triha_cpu.v
++++ b/rtl/cpu/triha_cpu.v
+@@ -116,6 +116,9 @@
+ wire  [ 31:0]  branch_exec0_pc_w;
+ wire  [ 31:0]  opcode0_pc_w;
+ wire  [ 31:0]  opcode0_ra_operand_w;
++wire           opcode0_ra_zero_w;
++wire           opcode1_ra_zero_w;
++wire           opcode1_rb_zero_w;
+ wire           mmu_ifetch_valid_w;
+ wire           csr_opcode_invalid_w;
+ wire  [  5:0]  csr_writeback_exception_w;
+@@ -125,6 +128,7 @@
+ wire           branch_exec1_is_taken_w;
+ wire  [  4:0]  opcode1_rd_idx_w;
+ wire  [ 31:0]  opcode0_rb_operand_w;
++wire           opcode0_rb_zero_w;
+ wire  [ 31:0]  fetch1_instr_w;
+ wire  [ 31:0]  csr_writeback_exception_addr_w;
+ wire           fetch1_instr_invalid_w;
+@@ -262,6 +266,8 @@
+ wire           mmu_store_fault_w;
+ 
+ 
++wire [8:0] fetch0_alu_decode_w,fetch1_alu_decode_w,opcode0_alu_decode_w,opcode1_alu_decode_w;
++
+ triha_frontend
+ #(
+      .EXTRA_DECODE_STAGE(EXTRA_DECODE_STAGE)
+@@ -314,6 +320,7 @@
+     ,.icache_priv_o(fetch_in_priv_w)
+     ,.fetch0_valid_o(fetch0_valid_w)
+     ,.fetch0_instr_o(fetch0_instr_w)
++    ,.fetch0_alu_decode_o(fetch0_alu_decode_w)
+     ,.fetch0_pc_o(fetch0_pc_w)
+     ,.fetch0_fault_fetch_o(fetch0_fault_fetch_w)
+     ,.fetch0_fault_page_o(fetch0_fault_page_w)
+@@ -327,6 +334,7 @@
+     ,.fetch0_instr_invalid_o(fetch0_instr_invalid_w)
+     ,.fetch1_valid_o(fetch1_valid_w)
+     ,.fetch1_instr_o(fetch1_instr_w)
++    ,.fetch1_alu_decode_o(fetch1_alu_decode_w)
+     ,.fetch1_pc_o(fetch1_pc_w)
+     ,.fetch1_fault_fetch_o(fetch1_fault_fetch_w)
+     ,.fetch1_fault_page_o(fetch1_fault_page_w)
+@@ -566,6 +574,7 @@
+     ,.rst_i(rst_i)
+     ,.fetch0_valid_i(fetch0_valid_w)
+     ,.fetch0_instr_i(fetch0_instr_w)
++    ,.fetch0_alu_decode_i(fetch0_alu_decode_w)
+     ,.fetch0_pc_i(fetch0_pc_w)
+     ,.fetch0_fault_fetch_i(fetch0_fault_fetch_w)
+     ,.fetch0_fault_page_i(fetch0_fault_page_w)
+@@ -579,6 +588,7 @@
+     ,.fetch0_instr_invalid_i(fetch0_instr_invalid_w)
+     ,.fetch1_valid_i(fetch1_valid_w)
+     ,.fetch1_instr_i(fetch1_instr_w)
++    ,.fetch1_alu_decode_i(fetch1_alu_decode_w)
+     ,.fetch1_pc_i(fetch1_pc_w)
+     ,.fetch1_fault_fetch_i(fetch1_fault_fetch_w)
+     ,.fetch1_fault_page_i(fetch1_fault_page_w)
+@@ -654,6 +664,7 @@
+     ,.mul_opcode_valid_o(mul_opcode_valid_w)
+     ,.div_opcode_valid_o(div_opcode_valid_w)
+     ,.opcode0_opcode_o(opcode0_opcode_w)
++    ,.opcode0_alu_decode_o(opcode0_alu_decode_w)
+     ,.opcode0_pc_o(opcode0_pc_w)
+     ,.opcode0_invalid_o(opcode0_invalid_w)
+     ,.opcode0_rd_idx_o(opcode0_rd_idx_w)
+@@ -661,7 +672,12 @@
+     ,.opcode0_rb_idx_o(opcode0_rb_idx_w)
+     ,.opcode0_ra_operand_o(opcode0_ra_operand_w)
+     ,.opcode0_rb_operand_o(opcode0_rb_operand_w)
++    ,.opcode0_ra_zero_o(opcode0_ra_zero_w)
++    ,.opcode0_rb_zero_o(opcode0_rb_zero_w)
++    ,.opcode1_ra_zero_o(opcode1_ra_zero_w)
++    ,.opcode1_rb_zero_o(opcode1_rb_zero_w)
+     ,.opcode1_opcode_o(opcode1_opcode_w)
++    ,.opcode1_alu_decode_o(opcode1_alu_decode_w)
+     ,.opcode1_pc_o(opcode1_pc_w)
+     ,.opcode1_invalid_o(opcode1_invalid_w)
+     ,.opcode1_rd_idx_o(opcode1_rd_idx_w)
+@@ -706,7 +722,7 @@
+ );
+ 
+ 
+-biriscv_exec
++triha_branch_exec #(.SUPPORT_ALU_PREDECODE(1))
+ u_exec0
+ (
+     // Inputs
+@@ -714,6 +730,7 @@
+     ,.rst_i(rst_i)
+     ,.opcode_valid_i(exec0_opcode_valid_w)
+     ,.opcode_opcode_i(opcode0_opcode_w)
++    ,.alu_decode_i(opcode0_alu_decode_w)
+     ,.opcode_pc_i(opcode0_pc_w)
+     ,.opcode_invalid_i(opcode0_invalid_w)
+     ,.opcode_rd_idx_i(opcode0_rd_idx_w)
+@@ -721,6 +738,8 @@
+     ,.opcode_rb_idx_i(opcode0_rb_idx_w)
+     ,.opcode_ra_operand_i(opcode0_ra_operand_w)
+     ,.opcode_rb_operand_i(opcode0_rb_operand_w)
++    ,.opcode_ra_zero_i(opcode0_ra_zero_w)
++    ,.opcode_rb_zero_i(opcode0_rb_zero_w)
+     ,.hold_i(exec0_hold_w)
+ 
+     // Outputs
+@@ -743,7 +762,7 @@
+ // Keep the shared issue/CSR/exception control intact; only specialize EX1.
+ generate
+ if (SUPPORT_DUAL_ISSUE) begin : gen_dual_exec
+-biriscv_exec
++triha_branch_exec #(.SUPPORT_ALU_PREDECODE(1))
+ u_exec1
+ (
+     // Inputs
+@@ -751,6 +770,7 @@
+     ,.rst_i(rst_i)
+     ,.opcode_valid_i(exec1_opcode_valid_w)
+     ,.opcode_opcode_i(opcode1_opcode_w)
++    ,.alu_decode_i(opcode1_alu_decode_w)
+     ,.opcode_pc_i(opcode1_pc_w)
+     ,.opcode_invalid_i(opcode1_invalid_w)
+     ,.opcode_rd_idx_i(opcode1_rd_idx_w)
+@@ -758,6 +778,8 @@
+     ,.opcode_rb_idx_i(opcode1_rb_idx_w)
+     ,.opcode_ra_operand_i(opcode1_ra_operand_w)
+     ,.opcode_rb_operand_i(opcode1_rb_operand_w)
++    ,.opcode_ra_zero_i(opcode1_ra_zero_w)
++    ,.opcode_rb_zero_i(opcode1_rb_zero_w)
+     ,.hold_i(exec1_hold_w)
+ 
+     // Outputs
+@@ -793,3 +815,442 @@
+ 
+ 
+ endmodule
++
++// Local execution derivative for the isolated signed-comparison diagnostic.
++// The original licensed vendor translation unit remains unchanged.
++//-----------------------------------------------------------------
++//                         biRISC-V CPU
++//                            V0.8.1
++//                     Ultra-Embedded.com
++//                     Copyright 2019-2020
++//
++//                   admin@ultra-embedded.com
++//
++//                     License: Apache 2.0
++//-----------------------------------------------------------------
++// Copyright 2020 Ultra-Embedded.com
++// 
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++// 
++//     http://www.apache.org/licenses/LICENSE-2.0
++// 
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++//-----------------------------------------------------------------
++
++module triha_branch_exec #(parameter SUPPORT_ALU_PREDECODE=0)
++(
++    // Inputs
++     input           clk_i
++    ,input           rst_i
++    ,input           opcode_valid_i
++    ,input  [ 31:0]  opcode_opcode_i
++    ,input [8:0] alu_decode_i
++    ,input  [ 31:0]  opcode_pc_i
++    ,input           opcode_invalid_i
++    ,input  [  4:0]  opcode_rd_idx_i
++    ,input  [  4:0]  opcode_ra_idx_i
++    ,input  [  4:0]  opcode_rb_idx_i
++    ,input  [ 31:0]  opcode_ra_operand_i
++    ,input  [ 31:0]  opcode_rb_operand_i
++    ,input           opcode_ra_zero_i
++    ,input           opcode_rb_zero_i
++    ,input           hold_i
++
++    // Outputs
++    ,output          branch_request_o
++    ,output          branch_is_taken_o
++    ,output          branch_is_not_taken_o
++    ,output [ 31:0]  branch_source_o
++    ,output          branch_is_call_o
++    ,output          branch_is_ret_o
++    ,output          branch_is_jmp_o
++    ,output [ 31:0]  branch_pc_o
++    ,output          branch_d_request_o
++    ,output [ 31:0]  branch_d_pc_o
++    ,output [  1:0]  branch_d_priv_o
++    ,output [ 31:0]  writeback_value_o
++);
++
++
++
++//-----------------------------------------------------------------
++// Includes
++//-----------------------------------------------------------------
++`include "biriscv_defs.v"
++
++//-------------------------------------------------------------
++// Opcode decode
++//-------------------------------------------------------------
++reg [31:0]  imm20_r;
++reg [31:0]  imm12_r;
++reg [31:0]  bimm_r;
++reg [31:0]  jimm20_r;
++reg [4:0]   shamt_r;
++
++always @ *
++begin
++    imm20_r     = {opcode_opcode_i[31:12], 12'b0};
++    imm12_r     = {{20{opcode_opcode_i[31]}}, opcode_opcode_i[31:20]};
++    bimm_r      = {{19{opcode_opcode_i[31]}}, opcode_opcode_i[31], opcode_opcode_i[7], opcode_opcode_i[30:25], opcode_opcode_i[11:8], 1'b0};
++    jimm20_r    = {{12{opcode_opcode_i[31]}}, opcode_opcode_i[19:12], opcode_opcode_i[20], opcode_opcode_i[30:25], opcode_opcode_i[24:21], 1'b0};
++    shamt_r     = opcode_opcode_i[24:20];
++end
++
++//-------------------------------------------------------------
++// Execute - ALU operations
++//-------------------------------------------------------------
++reg [3:0]  alu_func_r;
++reg [31:0] alu_input_a_r;
++reg [31:0] alu_input_b_r;
++
++generate if(SUPPORT_ALU_PREDECODE)begin:g_alu_predecoded
++    always @* begin
++        alu_func_r=alu_decode_i[8:5];
++        alu_input_a_r=0;alu_input_b_r=0;
++        case(alu_decode_i[4:3])
++            2'd1:alu_input_a_r=opcode_ra_operand_i;
++            2'd2:alu_input_a_r=imm20_r;
++            2'd3:alu_input_a_r=opcode_pc_i;
++            default:;
++        endcase
++        case(alu_decode_i[2:0])
++            3'd1:alu_input_b_r=opcode_rb_operand_i;
++            3'd2:alu_input_b_r=imm12_r;
++            3'd3:alu_input_b_r=imm20_r;
++            3'd4:alu_input_b_r={27'b0,shamt_r};
++            3'd5:alu_input_b_r=32'd4;
++            default:;
++        endcase
++    end
++end else begin:g_alu_legacy
++always @ *
++begin
++    alu_func_r     = `ALU_NONE;
++    alu_input_a_r  = 32'b0;
++    alu_input_b_r  = 32'b0;
++
++    if ((opcode_opcode_i & `INST_ADD_MASK) == `INST_ADD) // add
++    begin
++        alu_func_r     = `ALU_ADD;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_AND_MASK) == `INST_AND) // and
++    begin
++        alu_func_r     = `ALU_AND;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_OR_MASK) == `INST_OR) // or
++    begin
++        alu_func_r     = `ALU_OR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SLL_MASK) == `INST_SLL) // sll
++    begin
++        alu_func_r     = `ALU_SHIFTL;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SRA_MASK) == `INST_SRA) // sra
++    begin
++        alu_func_r     = `ALU_SHIFTR_ARITH;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SRL_MASK) == `INST_SRL) // srl
++    begin
++        alu_func_r     = `ALU_SHIFTR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SUB_MASK) == `INST_SUB) // sub
++    begin
++        alu_func_r     = `ALU_SUB;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_XOR_MASK) == `INST_XOR) // xor
++    begin
++        alu_func_r     = `ALU_XOR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SLT_MASK) == `INST_SLT) // slt
++    begin
++        alu_func_r     = `ALU_LESS_THAN_SIGNED;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_SLTU_MASK) == `INST_SLTU) // sltu
++    begin
++        alu_func_r     = `ALU_LESS_THAN;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = opcode_rb_operand_i;
++    end
++    else if ((opcode_opcode_i & `INST_ADDI_MASK) == `INST_ADDI) // addi
++    begin
++        alu_func_r     = `ALU_ADD;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_ANDI_MASK) == `INST_ANDI) // andi
++    begin
++        alu_func_r     = `ALU_AND;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_SLTI_MASK) == `INST_SLTI) // slti
++    begin
++        alu_func_r     = `ALU_LESS_THAN_SIGNED;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_SLTIU_MASK) == `INST_SLTIU) // sltiu
++    begin
++        alu_func_r     = `ALU_LESS_THAN;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_ORI_MASK) == `INST_ORI) // ori
++    begin
++        alu_func_r     = `ALU_OR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_XORI_MASK) == `INST_XORI) // xori
++    begin
++        alu_func_r     = `ALU_XOR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = imm12_r;
++    end
++    else if ((opcode_opcode_i & `INST_SLLI_MASK) == `INST_SLLI) // slli
++    begin
++        alu_func_r     = `ALU_SHIFTL;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = {27'b0, shamt_r};
++    end
++    else if ((opcode_opcode_i & `INST_SRLI_MASK) == `INST_SRLI) // srli
++    begin
++        alu_func_r     = `ALU_SHIFTR;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = {27'b0, shamt_r};
++    end
++    else if ((opcode_opcode_i & `INST_SRAI_MASK) == `INST_SRAI) // srai
++    begin
++        alu_func_r     = `ALU_SHIFTR_ARITH;
++        alu_input_a_r  = opcode_ra_operand_i;
++        alu_input_b_r  = {27'b0, shamt_r};
++    end
++    else if ((opcode_opcode_i & `INST_LUI_MASK) == `INST_LUI) // lui
++    begin
++        alu_input_a_r  = imm20_r;
++    end
++    else if ((opcode_opcode_i & `INST_AUIPC_MASK) == `INST_AUIPC) // auipc
++    begin
++        alu_func_r     = `ALU_ADD;
++        alu_input_a_r  = opcode_pc_i;
++        alu_input_b_r  = imm20_r;
++    end     
++    else if (((opcode_opcode_i & `INST_JAL_MASK) == `INST_JAL) || ((opcode_opcode_i & `INST_JALR_MASK) == `INST_JALR)) // jal, jalr
++    begin
++        alu_func_r     = `ALU_ADD;
++        alu_input_a_r  = opcode_pc_i;
++        alu_input_b_r  = 32'd4;
++    end
++end
++
++
++end endgenerate
++
++//-------------------------------------------------------------
++// ALU
++//-------------------------------------------------------------
++wire [31:0]  alu_p_w;
++biriscv_alu
++u_alu
++(
++    .alu_op_i(alu_func_r),
++    .alu_a_i(alu_input_a_r),
++    .alu_b_i(alu_input_b_r),
++    .alu_p_o(alu_p_w)
++);
++
++//-------------------------------------------------------------
++// Flop ALU output
++//-------------------------------------------------------------
++reg [31:0] result_q;
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    result_q  <= 32'b0;
++else if (~hold_i)
++    result_q <= alu_p_w;
++
++assign writeback_value_o  = result_q;
++
++//-----------------------------------------------------------------
++// less_than_signed: Less than operator (signed)
++// Inputs: x = left operand, y = right operand
++// Return: (int)x < (int)y
++//-----------------------------------------------------------------
++function [0:0] less_than_signed;
++    input [31:0] x;
++    input [31:0] y;
++begin
++    // Opposite signs decide immediately. For equal signs only the lower
++    // 31 bits need an unsigned comparison; no sign-bit subtract is needed.
++    // Exact case retains the parent's unknown-sign result in simulation.
++    case ({x[31], y[31]})
++        2'b01: less_than_signed = 1'b0;
++        2'b10: less_than_signed = 1'b1;
++        2'b00, 2'b11: less_than_signed = (x[30:0] < y[30:0]);
++        default: less_than_signed = 1'bx;
++    endcase
++end
++endfunction
++
++
++
++//-------------------------------------------------------------
++// Execute - Branch operations
++//-------------------------------------------------------------
++reg        branch_r;
++// Keep local four-bit equality reductions independent, then combine the
++// scalar results. The XOR/reduction identity preserves four-state equality.
++wire [7:0] branch_equal_group_w /* synthesis syn_keep=1 */;
++genvar equal_group;
++generate for(equal_group=0;equal_group<8;equal_group=equal_group+1) begin:g_branch_equal
++    assign branch_equal_group_w[equal_group] = ~(|(opcode_ra_operand_i[equal_group*4 +: 4] ^
++        opcode_rb_operand_i[equal_group*4 +: 4]));
++end endgenerate
++wire branch_equal_w = &branch_equal_group_w;
++reg        branch_taken_r;
++reg [31:0] branch_target_r;
++reg        branch_call_r;
++reg        branch_ret_r;
++reg        branch_jmp_r;
++
++always @ *
++begin
++    branch_r        = 1'b0;
++    branch_taken_r  = 1'b0;
++    branch_call_r   = 1'b0;
++    branch_ret_r    = 1'b0;
++    branch_jmp_r    = 1'b0;
++
++    // Default branch_r target is relative to current PC
++    branch_target_r = opcode_pc_i + bimm_r;
++
++    if ((opcode_opcode_i & `INST_JAL_MASK) == `INST_JAL) // jal
++    begin
++        branch_r        = 1'b1;
++        branch_taken_r  = 1'b1;
++        branch_target_r = opcode_pc_i + jimm20_r;
++        branch_call_r   = (opcode_rd_idx_i == 5'd1); // RA
++        branch_jmp_r    = 1'b1;
++    end
++    else if ((opcode_opcode_i & `INST_JALR_MASK) == `INST_JALR) // jalr
++    begin
++        branch_r            = 1'b1;
++        branch_taken_r      = 1'b1;
++        branch_target_r     = opcode_ra_operand_i + imm12_r;
++        branch_target_r[0]  = 1'b0;
++        branch_ret_r        = (opcode_ra_idx_i == 5'd1 && imm12_r[11:0] == 12'b0); // RA
++        branch_call_r       = ~branch_ret_r && (opcode_rd_idx_i == 5'd1); // RA
++        branch_jmp_r        = ~(branch_call_r | branch_ret_r);
++    end
++    else if ((opcode_opcode_i & `INST_BEQ_MASK) == `INST_BEQ) // beq
++    begin
++        branch_r      = 1'b1;
++        if (opcode_ra_idx_i == 5'b0)
++            branch_taken_r = opcode_rb_zero_i;
++        else if (opcode_rb_idx_i == 5'b0)
++            branch_taken_r = opcode_ra_zero_i;
++        else
++            branch_taken_r = branch_equal_w;
++    end
++    else if ((opcode_opcode_i & `INST_BNE_MASK) == `INST_BNE) // bne
++    begin
++        branch_r      = 1'b1;    
++        if (opcode_ra_idx_i == 5'b0)
++            branch_taken_r = ~opcode_rb_zero_i;
++        else if (opcode_rb_idx_i == 5'b0)
++            branch_taken_r = ~opcode_ra_zero_i;
++        else
++            branch_taken_r = ~branch_equal_w;
++    end
++    else if ((opcode_opcode_i & `INST_BLT_MASK) == `INST_BLT) // blt
++    begin
++        branch_r      = 1'b1;
++        branch_taken_r= less_than_signed(opcode_ra_operand_i, opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BGE_MASK) == `INST_BGE) // bge
++    begin
++        branch_r      = 1'b1;    
++        branch_taken_r= ~less_than_signed(opcode_ra_operand_i, opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BLTU_MASK) == `INST_BLTU) // bltu
++    begin
++        branch_r      = 1'b1;    
++        branch_taken_r= (opcode_ra_operand_i < opcode_rb_operand_i);
++    end
++    else if ((opcode_opcode_i & `INST_BGEU_MASK) == `INST_BGEU) // bgeu
++    begin
++        branch_r      = 1'b1;
++        branch_taken_r= (opcode_ra_operand_i >= opcode_rb_operand_i);
++    end
++end
++
++reg        branch_taken_q;
++reg        branch_ntaken_q;
++reg [31:0] pc_x_q;
++reg [31:0] pc_m_q;
++reg        branch_call_q;
++reg        branch_ret_q;
++reg        branch_jmp_q;
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++begin
++    branch_taken_q   <= 1'b0;
++    branch_ntaken_q  <= 1'b0;
++    pc_x_q           <= 32'b0;
++    pc_m_q           <= 32'b0;
++    branch_call_q    <= 1'b0;
++    branch_ret_q     <= 1'b0;
++    branch_jmp_q     <= 1'b0;
++end
++else if (opcode_valid_i)
++begin
++    branch_taken_q   <= branch_r && opcode_valid_i & branch_taken_r;
++    branch_ntaken_q  <= branch_r && opcode_valid_i & ~branch_taken_r;
++    pc_x_q           <= branch_taken_r ? branch_target_r : opcode_pc_i + 32'd4;
++    branch_call_q    <= branch_r && opcode_valid_i && branch_call_r;
++    branch_ret_q     <= branch_r && opcode_valid_i && branch_ret_r;
++    branch_jmp_q     <= branch_r && opcode_valid_i && branch_jmp_r;
++    pc_m_q           <= opcode_pc_i;
++end
++
++assign branch_request_o   = branch_taken_q | branch_ntaken_q;
++assign branch_is_taken_o  = branch_taken_q;
++assign branch_is_not_taken_o = branch_ntaken_q;
++assign branch_source_o    = pc_m_q;
++assign branch_pc_o        = pc_x_q;
++assign branch_is_call_o   = branch_call_q;
++assign branch_is_ret_o    = branch_ret_q;
++assign branch_is_jmp_o    = branch_jmp_q;
++
++assign branch_d_request_o = (branch_r && opcode_valid_i && branch_taken_r);
++assign branch_d_pc_o      = branch_target_r;
++assign branch_d_priv_o    = 2'b0; // don't care
++
++
++
++endmodule
+--- a/rtl/cpu/triha_decode.v
++++ b/rtl/cpu/triha_decode.v
+@@ -54,6 +54,7 @@
+     ,output          fetch_in_accept_o
+     ,output          fetch_out0_valid_o
+     ,output [ 31:0]  fetch_out0_instr_o
++    ,output [8:0] fetch_out0_alu_decode_o
+     ,output [ 31:0]  fetch_out0_pc_o
+     ,output          fetch_out0_fault_fetch_o
+     ,output          fetch_out0_fault_page_o
+@@ -67,6 +68,7 @@
+     ,output          fetch_out0_instr_invalid_o
+     ,output          fetch_out1_valid_o
+     ,output [ 31:0]  fetch_out1_instr_o
++    ,output [8:0] fetch_out1_alu_decode_o
+     ,output [ 31:0]  fetch_out1_pc_o
+     ,output          fetch_out1_fault_fetch_o
+     ,output          fetch_out1_fault_page_o
+@@ -90,6 +92,8 @@
+ generate
+ if (EXTRA_DECODE_STAGE)
+ begin
++    triha_alu_predecode u_alu_compat0 (.opcode_i(fetch_out0_instr_o),.control_o(fetch_out0_alu_decode_o));
++    triha_alu_predecode u_alu_compat1 (.opcode_i(fetch_out1_instr_o),.control_o(fetch_out1_alu_decode_o));
+     wire        fetch_in_fault_page_w;
+     wire        fetch_in_fault_fetch_w;
+     wire [1:0]  fetch_in_pred_branch_w;
+@@ -160,7 +164,7 @@
+     );
+ 
+     triha_fetch_fifo
+-    #( .OPC_INFO_W(10) )
++    #( .OPC_INFO_W(10), .DEPTH(3) )
+     u_fifo
+     (
+          .clk_i(clk_i)
+@@ -207,17 +211,34 @@
+ begin
+     wire [63:0] payload_in_w = (fetch_in_fault_page_i | fetch_in_fault_fetch_i) ? 64'b0 : fetch_in_instr_i;
+     wire csr0_in_w, csr1_in_w, csr0_history_w, csr1_history_w;
+-    wire decoded_csr0_w, decoded_csr1_w;
++    wire exec0_in_w,exec1_in_w,exec0_history_w,exec1_history_w;
++    wire [4:0] unit0_in_w,unit1_in_w;
++    wire illegal0_in_w,illegal1_in_w,legal0_history_w,legal1_history_w;
+     biriscv_decoder u_csr_hint0 (
+         .valid_i(1'b0),.fetch_fault_i(1'b0),.enable_muldiv_i(enable_muldiv_w),.opcode_i(payload_in_w[31:0]),
+-        .invalid_o(),.exec_o(),.lsu_o(),.branch_o(),.mul_o(),.div_o(),.csr_o(csr0_in_w),.rd_valid_o()
++        .invalid_o(),.exec_o(),.lsu_o(unit0_in_w[4]),.branch_o(unit0_in_w[3]),
++        .mul_o(unit0_in_w[2]),.div_o(unit0_in_w[1]),.csr_o(csr0_in_w),.rd_valid_o(unit0_in_w[0])
+     );
+     biriscv_decoder u_csr_hint1 (
+         .valid_i(1'b0),.fetch_fault_i(1'b0),.enable_muldiv_i(enable_muldiv_w),.opcode_i(payload_in_w[63:32]),
+-        .invalid_o(),.exec_o(),.lsu_o(),.branch_o(),.mul_o(),.div_o(),.csr_o(csr1_in_w),.rd_valid_o()
+-    );
++        .invalid_o(),.exec_o(),.lsu_o(unit1_in_w[4]),.branch_o(unit1_in_w[3]),
++        .mul_o(unit1_in_w[2]),.div_o(unit1_in_w[1]),.csr_o(csr1_in_w),.rd_valid_o(unit1_in_w[0])
++    );
++    biriscv_decoder u_legal_hint0 (
++        .valid_i(1'b1),.fetch_fault_i(1'b0),.enable_muldiv_i(enable_muldiv_w),.opcode_i(payload_in_w[31:0]),
++        .invalid_o(illegal0_in_w),.exec_o(),.lsu_o(),.branch_o(),.mul_o(),.div_o(),.csr_o(),.rd_valid_o()
++    );
++    biriscv_decoder u_legal_hint1 (
++        .valid_i(1'b1),.fetch_fault_i(1'b0),.enable_muldiv_i(enable_muldiv_w),.opcode_i(payload_in_w[63:32]),
++        .invalid_o(illegal1_in_w),.exec_o(),.lsu_o(),.branch_o(),.mul_o(),.div_o(),.csr_o(),.rd_valid_o()
++    );
++    triha_exec_classify u_exec_class0 (.opcode_i(payload_in_w[31:0]),.exec_o(exec0_in_w));
++    triha_exec_classify u_exec_class1 (.opcode_i(payload_in_w[63:32]),.exec_o(exec1_in_w));
++    wire [8:0] alu0_decode_w,alu1_decode_w;
++    triha_alu_predecode u_alu_in0 (.opcode_i(payload_in_w[31:0]),.control_o(alu0_decode_w));
++    triha_alu_predecode u_alu_in1 (.opcode_i(payload_in_w[63:32]),.control_o(alu1_decode_w));
+     triha_fetch_fifo
+-    #( .OPC_INFO_W(2) )
++    #( .OPC_INFO_W(18), .DEPTH(3) )
+     u_fifo
+     (
+          .clk_i(clk_i)
+@@ -230,66 +251,38 @@
+         ,.pc_in_i(fetch_in_pc_i)
+         ,.pred_in_i(fetch_in_pred_branch_i)
+         ,.data_in_i(payload_in_w)
+-        ,.info0_in_i({fetch_in_fault_page_i, fetch_in_fault_fetch_i})
+-        ,.info1_in_i({fetch_in_fault_page_i, fetch_in_fault_fetch_i})
++        ,.info0_in_i({~illegal0_in_w, unit0_in_w, alu0_decode_w, exec0_in_w, fetch_in_fault_page_i, fetch_in_fault_fetch_i})
++        ,.info1_in_i({~illegal1_in_w, unit1_in_w, alu1_decode_w, exec1_in_w, fetch_in_fault_page_i, fetch_in_fault_fetch_i})
+         ,.accept_o(fetch_in_accept_o)
+ 
+         // Outputs
+         ,.valid0_o(fetch_out0_valid_o)
+         ,.pc0_out_o(fetch_out0_pc_o)
+         ,.data0_out_o(fetch_out0_instr_o)
+-        ,.info0_out_o({fetch_out0_fault_page_o, fetch_out0_fault_fetch_o})
++        ,.info0_out_o({legal0_history_w, fetch_out0_instr_lsu_o, fetch_out0_instr_branch_o, fetch_out0_instr_mul_o, fetch_out0_instr_div_o, fetch_out0_instr_rd_valid_o, fetch_out0_alu_decode_o, exec0_history_w, fetch_out0_fault_page_o, fetch_out0_fault_fetch_o})
+         ,.pop0_i(fetch_out0_accept_i)
+ 
+         ,.valid1_o(fetch_out1_valid_o)
+         ,.pc1_out_o(fetch_out1_pc_o)
+         ,.data1_out_o(fetch_out1_instr_o)
+-        ,.info1_out_o({fetch_out1_fault_page_o, fetch_out1_fault_fetch_o})
++        ,.info1_out_o({legal1_history_w, fetch_out1_instr_lsu_o, fetch_out1_instr_branch_o, fetch_out1_instr_mul_o, fetch_out1_instr_div_o, fetch_out1_instr_rd_valid_o, fetch_out1_alu_decode_o, exec1_history_w, fetch_out1_fault_page_o, fetch_out1_fault_fetch_o})
+         ,.pop1_i(fetch_out1_accept_i)
+         ,.csr0_in_i(csr0_in_w),.csr1_in_i(csr1_in_w)
+         ,.csr0_out_o(csr0_history_w),.csr1_out_o(csr1_history_w)
+     );
+ 
+-    biriscv_decoder
+-    u_dec0
+-    (
+-         .valid_i(fetch_out0_valid_o)
+-        ,.fetch_fault_i(fetch_out0_fault_fetch_o | fetch_out0_fault_page_o)
+-        ,.enable_muldiv_i(enable_muldiv_w)
+-        ,.opcode_i(fetch_out0_instr_o)
+-
+-        ,.invalid_o(fetch_out0_instr_invalid_o)
+-        ,.exec_o(fetch_out0_instr_exec_o)
+-        ,.lsu_o(fetch_out0_instr_lsu_o)
+-        ,.branch_o(fetch_out0_instr_branch_o)
+-        ,.mul_o(fetch_out0_instr_mul_o)
+-        ,.div_o(fetch_out0_instr_div_o)
+-        ,.csr_o(decoded_csr0_w)
+-        ,.rd_valid_o(fetch_out0_instr_rd_valid_o)
+-    );
+-
+-    biriscv_decoder
+-    u_dec1
+-    (
+-         .valid_i(fetch_out1_valid_o)
+-        ,.fetch_fault_i(fetch_out1_fault_fetch_o | fetch_out1_fault_page_o)
+-        ,.enable_muldiv_i(enable_muldiv_w)
+-        ,.opcode_i(fetch_out1_instr_o)
+-
+-        ,.invalid_o(fetch_out1_instr_invalid_o)
+-        ,.exec_o(fetch_out1_instr_exec_o)
+-        ,.lsu_o(fetch_out1_instr_lsu_o)
+-        ,.branch_o(fetch_out1_instr_branch_o)
+-        ,.mul_o(fetch_out1_instr_mul_o)
+-        ,.div_o(fetch_out1_instr_div_o)
+-        ,.csr_o(decoded_csr1_w)
+-        ,.rd_valid_o(fetch_out1_instr_rd_valid_o)
+-    );
+-    // Preserve original CSR classification even when the FIFO is empty.
+-    assign fetch_out0_instr_csr_o = fetch_out0_valid_o ? decoded_csr0_w :
+-        (csr0_history_w | fetch_out0_fault_fetch_o | fetch_out0_fault_page_o);
+-    assign fetch_out1_instr_csr_o = fetch_out1_valid_o ? decoded_csr1_w :
+-        (csr1_history_w | fetch_out1_fault_fetch_o | fetch_out1_fault_page_o);
++    // Exec classification depends only on the stored opcode. Carry it in
++    // the same queue payload, including inactive history and reset opcode0.
++    assign fetch_out0_instr_exec_o=exec0_history_w;
++    assign fetch_out1_instr_exec_o=exec1_history_w;
++    // Legality is opcode-only; qualify it with the original live valid.
++    // This CSR expression preserves the old ternary for all four states.
++    assign fetch_out0_instr_invalid_o=fetch_out0_valid_o && ~legal0_history_w;
++    assign fetch_out0_instr_csr_o=csr0_history_w | fetch_out0_instr_invalid_o |
++        fetch_out0_fault_fetch_o | fetch_out0_fault_page_o;
++    assign fetch_out1_instr_invalid_o=fetch_out1_valid_o && ~legal1_history_w;
++    assign fetch_out1_instr_csr_o=csr1_history_w | fetch_out1_instr_invalid_o |
++        fetch_out1_fault_fetch_o | fetch_out1_fault_page_o;
+ end
+ endgenerate
+ 
+@@ -341,130 +334,158 @@
+     ,output                 csr1_out_o
+ );
+ 
+-//-----------------------------------------------------------------
+-// Local Params
+-//-----------------------------------------------------------------
+-localparam COUNT_W = ADDR_W + 1;
+-
+-//-----------------------------------------------------------------
+-// Registers
+-//-----------------------------------------------------------------
+-reg [31:0]           pc_q[DEPTH-1:0];
+-reg                  valid0_q[DEPTH-1:0];
+-reg                  valid1_q[DEPTH-1:0];
+-reg [OPC_INFO_W-1:0] info0_q[DEPTH-1:0];
+-reg [OPC_INFO_W-1:0] info1_q[DEPTH-1:0];
+-reg [WIDTH-1:0]      ram_q[DEPTH-1:0];
+-reg [ADDR_W-1:0]     rd_ptr_q;
+-reg [ADDR_W-1:0]     wr_ptr_q;
+-reg [COUNT_W-1:0]    count_q;
+-
+-//-----------------------------------------------------------------
+-// Sequential
+-//-----------------------------------------------------------------
+-wire push_w         = (push_i & accept_o);
+-wire pop1_w         = (pop0_i & valid0_o);
+-wire pop2_w         = (pop1_i & valid1_o);
+-wire pop_complete_w = ((pop1_w && ~valid1_o) || (pop2_w && ~valid0_o) || (pop1_w && pop2_w));
+-
+-reg [1:0] csr_history_q[DEPTH-1:0];
+-integer payload_i;
+-// Only wr_ptr's free slot may sample data. Push/flush affect validity and
+-// metadata below; occupied entries keep their payload when the FIFO is full.
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-begin
+-    for (payload_i=0; payload_i<DEPTH; payload_i=payload_i+1)
+-    begin
+-        ram_q[payload_i] <= {(WIDTH) {1'b0}};
+-        pc_q[payload_i] <= 32'b0;
++// Compact a four-word instruction queue, keeping PC and all sideband fields
++// with each word. Two outputs may cross an original 64-bit fetch boundary.
++// No combinational push-through and no change to memory response latency.
++localparam WORDS = 2*DEPTH;
++reg [31:0] pc_q[0:WORDS-1];
++reg [WIDTH/2-1:0] data_q[0:WORDS-1];
++reg [OPC_INFO_W-1:0] info_q[0:WORDS-1];
++reg csr_q[0:WORDS-1];
++reg [ADDR_W+1:0] count_q;
++wire pop_a_w = pop0_i && valid0_o;
++wire pop_b_w = pop1_i && valid1_o;
++wire push_w = push_i && accept_o;
++// Fixed destination enables replace dynamic multi-write compaction.
++reg remove_a_r,remove_b_r;
++reg [ADDR_W+1:0] remaining_r;
++always @* begin
++    // Preserve the old procedural filtering when a pop condition is X:
++    // an entry survives only when its removal condition is definitely false.
++    remove_a_r=1'b1; if(!pop_a_w) remove_a_r=1'b0;
++    remove_b_r=1'b1; if(!pop_b_w) remove_b_r=1'b0;
++    remaining_r=count_q-remove_a_r-remove_b_r;
++end
++assign accept_o = count_q <= WORDS-2;
++assign valid0_o = count_q != 0;
++assign valid1_o = count_q > 1 && pc_q[1] == pc_q[0] + 32'd4;
++assign pc0_out_o=pc_q[0]; assign pc1_out_o=pc_q[1];
++// ADS documented net replication isolates high-fanout RF read indices.
++// Concatenation preserves every original instruction bit and idle history.
++wire [9:0] read_index0_w /* synthesis syn_maxfan=16 */;
++wire [9:0] read_index1_w /* synthesis syn_maxfan=16 */;
++assign read_index0_w=data_q[0][24:15];
++assign read_index1_w=data_q[1][24:15];
++assign data0_out_o={data_q[0][WIDTH/2-1:25],read_index0_w,data_q[0][14:0]};
++assign data1_out_o={data_q[1][WIDTH/2-1:25],read_index1_w,data_q[1][14:0]};
++assign info0_out_o=info_q[0]; assign info1_out_o=info_q[1];
++assign csr0_out_o=csr_q[0]; assign csr1_out_o=csr_q[1];
++always @(posedge clk_i or posedge rst_i)
++if(rst_i) count_q<=0;
++else if(flush_i) count_q<=0;
++else begin
++    count_q<=remaining_r;
++    if(push_w) begin
++        if(!pred_in_i[0]) count_q<=remaining_r+2;
++        else count_q<=remaining_r+1;
+     end
+ end
+-else if (accept_o)
+-begin
+-    ram_q[wr_ptr_q] <= data_in_i;
+-    pc_q[wr_ptr_q] <= pc_in_i;
+-end
+-
+-integer i;
+-
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-begin
+-    count_q   <= {(COUNT_W) {1'b0}};
+-    rd_ptr_q  <= {(ADDR_W) {1'b0}};
+-    wr_ptr_q  <= {(ADDR_W) {1'b0}};
+-
+-    for (i = 0; i < DEPTH; i = i + 1) 
+-    begin
+-        info0_q[i]       <= {(OPC_INFO_W) {1'b0}};
+-        info1_q[i]       <= {(OPC_INFO_W) {1'b0}};
+-        valid0_q[i]      <= 1'b0;
+-        valid1_q[i]      <= 1'b0;
+-        csr_history_q[i] <= 2'b0;
++localparam PAYLOAD_W=32+WIDTH/2+OPC_INFO_W+1;
++genvar entry;
++generate for(entry=0;entry<WORDS;entry=entry+1) begin:g_entry
++    wire [PAYLOAD_W-1:0] same_w={pc_q[entry],data_q[entry],info_q[entry],csr_q[entry]};
++    wire [PAYLOAD_W-1:0] one_w,two_w,shift_w;
++    if(entry+1<WORDS) begin:g_one
++        assign one_w={pc_q[entry+1],data_q[entry+1],info_q[entry+1],csr_q[entry+1]};
++    end else assign one_w=same_w;
++    if(entry+2<WORDS) begin:g_two
++        assign two_w={pc_q[entry+2],data_q[entry+2],info_q[entry+2],csr_q[entry+2]};
++    end else assign two_w=same_w;
++    // B-only dequeue preserves entry0 while compacting all later entries.
++    assign shift_w=remove_a_r && remove_b_r ? two_w :
++        ((entry==0 ? remove_a_r : (remove_a_r || remove_b_r)) ? one_w : same_w);
++    always @(posedge clk_i or posedge rst_i)
++    if(rst_i) begin
++        pc_q[entry]<=0;data_q[entry]<=0;info_q[entry]<=0;csr_q[entry]<=0;
++    end else if(flush_i) begin
++        // Stored inactive payload history is retained across a flush.
++    end else begin
++        if(push_w && remaining_r==entry)
++            {pc_q[entry],data_q[entry],info_q[entry],csr_q[entry]}<=
++                {{pc_in_i[31:3],3'b000},data_in_i[WIDTH/2-1:0],info0_in_i,csr0_in_i};
++        else if(push_w && !pred_in_i[0] && remaining_r+1==entry)
++            {pc_q[entry],data_q[entry],info_q[entry],csr_q[entry]}<=
++                {{pc_in_i[31:3],3'b100},data_in_i[WIDTH-1:WIDTH/2],info1_in_i,csr1_in_i};
++        else if(remaining_r>entry)
++            {pc_q[entry],data_q[entry],info_q[entry],csr_q[entry]}<=shift_w;
+     end
+-end
+-else if (flush_i)
+-begin
+-    count_q   <= {(COUNT_W) {1'b0}};
+-    rd_ptr_q  <= {(ADDR_W) {1'b0}};
+-    wr_ptr_q  <= {(ADDR_W) {1'b0}};
+-
+-    for (i = 0; i < DEPTH; i = i + 1) 
+-    begin
+-        info0_q[i]       <= {(OPC_INFO_W) {1'b0}};
+-        info1_q[i]       <= {(OPC_INFO_W) {1'b0}};
+-        //valid0_q[i]      <= 1'b0; // TODO:...
+-        //valid1_q[i]      <= 1'b0; // TODO:...
++end endgenerate
++endmodule
++
++// Exact execution class, grouped by the original opcode/function masks.
++// Explicit funct3 coverage retains four-state behavior even for groups that
++// cover all eight binary values. Immediate shifts intentionally ignore bit25.
++module triha_exec_classify (
++    input wire [31:0] opcode_i,
++    output wire exec_o
++);
++    wire [6:0] major_w=opcode_i[6:0];
++    wire [2:0] funct3_w=opcode_i[14:12];
++    wire [6:0] funct7_w=opcode_i[31:25];
++    wire [5:0] funct6_w=opcode_i[31:26];
++    wire any_funct3_w=(funct3_w==3'd0)||(funct3_w==3'd1)||
++        (funct3_w==3'd2)||(funct3_w==3'd3)||(funct3_w==3'd4)||
++        (funct3_w==3'd5)||(funct3_w==3'd6)||(funct3_w==3'd7);
++    wire plain_imm_w=(funct3_w==3'd0)||(funct3_w==3'd2)||
++        (funct3_w==3'd3)||(funct3_w==3'd4)||(funct3_w==3'd6)||(funct3_w==3'd7);
++    wire shift_func_w=(funct3_w==3'd1)||(funct3_w==3'd5);
++    wire sub_or_sra_w=(funct3_w==3'd0)||(funct3_w==3'd5);
++    wire immediate_class_w /* synthesis syn_keep=1 */;
++    wire register_class_w /* synthesis syn_keep=1 */;
++    wire upper_class_w /* synthesis syn_keep=1 */;
++    assign immediate_class_w=(major_w==7'h13) &&
++        (plain_imm_w || ((funct6_w==6'h00)&&shift_func_w) ||
++        ((funct6_w==6'h10)&&(funct3_w==3'd5)));
++    assign register_class_w=(major_w==7'h33) &&
++        (((funct7_w==7'h00)&&any_funct3_w) || ((funct7_w==7'h20)&&sub_or_sra_w));
++    assign upper_class_w=(major_w==7'h37)||(major_w==7'h17);
++    assign exec_o=immediate_class_w|register_class_w|upper_class_w;
++endmodule
++
++// Early control fields retain the original exact-match/unknown-skip decode.
++// [8:5] ALU operation, [4:3] A source, [2:0] B source. Opcode0 resets0.
++`include "biriscv_defs.v"
++module triha_alu_predecode (
++    input wire [31:0] opcode_i,
++    output reg [8:0] control_o
++);
++    localparam [1:0] A_ZERO=0,A_REG=1,A_UPPER=2,A_PC=3;
++    localparam [2:0] B_ZERO=0,B_REG=1,B_IMM=2,B_UPPER=3,B_SHIFT=4,B_FOUR=5;
++    always @* begin
++        control_o=9'b0;
++        case(opcode_i[6:0])
++            7'h33:case({opcode_i[31:25],opcode_i[14:12]})
++                {7'h00,3'd0}:control_o={`ALU_ADD,A_REG,B_REG};
++                {7'h00,3'd1}:control_o={`ALU_SHIFTL,A_REG,B_REG};
++                {7'h00,3'd2}:control_o={`ALU_LESS_THAN_SIGNED,A_REG,B_REG};
++                {7'h00,3'd3}:control_o={`ALU_LESS_THAN,A_REG,B_REG};
++                {7'h00,3'd4}:control_o={`ALU_XOR,A_REG,B_REG};
++                {7'h00,3'd5}:control_o={`ALU_SHIFTR,A_REG,B_REG};
++                {7'h00,3'd6}:control_o={`ALU_OR,A_REG,B_REG};
++                {7'h00,3'd7}:control_o={`ALU_AND,A_REG,B_REG};
++                {7'h20,3'd0}:control_o={`ALU_SUB,A_REG,B_REG};
++                {7'h20,3'd5}:control_o={`ALU_SHIFTR_ARITH,A_REG,B_REG};
++                default:;
++            endcase
++            7'h13:case(opcode_i[14:12])
++                3'd0:control_o={`ALU_ADD,A_REG,B_IMM};
++                3'd2:control_o={`ALU_LESS_THAN_SIGNED,A_REG,B_IMM};
++                3'd3:control_o={`ALU_LESS_THAN,A_REG,B_IMM};
++                3'd4:control_o={`ALU_XOR,A_REG,B_IMM};
++                3'd6:control_o={`ALU_OR,A_REG,B_IMM};
++                3'd7:control_o={`ALU_AND,A_REG,B_IMM};
++                3'd1:if(opcode_i[31:26]==6'h00)control_o={`ALU_SHIFTL,A_REG,B_SHIFT};
++                3'd5:begin
++                    if(opcode_i[31:26]==6'h00)control_o={`ALU_SHIFTR,A_REG,B_SHIFT};
++                    else if(opcode_i[31:26]==6'h10)control_o={`ALU_SHIFTR_ARITH,A_REG,B_SHIFT};
++                end
++                default:;
++            endcase
++            7'h37:control_o={`ALU_NONE,A_UPPER,B_ZERO};
++            7'h17:control_o={`ALU_ADD,A_PC,B_UPPER};
++            7'h6f:control_o={`ALU_ADD,A_PC,B_FOUR};
++            7'h67:if(opcode_i[14:12]==0)control_o={`ALU_ADD,A_PC,B_FOUR};
++            default:;
++        endcase
+     end
+-end
+-else
+-begin
+-    // Push
+-    if (push_w)
+-    begin
+-        info0_q[wr_ptr_q]   <= info0_in_i;
+-        info1_q[wr_ptr_q]   <= info1_in_i;
+-        csr_history_q[wr_ptr_q] <= {csr1_in_i,csr0_in_i};
+-        valid0_q[wr_ptr_q]  <= 1'b1;
+-        valid1_q[wr_ptr_q]  <= ~pred_in_i[0];
+-        wr_ptr_q            <= wr_ptr_q + 1;
+-    end
+-
+-    if (pop1_w)
+-        valid0_q[rd_ptr_q] <= 1'b0;
+-    if (pop2_w)
+-        valid1_q[rd_ptr_q] <= 1'b0;
+-
+-    // Both instructions completed
+-    if (pop_complete_w)
+-        rd_ptr_q  <= rd_ptr_q + 1;
+-
+-    if (push_w & ~pop_complete_w)
+-        count_q <= count_q + 1;
+-    else if (~push_w & pop_complete_w)
+-        count_q <= count_q - 1;
+-end
+-
+-//-------------------------------------------------------------------
+-// Combinatorial
+-//-------------------------------------------------------------------
+-/* verilator lint_off WIDTH */
+-assign valid0_o      = (count_q != 0) & valid0_q[rd_ptr_q];
+-assign valid1_o      = (count_q != 0) & valid1_q[rd_ptr_q];
+-assign accept_o      = (count_q != DEPTH);
+-/* verilator lint_on WIDTH */
+-
+-assign pc0_out_o     = {pc_q[rd_ptr_q][31:3],3'b000};
+-assign pc1_out_o     = {pc_q[rd_ptr_q][31:3],3'b100};
+-assign data0_out_o   = ram_q[rd_ptr_q][(WIDTH/2)-1:0];
+-assign data1_out_o   = ram_q[rd_ptr_q][WIDTH-1:(WIDTH/2)];
+-
+-assign info0_out_o   = info0_q[rd_ptr_q];
+-assign info1_out_o   = info1_q[rd_ptr_q];
+-assign csr0_out_o    = csr_history_q[rd_ptr_q][0];
+-assign csr1_out_o    = csr_history_q[rd_ptr_q][1];
+-
+-
+-
+ endmodule
+--- a/rtl/cpu/triha_frontend.v
++++ b/rtl/cpu/triha_frontend.v
+@@ -81,6 +81,7 @@
+     ,output [  1:0]  icache_priv_o
+     ,output          fetch0_valid_o
+     ,output [ 31:0]  fetch0_instr_o
++    ,output [8:0] fetch0_alu_decode_o
+     ,output [ 31:0]  fetch0_pc_o
+     ,output          fetch0_fault_fetch_o
+     ,output          fetch0_fault_page_o
+@@ -94,6 +95,7 @@
+     ,output          fetch0_instr_invalid_o
+     ,output          fetch1_valid_o
+     ,output [ 31:0]  fetch1_instr_o
++    ,output [8:0] fetch1_alu_decode_o
+     ,output [ 31:0]  fetch1_pc_o
+     ,output          fetch1_fault_fetch_o
+     ,output          fetch1_fault_page_o
+@@ -212,6 +214,7 @@
+     ,.fetch_in_accept_o(fetch_accept_w)
+     ,.fetch_out0_valid_o(fetch0_valid_o)
+     ,.fetch_out0_instr_o(fetch0_instr_o)
++    ,.fetch_out0_alu_decode_o(fetch0_alu_decode_o)
+     ,.fetch_out0_pc_o(fetch0_pc_o)
+     ,.fetch_out0_fault_fetch_o(fetch0_fault_fetch_o)
+     ,.fetch_out0_fault_page_o(fetch0_fault_page_o)
+@@ -225,6 +228,7 @@
+     ,.fetch_out0_instr_invalid_o(fetch0_instr_invalid_o)
+     ,.fetch_out1_valid_o(fetch1_valid_o)
+     ,.fetch_out1_instr_o(fetch1_instr_o)
++    ,.fetch_out1_alu_decode_o(fetch1_alu_decode_o)
+     ,.fetch_out1_pc_o(fetch1_pc_o)
+     ,.fetch_out1_fault_fetch_o(fetch1_fault_fetch_o)
+     ,.fetch_out1_fault_page_o(fetch1_fault_page_o)
+--- a/rtl/cpu/triha_issue.v
++++ b/rtl/cpu/triha_issue.v
+@@ -1,1201 +1,1444 @@
+-//-----------------------------------------------------------------
+-//                         biRISC-V CPU
+-//                            V0.8.1
+-//                     Ultra-Embedded.com
+-//                     Copyright 2019-2020
+-//
+-//                   admin@ultra-embedded.com
+-//
+-//                     License: Apache 2.0
+-//-----------------------------------------------------------------
+-// Copyright 2020 Ultra-Embedded.com
+-// 
+-// Licensed under the Apache License, Version 2.0 (the "License");
+-// you may not use this file except in compliance with the License.
+-// You may obtain a copy of the License at
+-// 
+-//     http://www.apache.org/licenses/LICENSE-2.0
+-// 
+-// Unless required by applicable law or agreed to in writing, software
+-// distributed under the License is distributed on an "AS IS" BASIS,
+-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-// See the License for the specific language governing permissions and
+-// limitations under the License.
+-//-----------------------------------------------------------------
+-
+-// TriHa maintained issue derivative; see ADAPTATIONS.json.
+-module triha_issue
+-//-----------------------------------------------------------------
+-// Params
+-//-----------------------------------------------------------------
+-#(
+-     parameter SUPPORT_MULDIV   = 1
+-    ,parameter SUPPORT_DUAL_ISSUE = 1
+-    ,parameter SUPPORT_LOAD_BYPASS = 1
+-    ,parameter SUPPORT_MUL_BYPASS = 1
+-    ,parameter EARLY_MUL_BYPASS = 1
+-    ,parameter SUPPORT_REGFILE_XILINX = 0
+-)
+-//-----------------------------------------------------------------
+-// Ports
+-//-----------------------------------------------------------------
+-(
+-    // Inputs
+-     input           clk_i
+-    ,input           rst_i
+-    ,input           fetch0_valid_i
+-    ,input  [ 31:0]  fetch0_instr_i
+-    ,input  [ 31:0]  fetch0_pc_i
+-    ,input           fetch0_fault_fetch_i
+-    ,input           fetch0_fault_page_i
+-    ,input           fetch0_instr_exec_i
+-    ,input           fetch0_instr_lsu_i
+-    ,input           fetch0_instr_branch_i
+-    ,input           fetch0_instr_mul_i
+-    ,input           fetch0_instr_div_i
+-    ,input           fetch0_instr_csr_i
+-    ,input           fetch0_instr_rd_valid_i
+-    ,input           fetch0_instr_invalid_i
+-    ,input           fetch1_valid_i
+-    ,input  [ 31:0]  fetch1_instr_i
+-    ,input  [ 31:0]  fetch1_pc_i
+-    ,input           fetch1_fault_fetch_i
+-    ,input           fetch1_fault_page_i
+-    ,input           fetch1_instr_exec_i
+-    ,input           fetch1_instr_lsu_i
+-    ,input           fetch1_instr_branch_i
+-    ,input           fetch1_instr_mul_i
+-    ,input           fetch1_instr_div_i
+-    ,input           fetch1_instr_csr_i
+-    ,input           fetch1_instr_rd_valid_i
+-    ,input           fetch1_instr_invalid_i
+-    ,input           branch_exec0_request_i
+-    ,input           branch_exec0_is_taken_i
+-    ,input           branch_exec0_is_not_taken_i
+-    ,input  [ 31:0]  branch_exec0_source_i
+-    ,input           branch_exec0_is_call_i
+-    ,input           branch_exec0_is_ret_i
+-    ,input           branch_exec0_is_jmp_i
+-    ,input  [ 31:0]  branch_exec0_pc_i
+-    ,input           branch_d_exec0_request_i
+-    ,input  [ 31:0]  branch_d_exec0_pc_i
+-    ,input  [  1:0]  branch_d_exec0_priv_i
+-    ,input           branch_exec1_request_i
+-    ,input           branch_exec1_is_taken_i
+-    ,input           branch_exec1_is_not_taken_i
+-    ,input  [ 31:0]  branch_exec1_source_i
+-    ,input           branch_exec1_is_call_i
+-    ,input           branch_exec1_is_ret_i
+-    ,input           branch_exec1_is_jmp_i
+-    ,input  [ 31:0]  branch_exec1_pc_i
+-    ,input           branch_d_exec1_request_i
+-    ,input  [ 31:0]  branch_d_exec1_pc_i
+-    ,input  [  1:0]  branch_d_exec1_priv_i
+-    ,input           branch_csr_request_i
+-    ,input  [ 31:0]  branch_csr_pc_i
+-    ,input  [  1:0]  branch_csr_priv_i
+-    ,input  [ 31:0]  writeback_exec0_value_i
+-    ,input  [ 31:0]  writeback_exec1_value_i
+-    ,input           writeback_mem_valid_i
+-    ,input  [ 31:0]  writeback_mem_value_i
+-    ,input [31:0]   writeback_mem_bypass_i
+-    ,input  [  5:0]  writeback_mem_exception_i
+-    ,input  [ 31:0]  writeback_mul_value_i
+-    ,input  [ 31:0]  writeback_mul_early_i
+-    ,input           writeback_mul_early_valid_i
+-    ,input           writeback_div_valid_i
+-    ,input  [ 31:0]  writeback_div_value_i
+-    ,input  [ 31:0]  csr_result_e1_value_i
+-    ,input           csr_result_e1_write_i
+-    ,input  [ 31:0]  csr_result_e1_wdata_i
+-    ,input  [  5:0]  csr_result_e1_exception_i
+-    ,input           lsu_stall_i
+-    ,input           take_interrupt_i
+-
+-    // Outputs
+-    ,output          fetch0_accept_o
+-    ,output          fetch1_accept_o
+-    ,output          branch_request_o
+-    ,output [ 31:0]  branch_pc_o
+-    ,output [  1:0]  branch_priv_o
+-    ,output          branch_info_request_o
+-    ,output          branch_info_is_taken_o
+-    ,output          branch_info_is_not_taken_o
+-    ,output [ 31:0]  branch_info_source_o
+-    ,output          branch_info_is_call_o
+-    ,output          branch_info_is_ret_o
+-    ,output          branch_info_is_jmp_o
+-    ,output [ 31:0]  branch_info_pc_o
+-    ,output          exec0_opcode_valid_o
+-    ,output          exec1_opcode_valid_o
+-    ,output          lsu_opcode_valid_o
+-    ,output          csr_opcode_valid_o
+-    ,output          mul_opcode_valid_o
+-    ,output          div_opcode_valid_o
+-    ,output [ 31:0]  opcode0_opcode_o
+-    ,output [ 31:0]  opcode0_pc_o
+-    ,output          opcode0_invalid_o
+-    ,output [  4:0]  opcode0_rd_idx_o
+-    ,output [  4:0]  opcode0_ra_idx_o
+-    ,output [  4:0]  opcode0_rb_idx_o
+-    ,output [ 31:0]  opcode0_ra_operand_o
+-    ,output [ 31:0]  opcode0_rb_operand_o
+-    ,output [ 31:0]  opcode1_opcode_o
+-    ,output [ 31:0]  opcode1_pc_o
+-    ,output          opcode1_invalid_o
+-    ,output [  4:0]  opcode1_rd_idx_o
+-    ,output [  4:0]  opcode1_ra_idx_o
+-    ,output [  4:0]  opcode1_rb_idx_o
+-    ,output [ 31:0]  opcode1_ra_operand_o
+-    ,output [ 31:0]  opcode1_rb_operand_o
+-    ,output [ 31:0]  lsu_opcode_opcode_o
+-    ,output [ 31:0]  lsu_opcode_pc_o
+-    ,output          lsu_opcode_invalid_o
+-    ,output [  4:0]  lsu_opcode_rd_idx_o
+-    ,output [  4:0]  lsu_opcode_ra_idx_o
+-    ,output [  4:0]  lsu_opcode_rb_idx_o
+-    ,output [ 31:0]  lsu_opcode_ra_operand_o
+-    ,output [ 31:0]  lsu_opcode_rb_operand_o
+-    ,output [ 31:0]  mul_opcode_opcode_o
+-    ,output [ 31:0]  mul_opcode_pc_o
+-    ,output          mul_opcode_invalid_o
+-    ,output [  4:0]  mul_opcode_rd_idx_o
+-    ,output [  4:0]  mul_opcode_ra_idx_o
+-    ,output [  4:0]  mul_opcode_rb_idx_o
+-    ,output [ 31:0]  mul_opcode_ra_operand_o
+-    ,output [ 31:0]  mul_opcode_rb_operand_o
+-    ,output [ 31:0]  csr_opcode_opcode_o
+-    ,output [ 31:0]  csr_opcode_pc_o
+-    ,output          csr_opcode_invalid_o
+-    ,output [  4:0]  csr_opcode_rd_idx_o
+-    ,output [  4:0]  csr_opcode_ra_idx_o
+-    ,output [  4:0]  csr_opcode_rb_idx_o
+-    ,output [ 31:0]  csr_opcode_ra_operand_o
+-    ,output [ 31:0]  csr_opcode_rb_operand_o
+-    ,output          csr_writeback_write_o
+-    ,output [ 11:0]  csr_writeback_waddr_o
+-    ,output [ 31:0]  csr_writeback_wdata_o
+-    ,output [  5:0]  csr_writeback_exception_o
+-    ,output [ 31:0]  csr_writeback_exception_pc_o
+-    ,output [ 31:0]  csr_writeback_exception_addr_o
+-    ,output          exec0_hold_o
+-    ,output          exec1_hold_o
+-    ,output          mul_hold_o
+-    ,output          interrupt_inhibit_o
+-);
+-
+-
+-
+-`include "biriscv_defs.v"
+-
+-wire enable_dual_issue_w = SUPPORT_DUAL_ISSUE;
+-wire enable_muldiv_w     = SUPPORT_MULDIV;
+-wire enable_mul_bypass_w = SUPPORT_MUL_BYPASS;
+-
+-wire stall_w;
+-wire squash_w;
+-
+-//-------------------------------------------------------------
+-// PC
+-//-------------------------------------------------------------
+-wire        single_issue_w;
+-wire        dual_issue_w;
+-reg  [31:0] pc_x_q;
+-reg   [1:0] priv_x_q;
+-
+-// Finish constant increments before the late redirect selection. Keep these
+-// used nets so ADS does not merge redirect controls into the carry chain.
+-wire [31:0] pc_plus4_w /* synthesis syn_keep=1 */;
+-wire [31:0] pc_plus8_w;
+-assign pc_plus4_w = pc_x_q + 32'd4;
+-generate
+-if (SUPPORT_DUAL_ISSUE) begin: g_pc_dual
+-    wire [31:0] increment_w /* synthesis syn_keep=1 */;
+-    assign increment_w = pc_x_q + 32'd8;
+-    assign pc_plus8_w = increment_w;
+-end else begin: g_pc_single
+-    assign pc_plus8_w = 32'b0;
+-end
+-endgenerate
+-
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    pc_x_q <= 32'b0;
+-else if (branch_csr_request_i)
+-    pc_x_q <= branch_csr_pc_i;
+-else if (branch_d_exec1_request_i)
+-    pc_x_q <= branch_d_exec1_pc_i;
+-else if (branch_d_exec0_request_i)
+-    pc_x_q <= branch_d_exec0_pc_i;
+-else if (dual_issue_w)
+-    pc_x_q <= pc_plus8_w;
+-else if (single_issue_w)
+-    pc_x_q <= pc_plus4_w;
+-
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    priv_x_q <= `PRIV_MACHINE;
+-else if (branch_csr_request_i)
+-    priv_x_q <= branch_csr_priv_i;
+-
+-//-------------------------------------------------------------
+-// Issue Select
+-//-------------------------------------------------------------
+-reg mispredicted_r;
+-reg slot0_valid_r;
+-reg slot1_valid_r;
+-
+-always @ *
+-begin
+-    mispredicted_r = 1'b0;
+-    slot0_valid_r  = 1'b0;
+-    slot1_valid_r  = 1'b0;
+-
+-    // Flush due to CSR branch
+-    if (branch_csr_request_i || squash_w)
+-    begin
+-        slot0_valid_r  = 1'b0;
+-        slot1_valid_r  = 1'b0;
+-    end
+-    // Word 0 valid and expected PC (word 1 may also be valid)
+-    else if (fetch0_valid_i && {fetch0_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0})
+-        slot0_valid_r  = 1'b1;
+-    // Word 1 valid and expected PC
+-    else if (fetch1_valid_i && {fetch1_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0})
+-        slot1_valid_r  = 1'b1;
+-    // Neither word is the expected PC - must be a branch misprediction
+-    else if (fetch0_valid_i || fetch1_valid_i)
+-        mispredicted_r = 1'b1;
+-end
+-
+-// Branch request (CSR branch - ecall, xret, or branch misprediction)
+-// Note: Correctly predicted branches are silent
+-assign branch_request_o          = branch_csr_request_i | mispredicted_r;
+-assign branch_pc_o               = branch_csr_request_i ? branch_csr_pc_i : pc_x_q;
+-assign branch_priv_o             = branch_csr_request_i ? branch_csr_priv_i : priv_x_q;
+-
+-//-------------------------------------------------------------
+-// Instruction Decoder
+-//-------------------------------------------------------------
+-// The fetch FIFO fixes lane PCs to {base,000}/{base,100}. Select wide
+-// payload from registered PC bit 2, independently of the full PC-hit check.
+-// Full PC/valid matches below still qualify issue, faults and consumption.
+-wire payload0_selected_w = !pc_x_q[2];
+-wire payload0_match_w = fetch0_valid_i &&
+-    {fetch0_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
+-wire payload1_match_w = fetch1_valid_i &&
+-    {fetch1_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
+-reg        opcode_a_valid_r;
+-reg        opcode_b_valid_r;
+-reg [1:0]  opcode_a_fault_r;
+-reg [1:0]  opcode_b_fault_r;
+-reg [31:0] opcode_a_r;
+-reg [31:0] opcode_b_r;
+-reg [31:0] opcode_a_pc_r;
+-reg [31:0] opcode_b_pc_r;
+-
+-always @ *
+-begin
+-    opcode_a_valid_r = payload0_match_w || payload1_match_w;
+-    opcode_b_valid_r = payload0_match_w && fetch1_valid_i;
+-    opcode_a_r       = fetch1_instr_i;
+-    opcode_a_pc_r    = fetch1_pc_i;
+-    opcode_a_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
+-    opcode_b_r       = 32'b0;
+-    opcode_b_pc_r    = 32'b0;
+-    opcode_b_fault_r = 2'b0;
+-
+-    // Even word may issue together with lane 1; odd word uses slot 0 alone.
+-    if (payload0_selected_w)
+-    begin
+-        opcode_a_r       = fetch0_instr_i;
+-        opcode_a_pc_r    = fetch0_pc_i;
+-        opcode_a_fault_r = {fetch0_fault_page_i, fetch0_fault_fetch_i};
+-        opcode_b_r       = fetch1_instr_i;
+-        opcode_b_pc_r    = fetch1_pc_i;
+-        opcode_b_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
+-    end
+-end
+-
+-wire [4:0] issue_a_ra_idx_w   = opcode_a_r[19:15];
+-wire [4:0] issue_a_rb_idx_w   = opcode_a_r[24:20];
+-wire [4:0] issue_a_rd_idx_w   = opcode_a_r[11:7];
+-wire       issue_a_sb_alloc_w = (payload0_selected_w ? fetch0_instr_rd_valid_i : fetch1_instr_rd_valid_i);
+-wire       issue_a_exec_w     = (payload0_selected_w ? fetch0_instr_exec_i     : fetch1_instr_exec_i);
+-wire       issue_a_lsu_w      = (payload0_selected_w ? fetch0_instr_lsu_i      : fetch1_instr_lsu_i);
+-wire       issue_a_branch_w   = (payload0_selected_w ? fetch0_instr_branch_i   : fetch1_instr_branch_i);
+-wire       issue_a_mul_w      = (payload0_selected_w ? fetch0_instr_mul_i      : fetch1_instr_mul_i);
+-wire       issue_a_div_w      = (payload0_selected_w ? fetch0_instr_div_i      : fetch1_instr_div_i);
+-wire       issue_a_csr_w      = (payload0_selected_w ? fetch0_instr_csr_i      : fetch1_instr_csr_i);
+-wire       issue_a_invalid_w  = (payload0_selected_w ? fetch0_instr_invalid_i  : fetch1_instr_invalid_i);
+-
+-
+-wire [4:0] issue_b_ra_idx_w   = opcode_b_r[19:15];
+-wire [4:0] issue_b_rb_idx_w   = opcode_b_r[24:20];
+-wire [4:0] issue_b_rd_idx_w   = opcode_b_r[11:7];
+-wire       issue_b_sb_alloc_w = fetch1_instr_rd_valid_i;
+-wire       issue_b_exec_w     = fetch1_instr_exec_i;
+-wire       issue_b_lsu_w      = fetch1_instr_lsu_i;
+-wire       issue_b_branch_w   = fetch1_instr_branch_i;
+-wire       issue_b_mul_w      = fetch1_instr_mul_i;
+-wire       issue_b_div_w      = fetch1_instr_div_i;
+-wire       issue_b_csr_w      = fetch1_instr_csr_i;
+-wire       issue_b_invalid_w  = fetch1_instr_invalid_i;
+-
+-//-------------------------------------------------------------
+-// Pipe0 - Status tracking
+-//------------------------------------------------------------- 
+-wire        pipe0_squash_e1_e2_w;
+-wire        pipe1_squash_e1_e2_w;
+-
+-reg         opcode_a_issue_r;
+-reg         opcode_a_accept_r;
+-wire        pipe0_stall_raw_w;
+-
+-wire        pipe0_load_e1_w;
+-wire        pipe0_store_e1_w;
+-wire        pipe0_mul_e1_w;
+-wire        pipe0_branch_e1_w;
+-wire [4:0]  pipe0_rd_e1_w;
+-
+-wire [31:0] pipe0_pc_e1_w;
+-wire [31:0] pipe0_opcode_e1_w;
+-// Reuse E1 forwarding for the existing low-word product. The registered E2
+-// result still supplies architectural writeback; high products and dual issue
+-// retain their original hazard policy.
+-wire pipe0_early_mul_w = EARLY_MUL_BYPASS && SUPPORT_MUL_BYPASS && !SUPPORT_DUAL_ISSUE &&
+-    pipe0_mul_e1_w && writeback_mul_early_valid_i &&
+-    ((pipe0_opcode_e1_w & `INST_MUL_MASK) == `INST_MUL);
+-wire [31:0] pipe0_forward_e1_w = pipe0_early_mul_w ? writeback_mul_early_i : writeback_exec0_value_i;
+-wire [31:0] pipe0_operand_ra_e1_w;
+-wire [31:0] pipe0_operand_rb_e1_w;
+-
+-wire        pipe0_load_e2_w;
+-wire        pipe0_mul_e2_w;
+-wire [4:0]  pipe0_rd_e2_w;
+-wire [4:0]  pipe0_rd_bypass_e2_w;
+-wire [31:0] pipe0_result_e2_w;
+-
+-wire        pipe0_valid_wb_w;
+-wire        pipe0_csr_wb_w;
+-wire [4:0]  pipe0_rd_wb_w;
+-wire [4:0]  pipe0_rd_bypass_wb_w;
+-wire [31:0] pipe0_result_wb_w;
+-wire [31:0] pipe0_pc_wb_w;
+-wire [31:0] pipe0_opc_wb_w;
+-wire [31:0] pipe0_ra_val_wb_w;
+-wire [31:0] pipe0_rb_val_wb_w;
+-wire [`EXCEPTION_W-1:0] pipe0_exception_wb_w;
+-
+-wire [`EXCEPTION_W-1:0] issue_a_fault_w = opcode_a_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
+-                                          opcode_a_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
+-
+-triha_pipe_ctrl
+-#( 
+-     .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
+-    ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
+-)
+-u_pipe0_ctrl
+-(
+-     .clk_i(clk_i)
+-    ,.rst_i(rst_i)    
+-
+-    // Issue
+-    ,.issue_valid_i(opcode_a_issue_r)
+-    ,.issue_accept_i(opcode_a_accept_r)
+-    ,.issue_stall_i(stall_w)
+-    ,.issue_lsu_i(issue_a_lsu_w)
+-    ,.issue_csr_i(issue_a_csr_w)
+-    ,.issue_div_i(issue_a_div_w)
+-    ,.issue_mul_i(issue_a_mul_w)
+-    ,.issue_branch_i(issue_a_branch_w)
+-    ,.issue_rd_valid_i(issue_a_sb_alloc_w)
+-    ,.issue_rd_i(issue_a_rd_idx_w)
+-    ,.issue_exception_i(issue_a_fault_w)
+-    ,.issue_pc_i(opcode0_pc_o)
+-    ,.issue_opcode_i(opcode0_opcode_o)
+-    ,.issue_operand_ra_i(opcode0_ra_operand_o)
+-    ,.issue_operand_rb_i(opcode0_rb_operand_o)
+-    ,.issue_branch_taken_i(branch_d_exec0_request_i)
+-    ,.issue_branch_target_i(branch_d_exec0_pc_i)
+-    ,.take_interrupt_i(take_interrupt_i)
+-
+-    // Execution stage 1: ALU result
+-    ,.alu_result_e1_i(writeback_exec0_value_i)
+-    ,.csr_result_value_e1_i(csr_result_e1_value_i)
+-    ,.csr_result_write_e1_i(csr_result_e1_write_i)
+-    ,.csr_result_wdata_e1_i(csr_result_e1_wdata_i)
+-    ,.csr_result_exception_e1_i(csr_result_e1_exception_i)
+-
+-    // Execution stage 1
+-    ,.load_e1_o(pipe0_load_e1_w)
+-    ,.store_e1_o(pipe0_store_e1_w)
+-    ,.mul_e1_o(pipe0_mul_e1_w)
+-    ,.branch_e1_o(pipe0_branch_e1_w)
+-    ,.rd_e1_o(pipe0_rd_e1_w)
+-    ,.pc_e1_o(pipe0_pc_e1_w)
+-    ,.opcode_e1_o(pipe0_opcode_e1_w)
+-    ,.operand_ra_e1_o(pipe0_operand_ra_e1_w)
+-    ,.operand_rb_e1_o(pipe0_operand_rb_e1_w)
+-
+-    // Execution stage 2: Other results
+-    ,.mem_complete_i(writeback_mem_valid_i)
+-    ,.mem_result_e2_i(writeback_mem_value_i)
+-    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
+-    ,.mem_exception_e2_i(writeback_mem_exception_i)
+-    ,.mul_result_e2_i(writeback_mul_value_i)
+-
+-    // Execution stage 2
+-    ,.load_e2_o(pipe0_load_e2_w)
+-    ,.mul_e2_o(pipe0_mul_e2_w)
+-    ,.rd_e2_o(pipe0_rd_e2_w)
+-    ,.rd_bypass_e2_o(pipe0_rd_bypass_e2_w)
+-    ,.result_e2_o(pipe0_result_e2_w)
+-
+-    ,.stall_o(pipe0_stall_raw_w)
+-    ,.squash_e1_e2_o(pipe0_squash_e1_e2_w)
+-    ,.squash_e1_e2_i(pipe1_squash_e1_e2_w)
+-    ,.squash_wb_i(1'b0)
+-
+-    // Out of pipe: Divide Result
+-    ,.div_complete_i(writeback_div_valid_i)
+-    ,.div_result_i(writeback_div_value_i)
+-
+-    // Commit
+-    ,.valid_wb_o(pipe0_valid_wb_w)
+-    ,.csr_wb_o(pipe0_csr_wb_w)
+-    ,.rd_wb_o(pipe0_rd_wb_w)
+-    ,.rd_bypass_wb_o(pipe0_rd_bypass_wb_w)
+-    ,.result_wb_o(pipe0_result_wb_w)
+-    ,.pc_wb_o(pipe0_pc_wb_w)
+-    ,.opcode_wb_o(pipe0_opc_wb_w)
+-    ,.operand_ra_wb_o(pipe0_ra_val_wb_w)
+-    ,.operand_rb_wb_o(pipe0_rb_val_wb_w)
+-    ,.exception_wb_o(pipe0_exception_wb_w)
+-    ,.csr_write_wb_o(csr_writeback_write_o)
+-    ,.csr_waddr_wb_o(csr_writeback_waddr_o)
+-    ,.csr_wdata_wb_o(csr_writeback_wdata_o)   
+-);
+-
+-assign exec0_hold_o = stall_w;
+-assign mul_hold_o   = stall_w;
+-
+-//-------------------------------------------------------------
+-// Pipe1 - Status tracking
+-//-------------------------------------------------------------
+-reg         opcode_b_issue_r;
+-reg         opcode_b_accept_r;
+-wire        pipe1_stall_raw_w;
+-
+-wire        pipe1_load_e1_w;
+-wire        pipe1_store_e1_w;
+-wire        pipe1_mul_e1_w;
+-wire        pipe1_branch_e1_w;
+-wire [4:0]  pipe1_rd_e1_w;
+-
+-wire [31:0] pipe1_pc_e1_w;
+-wire [31:0] pipe1_opcode_e1_w;
+-wire [31:0] pipe1_operand_ra_e1_w;
+-wire [31:0] pipe1_operand_rb_e1_w;
+-
+-wire        pipe1_load_e2_w;
+-wire        pipe1_mul_e2_w;
+-wire [4:0]  pipe1_rd_e2_w;
+-wire [4:0]  pipe1_rd_bypass_e2_w;
+-wire [31:0] pipe1_result_e2_w;
+-
+-wire        pipe1_valid_wb_w;
+-wire [4:0]  pipe1_rd_wb_w;
+-wire [4:0]  pipe1_rd_bypass_wb_w;
+-wire [31:0] pipe1_result_wb_w;
+-wire [31:0] pipe1_pc_wb_w;
+-wire [31:0] pipe1_opc_wb_w;
+-wire [31:0] pipe1_ra_val_wb_w;
+-wire [31:0] pipe1_rb_val_wb_w;
+-wire [`EXCEPTION_W-1:0] pipe1_exception_wb_w;
+-
+-wire [`EXCEPTION_W-1:0] issue_b_fault_w = opcode_b_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
+-                                          opcode_b_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
+-
+-triha_pipe_ctrl
+-#( 
+-     .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
+-    ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
+-)
+-u_pipe1_ctrl
+-(
+-     .clk_i(clk_i)
+-    ,.rst_i(rst_i)
+-
+-    // Issue
+-    ,.issue_valid_i(opcode_b_issue_r)
+-    ,.issue_accept_i(opcode_b_accept_r)
+-    ,.issue_stall_i(stall_w)
+-    ,.issue_lsu_i(issue_b_lsu_w)
+-    ,.issue_csr_i(1'b0)
+-    ,.issue_div_i(1'b0)
+-    ,.issue_mul_i(issue_b_mul_w)
+-    ,.issue_branch_i(issue_b_branch_w)
+-    ,.issue_rd_valid_i(issue_b_sb_alloc_w)
+-    ,.issue_rd_i(issue_b_rd_idx_w)
+-    ,.issue_exception_i(issue_b_fault_w)
+-    ,.issue_pc_i(opcode1_pc_o)
+-    ,.issue_opcode_i(opcode1_opcode_o)
+-    ,.issue_operand_ra_i(opcode1_ra_operand_o)
+-    ,.issue_operand_rb_i(opcode1_rb_operand_o)
+-    ,.issue_branch_taken_i(branch_d_exec1_request_i)
+-    ,.issue_branch_target_i(branch_d_exec1_pc_i)
+-    ,.take_interrupt_i(take_interrupt_i)
+-
+-    // Execution stage 1: ALU, CSR result
+-    ,.alu_result_e1_i(writeback_exec1_value_i)
+-    ,.csr_result_value_e1_i(csr_result_e1_value_i)
+-    ,.csr_result_write_e1_i(csr_result_e1_write_i)
+-    ,.csr_result_wdata_e1_i(csr_result_e1_wdata_i)
+-    ,.csr_result_exception_e1_i(csr_result_e1_exception_i)
+-
+-    // Execution stage 1
+-    ,.load_e1_o(pipe1_load_e1_w)
+-    ,.store_e1_o(pipe1_store_e1_w)
+-    ,.mul_e1_o(pipe1_mul_e1_w)
+-    ,.branch_e1_o(pipe1_branch_e1_w)
+-    ,.rd_e1_o(pipe1_rd_e1_w)
+-    ,.pc_e1_o(pipe1_pc_e1_w)
+-    ,.opcode_e1_o(pipe1_opcode_e1_w)
+-    ,.operand_ra_e1_o(pipe1_operand_ra_e1_w)
+-    ,.operand_rb_e1_o(pipe1_operand_rb_e1_w)
+-
+-    // Execution stage 2: Other results
+-    ,.mem_complete_i(writeback_mem_valid_i)
+-    ,.mem_result_e2_i(writeback_mem_value_i)
+-    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
+-    ,.mem_exception_e2_i(writeback_mem_exception_i)
+-    ,.mul_result_e2_i(writeback_mul_value_i)
+-
+-    // Execution stage 2
+-    ,.load_e2_o(pipe1_load_e2_w)
+-    ,.mul_e2_o(pipe1_mul_e2_w)
+-    ,.rd_e2_o(pipe1_rd_e2_w)
+-    ,.rd_bypass_e2_o(pipe1_rd_bypass_e2_w)
+-    ,.result_e2_o(pipe1_result_e2_w)
+-
+-    ,.stall_o(pipe1_stall_raw_w)
+-    ,.squash_e1_e2_o(pipe1_squash_e1_e2_w)
+-    ,.squash_e1_e2_i(pipe0_squash_e1_e2_w)
+-    ,.squash_wb_i(pipe0_squash_e1_e2_w)
+-
+-    // Out of pipe: Divide Result
+-    ,.div_complete_i(writeback_div_valid_i)
+-    ,.div_result_i(writeback_div_value_i)
+-
+-    // Commit
+-    ,.valid_wb_o(pipe1_valid_wb_w)
+-    ,.csr_wb_o()
+-    ,.rd_wb_o(pipe1_rd_wb_w)
+-    ,.rd_bypass_wb_o(pipe1_rd_bypass_wb_w)
+-    ,.result_wb_o(pipe1_result_wb_w)
+-    ,.pc_wb_o(pipe1_pc_wb_w)
+-    ,.opcode_wb_o(pipe1_opc_wb_w)
+-    ,.operand_ra_wb_o(pipe1_ra_val_wb_w)
+-    ,.operand_rb_wb_o(pipe1_rb_val_wb_w)
+-    ,.exception_wb_o(pipe1_exception_wb_w)
+-    ,.csr_write_wb_o()
+-    ,.csr_waddr_wb_o()
+-    ,.csr_wdata_wb_o()
+-);
+-
+-assign exec1_hold_o = stall_w;
+-
+-assign csr_writeback_exception_o      = pipe0_exception_wb_w | pipe1_exception_wb_w;
+-assign csr_writeback_exception_pc_o   = (|pipe0_exception_wb_w) ? pipe0_pc_wb_w     : pipe1_pc_wb_w;
+-assign csr_writeback_exception_addr_o = (|pipe0_exception_wb_w) ? pipe0_result_wb_w : pipe1_result_wb_w;
+-
+-//-------------------------------------------------------------
+-// Branch predictor info
+-//-------------------------------------------------------------
+-// This info is used to learn future prediction, and to correct 
+-// BTB, BHT, GShare, RAS indexes on mispredictions.
+-assign branch_info_request_o      = mispredicted_r;
+-assign branch_info_is_taken_o     = (pipe1_branch_e1_w & branch_exec1_is_taken_i)     | (pipe0_branch_e1_w & branch_exec0_is_taken_i);
+-assign branch_info_is_not_taken_o = (pipe1_branch_e1_w & branch_exec1_is_not_taken_i) | (pipe0_branch_e1_w & branch_exec0_is_not_taken_i);
+-assign branch_info_is_call_o      = (pipe1_branch_e1_w & branch_exec1_is_call_i)      | (pipe0_branch_e1_w & branch_exec0_is_call_i);
+-assign branch_info_is_ret_o       = (pipe1_branch_e1_w & branch_exec1_is_ret_i)       | (pipe0_branch_e1_w & branch_exec0_is_ret_i);
+-assign branch_info_is_jmp_o       = (pipe1_branch_e1_w & branch_exec1_is_jmp_i)       | (pipe0_branch_e1_w & branch_exec0_is_jmp_i);
+-assign branch_info_source_o       = (pipe1_branch_e1_w & branch_exec1_request_i)      ? branch_exec1_source_i : branch_exec0_source_i;
+-assign branch_info_pc_o           = (pipe1_branch_e1_w & branch_exec1_request_i)      ? branch_exec1_pc_i     : branch_exec0_pc_i;
+-
+-//-------------------------------------------------------------
+-// Blocking events (division, CSR unit access)
+-//-------------------------------------------------------------
+-reg div_pending_q;
+-reg csr_pending_q;
+-
+-// Division operations take 2 - 34 cycles and stall
+-// the pipeline (complete out-of-pipe) until completed.
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    div_pending_q <= 1'b0;
+-else if (pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w)
+-    div_pending_q <= 1'b0;
+-else if (div_opcode_valid_o && issue_a_div_w)
+-    div_pending_q <= 1'b1;
+-else if (writeback_div_valid_i)
+-    div_pending_q <= 1'b0;
+-
+-// CSR operations are infrequent - avoid any complications of pipelining them.
+-// These only take a 2-3 cycles anyway and may result in a pipe flush (e.g. ecall, ebreak..).
+-always @ (posedge clk_i or posedge rst_i)
+-if (rst_i)
+-    csr_pending_q <= 1'b0;
+-else if (pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w)
+-    csr_pending_q <= 1'b0;
+-else if (csr_opcode_valid_o && issue_a_csr_w)
+-    csr_pending_q <= 1'b1;
+-else if (pipe0_csr_wb_w)
+-    csr_pending_q <= 1'b0;
+-
+-assign squash_w = pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w;
+-
+-//-------------------------------------------------------------
+-// Issue / scheduling logic
+-//-------------------------------------------------------------
+-reg [31:0] scoreboard_r;
+-reg        pipe1_mux_lsu_r;
+-reg        pipe1_mux_mul_r;
+-
+-// Check instructions can be issued in the second execution unit
+-wire pipe1_ok_w      = issue_b_exec_w | issue_b_branch_w | issue_b_lsu_w | issue_b_mul_w;
+-
+-// Is this combination of instructions possible to execute concurrently.
+-// This excludes result dependencies which may also block secondary execution.
+-wire dual_issue_ok_w =   enable_dual_issue_w &&  // Second pipe switched on
+-                         pipe1_ok_w &&           // Instruction 2 is possible on second exec unit
+-                        (((issue_a_exec_w | issue_a_lsu_w | issue_a_mul_w) && issue_b_exec_w)   ||
+-                         ((issue_a_exec_w | issue_a_lsu_w | issue_a_mul_w) && issue_b_branch_w) ||
+-                         ((issue_a_exec_w | issue_a_mul_w) && issue_b_lsu_w)                    ||
+-                         ((issue_a_exec_w | issue_a_lsu_w) && issue_b_mul_w)
+-                         ) && ~take_interrupt_i;
+-
+-always @ *
+-begin
+-    opcode_a_issue_r     = 1'b0;
+-    opcode_b_issue_r     = 1'b0;
+-    opcode_a_accept_r    = 1'b0;
+-    opcode_b_accept_r    = 1'b0;
+-    scoreboard_r         = 32'b0;
+-    pipe1_mux_lsu_r      = 1'b0;
+-    pipe1_mux_mul_r      = 1'b0;
+-
+-    // Execution units with >= 2 cycle latency
+-    if (SUPPORT_LOAD_BYPASS == 0)
+-    begin
+-        if (pipe0_load_e2_w)
+-            scoreboard_r[pipe0_rd_e2_w] = 1'b1;
+-        if (pipe1_load_e2_w)
+-            scoreboard_r[pipe1_rd_e2_w] = 1'b1;
+-    end
+-    if (SUPPORT_MUL_BYPASS == 0)
+-    begin
+-        if (pipe0_mul_e2_w)
+-            scoreboard_r[pipe0_rd_e2_w] = 1'b1;
+-        if (pipe1_mul_e2_w)
+-            scoreboard_r[pipe1_rd_e2_w] = 1'b1;
+-    end
+-
+-    // Execution units with >= 1 cycle latency (loads / multiply)
+-    if (pipe0_load_e1_w || (pipe0_mul_e1_w && !pipe0_early_mul_w))
+-        scoreboard_r[pipe0_rd_e1_w] = 1'b1;
+-    if (pipe1_load_e1_w || pipe1_mul_e1_w)
+-        scoreboard_r[pipe1_rd_e1_w] = 1'b1;
+-
+-    // Do not start multiply, division or CSR operation in the cycle after a load (leaving only ALU operations and branches)
+-    if ((pipe0_load_e1_w || pipe0_store_e1_w || pipe1_load_e1_w || pipe1_store_e1_w ) && (issue_a_mul_w || issue_a_div_w || issue_a_csr_w))
+-        scoreboard_r = 32'hFFFFFFFF;
+-
+-    // Stall - no issues...
+-    if (lsu_stall_i || stall_w || div_pending_q || csr_pending_q)
+-        ;
+-    // Primary slot (lsu, branch, alu, mul, div, csr)
+-    else if (opcode_a_valid_r &&
+-        !(scoreboard_r[issue_a_ra_idx_w] || 
+-          scoreboard_r[issue_a_rb_idx_w] ||
+-          scoreboard_r[issue_a_rd_idx_w]))
+-    begin
+-        opcode_a_issue_r  = 1'b1;
+-        opcode_a_accept_r = 1'b1;
+-
+-        if (opcode_a_accept_r && issue_a_sb_alloc_w && (|issue_a_rd_idx_w))
+-            scoreboard_r[issue_a_rd_idx_w] = 1'b1;
+-    end
+-
+-    // Stall - no issues...
+-    if (lsu_stall_i || stall_w || div_pending_q || csr_pending_q)
+-        ;
+-    // Secondary Slot (lsu, branch, alu, mul)
+-    else if (dual_issue_ok_w && opcode_b_valid_r && opcode_a_accept_r &&
+-        !(scoreboard_r[issue_b_ra_idx_w] || 
+-          scoreboard_r[issue_b_rb_idx_w] ||
+-          scoreboard_r[issue_b_rd_idx_w]))
+-    begin
+-        opcode_b_issue_r  = 1'b1;
+-        opcode_b_accept_r = 1'b1;
+-        pipe1_mux_lsu_r   = issue_b_lsu_w;
+-        pipe1_mux_mul_r   = issue_b_mul_w;
+-
+-        if (opcode_b_accept_r && issue_b_sb_alloc_w && (|issue_b_rd_idx_w))
+-            scoreboard_r[issue_b_rd_idx_w] = 1'b1;
+-    end    
+-    // Schedule from stable packet/class/hazards first. Late cancellation only
+-    // masks the final fire/accept strobes, not the classifier or scoreboard.
+-    if (branch_csr_request_i || squash_w)
+-    begin
+-        opcode_a_issue_r  = 1'b0;
+-        opcode_b_issue_r  = 1'b0;
+-        opcode_a_accept_r = 1'b0;
+-        opcode_b_accept_r = 1'b0;
+-        pipe1_mux_lsu_r   = 1'b0;
+-        pipe1_mux_mul_r   = 1'b0;
+-    end
+-
+-end
+-
+-assign lsu_opcode_valid_o   = (pipe1_mux_lsu_r ? opcode_b_issue_r : opcode_a_issue_r) & ~take_interrupt_i;
+-assign exec0_opcode_valid_o = opcode_a_issue_r;
+-assign mul_opcode_valid_o   = enable_muldiv_w & (pipe1_mux_mul_r ? opcode_b_issue_r : opcode_a_issue_r);
+-assign div_opcode_valid_o   = enable_muldiv_w & (opcode_a_issue_r);
+-// Preserve the original IRQ-inhibit semantics even on a cancelled packet.
+-assign interrupt_inhibit_o  = csr_pending_q ||
+-    (slot0_valid_r ? fetch0_instr_csr_i : fetch1_instr_csr_i);
+-
+-assign exec1_opcode_valid_o = opcode_b_issue_r;
+-
+-assign dual_issue_w         = opcode_b_issue_r & opcode_b_accept_r & ~take_interrupt_i;
+-assign single_issue_w       = (opcode_a_issue_r & opcode_a_accept_r) & ~dual_issue_w & ~take_interrupt_i;
+-
+-assign fetch0_accept_o      = ((slot0_valid_r & opcode_a_accept_r) | slot1_valid_r) & ~take_interrupt_i;
+-assign fetch1_accept_o      = ((slot1_valid_r & opcode_a_accept_r) | (opcode_b_accept_r)) & ~take_interrupt_i;
+-
+-assign stall_w              = pipe0_stall_raw_w | pipe1_stall_raw_w;
+-
+-//-------------------------------------------------------------
+-// Register File
+-//------------------------------------------------------------- 
+-wire [31:0] issue_a_ra_value_w;
+-wire [31:0] issue_a_rb_value_w;
+-wire [31:0] issue_b_ra_value_w;
+-wire [31:0] issue_b_rb_value_w;
+-
+-// Speculative operand reads do not issue another instruction. Both fetch slots
+-// are registered already; keep PC[2] out of the native RAM address path.
+-localparam PARALLEL_OPERAND_READ = !SUPPORT_DUAL_ISSUE && !SUPPORT_REGFILE_XILINX;
+-wire [4:0] rf_ra0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[19:15] : issue_a_ra_idx_w;
+-wire [4:0] rf_rb0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[24:20] : issue_a_rb_idx_w;
+-wire [31:0] raw_upper_ra_w, raw_upper_rb_w;
+-generate
+-if (PARALLEL_OPERAND_READ) begin: g_parallel_read
+-    triha_regfile #(.SUPPORT_REGFILE_XILINX(0), .SUPPORT_DUAL_ISSUE(0)) u_upper (
+-        .clk_i(clk_i), .rst_i(rst_i),
+-        .rd0_i(pipe0_rd_wb_w), .rd0_value_i(pipe0_result_wb_w),
+-        .rd1_i(pipe1_rd_wb_w), .rd1_value_i(pipe1_result_wb_w),
+-        .ra0_i(fetch1_instr_i[19:15]), .rb0_i(fetch1_instr_i[24:20]),
+-        .ra1_i(5'b0), .rb1_i(5'b0),
+-        .ra0_value_o(raw_upper_ra_w), .rb0_value_o(raw_upper_rb_w),
+-        .ra1_value_o(), .rb1_value_o()
+-    );
+-end else begin: g_no_parallel_read
+-    assign raw_upper_ra_w = 32'b0;
+-    assign raw_upper_rb_w = 32'b0;
+-end
+-endgenerate
+-
+-// Original priority: WB0, WB1, E2-0, E2-1, E1-0, E1-1, then architectural x0.
+-// All dependencies are explicit function inputs for complete sensitivity.
+-function [31:0] forward_raw_operand;
+-    input [4:0] index;
+-    input [31:0] rf_data;
+-    input [29:0] tags;
+-    input [191:0] values;
+-    reg [31:0] value;
+-    reg [5:0] hit;
+-    reg [5:0] select;
+-    integer source;
+-    begin
+-        hit = 6'b0;
+-        for (source=0; source<6; source=source+1)
+-            if (tags[source*5 +: 5] == index)
+-                hit[source] = 1'b1;
+-        for (source=0; source<6; source=source+1)
+-            select[source] = hit[source] & ~(|(hit & (6'b111111 << (source+1))));
+-        // At most one known select bit is set. A case transfers X/Z data
+-        // unchanged, including when an earlier matching source contains Z.
+-        case (select)
+-            6'b000001: value = values[31:0];
+-            6'b000010: value = values[63:32];
+-            6'b000100: value = values[95:64];
+-            6'b001000: value = values[127:96];
+-            6'b010000: value = values[159:128];
+-            6'b100000: value = values[191:160];
+-            default: value = rf_data;
+-        endcase
+-        if (index == 5'b0)
+-            value = 32'b0;
+-        forward_raw_operand = value;
+-    end
+-endfunction
+-wire [29:0] raw_bypass_tags_w = {pipe1_rd_e1_w,pipe0_rd_e1_w,
+-    pipe1_rd_bypass_e2_w,pipe0_rd_bypass_e2_w,pipe1_rd_bypass_wb_w,pipe0_rd_bypass_wb_w};
+-wire [191:0] raw_bypass_values_w = {writeback_exec1_value_i,pipe0_forward_e1_w,
+-    pipe1_result_e2_w,pipe0_result_e2_w,pipe1_result_wb_w,pipe0_result_wb_w};
+-wire [31:0] raw_lower_ra_w = forward_raw_operand(fetch0_instr_i[19:15],issue_a_ra_value_w,
+-    raw_bypass_tags_w,raw_bypass_values_w);
+-wire [31:0] raw_lower_rb_w = forward_raw_operand(fetch0_instr_i[24:20],issue_a_rb_value_w,
+-    raw_bypass_tags_w,raw_bypass_values_w);
+-wire [31:0] raw_upper_forward_ra_w = forward_raw_operand(fetch1_instr_i[19:15],raw_upper_ra_w,
+-    raw_bypass_tags_w,raw_bypass_values_w);
+-wire [31:0] raw_upper_forward_rb_w = forward_raw_operand(fetch1_instr_i[24:20],raw_upper_rb_w,
+-    raw_bypass_tags_w,raw_bypass_values_w);
+-
+-
+-// Register file: 2W4R
+-triha_regfile
+-#(
+-     .SUPPORT_REGFILE_XILINX(SUPPORT_REGFILE_XILINX)
+-    ,.SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)
+-)
+-u_regfile
+-(
+-    .clk_i(clk_i),
+-    .rst_i(rst_i),
+-
+-    // Write ports
+-    .rd0_i(pipe0_rd_wb_w),
+-    .rd0_value_i(pipe0_result_wb_w),
+-    .rd1_i(pipe1_rd_wb_w),
+-    .rd1_value_i(pipe1_result_wb_w),
+-
+-    // Read ports
+-    .ra0_i(rf_ra0_w),
+-    .rb0_i(rf_rb0_w),
+-    .ra0_value_o(issue_a_ra_value_w),
+-    .rb0_value_o(issue_a_rb_value_w),
+-
+-    .ra1_i(issue_b_ra_idx_w),
+-    .rb1_i(issue_b_rb_idx_w),
+-    .ra1_value_o(issue_b_ra_value_w),
+-    .rb1_value_o(issue_b_rb_value_w)    
+-);
+-
+-//-------------------------------------------------------------
+-// Issue Slot 0
+-//------------------------------------------------------------- 
+-assign opcode0_opcode_o = opcode_a_r;
+-assign opcode0_pc_o     = opcode_a_pc_r;
+-assign opcode0_rd_idx_o = issue_a_rd_idx_w;
+-assign opcode0_ra_idx_o = issue_a_ra_idx_w;
+-assign opcode0_rb_idx_o = issue_a_rb_idx_w;
+-assign opcode0_invalid_o= 1'b0; 
+-
+-reg [31:0] issue_a_ra_value_r;
+-reg [31:0] issue_a_rb_value_r;
+-
+-always @ *
+-begin
+-    // NOTE: Newest version of operand takes priority
+-    issue_a_ra_value_r = issue_a_ra_value_w;
+-    issue_a_rb_value_r = issue_a_rb_value_w;
+-
+-    // Bypass - WB
+-    if (pipe0_rd_bypass_wb_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = pipe0_result_wb_w;
+-    if (pipe0_rd_bypass_wb_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = pipe0_result_wb_w;
+-
+-    if (pipe1_rd_bypass_wb_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = pipe1_result_wb_w;
+-    if (pipe1_rd_bypass_wb_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = pipe1_result_wb_w;
+-
+-    // Bypass - E2
+-    if (pipe0_rd_bypass_e2_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = pipe0_result_e2_w;
+-    if (pipe0_rd_bypass_e2_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = pipe0_result_e2_w;
+-
+-    if (pipe1_rd_bypass_e2_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = pipe1_result_e2_w;
+-    if (pipe1_rd_bypass_e2_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = pipe1_result_e2_w;
+-
+-    // Bypass - E1
+-    if (pipe0_rd_e1_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = pipe0_forward_e1_w;
+-    if (pipe0_rd_e1_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = pipe0_forward_e1_w;
+-
+-    if (pipe1_rd_e1_w == issue_a_ra_idx_w)
+-        issue_a_ra_value_r = writeback_exec1_value_i;
+-    if (pipe1_rd_e1_w == issue_a_rb_idx_w)
+-        issue_a_rb_value_r = writeback_exec1_value_i;
+-
+-    // Reg 0 source
+-    if (issue_a_ra_idx_w == 5'b0)
+-        issue_a_ra_value_r = 32'b0;
+-    if (issue_a_rb_idx_w == 5'b0)
+-        issue_a_rb_value_r = 32'b0;
+-    if (PARALLEL_OPERAND_READ) begin
+-        issue_a_ra_value_r = raw_upper_forward_ra_w;
+-        issue_a_rb_value_r = raw_upper_forward_rb_w;
+-        if (payload0_selected_w) begin
+-            issue_a_ra_value_r = raw_lower_ra_w;
+-            issue_a_rb_value_r = raw_lower_rb_w;
+-        end
+-    end
+-end
+-
+-assign opcode0_ra_operand_o = issue_a_ra_value_r;
+-assign opcode0_rb_operand_o = issue_a_rb_value_r;
+-
+-//-------------------------------------------------------------
+-// Issue Slot 1
+-//------------------------------------------------------------- 
+-assign opcode1_opcode_o = opcode_b_r;
+-assign opcode1_pc_o     = opcode_b_pc_r;
+-assign opcode1_rd_idx_o = issue_b_rd_idx_w;
+-assign opcode1_ra_idx_o = issue_b_ra_idx_w;
+-assign opcode1_rb_idx_o = issue_b_rb_idx_w;
+-assign opcode1_invalid_o= 1'b0;
+-
+-reg [31:0] issue_b_ra_value_r;
+-reg [31:0] issue_b_rb_value_r;
+-
+-always @ *
+-begin
+-    // NOTE: Newest version of operand takes priority
+-    issue_b_ra_value_r = issue_b_ra_value_w;
+-    issue_b_rb_value_r = issue_b_rb_value_w;
+-
+-    // Bypass - WB
+-    if (pipe0_rd_bypass_wb_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = pipe0_result_wb_w;
+-    if (pipe0_rd_bypass_wb_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = pipe0_result_wb_w;
+-
+-    if (pipe1_rd_bypass_wb_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = pipe1_result_wb_w;
+-    if (pipe1_rd_bypass_wb_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = pipe1_result_wb_w;
+-
+-    // Bypass - E2
+-    if (pipe0_rd_bypass_e2_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = pipe0_result_e2_w;
+-    if (pipe0_rd_bypass_e2_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = pipe0_result_e2_w;
+-
+-    if (pipe1_rd_bypass_e2_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = pipe1_result_e2_w;
+-    if (pipe1_rd_bypass_e2_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = pipe1_result_e2_w;
+-
+-    // Bypass - E1
+-    if (pipe0_rd_e1_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = pipe0_forward_e1_w;
+-    if (pipe0_rd_e1_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = pipe0_forward_e1_w;
+-
+-    if (pipe1_rd_e1_w == issue_b_ra_idx_w)
+-        issue_b_ra_value_r = writeback_exec1_value_i;
+-    if (pipe1_rd_e1_w == issue_b_rb_idx_w)
+-        issue_b_rb_value_r = writeback_exec1_value_i;
+-
+-    // Reg 0 source
+-    if (issue_b_ra_idx_w == 5'b0)
+-        issue_b_ra_value_r = 32'b0;
+-    if (issue_b_rb_idx_w == 5'b0)
+-        issue_b_rb_value_r = 32'b0;
+-end
+-
+-assign opcode1_ra_operand_o = issue_b_ra_value_r;
+-assign opcode1_rb_operand_o = issue_b_rb_value_r;
+-
+-// synthesis translate_off
+-// When an instruction can actually issue, speculative data tags must equal
+-// the original control/commit tags. No control or write-port uses bypass tags.
+-always @(posedge clk_i) begin
+-    if (!rst_i && (opcode_a_issue_r || opcode_b_issue_r)) begin
+-        if ({pipe0_rd_e2_w,pipe0_rd_wb_w,pipe1_rd_e2_w,pipe1_rd_wb_w} !==
+-            {pipe0_rd_bypass_e2_w,pipe0_rd_bypass_wb_w,pipe1_rd_bypass_e2_w,pipe1_rd_bypass_wb_w})
+-            $fatal(1,"BYPASS_TAG_FAIL actual_issue_tag_mismatch");
+-    end
+-end
+-// synthesis translate_on
+-
+-
+-//-------------------------------------------------------------
+-// Load store unit
+-//-------------------------------------------------------------
+-assign lsu_opcode_opcode_o      = pipe1_mux_lsu_r ? opcode1_opcode_o     : opcode0_opcode_o;
+-assign lsu_opcode_pc_o          = pipe1_mux_lsu_r ? opcode1_pc_o         : opcode0_pc_o;
+-assign lsu_opcode_rd_idx_o      = pipe1_mux_lsu_r ? opcode1_rd_idx_o     : opcode0_rd_idx_o;
+-assign lsu_opcode_ra_idx_o      = pipe1_mux_lsu_r ? opcode1_ra_idx_o     : opcode0_ra_idx_o;
+-assign lsu_opcode_rb_idx_o      = pipe1_mux_lsu_r ? opcode1_rb_idx_o     : opcode0_rb_idx_o;
+-assign lsu_opcode_ra_operand_o  = pipe1_mux_lsu_r ? opcode1_ra_operand_o : opcode0_ra_operand_o;
+-assign lsu_opcode_rb_operand_o  = pipe1_mux_lsu_r ? opcode1_rb_operand_o : opcode0_rb_operand_o;
+-assign lsu_opcode_invalid_o     = 1'b0;
+-
+-//-------------------------------------------------------------
+-// Multiply
+-//-------------------------------------------------------------
+-assign mul_opcode_opcode_o      = pipe1_mux_mul_r ? opcode1_opcode_o     : opcode0_opcode_o;
+-assign mul_opcode_pc_o          = pipe1_mux_mul_r ? opcode1_pc_o         : opcode0_pc_o;
+-assign mul_opcode_rd_idx_o      = pipe1_mux_mul_r ? opcode1_rd_idx_o     : opcode0_rd_idx_o;
+-assign mul_opcode_ra_idx_o      = pipe1_mux_mul_r ? opcode1_ra_idx_o     : opcode0_ra_idx_o;
+-assign mul_opcode_rb_idx_o      = pipe1_mux_mul_r ? opcode1_rb_idx_o     : opcode0_rb_idx_o;
+-assign mul_opcode_ra_operand_o  = pipe1_mux_mul_r ? opcode1_ra_operand_o : opcode0_ra_operand_o;
+-assign mul_opcode_rb_operand_o  = pipe1_mux_mul_r ? opcode1_rb_operand_o : opcode0_rb_operand_o;
+-assign mul_opcode_invalid_o     = 1'b0;
+-
+-//-------------------------------------------------------------
+-// CSR unit
+-//-------------------------------------------------------------
+-assign csr_opcode_valid_o       = opcode_a_issue_r & ~take_interrupt_i;
+-assign csr_opcode_opcode_o      = opcode0_opcode_o;
+-assign csr_opcode_pc_o          = opcode0_pc_o;
+-assign csr_opcode_rd_idx_o      = opcode0_rd_idx_o;
+-assign csr_opcode_ra_idx_o      = opcode0_ra_idx_o;
+-assign csr_opcode_rb_idx_o      = opcode0_rb_idx_o;
+-assign csr_opcode_ra_operand_o  = opcode0_ra_operand_o;
+-assign csr_opcode_rb_operand_o  = opcode0_rb_operand_o;
+-assign csr_opcode_invalid_o     = issue_a_invalid_w;
+-
+-//-------------------------------------------------------------
+-// Checker Interface
+-//-------------------------------------------------------------
+-`ifdef verilator
+-biriscv_trace_sim
+-u_pipe0_dec0_verif
+-(
+-     .valid_i(pipe0_valid_wb_w)
+-    ,.pc_i(pipe0_pc_wb_w)
+-    ,.opcode_i(pipe0_opc_wb_w)
+-);
+-
+-wire [4:0] v_pipe0_rs1_w = pipe0_opc_wb_w[19:15];
+-wire [4:0] v_pipe0_rs2_w = pipe0_opc_wb_w[24:20];
+-
+-function [0:0] complete_valid0; /*verilator public*/
+-begin
+-    complete_valid0 = pipe0_valid_wb_w;
+-end
+-endfunction
+-function [31:0] complete_pc0; /*verilator public*/
+-begin
+-    complete_pc0 = pipe0_pc_wb_w;
+-end
+-endfunction
+-function [31:0] complete_opcode0; /*verilator public*/
+-begin
+-    complete_opcode0 = pipe0_opc_wb_w;
+-end
+-endfunction
+-function [4:0] complete_ra0; /*verilator public*/
+-begin
+-    complete_ra0 = v_pipe0_rs1_w;
+-end
+-endfunction
+-function [4:0] complete_rb0; /*verilator public*/
+-begin
+-    complete_rb0 = v_pipe0_rs2_w;
+-end
+-endfunction
+-function [4:0] complete_rd0; /*verilator public*/
+-begin
+-    complete_rd0 = pipe0_rd_wb_w;
+-end
+-endfunction
+-function [31:0] complete_ra_val0; /*verilator public*/
+-begin
+-    complete_ra_val0 = pipe0_ra_val_wb_w;
+-end
+-endfunction
+-function [31:0] complete_rb_val0; /*verilator public*/
+-begin
+-    complete_rb_val0 = pipe0_rb_val_wb_w;
+-end
+-endfunction
+-function [31:0] complete_rd_val0; /*verilator public*/
+-begin
+-    if (|pipe0_rd_wb_w)
+-        complete_rd_val0 = pipe0_result_wb_w;
+-    else
+-        complete_rd_val0 = 32'b0;
+-end
+-endfunction
+-
+-biriscv_trace_sim
+-u_pipe0_dec1_verif
+-(
+-     .valid_i(pipe1_valid_wb_w)
+-    ,.pc_i(pipe1_pc_wb_w)
+-    ,.opcode_i(pipe1_opc_wb_w)
+-);
+-
+-wire [4:0] v_pipe1_rs1_w = pipe1_opc_wb_w[19:15];
+-wire [4:0] v_pipe1_rs2_w = pipe1_opc_wb_w[24:20];
+-
+-function [0:0] complete_valid1; /*verilator public*/
+-begin
+-    complete_valid1 = pipe1_valid_wb_w;
+-end
+-endfunction
+-function [31:0] complete_pc1; /*verilator public*/
+-begin
+-    complete_pc1 = pipe1_pc_wb_w;
+-end
+-endfunction
+-function [31:0] complete_opcode1; /*verilator public*/
+-begin
+-    complete_opcode1 = pipe1_opc_wb_w;
+-end
+-endfunction
+-function [4:0] complete_ra1; /*verilator public*/
+-begin
+-    complete_ra1 = v_pipe1_rs1_w;
+-end
+-endfunction
+-function [4:0] complete_rb1; /*verilator public*/
+-begin
+-    complete_rb1 = v_pipe1_rs2_w;
+-end
+-endfunction
+-function [4:0] complete_rd1; /*verilator public*/
+-begin
+-    complete_rd1 = pipe1_rd_wb_w;
+-end
+-endfunction
+-function [31:0] complete_ra_val1; /*verilator public*/
+-begin
+-    complete_ra_val1 = pipe1_ra_val_wb_w;
+-end
+-endfunction
+-function [31:0] complete_rb_val1; /*verilator public*/
+-begin
+-    complete_rb_val1 = pipe1_rb_val_wb_w;
+-end
+-endfunction
+-function [31:0] complete_rd_val1; /*verilator public*/
+-begin
+-    if (|pipe1_rd_wb_w)
+-        complete_rd_val1 = pipe1_result_wb_w;
+-    else
+-        complete_rd_val1 = 32'b0;
+-end
+-endfunction
+-function [5:0] complete_exception; /*verilator public*/
+-begin
+-    complete_exception = pipe0_exception_wb_w | pipe1_exception_wb_w;
+-end
+-endfunction
+-`endif
+-
+-
+-endmodule
++//-----------------------------------------------------------------
++//                         biRISC-V CPU
++//                            V0.8.1
++//                     Ultra-Embedded.com
++//                     Copyright 2019-2020
++//
++//                   admin@ultra-embedded.com
++//
++//                     License: Apache 2.0
++//-----------------------------------------------------------------
++// Copyright 2020 Ultra-Embedded.com
++// 
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++// 
++//     http://www.apache.org/licenses/LICENSE-2.0
++// 
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++//-----------------------------------------------------------------
++
++// TriHa maintained issue derivative; see ADAPTATIONS.json.
++module triha_issue
++//-----------------------------------------------------------------
++// Params
++//-----------------------------------------------------------------
++#(
++     parameter SUPPORT_MULDIV   = 1
++    ,parameter SUPPORT_DUAL_ISSUE = 1
++    ,parameter SUPPORT_LOAD_BYPASS = 1
++    ,parameter SUPPORT_MUL_BYPASS = 1
++    ,parameter EARLY_MUL_BYPASS = 1
++    ,parameter SUPPORT_REGFILE_XILINX = 0
++)
++//-----------------------------------------------------------------
++// Ports
++//-----------------------------------------------------------------
++(
++    // Inputs
++     input           clk_i
++    ,input           rst_i
++    ,input           fetch0_valid_i
++    ,input  [ 31:0]  fetch0_instr_i
++    ,input [8:0] fetch0_alu_decode_i
++    ,input  [ 31:0]  fetch0_pc_i
++    ,input           fetch0_fault_fetch_i
++    ,input           fetch0_fault_page_i
++    ,input           fetch0_instr_exec_i
++    ,input           fetch0_instr_lsu_i
++    ,input           fetch0_instr_branch_i
++    ,input           fetch0_instr_mul_i
++    ,input           fetch0_instr_div_i
++    ,input           fetch0_instr_csr_i
++    ,input           fetch0_instr_rd_valid_i
++    ,input           fetch0_instr_invalid_i
++    ,input           fetch1_valid_i
++    ,input  [ 31:0]  fetch1_instr_i
++    ,input [8:0] fetch1_alu_decode_i
++    ,input  [ 31:0]  fetch1_pc_i
++    ,input           fetch1_fault_fetch_i
++    ,input           fetch1_fault_page_i
++    ,input           fetch1_instr_exec_i
++    ,input           fetch1_instr_lsu_i
++    ,input           fetch1_instr_branch_i
++    ,input           fetch1_instr_mul_i
++    ,input           fetch1_instr_div_i
++    ,input           fetch1_instr_csr_i
++    ,input           fetch1_instr_rd_valid_i
++    ,input           fetch1_instr_invalid_i
++    ,input           branch_exec0_request_i
++    ,input           branch_exec0_is_taken_i
++    ,input           branch_exec0_is_not_taken_i
++    ,input  [ 31:0]  branch_exec0_source_i
++    ,input           branch_exec0_is_call_i
++    ,input           branch_exec0_is_ret_i
++    ,input           branch_exec0_is_jmp_i
++    ,input  [ 31:0]  branch_exec0_pc_i
++    ,input           branch_d_exec0_request_i
++    ,input  [ 31:0]  branch_d_exec0_pc_i
++    ,input  [  1:0]  branch_d_exec0_priv_i
++    ,input           branch_exec1_request_i
++    ,input           branch_exec1_is_taken_i
++    ,input           branch_exec1_is_not_taken_i
++    ,input  [ 31:0]  branch_exec1_source_i
++    ,input           branch_exec1_is_call_i
++    ,input           branch_exec1_is_ret_i
++    ,input           branch_exec1_is_jmp_i
++    ,input  [ 31:0]  branch_exec1_pc_i
++    ,input           branch_d_exec1_request_i
++    ,input  [ 31:0]  branch_d_exec1_pc_i
++    ,input  [  1:0]  branch_d_exec1_priv_i
++    ,input           branch_csr_request_i
++    ,input  [ 31:0]  branch_csr_pc_i
++    ,input  [  1:0]  branch_csr_priv_i
++    ,input  [ 31:0]  writeback_exec0_value_i
++    ,input  [ 31:0]  writeback_exec1_value_i
++    ,input           writeback_mem_valid_i
++    ,input  [ 31:0]  writeback_mem_value_i
++    ,input [31:0]   writeback_mem_bypass_i
++    ,input  [  5:0]  writeback_mem_exception_i
++    ,input  [ 31:0]  writeback_mul_value_i
++    ,input  [ 31:0]  writeback_mul_early_i
++    ,input           writeback_mul_early_valid_i
++    ,input           writeback_div_valid_i
++    ,input  [ 31:0]  writeback_div_value_i
++    ,input  [ 31:0]  csr_result_e1_value_i
++    ,input           csr_result_e1_write_i
++    ,input  [ 31:0]  csr_result_e1_wdata_i
++    ,input  [  5:0]  csr_result_e1_exception_i
++    ,input           lsu_stall_i
++    ,input           take_interrupt_i
++
++    // Outputs
++    ,output          fetch0_accept_o
++    ,output          fetch1_accept_o
++    ,output          branch_request_o
++    ,output [ 31:0]  branch_pc_o
++    ,output [  1:0]  branch_priv_o
++    ,output          branch_info_request_o
++    ,output          branch_info_is_taken_o
++    ,output          branch_info_is_not_taken_o
++    ,output [ 31:0]  branch_info_source_o
++    ,output          branch_info_is_call_o
++    ,output          branch_info_is_ret_o
++    ,output          branch_info_is_jmp_o
++    ,output [ 31:0]  branch_info_pc_o
++    ,output          exec0_opcode_valid_o
++    ,output          exec1_opcode_valid_o
++    ,output          lsu_opcode_valid_o
++    ,output          csr_opcode_valid_o
++    ,output          mul_opcode_valid_o
++    ,output          div_opcode_valid_o
++    ,output [ 31:0]  opcode0_opcode_o
++    ,output [8:0] opcode0_alu_decode_o
++    ,output [ 31:0]  opcode0_pc_o
++    ,output          opcode0_invalid_o
++    ,output [  4:0]  opcode0_rd_idx_o
++    ,output [  4:0]  opcode0_ra_idx_o
++    ,output [  4:0]  opcode0_rb_idx_o
++    ,output [ 31:0]  opcode0_ra_operand_o
++    ,output [ 31:0]  opcode0_rb_operand_o
++    ,output          opcode0_ra_zero_o
++    ,output          opcode0_rb_zero_o
++    ,output          opcode1_ra_zero_o
++    ,output          opcode1_rb_zero_o
++    ,output [ 31:0]  opcode1_opcode_o
++    ,output [8:0] opcode1_alu_decode_o
++    ,output [ 31:0]  opcode1_pc_o
++    ,output          opcode1_invalid_o
++    ,output [  4:0]  opcode1_rd_idx_o
++    ,output [  4:0]  opcode1_ra_idx_o
++    ,output [  4:0]  opcode1_rb_idx_o
++    ,output [ 31:0]  opcode1_ra_operand_o
++    ,output [ 31:0]  opcode1_rb_operand_o
++    ,output [ 31:0]  lsu_opcode_opcode_o
++    ,output [ 31:0]  lsu_opcode_pc_o
++    ,output          lsu_opcode_invalid_o
++    ,output [  4:0]  lsu_opcode_rd_idx_o
++    ,output [  4:0]  lsu_opcode_ra_idx_o
++    ,output [  4:0]  lsu_opcode_rb_idx_o
++    ,output [ 31:0]  lsu_opcode_ra_operand_o
++    ,output [ 31:0]  lsu_opcode_rb_operand_o
++    ,output [ 31:0]  mul_opcode_opcode_o
++    ,output [ 31:0]  mul_opcode_pc_o
++    ,output          mul_opcode_invalid_o
++    ,output [  4:0]  mul_opcode_rd_idx_o
++    ,output [  4:0]  mul_opcode_ra_idx_o
++    ,output [  4:0]  mul_opcode_rb_idx_o
++    ,output [ 31:0]  mul_opcode_ra_operand_o
++    ,output [ 31:0]  mul_opcode_rb_operand_o
++    ,output [ 31:0]  csr_opcode_opcode_o
++    ,output [ 31:0]  csr_opcode_pc_o
++    ,output          csr_opcode_invalid_o
++    ,output [  4:0]  csr_opcode_rd_idx_o
++    ,output [  4:0]  csr_opcode_ra_idx_o
++    ,output [  4:0]  csr_opcode_rb_idx_o
++    ,output [ 31:0]  csr_opcode_ra_operand_o
++    ,output [ 31:0]  csr_opcode_rb_operand_o
++    ,output          csr_writeback_write_o
++    ,output [ 11:0]  csr_writeback_waddr_o
++    ,output [ 31:0]  csr_writeback_wdata_o
++    ,output [  5:0]  csr_writeback_exception_o
++    ,output [ 31:0]  csr_writeback_exception_pc_o
++    ,output [ 31:0]  csr_writeback_exception_addr_o
++    ,output          exec0_hold_o
++    ,output          exec1_hold_o
++    ,output          mul_hold_o
++    ,output          interrupt_inhibit_o
++);
++
++
++
++`include "biriscv_defs.v"
++
++wire enable_dual_issue_w = SUPPORT_DUAL_ISSUE;
++wire enable_muldiv_w     = SUPPORT_MULDIV;
++wire enable_mul_bypass_w = SUPPORT_MUL_BYPASS;
++
++wire stall_w;
++wire squash_w;
++
++//-------------------------------------------------------------
++// PC
++//-------------------------------------------------------------
++wire        single_issue_w;
++wire        dual_issue_w;
++reg  [31:0] pc_x_q;
++reg   [1:0] priv_x_q;
++
++// Finish constant increments before the late redirect selection. Keep these
++// used nets so ADS does not merge redirect controls into the carry chain.
++wire [31:0] pc_plus4_w /* synthesis syn_keep=1 */;
++wire [31:0] pc_plus8_w;
++assign pc_plus4_w = pc_x_q + 32'd4;
++generate
++if (SUPPORT_DUAL_ISSUE) begin: g_pc_dual
++    wire [31:0] increment_w /* synthesis syn_keep=1 */;
++    assign increment_w = pc_x_q + 32'd8;
++    assign pc_plus8_w = increment_w;
++end else begin: g_pc_single
++    assign pc_plus8_w = 32'b0;
++end
++endgenerate
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    pc_x_q <= 32'b0;
++else if (branch_csr_request_i)
++    pc_x_q <= branch_csr_pc_i;
++else if (branch_d_exec1_request_i)
++    pc_x_q <= branch_d_exec1_pc_i;
++else if (branch_d_exec0_request_i)
++    pc_x_q <= branch_d_exec0_pc_i;
++else if (dual_issue_w)
++    pc_x_q <= pc_plus8_w;
++else if (single_issue_w)
++    pc_x_q <= pc_plus4_w;
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    priv_x_q <= `PRIV_MACHINE;
++else if (branch_csr_request_i)
++    priv_x_q <= branch_csr_priv_i;
++
++//-------------------------------------------------------------
++// Issue Select
++//-------------------------------------------------------------
++reg mispredicted_r;
++reg slot0_valid_r;
++reg slot1_valid_r;
++
++always @ *
++begin
++    mispredicted_r = 1'b0;
++    slot0_valid_r  = 1'b0;
++    slot1_valid_r  = 1'b0;
++
++    // Flush due to CSR branch
++    if (branch_csr_request_i || squash_w)
++    begin
++        slot0_valid_r  = 1'b0;
++        slot1_valid_r  = 1'b0;
++    end
++    // Word 0 valid and expected PC (word 1 may also be valid)
++    else if (fetch0_valid_i && {fetch0_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0})
++        slot0_valid_r  = 1'b1;
++    // Word 1 valid and expected PC
++    else if (fetch1_valid_i && {fetch1_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0})
++        slot1_valid_r  = 1'b1;
++    // Neither word is the expected PC - must be a branch misprediction
++    else if (fetch0_valid_i || fetch1_valid_i)
++        mispredicted_r = 1'b1;
++end
++
++// Branch request (CSR branch - ecall, xret, or branch misprediction)
++// Note: Correctly predicted branches are silent
++assign branch_request_o          = branch_csr_request_i | mispredicted_r;
++assign branch_pc_o               = branch_csr_request_i ? branch_csr_pc_i : pc_x_q;
++assign branch_priv_o             = branch_csr_request_i ? branch_csr_priv_i : priv_x_q;
++
++//-------------------------------------------------------------
++// Instruction Decoder
++//-------------------------------------------------------------
++// Queue outputs may cross packet boundaries. Select by actual PC match;
++// pairing additionally requires contiguous PCs and preserves all sidebands.
++wire payload0_selected_w;
++wire payload0_match_w = fetch0_valid_i &&
++    {fetch0_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
++wire payload1_match_w = fetch1_valid_i &&
++    {fetch1_pc_i[31:2], 2'b0} == {pc_x_q[31:2], 2'b0};
++// A valid secondary FIFO word is contiguous with the head, so bit2 differs.
++// Use relative word position for speculative payload selection; retain the
++// full address comparisons above as the execution-validity authority.
++assign payload0_selected_w = pc_x_q[2] == fetch0_pc_i[2];
++// synthesis translate_off
++always @(posedge clk_i) if (!rst_i && fetch1_valid_i) begin
++    if (fetch0_valid_i !== 1'b1 || fetch1_pc_i !== fetch0_pc_i + 32'd4)
++        $fatal(1,"ISSUE_FIFO_CONTRACT_FAIL secondary_is_not_contiguous");
++end
++// synthesis translate_on
++reg        opcode_a_valid_r;
++reg        opcode_b_valid_r;
++reg [1:0]  opcode_a_fault_r;
++reg [1:0]  opcode_b_fault_r;
++reg [31:0] opcode_a_r;
++reg [31:0] opcode_b_r;
++reg [31:0] opcode_a_pc_r;
++reg [31:0] opcode_b_pc_r;
++
++always @ *
++begin
++    opcode_a_valid_r = payload0_match_w || payload1_match_w;
++    opcode_b_valid_r = payload0_match_w && fetch1_valid_i && fetch1_pc_i == fetch0_pc_i + 32'd4;
++    opcode_a_r       = fetch1_instr_i;
++    opcode_a_pc_r    = fetch1_pc_i;
++    opcode_a_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
++    // Speculative B payload is independent of head-PC selection.
++    // opcode_b_valid_r and existing issue gates authorize consumption.
++    opcode_b_r       = fetch1_instr_i;
++    opcode_b_pc_r    = fetch1_pc_i;
++    opcode_b_fault_r = {fetch1_fault_page_i, fetch1_fault_fetch_i};
++
++    // Head may pair with the next contiguous queued instruction.
++    if (payload0_selected_w)
++    begin
++        opcode_a_r       = fetch0_instr_i;
++        opcode_a_pc_r    = fetch0_pc_i;
++        opcode_a_fault_r = {fetch0_fault_page_i, fetch0_fault_fetch_i};
++    end
++end
++
++wire [4:0] issue_a_ra_idx_w   = opcode_a_r[19:15];
++wire [4:0] issue_a_rb_idx_w   = opcode_a_r[24:20];
++wire [4:0] issue_a_rd_idx_w   = opcode_a_r[11:7];
++wire       issue_a_sb_alloc_w = (payload0_selected_w ? fetch0_instr_rd_valid_i : fetch1_instr_rd_valid_i);
++wire       issue_a_exec_w     = (payload0_selected_w ? fetch0_instr_exec_i     : fetch1_instr_exec_i);
++wire       issue_a_lsu_w      = (payload0_selected_w ? fetch0_instr_lsu_i      : fetch1_instr_lsu_i);
++wire       issue_a_branch_w   = (payload0_selected_w ? fetch0_instr_branch_i   : fetch1_instr_branch_i);
++wire       issue_a_mul_w      = (payload0_selected_w ? fetch0_instr_mul_i      : fetch1_instr_mul_i);
++wire       issue_a_div_w      = (payload0_selected_w ? fetch0_instr_div_i      : fetch1_instr_div_i);
++wire       issue_a_csr_w      = (payload0_selected_w ? fetch0_instr_csr_i      : fetch1_instr_csr_i);
++wire       issue_a_invalid_w  = (payload0_selected_w ? fetch0_instr_invalid_i  : fetch1_instr_invalid_i);
++
++
++wire [4:0] issue_b_ra_idx_w   = opcode_b_r[19:15];
++wire [4:0] issue_b_rb_idx_w   = opcode_b_r[24:20];
++wire [4:0] issue_b_rd_idx_w   = opcode_b_r[11:7];
++wire       issue_b_sb_alloc_w = fetch1_instr_rd_valid_i;
++wire       issue_b_exec_w     = fetch1_instr_exec_i;
++wire       issue_b_lsu_w      = fetch1_instr_lsu_i;
++wire       issue_b_branch_w   = fetch1_instr_branch_i;
++wire       issue_b_mul_w      = fetch1_instr_mul_i;
++wire       issue_b_div_w      = fetch1_instr_div_i;
++wire       issue_b_csr_w      = fetch1_instr_csr_i;
++wire       issue_b_invalid_w  = fetch1_instr_invalid_i;
++
++//-------------------------------------------------------------
++// Pipe0 - Status tracking
++//------------------------------------------------------------- 
++wire        pipe0_squash_e1_e2_w;
++wire        pipe1_squash_e1_e2_w;
++
++reg         opcode_a_issue_r;
++reg         opcode_a_accept_r;
++wire        pipe0_stall_raw_w;
++
++wire        pipe0_load_e1_w;
++wire        pipe0_store_e1_w;
++wire        pipe0_mul_e1_w;
++wire        pipe0_branch_e1_w;
++wire [4:0]  pipe0_rd_e1_w;
++
++wire [31:0] pipe0_pc_e1_w;
++wire [31:0] pipe0_opcode_e1_w;
++wire pipe0_mul_low_e1_w;
++// Reuse E1 forwarding for the existing low-word product. The registered E2
++// result still supplies architectural writeback; high products and dual issue
++// retain their original hazard policy.
++wire pipe0_early_mul_w = EARLY_MUL_BYPASS && SUPPORT_MUL_BYPASS &&
++    pipe0_mul_e1_w && writeback_mul_early_valid_i &&
++    pipe0_mul_low_e1_w;
++wire [31:0] pipe0_forward_e1_w = pipe0_early_mul_w ? writeback_mul_early_i : writeback_exec0_value_i;
++wire [31:0] pipe0_operand_ra_e1_w;
++wire [31:0] pipe0_operand_rb_e1_w;
++
++wire        pipe0_load_e2_w;
++wire        pipe0_mul_e2_w;
++wire [4:0]  pipe0_rd_e2_w;
++wire [4:0]  pipe0_rd_bypass_e2_w;
++wire [31:0] pipe0_result_e2_w;
++
++wire        pipe0_valid_wb_w;
++wire        pipe0_csr_wb_w;
++wire [4:0]  pipe0_rd_wb_w;
++wire [4:0]  pipe0_rd_bypass_wb_w;
++wire [31:0] pipe0_result_wb_w;
++wire [31:0] pipe0_pc_wb_w;
++wire [31:0] pipe0_opc_wb_w;
++wire [31:0] pipe0_ra_val_wb_w;
++wire [31:0] pipe0_rb_val_wb_w;
++wire [`EXCEPTION_W-1:0] pipe0_exception_wb_w;
++
++wire [`EXCEPTION_W-1:0] issue_a_fault_w = opcode_a_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
++                                          opcode_a_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
++
++triha_pipe_ctrl
++#( 
++     .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
++    ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
++)
++u_pipe0_ctrl
++(
++     .clk_i(clk_i)
++    ,.rst_i(rst_i)    
++
++    // Issue
++    ,.issue_valid_i(opcode_a_issue_r)
++    ,.issue_accept_i(opcode_a_accept_r)
++    ,.issue_stall_i(stall_w)
++    ,.issue_lsu_i(issue_a_lsu_w)
++    ,.issue_csr_i(issue_a_csr_w)
++    ,.issue_div_i(issue_a_div_w)
++    ,.issue_mul_i(issue_a_mul_w)
++    ,.issue_branch_i(issue_a_branch_w)
++    ,.issue_rd_valid_i(issue_a_sb_alloc_w)
++    ,.issue_rd_i(issue_a_rd_idx_w)
++    ,.issue_exception_i(issue_a_fault_w)
++    ,.issue_pc_i(opcode0_pc_o)
++    ,.issue_opcode_i(opcode0_opcode_o)
++    ,.issue_operand_ra_i(opcode0_ra_operand_o)
++    ,.issue_operand_rb_i(opcode0_rb_operand_o)
++    ,.issue_branch_taken_i(branch_d_exec0_request_i)
++    ,.issue_branch_target_i(branch_d_exec0_pc_i)
++    ,.take_interrupt_i(take_interrupt_i)
++
++    // Execution stage 1: ALU result
++    ,.alu_result_e1_i(writeback_exec0_value_i)
++    ,.csr_result_value_e1_i(csr_result_e1_value_i)
++    ,.csr_result_write_e1_i(csr_result_e1_write_i)
++    ,.csr_result_wdata_e1_i(csr_result_e1_wdata_i)
++    ,.csr_result_exception_e1_i(csr_result_e1_exception_i)
++
++    // Execution stage 1
++    ,.load_e1_o(pipe0_load_e1_w)
++    ,.store_e1_o(pipe0_store_e1_w)
++    ,.mul_e1_o(pipe0_mul_e1_w)
++    ,.mul_low_e1_o(pipe0_mul_low_e1_w)
++    ,.branch_e1_o(pipe0_branch_e1_w)
++    ,.rd_e1_o(pipe0_rd_e1_w)
++    ,.pc_e1_o(pipe0_pc_e1_w)
++    ,.opcode_e1_o(pipe0_opcode_e1_w)
++    ,.operand_ra_e1_o(pipe0_operand_ra_e1_w)
++    ,.operand_rb_e1_o(pipe0_operand_rb_e1_w)
++
++    // Execution stage 2: Other results
++    ,.mem_complete_i(writeback_mem_valid_i)
++    ,.mem_result_e2_i(writeback_mem_value_i)
++    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
++    ,.mem_exception_e2_i(writeback_mem_exception_i)
++    ,.mul_result_e2_i(writeback_mul_value_i)
++
++    // Execution stage 2
++    ,.load_e2_o(pipe0_load_e2_w)
++    ,.mul_e2_o(pipe0_mul_e2_w)
++    ,.rd_e2_o(pipe0_rd_e2_w)
++    ,.rd_bypass_e2_o(pipe0_rd_bypass_e2_w)
++    ,.result_e2_o(pipe0_result_e2_w)
++
++    ,.stall_o(pipe0_stall_raw_w)
++    ,.squash_e1_e2_o(pipe0_squash_e1_e2_w)
++    ,.squash_e1_e2_i(pipe1_squash_e1_e2_w)
++    ,.squash_wb_i(1'b0)
++
++    // Out of pipe: Divide Result
++    ,.div_complete_i(writeback_div_valid_i)
++    ,.div_result_i(writeback_div_value_i)
++
++    // Commit
++    ,.valid_wb_o(pipe0_valid_wb_w)
++    ,.csr_wb_o(pipe0_csr_wb_w)
++    ,.rd_wb_o(pipe0_rd_wb_w)
++    ,.rd_bypass_wb_o(pipe0_rd_bypass_wb_w)
++    ,.result_wb_o(pipe0_result_wb_w)
++    ,.pc_wb_o(pipe0_pc_wb_w)
++    ,.opcode_wb_o(pipe0_opc_wb_w)
++    ,.operand_ra_wb_o(pipe0_ra_val_wb_w)
++    ,.operand_rb_wb_o(pipe0_rb_val_wb_w)
++    ,.exception_wb_o(pipe0_exception_wb_w)
++    ,.csr_write_wb_o(csr_writeback_write_o)
++    ,.csr_waddr_wb_o(csr_writeback_waddr_o)
++    ,.csr_wdata_wb_o(csr_writeback_wdata_o)   
++);
++
++assign exec0_hold_o = stall_w;
++assign mul_hold_o   = stall_w;
++
++//-------------------------------------------------------------
++// Pipe1 - Status tracking
++//-------------------------------------------------------------
++reg         opcode_b_issue_r;
++reg         opcode_b_accept_r;
++wire        pipe1_stall_raw_w;
++
++wire        pipe1_load_e1_w;
++wire        pipe1_store_e1_w;
++wire        pipe1_mul_e1_w;
++wire        pipe1_branch_e1_w;
++wire [4:0]  pipe1_rd_e1_w;
++
++wire [31:0] pipe1_pc_e1_w;
++wire [31:0] pipe1_opcode_e1_w;
++wire pipe1_mul_low_e1_w;
++wire pipe1_early_mul_w = EARLY_MUL_BYPASS && SUPPORT_MUL_BYPASS &&
++    pipe1_mul_e1_w && writeback_mul_early_valid_i &&
++    pipe1_mul_low_e1_w;
++wire [31:0] pipe1_forward_e1_w = pipe1_early_mul_w ? writeback_mul_early_i : writeback_exec1_value_i;
++wire [31:0] pipe1_operand_ra_e1_w;
++wire [31:0] pipe1_operand_rb_e1_w;
++
++wire        pipe1_load_e2_w;
++wire        pipe1_mul_e2_w;
++wire [4:0]  pipe1_rd_e2_w;
++wire [4:0]  pipe1_rd_bypass_e2_w;
++wire [31:0] pipe1_result_e2_w;
++
++wire        pipe1_valid_wb_w;
++wire [4:0]  pipe1_rd_wb_w;
++wire [4:0]  pipe1_rd_bypass_wb_w;
++wire [31:0] pipe1_result_wb_w;
++wire [31:0] pipe1_pc_wb_w;
++wire [31:0] pipe1_opc_wb_w;
++wire [31:0] pipe1_ra_val_wb_w;
++wire [31:0] pipe1_rb_val_wb_w;
++wire [`EXCEPTION_W-1:0] pipe1_exception_wb_w;
++
++wire [`EXCEPTION_W-1:0] issue_b_fault_w = opcode_b_fault_r[0] ? `EXCEPTION_FAULT_FETCH:
++                                          opcode_b_fault_r[1] ? `EXCEPTION_PAGE_FAULT_INST: `EXCEPTION_W'b0;
++
++triha_pipe_ctrl
++#( 
++     .SUPPORT_LOAD_BYPASS(SUPPORT_LOAD_BYPASS)
++    ,.SUPPORT_MUL_BYPASS(SUPPORT_MUL_BYPASS)
++)
++u_pipe1_ctrl
++(
++     .clk_i(clk_i)
++    ,.rst_i(rst_i)
++
++    // Issue
++    ,.issue_valid_i(opcode_b_issue_r)
++    ,.issue_accept_i(opcode_b_accept_r)
++    ,.issue_stall_i(stall_w)
++    ,.issue_lsu_i(issue_b_lsu_w)
++    ,.issue_csr_i(1'b0)
++    ,.issue_div_i(1'b0)
++    ,.issue_mul_i(issue_b_mul_w)
++    ,.issue_branch_i(issue_b_branch_w)
++    ,.issue_rd_valid_i(issue_b_sb_alloc_w)
++    ,.issue_rd_i(issue_b_rd_idx_w)
++    ,.issue_exception_i(issue_b_fault_w)
++    ,.issue_pc_i(opcode1_pc_o)
++    ,.issue_opcode_i(opcode1_opcode_o)
++    ,.issue_operand_ra_i(opcode1_ra_operand_o)
++    ,.issue_operand_rb_i(opcode1_rb_operand_o)
++    ,.issue_branch_taken_i(branch_d_exec1_request_i)
++    ,.issue_branch_target_i(branch_d_exec1_pc_i)
++    ,.take_interrupt_i(take_interrupt_i)
++
++    // Execution stage 1: ALU, CSR result
++    ,.alu_result_e1_i(writeback_exec1_value_i)
++    ,.csr_result_value_e1_i(csr_result_e1_value_i)
++    ,.csr_result_write_e1_i(csr_result_e1_write_i)
++    ,.csr_result_wdata_e1_i(csr_result_e1_wdata_i)
++    ,.csr_result_exception_e1_i(csr_result_e1_exception_i)
++
++    // Execution stage 1
++    ,.load_e1_o(pipe1_load_e1_w)
++    ,.store_e1_o(pipe1_store_e1_w)
++    ,.mul_e1_o(pipe1_mul_e1_w)
++    ,.mul_low_e1_o(pipe1_mul_low_e1_w)
++    ,.branch_e1_o(pipe1_branch_e1_w)
++    ,.rd_e1_o(pipe1_rd_e1_w)
++    ,.pc_e1_o(pipe1_pc_e1_w)
++    ,.opcode_e1_o(pipe1_opcode_e1_w)
++    ,.operand_ra_e1_o(pipe1_operand_ra_e1_w)
++    ,.operand_rb_e1_o(pipe1_operand_rb_e1_w)
++
++    // Execution stage 2: Other results
++    ,.mem_complete_i(writeback_mem_valid_i)
++    ,.mem_result_e2_i(writeback_mem_value_i)
++    ,.mem_bypass_e2_i(writeback_mem_bypass_i)
++    ,.mem_exception_e2_i(writeback_mem_exception_i)
++    ,.mul_result_e2_i(writeback_mul_value_i)
++
++    // Execution stage 2
++    ,.load_e2_o(pipe1_load_e2_w)
++    ,.mul_e2_o(pipe1_mul_e2_w)
++    ,.rd_e2_o(pipe1_rd_e2_w)
++    ,.rd_bypass_e2_o(pipe1_rd_bypass_e2_w)
++    ,.result_e2_o(pipe1_result_e2_w)
++
++    ,.stall_o(pipe1_stall_raw_w)
++    ,.squash_e1_e2_o(pipe1_squash_e1_e2_w)
++    ,.squash_e1_e2_i(pipe0_squash_e1_e2_w)
++    ,.squash_wb_i(pipe0_squash_e1_e2_w)
++
++    // Out of pipe: Divide Result
++    ,.div_complete_i(writeback_div_valid_i)
++    ,.div_result_i(writeback_div_value_i)
++
++    // Commit
++    ,.valid_wb_o(pipe1_valid_wb_w)
++    ,.csr_wb_o()
++    ,.rd_wb_o(pipe1_rd_wb_w)
++    ,.rd_bypass_wb_o(pipe1_rd_bypass_wb_w)
++    ,.result_wb_o(pipe1_result_wb_w)
++    ,.pc_wb_o(pipe1_pc_wb_w)
++    ,.opcode_wb_o(pipe1_opc_wb_w)
++    ,.operand_ra_wb_o(pipe1_ra_val_wb_w)
++    ,.operand_rb_wb_o(pipe1_rb_val_wb_w)
++    ,.exception_wb_o(pipe1_exception_wb_w)
++    ,.csr_write_wb_o()
++    ,.csr_waddr_wb_o()
++    ,.csr_wdata_wb_o()
++);
++
++assign exec1_hold_o = stall_w;
++
++assign csr_writeback_exception_o      = pipe0_exception_wb_w | pipe1_exception_wb_w;
++assign csr_writeback_exception_pc_o   = (|pipe0_exception_wb_w) ? pipe0_pc_wb_w     : pipe1_pc_wb_w;
++assign csr_writeback_exception_addr_o = (|pipe0_exception_wb_w) ? pipe0_result_wb_w : pipe1_result_wb_w;
++
++//-------------------------------------------------------------
++// Branch predictor info
++//-------------------------------------------------------------
++// This info is used to learn future prediction, and to correct 
++// BTB, BHT, GShare, RAS indexes on mispredictions.
++assign branch_info_request_o      = mispredicted_r;
++assign branch_info_is_taken_o     = (pipe1_branch_e1_w & branch_exec1_is_taken_i)     | (pipe0_branch_e1_w & branch_exec0_is_taken_i);
++assign branch_info_is_not_taken_o = (pipe1_branch_e1_w & branch_exec1_is_not_taken_i) | (pipe0_branch_e1_w & branch_exec0_is_not_taken_i);
++assign branch_info_is_call_o      = (pipe1_branch_e1_w & branch_exec1_is_call_i)      | (pipe0_branch_e1_w & branch_exec0_is_call_i);
++assign branch_info_is_ret_o       = (pipe1_branch_e1_w & branch_exec1_is_ret_i)       | (pipe0_branch_e1_w & branch_exec0_is_ret_i);
++assign branch_info_is_jmp_o       = (pipe1_branch_e1_w & branch_exec1_is_jmp_i)       | (pipe0_branch_e1_w & branch_exec0_is_jmp_i);
++assign branch_info_source_o       = (pipe1_branch_e1_w & branch_exec1_request_i)      ? branch_exec1_source_i : branch_exec0_source_i;
++assign branch_info_pc_o           = (pipe1_branch_e1_w & branch_exec1_request_i)      ? branch_exec1_pc_i     : branch_exec0_pc_i;
++
++//-------------------------------------------------------------
++// Blocking events (division, CSR unit access)
++//-------------------------------------------------------------
++reg div_pending_q;
++reg csr_pending_q;
++
++// Division operations take 2 - 34 cycles and stall
++// the pipeline (complete out-of-pipe) until completed.
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    div_pending_q <= 1'b0;
++else if (pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w)
++    div_pending_q <= 1'b0;
++else if (div_opcode_valid_o && issue_a_div_w)
++    div_pending_q <= 1'b1;
++else if (writeback_div_valid_i)
++    div_pending_q <= 1'b0;
++
++// CSR operations are infrequent - avoid any complications of pipelining them.
++// These only take a 2-3 cycles anyway and may result in a pipe flush (e.g. ecall, ebreak..).
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    csr_pending_q <= 1'b0;
++else if (pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w)
++    csr_pending_q <= 1'b0;
++else if (csr_opcode_valid_o && issue_a_csr_w)
++    csr_pending_q <= 1'b1;
++else if (pipe0_csr_wb_w)
++    csr_pending_q <= 1'b0;
++
++assign squash_w = pipe0_squash_e1_e2_w || pipe1_squash_e1_e2_w;
++
++//-------------------------------------------------------------
++// Issue / scheduling logic
++//-------------------------------------------------------------
++// Register roles qualify hazards only, never rewrite operand indices or
++// payloads. Invalid/faulting instructions preserve conservative decoding.
++function [2:0] register_roles;
++    input [31:0] op;
++    input invalid;
++    input [1:0] fault;
++    begin
++        register_roles=3'b111;
++        if(!invalid && fault==0) case(op[6:0])
++            7'h37,7'h17,7'h6f: register_roles=3'b100;
++            7'h67,7'h03,7'h13: register_roles=3'b101;
++            7'h23,7'h63: register_roles=3'b011;
++            7'h33: register_roles=3'b111;
++            7'h73: register_roles=op[14:12]==0 ? 3'b000 : (op[14] ? 3'b100 : 3'b101);
++            7'h0f: register_roles=3'b000;
++            default: register_roles=3'b111;
++        endcase
++    end
++endfunction
++wire [2:0] a_roles_w=register_roles(opcode_a_r,issue_a_invalid_w,opcode_a_fault_r);
++wire [2:0] b_roles_w=register_roles(opcode_b_r,issue_b_invalid_w,opcode_b_fault_r);
++wire prior_lsu_unit_wait_w =
++    (pipe0_load_e1_w || pipe0_store_e1_w || pipe1_load_e1_w || pipe1_store_e1_w) &&
++    (issue_a_mul_w || issue_a_div_w || issue_a_csr_w);
++
++// Normalize the original procedural allocation predicates before comparing
++// binary producer tags directly. Unknown predicates still allocate nothing.
++reg [3:0] pending_producer_r;
++wire [19:0] pending_tags_w={pipe1_rd_e2_w,pipe0_rd_e2_w,pipe1_rd_e1_w,pipe0_rd_e1_w};
++always @* begin
++    pending_producer_r=4'b0;
++    if(SUPPORT_LOAD_BYPASS==0)begin
++        if(pipe0_load_e2_w)pending_producer_r[2]=1;
++        if(pipe1_load_e2_w)pending_producer_r[3]=1;
++    end
++    if(SUPPORT_MUL_BYPASS==0)begin
++        if(pipe0_mul_e2_w)pending_producer_r[2]=1;
++        if(pipe1_mul_e2_w)pending_producer_r[3]=1;
++    end
++    if(pipe0_load_e1_w || (pipe0_mul_e1_w && !pipe0_early_mul_w))pending_producer_r[0]=1;
++    if(pipe1_load_e1_w || (pipe1_mul_e1_w && !pipe1_early_mul_w))pending_producer_r[1]=1;
++end
++
++function pending_operand_busy;
++    input [4:0] index;
++    input [19:0] tags;
++    input [3:0] pending;
++    integer producer;
++    begin
++        case(index)
++            5'd0:pending_operand_busy=1'b0;
++            5'd1, 5'd2, 5'd3, 5'd4, 5'd5, 5'd6, 5'd7, 5'd8, 5'd9, 5'd10, 5'd11, 5'd12, 5'd13, 5'd14, 5'd15, 5'd16, 5'd17, 5'd18, 5'd19, 5'd20, 5'd21, 5'd22, 5'd23, 5'd24, 5'd25, 5'd26, 5'd27, 5'd28, 5'd29, 5'd30, 5'd31:begin
++                pending_operand_busy=1'b0;
++                for(producer=0;producer<4;producer=producer+1)begin
++                    // The old indexed write ignores an unknown producer ID.
++                    case(tags[producer*5 +: 5])
++                        5'd0, 5'd1, 5'd2, 5'd3, 5'd4, 5'd5, 5'd6, 5'd7, 5'd8, 5'd9, 5'd10, 5'd11, 5'd12, 5'd13, 5'd14, 5'd15, 5'd16, 5'd17, 5'd18, 5'd19, 5'd20, 5'd21, 5'd22, 5'd23, 5'd24, 5'd25, 5'd26, 5'd27, 5'd28, 5'd29, 5'd30, 5'd31:
++                            if(pending[producer] && tags[producer*5 +: 5]==index)
++                                pending_operand_busy=1'b1;
++                        default:;
++                    endcase
++                end
++            end
++            // An unknown indexed read was X even for an all-zero bitmap.
++            default:pending_operand_busy=1'bx;
++        endcase
++    end
++endfunction
++
++// Prepare both raw-fetch dependencies before selecting the A payload.
++// This scalar follows the same procedural IF as opcode_a_r: X/Z selects B.
++function packet_dependency;
++    input [4:0] destination;
++    input [4:0] ra,rb,rd;
++    input [2:0] roles;
++    begin
++        packet_dependency=1'b0;
++        case(destination)
++            5'd1,5'd2,5'd3,5'd4,5'd5,5'd6,5'd7,5'd8,5'd9,5'd10,5'd11,5'd12,5'd13,5'd14,5'd15,
++            5'd16,5'd17,5'd18,5'd19,5'd20,5'd21,5'd22,5'd23,5'd24,5'd25,5'd26,5'd27,5'd28,5'd29,5'd30,5'd31:
++                packet_dependency=(roles[0] && ra==destination) ||
++                    (roles[1] && rb==destination) || (roles[2] && rd==destination);
++            default:;
++        endcase
++    end
++endfunction
++wire lower_packet_busy_w /* synthesis syn_keep=1 */;
++wire upper_packet_busy_w /* synthesis syn_keep=1 */;
++assign lower_packet_busy_w=packet_dependency(fetch0_instr_i[11:7],
++    issue_b_ra_idx_w,issue_b_rb_idx_w,issue_b_rd_idx_w,b_roles_w);
++assign upper_packet_busy_w=packet_dependency(fetch1_instr_i[11:7],
++    issue_b_ra_idx_w,issue_b_rb_idx_w,issue_b_rd_idx_w,b_roles_w);
++reg selected_packet_busy_r;
++always @* begin
++    selected_packet_busy_r=upper_packet_busy_w;
++    if(payload0_selected_w)selected_packet_busy_r=lower_packet_busy_w;
++end
++
++// Legacy bitmaps below are observer shadows; real issue permission reads tags.
++reg [31:0] scoreboard_r;
++reg [31:0] older_scoreboard_r;
++reg same_packet_busy_r;
++reg        pipe1_mux_lsu_r;
++reg        pipe1_mux_mul_r;
++
++// Check instructions can be issued in the second execution unit
++wire pipe1_ok_w      = issue_b_exec_w | issue_b_branch_w | issue_b_lsu_w | issue_b_mul_w;
++
++// Early BEQ/BNE-to-x0 decisions avoid the full two-operand branch comparator
++// in secondary issue permission. Other branches execute alone in this trial.
++wire opcode0_ra_zero_w;
++wire opcode0_rb_zero_w;
++reg zero_branch_not_taken_r;
++always @* begin
++    zero_branch_not_taken_r=1'b0;
++    if(opcode_a_r[19:15]==5'b0)begin
++        case(opcode_a_r[14:12])
++            3'b000:zero_branch_not_taken_r=~opcode0_rb_zero_w;
++            3'b001:zero_branch_not_taken_r=opcode0_rb_zero_w;
++            default:zero_branch_not_taken_r=1'b0;
++        endcase
++    end else if(opcode_a_r[24:20]==5'b0)begin
++        case(opcode_a_r[14:12])
++            3'b000:zero_branch_not_taken_r=~opcode0_ra_zero_w;
++            3'b001:zero_branch_not_taken_r=opcode0_ra_zero_w;
++            default:zero_branch_not_taken_r=1'b0;
++        endcase
++    end
++end
++wire branch_pair_w = issue_a_branch_w && opcode_a_r[6:0] == 7'h63 &&
++    !issue_a_invalid_w && opcode_a_fault_r == 0 &&
++    !issue_b_invalid_w && opcode_b_fault_r == 0 && zero_branch_not_taken_r &&
++    (issue_b_exec_w || issue_b_lsu_w || issue_b_mul_w);
++
++// Is this combination of instructions possible to execute concurrently.
++// This excludes result dependencies which may also block secondary execution.
++wire dual_issue_ok_w =   enable_dual_issue_w &&  // Second pipe switched on
++                         pipe1_ok_w &&           // Instruction 2 is possible on second exec unit
++                        (branch_pair_w || ((issue_a_exec_w | issue_a_lsu_w | issue_a_mul_w) && issue_b_exec_w)   ||
++                         ((issue_a_exec_w | issue_a_lsu_w | issue_a_mul_w) && issue_b_branch_w) ||
++                         ((issue_a_exec_w | issue_a_mul_w) && issue_b_lsu_w)                    ||
++                         ((issue_a_exec_w | issue_a_lsu_w) && issue_b_mul_w)
++                         ) && ~take_interrupt_i;
++
++always @ *
++begin
++    opcode_a_issue_r     = 1'b0;
++    opcode_b_issue_r     = 1'b0;
++    opcode_a_accept_r    = 1'b0;
++    opcode_b_accept_r    = 1'b0;
++    scoreboard_r         = 32'b0;
++    pipe1_mux_lsu_r      = 1'b0;
++    pipe1_mux_mul_r      = 1'b0;
++
++    // Execution units with >= 2 cycle latency
++    if (SUPPORT_LOAD_BYPASS == 0)
++    begin
++        if (pipe0_load_e2_w)
++            scoreboard_r[pipe0_rd_e2_w] = 1'b1;
++        if (pipe1_load_e2_w)
++            scoreboard_r[pipe1_rd_e2_w] = 1'b1;
++    end
++    if (SUPPORT_MUL_BYPASS == 0)
++    begin
++        if (pipe0_mul_e2_w)
++            scoreboard_r[pipe0_rd_e2_w] = 1'b1;
++        if (pipe1_mul_e2_w)
++            scoreboard_r[pipe1_rd_e2_w] = 1'b1;
++    end
++
++    // Execution units with >= 1 cycle latency (loads / multiply)
++    if (pipe0_load_e1_w || (pipe0_mul_e1_w && !pipe0_early_mul_w))
++        scoreboard_r[pipe0_rd_e1_w] = 1'b1;
++    if (pipe1_load_e1_w || (pipe1_mul_e1_w && !pipe1_early_mul_w))
++        scoreboard_r[pipe1_rd_e1_w] = 1'b1;
++
++    // Older producers and same-packet hazards are computed independently of A fire.
++    older_scoreboard_r = scoreboard_r;
++    same_packet_busy_r = 1'b0;
++    // Destination zero/unknown allocates nothing in the prepared function.
++    // Allocation X/Z is skipped by this same original procedural IF.
++    if(issue_a_sb_alloc_w) same_packet_busy_r=selected_packet_busy_r;
++
++    // Do not start multiply, division or CSR operation in the cycle after a load (leaving only ALU operations and branches)
++    if ((pipe0_load_e1_w || pipe0_store_e1_w || pipe1_load_e1_w || pipe1_store_e1_w ) && (issue_a_mul_w || issue_a_div_w || issue_a_csr_w))
++        scoreboard_r = 32'hFFFFFFFF;
++
++    // Stall - no issues...
++    if (lsu_stall_i || stall_w || div_pending_q || csr_pending_q)
++        ;
++    // Primary slot (lsu, branch, alu, mul, div, csr)
++    else if (opcode_a_valid_r && !prior_lsu_unit_wait_w &&
++        !((a_roles_w[0] && pending_operand_busy(issue_a_ra_idx_w,pending_tags_w,pending_producer_r)) || 
++          (a_roles_w[1] && pending_operand_busy(issue_a_rb_idx_w,pending_tags_w,pending_producer_r)) ||
++          (a_roles_w[2] && pending_operand_busy(issue_a_rd_idx_w,pending_tags_w,pending_producer_r))))
++    begin
++        opcode_a_issue_r  = 1'b1;
++        opcode_a_accept_r = 1'b1;
++
++        if (opcode_a_accept_r && issue_a_sb_alloc_w && (|issue_a_rd_idx_w))
++            scoreboard_r[issue_a_rd_idx_w] = 1'b1;
++    end
++
++    // Stall - no issues...
++    if (lsu_stall_i || stall_w || div_pending_q || csr_pending_q)
++        ;
++    // Secondary Slot (lsu, branch, alu, mul)
++    else if (dual_issue_ok_w && opcode_b_valid_r && opcode_a_accept_r &&
++        !((b_roles_w[0] && pending_operand_busy(issue_b_ra_idx_w,pending_tags_w,pending_producer_r)) ||
++          (b_roles_w[1] && pending_operand_busy(issue_b_rb_idx_w,pending_tags_w,pending_producer_r)) ||
++          (b_roles_w[2] && pending_operand_busy(issue_b_rd_idx_w,pending_tags_w,pending_producer_r))) &&
++        !same_packet_busy_r)
++    begin
++        opcode_b_issue_r  = 1'b1;
++        opcode_b_accept_r = 1'b1;
++        pipe1_mux_lsu_r   = issue_b_lsu_w;
++        pipe1_mux_mul_r   = issue_b_mul_w;
++
++        if (opcode_b_accept_r && issue_b_sb_alloc_w && (|issue_b_rd_idx_w))
++            scoreboard_r[issue_b_rd_idx_w] = 1'b1;
++    end    
++    // Schedule from stable packet/class/hazards first. Late cancellation only
++    // masks the final fire/accept strobes, not the classifier or scoreboard.
++    if (branch_csr_request_i || squash_w)
++    begin
++        opcode_a_issue_r  = 1'b0;
++        opcode_b_issue_r  = 1'b0;
++        opcode_a_accept_r = 1'b0;
++        opcode_b_accept_r = 1'b0;
++        pipe1_mux_lsu_r   = 1'b0;
++        pipe1_mux_mul_r   = 1'b0;
++    end
++
++end
++
++// Prepare potential B LSU payload before branch resolution / issue permission.
++// A CSR/cache-maintenance and A LSU retain A. When B is merely prepared,
++// only B's real issue event may authorize memory side effects.
++wire lsu_payload_b_w = issue_b_lsu_w &&
++    (issue_a_exec_w || issue_a_branch_w || issue_a_mul_w);
++// Invalid slots may have unknown class bits; actual issue gates all requests.
++// CSR remains included for cache-maintenance operations.
++assign lsu_opcode_valid_o = (((issue_a_lsu_w || issue_a_csr_w) && opcode_a_issue_r) ||
++    (issue_b_lsu_w && opcode_b_issue_r)) & ~take_interrupt_i;
++assign exec0_opcode_valid_o = opcode_a_issue_r;
++// Shared multiplier data is prepared from static unit classes; actual issue
++// and existing producer tags authorize all uses of the sampled arithmetic.
++wire mul_payload_b_w = issue_b_mul_w &&
++    (issue_a_exec_w || issue_a_lsu_w || issue_a_branch_w);
++assign mul_opcode_valid_o = enable_muldiv_w &
++    ((issue_a_mul_w && opcode_a_issue_r) || (issue_b_mul_w && opcode_b_issue_r));
++assign div_opcode_valid_o   = enable_muldiv_w & (opcode_a_issue_r);
++// Preserve the original IRQ-inhibit semantics even on a cancelled packet.
++assign interrupt_inhibit_o  = csr_pending_q ||
++    (slot0_valid_r ? fetch0_instr_csr_i : fetch1_instr_csr_i);
++
++assign exec1_opcode_valid_o = opcode_b_issue_r;
++
++assign dual_issue_w         = opcode_b_issue_r & opcode_b_accept_r & ~take_interrupt_i;
++assign single_issue_w       = (opcode_a_issue_r & opcode_a_accept_r) & ~dual_issue_w & ~take_interrupt_i;
++
++assign fetch0_accept_o      = ((slot0_valid_r & opcode_a_accept_r) | slot1_valid_r) & ~take_interrupt_i;
++assign fetch1_accept_o      = ((slot1_valid_r & opcode_a_accept_r) | (opcode_b_accept_r)) & ~take_interrupt_i;
++
++assign stall_w              = pipe0_stall_raw_w | pipe1_stall_raw_w;
++
++//-------------------------------------------------------------
++// Register File
++
++
++//------------------------------------------------------------- 
++wire [31:0] issue_a_ra_value_w;
++wire [31:0] issue_a_rb_value_w;
++wire [31:0] issue_b_ra_value_w;
++wire [31:0] issue_b_rb_value_w;
++wire issue_a_ra_zero_w,issue_a_rb_zero_w,issue_b_ra_zero_w,issue_b_rb_zero_w;
++
++// Speculative operand reads do not issue another instruction. Both fetch slots
++// are registered already; keep PC[2] out of the native RAM address path.
++localparam PARALLEL_OPERAND_READ = !SUPPORT_REGFILE_XILINX;
++wire [4:0] rf_ra0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[19:15] : issue_a_ra_idx_w;
++wire [4:0] rf_rb0_w = PARALLEL_OPERAND_READ ? fetch0_instr_i[24:20] : issue_a_rb_idx_w;
++wire [31:0] raw_upper_ra_w, raw_upper_rb_w;
++wire raw_upper_ra_zero_w,raw_upper_rb_zero_w;
++generate
++if (PARALLEL_OPERAND_READ && !SUPPORT_DUAL_ISSUE) begin: g_parallel_read
++    triha_regfile #(.SUPPORT_REGFILE_XILINX(0), .SUPPORT_DUAL_ISSUE(0)) u_upper (
++        .clk_i(clk_i), .rst_i(rst_i),
++        .rd0_i(pipe0_rd_wb_w), .rd0_value_i(pipe0_result_wb_w),
++        .rd1_i(pipe1_rd_wb_w), .rd1_value_i(pipe1_result_wb_w),
++        .ra0_i(fetch1_instr_i[19:15]), .rb0_i(fetch1_instr_i[24:20]),
++        .ra1_i(5'b0), .rb1_i(5'b0),
++        .ra0_value_o(raw_upper_ra_w), .rb0_value_o(raw_upper_rb_w),
++        .ra1_value_o(), .rb1_value_o(),
++        .ra0_zero_o(raw_upper_ra_zero_w),.rb0_zero_o(raw_upper_rb_zero_w),
++        .ra1_zero_o(),.rb1_zero_o()
++    );
++end else if (PARALLEL_OPERAND_READ) begin: g_dual_parallel_read
++    // Reuse the existing B read ports; no additional storage or RF copy.
++    assign raw_upper_ra_w = issue_b_ra_value_w;
++    assign raw_upper_rb_w = issue_b_rb_value_w;
++    assign raw_upper_ra_zero_w=issue_b_ra_zero_w;
++    assign raw_upper_rb_zero_w=issue_b_rb_zero_w;
++end else begin: g_no_parallel_read
++    assign raw_upper_ra_w = 32'b0;
++    assign raw_upper_rb_w = 32'b0;
++    assign raw_upper_ra_zero_w=1'b1;
++    assign raw_upper_rb_zero_w=1'b1;
++end
++endgenerate
++
++// Original priority: WB0, WB1, E2-0, E2-1, E1-0, E1-1, then architectural x0.
++// All dependencies are explicit function inputs for complete sensitivity.
++function [31:0] forward_raw_operand;
++    input [4:0] index;
++    input [31:0] rf_data;
++    input [29:0] tags;
++    input [191:0] values;
++    reg [31:0] value;
++    reg [5:0] hit;
++    reg [5:0] select;
++    integer source;
++    begin
++        hit = 6'b0;
++        for (source=0; source<6; source=source+1)
++            if (tags[source*5 +: 5] == index)
++                hit[source] = 1'b1;
++        for (source=0; source<6; source=source+1)
++            select[source] = hit[source] & ~(|(hit & (6'b111111 << (source+1))));
++        // At most one known select bit is set. A case transfers X/Z data
++        // unchanged, including when an earlier matching source contains Z.
++        case (select)
++            6'b000001: value = values[31:0];
++            6'b000010: value = values[63:32];
++            6'b000100: value = values[95:64];
++            6'b001000: value = values[127:96];
++            6'b010000: value = values[159:128];
++            6'b100000: value = values[191:160];
++            default: value = rf_data;
++        endcase
++        if (index == 5'b0)
++            value = 32'b0;
++        forward_raw_operand = value;
++    end
++endfunction
++// Compare each possible value before the late source selection. Matches
++// retain the original sequential priority and skipped unknown equality.
++function forward_raw_zero;
++    input [4:0] index;
++    input rf_zero;
++    input [29:0] tags;
++    input [5:0] source_zero;
++    reg value;
++    integer source;
++    begin
++        value=rf_zero;
++        for(source=0;source<6;source=source+1)
++            if(tags[source*5 +: 5]==index)value=source_zero[source];
++        if(index==5'b0)value=1'b1;
++        forward_raw_zero=value;
++    end
++endfunction
++wire [29:0] raw_bypass_tags_w = {pipe1_rd_e1_w,pipe0_rd_e1_w,
++    pipe1_rd_bypass_e2_w,pipe0_rd_bypass_e2_w,pipe1_rd_bypass_wb_w,pipe0_rd_bypass_wb_w};
++wire [191:0] raw_bypass_values_w = {pipe1_forward_e1_w,pipe0_forward_e1_w,
++    pipe1_result_e2_w,pipe0_result_e2_w,pipe1_result_wb_w,pipe0_result_wb_w};
++wire [31:0] raw_lower_ra_w = forward_raw_operand(fetch0_instr_i[19:15],issue_a_ra_value_w,
++    raw_bypass_tags_w,raw_bypass_values_w);
++wire [31:0] raw_lower_rb_w = forward_raw_operand(fetch0_instr_i[24:20],issue_a_rb_value_w,
++    raw_bypass_tags_w,raw_bypass_values_w);
++wire [31:0] raw_upper_forward_ra_w = forward_raw_operand(fetch1_instr_i[19:15],raw_upper_ra_w,
++    raw_bypass_tags_w,raw_bypass_values_w);
++wire [31:0] raw_upper_forward_rb_w = forward_raw_operand(fetch1_instr_i[24:20],raw_upper_rb_w,
++    raw_bypass_tags_w,raw_bypass_values_w);
++
++
++// Register file: 2W4R
++triha_regfile
++#(
++     .SUPPORT_REGFILE_XILINX(SUPPORT_REGFILE_XILINX)
++    ,.SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)
++)
++u_regfile
++(
++    .clk_i(clk_i),
++    .rst_i(rst_i),
++
++    // Write ports
++    .rd0_i(pipe0_rd_wb_w),
++    .rd0_value_i(pipe0_result_wb_w),
++    .rd1_i(pipe1_rd_wb_w),
++    .rd1_value_i(pipe1_result_wb_w),
++
++    // Read ports
++    .ra0_i(rf_ra0_w),
++    .rb0_i(rf_rb0_w),
++    .ra0_value_o(issue_a_ra_value_w),
++    .rb0_value_o(issue_a_rb_value_w),
++
++    .ra1_i(issue_b_ra_idx_w),
++    .rb1_i(issue_b_rb_idx_w),
++    .ra1_value_o(issue_b_ra_value_w),
++    .rb1_value_o(issue_b_rb_value_w),
++    .ra0_zero_o(issue_a_ra_zero_w),.rb0_zero_o(issue_a_rb_zero_w),
++    .ra1_zero_o(issue_b_ra_zero_w),.rb1_zero_o(issue_b_rb_zero_w)
++);
++
++// These scalar properties share the unchanged raw data sources and tags.
++wire [5:0] raw_source_zero_w;
++genvar zero_source;
++generate for(zero_source=0;zero_source<6;zero_source=zero_source+1)begin:g_prepared_zero_source
++    assign raw_source_zero_w[zero_source]=(raw_bypass_values_w[zero_source*32 +: 32]==32'b0);
++end endgenerate
++wire lower_ra_zero_w=forward_raw_zero(fetch0_instr_i[19:15],issue_a_ra_zero_w,raw_bypass_tags_w,raw_source_zero_w);
++wire lower_rb_zero_w=forward_raw_zero(fetch0_instr_i[24:20],issue_a_rb_zero_w,raw_bypass_tags_w,raw_source_zero_w);
++wire upper_ra_zero_w=forward_raw_zero(fetch1_instr_i[19:15],raw_upper_ra_zero_w,raw_bypass_tags_w,raw_source_zero_w);
++wire upper_rb_zero_w=forward_raw_zero(fetch1_instr_i[24:20],raw_upper_rb_zero_w,raw_bypass_tags_w,raw_source_zero_w);
++reg selected_ra_zero_r;
++reg selected_rb_zero_r;
++always @* begin
++    selected_ra_zero_r=(opcode0_ra_operand_o==32'b0);
++    selected_rb_zero_r=(opcode0_rb_operand_o==32'b0);
++    if(PARALLEL_OPERAND_READ)begin
++        selected_ra_zero_r=upper_ra_zero_w;
++        selected_rb_zero_r=upper_rb_zero_w;
++        if(payload0_selected_w)begin
++            selected_ra_zero_r=lower_ra_zero_w;
++            selected_rb_zero_r=lower_rb_zero_w;
++        end
++    end
++end
++assign opcode0_ra_zero_w=selected_ra_zero_r;
++assign opcode0_rb_zero_w=selected_rb_zero_r;
++
++//-------------------------------------------------------------
++// Issue Slot 0
++//------------------------------------------------------------- 
++reg [8:0] selected_alu_decode_r;
++always @* begin
++    selected_alu_decode_r=fetch1_alu_decode_i;
++    if(payload0_selected_w)selected_alu_decode_r=fetch0_alu_decode_i;
++end
++assign opcode0_alu_decode_o=selected_alu_decode_r;
++assign opcode1_alu_decode_o=fetch1_alu_decode_i;
++assign opcode0_opcode_o = opcode_a_r;
++assign opcode0_pc_o     = opcode_a_pc_r;
++assign opcode0_rd_idx_o = issue_a_rd_idx_w;
++assign opcode0_ra_idx_o = issue_a_ra_idx_w;
++assign opcode0_rb_idx_o = issue_a_rb_idx_w;
++assign opcode0_invalid_o= 1'b0; 
++
++reg [31:0] issue_a_ra_value_r;
++reg [31:0] issue_a_rb_value_r;
++
++always @ *
++begin
++    // NOTE: Newest version of operand takes priority
++    issue_a_ra_value_r = issue_a_ra_value_w;
++    issue_a_rb_value_r = issue_a_rb_value_w;
++
++    // Bypass - WB
++    if (pipe0_rd_bypass_wb_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe0_result_wb_w;
++    if (pipe0_rd_bypass_wb_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe0_result_wb_w;
++
++    if (pipe1_rd_bypass_wb_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe1_result_wb_w;
++    if (pipe1_rd_bypass_wb_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe1_result_wb_w;
++
++    // Bypass - E2
++    if (pipe0_rd_bypass_e2_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe0_result_e2_w;
++    if (pipe0_rd_bypass_e2_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe0_result_e2_w;
++
++    if (pipe1_rd_bypass_e2_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe1_result_e2_w;
++    if (pipe1_rd_bypass_e2_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe1_result_e2_w;
++
++    // Bypass - E1
++    if (pipe0_rd_e1_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe0_forward_e1_w;
++    if (pipe0_rd_e1_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe0_forward_e1_w;
++
++    if (pipe1_rd_e1_w == issue_a_ra_idx_w)
++        issue_a_ra_value_r = pipe1_forward_e1_w;
++    if (pipe1_rd_e1_w == issue_a_rb_idx_w)
++        issue_a_rb_value_r = pipe1_forward_e1_w;
++
++    // Reg 0 source
++    if (issue_a_ra_idx_w == 5'b0)
++        issue_a_ra_value_r = 32'b0;
++    if (issue_a_rb_idx_w == 5'b0)
++        issue_a_rb_value_r = 32'b0;
++    if (PARALLEL_OPERAND_READ) begin
++        issue_a_ra_value_r = raw_upper_forward_ra_w;
++        issue_a_rb_value_r = raw_upper_forward_rb_w;
++        if (payload0_selected_w) begin
++            issue_a_ra_value_r = raw_lower_ra_w;
++            issue_a_rb_value_r = raw_lower_rb_w;
++        end
++    end
++end
++
++assign opcode0_ra_operand_o = issue_a_ra_value_r;
++assign opcode0_rb_operand_o = issue_a_rb_value_r;
++assign opcode0_ra_zero_o    = opcode0_ra_zero_w;
++assign opcode0_rb_zero_o    = opcode0_rb_zero_w;
++assign opcode1_ra_zero_o = PARALLEL_OPERAND_READ ? upper_ra_zero_w : (opcode1_ra_operand_o == 32'b0);
++assign opcode1_rb_zero_o = PARALLEL_OPERAND_READ ? upper_rb_zero_w : (opcode1_rb_operand_o == 32'b0);
++
++//-------------------------------------------------------------
++// Issue Slot 1
++//------------------------------------------------------------- 
++assign opcode1_opcode_o = opcode_b_r;
++assign opcode1_pc_o     = opcode_b_pc_r;
++assign opcode1_rd_idx_o = issue_b_rd_idx_w;
++assign opcode1_ra_idx_o = issue_b_ra_idx_w;
++assign opcode1_rb_idx_o = issue_b_rb_idx_w;
++assign opcode1_invalid_o= 1'b0;
++
++reg [31:0] issue_b_ra_value_r;
++reg [31:0] issue_b_rb_value_r;
++
++always @ *
++begin
++    // NOTE: Newest version of operand takes priority
++    issue_b_ra_value_r = issue_b_ra_value_w;
++    issue_b_rb_value_r = issue_b_rb_value_w;
++
++    // Bypass - WB
++    if (pipe0_rd_bypass_wb_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe0_result_wb_w;
++    if (pipe0_rd_bypass_wb_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe0_result_wb_w;
++
++    if (pipe1_rd_bypass_wb_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe1_result_wb_w;
++    if (pipe1_rd_bypass_wb_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe1_result_wb_w;
++
++    // Bypass - E2
++    if (pipe0_rd_bypass_e2_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe0_result_e2_w;
++    if (pipe0_rd_bypass_e2_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe0_result_e2_w;
++
++    if (pipe1_rd_bypass_e2_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe1_result_e2_w;
++    if (pipe1_rd_bypass_e2_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe1_result_e2_w;
++
++    // Bypass - E1
++    if (pipe0_rd_e1_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe0_forward_e1_w;
++    if (pipe0_rd_e1_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe0_forward_e1_w;
++
++    if (pipe1_rd_e1_w == issue_b_ra_idx_w)
++        issue_b_ra_value_r = pipe1_forward_e1_w;
++    if (pipe1_rd_e1_w == issue_b_rb_idx_w)
++        issue_b_rb_value_r = pipe1_forward_e1_w;
++
++    // Reg 0 source
++    if (issue_b_ra_idx_w == 5'b0)
++        issue_b_ra_value_r = 32'b0;
++    if (issue_b_rb_idx_w == 5'b0)
++        issue_b_rb_value_r = 32'b0;
++end
++
++assign opcode1_ra_operand_o = issue_b_ra_value_r;
++assign opcode1_rb_operand_o = issue_b_rb_value_r;
++
++// synthesis translate_off
++// When an instruction can actually issue, speculative data tags must equal
++// the original control/commit tags. No control or write-port uses bypass tags.
++always @(posedge clk_i) begin
++    if (!rst_i && (opcode_a_issue_r || opcode_b_issue_r)) begin
++        if ({pipe0_rd_e2_w,pipe0_rd_wb_w,pipe1_rd_e2_w,pipe1_rd_wb_w} !==
++            {pipe0_rd_bypass_e2_w,pipe0_rd_bypass_wb_w,pipe1_rd_bypass_e2_w,pipe1_rd_bypass_wb_w})
++            $fatal(1,"BYPASS_TAG_FAIL actual_issue_tag_mismatch");
++    end
++end
++// synthesis translate_on
++
++
++//-------------------------------------------------------------
++// Load store unit
++//-------------------------------------------------------------
++assign lsu_opcode_opcode_o      = lsu_payload_b_w ? opcode1_opcode_o     : opcode0_opcode_o;
++assign lsu_opcode_pc_o          = lsu_payload_b_w ? opcode1_pc_o         : opcode0_pc_o;
++assign lsu_opcode_rd_idx_o      = lsu_payload_b_w ? opcode1_rd_idx_o     : opcode0_rd_idx_o;
++assign lsu_opcode_ra_idx_o      = lsu_payload_b_w ? opcode1_ra_idx_o     : opcode0_ra_idx_o;
++assign lsu_opcode_rb_idx_o      = lsu_payload_b_w ? opcode1_rb_idx_o     : opcode0_rb_idx_o;
++assign lsu_opcode_ra_operand_o  = lsu_payload_b_w ? opcode1_ra_operand_o : opcode0_ra_operand_o;
++assign lsu_opcode_rb_operand_o  = lsu_payload_b_w ? opcode1_rb_operand_o : opcode0_rb_operand_o;
++assign lsu_opcode_invalid_o     = 1'b0;
++
++//-------------------------------------------------------------
++// Multiply
++//-------------------------------------------------------------
++assign mul_opcode_opcode_o      = mul_payload_b_w ? opcode1_opcode_o     : opcode0_opcode_o;
++assign mul_opcode_pc_o          = mul_payload_b_w ? opcode1_pc_o         : opcode0_pc_o;
++assign mul_opcode_rd_idx_o      = mul_payload_b_w ? opcode1_rd_idx_o     : opcode0_rd_idx_o;
++assign mul_opcode_ra_idx_o      = mul_payload_b_w ? opcode1_ra_idx_o     : opcode0_ra_idx_o;
++assign mul_opcode_rb_idx_o      = mul_payload_b_w ? opcode1_rb_idx_o     : opcode0_rb_idx_o;
++assign mul_opcode_ra_operand_o  = mul_payload_b_w ? opcode1_ra_operand_o : opcode0_ra_operand_o;
++assign mul_opcode_rb_operand_o  = mul_payload_b_w ? opcode1_rb_operand_o : opcode0_rb_operand_o;
++assign mul_opcode_invalid_o     = 1'b0;
++
++//-------------------------------------------------------------
++// CSR unit
++//-------------------------------------------------------------
++assign csr_opcode_valid_o       = opcode_a_issue_r & ~take_interrupt_i;
++assign csr_opcode_opcode_o      = opcode0_opcode_o;
++assign csr_opcode_pc_o          = opcode0_pc_o;
++assign csr_opcode_rd_idx_o      = opcode0_rd_idx_o;
++assign csr_opcode_ra_idx_o      = opcode0_ra_idx_o;
++assign csr_opcode_rb_idx_o      = opcode0_rb_idx_o;
++assign csr_opcode_ra_operand_o  = opcode0_ra_operand_o;
++assign csr_opcode_rb_operand_o  = opcode0_rb_operand_o;
++assign csr_opcode_invalid_o     = issue_a_invalid_w;
++
++//-------------------------------------------------------------
++// Checker Interface
++//-------------------------------------------------------------
++`ifdef verilator
++biriscv_trace_sim
++u_pipe0_dec0_verif
++(
++     .valid_i(pipe0_valid_wb_w)
++    ,.pc_i(pipe0_pc_wb_w)
++    ,.opcode_i(pipe0_opc_wb_w)
++);
++
++wire [4:0] v_pipe0_rs1_w = pipe0_opc_wb_w[19:15];
++wire [4:0] v_pipe0_rs2_w = pipe0_opc_wb_w[24:20];
++
++function [0:0] complete_valid0; /*verilator public*/
++begin
++    complete_valid0 = pipe0_valid_wb_w;
++end
++endfunction
++function [31:0] complete_pc0; /*verilator public*/
++begin
++    complete_pc0 = pipe0_pc_wb_w;
++end
++endfunction
++function [31:0] complete_opcode0; /*verilator public*/
++begin
++    complete_opcode0 = pipe0_opc_wb_w;
++end
++endfunction
++function [4:0] complete_ra0; /*verilator public*/
++begin
++    complete_ra0 = v_pipe0_rs1_w;
++end
++endfunction
++function [4:0] complete_rb0; /*verilator public*/
++begin
++    complete_rb0 = v_pipe0_rs2_w;
++end
++endfunction
++function [4:0] complete_rd0; /*verilator public*/
++begin
++    complete_rd0 = pipe0_rd_wb_w;
++end
++endfunction
++function [31:0] complete_ra_val0; /*verilator public*/
++begin
++    complete_ra_val0 = pipe0_ra_val_wb_w;
++end
++endfunction
++function [31:0] complete_rb_val0; /*verilator public*/
++begin
++    complete_rb_val0 = pipe0_rb_val_wb_w;
++end
++endfunction
++function [31:0] complete_rd_val0; /*verilator public*/
++begin
++    if (|pipe0_rd_wb_w)
++        complete_rd_val0 = pipe0_result_wb_w;
++    else
++        complete_rd_val0 = 32'b0;
++end
++endfunction
++
++biriscv_trace_sim
++u_pipe0_dec1_verif
++(
++     .valid_i(pipe1_valid_wb_w)
++    ,.pc_i(pipe1_pc_wb_w)
++    ,.opcode_i(pipe1_opc_wb_w)
++);
++
++wire [4:0] v_pipe1_rs1_w = pipe1_opc_wb_w[19:15];
++wire [4:0] v_pipe1_rs2_w = pipe1_opc_wb_w[24:20];
++
++function [0:0] complete_valid1; /*verilator public*/
++begin
++    complete_valid1 = pipe1_valid_wb_w;
++end
++endfunction
++function [31:0] complete_pc1; /*verilator public*/
++begin
++    complete_pc1 = pipe1_pc_wb_w;
++end
++endfunction
++function [31:0] complete_opcode1; /*verilator public*/
++begin
++    complete_opcode1 = pipe1_opc_wb_w;
++end
++endfunction
++function [4:0] complete_ra1; /*verilator public*/
++begin
++    complete_ra1 = v_pipe1_rs1_w;
++end
++endfunction
++function [4:0] complete_rb1; /*verilator public*/
++begin
++    complete_rb1 = v_pipe1_rs2_w;
++end
++endfunction
++function [4:0] complete_rd1; /*verilator public*/
++begin
++    complete_rd1 = pipe1_rd_wb_w;
++end
++endfunction
++function [31:0] complete_ra_val1; /*verilator public*/
++begin
++    complete_ra_val1 = pipe1_ra_val_wb_w;
++end
++endfunction
++function [31:0] complete_rb_val1; /*verilator public*/
++begin
++    complete_rb_val1 = pipe1_rb_val_wb_w;
++end
++endfunction
++function [31:0] complete_rd_val1; /*verilator public*/
++begin
++    if (|pipe1_rd_wb_w)
++        complete_rd_val1 = pipe1_result_wb_w;
++    else
++        complete_rd_val1 = 32'b0;
++end
++endfunction
++function [5:0] complete_exception; /*verilator public*/
++begin
++    complete_exception = pipe0_exception_wb_w | pipe1_exception_wb_w;
++end
++endfunction
++`endif
++
++
++endmodule
+--- a/rtl/cpu/triha_multiplier.v
++++ b/rtl/cpu/triha_multiplier.v
+@@ -64,6 +64,7 @@
+ reg [32:0]   operand_a_e1_q;
+ reg [32:0]   operand_b_e1_q;
+ reg          mulhi_sel_e1_q;
++reg          early_ready_e1_q;
+ 
+ //-------------------------------------------------------------
+ // Multiplier
+@@ -103,6 +104,7 @@
+     operand_a_e1_q <= 33'b0;
+     operand_b_e1_q <= 33'b0;
+     mulhi_sel_e1_q <= 1'b0;
++    early_ready_e1_q <= 1'b1;
+ end
+ else if (hold_i)
+     ;
+@@ -113,6 +115,7 @@
+     operand_a_e1_q <= operand_a_r;
+     operand_b_e1_q <= operand_b_r;
+     mulhi_sel_e1_q <= ~((opcode_opcode_i & `INST_MUL_MASK) == `INST_MUL);
++    early_ready_e1_q <= (operand_a_r[31:16]==16'b0) && (operand_b_r[31:16]==16'b0);
+ end
+ 
+ // Signed 17-bit partial products retain the full signed/unsigned 33-bit math.
+@@ -133,8 +136,7 @@
+ wire signed [35:0] upper_w = {{2{partial_hh_w[33]}},partial_hh_w} + cross_carry_w;
+ assign mult_result_w = {upper_w[32:0],cross_w[15:0],partial_ll_w[15:0]};
+ assign early_low_value_o = partial_ll_w[31:0];
+-assign early_low_valid_o = (operand_a_e1_q[31:16]==16'b0) &&
+-                          (operand_b_e1_q[31:16]==16'b0);
++assign early_low_valid_o = early_ready_e1_q;
+ 
+ always @ *
+ begin
+--- a/rtl/cpu/triha_pipe_ctrl.v
++++ b/rtl/cpu/triha_pipe_ctrl.v
+@@ -71,6 +71,7 @@
+     ,output          load_e1_o
+     ,output          store_e1_o
+     ,output          mul_e1_o
++    ,output          mul_low_e1_o
+     ,output          branch_e1_o
+     ,output [  4:0]  rd_e1_o
+     ,output [31:0]   pc_e1_o
+@@ -122,6 +123,10 @@
+ //-------------------------------------------------------------
+ `include "biriscv_defs.v"
+ 
++reg [4:0] rd_tag_e1_q;
++reg [4:0] rd_tag_e2_q;
++reg [4:0] rd_tag_wb_q;
++
+ wire squash_e1_e2_w;
+ wire branch_misaligned_w = (issue_branch_taken_i && issue_branch_target_i[1:0] != 2'b0);
+ 
+@@ -147,6 +152,7 @@
+ reg [31:0]              pc_e1_q;
+ reg [31:0]              npc_e1_q;
+ reg [31:0]              opcode_e1_q;
++reg                     mul_low_e1_q;
+ reg [31:0]              operand_ra_e1_q;
+ reg [31:0]              operand_rb_e1_q;
+ reg [`EXCEPTION_W-1:0]  exception_e1_q;
+@@ -159,6 +165,7 @@
+     pc_e1_q         <= 32'b0;
+     npc_e1_q        <= 32'b0;
+     opcode_e1_q     <= 32'b0;
++    mul_low_e1_q    <= 1'b0;
+     operand_ra_e1_q <= 32'b0;
+     operand_rb_e1_q <= 32'b0;
+     exception_e1_q  <= `EXCEPTION_W'b0;
+@@ -183,6 +190,7 @@
+     pc_e1_q         <= issue_pc_i;
+     npc_e1_q        <= issue_branch_taken_i ? issue_branch_target_i : issue_pc_i + 32'd4;
+     opcode_e1_q     <= issue_opcode_i;
++    mul_low_e1_q    <= ((issue_opcode_i & `INST_MUL_MASK)==`INST_MUL);
+     operand_ra_e1_q <= issue_operand_ra_i;
+     operand_rb_e1_q <= issue_operand_rb_i;
+     exception_e1_q  <= (|issue_exception_i) ? issue_exception_i : 
+@@ -196,6 +204,7 @@
+     pc_e1_q         <= 32'b0;
+     npc_e1_q        <= 32'b0;
+     opcode_e1_q     <= 32'b0;
++    mul_low_e1_q    <= 1'b0;
+     operand_ra_e1_q <= 32'b0;
+     operand_rb_e1_q <= 32'b0;
+     exception_e1_q  <= `EXCEPTION_W'b0;
+@@ -207,8 +216,9 @@
+ wire   csr_e1_w        = ctrl_e1_q[`PCINFO_CSR];
+ wire   div_e1_w        = ctrl_e1_q[`PCINFO_DIV];
+ assign mul_e1_o        = ctrl_e1_q[`PCINFO_MUL];
++assign mul_low_e1_o    = mul_low_e1_q;
+ assign branch_e1_o     = ctrl_e1_q[`PCINFO_BRANCH];
+-assign rd_e1_o         = {5{ctrl_e1_q[`PCINFO_RD_VALID]}} & opcode_e1_q[`RD_IDX_R];
++assign rd_e1_o         = rd_tag_e1_q;
+ assign pc_e1_o         = pc_e1_q;
+ assign opcode_e1_o     = opcode_e1_q;
+ assign operand_ra_e1_o = operand_ra_e1_q;
+@@ -315,22 +325,30 @@
+ assign mul_e2_o        = ctrl_e2_q[`PCINFO_MUL];
+ assign rd_e2_o         = {5{(valid_e2_w && ctrl_e2_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_e2_q[`RD_IDX_R];
+ // Data selection uses registered stage metadata; late stall gates commit only.
+-assign rd_bypass_e2_o = {5{valid_e2_q && ctrl_e2_q[`PCINFO_RD_VALID]}} & opcode_e2_q[`RD_IDX_R];
++assign rd_bypass_e2_o = rd_tag_e2_q;
+ assign result_e2_o     = result_e2_r;
+ 
+ // Load store result not ready when reaching E2
+ assign stall_o         = (ctrl_e1_q[`PCINFO_DIV] && ~div_complete_i) || ((ctrl_e2_q[`PCINFO_LOAD] | ctrl_e2_q[`PCINFO_STORE]) & ~mem_complete_i);
+ 
+ reg [`EXCEPTION_W-1:0] exception_e2_r;
++// Reduce both sources before the late completion selector. Full exception
++// metadata still follows the original procedural branch for writeback.
++(* syn_keep = 1 *) wire mem_exception_any_w = |mem_exception_e2_i;
++(* syn_keep = 1 *) wire saved_exception_any_w = |exception_e2_q;
++reg exception_any_r;
+ always @ *
+ begin
+-    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i)
++    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i) begin
+         exception_e2_r = mem_exception_e2_i;
+-    else
++        exception_any_r = mem_exception_any_w;
++    end else begin
+         exception_e2_r = exception_e2_q;
+-end
+-
+-assign squash_e1_e2_w = |exception_e2_r;
++        exception_any_r = saved_exception_any_w;
++    end
++end
++
++assign squash_e1_e2_w = exception_any_r;
+ 
+ reg squash_e1_e2_q;
+ 
+@@ -428,13 +446,55 @@
+         result_wb_q <= result_e2_q;
+ end
+ 
++// Carry qualified destination metadata beside the unchanged opcode/control.
++// This moves the mask before each existing stage boundary, with no new stage.
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    rd_tag_e1_q <= 5'b0;
++else if (issue_stall_i)
++    ;
++else if ((issue_valid_i && issue_accept_i) && ~(squash_e1_e2_o || squash_e1_e2_i))
++    rd_tag_e1_q <= {5{issue_rd_valid_i & ~take_interrupt_i}} & issue_opcode_i[`RD_IDX_R];
++else
++    rd_tag_e1_q <= 5'b0;
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    rd_tag_e2_q <= 5'b0;
++else if (issue_stall_i)
++    ;
++else if (squash_e1_e2_o || squash_e1_e2_i)
++    rd_tag_e2_q <= 5'b0;
++else if (ctrl_e1_q[`PCINFO_INTR])
++    rd_tag_e2_q <= {5{valid_e1_q}} & rd_tag_e1_q;
++else if (|exception_e1_q)
++    rd_tag_e2_q <= 5'b0;
++else
++    rd_tag_e2_q <= {5{valid_e1_q}} & rd_tag_e1_q;
++
++always @ (posedge clk_i or posedge rst_i)
++if (rst_i)
++    rd_tag_wb_q <= 5'b0;
++else if (issue_stall_i)
++    ;
++else if (squash_wb_i)
++    rd_tag_wb_q <= 5'b0;
++// Every special memory-fault valid-clear case is nonzero and also clears
++// RD_VALID. The original procedural exception gate covers those cases;
++// an unknown reduction takes the original else path, preserving X behavior.
++else if (|exception_e2_r)
++    rd_tag_wb_q <= 5'b0;
++else
++    rd_tag_wb_q <= rd_tag_e2_q;
++
+ // Instruction completion (for debug)
+ wire complete_wb_w     = ctrl_wb_q[`PCINFO_COMPLETE] & ~issue_stall_i;
+ 
+ assign valid_wb_o      = valid_wb_q & ~issue_stall_i;
+ assign csr_wb_o        = ctrl_wb_q[`PCINFO_CSR] & ~issue_stall_i; // TODO: Fault disable???
+ assign rd_wb_o         = {5{(valid_wb_o && ctrl_wb_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_wb_q[`RD_IDX_R];
+-assign rd_bypass_wb_o = {5{valid_wb_q && ctrl_wb_q[`PCINFO_RD_VALID]}} & opcode_wb_q[`RD_IDX_R];
++assign rd_bypass_wb_o = rd_tag_wb_q;
+ assign result_wb_o     = result_wb_q;
+ assign pc_wb_o         = pc_wb_q;
+ assign opcode_wb_o     = opcode_wb_q;
+--- a/rtl/cpu/triha_regfile.v
++++ b/rtl/cpu/triha_regfile.v
+@@ -24,10 +24,11 @@
+ //-----------------------------------------------------------------
+ /*
+  * TriHa register file: asynchronous distributed RAM for single issue.
+- * Two copies provide the existing two simultaneous read ports. A resettable
+- * written mask preserves synchronous zero-on-reset without resetting RAM.
+- * The single-issue integration has no secondary write. Dual issue retains
+- * the existing implementation. See ADAPTATIONS.json for provenance.
++ * Single issue uses two read copies. The isolated dual-native experiment
++ * uses two writer banks, four read replicas and a written/live-bank table.
++ * Reset masks preserve synchronous zero-on-reset without resetting RAM.
++ * The explicit vendor configuration remains available. See the diagnostic
++ * manifest and ADAPTATIONS.json for provenance and admission boundaries.
+  */
+ `timescale 1ns / 1ps
+ module triha_regfile #(
+@@ -47,7 +48,8 @@
+     output wire [31:0] ra0_value_o,
+     output wire [31:0] rb0_value_o,
+     output wire [31:0] ra1_value_o,
+-    output wire [31:0] rb1_value_o
++    output wire [31:0] rb1_value_o,
++    output wire ra0_zero_o,rb0_zero_o,ra1_zero_o,rb1_zero_o
+ );
+     generate
+         if (!SUPPORT_DUAL_ISSUE && !SUPPORT_REGFILE_XILINX) begin : g_single
+@@ -101,13 +103,155 @@
+             assign ra1_value_o = 32'b0;
+             assign rb1_value_o = 32'b0;
+ 
++            assign ra0_zero_o=(ra0_value_o==32'b0);
++            assign rb0_zero_o=(rb0_value_o==32'b0);
++            assign ra1_zero_o=(ra1_value_o==32'b0);
++            assign rb1_zero_o=(rb1_value_o==32'b0);
++
+             // synthesis translate_off
+             always @(posedge clk_i) begin
+                 if (!rst_i && rd1_i !== 5'b0)
+                     $fatal(1, "REGFILE_FAIL single_issue_secondary_write");
+             end
+             // synthesis translate_on
++        end else if(SUPPORT_DUAL_ISSUE && !SUPPORT_REGFILE_XILINX) begin : g_dual_native
++            // One valid bit per writer bank directly encodes the existing
++            // live-value table. Reset has neither bank valid; port0 still wins.
++            // Two writer banks reuse the existing
++            // dual-bank storage topology, with current port0 priority.
++            reg [31:1] bank0_live_q,bank1_live_q;
++            reg [31:1] zero_q;
++            wire [31:0] bank0_live_w={bank0_live_q,1'b0};
++            wire [31:0] bank1_live_w={bank1_live_q,1'b0};
++            wire [31:0] written_w=bank0_live_w | bank1_live_w;
++            wire [31:0] bank0_data[0:3];
++            wire [31:0] bank1_data[0:3];
++            reg reset_active_r;
++            always @* begin
++                reset_active_r=1'b0;
++                if(rst_i) reset_active_r=1'b1;
++            end
++            // Preserve the old exact case/default0 behavior for X/Z addresses.
++            function known_register;
++                input [4:0] address;
++                begin
++                    known_register=1'b0;
++                    case(address)
++                        5'd1,5'd2,5'd3,5'd4,5'd5,5'd6,5'd7,5'd8,
++                        5'd9,5'd10,5'd11,5'd12,5'd13,5'd14,5'd15,5'd16,
++                        5'd17,5'd18,5'd19,5'd20,5'd21,5'd22,5'd23,5'd24,
++                        5'd25,5'd26,5'd27,5'd28,5'd29,5'd30,5'd31: known_register=1'b1;
++                        default: known_register=1'b0;
++                    endcase
++                end
++            endfunction
++            genvar register_index,bank,read_port,bit_pair,write_bit;
++            for(register_index=1;register_index<32;register_index=register_index+1) begin:g_live
++                always @(posedge clk_i) begin
++                    if(rst_i) begin
++                        bank0_live_q[register_index]<=1'b0;
++                        bank1_live_q[register_index]<=1'b0;
++                        zero_q[register_index]<=1'b1;
++                    end else if(rd0_i==register_index) begin
++                        bank0_live_q[register_index]<=1'b1;
++                        bank1_live_q[register_index]<=1'b0;
++                        zero_q[register_index]<=(rd0_value_i==32'b0);
++                    end else if(rd1_i==register_index) begin
++                        bank0_live_q[register_index]<=1'b0;
++                        bank1_live_q[register_index]<=1'b1;
++                        zero_q[register_index]<=(rd1_value_i==32'b0);
++                    end
++                end
++            end
++            for(bank=0;bank<2;bank=bank+1) begin:g_bank
++                wire [4:0] raw_address_w=bank==0 ? rd0_i : rd1_i;
++                wire [31:0] raw_data_w=bank==0 ? rd0_value_i : rd1_value_i;
++                wire address_known_w=known_register(raw_address_w);
++                wire write_w=address_known_w && !reset_active_r;
++                (* syn_keep=1 *) wire [31:0] data_delay_w,data_w;
++                (* syn_keep=1 *) wire [4:0] address_delay_w,address_w;
++                for(write_bit=0;write_bit<32;write_bit=write_bit+1) begin:g_data_hold
++                    (* syn_keep=1 *) GTP_LUT6 #(.INIT(64'h8888888888888888)) u_first (
++                        .I0(raw_data_w[write_bit]),.I1(address_known_w),.I2(1'b0),.I3(1'b0),
++                        .I4(1'b0),.I5(1'b0),.Z(data_delay_w[write_bit]));
++                    (* syn_keep=1 *) GTP_LUT6 #(.INIT(64'h2222222222222222)) u_second (
++                        .I0(data_delay_w[write_bit]),.I1(reset_active_r),.I2(1'b0),.I3(1'b0),
++                        .I4(1'b0),.I5(1'b0),.Z(data_w[write_bit]));
++                end
++                for(write_bit=0;write_bit<5;write_bit=write_bit+1) begin:g_address_hold
++                    (* syn_keep=1 *) GTP_LUT6 #(.INIT(64'h8888888888888888)) u_first (
++                        .I0(raw_address_w[write_bit]),.I1(address_known_w),.I2(1'b0),.I3(1'b0),
++                        .I4(1'b0),.I5(1'b0),.Z(address_delay_w[write_bit]));
++                    (* syn_keep=1 *) GTP_LUT6 #(.INIT(64'h2222222222222222)) u_second (
++                        .I0(address_delay_w[write_bit]),.I1(reset_active_r),.I2(1'b0),.I3(1'b0),
++                        .I4(1'b0),.I5(1'b0),.Z(address_w[write_bit]));
++                end
++                for(read_port=0;read_port<4;read_port=read_port+1) begin:g_read
++                    wire [4:0] read_address_w=read_port==0 ? ra0_i :
++                        read_port==1 ? rb0_i : read_port==2 ? ra1_i : rb1_i;
++                    wire [31:0] data_read_w;
++                    for(bit_pair=0;bit_pair<16;bit_pair=bit_pair+1) begin:g_pair
++                        GTP_RAM32X2DP #(.INIT_0(32'b0),.INIT_1(32'b0)) u_ram (
++                            .DO(data_read_w[2*bit_pair +: 2]),.DI(data_w[2*bit_pair +: 2]),
++                            .RADDR(read_address_w),.WADDR(address_w),.WCLK(clk_i),.WE(write_w));
++                    end
++                    if(bank==0)assign bank0_data[read_port]=data_read_w;
++                    else assign bank1_data[read_port]=data_read_w;
++                end
++            end
++            // Capture the scalar property at the unchanged RF write edge.
++            // Preserve original read qualification and unknown-skip behavior.
++            reg ra0_zero_r,rb0_zero_r,ra1_zero_r,rb1_zero_r;
++            always @* begin
++                ra0_zero_r=1'b1;rb0_zero_r=1'b1;ra1_zero_r=1'b1;rb1_zero_r=1'b1;
++                if(known_register(ra0_i) && written_w[ra0_i])
++                    ra0_zero_r=zero_q[ra0_i];
++                if(known_register(rb0_i) && written_w[rb0_i])
++                    rb0_zero_r=zero_q[rb0_i];
++                if(known_register(ra1_i) && written_w[ra1_i])
++                    ra1_zero_r=zero_q[ra1_i];
++                if(known_register(rb1_i) && written_w[rb1_i])
++                    rb1_zero_r=zero_q[rb1_i];
++            end
++            assign ra0_zero_o=ra0_zero_r;
++            assign rb0_zero_o=rb0_zero_r;
++            assign ra1_zero_o=ra1_zero_r;
++            assign rb1_zero_o=rb1_zero_r;
++            reg [31:0] ra0_value_r,rb0_value_r,ra1_value_r,rb1_value_r;
++            always @* begin
++                ra0_value_r=0;rb0_value_r=0;ra1_value_r=0;rb1_value_r=0;
++                if(known_register(ra0_i))
++                    case ({bank1_live_w[ra0_i],bank0_live_w[ra0_i]})
++                        2'b01: ra0_value_r=bank0_data[0];
++                        2'b10: ra0_value_r=bank1_data[0];
++                        default: ra0_value_r=32'b0;
++                    endcase
++                if(known_register(rb0_i))
++                    case ({bank1_live_w[rb0_i],bank0_live_w[rb0_i]})
++                        2'b01: rb0_value_r=bank0_data[1];
++                        2'b10: rb0_value_r=bank1_data[1];
++                        default: rb0_value_r=32'b0;
++                    endcase
++                if(known_register(ra1_i))
++                    case ({bank1_live_w[ra1_i],bank0_live_w[ra1_i]})
++                        2'b01: ra1_value_r=bank0_data[2];
++                        2'b10: ra1_value_r=bank1_data[2];
++                        default: ra1_value_r=32'b0;
++                    endcase
++                if(known_register(rb1_i))
++                    case ({bank1_live_w[rb1_i],bank0_live_w[rb1_i]})
++                        2'b01: rb1_value_r=bank0_data[3];
++                        2'b10: rb1_value_r=bank1_data[3];
++                        default: rb1_value_r=32'b0;
++                    endcase
++            end
++            assign ra0_value_o=ra0_value_r;assign rb0_value_o=rb0_value_r;
++            assign ra1_value_o=ra1_value_r;assign rb1_value_o=rb1_value_r;
+         end else begin : g_existing
++            assign ra0_zero_o=(ra0_value_o==32'b0);
++            assign rb0_zero_o=(rb0_value_o==32'b0);
++            assign ra1_zero_o=(ra1_value_o==32'b0);
++            assign rb1_zero_o=(rb1_value_o==32'b0);
+             biriscv_regfile #(
+                 .SUPPORT_REGFILE_XILINX(SUPPORT_REGFILE_XILINX),
+                 .SUPPORT_DUAL_ISSUE(SUPPORT_DUAL_ISSUE)

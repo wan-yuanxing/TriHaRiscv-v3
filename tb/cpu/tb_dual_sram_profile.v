@@ -19,6 +19,9 @@ module tb_dual_sram_profile;
     integer queue0=0,queue1=0,queue2=0,queue3=0,queue4=0,queue5=0,queue6=0,queue7=0,queue8=0;
     integer backpressure=0,backpressure_pop=0,frontend_empty=0,frontend_pc=0;
     integer branch_pairs=0,branch_zero_eqne=0,branch_zero_signed=0,branch_zero_unsigned=0,branch_nonzero=0;
+    integer conditional_branches=0,conditional_taken=0,conditional_not_taken=0;
+    integer direct_jumps=0,indirect_jumps=0,pc_mismatch_cycles=0,pc_mismatch_episodes=0;
+    reg pc_mismatch_previous=0;
     reg [31:0] start_cycle = 0, elapsed = 0;
     reg printed = 0;
     reg [2:0] a_roles, b_roles;
@@ -68,6 +71,14 @@ module tb_dual_sram_profile;
         end
         if (reads == 1) begin
             sample_issue;
+            sample_branch(u_tb.u_dut.u_core.u_cpu.exec0_opcode_valid_w,
+                u_tb.u_dut.u_core.u_cpu.opcode0_opcode_w,`I.branch_d_exec0_request_i);
+            sample_branch(u_tb.u_dut.u_core.u_cpu.exec1_opcode_valid_w,
+                u_tb.u_dut.u_core.u_cpu.opcode1_opcode_w,`I.branch_d_exec1_request_i);
+            if (`I.mispredicted_r) begin
+                pc_mismatch_cycles=pc_mismatch_cycles+1;
+                if (!pc_mismatch_previous) pc_mismatch_episodes=pc_mismatch_episodes+1;
+            end
             if (`I.pipe0_valid_wb_w) begin
                 wb_events = wb_events + 1;
                 $fwrite(wb_file, "%08h %08h %02h %08h %02h\n", `I.pipe0_pc_wb_w,
@@ -85,7 +96,30 @@ module tb_dual_sram_profile;
                 $fwrite(store_file, "%08h %h %08h\n", u_tb.u_dut.data_addr, u_tb.u_dut.data_wstrb, u_tb.u_dut.data_wdata);
             end
         end
+        pc_mismatch_previous=`I.mispredicted_r;
     end
+    // Observable issue/recovery events, not a hypothetical new pipeline score.
+    task sample_branch;
+        input valid;
+        input [31:0] opcode;
+        input taken;
+        begin
+            if(valid)case(opcode[6:0])
+                7'h63:case(opcode[14:12])
+                    0,1,4,5,6,7:begin
+                        conditional_branches=conditional_branches+1;
+                        case(taken)
+                            1'b1:conditional_taken=conditional_taken+1;
+                            1'b0:conditional_not_taken=conditional_not_taken+1;
+                            default:$fatal(1,"SRAM_PROFILE_FAIL unknown_branch_result");
+                        endcase
+                    end
+                endcase
+                7'h6f:direct_jumps=direct_jumps+1;
+                7'h67:if(opcode[14:12]==0)indirect_jumps=indirect_jumps+1;
+            endcase
+        end
+    endtask
     task sample_issue;
         begin
             total = total + 1;
@@ -192,6 +226,10 @@ module tb_dual_sram_profile;
                 dependency, false_a, false_b, pair_no_word, pair_structure, pair_dependency, early_mul_opportunity, structure_lsu_pair, structure_branch_a, structure_other, pair_raw, pair_waw, pair_older, a_waw_only, b_waw_only,
                 queue0,queue1,queue2,queue3,queue4,queue5,queue6,queue7,queue8,backpressure,backpressure_pop,frontend_empty,frontend_pc,
                 branch_pairs,branch_zero_eqne,branch_zero_signed,branch_zero_unsigned,branch_nonzero);
+            if(conditional_branches!=conditional_taken+conditional_not_taken)
+                $fatal(1,"SRAM_PROFILE_FAIL branch_partition");
+            $display("SRAM_BRANCH_PROFILE_PASS conditional=%0d taken=%0d not_taken=%0d jal=%0d jalr=%0d pc_mismatch_cycles=%0d pc_mismatch_episodes=%0d",
+                conditional_branches,conditional_taken,conditional_not_taken,direct_jumps,indirect_jumps,pc_mismatch_cycles,pc_mismatch_episodes);
         end
     end
     `undef I

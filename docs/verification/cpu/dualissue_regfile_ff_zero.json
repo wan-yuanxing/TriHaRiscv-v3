@@ -1,0 +1,98 @@
+{
+  "status": "RTL_PASS_PHYSICAL_PENDING",
+  "overall_target_met": false,
+  "scope": "Existing synchronous-reset dual-write FFbackend with cached zero flags; same visible post-reset register behavior",
+  "manifest": "docs\\verification\\cpu\\dualissue_regfile_ff_zero_sources.json",
+  "manifest_sha256": "ad5274bd1c3d94a6576b344a207ad236540c20a08c70d963c123b7245a8d2db5",
+  "comparison": [
+    {
+      "label": "sram",
+      "directory": "build\\cpu\\dual-sram\\coremark-20261025T092343747798Z",
+      "parent_directory": "build\\cpu\\dual-sram\\coremark-20261025T062140159862Z",
+      "result_sha256": "fd45d813665ac470d1be6dac1c2ca2225988f00ef53ac2594012d5b8cd7bf0e7",
+      "measurement": {
+        "cycles": 1240606,
+        "wb_completed": 1448448,
+        "observed_ipc": 1.1675326413059424,
+        "coremark_per_mhz_short_estimate": 4.0302884235607435,
+        "crc": [
+          "e9f5",
+          "e714",
+          "1fd7",
+          "8e3a"
+        ],
+        "official_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+        "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+        "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+      }
+    },
+    {
+      "label": "cache_on",
+      "directory": "build\\cpu\\cache-coremark-20261025T092343758488Z",
+      "parent_directory": "build\\cpu\\cache-coremark-20261025T062140158689Z",
+      "result_sha256": "cb7dc011ab66cc89e6ce74b6bb7728c7fb6b741325889ca08e5b56710e9f85d6",
+      "measurement": {
+        "cycles": 1621119,
+        "wb_observations": 1448448,
+        "stores": 70839,
+        "coremark_per_mhz": 3.0842893088045975,
+        "clock_hz_nominal": 100000000,
+        "official_score": false,
+        "board_score": false
+      },
+      "runtime_images_and_complete_traces_identical": true,
+      "hashes": {
+        "firmware.hex": "f4709ec564c8c3a01555d1651f43f30020f0e471676214fc2b28b45999e6adb2",
+        "cpu-cache.wb.log": "83c2ecbdf3ecd96172e3829b1b9b3ca5164d0053e66a0bfd8b6d3c4bc2035a64",
+        "cpu-cache.store.log": "45110981fcff7e5a21a9b1101d0419a1af7edab4be811b51c88b59300ccaf78e"
+      }
+    }
+  ],
+  "directed": [
+    {
+      "label": "RF20195",
+      "directory": "build\\cpu\\dual-diagnostic-20261025T092312654350Z",
+      "status": "PASS",
+      "result_sha256": "c750bd442ec1ab2bdf26985fa5c01f87e4bec5fade352a8d7843058f601c6670"
+    },
+    {
+      "label": "metadata_negative",
+      "directory": "build\\cpu\\dual-diagnostic-20261025T092312654144Z",
+      "status": "FAIL",
+      "result_sha256": "24f10206dae8319315fe58f3c0d011cd59be4b02782ce4758100a77609f57ee4"
+    },
+    {
+      "label": "forwarding540400",
+      "directory": "build\\cpu\\dual-diagnostic-20261025T092343766223Z",
+      "status": "PASS",
+      "result_sha256": "dc72c8297781a15e6b63447ec6fc5ec9b1e162fd53c332a40d702fb53ea26ee3"
+    },
+    {
+      "label": "ordered",
+      "directory": "build\\cpu\\redirect-ordered-20261025T0923440718832Z",
+      "status": "PASS",
+      "result_sha256": "770013b7e3520378f8cc7c427fe69bf258b6d3d40ef66b5c7a1e0e7010f7da63"
+    },
+    {
+      "label": "ordered_irq",
+      "directory": "build\\cpu\\redirect-ordered-20261025T0923440729795Z",
+      "status": "PASS",
+      "result_sha256": "ba6948f8fe6bc161081a048b3971ccffda55d3367947fc19436817be1f75bd31"
+    }
+  ],
+  "physical": {
+    "directory": "build\\cpu\\dual-regfile-ff-zero-io-physical-v40",
+    "prepared_sha256": "29a874583e5669c6012b18b9b0ec45d94ce32caabee8e94bed6b4bbb70416fbb",
+    "status": "RUNNING",
+    "period_ns": 10,
+    "pnr_minutes": 20,
+    "outer_seconds": 1500
+  },
+  "independent_review": "No blocker after at least one reset clock; pre-reset equivalence excluded; actual FF/mux/fanout cost and timing unknown",
+  "initial_failure": "Implicit zero_q function dependency caused stale flags at stable address; fixed by explicit zero_bits argument; bad snapshot and failed run retained"
+}

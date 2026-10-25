@@ -1,0 +1,48 @@
+{
+  "status": "REJECTED_REGION_CAPACITY",
+  "scope": "One bounded middle clock-region placement comparison on proven v32 and v37; original timing/IO/hold and native tool budgets unchanged",
+  "physical_constraint": "fpga/pg2l100h/constraints/cpu_minimal_soc_central.fdc",
+  "constraint_sha256": "07ca981d486169a64f874db29b9e954c9638b9f4255977e06d04eb5ec41e2712",
+  "region": [
+    0,
+    64,
+    100,
+    149
+  ],
+  "prior_region": [
+    0,
+    64,
+    150,
+    199
+  ],
+  "coordinate_caution": "PAP_REGION logical coordinates; do not directly equate to CLMA physical report coordinates",
+  "overall_target_met": false,
+  "runs": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-zero-exec-central-physical-v32",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-zero-exec-io-physical-v32",
+      "status": "FAIL",
+      "prepared_sha256": "4e68a3cfe4ccaf0c98bc271f531d707df5cd097dc54809ab94497b651cb5fdf8",
+      "same_RTL_firmware_base_timing": true,
+      "result_sha256": "499c6aed4b059e8be558c757ec205278ed6a193e9f3a56aa8e2f6e360492cf88",
+      "native_return_code": 1,
+      "runner_return_code": 1,
+      "error": "E: ConstraintEditor-0070: [D:/FPGA/TriHaRiscv-cpu-dualissue-windows/build/cpu/dual-branch-zero-exec-central-physical-v32/device_map/triha_minimal_soc.pcf(line number: 6503)] Region soc_cpu_central can't hold the design inst, try a bigger region. Region soc_cpu_central already has these instance cons",
+      "timing_report_available": false
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-equality-groups-central-physical-v37",
+      "parent_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-branch-equality-groups-io-physical-v37",
+      "status": "FAIL",
+      "prepared_sha256": "7a5f7a2ea2106079d4341977645a654676ef28faa512ac230127ae1f5f060b79",
+      "same_RTL_firmware_base_timing": true,
+      "result_sha256": "c315c1a456edaa3dcd38df8d2f348e21754fcb4c350246d6dbb7b173015dffcd",
+      "native_return_code": 1,
+      "runner_return_code": 1,
+      "error": "E: ConstraintEditor-0070: [D:/FPGA/TriHaRiscv-cpu-dualissue-windows/build/cpu/dual-branch-equality-groups-central-physical-v37/device_map/triha_minimal_soc.pcf(line number: 5764)] Region soc_cpu_central can't hold the design inst, try a bigger region. Region soc_cpu_central already has these instanc",
+      "timing_report_available": false
+    }
+  ],
+  "reason": "Whole-CPU region cannot hold mapped instances; first capacity failures in predictor hierarchy. Failed before placement; no new timing result.",
+  "next_scope": "Datapath+queue only, excluding large predictor and hard multiplier"
+}

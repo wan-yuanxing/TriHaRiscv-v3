@@ -39,7 +39,17 @@ WB/store均与v30逐字节一致，保持4.030288/3.084289。两通道及四态�
 原10ns两套独立PDS已结束：默认setup−0.943ns，I/O打包−0.539ns，
 两套hold/MPW均通过。仍未达到100MHz。v33只加工具支持的局部syn_maxfan16
 属性，复用v32全部功能；SRAM/Cache完整镜像及WB/store逐字节相同，
-原10ns/I/O映射PDS已结束，setup−0.909ns回退，淘汰v33。当前无本路线PDS在运行。详见
+原10ns/I/O映射PDS已结束，setup−0.909ns回退，淘汰v33。v34实际复制成功但setup−1.007ns，淘汰。v35只将有符号分支比较改为
+符号判定+31bit比较，整核镜像与轨迹相同，但setup−0.974ns未过。
+v36基于v35把RF所有者/已写位改为两银行有效位，组件与整核通过，setup−0.662ns仍未过。
+v32/v36种子8对照分别−0.960/−0.706ns，均不采用。
+当前最佳v32−0.539ns；ADS retiming诊断setup−1.095ns且FF+1905，淘汰。
+v37/v38分组相等比较均通过完整整核，实际carry链消除，
+但setup−0.776/−1.209ns仍未过。整核中部区域因容量检查失败；
+数据通路区域v32/v37也分别−0.723/−0.995ns未过。
+v39局部PC寄存已等周期/等轨迹通过，但setup−1.758ns，淘汰。
+当前v40复用现有FF寄存器堆后端并保留zero元数据；完整SRAM/Cache等周期等轨迹通过，
+原10ns独立PDS运行中。详见
 [v32证据](../verification/cpu/dualissue_branch_zero_exec.json)。
 见[零标志终态](../verification/cpu/dualissue_rf_zero_metadata.json)、
 [类别队列I/O版](../verification/cpu/dualissue_queued_unit_classes.json)与
@@ -276,3 +286,52 @@ v33只在raw forwarding hit/select、branch_taken_r增加ADS手册5.13支持的s
 
 
 v33终态：Slow/Fast setup−0.909/+2.840ns、hold+0.113/+0.100ns、MPW+3.655/+4.202ns；native0/verifier2、全部冻结输入/输出已核。CPU-only8871LUT/4252FF/752RAM-LUT(included)/4APM/0DRM。编译器识别三处新属性，但函数内hit/select属性未保留在综合网表；branch_taken部分复制且carry驱动网络有未复制警告。相比v32 setup退步0.370ns，因此不采用。下一步须先把目标匹配/选择网络显式暴露到模块边界并在综合后验证真正复制，或另行验证分支比较器结构；不盲目重复当前属性方案。
+
+
+v34基于v32，把四路转发匹配/独热选择暴露为模块级网络，并使用ADS支持的syn_maxfan16；共享同一组已消除未知匹配的hit给数据与zero属性。540400实际RF/转发四态检查、破坏优先级负控、有序/IRQ均通过，独立源码/证据审查无阻塞。完整SRAM/Cache固件及WB/store逐字节同v32，分数保持4.030288/3.084289。原10ns/I/O/hold约束20分钟独立PDS已启动，实际映射与终态时序待核。见[显式转发控制证据](../verification/cpu/dualissue_forward_explicit_controls.json)。
+
+
+v34终态setup Slow/Fast−1.007/+2.682ns，hold+0.098/+0.058ns、MPW+3.655/+4.202ns，native0/verifier2。关键N3168在综合中确实分成15/16/10负载，57个受约束scalar均≤16，但setup仍退步；CPU-only8868LUT/4256FF/752RAM-LUT(included)/4APM/0DRM。冻结输入/输出已核，不采用。
+
+v35回到v32，仅改less_than_signed：异号按符号，同号仅比较低31bit，未知符号保留X。用原v32完整branch模块作独立clocked oracle，全137bit输出40139次对照/负控及有序/IRQ通过，独立审查无阻塞。新完整SRAM/Cache镜像和WB/store逐字节相同，4.030288/3.084289短RTL分数不变。原10ns/I/O/hold的20分钟PDS已启动。见[分支符号比较证据](../verification/cpu/dualissue_branch_sign_compare.json)。
+
+
+v35终态setup Slow/Fast−0.974/+2.682ns、hold+0.113/+0.100ns、MPW+3.655/+4.202ns，native0/verifier2，完整冻结输入/输出已核。CPU-only8837LUT/4252FF/752RAM-LUT(included)/4APM/0DRM。旧32bit分支减法消失；最差written_q[7]→RF资格/银行选择→转发→比较→PC，逻辑13级/2.159ns，布线8.294ns。仍不及v32−0.539ns。
+
+v36沿用双银行LVT拓扑，只重编码62个有效/所有者状态位：reset00、port0写01、port1写10，port0同地址优先。读数据直接case选银行，zero属性按live0|live1资格保持；RAM与hold gates未改。独立RF oracle20195次、实际RF/转发540400次及错误银行负控、有序/IRQ通过。独立审查限定同步复位后可达状态等价。整核SRAM/Cache完整镜像和WB/store同v35，4.030288/3.084289短RTL分数不变；原10ns独立PDS启动。见[RF银行有效位证据](../verification/cpu/dualissue_regfile_bank_valid.json)。
+
+
+v36种子1终态setup Slow/Fast−0.662/+2.631ns，hold+0.111/+0.100ns、MPW+3.655/+4.202ns，native0/verifier2，冻结输入/输出已核。CPU-only8979LUT/4256FF/752RAM-LUT(included)/4APM/0DRM。比v35改善0.312ns，仍未通过。复用工程已有种子8方案，对v32和v36各做一次有界对照；新准备脚本只允许种子1/8，默认Tcl逐字不变，12项冻结/预算/参数检查通过；两套输入与原Tcl仅种子不同（目录规范化后），不改变约束或放松验收。
+
+
+种子8两套终态均失败：v32 setup Slow/Fast−0.960/+2.667ns、hold+0.116/+0.102ns；v36−0.706/+2.795ns、hold+0.115/+0.102ns；MPW均+3.655/+4.202ns。冻结输入/输出已核。保留种子1最佳，不扩展种子搜索。
+
+同源v32启动一次ADS原生-retiming诊断，源码/固件/FDC/IO/hold/seed1均同最佳包，规范化目录后Tcl仅综合选项不同。默认Tcl保持原字节，14项参数/冻结/兼容检查通过。尚未验证实际移动与综合后语义，不能凭工具PASS或RTL测试宣称准入；需核查日志/netlist和最终时序。
+
+
+原生retiming终态：Slow/Fast setup−1.095/+2.667ns、hold+0.082/+0.108ns、MPW+3.655/+4.202ns。CPU-only8871LUT/6157FF/752RAM-LUT(included)/4APM/0DRM，冻结输入/输出已核。时序更差且FF增加1905，因此拒绝，不花费完整综合网表CoreMark仿真、不作重定时功能准入。
+
+v37/v38回到v36，通用BEQ/BNE比较改为保持中间结果的XOR/归约相等分组，分别8×4bit与11×3bit（末组共同补零，适配六输入LUT）。均全137bit输出40139对照/漏高位负控、有序/IRQ及独立审查通过，无新增状态/周期。v37完整SRAM/Cache镜像和WB/store同v36，4.030288/3.084289；独立原10ns PDS启动。v38完整仿真待结束。实际LUT/carry拓扑与最终STA待核，不以syn_keep请求代替映射证据。
+
+
+v37/v38分组比较终态：setup Slow/Fast分别−0.776/+2.723ns、−1.209/+2.842ns；hold分别+0.107/+0.101ns、+0.113/+0.083ns；MPW均+3.655/+4.202ns。CPU-only8948LUT/4256FF与8961LUT/4257FF，均752RAM-LUT(included)/4APM/0DRM；全部冻结输入/输出已核。carry等值链消除但布线仍主导，不采用为已收敛设计。
+
+当前各对v32和v37运行一次中部PAP_REGION(0,64,100,149)对照，区域尺寸同旧upperquarter试验，已有IO寄存器打包保留；全部基础FDC/RTL/固件/seed1及预算不变，无timing exception。PAP逻辑坐标不得直接当CLMA物理坐标；实际区域使用与setup/hold/MPW待最终报告核验。见[区域对照](../verification/cpu/dualissue_central_region.json)。
+
+
+整核中部区域两套均在约束检查失败，native/runner1，无最终时序。首批容量失败位于u_frontend/u_npc，不能据此报告时序收益。原始错误及输出哈希保留。改为仅u_issue/u_exec0/gen_dual_exec.u_exec1/u_div/u_lsu/u_frontend/u_decode同一区域，排除3118LUT预测器与硬乘法器；所选层级约4762LUT。v32/v37两套原RTL/固件/基础FDC/seed1预算不变，实际区域容量与布线待验收。
+
+
+数据通路区域两套终态：v32 setup Slow/Fast−0.723/+2.663ns、hold+0.082/+0.046ns；v37−0.995/+2.647ns、hold+0.119/+0.072ns；MPW均+3.655/+4.202ns。区域通过容量与布线但不改善最佳结果，全部冻结输出已核，不采用。
+
+真实分支画像：v32计时窗266022条件分支（147132 taken/118890 not-taken），20309 JAL/18198 JALR，20530 PC mismatch episodes，独立WB opcode计数完全一致，新增observer后完整trace/程序保持。若仅每恢复额外1cycle估算3.964679/MHz，不能作为解决方案；该估算不是新架构实测。
+
+v39局部MUX重定时：四组候选PC与onehot选择同沿寄存，visiblePC严格保持CSR>EX1>EX0>+8>+4>hold优先级。独立单PC oracle20005周期（控制/目标/异步reset XZ、回绕）与错CSR选择负控、有序/IRQ、RF转发540400检查通过；独立审查无RTL阻塞。原版试验两次因测试刺激同tick reset多次赋值/force传播竞争失败，修正后parent与candidate均通过，失败日志保留。新完整SRAM/Cache镜像/WB/store同v32，仍1240606/1621119cycles，4.030288/3.084289短RTL分数；PDS原10ns预算启动。原PC存储32bit→名义132bit，输出mux可能造成新关键路径，必须核实实际映射及全部corner，未作准入。见[局部PC重定时](../verification/cpu/dualissue_pc_candidate_registers.json)。
+
+
+v39终态setup Slow/Fast−1.758/+2.700ns、hold+0.112/+0.100ns、MPW+3.655/+4.202ns，native0/verifier2，冻结输入/输出已核。候选PC/选择FF实际保留，CPU-only8815LUT/4360FF/752RAM-LUT(included)/4APM/0DRM。旧branch到32bitPC写口路径移动，但新最差FIFO data_q[1][4]→消费/shift控制→data_q[2][19]，故不采用。
+
+v40基于最佳v32，仅双发射RF改为复用已有vendor FF后端（同步reset、port0写优先），保留31个zero元数据。输入mask&ffffffff保持原生RAM门对Z→X写数据语义。最初函数隐式读取zero_q导致地址不变时flag陈旧，独立组件实测检出；改为全部显式函数输入，保留bad快照/失败记录。固定版RF20195、转发540400及metadata损坏负控、有序/IRQ通过，独立审查限定至少经历一次同步复位；复位前输出不等价、不作声明。单发射/Xilinx路径未改。完整SRAM/Cache仿真运行中。
+
+
+v40固定版完整SRAM/Cache固件及WB/store同v32，1240606/1621119cycles、4.030288/3.084289短RTL分数保持。原10ns/I/O/hold/multicorner/seed1，20分钟独立PDS已启动。CPU-only映射与最终STA待核，仍不提升生产RTL。见[FF后端对照](../verification/cpu/dualissue_regfile_ff_zero.json)。

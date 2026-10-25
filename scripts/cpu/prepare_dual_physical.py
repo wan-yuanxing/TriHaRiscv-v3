@@ -11,10 +11,12 @@ ROOT=Path(__file__).resolve().parents[2]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def physical_constraints(compact=False,io_registers=False):
-    if compact and io_registers:
+def physical_constraints(compact=False,io_registers=False,central=False,datapath=False):
+    if sum(bool(value) for value in (compact,io_registers,central,datapath))>1:
         raise ValueError('Choose region placement or output register packing separately')
     if compact:return ['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc']
+    if central:return ['fpga/pg2l100h/constraints/cpu_minimal_soc_central.fdc']
+    if datapath:return ['fpga/pg2l100h/constraints/cpu_minimal_soc_datapath.fdc']
     if io_registers:return ['fpga/pg2l100h/constraints/cpu_io_registers.fdc']
     return []
 
@@ -58,7 +60,7 @@ def verify_package(work):
     recipe=json.loads((ROOT/'fpga/pg2l100h/project/cpu_minimal_soc.json').read_text(encoding='utf-8'))
     names=set(core['sources']+core['headers']+recipe['sources']+recipe['headers'])
     physical=row.get('physical_constraints',[])
-    if physical not in ([],physical_constraints(compact=True),physical_constraints(io_registers=True)):
+    if physical not in ([],physical_constraints(compact=True),physical_constraints(io_registers=True),physical_constraints(central=True),physical_constraints(datapath=True)):
         raise ValueError('Unsupported physical constraint set')
     for name in physical:
         if row['input_hashes'].get(name)!=sha(ROOT/name):raise ValueError('Physical implementation attribute drift')
@@ -72,7 +74,7 @@ def verify_package(work):
     minutes=row.get('pnr_minutes',10)
     if ('pnr_minutes' in row)!=('outer_seconds' in row) or type(minutes) is not int or not 1<=minutes<=60 or row.get('outer_seconds',900)!=minutes*60+300:
         raise ValueError('Invalid bounded PDS execution budget')
-    expected=tcl(work,core,core['sources']+recipe['sources'],recipe['constraints'],minutes,physical)
+    expected=tcl(work,core,core['sources']+recipe['sources'],recipe['constraints'],minutes,physical,row.get('placement_seed',1),row.get('retiming',False))
     if (work/'build.tcl').read_text(encoding='utf-8')!=expected:
         raise ValueError('Physical Tcl differs from bounded route recipe')
     return row
@@ -85,22 +87,38 @@ def check_simulation(row):
         raise ValueError('Need real dual-issue CoreMark evidence')
 
 
-def tcl(work,core,sources,fdc,pnr_minutes=10,physical_constraints=()):
+def checked_seed(placement_seed):
+    if type(placement_seed) is not int or placement_seed not in (1,8):
+        raise ValueError('Placement seed must be 1 or the bounded comparison seed 8')
+    return placement_seed
+
+
+def checked_retiming(retiming):
+    if type(retiming) is not bool:
+        raise ValueError('Retiming metadata must be boolean')
+    return retiming
+
+
+def tcl(work,core,sources,fdc,pnr_minutes=10,physical_constraints=(),placement_seed=1,retiming=False):
+    placement_seed=checked_seed(placement_seed)
+    retiming=checked_retiming(retiming)
     def path(p):return '{'+(work/'src'/p).as_posix()+'}'
     lines=[f"set_arch -family {core['family']} -device {core['device']} -speedgrade {core['speedgrade']} -package {core['package']}"]
     lines += ['add_design '+path(p) for p in sources]
     lines += ['add_constraint '+path(fdc)]
     lines += ['add_constraint '+path(name) for name in physical_constraints]
     lines += ['compile -top_module triha_minimal_soc -include_path {'+path('rtl/cpu/vendor/src/core')+' '+path('rtl/soc/include')+'}',
-        'synthesize -ads -write_verilog TRUE','dev_map -detail',
-        f'pnr -action_timeout {pnr_minutes} -optimize_multi_corner_timing -fix_hold_violation -gplace_seed 1 -dump_router_congestion_plot TRUE',
+        'synthesize -ads -write_verilog TRUE'+(' -retiming' if retiming else ''),'dev_map -detail',
+        f'pnr -action_timeout {pnr_minutes} -optimize_multi_corner_timing -fix_hold_violation -gplace_seed {placement_seed} -dump_router_congestion_plot TRUE',
         'report_timing -max_path 100']
     return '\n'.join(lines)+'\n'
 
 
-def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False):
+def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False,placement_seed=1,retiming=False,central=False,datapath=False):
     if type(pnr_minutes) is not int or not 1<=pnr_minutes<=60:raise ValueError('PNR minutes must be 1..60')
-    physical=physical_constraints(compact,io_registers)
+    placement_seed=checked_seed(placement_seed)
+    retiming=checked_retiming(retiming)
+    physical=physical_constraints(compact,io_registers,central,datapath)
     simulation=simulation.resolve();output=output.resolve()
     if output.exists() or not output.is_relative_to(ROOT/'build/cpu'):
         raise ValueError('Use a new directory below build/cpu')
@@ -137,9 +155,9 @@ def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False):
         shutil.copyfile(ROOT/name,dst);frozen[name]=sha(dst)
     for name in ['rom.hex','sram.hex','firmware.elf']:
         shutil.copyfile(simulation/name,output/name)
-    (output/'build.tcl').write_text(tcl(output,core,core['sources']+recipe['sources'],fdc,pnr_minutes,physical),encoding='utf-8',newline='\n')
+    (output/'build.tcl').write_text(tcl(output,core,core['sources']+recipe['sources'],fdc,pnr_minutes,physical,placement_seed,retiming),encoding='utf-8',newline='\n')
     prepared=dict(status='PREPARED_NOT_EXECUTED',simulation=str(simulation),simulation_result_sha256=sha(simulation/'result.json'),
-        physical_constraints=physical,pnr_minutes=pnr_minutes,outer_seconds=pnr_minutes*60+300,cpu_mode=1,period_ns=10,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
+        physical_constraints=physical,placement_seed=placement_seed,retiming=retiming,pnr_minutes=pnr_minutes,outer_seconds=pnr_minutes*60+300,cpu_mode=1,period_ns=10,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
         input_hashes=frozen,files={p.name:sha(p) for p in output.iterdir() if p.is_file()},
         timing_closed=False,pds_started=False,board_validated=False,
         required_acceptance=['compile hierarchy dual=1; six stages and predictor settings bound',
@@ -153,12 +171,16 @@ def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true');parser.add_argument('--pnr-minutes',type=int,default=10)
+    parser.add_argument('--placement-seed',type=int,choices=[1,8],default=1,help='Original placement or one bounded seed-8 comparison; constraints unchanged')
+    parser.add_argument('--retiming',action='store_true',help='Explicit ADS register-retiming diagnostic; RTL and constraints unchanged')
     physical=parser.add_mutually_exclusive_group()
     physical.add_argument('--compact',action='store_true')
     physical.add_argument('--io-registers',action='store_true',help='Pack existing port FFs; no region or timing exceptions')
+    physical.add_argument('--central',action='store_true',help='One central CPU clock region with existing IO register packing; no timing exceptions')
+    physical.add_argument('--datapath-region',action='store_true',help='Constrain only critical datapath/queue; predictor and hard multiplier unconfined')
     args=parser.parse_args()
     if args.verify:
         verify_package(args.simulation);print('FROZEN_PACKAGE_PASS')
     else:
         if args.output is None:parser.error('output is required for preparation')
-        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact,args.io_registers)['status'])
+        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact,args.io_registers,args.placement_seed,args.retiming,args.central,args.datapath_region)['status'])

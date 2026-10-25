@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Passive branch and PC-mismatch event counts from real SRAM benchmark; not a changed-pipeline performance claim",
+  "directory": "build\\cpu\\dual-sram\\coremark-20261025T084225386844Z",
+  "result_sha256": "651f1f59a15fc804e340c94226cfc39448940d32e0978366cd2a8d5e48f1f12d",
+  "observed": {
+    "conditional": 266022,
+    "taken": 147132,
+    "not_taken": 118890,
+    "jal": 20309,
+    "jalr": 18198,
+    "pc_mismatch_cycles": 20530,
+    "pc_mismatch_episodes": 20530
+  },
+  "independent_WB_opcode_counts": {
+    "jalr": 18198,
+    "conditional": 266022,
+    "jal": 20309
+  },
+  "measurement": {
+    "cycles": 1240606,
+    "wb_completed": 1448448,
+    "observed_ipc": 1.1675326413059424,
+    "coremark_per_mhz_short_estimate": 4.0302884235607435,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "unchanged_program_and_complete_traces": {
+    "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+    "sram.bin": "1b8dee944f2d044d54c0ea8a01701bb9a4bd207447e50e48169aec7099c45e22",
+    "sram.wb.log": "357ec267bc2fed29a2e528f15e70e0edd1c1666ff3c78359202e618751bbda54",
+    "sram.store.log": "353496070a76a400e5f131fee2b0aa5f3163891f9bfd6640210827a06fd58a1b"
+  },
+  "cycles_headroom_strictly_above4": 9393,
+  "hypothetical_extra_one_cycle_per_mismatch_coremark_mhz": 3.9646794635947273,
+  "interpretation": "A blanket recovery delay would miss4/MHz; new prototype therefore preserves every visiblePC cycle with localmux retiming."
+}

@@ -6,6 +6,34 @@ from pathlib import Path
 import prepare_dual_physical as m
 
 class PhysicalGateTests(unittest.TestCase):
+    def test_retiming_changes_only_the_explicit_synthesis_switch(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        first=m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',retiming=False)
+        second=m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',retiming=True)
+        self.assertEqual(first.replace('synthesize -ads -write_verilog TRUE',
+            'synthesize -ads -write_verilog TRUE -retiming'),second)
+        self.assertEqual(first,m.tcl(Path('package'),core,['cpu.v'],'clock.fdc'))
+
+    def test_retiming_accepts_only_boolean_metadata(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        for value in (0,1,None,'true','-retiming -other_option'):
+            with self.subTest(value=value),self.assertRaises(ValueError):
+                m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',retiming=value)
+
+    def test_bounded_seed_comparison_changes_only_the_seed(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        first=m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',20,(),placement_seed=1)
+        second=m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',20,(),placement_seed=8)
+        self.assertEqual(first.replace('-gplace_seed 1 ', '-gplace_seed 8 '),second)
+        self.assertEqual(first,m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',20,()))
+        self.assertIn('-optimize_multi_corner_timing -fix_hold_violation ',second)
+
+    def test_seed_cannot_inject_options_or_expand_the_bounded_comparison(self):
+        core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
+        for seed in (0,2,9,-1,True,'8 -fix_hold_violation FALSE'):
+            with self.subTest(seed=seed),self.assertRaises(ValueError):
+                m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',placement_seed=seed)
+
     def test_output_register_packing_is_explicit_and_separate_from_region(self):
         self.assertEqual(m.physical_constraints(),[])
         self.assertEqual(m.physical_constraints(io_registers=True),
@@ -13,6 +41,15 @@ class PhysicalGateTests(unittest.TestCase):
         self.assertEqual(m.physical_constraints(compact=True),
             ['fpga/pg2l100h/constraints/cpu_minimal_soc_compact.fdc'])
         with self.assertRaises(ValueError):m.physical_constraints(compact=True,io_registers=True)
+        self.assertEqual(m.physical_constraints(central=True),
+            ['fpga/pg2l100h/constraints/cpu_minimal_soc_central.fdc'])
+        with self.assertRaises(ValueError):m.physical_constraints(central=True,compact=True)
+        with self.assertRaises(ValueError):m.physical_constraints(central=True,io_registers=True)
+        self.assertEqual(m.physical_constraints(datapath=True),
+            ['fpga/pg2l100h/constraints/cpu_minimal_soc_datapath.fdc'])
+        for other in ('central','compact','io_registers'):
+            with self.subTest(other=other),self.assertRaises(ValueError):
+                m.physical_constraints(datapath=True,**{other:True})
 
     def test_rejects_unfinished_or_changed_simulation(self):
         for row in [dict(status='RUNNING'),dict(status='PASS',source_unchanged=False)]:
