@@ -6,7 +6,8 @@
 - [x] 从v64完整冻结patch重建新候选；只改issue内两路branch比较接口和recover条件。
 - [x] ordered/IRQ回归及完整-O2 SRAM轨迹/计数比较，要求>4/MHz。
 - [x] 原生映射保留两路预比较，方向到recover连接深度2/3，记录CPU-only9584LUT/4908FF，不提前PNR。深度不是STA；FIFO1356引脚全图通过。
-- [ ] 单独审查reset释放及i_service/ROM使能的契约：ROM与SRAM区间互斥能否解除ROM使能对SRAM写冲突的依赖；复位组合门控是否需要有明确定义的本地释放状态。未经测试不修改默认SoC。
-- [ ] 三条违例均有已验证结构方案后，再评审是否使用第二次物理预算。
+- [x] v66 ROM使能隔离及v67 selector内部更新隔离：保留外部门控/异步清零/X-Z回退；组件、破坏负例、完整CPU轨迹、原生映射通过。默认SoC未修改。
+- [x] 三类路径结构检查及独立启动评审通过；只对新包dual-memory-control-io-physical-v67运行一次原约束物理实验。
+- [x] 核对最终实际多corner报告、冻结输入与444输出哈希；v67 setup−0.218ns，仍FAIL，剩ROM数据返回/旁路相关3端点。保留v57最佳−0.009ns；无第二次同候选布线。
 
 工作仍在独立CPU工作树，默认源与集成不变。候选及日志留build/cpu，测量和源码清单保留在docs/verification/cpu。短仿真不当板级分数，native mapping不当时序通过。

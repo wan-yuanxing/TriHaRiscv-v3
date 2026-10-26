@@ -13,6 +13,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--rom-structure', action='store_true')
+    parser.add_argument('--selector-structure', action='store_true')
     parser.add_argument('--fault-read', action='store_true')
     args = parser.parse_args()
     work = ROOT / 'build/cpu' / ('memory-control-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
@@ -64,7 +65,8 @@ def main():
         native('vlog', ['+define+COMPARE_MEMORY_PARENT', '+incdir+' + (work / 'src/rtl/soc/include').as_posix(),
             *sources, work / 'parent.v', work / 'src/candidate.v', work / 'src/tb/soc/tb_soc_memory.v'], 'compile')
         output = native('vsim', ['-c', '-onfinish', 'exit', '-voptargs=+acc',
-            '-gCHECK_ROM_STRUCTURE=' + str(int(args.rom_structure)), 'work.tb_soc_memory',
+            '-gCHECK_ROM_STRUCTURE=' + str(int(args.rom_structure)),
+            '-gCHECK_SELECTOR_STRUCTURE=' + str(int(args.selector_structure)), 'work.tb_soc_memory',
             *(['+FAULT_READ=1'] if args.fault_read else []), '-do', work / 'src/scripts/cpu/run_modelsim.do'], 'simulation')
         if 'SOC_MEMORY_PASS' not in output or any(s in output for s in ['SOC_MEMORY_FAIL', '** Error', '** Fatal']):
             raise ValueError('Memory self-check failed')

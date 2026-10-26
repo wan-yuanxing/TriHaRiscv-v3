@@ -2,6 +2,13 @@
 
 更新：2026-10-26。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新终态v67：内部selector更新与外部门控分离，异步清零/X-Z fallback保留；完整SRAM
+CoreMark、WB/store/profile与v65一致，4.091964/MHz。原约束布线完成但TIMING_FAIL：
+setup Slow/Fast **−0.218/+2.835ns**，hold **+0.103/+0.064ns**，MPW **+3.655/+4.202ns**。
+剩3个Slow setup端点；native0/runner2，444输出与冻结输入已核。CPU-only9581LUT/4908FF。
+最差为ROM数据口→LSU/旁路→B路ALU，不是ROM取指使能；不重复同候选布线。
+详见[v67终态](DUAL_ISSUE_MEMORY_CONTROL_2026-10-26.md)。最佳v57 −0.009ns仍保留，100MHz尚未通过。
+
 最新进展v65：分支恢复预比较通过完整SRAM等周期/全轨迹核验，仍为4.091964/MHz；
 原生compile/synthesize/dev_map通过，CPU-only9584LUT/4908FF。映射保留预比较，
 FIFO1356个后端D/CE全层级检查通过。修正了双输出LUT的保守支持误报，并保留真实破坏负例。

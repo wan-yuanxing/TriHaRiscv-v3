@@ -2,6 +2,7 @@
 
 module tb_soc_memory;
     parameter CHECK_ROM_STRUCTURE = 0;
+    parameter CHECK_SELECTOR_STRUCTURE = 0;
     reg clk = 0;
     reg rst_n = 0;
     always #5 clk = ~clk;
@@ -59,7 +60,7 @@ module tb_soc_memory;
         .data_rdata_o(parent_d_data), .data_resp_tag_o(parent_d_resp),
         .uart_tx_o(parent_tx), .done_o(parent_done), .exit_code_o(parent_code)
     );
-    always @(posedge clk) if (rst_n && !CHECK_ROM_STRUCTURE) begin
+    always @(posedge clk) if (rst_n && !CHECK_ROM_STRUCTURE && !CHECK_SELECTOR_STRUCTURE) begin
         #1;
         if ({i_accept,i_valid,i_error,i_data,d_accept,d_ack,d_error,d_data,d_resp,tx,done,code} !==
             {parent_i_accept,parent_i_valid,parent_i_error,parent_i_data,parent_d_accept,parent_d_ack,
@@ -147,6 +148,16 @@ module tb_soc_memory;
     initial begin
         if ($test$plusargs("FAULT_READ")) force u_dut.data_rdata_o = 32'b0;
         repeat (3) @(negedge clk); rst_n = 1;
+        if (CHECK_SELECTOR_STRUCTURE) begin
+            @(negedge clk); i_req = 1; i_addr = 0;
+            force u_dut.i_service = 1'b0;
+            @(posedge clk); #1;
+            if (u_dut.inst_rom_q !== 1'b1 || u_dut.inst_sram_q !== 1'b0)
+                $fatal(1,"SOC_MEMORY_FAIL selector_depends_on_reset_gated_service");
+            release u_dut.i_service;
+            $display("SOC_MEMORY_PASS selector_structure");
+            $finish;
+        end
         if (CHECK_ROM_STRUCTURE) begin
             // For a decoded ROM request the SRAM collision signal is irrelevant.
             // Poison only this internal boundary; functional tests run separately.
@@ -331,6 +342,21 @@ module tb_soc_memory;
             check(u_dut.u_rom.inst_en_i === u_parent.u_rom.inst_en_i, "four-state ROM enable equivalence");
         end
         @(negedge clk); i_req = 0; i_addr = 0; d_we = 0; d_flush = 0;
+        // Unknown reset must retain the parent's simulation semantics too.
+        // Check explicitly because the normal comparison monitor is reset-gated.
+        @(negedge clk); i_req = 1; i_addr = 32'h10000;
+        @(posedge clk); #1;
+        check(u_dut.inst_sram_q === 1'b1, "known SRAM before unknown reset");
+        @(negedge clk); i_req = 1; i_addr = 0; rst_n = 1'bx;
+        @(posedge clk); #1;
+        check({u_dut.inst_rom_q,u_dut.inst_sram_q} ===
+              {u_parent.inst_rom_q,u_parent.inst_sram_q}, "unknown reset select history");
+        @(negedge clk); i_addr = 0; rst_n = 1'bz;
+        @(posedge clk); #1;
+        check({u_dut.inst_rom_q,u_dut.inst_sram_q} ===
+              {u_parent.inst_rom_q,u_parent.inst_sram_q}, "high impedance reset select history");
+        @(negedge clk); rst_n = 0; i_req = 0;
+        @(negedge clk); rst_n = 1;
 `endif
         access(32'h20020000, 0, 1, 0, 0, 32'h54524801);
         access(32'h20020004, 32'h5a, 0, 1, 0, 0);
