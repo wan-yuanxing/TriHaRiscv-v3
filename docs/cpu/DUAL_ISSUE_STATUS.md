@@ -1,43 +1,57 @@
 # 双发射独立路线状态
 
-更新：2026-10-25。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
+更新：2026-10-26。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
-当前只推进**不带Cache、不接DDR的SRAM/TCM版本**。六级顺序双发射、RV32IM/CSR，
-BTB512/BHT512/RAS4、GShare关闭；共享LSU/MUL/DIV。变量移位在A，B保留立即移位。
-A分支可与B ALU推测配对，E1恢复/故障取消年轻结果；B LSU仅保留已验收的不跳转配对。
+当前只推进**不带 Cache、不接 DDR 的 SRAM/TCM 版本**。六级顺序双发射、RV32IM/CSR，
+BTB512/BHT512/RAS4、GShare 关闭；共享 LSU/MUL/DIV。变量移位在 A，B 保留立即移位。
+A 分支可与 B ALU 推测配对，E1 恢复/故障取消年轻结果；B 副作用配对继续受互锁限制。
 
-最新v58 Windows GCC15.2 `-O2`五次迭代短测：**1221907周期、4.091964 CoreMark/MHz**，
-WB观察IPC **1.185400**。CRC通过；1448448条WB、70839条store以及运行镜像与v54逐字节一致。
-这是RTL短测估计，非官方分数或板级结果；观察IPC不是架构minstret。
+六字最佳版 v57 Windows GCC15.2 `-O2` 五次迭代：**1221907 周期、4.091964 CoreMark/MHz**，
+WB 观察 IPC **1.185400**。CRC 通过，计时窗包含1448448条WB、70839条store。这是 RTL 短测，非官方分数或板级结果；观察 IPC 不是架构 minstret。
 
-**100MHz尚未通过。**最佳完成版v57在原10ns/IO/hold/multicorner下：setup Slow/Fast
+**100MHz 尚未通过。**最佳完成版 v57 原10ns/IO/hold/multicorner：setup Slow/Fast
 **-0.009/+2.663ns**，hold **+0.107/+0.100ns**，脉宽 **+3.655/+4.202ns**。
-原生退出0、验收器退出2；416个实际输出哈希和冻结输入均通过复核。
-完全相同输入的seed8布局对照setup-0.489ns（424输出核验），不继续扫seed。
-v55已终态：属性未实际复制驱动，六项余量与v54完全相同，排除。
-v56实际复制了PC驱动（查询224→32、FF+106），但setup回退到-1.164ns，排除。
-v57回到v54，提前BTB命中限定的call/ret窄控制；v58复用分组相等比较器处理FIFO PC连续性，
-完整SRAM等周期/等轨迹通过，原约束独立PDS运行中。
+原生退出0、验收器退出2，416个输出与冻结输入已核；seed8对照回退到-0.489ns，不继续扫seed。
+v58 分组连续性比较终态 -0.442ns；v59 旧占用目的位置前译码 -0.689ns，均未达标。
+v60 保守限制 E1 MUL 相关的分支+B副作用配对，完整 CoreMark 等周期；实际报告 setup
+**-0.547/+2.716ns**、hold **+0.114/+0.108ns**、脉宽 **+3.655/+4.202ns**。
+v60 原外层进程已消失，原始 result 保留 RUNNING，原生/外层退出码均**未知**；另存终态审计，
+核对输入、现有输出和五阶段成功标记，不伪造退出0。最差为 E1 分支/异常到 FIFO 更新。
 
-v54 CPU-only综合 **9199 LUT/4646 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
-排除ROM/SRAM/MMIO夹具；v55资源与v54相同；v56原生9199LUT/4752FF但时序回退；v57原生CPU-only9394LUT/4652FF/752RAM-LUT/4APM/0DRM；v58原生CPU-only9313LUT/4652FF/752RAM-LUT/4APM/0DRM；
-实际分组比较实例保留，LUT较v57少81、FF不增，最终STA待核。
+v61 返回最佳 v57，只给 `triha_fetch_fifo` 增加 ADS 文档5.17支持的模块属性
+`syn_reduce_controlset_size=192`。去除此一注释后全部 CPU 字节还原 v57。
+三项组件回归与新完整 SRAM 运行通过；独立原约束 PDS 已终态：setup **-0.468/+2.667ns**，hold **+0.114/+0.103ns**，
+脉宽 **+3.655/+4.202ns**，native0/runner2，292个输出与冻结输入通过独立核验。
+控制组实验增加资源且时序弱于 v57，**不采用**。
+实际综合核实 FIFO 十三个17–147 FF的 CE 控制组已移到 D 逻辑，控制组总数597→584；
+FIFO 映射中使能 FF 已消除。这些是映射结果，不能称频率收益。
+v61 CPU-only 综合 **9773 LUT/4685 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
+较 v57 的9394 LUT/4652 FF增加379 LUT/33 FF；不包含 ROM/SRAM/MMIO 夹具。
 
-本批保留的结构调整：请求PC入队对齐、局部指令请求槽、FIFO bulk/flush分离、B能力前译码、
-分支目标和顺序地址独立加法、B ALU有用ADD/SUB结果边界。v53分支carry晚控制依赖59/60→0/0，
-v54减法到另一carry依赖32→0，均经实际原生网表核对；这些局部检查本身不等于时序通过。
-v52队列位置预译码时序回退，未纳入当前候选。
+v62 试验重新基于 v57，排除 v58–v61 试验，只提前计算 FIFO 四种完整更新载荷，
+晚出队只作最终选择。7168 状态 oracle、算术隔离红绿/真实数据负例、两译码配置对齐、
+恢复/异常、有序/IRQ及新完整 SRAM 均通过，独立源码/证据评审通过。
+原生综合网表1856个实际候选位的组合上游均不含pop0/pop1，真实 LUT 输入破坏负例可检出；
+此局部拓扑核验不是 STA。CPU-only **10711 LUT/4702 FF/752 RAM-LUT（已含LUT）/4 APM/0 DRM**，
+相对 v57 增加1317 LUT/50 FF。原约束独立PDS已结束：setup **-1.315/+2.386ns**、hold **+0.112/+0.074ns**、
+脉宽 **+3.655/+4.202ns**，native0/runner2，500个输出/冻结输入已核。
+最差rst_ni→data_accept→issue/出队→FIFO，出队负载达到696；面积/总时序均回退，不采用。
+见[v62候选](../verification/cpu/dualissue_fifo_prepared_values.json)。
 
-v55等值查询alias未产生实际复制；v56实际复制但时序回退。v57只提前窄call/ret命中控制，
-预测策略、训练/WADDR和周期未变；262144组X/Z限定检查及回归通过，native/STA待核对。
+v63 五字容量对照已完成：**1224859 周期/4.082102 CoreMark/MHz**，WB观察IPC1.182543，
+较六字周期+2952（+0.241590%）。完整镜像相同，仅归一化已核实首个cycle CSR及started存储，
+其余1448447条WB/70838条store完全相同。实际容量、保留双字空间、EXTRA0/1对齐、
+有序异常/IRQ及负例通过。**没有启动v63 PDS，资源/时序UNKNOWN**。
+根据用户对迭代效率的质疑，先冻结最佳版并完成[方法复盘](DUAL_ISSUE_TIMING_REVIEW_2026-10-26.md)，
+后续先做结构与时序预算审查，再决定下一次物理准入；不直接继续试凑，不降低100MHz要求。
 
-默认`rtl/cpu`未替换，候选由完整生产基线补丁/manifest重建。
-本独立分支`rtl/soc/triha_soc_memory.v`含单项指令冲突请求槽，主工程/集成工作树未修改，未上板。
-现有限制：旧未对齐mtval报告源PC；未声称完整ISA、任意未知PC或invalid bulk全总线证明。
+默认 `rtl/cpu` 未替换，候选由完整生产基线补丁/manifest 重建。
+本独立分支的 `rtl/soc/triha_soc_memory.v` 含指令冲突请求槽，主工程/集成工作树未修改，未上板。
+已知旧未对齐 mtval 报告源PC；未声称完整 ISA、任意未知PC或 invalid bulk 全总线证明。
 
-见[当前候选](../verification/cpu/dualissue_fifo_pc_compare.json)、
+见[当前实验](../verification/cpu/dualissue_fifo_controlset.json)、
 [最佳完成版](../verification/cpu/dualissue_btb_qualified_kind.json)、
-[取指请求槽](../verification/cpu/dualissue_sram_instruction_buffer.json)和
+[v60终态](../verification/cpu/dualissue_mul_branch_pair_policy.json)及
 [物理汇总](../verification/cpu/dualissue_operand_timing.json)。
 下文保留历史批次；历史Cache/DDR记录不代表继续执行这些路线。
 

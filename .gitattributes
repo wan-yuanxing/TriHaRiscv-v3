@@ -66,6 +66,11 @@ docs/verification/cpu/dualissue_btb_read_fanout.patch -text -whitespace
 docs/verification/cpu/dualissue_pc_read_fanout.patch -text -whitespace
 docs/verification/cpu/dualissue_btb_qualified_kind.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_pc_compare.patch -text -whitespace
+docs/verification/cpu/dualissue_fifo_destinations.patch -text -whitespace
+docs/verification/cpu/dualissue_mul_branch_pair_policy.patch -text -whitespace
+docs/verification/cpu/dualissue_fifo_controlset.patch -text -whitespace
+docs/verification/cpu/dualissue_fifo_prepared_values.patch -text -whitespace
+docs/verification/cpu/dualissue_fifo_five.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol

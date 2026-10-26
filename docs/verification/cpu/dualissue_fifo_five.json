@@ -1,0 +1,165 @@
+{
+  "status": "RTL_PASS_NOT_PHYSICALLY_QUALIFIED",
+  "overall_target_met": false,
+  "scope": "SRAM/TCM only, six-stage dual RV32IM/CSR. Bestv57 with fiveword FIFO. No Cache/DDR, no v58-v62 edits. Generic even-depth defaults preserved; accepted schedule/cycle count changes.",
+  "manifest": "docs/verification/cpu/dualissue_fifo_five_sources.json",
+  "manifest_sha256": "177e35cd90abcc3520faad6366e14d7d74c1db2c21a317e3b7eabbf154c7c234",
+  "soc_source": "rtl/soc/triha_soc_memory.v",
+  "soc_source_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261026T090851640698Z",
+    "status": "PASS",
+    "result_sha256": "946a2485254145478f7ff35b78c37f026e5386e32fb018599feb085716f4ba7d",
+    "output_hashes_verified": 122,
+    "measurement": {
+      "cycles": 1224859,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1825426436838853,
+      "coremark_per_mhz_short_estimate": 4.082102511391107,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "profile": {
+      "cycles": 1224859,
+      "wb": 1448448,
+      "stores": 70839,
+      "issued": 1006407,
+      "paired": 447119,
+      "frontend": 61785,
+      "lsu": 0,
+      "pipe": 0,
+      "div": 0,
+      "csr": 3,
+      "cancel": 0,
+      "unit": 1,
+      "dependency": 156663,
+      "false_a": 2062,
+      "false_b": 0,
+      "pair_no_word": 153507,
+      "pair_structure": 104066,
+      "pair_dependency": 301715,
+      "narrow_mul_opportunity": 0,
+      "structure_lsu_pair": 83853,
+      "structure_branch_a": 20212,
+      "structure_other": 1,
+      "pair_raw": 249492,
+      "pair_waw": 2,
+      "pair_older": 52221,
+      "a_waw_only": 11890,
+      "b_waw_only": 2,
+      "queue0": 61785,
+      "queue1": 47882,
+      "queue2": 279228,
+      "queue3": 513321,
+      "queue4": 283738,
+      "queue5": 38905,
+      "queue6": 0,
+      "queue7": 0,
+      "queue8": 0,
+      "backpressure": 322643,
+      "backpressure_pop": 284438,
+      "frontend_empty": 61785,
+      "frontend_pc": 0,
+      "branch_pairs": 83434,
+      "branch_zero_eqne": 50838,
+      "branch_zero_signed": 1172,
+      "branch_zero_unsigned": 0,
+      "branch_nonzero": 31424
+    },
+    "parent": "build/cpu/dual-sram/coremark-20261025T133900164122Z",
+    "cycles_delta": 2952,
+    "cycles_delta_percent": 0.24158958087645566,
+    "images_identical": true,
+    "normalized_trace_counts": {
+      "sram.wb.log": 1448448,
+      "sram.store.log": 70839
+    },
+    "trace_normalization": {
+      "only_changes": [
+        "first WB cycle-CSR c00027f3 at start_time",
+        "first full-width store to ELF started symbol000140c4"
+      ],
+      "values": {
+        "candidate": "000028aa",
+        "parent": "000028a8"
+      },
+      "remaining_wb_events_exact": 1448447,
+      "remaining_store_events_exact": 70838,
+      "note": "No other line is normalized or omitted. Compiler symbol nm confirms start_time000115a8 and started000140c4."
+    }
+  },
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090738663990Z",
+      "status": "FAIL",
+      "result_sha256": "6cbfe860095544d853c35ef96d0fd182122ab322d116acbed5a0b36e64836090",
+      "output_hashes_verified": 72,
+      "purpose": "Actualdecode capacity6 RED"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090851609192Z",
+      "status": "PASS",
+      "result_sha256": "fea0cf534a0a9a0a544217af9dd60d3509bbe1da8d13ea62d4b7c42e8a3ed40d",
+      "output_hashes_verified": 72,
+      "purpose": "Actualfive words 1+2+2 fill, conservative reserve and drain EXTRA0"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090851630476Z",
+      "status": "PASS",
+      "result_sha256": "49d6ba61223e407a01c3cea6cbfb944e62ba1692eddb77cd3cc4abbb0a851289",
+      "output_hashes_verified": 72,
+      "purpose": "Same actualcapacity EXTRA1"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090851624791Z",
+      "status": "FAIL",
+      "result_sha256": "8a6eb683a5125c2c3f8326d92b1658e8f0527d872bfce6407c20797a6272e24a",
+      "output_hashes_verified": 72,
+      "purpose": "Actualpayload forced0 negative"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090934623229Z",
+      "status": "PASS",
+      "result_sha256": "b5537898a51db54f993361436e17bf91e2383b8dcb45936bb28e5866c2df3284",
+      "output_hashes_verified": 72,
+      "purpose": "Accepted request/alignment EXTRA0"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T090934628971Z",
+      "status": "PASS",
+      "result_sha256": "2d98cea9f0c1f51f11b02c9f7290aadf82f630b94b03bca0cf4e6f008c983aaa",
+      "output_hashes_verified": 72,
+      "purpose": "Accepted request/alignment EXTRA1"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261026T0909346774556Z",
+      "status": "PASS",
+      "result_sha256": "907ff2bd32a075459f55916e1c0c43693683a46a58ea117256533454c3bd825a",
+      "output_hashes_verified": 38,
+      "purpose": "Ordered single/dual seed97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261026T0909346662373Z",
+      "status": "PASS",
+      "result_sha256": "313b817bd3ef409dd8248ebaa347f69cfc34dc749ea49cd8b7c723dc4c2f0bc5",
+      "output_hashes_verified": 38,
+      "purpose": "IRQ/pair single/dual seed173"
+    }
+  ],
+  "independent_source_review": "PASS:all22source hashes/fullbase patch;bounded count0..5/enqueue max4/accept reserves2,76eligible count-transition cases;actualEXTRA0/1 tests and all8 receipts independently checked. Fresh SRAM122outputs/77frozen inputs/77origins/11external hashes independently checked. Disassembly confirms only first rdcycle/started store normalization;allremaining1448447WB/70838store lines exact. Physical timing/resources remain UNKNOWN.",
+  "physical": null,
+  "cpu_only_resources": null,
+  "limits": [
+    "Five-iteration RTL estimate only, not official/board score",
+    "Physical timing and CPU-only area UNKNOWN",
+    "Count scheduling differs; only initial CSR/store values normalized in full trace comparison",
+    "Old source-PC misalignment mtval limitation remains",
+    "Main/integration/defaultCPU/board untouched",
+    "No further PDS launch until architecture/physical-structure qualification"
+  ]
+}
