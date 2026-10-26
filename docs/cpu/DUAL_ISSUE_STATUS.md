@@ -2,6 +2,8 @@
 
 更新：2026-10-26。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v69分离ROM双口实验已完成但不采用：完整SRAM短测仍为4.091964/MHz，CPU-only9709 LUT/4906 FF；原100MHz后布线setup **-0.275/+2.835ns**，hold **+0.103/+0.063ns**，MPW **+3.655/+4.202ns**。9个Slow setup端点违例，native0/runner2，394输出与冻结输入全部核验。8条违例来自乘法结果→零比较/配对→FIFO头，另1条队头→ALU；不重复ROM映射实验，先核验该组合链的结构方案。最佳v57 -0.009ns仍为FAIL。见[v69终态](DUAL_ISSUE_ROM_SPLIT_2026-10-26.md)。
+
 最新v68b逻辑ROM映射实验**拒绝采用**：功能/完整CoreMark仍等周期4.091964/MHz，但原约束
 后布线setup **−1.376/+2.639ns**，Slow违例108端点，弱于v67。hold/MPW通过。
 native0/runner2，476输出及冻结输入已核；CPU-only9703LUT/4908FF。两个ROM口映射变化
