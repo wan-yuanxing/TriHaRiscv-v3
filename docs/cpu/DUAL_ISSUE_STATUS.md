@@ -8,6 +8,11 @@ FIFO1356个后端D/CE全层级检查通过。修正了双输出LUT的保守支�
 本候选**未执行PNR，100MHz未通过**；先完成memory复位/ROM使能两条路径验证。
 见[v65阶段记录](DUAL_ISSUE_RECOVERY_COMPARE_2026-10-26.md)。
 
+v66 ROM使能隔离：组件473项与父版对照通过，异步复位/释放首拍/挂起SRAM时切ROM/四态输入已覆盖；
+原生综合映射通过，实际ROM CEB锥36节点不含LSU维护或collision，注入flush负例被拒绝。
+仅此局部锥通过，整图别名歧义尚未处理；v66完整CPU回归及复位→selector CE仍待完成，未PNR。
+证据见[ROM控制检查](../verification/cpu/dualissue_rom_control.json)。
+
 最新结构检查：v64 已实现两字头部副本＋只因入队写入的环形后端。完整 SRAM CoreMark、
 全部 WB/store/profile 与 v57 完全一致（1221907周期、4.091964/MHz）；106个合法组合和20821步
 oracle、对齐两配置、有序/IRQ、真实数据负例通过。全层级位连接核查1356个后端D/CE引脚，

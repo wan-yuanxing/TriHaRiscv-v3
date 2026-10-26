@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 
 module tb_soc_memory;
+    parameter CHECK_ROM_STRUCTURE = 0;
     reg clk = 0;
     reg rst_n = 0;
     always #5 clk = ~clk;
@@ -58,7 +59,7 @@ module tb_soc_memory;
         .data_rdata_o(parent_d_data), .data_resp_tag_o(parent_d_resp),
         .uart_tx_o(parent_tx), .done_o(parent_done), .exit_code_o(parent_code)
     );
-    always @(posedge clk) if (rst_n) begin
+    always @(posedge clk) if (rst_n && !CHECK_ROM_STRUCTURE) begin
         #1;
         if ({i_accept,i_valid,i_error,i_data,d_accept,d_ack,d_error,d_data,d_resp,tx,done,code} !==
             {parent_i_accept,parent_i_valid,parent_i_error,parent_i_data,parent_d_accept,parent_d_ack,
@@ -146,6 +147,18 @@ module tb_soc_memory;
     initial begin
         if ($test$plusargs("FAULT_READ")) force u_dut.data_rdata_o = 32'b0;
         repeat (3) @(negedge clk); rst_n = 1;
+        if (CHECK_ROM_STRUCTURE) begin
+            // For a decoded ROM request the SRAM collision signal is irrelevant.
+            // Poison only this internal boundary; functional tests run separately.
+            @(negedge clk); i_req = 1; i_addr = 0;
+            force u_dut.collision = 1'b1;
+            #1;
+            if (u_dut.u_rom.inst_en_i !== 1'b1)
+                $fatal(1,"SOC_MEMORY_FAIL ROM_enable_depends_on_SRAM_collision");
+            release u_dut.collision;
+            $display("SOC_MEMORY_PASS ROM_structure");
+            $finish;
+        end
         // A local synchronous read must respond after the acceptance edge.
         // The initial controller unnecessarily waited an additional cycle.
         @(negedge clk); d_addr = 0; d_re = 1; d_tag = 11'd7;
@@ -155,6 +168,18 @@ module tb_soc_memory;
         fetch(0, 0, 64'h00028067000102b7);
         fetch(32'h2000, 1, 0);
         fetch(32'h18000, 1, 0);
+        // ROM fetch must run alongside valid writes and all rejected maintenance
+        // combinations. SRAM and ROM deliberately share the low word address.
+        for (n = 0; n < 8; n = n + 1) begin
+            @(negedge clk); i_req = 1; i_addr = 0;
+            d_addr = 32'h10000; d_wdata = 32'h12345678; d_we = 15;
+            d_invalidate = n[0]; d_writeback = n[1]; d_flush = n[2];
+            @(posedge clk); #1;
+            check(i_valid && !i_error && i_data === 64'h00028067000102b7, "ROM concurrent write/maintenance");
+            check(d_ack && d_error === (n != 0), "concurrent data result");
+            @(negedge clk); i_req = 0; d_we = 0;
+            d_invalidate = 0; d_writeback = 0; d_flush = 0;
+        end
         for (n = 0; n < 32; n = n + 1) begin
             expected[n] = 32'h3f12a500 ^ (n * 32'h192731);
             access(32'h10000 + n * 4, expected[n], 0, 15, 0, 0);
@@ -225,7 +250,7 @@ module tb_soc_memory;
         d_wdata = expected[0]; d_we = 15;
         #1; check(i_accept, "collision request accepted into independent slot");
         @(posedge clk); #1; check(!i_valid, "collision no spurious valid");
-        @(negedge clk); i_addr = 32'h2000;
+        @(negedge clk); i_addr = 0;
         repeat (3) begin
             expected[0] = expected[0] + 32'h10203;
             d_wdata = expected[0];
@@ -282,6 +307,31 @@ module tb_soc_memory;
         @(negedge clk); check(!d_ack && !i_valid && tx && !done, "coordinated reset");
         rst_n = 1;
         access(32'h10000, 0, 1, 0, 0, expected[0]);
+        // Asynchronous assertion between clock edges must block new writes;
+        // the very first released clock edge may accept a ROM fetch.
+        @(negedge clk); i_req = 1; i_addr = 0;
+        d_addr = 32'h10000; d_wdata = 32'hbad0bad0; d_we = 15;
+        #2; rst_n = 0;
+        #1; check(!i_accept && !d_accept && !i_valid && !d_ack, "async reset blocks acceptance");
+        repeat (2) @(posedge clk);
+        @(negedge clk); d_we = 0; rst_n = 1;
+        @(posedge clk); #1;
+        check(i_valid && !i_error && i_data === 64'h00028067000102b7, "first released ROM fetch");
+        @(negedge clk); i_req = 0;
+        access(32'h10000, 0, 1, 0, 0, expected[0]);
+`ifdef COMPARE_MEMORY_PARENT
+        // Four-state control/address coverage: compare the actual ROM enable,
+        // including an unknown decode and unknown maintenance inputs.
+        for (n = 0; n < 16; n = n + 1) begin
+            @(negedge clk); i_req = n[0] ? 1'bx : 1'b1;
+            i_addr = n[1] ? 32'h00000x00 : 32'b0;
+            d_addr = 32'h10000; d_we = n[2] ? 4'hx : 4'hf;
+            d_flush = n[3] ? 1'bx : 1'b0;
+            #1;
+            check(u_dut.u_rom.inst_en_i === u_parent.u_rom.inst_en_i, "four-state ROM enable equivalence");
+        end
+        @(negedge clk); i_req = 0; i_addr = 0; d_we = 0; d_flush = 0;
+`endif
         access(32'h20020000, 0, 1, 0, 0, 32'h54524801);
         access(32'h20020004, 32'h5a, 0, 1, 0, 0);
         check(done && code == 8'h5a, "debug exit");

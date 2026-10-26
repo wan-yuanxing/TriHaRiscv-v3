@@ -1,0 +1,69 @@
+{
+  "status": "RTL_AND_NATIVE_MAPPING_PASS_PHYSICAL_PENDING",
+  "candidate": "v66 ROM instruction enable isolation",
+  "source_patch": "docs/verification/cpu/dualissue_rom_control.patch",
+  "rtl_checks": {
+    "baseline": "build/cpu/memory-control-20261026T130754339917Z/result.json",
+    "candidate": "build/cpu/memory-control-20261026T130754329827Z/result.json",
+    "baseline_status": "PASS",
+    "candidate_status": "PASS",
+    "scope": "473 self checks including reset, release first fetch, pending SRAM collision, ROM/concurrent writes and maintenance, four-state comparisons"
+  },
+  "negative_checks": {
+    "forced_read_data": "build/cpu/memory-control-20261026T130400963528Z/result.json",
+    "status": "FAIL_EXPECTED",
+    "corrupt_rom_ce_mapping": "build/cpu/rom-control-mapping-negative-v66.json",
+    "corrupt_status": "FAIL_EXPECTED"
+  },
+  "native": {
+    "result": "build/cpu/memory-rom-control-native-clean-v66/result.json",
+    "status": "PASS",
+    "stages": [
+      "compile",
+      "synthesize",
+      "dev_map"
+    ],
+    "pnr": false,
+    "timing_closed": false,
+    "cpu_only_note": "The isolated package is mapped with the existing CPU source; no full CPU route was run."
+  },
+  "mapping": {
+    "result": "build/cpu/rom-control-mapping-v66.json",
+    "status": "PASS",
+    "rom_ce_visited": 36,
+    "forbidden_controls": [
+      "data_flush_i",
+      "data_invalidate_i",
+      "data_writeback_i",
+      "collision"
+    ],
+    "hits": [],
+    "scope": "Conservative mapped connectivity check, not STA or full Boolean equivalence"
+  },
+  "change": "When i_rom is known true, ROM inst_en uses rst_ni && i_fire; unknown/non-ROM cases retain the original i_service && i_rom expression.",
+  "source_hashes": {
+    "base_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+    "candidate_sha256": "4f7f7b6231a5c80270ded4054c728e7a38c2f899abeacd49369633e0d6871f18",
+    "patch_sha256": "7588516aa517f00e879c2b367a00776a9c906961f02c76bd4a5c8717a09e4c83"
+  },
+  "receipt_sha256": {
+    "build/cpu/memory-control-20261026T130754339917Z/result.json": "96620e78337c538550d95c5ac00ff257c250fcc39c7f5201978c7123b5fbbf44",
+    "build/cpu/memory-control-20261026T130754329827Z/result.json": "f953f1ed59d839cf8decf88206d30fdd85c9aa29edfb950bd6e89a0045044f41",
+    "build/cpu/memory-control-20261026T130400963528Z/result.json": "e9fb937b16918c1933237f879b75fcfd5d923294f312d835842db7d4d524427c",
+    "build/cpu/memory-rom-control-native-clean-v66/result.json": "2de888c176e32278d52e2a329cf3c90028a3724ec3172b01926e2b218280311e",
+    "build/cpu/rom-control-mapping-v66.json": "3bdef9e84cd750b68dbc6e2e7012eb6912c5cfe0708e6037bede7bdade5b1311",
+    "build/cpu/rom-control-mapping-negative-v66.json": "9c804266925bd8e25dd8d1946c436c126571604d811fbd623d2b5701b09ddeed"
+  },
+  "excluded_attempt": {
+    "directory": "build/cpu/memory-rom-control-native-v66",
+    "status": "FAIL",
+    "return_code": 1,
+    "reason": "Copied Tcl retained parent absolute paths; owned process stopped before successful synthesis; excluded."
+  },
+  "limitations": [
+    "No complete CPU regression for v66 yet",
+    "Global graph checker encountered a multi-driver alias outside ROM cone; only scoped ROM cone accepted",
+    "Reset to selector CE unresolved",
+    "No PNR or 100MHz acceptance"
+  ]
+}

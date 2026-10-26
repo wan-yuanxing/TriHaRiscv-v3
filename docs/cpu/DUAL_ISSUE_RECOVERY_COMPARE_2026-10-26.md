@@ -18,3 +18,5 @@ v65在v64环形后端上仅修改两路E1分支的预测PC不匹配判断：目�
 - 选择寄存器CE：现有异步复位分支之外，i_service又含复位组合门控。需验证内部更新条件和外部接受/写使能能否分离，保留复位期间无副作用、释放首拍、挂起请求和无效输出历史。尚未实现或证明。
 
 本轮证据：[dualissue_recovery_compare.json](../verification/cpu/dualissue_recovery_compare.json)。
+
+后续 v66 只隔离 ROM 指令使能：已知 ROM 命中时不再经过 SRAM collision/LSU maintenance 控制，未知或非 ROM 情况保持原逻辑。组件 473 项检查及候选 compile/synthesize/dev_map 通过；实际映射锥无 forbidden control 命中，故意注入 `data_flush` 的负例被拒绝。复位到目标选择寄存器 CE 路径仍未修改，v66 也未执行 PNR。
