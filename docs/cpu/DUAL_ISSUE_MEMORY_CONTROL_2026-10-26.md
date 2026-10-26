@@ -12,7 +12,7 @@
 
 实际后布线：setup Slow/Fast **−0.218/+2.835ns**，hold **+0.103/+0.064ns**，脉宽 **+3.655/+4.202ns**；Slow setup有3个违例端点，TNS−0.371ns。native返回0、验收器记录runner2；444个输出、冻结输入和五阶段成功标记已核验。CPU-only仍为9581LUT/4908FF。相比v64的−0.396ns改善，但新映射/布局仍弱于历史最佳v57的−0.009ns，保留最佳基线。
 
-本轮route自己的综合网表再次通过selector/ROM/FIFO/分支结构检查。当前瓶颈为：
+本轮route自己的综合网表再次通过selector/ROM/FIFO支持检查；分支预比较边界保留，但branch诊断文件顶层仍为HOLD，不称整体PASS。当前瓶颈为：
 
 - ROM **数据口CLKA/rom_data** → memory读响应合并 → LSU格式化 → E2旁路 → B路ALU减法 → result[21]，12层，logic3.364ns、route6.364ns，setup−0.218ns。不是ROM取指口使能路径。
 - 同一ROM数据返回 → load旁路 →零比较分支 → FIFO head1更新，12层，−0.142ns。
