@@ -59,7 +59,11 @@ def main():
     parser.add_argument('--cpu-snapshot',type=Path,required=True)
     parser.add_argument('--candidate-manifest',type=Path,default=Path('docs/verification/cpu/dualissue_pairing_sources.json'))
     parser.add_argument('--profile',action='store_true',help='Passive cycle partition and ordered trace observer')
+    parser.add_argument('--simulation-timeout-seconds',type=int,default=300,
+                        help='Bounded wall-clock budget, 30..900 seconds; does not change simulated cycles')
     args = parser.parse_args()
+    if not 30 <= args.simulation_timeout_seconds <= 900:
+        parser.error('Simulation timeout must be 30..900 seconds')
     if args.test=='memory': parser.error('Use original runner for memory-only tests')
     if args.profile and (args.test!='coremark' or args.fault!='none'):
         parser.error('Passive profile supports only coremark with fault none')
@@ -67,6 +71,7 @@ def main():
     work.mkdir(parents=True)
     print(f"SOC_RUN directory={work}", flush=True)
     result = dict(status="RUNNING", directory=str(work), test=args.test, fault=args.fault,
+                  simulation_timeout_seconds=args.simulation_timeout_seconds,
                   input_hashes={}, origin_hashes={}, input_origins={}, external_hashes={}, commands=[], output_hashes={}, source_unchanged=False,
                   scope="RTL simulation; no board execution or official CoreMark score")
     start_time = time.monotonic()
@@ -199,7 +204,7 @@ def main():
             arguments += ["+FAULT_READ=1"]
         if args.fault == "timeout":
             arguments += ["-gMAX_CYCLES=8"]
-        output = native(SIM / "vsim.exe", arguments + ["-do", work / "src/scripts/cpu/run_modelsim.do"], "simulation", 300)
+        output = native(SIM / "vsim.exe", arguments + ["-do", work / "src/scripts/cpu/run_modelsim.do"], "simulation", args.simulation_timeout_seconds)
         if re.search(r"SOC_\w*FAIL|CPU_TRAP|\*\* (Error|Fatal)", output):
             raise RuntimeError("Self-check reported failure")
         if args.test == "memory":

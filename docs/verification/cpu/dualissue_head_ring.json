@@ -1,0 +1,268 @@
+{
+  "status": "RTL_AND_NATIVE_GATE_PASS_PHYSICAL_RUNNING",
+  "overall_target_met": false,
+  "manifest": "docs/verification/cpu/dualissue_head_ring_sources.json",
+  "manifest_sha256": "571a181edf2d1c7af872fd3c6653c17b7b0929162ec210c2c48232daefe0c60d",
+  "tests": [
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T111654893837Z",
+      "status": "FAIL",
+      "result_sha256": "3fa6ef95ce8a8f5043e5b795d16cc699e9b973455f984622fbd3489f816aa50e",
+      "outputs_verified": 72,
+      "purpose": "Original parent RED: backend shifts"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T112856724368Z",
+      "status": "PASS",
+      "result_sha256": "adf8f9c3b692faf0d98f36374c273ad0d6aebbcb77c29678796cb8c9526946b8",
+      "outputs_verified": 72,
+      "purpose": "Parent full semantic oracle"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T112837994709Z",
+      "status": "PASS",
+      "result_sha256": "8746063a941e20dca9620f2cc1e2bc60828fb842268a52494adc4f0284d3adad",
+      "outputs_verified": 72,
+      "purpose": "Reviewed full-payload oracle and106 transition bins,20821 steps"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T112856738682Z",
+      "status": "FAIL",
+      "result_sha256": "399108cbfb9ea45b6e5ff7e313d862a9dedfb39453409dadb574a1033a562807",
+      "outputs_verified": 72,
+      "purpose": "Actual data output corruption negative"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T113138328786Z",
+      "status": "PASS",
+      "result_sha256": "2661751e8b779a97ea1b0ad3e9c5309ed1f10be5039c920807bfadfd05255333",
+      "outputs_verified": 72,
+      "purpose": "Alignment EXTRA_DECODE0"
+    },
+    {
+      "directory": "build/cpu/dual-diagnostic-20261026T113138327829Z",
+      "status": "PASS",
+      "result_sha256": "44d08927275f2567e0f4b68027fd2ae5a3a8ea3ab5e164b88173390503b7bbc4",
+      "outputs_verified": 72,
+      "purpose": "Alignment EXTRA_DECODE1"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261026T1131386244677Z",
+      "status": "PASS",
+      "result_sha256": "c5a0eae02ad0a1d1b048a9f136e1eb7cff46a4091340fe994d6eda18ffc8aa93",
+      "outputs_verified": 38,
+      "purpose": "Ordered single/dual97"
+    },
+    {
+      "directory": "build/cpu/redirect-ordered-20261026T1131386326640Z",
+      "status": "PASS",
+      "result_sha256": "a35200a2b906fbe131b8fa201632dff850907ab79d08b679244e46f090730b4e",
+      "outputs_verified": 38,
+      "purpose": "IRQ dual-pair173"
+    },
+    {
+      "directory": "build/cpu/dual-sram/runtime-20261026T112856724565Z",
+      "status": "PASS",
+      "result_sha256": "39d5edae0165fd92a6a46054ea3c74e98bdb1153a4e01aabdad54bba926fa632",
+      "outputs_verified": 104,
+      "purpose": "Actual SRAM runtime"
+    },
+    {
+      "directory": "build/cpu/dual-sram/coremark-20261026T111901291288Z",
+      "status": "FAIL",
+      "result_sha256": "afd157b3496869ee55b42904d5885c5875b69254f23fce41d7d059615e9bbc87",
+      "outputs_verified": 123,
+      "purpose": "Prototype300s timeout retained; no success claim"
+    }
+  ],
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261026T113059515880Z",
+    "status": "PASS",
+    "result_sha256": "8a11029fe022144ff3ee2cdd542161e2d6c2777fc923b30e83ff9c65be8339b2",
+    "outputs_verified": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "elapsed_seconds": 319.019,
+    "parent": "build/cpu/dual-sram/coremark-20261025T133900164122Z",
+    "images_full_wb_full_store_and_profile_exact": true
+  },
+  "native": {
+    "directory": "build/cpu/dual-head-ring-native-gate-v64",
+    "return_code": 0,
+    "outputs_verified": 68,
+    "receipt_sha256": "3230ecbfb2a72bfdb5aeaa04cf07b284bffe861bfc3b69d4693585bb2a46d314",
+    "cpu_only": {
+      "lut": 9535,
+      "ff": 4908,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "status": "PASS",
+    "backend_ff_count": 678,
+    "backend_checked_pins": 1356,
+    "backend_max_local_depth": 30,
+    "head_max_local_depth": 31,
+    "violations": [],
+    "head_late_pins": {
+      "pop0_i": 499,
+      "pop1_i": 499
+    },
+    "head_late_max_depth": {
+      "pop0_i": 3,
+      "pop1_i": 3
+    },
+    "primitives": {
+      "GTP_LUT3": 9,
+      "GTP_LUT6D": 108,
+      "GTP_LUT4": 52,
+      "GTP_LUT5": 380,
+      "GTP_LUT6CARRY": 74,
+      "GTP_LUT6": 762,
+      "GTP_DFF_C": 155,
+      "GTP_DFF_CE": 188,
+      "GTP_DFF_E": 678
+    },
+    "unknown_terminals": [],
+    "scope": "Conservative local FIFO support at FF boundaries, including all LUT inputs; no STA/area/ISA acceptance",
+    "netlist": "build\\cpu\\dual-head-ring-native-gate-v64\\synthesize\\triha_minimal_soc_syn.vm",
+    "netlist_sha256": "0691573b5c72fc1febc140d3d4b1bc089305459e0b9af35f8bf2f0a173e7802d"
+  },
+  "negative_mapping": {
+    "file": "build/cpu/head-ring-native-negative-v64.json",
+    "sha256": "25d71af859b66b3aa803df0d08bf2c9a230306525d50d650618b1c7c7731120d",
+    "status": "FAIL_EXPECTED"
+  },
+  "physical": {
+    "name": "dual-head-ring-io-physical-v64",
+    "directory": "build/cpu/dual-head-ring-io-physical-v64",
+    "prepared_sha256": "8eb8b80ead81655f3a2c16259ccdea7236e5fd3068755f4e818b6fce7d1f8008",
+    "status": "RUNNING",
+    "timing_closed": false
+  },
+  "limits": [
+    "Short five-iteration RTL estimate, not official/board score",
+    "First prototype timed out300s; reviewed run completed319s under explicit600s wall budget",
+    "Local connectivity gate is not STA",
+    "Default/main/integration/board unchanged",
+    "Known original source-PC misalignment mtval behavior remains",
+    "Physical original100MHz acceptance not yet obtained"
+  ],
+  "excluded_attempts": [
+    "Initial SRAM snapshot argument omitted rtl/cpu: rejected before simulation",
+    "Alignment generic EXTRA=1 was not actual EXTRA_DECODE parameter: excluded; actual EXTRA_DECODE1 rerun passed"
+  ],
+  "global_mapping": {
+    "result": {
+      "status": "PASS",
+      "scope": "Full hierarchy alias-unified bit connectivity, FF/top inputs terminate; unknown primitives never silently terminate",
+      "netlist": "build\\cpu\\dual-head-ring-native-gate-v64\\synthesize\\triha_minimal_soc_syn.vm",
+      "sha256": "0691573b5c72fc1febc140d3d4b1bc089305459e0b9af35f8bf2f0a173e7802d",
+      "backend_pins": 1356,
+      "visited": 1701,
+      "late_hits": [],
+      "unknown": [],
+      "fifo_path": "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo",
+      "targets": [
+        "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop0_i",
+        "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop1_i"
+      ],
+      "target_canonical": [
+        "top/u_core/u_cpu/u_issue/fetch0_accept_o",
+        "top/u_core/u_cpu/u_issue/fetch1_accept_o"
+      ],
+      "primitive_census": {
+        "GTP_GRS": 1,
+        "GTP_INBUF": 3,
+        "GTP_OUTBUF": 10,
+        "triha_core": 1,
+        "GTP_LUT6D": 1702,
+        "GTP_INV": 1,
+        "triha_cpu": 1,
+        "triha_branch_exec_1": 1,
+        "GTP_LUT4": 418,
+        "GTP_LUT5": 1227,
+        "GTP_LUT6CARRY": 1540,
+        "GTP_LUT6": 3929,
+        "triha_immediate_shift_alu": 1,
+        "GTP_LUT3": 80,
+        "GTP_MUX2LUT7": 458,
+        "GTP_DFF_CE": 2083,
+        "triha_csr": 1,
+        "GTP_DFF_C": 1117,
+        "GTP_DFF_P": 1,
+        "biriscv_csr_regfile": 1,
+        "GTP_LUT2": 27,
+        "GTP_LUT1": 6,
+        "triha_divider": 1,
+        "biriscv_divider": 1,
+        "triha_branch_exec": 1,
+        "biriscv_alu": 1,
+        "triha_frontend": 1,
+        "triha_decode": 1,
+        "triha_alu_predecode": 1,
+        "triha_alu_predecode_unq4": 1,
+        "biriscv_decoder": 1,
+        "biriscv_decoder_unq8": 1,
+        "triha_exec_classify": 1,
+        "triha_exec_classify_unq4": 1,
+        "triha_fetch_fifo": 1,
+        "GTP_DFF_E": 678,
+        "triha_fetch_prediction": 1,
+        "triha_npc": 1,
+        "GTP_DFF_PE": 1038,
+        "triha_btb": 1,
+        "triha_btb_bank": 1,
+        "GTP_MUX2LUT8": 144,
+        "GTP_RAM32X2DP": 752,
+        "triha_npc_equal": 1,
+        "triha_npc_equal_unq8": 1,
+        "triha_btb_bank_unq4": 1,
+        "triha_npc_equal_unq10": 1,
+        "triha_npc_equal_unq12": 1,
+        "triha_issue": 1,
+        "triha_e1_branch": 1,
+        "triha_e1_branch_unq4": 1,
+        "triha_pipe_ctrl": 1,
+        "triha_pipe_ctrl_unq4": 1,
+        "triha_regfile": 1,
+        "GTP_ROM32X1": 6,
+        "GTP_DFF": 31,
+        "GTP_DFF_RE": 31,
+        "GTP_DFF_SE": 31,
+        "triha_lsu": 1,
+        "triha_lsu_fifo": 1,
+        "triha_multiplier": 1,
+        "GTP_APM_E2": 4,
+        "triha_soc_memory": 1,
+        "triha_boot_rom": 1,
+        "GTP_DRM18K_E1": 1,
+        "triha_sram": 1,
+        "GTP_DRM36K_E1": 16,
+        "triha_uart_tx": 1
+      }
+    },
+    "result_sha256": "df985ec4dd73db2912248acef2b98878231c050bce3abd20b7ca674d88e0ed5c",
+    "checker": "scripts/cpu/trace_head_ring_hierarchy.py",
+    "checker_sha256": "5a4794164bdcfed127e36ec5ebed6c69588fa912341fbf050e1fa3290ab35e13",
+    "vendor_models": {
+      "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_DRM18K_E1.v": "73a4dc428a369fe4ff6f6995bb9d79b58c0963e5812e6e9bfbaaf85dc237ab60",
+      "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_DRM36K_E1.v": "3e372cd60025a439eb7435d770930260e22c40f148ae83c4bdf7398fb65ddb66"
+    },
+    "boundary": "Clocked RAM data state terminates; asynchronous reset and cascade dependencies retained. Actual36K sync reset/no cascade/ECC disabled reviewed."
+  },
+  "independent_review": "PASS: source/106 legal bins/complete output histories, native output hashes, primitive census, full hierarchy support and DRM state boundaries independently checked. One original10ns experiment admitted; not timing pass."
+}
