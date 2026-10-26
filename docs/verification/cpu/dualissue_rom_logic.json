@@ -1,0 +1,245 @@
+{
+  "status": "RTL_PASS_TIMING_FAIL",
+  "timing_closed": false,
+  "candidate": "v68b boot ROM output logic mapping",
+  "change": "Only inference annotations; actual boot image and 8KiB dual-port synchronous interface unchanged",
+  "source_sha256": "0ab4ffe52350e225459168aba65054a11149da818ee9580c01856de55b5e8411",
+  "base_sha256": "14e805d00471ff4a8c70c5930d2edfce23985dc99953ae4c878680b939eb06d5",
+  "patch_sha256": "f484a21229ee72e4c8c5801d0283855fb9e2af513ab4d14d67ec14c4ff329728",
+  "native_component": {
+    "result": "build/cpu/boot-rom-native-v68b/result.json",
+    "sha256": "dce03724ffb7d40086abbfaa18e5f939079febf4897428ca1ca82ab868f13bc1",
+    "checks": 5124,
+    "LUT": 4,
+    "FF": 4,
+    "DRM": 0,
+    "negative_detected": true,
+    "image_scope": "Actual frozen boot image only; resource count depends on contents"
+  },
+  "manual": "Installed ADS Synthesis User Guide section5.18 syn_romstyle: output signal attribute logic",
+  "excluded": [
+    "build/cpu/boot-rom-native-v68: postprocessing filename error, native stages successful but ROM remains DRM",
+    "build/cpu/boot-rom-native-check-v68: mapping gate FAIL because DRM retained"
+  ],
+  "full_cpu": "build/cpu/dual-sram/coremark-20261026T141118724828Z",
+  "notes": [
+    "Native mapping is not STA",
+    "No production RTL or board change",
+    "No additional cycle or bypass interlock introduced"
+  ],
+  "sram": {
+    "result": "build/cpu/dual-sram/coremark-20261026T141118724828Z/result.json",
+    "sha256": "56ac66d654cc9ec1a1d48c0ab22631d4f1d63d51607a91a4fb2de470f83a90d3",
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "full_trace_match_v67": true
+  },
+  "native_system": {
+    "result": "build/cpu/rom-logic-native-gate-v68b/native-result.json",
+    "sha256": "b59b9ef77264a476a27fcda332cb18475e029ed728dc2526f9a9f1c3025972fa",
+    "CPU_only": {
+      "LUT": 9703,
+      "FF": 4908,
+      "RAM_LUT_included": 752,
+      "APM": 4,
+      "DRM": 0
+    },
+    "rom": {
+      "LUT": 4,
+      "FF": 4,
+      "DRM": 0
+    }
+  },
+  "physical": {
+    "name": "dual-rom-logic-io-physical-v68b",
+    "directory": "build/cpu/dual-rom-logic-io-physical-v68b",
+    "prepared_sha256": "95937862a0039a5c336c7cae8274fb7e614e16483de423be4b9fc81df885a13e",
+    "status": "TIMING_FAIL",
+    "source_unchanged": true,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.376,
+          "total_negative_slack_ns": -32.588,
+          "failing_endpoints": 108,
+          "endpoints": 26716
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.116,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26716
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4664
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.639,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26716
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.102,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26716
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4664
+        }
+      ],
+      "performance_slack_ns": -1.376,
+      "worst_setup_ns": -1.376,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "timing_closed": false,
+    "native_exit": 0,
+    "runner_return_code": 2,
+    "native_seconds": 306.45,
+    "verified_output_files": 476,
+    "result_sha256": "0ec52e0a61396f4845ab5734790ae8ba9a63a72174b6d358d91fc0d1ad36a1da",
+    "report_sha256": "50303a55c06e7c57d3b6695d2b02a435951d6c8e80ed4b9db7c3e5b47127fe20",
+    "cpu_synthesis_resources": {
+      "lut": 9703,
+      "ff": 4908,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "worst_path": {
+      "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+      "end": "u_core/u_cpu/u_issue/pc_x_q[31]/opit_0_inv_L6Q_perm/I4",
+      "slack_ns": -1.376,
+      "logic_levels": 11,
+      "logic_ns": 1.888,
+      "route_ns": 9.138
+    },
+    "reported_slow_setup_paths": [
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[31]/opit_0_inv_L6Q_perm/I4",
+        "slack_ns": -1.376,
+        "logic_levels": 11,
+        "logic_ns": 1.888,
+        "route_ns": 9.138
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[30]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -1.349,
+        "logic_levels": 11,
+        "logic_ns": 1.888,
+        "route_ns": 9.138
+      },
+      {
+        "start": "u_memory/data_error_o/opit_0_inv_L5Q_perm/CLK",
+        "end": "u_memory/u_sram/memory_5/gopdrm_36k/CEB[0]",
+        "slack_ns": -0.81,
+        "logic_levels": 7,
+        "logic_ns": 1.405,
+        "route_ns": 9.17
+      },
+      {
+        "start": "u_memory/data_error_o/opit_0_inv_L5Q_perm/CLK",
+        "end": "u_memory/u_sram/memory_3/gopdrm_36k/CEB[0]",
+        "slack_ns": -0.807,
+        "logic_levels": 7,
+        "logic_ns": 1.405,
+        "route_ns": 9.179
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/u_pipe0_ctrl/npc_e1_q[14]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -0.763,
+        "logic_levels": 11,
+        "logic_ns": 1.961,
+        "route_ns": 8.45
+      },
+      {
+        "start": "u_memory/data_error_o/opit_0_inv_L5Q_perm/CLK",
+        "end": "u_memory/u_sram/memory_6/gopdrm_36k/CEB[0]",
+        "slack_ns": -0.715,
+        "logic_levels": 7,
+        "logic_ns": 1.405,
+        "route_ns": 9.092
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/u_pipe0_ctrl/npc_e1_q[9]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -0.699,
+        "logic_levels": 10,
+        "logic_ns": 1.739,
+        "route_ns": 8.607
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/pc_e1_q[9]/opit_0_inv_L6Q_perm/CLK",
+        "end": "u_core/u_cpu/u_issue/pc_x_q[28]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -0.691,
+        "logic_levels": 11,
+        "logic_ns": 1.888,
+        "route_ns": 8.443
+      }
+    ],
+    "reported_slow_setup_path_count": 100,
+    "same_source_sram_measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "mapping": {
+    "selector-mapping-v68b.json": {
+      "path": "build/cpu/selector-mapping-v68b.json",
+      "sha256": "21b827b1e3e1610ab6287b13736a89e7c1a3b97b247e654db7b75368233f42b6"
+    },
+    "recovery-mapping-v68b.json": {
+      "path": "build/cpu/recovery-mapping-v68b.json",
+      "sha256": "c4c1dda1169fea94de8c6a8b8842a3a4e3df6aa7f999f4e31b05f073b4958c20"
+    }
+  },
+  "firmware_note": "ROM/SRAM and executable LOAD segments equal v67; ELF non-loaded .strtab differs, not byte-identical ELF.",
+  "overall_target_met": false,
+  "adoption": "REJECTED_TIMING_REGRESSION",
+  "next_baseline": "v67 functional control isolation; v57 remains best completed physical result",
+  "terminal_review": "Independent verification: 476 output hashes,30 inputs; ROM actual4LUT4FF0DRM; overall mapping/routing regressed. Do not attribute solely to placement."
+}

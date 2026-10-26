@@ -2,6 +2,12 @@
 
 更新：2026-10-26。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v68b逻辑ROM映射实验**拒绝采用**：功能/完整CoreMark仍等周期4.091964/MHz，但原约束
+后布线setup **−1.376/+2.639ns**，Slow违例108端点，弱于v67。hold/MPW通过。
+native0/runner2，476输出及冻结输入已核；CPU-only9703LUT/4908FF。两个ROM口映射变化
+影响全局优化，不能以局部4LUT/4FF/0DRM推导整核性能。保留v67和最佳v57，不重跑该候选。
+详见[v68b终态](DUAL_ISSUE_ROM_MAPPING_2026-10-26.md)。
+
 最新终态v67：内部selector更新与外部门控分离，异步清零/X-Z fallback保留；完整SRAM
 CoreMark、WB/store/profile与v65一致，4.091964/MHz。原约束布线完成但TIMING_FAIL：
 setup Slow/Fast **−0.218/+2.835ns**，hold **+0.103/+0.064ns**，MPW **+3.655/+4.202ns**。

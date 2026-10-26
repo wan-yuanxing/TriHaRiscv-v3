@@ -75,6 +75,7 @@ docs/verification/cpu/dualissue_head_ring.patch -text -whitespace
 docs/verification/cpu/dualissue_recovery_compare.patch -text -whitespace
 docs/verification/cpu/dualissue_rom_control.patch -text -whitespace
 docs/verification/cpu/dualissue_memory_selector.patch -text -whitespace
+docs/verification/cpu/dualissue_rom_logic.patch -text -whitespace
 docs/verification/cpu/dualissue_head_ring_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol

@@ -59,6 +59,8 @@ def main():
     parser.add_argument('--cpu-snapshot',type=Path,required=True)
     parser.add_argument('--memory-source',type=Path,
                         help='Isolated triha_soc_memory candidate; copied and hashed with its origin')
+    parser.add_argument('--rom-source',type=Path,
+                        help='Isolated boot ROM candidate; copied and hashed with its origin')
     parser.add_argument('--candidate-manifest',type=Path,default=Path('docs/verification/cpu/dualissue_pairing_sources.json'))
     parser.add_argument('--profile',action='store_true',help='Passive cycle partition and ordered trace observer')
     parser.add_argument('--simulation-timeout-seconds',type=int,default=300,
@@ -143,6 +145,9 @@ def main():
             if name == 'rtl/soc/triha_soc_memory.v' and args.memory_source is not None:
                 source = args.memory_source.resolve()
                 result['memory_candidate'] = str(source)
+            if name == 'rtl/soc/triha_boot_rom.v' and args.rom_source is not None:
+                source = args.rom_source.resolve()
+                result['rom_candidate'] = str(source)
             result['input_origins'][name]=str(source)
             result['origin_hashes'][name]=sha(source)
             target = work / "src" / name
