@@ -23,7 +23,10 @@ def inspect(report, minimum, netlist=None):
                          netlist.read_text(encoding='utf-8'))
     if len(modules) != 1:
         raise ValueError('Actual FIFO module missing or ambiguous in mapped netlist')
-    flops = Counter(re.findall(r'(?m)^\s+(GTP_DFF\w*)\b', modules[0]))
+    # ADS can prefix a primitive with PAP_PRESERVE on the same line.
+    # Remove comments and attributes before counting actual declarations.
+    body = re.sub(r'/\*.*?\*/|//[^\n]*|\(\*.*?\*\)', '', modules[0], flags=re.S)
+    flops = Counter(re.findall(r'(?m)^\s*(GTP_DFF\w*)\b', body))
     if not flops:
         raise ValueError('Actual FIFO has no mapped FF evidence')
     groups = [dict(signal=m[1], registers=int(m[2])) for m in re.finditer(

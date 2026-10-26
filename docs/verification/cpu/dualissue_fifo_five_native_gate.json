@@ -1,0 +1,76 @@
+{
+  "status": "NATIVE_MAPPING_VERIFIED_ROUTE_NOT_ADMITTED",
+  "timing_closed": false,
+  "native_return_code": 0,
+  "stages": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true
+  },
+  "source_unchanged": true,
+  "verified_outputs": 68,
+  "native_directory": "build/cpu/dual-fifo-five-native-gate-v63",
+  "native_receipt_sha256": "0516e4b8c1ff1ea5f1e9c2f93f096e9a53ef01e8486ba0d70f5080bf6bbb9612",
+  "receipt_note": "Original receipt FAIL preserved: stage parser expected no arguments. Independent audit matches actual command arguments and success markers. Native exit was 0. No rerun.",
+  "cpu_only": {
+    "parent": {
+      "lut": 9394,
+      "ff": 4652
+    },
+    "five": {
+      "lut": 9061,
+      "ff": 4536
+    }
+  },
+  "mapping": {
+    "parent": {
+      "netlist_sha256": "af3ddf747c88f4daa52a609a163e803cb69eda7f8cc4a8af16f904a596284d77",
+      "fifo_ff": 783,
+      "fifo_ff_primitives": {
+        "GTP_DFF_C": 6,
+        "GTP_DFF_CE": 777
+      },
+      "ce_groups": 13,
+      "late_controls": {
+        "pop0_i": {
+          "direct_lut_pins": 365,
+          "reachable_ff_pins": 1448,
+          "max_local_lut_depth": 4
+        },
+        "pop1_i": {
+          "direct_lut_pins": 488,
+          "reachable_ff_pins": 1448,
+          "max_local_lut_depth": 3
+        }
+      },
+      "diagnostic": "build/cpu/dual-btb-qualified-io-physical-v57-fifo-structure.json",
+      "diagnostic_sha256": "74174c13c37400db51de9327918ae4c447523d5cf1d8223fdf84934fe9799fff"
+    },
+    "five": {
+      "netlist_sha256": "987a63d24e53772a2f465f204b971b7b64ee5aa97528fbbc172bb15e2f0831db",
+      "fifo_ff": 667,
+      "fifo_ff_primitives": {
+        "GTP_DFF_C": 5,
+        "GTP_DFF_CE": 662
+      },
+      "ce_groups": 11,
+      "late_controls": {
+        "pop0_i": {
+          "direct_lut_pins": 251,
+          "reachable_ff_pins": 1217,
+          "max_local_lut_depth": 3
+        },
+        "pop1_i": {
+          "direct_lut_pins": 360,
+          "reachable_ff_pins": 1217,
+          "max_local_lut_depth": 3
+        }
+      },
+      "diagnostic": "build/cpu/dual-fifo-five-native-gate-v63-fifo-structure.json",
+      "diagnostic_sha256": "a8dd9a1eedd35d77460030abff9d95ce22403645b835335a2fdf7ed65ca43d78"
+    }
+  },
+  "diagnostic_limit": "Conservative local FIFO LUT connectivity, not full-hierarchy STA or equivalence. D and CE pins counted separately. No route admission from these counts alone.",
+  "decision": "Capacity reduction decreases local storage/load but does not remove late dequeue from backend payload updates. Hold route pending head/backend boundary design.",
+  "script_sha256": "59e8e16c91057cdfbc1154ef206c519f6dae0ba8ade18ff8ef060192341c8cb9"
+}
