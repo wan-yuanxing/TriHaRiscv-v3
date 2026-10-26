@@ -16,7 +16,7 @@ def find(x):
 def union(a,b):
  a=find(a);b=find(b)
  if a!=b:parent[a]=b
-cache={}
+cache={};lut_inits={}
 def parse(name):
  if name in cache:return cache[name]
  b=mods[name];decl={};ports={}
@@ -24,10 +24,16 @@ def parse(name):
   n=norm(n);decl[n]=list(range(int(hi),int(lo)-1,-1)) if hi else None
   if kind!='wire':ports[n]=kind
  cells=[]
- for kind,inst,body in re.findall(r'(?m)^\s*(\w+)\s*(?:#\s*\(.*?\)\s*)?(\\[^\s]+|[\w$]+)\s*\((.*?)\);',b,re.S):
+ for kind,params,inst,body in re.findall(r'(?m)^\s*(\w+)\s*(?:#\s*\((.*?)\)\s*)?(\\[^\s]+|[\w$]+)\s*\((.*?)\);',b,re.S):
   if kind not in mods and not kind.startswith('GTP_'):continue
   connections={norm(k):v for k,v in re.findall(r'\.(\\[^\s]+|\w+)\s*\(([^()]*)\)',body)}
   cells.append((kind,norm(inst),connections))
+  init=re.search(r"\.INIT\s*\(\s*64'([bh])([0-9a-f_]+)\s*\)",params,re.I)
+  if kind=='GTP_LUT6D' and init:
+   digits=init[2].replace('_','')
+   if re.fullmatch('[01]+' if init[1].lower()=='b' else '[0-9a-fA-F]+',digits):
+    value=int(digits,2 if init[1].lower()=='b' else 16)
+    if value < 2**64:lut_inits[(name,norm(inst))]=value
  cache[name]=(decl,ports,cells,re.findall(r'\bassign\s+([^=;]+)=([^;]+);',b));return cache[name]
 def expand(expr,decl,path):
  expr=norm(expr)
@@ -82,7 +88,15 @@ def walk(module,path):
   elif kind.startswith(('GTP_LUT','GTP_MUX2LUT')):
    outpins={'Z','Z5','COUT'};incoming=[x for k,vs in pins.items() if k not in outpins for x in vs]
    for k in outpins:
-    for o in pins.get(k,[]):edges.append((o,incoming))
+    relevant=incoming
+    if kind=='GTP_LUT6D' and (module,inst) in lut_inits and k in ('Z','Z5'):
+     # Vendor GTP_LUT6D: Z uses all 64 INIT bits; Z5 only the lower 32.
+     # Retain each input iff toggling it can change this output truth table.
+     # Unknown/missing INIT keeps the conservative all-input graph above.
+     table=lut_inits[(module,inst)];width=5 if k=='Z5' else 6
+     support=[i for i in range(width) if any(((table>>a)^(table>>(a^(1<<i))))&1 for a in range(1<<width))]
+     relevant=[v for i in support for v in pins.get('I'+str(i),[])]
+    for o in pins.get(k,[]):edges.append((o,relevant))
   elif kind in ['GTP_DRM18K_E1','GTP_DRM36K_E1']:
    # Installed vendor models update a_out/b_out only on clock/reset events.
    # Keep asynchronous reset and 36K cascade paths in the support graph.

@@ -1,0 +1,219 @@
+{
+  "status": "SIMULATION_AND_NATIVE_MAPPING_PASS_PHYSICAL_PENDING",
+  "timing_closed": false,
+  "candidate": "v65 parallel branch recovery comparison on v64 head-ring",
+  "patch_sha256": "fac99642b09c623d4c4db534a2fcb444e0d69252a586ec6812063c00c778c6ef",
+  "manifest_sha256": "4226a7820aa926b5f1944a589ae3167565d5a7f183713c946c836bf3b1ec6a7e",
+  "receipts": {
+    "component": {
+      "result": "build/cpu/dual-diagnostic-20261026T121320447045Z/result.json",
+      "sha256": "5c26cbde6897881431ef688ab553343439a9158ab5b759fdb2944ec182b849ff",
+      "status": "PASS",
+      "output_hash_count": 72
+    },
+    "scalar_negative": {
+      "result": "build/cpu/dual-diagnostic-20261026T121320452052Z/result.json",
+      "sha256": "12f365dffeb434ff8d660e0bf23cd56ef7d55b879cb20d7e9915b2eb065a54b5",
+      "status": "FAIL",
+      "output_hash_count": 72
+    },
+    "corrupt_negative": {
+      "result": "build/cpu/dual-diagnostic-20261026T121320429161Z/result.json",
+      "sha256": "80ba9380e4107a1aaa4a1fee08140c73181ed2d9dfe602e4f8912412fb1af6d9",
+      "status": "FAIL",
+      "output_hash_count": 72
+    },
+    "ordered": {
+      "result": "build/cpu/redirect-ordered-20261026T1213207687782Z/result.json",
+      "sha256": "663d709f179534e09659ca092bedfc02207366905e27bc65ae4240e8a1cd2ef6",
+      "status": "PASS",
+      "output_hash_count": 38
+    },
+    "irq": {
+      "result": "build/cpu/redirect-ordered-20261026T1213207736263Z/result.json",
+      "sha256": "093bf0f76d9f0b427a3e61bac97be32946e6605ebe2cdfeb4e6424d905a92160",
+      "status": "PASS",
+      "output_hash_count": 38
+    },
+    "sram": {
+      "result": "build/cpu/dual-sram/coremark-20261026T121320481830Z/result.json",
+      "sha256": "490843d15beaaad092542f583c0dd9ac432787948692b16a275b6345e8eeab69",
+      "status": "PASS",
+      "output_hash_count": 122
+    }
+  },
+  "measurement": {
+    "cycles": 1221907,
+    "wb_completed": 1448448,
+    "observed_ipc": 1.1853995435004465,
+    "coremark_per_mhz_short_estimate": 4.091964445739324,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "official_score": false
+  },
+  "exact_parent_match": [
+    "rom.hex",
+    "sram.hex",
+    "sram.bin",
+    "sram.wb.log",
+    "sram.store.log",
+    "measurement",
+    "profile"
+  ],
+  "native": {
+    "result": "build/cpu/dual-recovery-compare-native-gate-v65/native-result.json",
+    "sha256": "d3866424c2f13a05015664698bb3586928b9015d5b95c9f4ecc8c1394cf790a6",
+    "return_code": 0,
+    "output_hash_count": 68,
+    "stages": {
+      "compile": true,
+      "synthesize": true,
+      "dev_map": true
+    },
+    "cpu_only": {
+      "LUT": 9584,
+      "FF": 4908,
+      "RAM_LUT_included": 752,
+      "APM": 4,
+      "DRM": 0
+    }
+  },
+  "mapping": {
+    "result": "build/cpu/recovery-mapping-v65.json",
+    "sha256": "f76cceafb5830cc483e95182766b9405a0505242231b2914688ceed3c19e2bde",
+    "branch": [
+      {
+        "lane": 0,
+        "direction": "top/u_core/u_cpu/u_issue/u_pipe0_ctrl/resolved_taken_e1_i",
+        "target_mismatch_w_direction_depth": null,
+        "sequential_mismatch_w_direction_depth": null,
+        "recover_direction_depth": 2,
+        "recovery_direction_depth": 3,
+        "direction_consumer_edges": 71
+      },
+      {
+        "lane": 1,
+        "direction": "top/u_core/u_cpu/u_issue/u_branch1/branch_taken_r",
+        "target_mismatch_w_direction_depth": null,
+        "sequential_mismatch_w_direction_depth": null,
+        "recover_direction_depth": 3,
+        "recovery_direction_depth": 4,
+        "direction_consumer_edges": 39
+      }
+    ],
+    "fifo": {
+      "status": "PASS",
+      "scope": "Full hierarchy alias-unified bit connectivity, FF/top inputs terminate; unknown primitives never silently terminate",
+      "netlist": "build\\cpu\\dual-recovery-compare-native-gate-v65\\synthesize\\triha_minimal_soc_syn.vm",
+      "sha256": "0b30e4a2112d0227bcc84742d89d77c5aef6601ef7344f9bcb96d0520b9d7279",
+      "backend_pins": 1356,
+      "visited": 1209,
+      "late_hits": [],
+      "unknown": [],
+      "fifo_path": "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo",
+      "targets": [
+        "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop0_i",
+        "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop1_i"
+      ],
+      "target_canonical": [
+        "top/u_core/u_cpu/u_issue/fetch0_accept_o",
+        "top/u_core/u_cpu/u_issue/fetch1_accept_o"
+      ],
+      "primitive_census": {
+        "GTP_GRS": 1,
+        "GTP_INBUF": 3,
+        "GTP_OUTBUF": 10,
+        "triha_core": 1,
+        "GTP_LUT6D": 1633,
+        "GTP_INV": 1,
+        "triha_cpu": 1,
+        "triha_branch_exec_1": 1,
+        "GTP_LUT4": 327,
+        "GTP_LUT5": 1288,
+        "GTP_LUT6": 3983,
+        "triha_immediate_shift_alu": 1,
+        "GTP_LUT6CARRY": 1613,
+        "GTP_LUT2": 24,
+        "GTP_LUT3": 113,
+        "GTP_MUX2LUT7": 452,
+        "GTP_DFF_CE": 2083,
+        "triha_csr": 1,
+        "GTP_DFF_C": 1117,
+        "GTP_DFF_P": 1,
+        "biriscv_csr_regfile": 1,
+        "GTP_LUT1": 6,
+        "triha_divider": 1,
+        "biriscv_divider": 1,
+        "triha_branch_exec": 1,
+        "biriscv_alu": 1,
+        "triha_frontend": 1,
+        "triha_decode": 1,
+        "triha_alu_predecode": 1,
+        "triha_alu_predecode_unq4": 1,
+        "biriscv_decoder": 1,
+        "biriscv_decoder_unq8": 1,
+        "triha_exec_classify": 1,
+        "triha_exec_classify_unq4": 1,
+        "triha_fetch_fifo": 1,
+        "GTP_DFF_E": 678,
+        "triha_fetch_prediction": 1,
+        "triha_npc": 1,
+        "GTP_DFF_PE": 1038,
+        "triha_btb": 1,
+        "triha_btb_bank": 1,
+        "GTP_MUX2LUT8": 144,
+        "GTP_RAM32X2DP": 752,
+        "triha_npc_equal": 1,
+        "triha_npc_equal_unq8": 1,
+        "triha_btb_bank_unq4": 1,
+        "triha_npc_equal_unq10": 1,
+        "triha_npc_equal_unq12": 1,
+        "triha_issue": 1,
+        "triha_e1_branch": 1,
+        "triha_e1_branch_unq4": 1,
+        "triha_pipe_ctrl": 1,
+        "triha_pipe_ctrl_unq4": 1,
+        "triha_regfile": 1,
+        "GTP_ROM32X1": 6,
+        "GTP_DFF": 31,
+        "GTP_DFF_RE": 31,
+        "GTP_DFF_SE": 31,
+        "triha_lsu": 1,
+        "triha_lsu_fifo": 1,
+        "triha_multiplier": 1,
+        "GTP_APM_E2": 4,
+        "triha_soc_memory": 1,
+        "triha_boot_rom": 1,
+        "GTP_DRM18K_E1": 1,
+        "triha_sram": 1,
+        "GTP_DRM36K_E1": 16,
+        "triha_uart_tx": 1
+      }
+    },
+    "note": "Conservative mapped connectivity only, not STA or full Boolean proof; LUT6D per-output INIT support refined against installed vendor model."
+  },
+  "excluded_aborted_attempt": {
+    "path": "build/cpu/dual-recovery-compare-io-native-v65",
+    "status": "FAIL",
+    "native_return_code": 1,
+    "runner_return_code": 1,
+    "reason": "Incorrect full-route invocation bound old v64 simulation. Owned process stopped during compile/synthesis setup; no PNR. Not v65 evidence."
+  },
+  "remaining": [
+    "reset to memory selector CE path",
+    "LSU flush to ROM instruction enable path",
+    "Actual original 100MHz post-route multicorner acceptance"
+  ],
+  "constraints": "No clock or IO/hold relaxation; no production RTL promotion; no board/integration changes",
+  "tools": {
+    "scripts/cpu/trace_head_ring_hierarchy.py": "66373eee55a95d1c43e26bebe21e11285f47829badec17f489d7eaf87609e166",
+    "scripts/cpu/test_head_ring_hierarchy.py": "bd2c173e1314054cb5c33d558e2c02d37779658f815cf117fc7f262e5e04ff7d",
+    "build/cpu/check_recovery_mapping_v65.py": "1220830617421176388c14f616cd0380e7ddc1b693e259a443a22b381f56cd33",
+    "build/cpu/qualify_recovery_compare_native_v65.py": "7574e1a39f7cc2c953e4d5e799a86b9cdbb95a5f14061e41e7c3a0cb433cb271",
+    "tb/cpu/tb_branch_recovery_compare.v": "f6252fda0b7fb4e7fed40343c3de09f6d4fb70e514d57a28ae94c32974099340"
+  }
+}

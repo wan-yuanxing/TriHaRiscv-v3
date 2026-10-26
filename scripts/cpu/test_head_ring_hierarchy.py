@@ -49,6 +49,37 @@ class HierarchyGateTests(unittest.TestCase):
         code, _ = self.run_fixture(FIXTURE.replace('ring_q', 'head0_q'))
         self.assertNotEqual(code, 0)
 
+    def dual_output_fixture(self, output='Z5', init="64'h3cf03cf0e0e0e0e0"):
+        return FIXTURE.replace('GTP_LUT1 gate (.I0(push),.Z(moved));',
+            f'GTP_LUT6D #(.INIT({init})) gate '
+            f'(.I0(push),.I1(data_i),.I2(push),.I3(pop0),.I4(pop1),.I5(push),.{output}(moved));')
+
+    def test_dual_output_lower_table_excludes_pop(self):
+        code, row = self.run_fixture(self.dual_output_fixture())
+        self.assertEqual(code, 0)
+        self.assertEqual(row['status'], 'PASS')
+
+    def test_dual_output_upper_table_keeps_pop(self):
+        code, row = self.run_fixture(self.dual_output_fixture(output='Z'))
+        self.assertNotEqual(code, 0)
+        self.assertEqual(row['status'], 'FAIL')
+
+    def test_dual_output_corrupt_lower_table_detects_pop(self):
+        code, row = self.run_fixture(self.dual_output_fixture(init="64'h3cf03cf0e0e0e1e0"))
+        self.assertNotEqual(code, 0)
+        self.assertEqual(row['status'], 'FAIL')
+
+    def test_dual_output_unknown_init_stays_conservative(self):
+        code, row = self.run_fixture(self.dual_output_fixture(init="64'hxxxxxxxxxxxxxxxx"))
+        self.assertNotEqual(code, 0)
+        self.assertTrue(row['late_hits'])
+
+    def test_dual_output_missing_init_stays_conservative(self):
+        source = self.dual_output_fixture().replace("#(.INIT(64'h3cf03cf0e0e0e0e0)) ", '')
+        code, row = self.run_fixture(source)
+        self.assertNotEqual(code, 0)
+        self.assertTrue(row['late_hits'])
+
 
 if __name__ == '__main__':
     unittest.main()
