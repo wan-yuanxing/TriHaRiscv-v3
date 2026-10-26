@@ -2,6 +2,19 @@
 
 更新：2026-10-26。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新结构检查：v64 已实现两字头部副本＋只因入队写入的环形后端。完整 SRAM CoreMark、
+全部 WB/store/profile 与 v57 完全一致（1221907周期、4.091964/MHz）；106个合法组合和20821步
+oracle、对齐两配置、有序/IRQ、真实数据负例通过。全层级位连接核查1356个后端D/CE引脚，
+在FF/同步RAM状态边界以内没有pop支持，未知节点为0，跨层隐藏pop负例拒绝。
+
+本结构只运行了一次原约束物理试验，**仍为TIMING_FAIL**：setup Slow/Fast **−0.396/+2.660ns**，
+hold **+0.112/+0.100ns**，脉宽 **+3.655/+4.202ns**；native0/runner2，442输出/30输入与五阶段标记核验。
+CPU-only **9535 LUT/4908 FF/752已含RAM-LUT/4APM/0DRM**。比最佳v57多141LUT、256FF。
+报告列出的FIFO端点最差+0.060ns，但剩余8个违例分布在复位→memory CE、分支恢复→CSR异常、
+LSU flush→ROM CE三条控制链。不能把FIFO局部改善当成整核通过，也不能只修复复位就宣称问题解决。
+保留v57为最佳完成物理基线；v64未提升默认RTL，没有第二次自动布线。
+见[本轮记录](DUAL_ISSUE_HEAD_RING_RESULT_2026-10-26.md)及[完整证据](../verification/cpu/dualissue_head_ring.json)。
+
 当前只推进**不带 Cache、不接 DDR 的 SRAM/TCM 版本**。六级顺序双发射、RV32IM/CSR，
 BTB512/BHT512/RAS4、GShare 关闭；共享 LSU/MUL/DIV。变量移位在 A，B 保留立即移位。
 A 分支可与 B ALU 推测配对，E1 恢复/故障取消年轻结果；B 副作用配对继续受互锁限制。

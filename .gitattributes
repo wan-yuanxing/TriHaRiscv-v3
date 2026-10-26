@@ -71,6 +71,8 @@ docs/verification/cpu/dualissue_mul_branch_pair_policy.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_controlset.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_prepared_values.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_five.patch -text -whitespace
+docs/verification/cpu/dualissue_head_ring.patch -text -whitespace
+docs/verification/cpu/dualissue_head_ring_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_interlock_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_branch_zero_exec_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whitespace=cr-at-eol
