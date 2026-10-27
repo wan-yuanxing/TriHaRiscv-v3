@@ -437,3 +437,8 @@ v45终态setup−0.883/+2.836ns，hold+0.117/+0.100ns，MPW+3.655/+4.202ns；启
 ### 2026-10-27 v73 rs1 移位旁路：HOLD
 
 组件全输出对照及故障负例通过；完整SRAM CoreMark与v72保持1221907周期、短测4.091964/MHz，WB/store/profile一致。原生三阶段通过，CPU核9726LUT/4932FF，比v72+212/+21。局部直接移位连接保留，但整条关键路径改善UNKNOWN；不启动PNR、不叠加到默认基线。独立审查确认HOLD。详见[本轮记录](DUAL_ISSUE_SHIFT_DATA_2026-10-27.md)。100MHz仍未通过。
+
+
+### 2026-10-27 v74 提前条件目标：实际时序未通过
+
+完整功能与SRAM短测保持4.091964/MHz，CPU核9516LUT/4975FF。实际原100MHz布线Slow/Fast setup -0.297/+2.639ns，hold +0.031/+0.013ns，MPW通过。408输出核验，8个Slow违例。旧recovery CE离开违例列表，但控制清零被吸入新目标carry形成4个端点；另有SRAM CE、A结果及CSR异常路径。详见[记录](DUAL_ISSUE_EARLY_TARGET_2026-10-27.md)。不提升默认版；下一v75仅保留纯sum边界，先检查实际carry支持。

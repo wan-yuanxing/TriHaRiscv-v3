@@ -20,3 +20,11 @@
 native compile/synthesize/dev_map PASS；CPU核u_core9516LUT/4975FF/752已含RAM-LUT/4APM/0DRM，较v72+2LUT/+64FF。严格u_cpu为9515LUT。64个条件目标输入均在寄存器边界终止，64个GTP_DFF_CE存在。局部新D锥在pipe_ctrl实际输入处截断，最大32图边、未知0；这不是完整issue路径STA。两路新寄存器共用原N161 CE，每路多32负载；模块内CE连接469/374个FF引脚，不等于实际布局扇出。
 
 独立审查允许一次物理诊断，保持10ns/IO/hold/multicorner及原seed。运行目录build/cpu/dual-early-target-io-physical-v74；需要检查新D/CE与原recovery、SRAM返回路径。启动不代表通过，不提升默认RTL或集成主线。
+
+## 实际物理终态
+
+布线完成，工具退出0，验收runner退出2，TIMING_FAIL；408项输出及冻结输入、五阶段成功标记核验。Slow/Fast setup -0.297/+2.639ns，hold +0.031/+0.013ns，MPW +3.655/+4.202ns；8个Slow setup端点，TNS -1.078ns。CPU-only资源与native一致。原10ns/IO/hold约束，新网表新布局。
+
+原条件目标→恢复CE未再出现在本轮8条违例中，但4条新目标寄存器路径失败，最差head0_q[39]（fetch0指令rs1索引[19]）→发射依赖/许可→div_opcode_valid_w（120扇出）→目标寄存器进位链，-0.297ns，13级，逻辑1.716ns/布线8.105ns。并非简单的PC/立即数数据加法路径。其他为2条data_error→SRAM CE（-0.194/-0.048），1条SRAM→A结果（-0.100），1条队头→CSR异常（-0.064）。没有提高实际已验收频率，不提升默认版。
+
+下一诊断必须检查发射控制为何被综合合入目标加法链，评估保存独立sum边界能否将清零/写许可留在加法结果端；不得凭RTL加了寄存器就认定切断关键路径。
