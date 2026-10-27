@@ -2,6 +2,8 @@
 
 更新：2026-10-27。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v71目标预比较完成组件41151检查、完整CoreMark/轨迹和原生映射。短测仍4.091964/MHz，CPU-only9583 LUT/4905 FF；目标到recover连接未显示缩短，增加27 LUT，因此**结构筛选HOLD，不启动PNR**。同时修复网表检查器对LUT6D固定选择输入的保守误报，13项测试PASS。实际时序仍以v70 FAIL和最佳v57 FAIL记录为准。见[v71记录](DUAL_ISSUE_TARGET_COMPARE_2026-10-27.md)。
+
 最新v70同步乘法零标志完成：短测4.091964/MHz及完整WB/store/profile不变，CPU-only9556 LUT/4907 FF；组件206622检查、消费者8000检查、实际双路指令及真实侧带负例PASS。实际映射消除了零比较的APM依赖，但原100MHz后布线仍FAIL：setup **-0.192/+2.647ns**，hold **+0.111/+0.082ns**，MPW **+3.655/+4.202ns**。11个Slow setup端点；native0/runner2，392输出已核。剩余为分支恢复→fetch CE与SRAM返回链。未提升默认RTL，最佳v57 -0.009ns仍FAIL。详见[v70记录](DUAL_ISSUE_MUL_ZERO_PLAN_2026-10-27.md)。
 
 最新v69分离ROM双口实验已完成但不采用：完整SRAM短测仍为4.091964/MHz，CPU-only9709 LUT/4906 FF；原100MHz后布线setup **-0.275/+2.835ns**，hold **+0.103/+0.063ns**，MPW **+3.655/+4.202ns**。9个Slow setup端点违例，native0/runner2，394输出与冻结输入全部核验。8条违例来自乘法结果→零比较/配对→FIFO头，另1条队头→ALU；不重复ROM映射实验，先核验该组合链的结构方案。最佳v57 -0.009ns仍为FAIL。见[v69终态](DUAL_ISSUE_ROM_SPLIT_2026-10-26.md)。

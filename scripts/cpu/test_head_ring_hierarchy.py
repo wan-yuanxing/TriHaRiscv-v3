@@ -80,6 +80,29 @@ class HierarchyGateTests(unittest.TestCase):
         self.assertNotEqual(code, 0)
         self.assertTrue(row['late_hits'])
 
+    def constant_select_fixture(self, select="1'b1", init="64'haaaaaaaaff00ff00"):
+        return self.dual_output_fixture(output='Z', init=init).replace('.I5(push)', f'.I5({select})')
+
+    def test_constant_high_half_excludes_unreachable_pop(self):
+        code, row = self.run_fixture(self.constant_select_fixture())
+        self.assertEqual(code, 0)
+        self.assertEqual(row['status'], 'PASS')
+
+    def test_constant_low_half_retains_pop(self):
+        code, row = self.run_fixture(self.constant_select_fixture(select="1'b0"))
+        self.assertNotEqual(code, 0)
+        self.assertTrue(row['late_hits'])
+
+    def test_unknown_select_does_not_remove_support(self):
+        code, row = self.run_fixture(self.constant_select_fixture(select="1'bx"))
+        self.assertNotEqual(code, 0)
+        self.assertTrue(row['late_hits'])
+
+    def test_constant_high_half_corruption_detected(self):
+        code, row = self.run_fixture(self.constant_select_fixture(init="64'haaaaaaabff00ff00"))
+        self.assertNotEqual(code, 0)
+        self.assertTrue(row['late_hits'])
+
 
 if __name__ == '__main__':
     unittest.main()

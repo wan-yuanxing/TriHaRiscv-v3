@@ -1,0 +1,322 @@
+{
+  "status": "RTL_NATIVE_PASS_STRUCTURE_HOLD_NO_PNR",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "patch_sha256": "1a0abc5a9f2daa1f934a796639756bf57996c2729d99a6feeac00c51cb1d01ed",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T012157297802Z",
+    "result_sha256": "c68c740e69f9b0f3a5b244b619ae34819824b6dc750a7797db41e81fdfe44858",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "native": {
+    "directory": "build/cpu/target-compare-native-gate-v71",
+    "result_sha256": "bf4d8745a9a4f54411732bc01b8382bd268e27bbecc48de0787f5abb9464a5bb",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9583,
+      "ff": 4905,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0,
+      "boundary": "u_core, includes one LUT CPU wrapper; excludes ROM/SRAM/MMIO fixture",
+      "u_cpu_lut": 9582
+    }
+  },
+  "component": {
+    "directory": "build/cpu/branch-target-validation-v71-v2",
+    "result_sha256": "21f367a7efd878ede0687dbec73c3a629ad63672bf691398831b0fdb7447d509",
+    "verified_outputs": 8
+  },
+  "mapping": {
+    "candidate": {
+      "file": "build/cpu/target-compare-mapping-v71-final.json",
+      "sha256": "e0c44e8f40feae699685ecdd964b40658f91000c78a30948b81b66b94adc81c8",
+      "result": {
+        "status": "HOLD",
+        "scope": "Shortest connectivity paths only; hierarchical aliases resolved; not maximum Boolean depth or STA",
+        "netlist": "build\\cpu\\target-compare-native-gate-v71\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "0ffa08ed4332ec6c684367e004506c559abccd7b3e9a340664b80c9226456a68",
+        "branch": [
+          {
+            "lane": 0,
+            "comparisons": {
+              "conditional": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              },
+              "jump": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              },
+              "register": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              }
+            },
+            "conditional_to_recover_depth": 13,
+            "lost_optimized_names": [
+              "target_mismatch_w",
+              "mismatch_o",
+              "branch_target_r[10]"
+            ]
+          },
+          {
+            "lane": 1,
+            "comparisons": {
+              "conditional": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              },
+              "jump": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              },
+              "register": {
+                "source_target_depth": 11,
+                "to_recover_depth": 2
+              }
+            },
+            "conditional_to_recover_depth": 13,
+            "lost_optimized_names": [
+              "target_mismatch_w",
+              "mismatch_o",
+              "branch_target_r[10]"
+            ]
+          }
+        ],
+        "fifo": {
+          "status": "PASS",
+          "scope": "Full hierarchy alias-unified bit connectivity, FF/top inputs terminate; unknown primitives never silently terminate",
+          "netlist": "build\\cpu\\target-compare-native-gate-v71\\synthesize\\triha_minimal_soc_syn.vm",
+          "sha256": "0ffa08ed4332ec6c684367e004506c559abccd7b3e9a340664b80c9226456a68",
+          "backend_pins": 1356,
+          "visited": 1208,
+          "late_hits": [],
+          "unknown": [],
+          "fifo_path": "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo",
+          "targets": [
+            "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop0_i",
+            "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop1_i"
+          ],
+          "target_canonical": [
+            "top/u_memory/u_core/u_cpu/fetch0_accept_w",
+            "top/u_memory/u_core/u_cpu/fetch1_accept_w"
+          ],
+          "primitive_census": {
+            "GTP_GRS": 1,
+            "GTP_INBUF": 3,
+            "GTP_OUTBUF": 10,
+            "triha_core": 1,
+            "GTP_LUT6D": 1694,
+            "GTP_INV": 1,
+            "triha_cpu": 1,
+            "triha_branch_exec_1": 1,
+            "GTP_LUT4": 429,
+            "GTP_LUT5": 1346,
+            "GTP_LUT6": 3850,
+            "triha_immediate_shift_alu": 1,
+            "GTP_LUT6CARRY": 1548,
+            "GTP_LUT3": 79,
+            "GTP_MUX2LUT7": 462,
+            "GTP_DFF_CE": 2081,
+            "triha_csr": 1,
+            "GTP_LUT2": 23,
+            "GTP_DFF_C": 1115,
+            "GTP_DFF_P": 1,
+            "biriscv_csr_regfile": 1,
+            "GTP_LUT1": 5,
+            "triha_divider": 1,
+            "biriscv_divider": 1,
+            "triha_branch_exec": 1,
+            "biriscv_alu": 1,
+            "triha_frontend": 1,
+            "triha_decode": 1,
+            "triha_alu_predecode": 1,
+            "triha_alu_predecode_unq4": 1,
+            "biriscv_decoder": 1,
+            "biriscv_decoder_unq8": 1,
+            "triha_exec_classify": 1,
+            "triha_exec_classify_unq4": 1,
+            "triha_fetch_fifo": 1,
+            "GTP_DFF_E": 680,
+            "triha_fetch_prediction": 1,
+            "triha_npc": 1,
+            "GTP_DFF_PE": 1039,
+            "triha_btb": 1,
+            "triha_btb_bank": 1,
+            "GTP_MUX2LUT8": 144,
+            "GTP_RAM32X2DP": 752,
+            "triha_npc_equal": 1,
+            "triha_npc_equal_unq8": 1,
+            "triha_btb_bank_unq4": 1,
+            "triha_npc_equal_unq10": 1,
+            "triha_npc_equal_unq12": 1,
+            "triha_issue": 1,
+            "triha_e1_branch": 1,
+            "triha_e1_branch_unq4": 1,
+            "triha_pipe_ctrl": 1,
+            "triha_pipe_ctrl_unq4": 1,
+            "triha_regfile": 1,
+            "GTP_ROM32X1": 6,
+            "GTP_DFF": 31,
+            "GTP_DFF_RE": 31,
+            "GTP_DFF_SE": 31,
+            "triha_lsu": 1,
+            "triha_lsu_fifo": 1,
+            "triha_multiplier": 1,
+            "GTP_APM_E2": 4,
+            "triha_soc_memory": 1,
+            "triha_boot_rom": 1,
+            "GTP_DRM18K_E1": 1,
+            "triha_sram": 1,
+            "GTP_DRM36K_E1": 16,
+            "triha_uart_tx": 1
+          }
+        },
+        "fifo_shortest_pop_path": null
+      }
+    },
+    "parent": {
+      "file": "build/cpu/target-compare-parent-mapping-v71-final.json",
+      "sha256": "7dc43bc34bf1ba49629eab6a5bf368c9eda23aa49674ce3e07cb59ecbef2dab8",
+      "result": {
+        "status": "HOLD",
+        "scope": "Shortest connectivity paths only; hierarchical aliases resolved; not maximum Boolean depth or STA",
+        "netlist": "build\\cpu\\mul-zero-native-gate-v70\\synthesize\\triha_minimal_soc_syn.vm",
+        "netlist_sha256": "37f77d50bed5e54cfd1d3f1dc40fa720e56dd527ea97681b2ac54f652ec7a708",
+        "branch": [
+          {
+            "lane": 0,
+            "conditional_to_recover_depth": 13
+          },
+          {
+            "lane": 1,
+            "conditional_to_recover_depth": 13
+          }
+        ],
+        "fifo": {
+          "status": "PASS",
+          "scope": "Full hierarchy alias-unified bit connectivity, FF/top inputs terminate; unknown primitives never silently terminate",
+          "netlist": "build\\cpu\\mul-zero-native-gate-v70\\synthesize\\triha_minimal_soc_syn.vm",
+          "sha256": "37f77d50bed5e54cfd1d3f1dc40fa720e56dd527ea97681b2ac54f652ec7a708",
+          "backend_pins": 1356,
+          "visited": 1204,
+          "late_hits": [],
+          "unknown": [],
+          "fifo_path": "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo",
+          "targets": [
+            "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop0_i",
+            "top/u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/pop1_i"
+          ],
+          "target_canonical": [
+            "top/u_core/u_cpu/u_issue/fetch0_accept_o",
+            "top/u_core/u_cpu/u_issue/fetch1_accept_o"
+          ],
+          "primitive_census": {
+            "GTP_GRS": 1,
+            "GTP_INBUF": 3,
+            "GTP_OUTBUF": 10,
+            "triha_core": 1,
+            "GTP_LUT6D": 1671,
+            "GTP_INV": 1,
+            "triha_cpu": 1,
+            "triha_branch_exec_1": 1,
+            "GTP_LUT4": 473,
+            "GTP_LUT5": 1258,
+            "GTP_LUT6": 3858,
+            "triha_immediate_shift_alu": 1,
+            "GTP_LUT6CARRY": 1572,
+            "GTP_LUT3": 81,
+            "GTP_MUX2LUT7": 463,
+            "GTP_DFF_CE": 2083,
+            "triha_csr": 1,
+            "GTP_DFF_C": 1115,
+            "GTP_DFF_P": 1,
+            "biriscv_csr_regfile": 1,
+            "GTP_LUT2": 28,
+            "GTP_LUT1": 5,
+            "triha_divider": 1,
+            "biriscv_divider": 1,
+            "triha_branch_exec": 1,
+            "biriscv_alu": 1,
+            "triha_frontend": 1,
+            "triha_decode": 1,
+            "triha_alu_predecode": 1,
+            "triha_alu_predecode_unq4": 1,
+            "biriscv_decoder": 1,
+            "biriscv_decoder_unq8": 1,
+            "triha_exec_classify": 1,
+            "triha_exec_classify_unq4": 1,
+            "triha_fetch_fifo": 1,
+            "GTP_DFF_E": 680,
+            "triha_fetch_prediction": 1,
+            "triha_npc": 1,
+            "GTP_DFF_PE": 1039,
+            "triha_btb": 1,
+            "triha_btb_bank": 1,
+            "GTP_MUX2LUT8": 144,
+            "GTP_RAM32X2DP": 752,
+            "triha_npc_equal": 1,
+            "triha_npc_equal_unq8": 1,
+            "triha_btb_bank_unq4": 1,
+            "triha_npc_equal_unq10": 1,
+            "triha_npc_equal_unq12": 1,
+            "triha_issue": 1,
+            "triha_e1_branch": 1,
+            "triha_e1_branch_unq4": 1,
+            "triha_pipe_ctrl": 1,
+            "triha_pipe_ctrl_unq4": 1,
+            "triha_regfile": 1,
+            "GTP_ROM32X1": 6,
+            "GTP_DFF": 31,
+            "GTP_DFF_RE": 31,
+            "GTP_DFF_SE": 31,
+            "triha_lsu": 1,
+            "triha_lsu_fifo": 1,
+            "triha_multiplier": 1,
+            "GTP_APM_E2": 4,
+            "triha_soc_memory": 1,
+            "triha_boot_rom": 1,
+            "GTP_DRM18K_E1": 1,
+            "triha_sram": 1,
+            "GTP_DRM36K_E1": 16,
+            "triha_uart_tx": 1
+          }
+        },
+        "fifo_shortest_pop_path": null
+      }
+    }
+  },
+  "disposition": "No physical run: equal shortest conditional target-to-recover depth13, +27LUT/-2FF, timing benefit unproven. SRAM return violations remain.",
+  "checker_change": {
+    "file": "scripts/cpu/trace_head_ring_hierarchy.py",
+    "sha256": "bee22c1653b653f5a20c1bad6c0d782db1c5cac1a2e49d8c57fa4a9af58cf0d2",
+    "tests": "13 PASS; constant-select red test reproduced first; literal binary cofactors only"
+  },
+  "limits": [
+    "No new100MHz result",
+    "Best v57 remains-.009ns FAIL",
+    "RTL short score not board or official CoreMark",
+    "Default RTL/SoC untouched",
+    "Shortest mapped connectivity is not STA or proof of maximum delay"
+  ],
+  "review": {
+    "reviewer": "head_ring_review",
+    "status": "HOLD_CONFIRMED",
+    "checker": "literal binary cofactor reviewed; recover0 cone has no detected cycle",
+    "cpu_resource_boundary": "u_core9583 LUT; u_cpu9582 LUT; both4905FF"
+  }
+}

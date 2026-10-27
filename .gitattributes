@@ -84,3 +84,5 @@ docs/verification/cpu/dualissue_forward_control_fanout_sources.json -text whites
 tb/cpu/tb_issue_branch_zero_sources.v -text whitespace=cr-at-eol
 
 docs/verification/cpu/dualissue_mul_zero.patch -text -whitespace
+
+docs/verification/cpu/dualissue_target_compare.patch -text -whitespace

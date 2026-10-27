@@ -94,7 +94,15 @@ def walk(module,path):
      # Retain each input iff toggling it can change this output truth table.
      # Unknown/missing INIT keeps the conservative all-input graph above.
      table=lut_inits[(module,inst)];width=5 if k=='Z5' else 6
-     support=[i for i in range(width) if any(((table>>a)^(table>>(a^(1<<i))))&1 for a in range(1<<width))]
+     # Cofactor only literal binary inputs. With I5 tied high, Z cannot
+     # observe the lower table used by Z5; including it creates false loops.
+     # Unconnected, unknown or aliased inputs remain conservative.
+     fixed={i:int(pins['I'+str(i)][0][-1]) for i in range(width)
+            if pins.get('I'+str(i)) in (['CONST:0'],['CONST:1'])}
+     reachable=[a for a in range(1<<width)
+                if all(((a>>i)&1)==v for i,v in fixed.items())]
+     support=[i for i in range(width) if i not in fixed and
+              any(((table>>a)^(table>>(a^(1<<i))))&1 for a in reachable)]
      relevant=[v for i in support for v in pins.get('I'+str(i),[])]
     for o in pins.get(k,[]):edges.append((o,relevant))
   elif kind in ['GTP_DRM18K_E1','GTP_DRM36K_E1']:
