@@ -1,0 +1,110 @@
+{
+  "status": "RTL_NATIVE_PASS_PNR_RUNNING",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v79 precomputed FIFO count-after-dequeue scalar predicates; v78 memory unchanged",
+  "component": {
+    "directory": "build/cpu/fifo-predicate-validation-v79",
+    "status": "PASS",
+    "result_sha256": "3991ad818362fa441d96fe46ccf5c2004a56e5933885fa061e800f42bef80572",
+    "verified_outputs": 13
+  },
+  "red": {
+    "directory": "build/cpu/fifo-predicate-red-v79",
+    "status": "PASS",
+    "result_sha256": "8258bc18652600690ddbcd35c446be5eb45194780ab7bac2aafa792e5ac9e155",
+    "verified_outputs": 13
+  },
+  "ordered": {
+    "directory": "build/cpu/redirect-ordered-20261027T0819319663113Z",
+    "status": "PASS",
+    "result_sha256": "53ce850113dbede71abb57fc51254ec2fd147dc39200467238e6d26f413cee3b",
+    "verified_outputs": 38
+  },
+  "irq": {
+    "directory": "build/cpu/redirect-ordered-20261027T0819578297593Z",
+    "status": "PASS",
+    "result_sha256": "2c9f6a3e9acb7ec6a8afa1f7a127e8974601a0602e69cd687be92c9cae16bc05",
+    "verified_outputs": 38
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T081931724362Z",
+    "status": "PASS",
+    "result_sha256": "283dbabaece4c42c108e3c7c823f1b04740a8188d3447e5ab095f6da57bcdcee",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "same_parent_cycle_profile_wb_store": true
+  },
+  "native": {
+    "directory": "build/cpu/fifo-predicate-native-gate-v79",
+    "status": "PASS",
+    "result_sha256": "94ac95aa118947cca0f29103a4cb0342b6620a5678e42b4b0d51691e2359f546",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9619,
+      "ff": 4972,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "fifo-predicate-mapping-v79": {
+      "file": "build\\cpu\\fifo-predicate-mapping-v79.json",
+      "sha256": "7fa76543c3dcac48b5cd2e09f80e3c8ae29b314bc46ffc5ff4e6d78c1966ea27",
+      "status": "PASS"
+    },
+    "fifo-predicate-mapping-v79-negative-remaining": {
+      "file": "build\\cpu\\fifo-predicate-mapping-v79-negative-remaining.json",
+      "sha256": "faf1c9e8baf29ea15824ba81dcb2ad08cb832898a56facca25e161ea49aaeaaa",
+      "status": "HOLD"
+    },
+    "fifo-predicate-mapping-v79-negative-flags": {
+      "file": "build\\cpu\\fifo-predicate-mapping-v79-negative-flags.json",
+      "sha256": "c351ff7a515894906dedeb93f854d5009849315a6a7ac97b2df404a3e1bbfb6d",
+      "status": "HOLD"
+    },
+    "fifo-predicate-branch-mapping-v79": {
+      "file": "build\\cpu\\fifo-predicate-branch-mapping-v79.json",
+      "sha256": "8224e3e8257fccfaba2183054574062d0c25447e56f546e760ee8536041678c8",
+      "status": "PASS"
+    },
+    "fifo-predicate-btb-mapping-v79": {
+      "file": "build\\cpu\\fifo-predicate-btb-mapping-v79.json",
+      "sha256": "93cf8a3c071d7f43c02098f66c231da5fd45f825180787cb969085ae520ecc17",
+      "status": "PASS"
+    },
+    "fifo-predicate-sum-mapping-v79": {
+      "file": "build\\cpu\\fifo-predicate-sum-mapping-v79.json",
+      "sha256": "d3e66f1e2f21251ff9e797e3bb6231e8899d9c9c9866ff54380511adf5df2bd7",
+      "status": "PASS"
+    },
+    "fifo-predicate-memory-mapping-v79": {
+      "file": "build\\cpu\\fifo-predicate-memory-mapping-v79.json",
+      "sha256": "1ddad11e7917d8b8dd05b6a83a1400dea2d081239c7e2b918e4c377e5dea92e6",
+      "status": "PASS"
+    }
+  },
+  "physical": {
+    "directory": "build\\cpu\\dual-fifo-predicate-io-physical-v79",
+    "prepared_sha256": "15057ffbc2ff7c27e7cc72ee6441a95cd1b46085a8d7e1cc029e4f10a6ddd532",
+    "status": "RUNNING"
+  },
+  "mapping_tool": {
+    "file": "build/cpu/check_fifo_predicate_mapping_v79.py",
+    "sha256": "5afadf82ca9443e97f3e330794a5433e764c09bd736084dd9a22213098093691"
+  },
+  "review": "Independent replay supports one original100MHz PNR diagnostic;12 logical flags fold to10 canonical nodes,9 are consumed by head logic.231 FF/231D/135CE covered. Native68/CoreMark122 hashes match. No timing acceptance from topology."
+}

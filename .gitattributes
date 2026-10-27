@@ -99,3 +99,5 @@ docs/verification/cpu/dualissue_btb_local_write.patch -text -whitespace
 docs/verification/cpu/dualissue_branch_type.patch -text -whitespace
 
 docs/verification/cpu/dualissue_sram_local_command.patch -text -whitespace
+
+docs/verification/cpu/dualissue_fifo_predicate.patch -text -whitespace
