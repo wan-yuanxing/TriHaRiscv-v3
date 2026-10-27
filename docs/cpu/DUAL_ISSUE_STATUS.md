@@ -2,6 +2,8 @@
 
 更新：2026-10-27。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v78（v77 CPU＋SRAM本地命令/写碰撞许可）完成原100MHz完整PNR，仍 **TIMING_FAIL**：setup Slow/Fast **-0.175/+2.667ns**，hold **+0.111/+0.100ns**，MPW **+3.655/+4.202ns**。12个Slow违例，326输出及冻结输入已核；CPU-only9856LUT/4975FF/752已含RAM-LUT/4APM/0DRM。完整短测仍4.091964/MHz，1221907周期，WB/store/profile与v77一致。实际16个DRM CE锥已退出通用请求网络；最终无SRAM CE违例，报告可见CEB+0.160ns。新最差为SRAM返回零判定→配对→FIFO头更新，另有A ALU违例；下一诊断是FIFO晚pop后的空槽判定提前。未提升默认RTL，历史最佳v57 -0.009ns仍FAIL。详见[v78终态](DUAL_ISSUE_SRAM_COMMAND_2026-10-27.md)。
+
 最新v77（v76 BTB块内写许可＋分支目标预比较）已完成原100MHz完整PNR，仍 **TIMING_FAIL**：setup Slow/Fast **-0.185/+2.639ns**，hold **+0.053/+0.019ns**，MPW **+3.655/+4.202ns**。21个Slow违例，282输出及冻结输入核验；实际CPU-only9840LUT/4975FF/752已含RAM-LUT/4APM/0DRM。短测仍4.091964/MHz，1221907周期，完整WB/store/profile与父版相同。剩余主要为SRAM请求CE及A路JALR恢复控制。最新不等于最佳，历史v57 -0.009ns仍FAIL。未提升默认RTL。详见[v77终态](DUAL_ISSUE_BRANCH_TYPE_2026-10-27.md)。
 
 最新v72（从v70派生）LSU符号扩展前零属性已通过409604项组件/E2检查、真实双路加载程序、完整CoreMark及原生映射。短测仍4.091964/MHz，全部WB/store/profile不变；CPU-only9514 LUT/4911 FF。映射确认零属性绕过格式化后的32位结果，但**未PNR、100MHz未通过**。下一步针对B立即移位数据入口，并保留分支恢复CE问题；不叠加HOLD的v71。见[v72记录](DUAL_ISSUE_LSU_ZERO_2026-10-27.md)。

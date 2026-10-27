@@ -30,3 +30,21 @@ v78初步候选只改data_en，已经启动的完整CPU回归保留为诊断；�
 native fresh compile/synthesize/dev_map通过，68输出核验；CPU-only9856LUT/4975FF/752已含RAM-LUT/4APM/0DRM，较v77 +16LUT。实际16个动态DRM CE锥均不含通用d_fire/issue_lsu，注入共享控制返回HOLD。六组branch比较器、BTB256WE/624地址/80延迟边界、64目标FF与60sum carry亦重放PASS，均仅为结构门槛。
 
 独立评审支持单次原约束PNR。fresh目录`build/cpu/dual-sram-command-io-physical-v78`，原10ns/IO/hold/multicorner、seed1，PNR600秒/外层900秒。已启动；未出现最终报告前不认为100MHz通过。
+
+## 最终物理结果
+
+本轮完整300.325秒，主详细布线117迭代到0。PDS退出0，验收器记录退出2，TIMING_FAIL；326输出、全部冻结输入、五阶段成功标记和performance一致性核验。
+
+| 检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| Setup | -0.175 | +2.667 |
+| Hold | +0.111 | +0.100 |
+| 最小脉宽 | +3.655 | +4.202 |
+
+Slow12失败端点、TNS-1.166ns。相比v77同10ns setup -0.185、21失败端点，本轮新网表/新布局，不把端点数或0.010ns变化当稳定频率收益。历史最佳v57 -0.009ns仍FAIL；本轮不是100MHz通过。
+
+12条违例：7条SRAM→FIFO head1 D、2条SRAM→FIFO head0 CE、2条FIFO head0→A ALU结果、1条ROM→FIFO head1数据逻辑。无SRAM CE setup违例；报告显示memory_15/CEB路径+0.160ns、起点改为fetchPC，不代表报告列出每个CE详细余量。
+
+实际route包合成重查16动态DRM CE、branch比较器、BTB和纯sum门槛均PASS。原目标CE路径改善，但新最差为SRAM QA→返回数据→byte_zero[3]→bypass零标量→分支配对→fetch1_accept（182扇出）→remaining_r→head1 D，-0.175ns，9级，logic3.142ns/route6.777ns。byte_zero网线1.729ns；不能泛化为所有load/branch结果或只靠加buffer解决。
+
+独立评审核验326输出与分类一致。下一最小诊断先提前计算count减0/1/2后的空槽/一槽判定，再由晚到remove选择标量；保留原remaining_r计数更新，不增加状态、不复制宽payload、不改变配对策略。必须覆盖B-only消费、同时push/pop、flush元数据历史和原位宽下溢/X-Z语义，并在实际head D锥验证晚到pop不再经remaining减法后比较。该方案未实施，不能声称已消除其余A ALU路径。
