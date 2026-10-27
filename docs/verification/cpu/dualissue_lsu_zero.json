@@ -1,0 +1,119 @@
+{
+  "status": "RTL_NATIVE_PASS_PHYSICAL_NOT_RUN",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "base": "v70; v71 not included",
+  "patch_sha256": "9d12e740f5f47b0880313f981ef252d9844cd3ad8bf6a446a36f73f39e3f0aeb",
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T015156676410Z",
+    "result_sha256": "229728f8914ba834b4160a50106d210272296288431af17a5311cdd2cf46111f",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "native": {
+    "directory": "build/cpu/lsu-zero-native-gate-v72",
+    "result_sha256": "05e7f02ffd4dc8f7ebf47f3851583e21bd5d8410d28a2275d9ec7f404d098ac5",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "boundary": "u_core, excludes ROM/SRAM/MMIO fixture",
+      "lut": 9514,
+      "ff": 4911,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0,
+      "u_cpu_lut": 9513
+    }
+  },
+  "component": {
+    "directory": "build/cpu/lsu-zero-validation-v72-v4",
+    "result_sha256": "abd2eece2de791708ba9dbec38d59bf1d296e06c8df2b5ae68bf91bb860d1779",
+    "verified_outputs": 11,
+    "checks_per_bypass_configuration": 102401,
+    "configurations": 4,
+    "program_cycles": 377,
+    "loads_retired": 48,
+    "dependent_alu_retired": 48,
+    "held_cycles": 220,
+    "lsu_a_issues": 44,
+    "lsu_b_issues": 5,
+    "issue_count_scope": "includes final completion store",
+    "negative": [
+      "FAULT_ZERO",
+      "FAULT_E2"
+    ],
+    "runner_sha256": "92b0703e25023fcba2782be7acb57f690c19ea872e08fa0a1c5c4630dfa1327f"
+  },
+  "mapping": {
+    "file": "build/cpu/lsu-zero-mapping-v72.json",
+    "sha256": "0b2744a87415d26522b706b2d3c3441373b834fb124f0555821350edbd8e2569",
+    "result": {
+      "status": "PASS",
+      "scope": "Mapped connectivity; shortest paths are not STA or maximum logic depth",
+      "zero_cone": {
+        "nodes": 166,
+        "unknown": [],
+        "formatted_data_hits": [],
+        "control_hits": []
+      },
+      "e2": [
+        {
+          "lane": 2,
+          "name_available": false,
+          "raw_data23_to_zero_shortest": null
+        },
+        {
+          "lane": 3,
+          "name_available": false,
+          "raw_data23_to_zero_shortest": null
+        }
+      ],
+      "zero_scalar_consumer_edges": 2,
+      "raw_data23_to_lsu_zero_shortest": 4,
+      "cpu_netlist_sha256": "786643ca51fd4ca13ff639270e6d258cf76d8a72cf29747c7bc187fe982584a7"
+    }
+  },
+  "excluded_attempts": [
+    {
+      "directory": "build/cpu/dual-lsu-zero-reconstructed-v72",
+      "reason": "patch missing no-newline marker, reconstruction rejected; replaced by clean fresh directory"
+    },
+    {
+      "directory": "build/cpu/dual-sram/coremark-20261027T015010159684Z",
+      "reason": "input drift preflight; no ModelSim invocation"
+    },
+    {
+      "directory": "build/cpu/lsu-zero-validation-v72-v2",
+      "reason": "program checked final ALU retirement before drain; benchmark updated, RTL unchanged"
+    }
+  ],
+  "remaining_paths": [
+    "v70 branch recovery to fetch branch-PC CE",
+    "v70 SRAM to B immediate-shift ALU inputs/result; not an addition carry path"
+  ],
+  "limits": [
+    "RTL score is not board or official CoreMark",
+    "No PNR for v72, no100MHz acceptance",
+    "Default RTL/main integration unchanged",
+    "No extra RTL state; native FF increase reflects changed mapping",
+    "Mapped scalar E2 intermediate names optimized out; no absence-of-path claim for those names"
+  ],
+  "review": {
+    "reviewer": "head_ring_review",
+    "status": "FUNCTIONAL_STRUCTURE_PASS_NOT_PNR_ADMISSION",
+    "native_outputs_verified": 68,
+    "sram_outputs_verified": 122,
+    "scope": "no timing acceptance; no ambiguous multiple-driver aliases in mapped diagnostic"
+  }
+}

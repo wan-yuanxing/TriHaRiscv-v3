@@ -86,3 +86,5 @@ tb/cpu/tb_issue_branch_zero_sources.v -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_mul_zero.patch -text -whitespace
 
 docs/verification/cpu/dualissue_target_compare.patch -text -whitespace
+
+docs/verification/cpu/dualissue_lsu_zero.patch -text -whitespace
