@@ -1,0 +1,84 @@
+{
+  "status": "RTL_NATIVE_PASS_PNR_RUNNING",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v77 target precomparison over v76 local BTB WE",
+  "component": {
+    "directory": "build/cpu/branch-type-validation-v77",
+    "result_sha256": "6f0b904310f9b6ec9aa33937336710637df24e9ad9e07c3e744df4f8a8ce18d2",
+    "verified_outputs": 8
+  },
+  "red": {
+    "directory": "build/cpu/branch-type-red-v77",
+    "result_sha256": "8a3699c8eefcb75b8ccd21841de45e81bc43de8f93ff04cc4ae1226ac1c1f7c0",
+    "verified_outputs": 8
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T054431726597Z",
+    "result_sha256": "419fb142e91a2595d2ad800f32230ededa807f182f5eb75fee7c18d70f93ce54",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "native": {
+    "directory": "build/cpu/branch-type-native-gate-v77",
+    "result_sha256": "7d4fce61b8a0ee0414597818760781ad1b56a9e48a689e8d6c38800c3363a2b5",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9840,
+      "ff": 4975,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "branch-type-mapping-v77": {
+      "file": "build\\cpu\\branch-type-mapping-v77.json",
+      "sha256": "ca4e92f7fff13e404284e6f5c3c24ff3e93442c7038f9c0f212037ee99a7928d",
+      "status": "PASS"
+    },
+    "branch-type-mapping-v77-negative-control": {
+      "file": "build\\cpu\\branch-type-mapping-v77-negative-control.json",
+      "sha256": "278ab8b426c44412f64bc22079ad6387b13dbff92a572005d154503c2ee9ae4e",
+      "status": "HOLD"
+    },
+    "branch-type-mapping-v77-negative-disconnect": {
+      "file": "build\\cpu\\branch-type-mapping-v77-negative-disconnect.json",
+      "sha256": "b48a2a8dcd5a45846f98ee28f6db1cc7c957fd9155723648b6475ba633f0b3b7",
+      "status": "HOLD"
+    },
+    "btb-local-mapping-v77": {
+      "file": "build\\cpu\\btb-local-mapping-v77.json",
+      "sha256": "be08f47ca36af58d14361f7c9733a6bf6967674b74bc1259508555d9fc152281",
+      "status": "PASS"
+    }
+  },
+  "physical": {
+    "directory": "build/cpu/dual-branch-type-io-physical-v77",
+    "prepared_sha256": "92a617d4762ba0fe7b7ae0f39b5cd0ecd93f737e9a9dbefdc9f454133a840bf9",
+    "status": "RUNNING"
+  },
+  "limitations": [
+    "Short RTL CoreMark, not official or board score",
+    "Observed writeback IPC, not architectural minstret",
+    "Native mapping and area do not establish timing",
+    "No default RTL promotion"
+  ],
+  "review": "Independent reviewer replayed comparator and BTB boundaries, 64 target FF D/60 COUT pure-sum gate, 122 simulation and 68 native hashes. Supports one original100MHz PNR only; shortest graph distance is not STA.",
+  "mapping_tools": {
+    "build\\cpu\\check_branch_type_mapping_v77.py": "b84816618d97782464ebb314a77012292daeb35b98109119a61def77f098e4e9",
+    "build\\cpu\\check_btb_local_mapping_v77.py": "d7e901a17b90d098f45e581f7726c1e485eb160685ecc4498ff2af133512dc40"
+  }
+}
