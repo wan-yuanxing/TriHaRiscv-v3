@@ -1,0 +1,78 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v74 condition target at existing E1 boundary; v72 base",
+  "component": {
+    "directory": "build/cpu/early-target-validation-v74-v2",
+    "result_sha256": "4420fa2a51b1ae1954a7792f69c3e16e320dc6f888e39f2748bab388552b0a88",
+    "verified_output_files": 6
+  },
+  "branch_compare": {
+    "directory": "build/cpu/early-branch-compare-v74",
+    "result_sha256": "08b7476476d5c2d4879b26703fcd47aa61a425ebadecba7371cdc02250740a00",
+    "verified_output_files": 7
+  },
+  "ordered": {
+    "directory": "build/cpu/redirect-ordered-20261027T0454156984123Z",
+    "result_sha256": "667e85e04fe007cd929f862720a340befe0c105313cdc565c3bfee6ae579fd32",
+    "verified_output_files": 38
+  },
+  "irq": {
+    "directory": "build/cpu/redirect-ordered-20261027T0454241358129Z",
+    "result_sha256": "4b7371471f9f146aef9607f6f80102ac7ee2d3f41c569f00745f9f1b8afb7b36",
+    "verified_output_files": 38
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T045201989857Z",
+    "result_sha256": "e268165109fd9e4bb6c40335a5e0cbc10c3944eef177b043568232ba4b0f93c2",
+    "verified_output_files": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "native": {
+    "directory": "build/cpu/early-target-native-gate-v74",
+    "result_sha256": "3b89b6c60449013185de399b93d24048463dafa58749cfc3cb092337db53e710",
+    "verified_output_files": 68,
+    "cpu_only": {
+      "lut": 9516,
+      "ff": 4975,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    },
+    "delta_v72": {
+      "lut": 2,
+      "ff": 64
+    }
+  },
+  "mapping": {
+    "file": "build/cpu/early-target-mapping-v74.json",
+    "sha256": "9b3ea8611ec5a809aa1fe6caf338eb99957fee31ddb29fc21029ef8510921dc9",
+    "scope": "64 registered target inputs; local module-input-cut adder topology only, NOT STA"
+  },
+  "physical": {
+    "directory": "build/cpu/dual-early-target-io-physical-v74",
+    "prepared_sha256": "d20ef8d7874c7a7fe231073751a7a39d4d602295eeea6edbfe0a89d01c7640fb",
+    "status": "RUNNING"
+  },
+  "review": {
+    "decision": "allow one isolated original-constraint 100MHz physical diagnostic",
+    "risk": "CE adds 32 target registers per lane; local CE FF pin consumers 469/374, not physical fanout; full new D/CE and prior SRAM paths require STA"
+  },
+  "diagnostic_helpers": {
+    "build/cpu/check_early_target_mapping_v74.py": "86fe00f7c220372133cb90672f16293a3ebe67c1a294fb3f008ec3f92292d37f",
+    "build/cpu/qualify_early_target_native_v74.py": "1f601988cc7523f21eca62bd1092572345b986b0f43ce554d7b75cfc89d15442"
+  }
+}
