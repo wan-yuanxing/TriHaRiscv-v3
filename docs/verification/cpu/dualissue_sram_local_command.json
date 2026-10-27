@@ -1,0 +1,118 @@
+{
+  "status": "RTL_NATIVE_PASS_PNR_RUNNING",
+  "overall_target_met": false,
+  "timing_closed": false,
+  "candidate": "v78 SRAM local command and write-collision qualification; v77 CPU unchanged",
+  "component": {
+    "four_state": {
+      "directory": "build/cpu/sram-command-validation-v78-v2",
+      "status": "PASS",
+      "result_sha256": "1890bd3984006f316662b3bfc45ec656fa8c7671767613e4652f9310bf4a11a2",
+      "verified_outputs": 10
+    },
+    "red": {
+      "directory": "build/cpu/sram-command-red-v78-v2",
+      "status": "PASS",
+      "result_sha256": "bd7f67119474cca6a0d7719b42c3cf5146ce5f8edf8ad9e7a41cdb58151b15fe",
+      "verified_outputs": 10
+    },
+    "memory": {
+      "directory": "build/cpu/memory-control-20261027T075500049186Z",
+      "status": "PASS",
+      "result_sha256": "e054999a9a2748240edccfa4af26dee40bb8ad2f0d7ccad620799224fd63e388",
+      "verified_outputs": 41
+    },
+    "four_state_v3": {
+      "directory": "build/cpu/sram-command-validation-v78-v3",
+      "status": "PASS",
+      "result_sha256": "497f67ffbe7a04e187c5de9b84d3104c26ef4bdd98c8c5534028bbc7680f7637",
+      "verified_outputs": 10
+    },
+    "data_only_red_v3": {
+      "directory": "build/cpu/sram-command-data-only-red-v78-v3",
+      "status": "PASS",
+      "result_sha256": "405c22e954e92869fd791a65ba57221a7b3c23ab8b2325e88de0af044c80ce81",
+      "verified_outputs": 10
+    }
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T075648276873Z",
+    "status": "PASS",
+    "result_sha256": "1fbdc43bc954a7fedb8d4e487f79dcb878c9d3435ec33eb22cbe33151a083397",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "same_parent_measurement_profile_wb_store": true
+  },
+  "preliminary_sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T075259456231Z",
+    "scope": "Only data CE changed; not current candidate and never routed"
+  },
+  "mapping_parent": {
+    "file": "build/cpu/sram-command-parent-mapping-v77-v2.json",
+    "sha256": "9b90e650c29993d5bd0ac857f7136767c313d29b5fc2c3c1f70cfccc47e500b7",
+    "status": "HOLD_EXPECTED_SHARED_REQUEST"
+  },
+  "current_component": "four_state_v3",
+  "native": {
+    "directory": "build/cpu/sram-command-native-gate-v78",
+    "status": "PASS",
+    "result_sha256": "dba6adda00b9e11c90d4b8c503f78ef15b416d60564f4c9f61fac32c08eb7097",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9856,
+      "ff": 4975,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "sram-command-mapping-v78": {
+      "file": "build\\cpu\\sram-command-mapping-v78.json",
+      "sha256": "8bd75dd57eba15f86d3f37f505829b1b93c07b8e49348f6107d9cdb3e2dcbe3c",
+      "status": "PASS"
+    },
+    "sram-command-mapping-v78-negative": {
+      "file": "build\\cpu\\sram-command-mapping-v78-negative.json",
+      "sha256": "b0ad0cdbfe2356ed7b297d93197c21915f821779bb0c9dbf1e299dcc31ea9b75",
+      "status": "HOLD"
+    },
+    "sram-command-branch-mapping-v78": {
+      "file": "build\\cpu\\sram-command-branch-mapping-v78.json",
+      "sha256": "d680259bb3258ba8b614772eb9100a0dc3fefb973cb62e466984bdc8b0d56fc7",
+      "status": "PASS"
+    },
+    "sram-command-btb-mapping-v78": {
+      "file": "build\\cpu\\sram-command-btb-mapping-v78.json",
+      "sha256": "bc2c572ffe0cb268e707a34eb14e0a999497bdb3d98474f694355c198d85d4d4",
+      "status": "PASS"
+    },
+    "sram-command-sum-mapping-v78": {
+      "file": "build\\cpu\\sram-command-sum-mapping-v78.json",
+      "sha256": "42ce85af6685a559717d7f686843e8451f46e5fc0b709744c0a9e60ace493b01",
+      "status": "PASS"
+    }
+  },
+  "physical": {
+    "directory": "build\\cpu\\dual-sram-command-io-physical-v78",
+    "prepared_sha256": "6027bb118cc0d7ed1a980e71f66cadc4f3d730a019217d1394f64f63165cec28",
+    "status": "RUNNING"
+  },
+  "review": "Independent reviewer confirms v3 sensitive write-poison control, all16 actualCE supports,68 native and122 CPU hashes; permits one original100MHz PNR diagnostic only.",
+  "mapping_tool": {
+    "file": "build/cpu/check_sram_command_mapping_v78.py",
+    "sha256": "d4a7be879d228cff76d354621f55c86ee8031b6ac5da6e1b7e22e8f9f5ec04e4"
+  }
+}

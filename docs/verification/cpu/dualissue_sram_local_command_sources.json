@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "scope": "Full-base isolated memory v78; v77 CPU unchanged",
+  "patch_file": "docs/verification/cpu/dualissue_sram_local_command.patch",
+  "patch_sha256": "0f2876971e2f3f43e50f788fc2529ecc9637967c115c1bd20244ea76d350e896",
+  "sources": {
+    "rtl/soc/triha_soc_memory.v": {
+      "base_sha256": "dcc02d2c07515ca7f5e390336f220428dd92299183e4fa83b31789b467f74971",
+      "candidate_sha256": "00d4639d6699bc9b2a12013b2ec2f742ac6004024f778dd3817c02be37b3fbb3"
+    }
+  },
+  "experimental_parent": {
+    "file": "build/cpu/memory-selector-control-v67/triha_soc_memory.v",
+    "sha256": "231762195459577649519284e9af06365df62ab8fe576d0d38a1cb1051892aea"
+  },
+  "cpu_manifest": "docs/verification/cpu/dualissue_branch_type_sources.json",
+  "cpu_manifest_sha256": "780d8b1c6be5002b4c732e7c0ff7fc3a7efb29da6eefe5868d0a003e4d65cc42"
+}
