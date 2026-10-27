@@ -1,0 +1,71 @@
+{
+  "status": "RTL_PASS_PHYSICAL_RUNNING",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v75 pure conditional sum boundary; v74 parent",
+  "component": {
+    "directory": "build/cpu/target-sum-validation-v75",
+    "result_sha256": "743b90439f70873d74f07c0145569f23998caec9e667fb7d14d14ba8b0f34218"
+  },
+  "branch_oracle_reuse": {
+    "directory": "build/cpu/early-branch-compare-v74",
+    "issue_source_sha256": "5ad3959de1dacaecff5840d54fba24ca0c4879d21d3fd930c457c0d4ce48b73e",
+    "reason": "whole branch-containing source byte identical to v74"
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T050825900347Z",
+    "status": "PASS",
+    "result_sha256": "3368d93c78ffa80270bf8a85769aedb5b95fe6a144864a77d51a90c042c9a50f",
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "verified_output_files": 122,
+    "comparison": "measurement/profile/full WB/store identical to v74"
+  },
+  "mapping_gate": "Check actual target register D consumes kept sum and every D-cone COUT has only PC/immediate support; reject unknown/ambiguous/cycles",
+  "native": {
+    "directory": "build/cpu/target-sum-native-gate-v75",
+    "status": "PASS",
+    "result_sha256": "25f44f9ce41aabf1a2f967cdddce2ffb47c56ea157718e50e860e5405e7990c3",
+    "verified_output_files": 68,
+    "cpu_only": {
+      "lut": 9527,
+      "ff": 4975,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "normal": {
+      "file": "build/cpu/target-sum-mapping-v75.json",
+      "sha256": "a2152c0cb7724f831c970f7dd0cd6bf65f2982454bd6427411cafe28265f36a1",
+      "status": "PASS"
+    },
+    "negative": {
+      "file": "build/cpu/target-sum-mapping-v75-negative.json",
+      "sha256": "ccf39142083be6913664512705a632573b9b9766025ff7b08e89d4a935b6c3c7",
+      "status": "HOLD"
+    }
+  },
+  "physical": {
+    "directory": "build/cpu/dual-target-sum-io-physical-v75",
+    "prepared_sha256": "8c2dcddb3d5041276be5eec00c3af40c7683a8c800b9e284930e3e0ccd6d1646",
+    "status": "RUNNING"
+  },
+  "review": "Independent replay confirmed actual D consumption, all 60 COUT support and injected negative; one physical diagnostic admitted",
+  "diagnostic_helpers": {
+    "build/cpu/check_target_sum_mapping_v75.py": "2d29ee06470d83e90045f69747f08d95a0e7673bd359212ca4ceb5e2b869843b",
+    "build/cpu/qualify_target_sum_native_v75.py": "3f54712f496e8f3f29289125f74b0bb1a9b2addefaa8543150bb7144c57db0ed"
+  }
+}

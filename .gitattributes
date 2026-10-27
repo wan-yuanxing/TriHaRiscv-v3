@@ -91,3 +91,5 @@ docs/verification/cpu/dualissue_lsu_zero.patch -text -whitespace
 docs/verification/cpu/dualissue_shift_data.patch -text -whitespace
 
 docs/verification/cpu/dualissue_early_target.patch -text -whitespace
+
+docs/verification/cpu/dualissue_target_sum.patch -text -whitespace
