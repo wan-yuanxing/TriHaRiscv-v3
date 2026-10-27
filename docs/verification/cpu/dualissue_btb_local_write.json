@@ -1,0 +1,65 @@
+{
+  "status": "QUALIFIED_NO_PNR",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v76 local BTB training write enable; v75 parent",
+  "component": {
+    "directory": "build/cpu/btb-local-validation-v76-v2",
+    "result_sha256": "34eabd972518deee75c8c45cde461e30e8f71fa3394c661c45ea2dd52d6dd4b0",
+    "verified_outputs": 6
+  },
+  "red": {
+    "directory": "build/cpu/btb-local-red-v76-v2",
+    "result_sha256": "5633a98559d4317e86dd2d7088dec6f284f1b424873de894219e83dc524b74b8",
+    "verified_outputs": 4
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T053419873681Z",
+    "result_sha256": "0420d2a0b07d246c453136179781f175ac622f7ec1ff233d25150e23c3247c7a",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    }
+  },
+  "native": {
+    "directory": "build/cpu/btb-local-native-gate-v76",
+    "result_sha256": "49716ed3ac00451822b71e392a812b89b609a372d1ff2addef417927021ac9ad",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9755,
+      "ff": 4977,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "normal": {
+      "file": "build/cpu/btb-local-mapping-v76.json",
+      "sha256": "aa32e3b932a97939aaaee9a099d0bc8d1fc12bba4d6ebacb8eb0771b7557afb1",
+      "status": "PASS"
+    },
+    "-negative": {
+      "file": "build/cpu/btb-local-mapping-v76-negative.json",
+      "sha256": "c7f29dc751a17f9e2e0c0569ac0d41443a88d9a222b1f6b82cd9d86c5e45b636",
+      "status": "HOLD"
+    },
+    "-negative-address": {
+      "file": "build/cpu/btb-local-mapping-v76-negative-address.json",
+      "sha256": "3e390ebacbee8f8d7e57ce7b6aadeb841c1cccce77aeadd7cbd30bee229fff15",
+      "status": "HOLD"
+    }
+  },
+  "decision": "No standalone PNR; combine only after separately validating B branch type comparison. No default promotion.",
+  "review": "Independent replay verified 256 actual WE and 624 actual WADDR; assertion and address-bypass negative added."
+}
