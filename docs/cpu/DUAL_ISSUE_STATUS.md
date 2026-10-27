@@ -2,6 +2,8 @@
 
 更新：2026-10-27。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v77（v76 BTB块内写许可＋分支目标预比较）已完成原100MHz完整PNR，仍 **TIMING_FAIL**：setup Slow/Fast **-0.185/+2.639ns**，hold **+0.053/+0.019ns**，MPW **+3.655/+4.202ns**。21个Slow违例，282输出及冻结输入核验；实际CPU-only9840LUT/4975FF/752已含RAM-LUT/4APM/0DRM。短测仍4.091964/MHz，1221907周期，完整WB/store/profile与父版相同。剩余主要为SRAM请求CE及A路JALR恢复控制。最新不等于最佳，历史v57 -0.009ns仍FAIL。未提升默认RTL。详见[v77终态](DUAL_ISSUE_BRANCH_TYPE_2026-10-27.md)。
+
 最新v72（从v70派生）LSU符号扩展前零属性已通过409604项组件/E2检查、真实双路加载程序、完整CoreMark及原生映射。短测仍4.091964/MHz，全部WB/store/profile不变；CPU-only9514 LUT/4911 FF。映射确认零属性绕过格式化后的32位结果，但**未PNR、100MHz未通过**。下一步针对B立即移位数据入口，并保留分支恢复CE问题；不叠加HOLD的v71。见[v72记录](DUAL_ISSUE_LSU_ZERO_2026-10-27.md)。
 
 最新v71目标预比较完成组件41151检查、完整CoreMark/轨迹和原生映射。短测仍4.091964/MHz，CPU-only9583 LUT/4905 FF；目标到recover连接未显示缩短，增加27 LUT，因此**结构筛选HOLD，不启动PNR**。同时修复网表检查器对LUT6D固定选择输入的保守误报，13项测试PASS。实际时序仍以v70 FAIL和最佳v57 FAIL记录为准。见[v71记录](DUAL_ISSUE_TARGET_COMPARE_2026-10-27.md)。

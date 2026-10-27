@@ -16,3 +16,21 @@
 ## 物理验证
 
 独立评审支持单次原约束PNR，已启动`build/cpu/dual-branch-type-io-physical-v77`。原10ns、IO/hold、多corner、seed1不变；PNR600秒、外层900秒。全新compile/map/place/route。未完成最终STA前不称100MHz通过，不提升默认RTL，不接触主工程集成或板卡。
+
+## 最终物理结果
+
+本轮完整执行341.55秒。主详细布线95次迭代到0，PDS退出0；验收器记录退出2，TIMING_FAIL（外层命令转发的退出1不代替验收记录）。冻结输入、282输出、五阶段成功标记和performance一致性均已审计。
+
+| 检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| Setup | -0.185 | +2.639 |
+| Hold | +0.053 | +0.019 |
+| 最小脉宽 | +3.655 | +4.202 |
+
+Slow21违例，TNS-0.971ns。相比v75同10ns最差-0.409改善0.224ns，但本轮新映射/布局，不能归因到单一逻辑。历史最佳v57 -0.009仍FAIL，v77不是新最佳，也不是100MHz通过。
+
+最差data_error→LSU delay→issue_lsu→SRAM CEB，5级、logic0.811ns/route9.155ns，占比91.862%为布线。两个SRAM CE端点失败。另19端点：15个pc_x CE、2个FIFO头CE、2个fetch branch_pc CE；主要由A路opcode[31]经JALR目标加法、比较、recover0/recovery到更新控制，最差-0.082ns。不能把物理单元名当新乘法或CSR数据路径；需读逻辑网络。
+
+实际route包合成重查：两lane三组比较器及recovery消费、BTB256 WE/624地址/80延迟边界均PASS；这些局部结构目标保留，尚不足以关闭整体时序。
+
+下一步只针对上述真实路径：先评估SRAM本地使能避免复用全局issue_lsu控制，保持错误响应、维护请求、写副作用和周期不变；并分析JALR目标加法/恢复扇出。不能直接删除LSU mem_error阻塞，不能把依赖rs1的JALR当作已提前计算的条件分支。先组件和映射门槛，不重复同候选/seed试跑。
