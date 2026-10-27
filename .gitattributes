@@ -88,3 +88,4 @@ docs/verification/cpu/dualissue_mul_zero.patch -text -whitespace
 docs/verification/cpu/dualissue_target_compare.patch -text -whitespace
 
 docs/verification/cpu/dualissue_lsu_zero.patch -text -whitespace
+docs/verification/cpu/dualissue_shift_data.patch -text -whitespace
