@@ -442,3 +442,8 @@ v45终态setup−0.883/+2.836ns，hold+0.117/+0.100ns，MPW+3.655/+4.202ns；启
 ### 2026-10-27 v74 提前条件目标：实际时序未通过
 
 完整功能与SRAM短测保持4.091964/MHz，CPU核9516LUT/4975FF。实际原100MHz布线Slow/Fast setup -0.297/+2.639ns，hold +0.031/+0.013ns，MPW通过。408输出核验，8个Slow违例。旧recovery CE离开违例列表，但控制清零被吸入新目标carry形成4个端点；另有SRAM CE、A结果及CSR异常路径。详见[记录](DUAL_ISSUE_EARLY_TARGET_2026-10-27.md)。不提升默认版；下一v75仅保留纯sum边界，先检查实际carry支持。
+
+
+### 2026-10-27 v75 纯目标sum：局部结构有效，整体时序FAIL
+
+完整SRAM仍4.091964/MHz短估算，CPU核9527LUT/4975FF。实际100MHz Slow/Fast setup -0.409/+2.663ns，hold +0.111/+0.102ns，MPW通过，356输出核验。新目标carry控制依赖确实消除且无目标寄存器违例，但22端点转为11个BTB target WE和11个B恢复CE；整体比v74退步，不提升默认。下一针对BTB写口tag读/比较/使能与B恢复控制，保留策略周期，不扫seed。详见[本轮证据](DUAL_ISSUE_TARGET_SUM_2026-10-27.md)。
