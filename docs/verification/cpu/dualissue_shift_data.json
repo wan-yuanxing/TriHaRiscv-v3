@@ -1,0 +1,63 @@
+{
+  "status": "HOLD",
+  "scope": "Isolated v73 diagnostic; not promoted, no PNR or board validation",
+  "timing_closed": false,
+  "parent": "v72 / cdf5e34",
+  "component": {
+    "directory": "build/cpu/shift-data-validation-v73-v3",
+    "receipt_sha256": "838163d5d57ed8865c7287a99bc227ff6c197dd029dd226aa1e9f3f6adff8bd0",
+    "normal_checks_each_mode": 32510,
+    "poison_checks_each_mode": 32511,
+    "review": "all-output oracle and directed shamt X/Z checks reviewed"
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T021752809127Z",
+    "receipt_sha256": "8fec66754065393e70fa106bfd56d19f7f977ce7e42188801006afe7ab3e7116",
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "parent_comparison": "measurement/profile/full WB/store and ROM/SRAM identical to v72"
+  },
+  "native": {
+    "directory": "build/cpu/shift-data-native-gate-v73",
+    "receipt_sha256": "827a75ecaa271fd01c5873954e403f0d09d9e70b8f7defe0715cd77faca3913a",
+    "cpu_core": {
+      "LUT": 9726,
+      "FF": 4932,
+      "included_RAM_LUT": 752,
+      "APM": 4,
+      "DRM": 0
+    },
+    "delta_v72": {
+      "LUT": 212,
+      "FF": 21
+    },
+    "stages": [
+      "compile",
+      "synthesize",
+      "dev_map"
+    ],
+    "review": "Independent reviewer verified all 68 output hashes, resources and HOLD decision"
+  },
+  "mapping": {
+    "report": "build/cpu/shift-data-mapping-v73.json",
+    "sha256": "87e9b3306a5b6ca99e43182552f10c48cb2634ab91e7a6dc794f5117e507c3e6",
+    "scope": "Partial local bit connectivity, cut at exec1 inputs; NOT STA",
+    "driven_traced": 20,
+    "unresolved": 13,
+    "unavailable": 31,
+    "full_path_improvement": "UNKNOWN"
+  },
+  "decision": "HOLD: area increase without demonstrated full critical path improvement; no PNR admission",
+  "next": "Return to v72 baseline. Investigate branch recovery CE path and its high fanout before combining any candidate; keep original 100MHz constraints."
+}

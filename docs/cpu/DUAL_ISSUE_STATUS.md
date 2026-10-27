@@ -432,3 +432,8 @@ v45完整SRAM再次通过，1226007cycles、4.078280/MHz，完整ROM/SRAM/WB/sto
 
 
 v45终态setup−0.883/+2.836ns，hold+0.117/+0.100ns，MPW+3.655/+4.202ns；启动feedback已除，最差B RF读→74负载移位量。v46仅ALU输入B syn_maxfan16，实际两ALU各53条网络、每条≤16，完整性能/轨迹不变，但setup−1.015/+2.696ns，hold+0.089/+0.050ns，MPW同值；最差A PC字选择179负载→源数选择→移位，不继续盲调属性。v47变量移位统一A、B立即移位直接取指令shamt，3种寄存移位/3种B立即配对、44096四态ALU及真实调度破坏负控、有序/IRQ和完整SRAM全部PASS，1226007cycles/4.078280/MHz，完整镜像/WB/store相同；尚未单独布线。v48继承v47，把请求PC bit2留在既有PC/skid，FIFO先对齐首个有效字，A固定队头、失配重定向；上半字/预测/不同上下指令/fault侧带/背压/EXTRA0与1及负控、整核有序/IRQ/恢复已过，新SRAM在跑。
+
+
+### 2026-10-27 v73 rs1 移位旁路：HOLD
+
+组件全输出对照及故障负例通过；完整SRAM CoreMark与v72保持1221907周期、短测4.091964/MHz，WB/store/profile一致。原生三阶段通过，CPU核9726LUT/4932FF，比v72+212/+21。局部直接移位连接保留，但整条关键路径改善UNKNOWN；不启动PNR、不叠加到默认基线。独立审查确认HOLD。详见[本轮记录](DUAL_ISSUE_SHIFT_DATA_2026-10-27.md)。100MHz仍未通过。
