@@ -31,3 +31,21 @@ native compile/synthesize/dev_map通过，68输出已核；CPU-only9619LUT/4972F
 工具将部分出队/flush逻辑跨层共享。检查器读取实际LUT/CARRY INIT，按已安装厂商carry选择规则及literal cofactors证明Z/COUT等价，再逐一验证实际pop1的四因子16组合、实际flush三因子8组合，才允许对应控制边界。late_remaining接回实际headD、flags注入pop两个负例均HOLD。完整检查仅为位连接结构诊断，不是STA。
 
 实际SRAM16CE、BTB256WE/624地址/80延迟边界、branch比较及64目标FF/60sum carry仍PASS。独立评审支持单次原约束fresh物理运行：`build/cpu/dual-fifo-predicate-io-physical-v79`，10ns/原IO/hold/multicorner、seed1、PNR600秒/外层900秒。已启动；尚无100MHz通过结论。
+
+## 最终物理结果
+
+完整运行318.435秒，主详细布线118次迭代到0。PDS退出0、验收器记录退出2，TIMING_FAIL。冻结输入、328实际输出、五阶段成功标记及performance一致性核验。
+
+| 检查 | Slow/ns | Fast/ns |
+|---|---:|---:|
+| Setup | -0.431 | +2.677 |
+| Hold | +0.111 | +0.099 |
+| 最小脉宽 | +3.655 | +4.202 |
+
+22个Slow违例，TNS-3.990ns。相比v78同10ns的-0.175ns回退；本轮新网表/新布局，不把资源减少或局部结构通过当频率收益。v79不提升默认RTL，不作为优于v78的物理基线，不重跑同候选。历史最佳v57 -0.009ns仍FAIL，100MHz目标未达成。
+
+最差物理寄存器名opcode_e1_q[18]实际逻辑网为pipe0_opcode_e1_w[17]（rs1索引）：rs1==x0译码→branch_taken→resolved0_next[0]→对齐异常→resolved_fault→mispredicted→fetch PC CE，-0.431ns，10级、logic1.735ns/route8.244ns；最后N88网33扇出/2.090ns。不能按物理寄存器名误报opcode bit18或JALR立即数加法。
+
+22违例分布：8条分支方向到fetch branch-PC CE、3条同源到FIFO head0 D、9条SRAM到B ALU、1条SRAM到A ALU、1条SRAM到FIFO head1 D。实际route包FIFO全部231D/135CE、flags纯count及消费、SRAM16CE、BTB/branch/sum均重查PASS，局部预判定结构保留，但全核时序回退。
+
+独立终态评审确认全部哈希/分类一致。下一最小诊断从v78独立派生，方向前预比较目标对齐；taken=1使用目标低两位预判定、taken=0不报错、taken=X/Z保留原taken && (next_pc[1:0]!=0)。保留resolve/stall/异常优先级和next-PC/mtval数据；pipe_ctrl中的同类对齐检查属于另一个消费者，不应误称一并消失。必须覆盖JALR bit0清零、非taken但目标未对齐、未知方向且目标/顺序低位不同，并检查实际fault/misprediction锥绕过方向后低位mux。SRAM→B ALU路径仍需独立处理。本轮未实现该下一候选。

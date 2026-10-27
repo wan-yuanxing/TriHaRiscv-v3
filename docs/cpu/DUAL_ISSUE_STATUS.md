@@ -2,6 +2,8 @@
 
 更新：2026-10-27。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
+最新v79 FIFO预判定实验完成，**TIMING_FAIL且不采用为更好物理基线**：原100MHz setup Slow/Fast **-0.431/+2.677ns**，hold **+0.111/+0.099ns**，MPW **+3.655/+4.202ns**；22个Slow违例、328输出及冻结输入已核。完整短测仍4.091964/MHz，周期和WB/store/profile相同；CPU-only9619LUT/4972FF（较v78 -237/-3），面积减少未带来全核时序改善。实际FIFO预判定结构保留，但最差变为A分支方向→目标低位→对齐异常→misprediction→fetch CE，另9条SRAM→B ALU。下一从v78独立评估目标对齐预判定，不自动叠加v79。详见[v79终态](DUAL_ISSUE_FIFO_PREDICATE_2026-10-27.md)。历史最佳v57 -0.009ns仍FAIL。
+
 最新v78（v77 CPU＋SRAM本地命令/写碰撞许可）完成原100MHz完整PNR，仍 **TIMING_FAIL**：setup Slow/Fast **-0.175/+2.667ns**，hold **+0.111/+0.100ns**，MPW **+3.655/+4.202ns**。12个Slow违例，326输出及冻结输入已核；CPU-only9856LUT/4975FF/752已含RAM-LUT/4APM/0DRM。完整短测仍4.091964/MHz，1221907周期，WB/store/profile与v77一致。实际16个DRM CE锥已退出通用请求网络；最终无SRAM CE违例，报告可见CEB+0.160ns。新最差为SRAM返回零判定→配对→FIFO头更新，另有A ALU违例；下一诊断是FIFO晚pop后的空槽判定提前。未提升默认RTL，历史最佳v57 -0.009ns仍FAIL。详见[v78终态](DUAL_ISSUE_SRAM_COMMAND_2026-10-27.md)。
 
 最新v77（v76 BTB块内写许可＋分支目标预比较）已完成原100MHz完整PNR，仍 **TIMING_FAIL**：setup Slow/Fast **-0.185/+2.639ns**，hold **+0.053/+0.019ns**，MPW **+3.655/+4.202ns**。21个Slow违例，282输出及冻结输入核验；实际CPU-only9840LUT/4975FF/752已含RAM-LUT/4APM/0DRM。短测仍4.091964/MHz，1221907周期，完整WB/store/profile与父版相同。剩余主要为SRAM请求CE及A路JALR恢复控制。最新不等于最佳，历史v57 -0.009ns仍FAIL。未提升默认RTL。详见[v77终态](DUAL_ISSUE_BRANCH_TYPE_2026-10-27.md)。
