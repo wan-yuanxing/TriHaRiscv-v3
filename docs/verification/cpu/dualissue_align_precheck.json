@@ -1,0 +1,467 @@
+{
+  "status": "RTL_PASS_TIMING_FAIL",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v80 v78-derived branch-target alignment precheck; v79 FIFO excluded",
+  "review": "Inline review of source diff, full v78 trace equality, actual mapped support and negative controls; no independent reviewer in this turn",
+  "component": {
+    "directory": "build/cpu/align-precheck-validation-v80",
+    "status": "PASS",
+    "result_sha256": "b94d6d2dacefad482461651e436c5286793feaeab51fc5921c62a407b8dc1050",
+    "verified_outputs": 8
+  },
+  "ordered": {
+    "directory": "build/cpu/redirect-ordered-20261030T0916221616318Z",
+    "status": "PASS",
+    "result_sha256": "bb842dc69c90a649d7201cbdd30912ec1f7236542b1b07b4872ac7762d783476",
+    "verified_outputs": 38
+  },
+  "irq": {
+    "directory": "build/cpu/redirect-ordered-20261030T0916221618985Z",
+    "status": "PASS",
+    "result_sha256": "4f4e2f71465652c1bde2be652afd69fb2bbec91c0f14518ad02d9bcaa6992c3d",
+    "verified_outputs": 38
+  },
+  "recovery_integration": {
+    "directory": "build/cpu/dual-diagnostic-20261030T092639850436Z",
+    "status": "PASS",
+    "result_sha256": "e6f9d0d3282f3ac6e5420227b8f760fda3fc3f43466371a02718a1e3e0a62faf",
+    "verified_outputs": 75
+  },
+  "sram": {
+    "directory": "build/cpu/dual-sram/coremark-20261030T091601435636Z",
+    "status": "PASS",
+    "result_sha256": "3832048591a5e2be81c2c7d78da2ce36da832b5b87511469d55625bbccac3330",
+    "verified_outputs": 122,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "same_parent_profile_wb_store": true
+  },
+  "native": {
+    "directory": "build/cpu/align-precheck-native-gate-v80",
+    "status": "PASS",
+    "result_sha256": "c28ba12dacf2008a30a9fcafc7f05b85c2b283ac253b5743eef3a3effd2ab14a",
+    "verified_outputs": 68,
+    "cpu_only": {
+      "lut": 9588,
+      "ff": 4976,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    }
+  },
+  "mapping": {
+    "align-precheck-mapping-v80-v2.json": {
+      "file": "build/cpu/align-precheck-mapping-v80-v2.json",
+      "sha256": "b50ae3aab889c1d47e54953a399d6dde5f3afab826f003c56d6b910c0792a7ba",
+      "status": "PASS"
+    },
+    "align-precheck-mapping-v80-negative-next.json": {
+      "file": "build/cpu/align-precheck-mapping-v80-negative-next.json",
+      "sha256": "81ce7d2b2230399af8b0cee1fa31a0d196b379d5757d73539b0e3381ce39482f",
+      "status": "HOLD"
+    },
+    "align-precheck-mapping-v80-negative-disconnect.json": {
+      "file": "build/cpu/align-precheck-mapping-v80-negative-disconnect.json",
+      "sha256": "348bc4d828710b9803e9b76af5a615113ce5075dc4a5c1e6a4770f77861486ad",
+      "status": "HOLD"
+    },
+    "align-precheck-prior-branch-mapping-v80-v2.json": {
+      "file": "build/cpu/align-precheck-prior-branch-mapping-v80-v2.json",
+      "sha256": "8114424cab74910dc63e08c8db24c22fb7671d65c09980aa7f8c7fa31ad7b42c",
+      "status": "PASS"
+    },
+    "align-precheck-prior-branch-mapping-v80-v2-negative-control.json": {
+      "file": "build/cpu/align-precheck-prior-branch-mapping-v80-v2-negative-control.json",
+      "sha256": "79e222dd3cd21116cb233ce0075c4433ccc3730124bcb81348e5bcadb079e9d2",
+      "status": "HOLD"
+    },
+    "align-precheck-prior-btb-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-btb-mapping-v80.json",
+      "sha256": "a7d2c41ff1f09294e4ac3cd522c5a18b0415138bb74439698e658f47718c31fc",
+      "status": "PASS"
+    },
+    "align-precheck-prior-sum-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-sum-mapping-v80.json",
+      "sha256": "375f33aeebef29a14880f4e0578074e01e113a2f923d69124cbbd26d36ba2b58",
+      "status": "PASS"
+    },
+    "align-precheck-prior-memory-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-memory-mapping-v80.json",
+      "sha256": "1813682a3487ff372e4f68b52157b6d7fd45526f756ffaac69ed473cec67ae45",
+      "status": "PASS"
+    },
+    "align-precheck-route-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-route-mapping-v80.json",
+      "sha256": "c01b6835f46eadf2cbb75fc465017886ea0b0f7a75a28f8a3d45203f99fc54ac",
+      "status": "PASS",
+      "scope": "Actual route-package synthesis, not STA"
+    },
+    "align-precheck-prior-branch-route-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-branch-route-mapping-v80.json",
+      "sha256": "a2e88433462696725b61eadec38f4c58cc3ce9717fe6e19b9ef457570857de42",
+      "status": "PASS",
+      "scope": "Actual route-package synthesis, not STA"
+    },
+    "align-precheck-prior-btb-route-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-btb-route-mapping-v80.json",
+      "sha256": "402cdd2a481495a2442a7ddc919acee224492c4739b0ccb2e528758969ba0894",
+      "status": "PASS",
+      "scope": "Actual route-package synthesis, not STA"
+    },
+    "align-precheck-prior-sum-route-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-sum-route-mapping-v80.json",
+      "sha256": "5a6431f4d237e572cdae0ae2472680768ecd688091892f1db4370e5982ae2d13",
+      "status": "PASS",
+      "scope": "Actual route-package synthesis, not STA"
+    },
+    "align-precheck-prior-memory-route-mapping-v80.json": {
+      "file": "build/cpu/align-precheck-prior-memory-route-mapping-v80.json",
+      "sha256": "110260a7b3b47865a12f164f83a152aa99623e96c680b9d4d47aa96c02c2574e",
+      "status": "PASS",
+      "scope": "Actual route-package synthesis, not STA"
+    }
+  },
+  "reconstruction": {
+    "manifest_sha256": "4d17dfd8e87f427e155e5abfd1950894ad7ae2351575292e72a4f0560a827313",
+    "patch_sha256": "c4bc6dba97295d2dda87c728f2b6349938ddf6a626ddcaaf1cf579430028c97d",
+    "verified_source_files": 22,
+    "replay_directory": "build/cpu/dual-align-precheck-reconstructed-v80-v3",
+    "simulation_manifest_sources_identical": true,
+    "packaging_correction_only": "Preserve CRLF and no-newline-at-EOF; simulation frozen manifest retains original packaging metadata"
+  },
+  "physical": {
+    "directory": "build/cpu/dual-align-precheck-io-physical-v80",
+    "status": "TIMING_FAIL",
+    "prepared_sha256": "54d51791d31dd7a885f3d82528b0ab8cbd0390d52570b690c26469aa872bb469",
+    "timing_closed": false,
+    "source_unchanged": true,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -1.112,
+          "total_negative_slack_ns": -7.816,
+          "failing_endpoints": 24,
+          "endpoints": 25000
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.114,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25000
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4428
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.808,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25000
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.105,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 25000
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4428
+        }
+      ],
+      "performance_slack_ns": -1.112,
+      "worst_setup_ns": -1.112,
+      "performance_consistent": true,
+      "all_constraints_met": false
+    },
+    "native_exit": 0,
+    "runner_return_code": 2,
+    "native_seconds": 363.684,
+    "verified_output_files": 470,
+    "result_sha256": "a58d460b922c6c9dda72ee0627a3f80da78ebfaa270ea95a4cc77cbd7be0c869",
+    "report_sha256": "43f439958449cc9d02c0027f688094892ebd297e17f32a13921962532dc516d7",
+    "successful_stages": {
+      "compile": true,
+      "synthesize": true,
+      "dev_map": true,
+      "pnr": true,
+      "report_timing": true
+    },
+    "main_detailed_iteration": 189,
+    "main_detailed_unrouted": 0,
+    "worst_path": {
+      "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+      "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[37]/opit_0_inv/D",
+      "slack_ns": -1.112,
+      "logic_levels": 11,
+      "logic_ns": 1.416,
+      "route_ns": 9.444
+    },
+    "failing_path_groups": {
+      "E1_rd_tag_to_forwarding_pairing_FIFO": 10,
+      "A_branch_direction_to_fault_FIFO": 14
+    },
+    "all_reported_slow_setup_failures": [
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[37]/opit_0_inv/D",
+        "slack_ns": -1.112,
+        "logic_levels": 11,
+        "logic_ns": 1.416,
+        "route_ns": 9.444
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[37]_1/opit_0_inv/D",
+        "slack_ns": -1.069,
+        "logic_levels": 11,
+        "logic_ns": 1.416,
+        "route_ns": 9.297
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[37]_2/opit_0_inv/D",
+        "slack_ns": -0.965,
+        "logic_levels": 11,
+        "logic_ns": 1.416,
+        "route_ns": 9.297
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[35]_2/opit_0_inv/D",
+        "slack_ns": -0.775,
+        "logic_levels": 11,
+        "logic_ns": 2.13,
+        "route_ns": 8.289
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[35]/opit_0_inv/D",
+        "slack_ns": -0.623,
+        "logic_levels": 11,
+        "logic_ns": 2.13,
+        "route_ns": 8.137
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[35]_1/opit_0_inv/D",
+        "slack_ns": -0.623,
+        "logic_levels": 11,
+        "logic_ns": 2.13,
+        "route_ns": 8.137
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[39]_1/opit_0_inv/D",
+        "slack_ns": -0.305,
+        "logic_levels": 11,
+        "logic_ns": 2.096,
+        "route_ns": 7.745
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[39]_2/opit_0_inv/D",
+        "slack_ns": -0.305,
+        "logic_levels": 11,
+        "logic_ns": 2.096,
+        "route_ns": 7.745
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[40]_1/opit_0_inv/D",
+        "slack_ns": -0.298,
+        "logic_levels": 11,
+        "logic_ns": 2.118,
+        "route_ns": 7.824
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[36]/opit_0_inv/D",
+        "slack_ns": -0.248,
+        "logic_levels": 11,
+        "logic_ns": 2.146,
+        "route_ns": 7.746
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q[35]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": -0.242,
+        "logic_levels": 10,
+        "logic_ns": 2.056,
+        "route_ns": 7.854
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q[29]/opit_0_inv_L6Q_perm/I2",
+        "slack_ns": -0.181,
+        "logic_levels": 10,
+        "logic_ns": 1.308,
+        "route_ns": 8.314
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[40]_6/opit_0_inv/D",
+        "slack_ns": -0.175,
+        "logic_levels": 11,
+        "logic_ns": 2.118,
+        "route_ns": 7.804
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[40]_5/opit_0_inv/D",
+        "slack_ns": -0.174,
+        "logic_levels": 11,
+        "logic_ns": 2.118,
+        "route_ns": 7.804
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[39]/opit_0_inv/D",
+        "slack_ns": -0.157,
+        "logic_levels": 11,
+        "logic_ns": 2.096,
+        "route_ns": 7.598
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[38]/opit_0_inv/D",
+        "slack_ns": -0.148,
+        "logic_levels": 11,
+        "logic_ns": 2.096,
+        "route_ns": 7.588
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[38]_1/opit_0_inv/D",
+        "slack_ns": -0.148,
+        "logic_levels": 11,
+        "logic_ns": 2.096,
+        "route_ns": 7.588
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q[65]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -0.079,
+        "logic_levels": 10,
+        "logic_ns": 1.308,
+        "route_ns": 8.283
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe0_ctrl/operand_ra_e1_q[30]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[40]/opit_0_inv/D",
+        "slack_ns": -0.042,
+        "logic_levels": 11,
+        "logic_ns": 2.118,
+        "route_ns": 7.672
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q[75]/opit_0_inv_L6Q_perm/I2",
+        "slack_ns": -0.04,
+        "logic_levels": 10,
+        "logic_ns": 1.308,
+        "route_ns": 8.167
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[44]_1/opit_0_inv/D",
+        "slack_ns": -0.027,
+        "logic_levels": 11,
+        "logic_ns": 1.404,
+        "route_ns": 8.163
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[44]_3/opit_0_inv/D",
+        "slack_ns": -0.027,
+        "logic_levels": 11,
+        "logic_ns": 1.404,
+        "route_ns": 8.163
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[44]_4/opit_0_inv/D",
+        "slack_ns": -0.027,
+        "logic_levels": 11,
+        "logic_ns": 1.404,
+        "route_ns": 8.163
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/rd_tag_e1_q[4]/opit_0_inv_L6QL5Q1_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q[11]/opit_0_inv_L6Q_perm/I3",
+        "slack_ns": -0.026,
+        "logic_levels": 10,
+        "logic_ns": 1.308,
+        "route_ns": 8.348
+      }
+    ],
+    "cpu_synthesis_resources": {
+      "lut": 9588,
+      "ff": 4976,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    },
+    "same_constraint_parent": "v78 Slow setup -0.175ns; new netlist/layout; v80 regressed0.937ns"
+  },
+  "tools": {
+    "scripts/cpu/check_branch_alignment_precheck.py": "49b828bd6e4a978fd9be382871b8385767ec9f9b6ab1acdf395e29bc65b90046",
+    "tb/cpu/tb_branch_alignment_precheck.v": "11984edcd960a95492fc8d141de53cf9c078d4cf192d78e6ffd5f63d4f4f73f6",
+    "scripts/cpu/check_branch_alignment_mapping.py": "51ac5150fe9401da345a79ade0a392d561261bfa9181b03a5711e23f8b7761fd",
+    "scripts/cpu/run_dual_native_gate.py": "6a56977608d0323df65ab0273c93a5d803170302cb0d4452ec00e07b10c54ef2",
+    "scripts/cpu/prepare_dual_physical.py": "74422e166dac17a7997539c7e5b1c5edd1a4d5ea8de6618220330ef8b025f534",
+    "build/cpu/align-precheck-prior-branch-mapping-v80-v2.py": "d90ac96910204c55401712966d67f2279ba2cfe8059cc8847da7be434a59e967",
+    "build/cpu/align-precheck-check_sram_command_sum_mapping_v78.py": "e1364856f52164aa2cfa8d2ad5a7ede973126989c9a9b0bc856748d5f519aa95",
+    "build/cpu/align-precheck-check_sram_command_btb_local_mapping_v78.py": "3059141577758d4f6c8db3624d08c7d7c11e473b134917fa903a51c6b2ebea56",
+    "build/cpu/check_sram_command_mapping_v78.py": "d4a7be879d228cff76d354621f55c86ee8031b6ac5da6e1b7e22e8f9f5ec04e4"
+  },
+  "decision": "Reject v80 as improved physical baseline; retain v78 as recent reference and v57 historical best(-0.009ns still FAIL). Do not promote default RTL or rerun v80.",
+  "remaining_bottleneck": "Late E1 bypass-tag pairing permission and A branch direction/fault both feed global dequeue/FIFO head updates;24 Slow setup failures, all FIFO heads. Target alignment prechecks retained but no overall timing benefit.",
+  "next_diagnostic": "Analyze a real issue-accept/dequeue control boundary from v78 before more equivalent logic reshaping; preserve six main stages and quantify performance against >4 CoreMark/MHz. No next implementation or PNR launched.",
+  "red": {
+    "directory": "build/cpu/align-precheck-red-v80-v3",
+    "status": "PASS_EXPECTED_LATE_NEXT_POISON_REJECTED",
+    "result_sha256": "230200283613f546e0aa426f4b4877277a8b6a18a8c7b573da4521d8cf6e7d43",
+    "verified_outputs": 7,
+    "scope": "v78 semantics pass, injected next-PC low-bit corruption detected; inputs captured before candidate edit"
+  },
+  "constraint_comparison": {
+    "same_as_v78": true,
+    "same_period_ns": 10,
+    "same_io_hold_multicorner_bytes": true,
+    "same_recipe_after_package_path_normalization": true,
+    "same_seed": 1,
+    "same_pnr_seconds": 600,
+    "same_outer_seconds": 900
+  }
+}
