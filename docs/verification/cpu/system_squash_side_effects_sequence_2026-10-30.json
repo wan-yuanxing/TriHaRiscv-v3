@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "runs": [
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\squash-20261029T153735115500Z\\result.json",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\squash-20261029T153737907785Z\\result.json"
+  ],
+  "normalized_field": "wb_data forced to zero when wb_rd=0",
+  "rows": 162,
+  "sequences_equal": true,
+  "checks": {
+    "retirement_rows": true,
+    "x0_normalized": true,
+    "exception_sequence_equal": true
+  },
+  "run_result_sha256": [
+    "39553439ac3462bf981ee615b605ac265bad9d3f81722761434d8e5915f869d8",
+    "557f29234f94b2be2f104444a0135b30f2c1e7faf63dc0a957b1386bb221f0e3"
+  ],
+  "wb_sha256": [
+    "4661ce64900253372a6b0eb9e772112c3340f540a6eaae10542ff65ef8b9f793",
+    "4661ce64900253372a6b0eb9e772112c3340f540a6eaae10542ff65ef8b9f793"
+  ]
+}

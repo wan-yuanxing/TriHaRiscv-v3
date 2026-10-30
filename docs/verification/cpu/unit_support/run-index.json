@@ -1,0 +1,612 @@
+{
+  "status": "PASS",
+  "date": "2026-10-29",
+  "section": "B.2",
+  "scope": "Multiplier, divider and CSR unit functional simulations only.",
+  "simulator": "ModelSim SE-64 2020.4",
+  "clock_period_ns": 10,
+  "positive_tests_pass": 3,
+  "negative_tests_rejected": 3,
+  "source_hashes": {
+    "rtl/cpu/triha_multiplier.v": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+    "tb/cpu/tb_multiplier_payload.v": "d62652694e88eda80178e1432c0581a533f4df8a6c845d1a95fece95180a3711",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+    "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+    "scripts/cpu/capture_unit_waveforms.ps1": "43372b939a89e247b977f304508c1ec2a7f32833635b061d8fcf52b9e9d2df08",
+    "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "tb/cpu/tb_divider_arithmetic.v": "8e4dcad7c9b6189a763abf84305b160ff6465c08d08791e9647de47091b39c0a",
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "rtl/cpu/triha_csr.v": "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49",
+    "tb/cpu/tb_csr_functional.v": "f0648e9d5a94666720d52685a2cc021a0fda26bc17be14248cf168ad43a38546"
+  },
+  "runs": [
+    {
+      "name": "wave-unit-mularith-20261029T0659104273544Z",
+      "test": "mularith",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0659104273544Z\\result.json",
+      "result_sha256": "46bfef512cb0a59b271ea42c60e9809941b8a21eaa39b4d1e0e2ca75c2cc5774",
+      "functional_log_line": "# MUL_PAYLOAD_PASS checks=2730 holds=904",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "00d2846bed88afb37f9a0cf69761fa9a9b24d08377bcdc86f592caa829404983",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "ad7c86c9e8c1d33dbe724b7d5937637dc688e7735a10ef89386f8983e10bf728",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "mularith.vcd": "a03205f962b6e4d46e61584f509bf2817b4ba97ba74e804ceeda200ac3216d81",
+        "mularith.wlf": "696a8d4eed66a2bad1cbc8658b4b867fb715497dee9dd4e9c1901a7ac8134b7e",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "ab49789601088b27bbe8cf8f9fbb7d9718a42062690fb438a17a7a6fb04f59d3",
+        "view.do": "4c1008b2665a129786298536284f736344125998647b85f6c3f82d180151b36d",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [
+        {
+          "reason": "GUI WLF viewing reused the mutable default transcript; not used as batch-run evidence. simulation.stdout.log remains hash-matched.",
+          "original_sha256": "abd4c308b86aeccbab727de151ba8760cf30a0336011d31a207927f4da128646",
+          "file": "transcript"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 37076,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.052
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 33924,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.048
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_multiplier.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_multiplier_payload.v"
+          ],
+          "pid": 26536,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.063
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0659104273544Z\\mularith.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_multiplier_payload",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0659104273544Z\\capture.do"
+          ],
+          "pid": 27232,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.868
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-divarith-20261029T0659459193103Z",
+      "test": "divarith",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0659459193103Z\\result.json",
+      "result_sha256": "fbbe7095fe15596d47389082906abfff5206aafe370bbaace984839a0cd27e2b",
+      "functional_log_line": "# DIV_ARITH_PASS operations=        308 checks=        312 cached=         16 random_stream_cycles=1000",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "ea50f29c74bc00b98fc9619ca9ba5159c43ddf5caae371c06172466aa1f95fba",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "e3d26c1b088b15b0bcd58561d6b098090d215eb3b2be9af4f67c6f4a8834c581",
+        "divarith.vcd": "856273dc3b54c4df217ed31531811bdf2474acaceb280de1659868134d66d234",
+        "divarith.wlf": "6a7b6e2433a69a6b4ccee0745115807581fef29cdab03b93906c429476e5cdac",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "d2dafedb2d7a253d1b98777047e19c701f3001ba1e2546047e43413c2909ff97",
+        "view.do": "b7076e27609238ffd2d9806c7ab3d0e1537e2a644f3d07040bd5f5dd7b69bfc3",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [
+        {
+          "reason": "GUI WLF viewing reused the mutable default transcript; not used as batch-run evidence. simulation.stdout.log remains hash-matched.",
+          "original_sha256": "1e93eb77ee1e08c0fc36c3153fc0d494642e3982f58c8516c5e472667745714c",
+          "file": "transcript"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 22296,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 20968,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.043
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "+define+DIV_MODULE=triha_divider",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_divider.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_divider.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_divider_arithmetic.v"
+          ],
+          "pid": 21496,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.061
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0659459193103Z\\divarith.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_divider_arithmetic",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0659459193103Z\\capture.do"
+          ],
+          "pid": 18588,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.605
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-csr-20261029T0659481834621Z",
+      "test": "csr",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0659481834621Z\\result.json",
+      "result_sha256": "6df497ec7bcaf9c52fcc310dcd9ccec181a92424f11e1d4efe50fd477aa50ecb",
+      "functional_log_line": "# CSR_UNIT_PASS operations=21 checks=91 forms=6 traps=2 returns=1",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "a5d6e9c0c5a5a8b0215c71adaf488ff9c0a497297d000d03c4f51cebfee92866",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "177d505eff20b285123f0535382d5ee431c9d249df34ea9581959199abd99fba",
+        "csr.vcd": "fa636335acc308efcf832068f2f87fe62c460abba5e50a2e3a9ccd4e97a1e324",
+        "csr.wlf": "81b24e39a87b2916dd1784aa9921970df9c04bba231d4b6fa77e4251af41ffb9",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "e997b43e3b6901e1de5039d9ef8c4201ed26440667cb20a4293c7d8214aa9c85",
+        "view.do": "42790f55eb94c79ed7cb6592448b1e0f965640dd863e4459defe69084aa7c4b1",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [
+        {
+          "reason": "GUI WLF viewing reused the mutable default transcript; not used as batch-run evidence. simulation.stdout.log remains hash-matched.",
+          "original_sha256": "63a1969cedb7bc30bb5bbaec2b104e78146f8d4bc85057ffa13efc4038cdb3a3",
+          "file": "transcript"
+        }
+      ],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 35740,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.048
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 38248,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.044
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_csr.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_csr_functional.v"
+          ],
+          "pid": 22468,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.062
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0659481834621Z\\csr.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_csr_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0659481834621Z\\capture.do"
+          ],
+          "pid": 31588,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.565
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-mularith-20261029T0706268966838Z",
+      "test": "mularith",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0706268966838Z\\result.json",
+      "result_sha256": "e89008b162d352fa7ef00abb119608a7a84e771c116f8885979823cb0be83643",
+      "functional_log_line": "# ** Fatal: MUL_PAYLOAD_FAIL expected=80000000 actual=00000000",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "35cff5c450d3bdeb4303216c05ec0bce887682329acdb8d08a21661b551dfb40",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "041bdc599e308e5442c97319a0a56294971851bb0068dbbd4815948f507bcf80",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "mularith.vcd": "d03dafb71493689e61a9d799fd624d5808069bc907a03c2270f021d1ea93730c",
+        "mularith.wlf": "81f62215db60662d540406bceaf352690d722b2fdb7f8080ff9adcf5093afe80",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "7fad8bcfb17deaaaceed647a86c12735365d883ea59ce91edbbbab7a2c1cbaea",
+        "transcript": "e61d2455d75d069ed67022f12996d0121c7e81ea30795abc10d1a7fe65c8e031",
+        "view.do": "4c1008b2665a129786298536284f736344125998647b85f6c3f82d180151b36d",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 940,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.05
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 28296,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.045
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_multiplier.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_multiplier_payload.v"
+          ],
+          "pid": 27096,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.062
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0706268966838Z\\mularith.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_RESULT=1",
+            "work.tb_multiplier_payload",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-mularith-20261029T0706268966838Z\\capture.do"
+          ],
+          "pid": 4452,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.51
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-divarith-20261029T0706290401779Z",
+      "test": "divarith",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0706290401779Z\\result.json",
+      "result_sha256": "e2974e8c08d92942dac7a5bc1345f376d8a70712cfba199e105069033baca88b",
+      "functional_log_line": "# ** Fatal: DIV_ARITH_FAIL value op=02004033 a=00000000 b=00000000 got=c0ffee00 golden=ffffffff expected=ffffffff",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "c2b081d8886f34428869214c7be9fb439efc0b04af811591019a3ead4d50a343",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "76a011511ed50e0d3ce726c54cf53a6e257e539f20ca87776e84e7c1c028852e",
+        "divarith.vcd": "88b4e235060427a98fa80a4e2e24e584082645c63dd808bf801071aad739f61a",
+        "divarith.wlf": "5020cb58e41d56438219fb2624b9e2a56c99769147e83ecd590d9f11233369a3",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "290c136dbaee1e2e8466ec8ce10eb43669f560740ec36be6e23f58159b40032f",
+        "transcript": "4784fee2b3cbe14f941dc624c6a6791ba7a03eeedb53827b2b873ab2eca436b1",
+        "view.do": "b7076e27609238ffd2d9806c7ab3d0e1537e2a644f3d07040bd5f5dd7b69bfc3",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 28988,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.047
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 18036,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.044
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "+define+DIV_MODULE=triha_divider",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_divider.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_divider.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_divider_arithmetic.v"
+          ],
+          "pid": 35756,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.059
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0706290401779Z\\divarith.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gBROKEN=1",
+            "work.tb_divider_arithmetic",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-divarith-20261029T0706290401779Z\\capture.do"
+          ],
+          "pid": 10472,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.518
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-csr-20261029T0706311846273Z",
+      "test": "csr",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0706311846273Z\\result.json",
+      "result_sha256": "bd0dfaa4dd018cf0e0f4b36e4178a9392bc7c81d3aa824556b61c2e45df5a519",
+      "functional_log_line": "# ** Fatal: CSR_UNIT_FAIL old addr=340 expected=00000000 actual=c0ffee01",
+      "source_unchanged_during_run": true,
+      "current_input_hashes_match": true,
+      "verified_output_hashes": {
+        "capture.do": "be01385af13ba85d497d29735a29e2e6c2bef11189d4baa86fd7a63d8b5915ab",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "b48410bef217ca4b9586ebacfc2d6fa080c6f05ee2b6a1af19017fdd6ba9bb22",
+        "csr.vcd": "07c0f11fec991fe48b4ca4faee575b0ae5cd1da1f82d8226b4dc6660ec87aaaf",
+        "csr.wlf": "b3956045d6cc86067f7d58010d4ae8cd1a5b1e2cfdea7475b85e6fde574f0d7a",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "8842f6c33aaa36277aeca9ce05f18c5614dff40bf87fc364f067b7260fc0bf61",
+        "transcript": "dcb04081d0a00a859658113ebd9be4ffd80c8359f3ae9c5d22cb2ecf6240f53e",
+        "view.do": "42790f55eb94c79ed7cb6592448b1e0f965640dd863e4459defe69084aa7c4b1",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "mutable_outputs_excluded": [],
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 15916,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 14916,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.045
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_csr.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_csr_functional.v"
+          ],
+          "pid": 23880,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.064
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0706311846273Z\\csr.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_RESULT=1",
+            "work.tb_csr_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-csr-20261029T0706311846273Z\\capture.do"
+          ],
+          "pid": 38276,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.53
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-unit-multiplier-modelsim-original.jpg",
+      "sha256": "b1fb6f497c0e57b9bbbad4ce63f6bde9f89a3cf701f8cb7b4e01a8541af70abf",
+      "test": "mularith",
+      "window_ns": [
+        50,
+        140
+      ],
+      "width": 2553,
+      "height": 1440,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original native window capture through @oai/sky; screenshot bytes saved without redraw or pixel edits.",
+      "mouse_pointer_visible": false
+    },
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-unit-divider-modelsim-original.jpg",
+      "sha256": "a368f1fa7e4d7a0f32f5ce42949f328c78ad6132d002c3cc7d5e5152422d566d",
+      "test": "divarith",
+      "window_ns": [
+        2480,
+        3020
+      ],
+      "width": 2553,
+      "height": 1440,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original native window capture through @oai/sky; screenshot bytes saved without redraw or pixel edits.",
+      "mouse_pointer_visible": false
+    },
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-unit-csr-modelsim-original.jpg",
+      "sha256": "3eec50097f413a3c1db0aab7b352becf1a1d00749457c190b7f2c560bfc17a09",
+      "test": "csr",
+      "window_ns": [
+        80,
+        360
+      ],
+      "width": 2553,
+      "height": 1440,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original native window capture through @oai/sky; screenshot bytes saved without redraw or pixel edits.",
+      "mouse_pointer_visible": false
+    }
+  ],
+  "signal_notes": {
+    "multiplier_valid_out": "Reference valid register in the testbench; not a DUT output.",
+    "csr_positive": "Public ports only; instruction access and later commit are driven separately.",
+    "divider_reference": "Independent integer oracle for 308 operations; original divider stream delayed one cycle for completion/restart/reset checks."
+  },
+  "remaining": [
+    "ALU and register-file unit waveforms",
+    "Front-end/issue/forwarding/LSU/cache module verification",
+    "Whole-core minimal-system functional verification"
+  ],
+  "production_rtl_modified_in_this_batch": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false
+}

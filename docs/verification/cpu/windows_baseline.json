@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "native Windows CPU smoke and software environment preparation",
+  "recorded_utc": "2026-10-18T09:17:58.6209149Z",
+  "branch": "cpu/windows-baseline",
+  "summary_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\summary-20261018T0901517293376Z.json",
+  "summary_sha256": "d575356aab070ab96463f59bede16fae60e3c77bf3b410c168dab440effa604e",
+  "cases": [
+    {
+      "case": "single",
+      "status": "PASS",
+      "run_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\single-20261018T0901438302813Z",
+      "result_sha256": "1e21818b12504d891860ea685f3b910995bf1dd56c3a7cf22462342cace91a30",
+      "source_unchanged": true,
+      "measurement": {
+        "dual_issue": 0,
+        "cycles": 3315,
+        "issued": 2151,
+        "paired_cycles": 0,
+        "issued_is_not_instret": true
+      },
+      "error": null,
+      "runner_return_code": 0,
+      "simulator_return_code": 0
+    },
+    {
+      "case": "dual",
+      "status": "PASS",
+      "run_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\dual-20261018T0901460018021Z",
+      "result_sha256": "9ce4ed49059160496f2b422c16a3628632d3f18f7b1cde1058be3a72780e59aa",
+      "source_unchanged": true,
+      "measurement": {
+        "dual_issue": 1,
+        "cycles": 3118,
+        "issued": 2151,
+        "paired_cycles": 274,
+        "issued_is_not_instret": true
+      },
+      "error": null,
+      "runner_return_code": 0,
+      "simulator_return_code": 0
+    },
+    {
+      "case": "fail",
+      "status": "FAIL",
+      "run_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\fail-20261018T0901479800442Z",
+      "result_sha256": "0d638b4255c2a6e572f1911bfad4c94dd16a740c1bff59e0301dc30d63a80d8a",
+      "source_unchanged": true,
+      "measurement": null,
+      "error": "Program exited with code 1.",
+      "runner_return_code": 1,
+      "simulator_return_code": 0
+    },
+    {
+      "case": "timeout",
+      "status": "FAIL",
+      "run_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\timeout-20261018T0901498479664Z",
+      "result_sha256": "2d7d8d67b5894aaf35ebf949eac00c728380d92389aa3720d6a1103b7a948c9a",
+      "source_unchanged": true,
+      "measurement": null,
+      "error": "RTL cycle timeout.",
+      "runner_return_code": 1,
+      "simulator_return_code": 0
+    }
+  ],
+  "standalone_negative_process_exit_codes": {
+    "timeout": 1,
+    "fail": 1
+  },
+  "compiler": {
+    "compiler": "D:/AI_Tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/riscv-none-elf-gcc.exe",
+    "result_sha256": "2d621fdf59619556ea27064ea73e8c0456ba02a13f2b27a56dbf7db8da896437",
+    "status": "PASS",
+    "profiles": [
+      {
+        "march": "rv32i",
+        "mabi": "ilp32",
+        "compile_return_code": 0,
+        "elf_class": "ELF32",
+        "machine": "RISC-V",
+        "elf_sha256": "15aacd3f79ab0b54391a22996f7f01c48847588179710badac40a1622cbce2b6"
+      },
+      {
+        "march": "rv32im_zicsr",
+        "mabi": "ilp32",
+        "compile_return_code": 0,
+        "elf_class": "ELF32",
+        "machine": "RISC-V",
+        "elf_sha256": "c2fbcb39faed1c0dd3a49be336981ea159487247d5e6a74d325476f0478ddb6b"
+      }
+    ],
+    "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\toolchain-check-20261018T0915283344490Z\\result.json"
+  },
+  "benchmark": {
+    "name": "CoreMark",
+    "measured": false,
+    "manifest_sha256": "c9f591d86a6ef019ae6abe7e45c4942a7713122c1fdfb11e4dccacf62ae6b0c9",
+    "version": "1.0",
+    "source_tag": "v1.01",
+    "manifest": "sw/benchmarks/coremark/UPSTREAM.json"
+  },
+  "limitations": [
+    "smoke only, not full ISA or retirement correctness",
+    "issued counts are not instret or IPC",
+    "compiler probes compiled and linked but not executed",
+    "CoreMark port and measurement not yet performed",
+    "CPU-only resources, PDS100MHz and board validation not yet performed"
+  ],
+  "missing_compiler_negative": {
+    "status": "FAIL",
+    "correctly_rejected": true,
+    "observed_process_exit": 1,
+    "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\toolchain-check-20261018T0918449067982Z\\result.json",
+    "result_sha256": "851b89eec653d6e57563bc31711c3ca3c8fe648e7a921e6e09502336221aacb5"
+  }
+}

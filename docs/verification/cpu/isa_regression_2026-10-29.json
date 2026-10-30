@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "riscv_tests": "50/50",
+  "act4": "53/53",
+  "manifest": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\regression-2026-10-29.json",
+  "manifest_sha256": "08e61a26b9aaf463422d25047f884d87dd6f1732bd5605eafa5188841ae5f2f2",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\cpu-isa-support-2026-10-29.zip",
+  "archive_sha256": "79e5c590f1937cc1b994c51b692b920bdd98f80c41bd96e9b8b9423c9eeb82ab",
+  "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+  "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+  "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+  "section": "B.1",
+  "latest_document_update": {
+    "scope": "B.3 frontend and issue/forwarding module validation; B.1/B.2 evidence retained",
+    "evidence": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_waveforms_2026-10-29.json",
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  },
+  "pages": 61
+}

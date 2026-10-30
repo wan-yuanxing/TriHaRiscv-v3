@@ -1,0 +1,99 @@
+{
+  "status": "PASS_DOCUMENT_UPDATE",
+  "date": "2026-10-28",
+  "scope": "SRAM standalone CPU hardware results and waveform figures; Cache/DDR results separately retained",
+  "original_hardware_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2",
+  "measurement": {
+    "iterations": 5000,
+    "cycles": 1636465356,
+    "clock_hz": 100000000,
+    "seconds": 16.36465356,
+    "coremark": 305.5365627917393,
+    "coremark_per_mhz": 3.055365627917393,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.051497819449138595,
+    "coremark_per_actual_debug_cpu_lut": 0.04976976100207514
+  },
+  "current_debug_cpu_luts": 6139,
+  "current_debug_coremark_per_cpu_lut": 0.04976976100207514,
+  "historical_release_cpu_luts": 5933,
+  "cpu_setup_slow_fast_ns": [
+    0.366,
+    3.662
+  ],
+  "cpu_hold_slow_fast_ns": [
+    0.061,
+    0.034
+  ],
+  "figures": {
+    "list": {
+      "source_csv": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\list.samples.csv",
+      "source_sha256": "4c5bea9c79f92670a1e9c1beabbb628022f4385780d50847a949e8159670c351",
+      "plotted_samples": [
+        0,
+        47
+      ],
+      "trigger_sample": 1,
+      "outputs": {
+        "cpu-sram-list-board.pdf": "a1228372f58456d68527ed6245dab5e9e3a414255b470af4d4bd6cea03a54033",
+        "cpu-sram-list-board.svg": "fa602532681611784b20b809ae6c1680101e6fdb7d9343ec868bf57efca579a0"
+      }
+    },
+    "matrix": {
+      "source_csv": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\matrix.samples.csv",
+      "source_sha256": "cf7d73ad7cc639b95798976372a7429ad2f93a84e8c89fba3583783bc7050489",
+      "plotted_samples": [
+        0,
+        47
+      ],
+      "trigger_sample": 1,
+      "outputs": {
+        "cpu-sram-matrix-board.pdf": "ec4afca7ca74db28f4ba808f9bdc5b246d55766cea47a8393e0eecb346bef6f0",
+        "cpu-sram-matrix-board.svg": "b0c7b8c4ae91149cb6e5c208c3240f15260b8022ffc7d88367bf63dda731a9f7"
+      }
+    },
+    "state": {
+      "source_csv": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\state.samples.csv",
+      "source_sha256": "453462edc105406078ad0503e8a4ff1a232ce3b3760c5f5ce46fcda35f1c5bd2",
+      "plotted_samples": [
+        0,
+        47
+      ],
+      "trigger_sample": 1,
+      "outputs": {
+        "cpu-sram-state-board.pdf": "3dd0fe7b675aa7a939144e26eeaa001083be255a5d99e21f3d99705bc243048a",
+        "cpu-sram-state-board.svg": "85df9c278a37ce8f84192195a8c84234808a9d112dd4da98a0c24ca02cd11568"
+      }
+    }
+  },
+  "original_evidence_hashes": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-admission.json": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-result.json": "d93eeda0d1910fc3f4f534665e2e4fd1fa63d66c1bf56455294fad13277a285c",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\capture-review.json": "43dc1236ffc1ba43685f5e5f845d49c151e67593fe64be4e319fa3dedf7d84bd",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\board-v2\\result.json": "b3de92c2b95bdd86067f89b1c292fb91ff4186f1b3c3f32cac6984f8fad2b747",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\sram_debug_led_fix_2026-10-28.json": "26ca44a4b6dbc3bdb383dd3c56cacb80cd77ef4a1a7bf63d74359fbe3cecb0f0"
+  },
+  "document_hashes": {
+    "docs\\technical-report\\README.md": "571714e7fb2ede521fe4b1c648b83295b02d1e23af2495ac3d657c793699541b",
+    "docs\\technical-report\\latex\\chapters\\02-system.tex": "09dd267237a8776bc0ebaf9f73d34f455c8e20efe281987a6897406af5344721",
+    "docs\\technical-report\\latex\\chapters\\03-results.tex": "20d3e9a087fa94ec74b988a349c909f7ce5beb811ffd0eb2654c3f767b6a169a",
+    "docs\\technical-report\\latex\\chapters\\06-appendix.tex": "513c17047ddee5590a2b3bf22bf0b2c0b96c6b663f95cfc64a0725f79f15c496",
+    "docs\\technical-report\\latex\\\u6280\u672f\u6587\u6863.pdf": "6703ffbef01d45c6edb05139d44dbe99d6e1e3ba3aac219eebe7901b021cb523"
+  },
+  "unrelated_report_inputs_unchanged": 234,
+  "non_cpu_chapter_content_unchanged": true,
+  "compiled_pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\\u6280\u672f\u6587\u6863.pdf",
+  "compiled_pdf_sha256": "6703ffbef01d45c6edb05139d44dbe99d6e1e3ba3aac219eebe7901b021cb523",
+  "build_log_sha256": "3fa7cf54e5bfb1ff3f325bc663037d5689a6282ee7241b7a9048816d797fc54a",
+  "pdf_rendered_or_previewed": false,
+  "new_simulation_or_pnr": false,
+  "board_reprogrammed": false
+}

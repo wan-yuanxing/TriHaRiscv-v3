@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "recorded_utc": "2026-10-18T10:48:01.3205096Z",
+  "scope": "CPU-only synthesis and device mapping; not place/route or timing signoff",
+  "branch": "cpu/windows-baseline",
+  "device": "PG2L100H/FBG676/-6",
+  "tool": "Windows PDS ADS 2022.2-SP6.4",
+  "input_manifest": "fpga/pg2l100h/project/cpu_core.json",
+  "input_manifest_sha256": "4d49e645347f6d41f247e2e8bec570e437002f312fc14870a4946b50e5f50378",
+  "cases": [
+    {
+      "mode": "single",
+      "dual_issue": 0,
+      "status": "PASS",
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1043397504598Z\\result.json",
+      "result_sha256": "d263637ca29f81547aa4349f8d295de3142fdee206b0b69ab4a9b25ff4ca0f64",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "synthesis_resources": {
+        "lut": 8819.0,
+        "registers": 6113.0,
+        "latches": 0.0,
+        "drm": 0.0,
+        "apm": 4.0,
+        "io": 224.0
+      },
+      "mapped_cpu_resources": {
+        "lut": 8819.0,
+        "ff": 6113.0,
+        "drm": 0.0,
+        "apm": 4.0
+      },
+      "io_separate_from_cpu_logic": 224.0,
+      "map_minus_synthesis": {
+        "lut": 0.0,
+        "registers": 0.0,
+        "drm": 0.0,
+        "apm": 0.0,
+        "io": 0.0
+      },
+      "elaborated_configuration": {
+        "SUPPORT_BRANCH_PREDICTION": 1,
+        "SUPPORT_MULDIV": 1,
+        "SUPPORT_SUPER": 0,
+        "SUPPORT_MMU": 0,
+        "SUPPORT_DUAL_ISSUE": 0,
+        "SUPPORT_LOAD_BYPASS": 1,
+        "SUPPORT_MUL_BYPASS": 1,
+        "SUPPORT_REGFILE_XILINX": 0,
+        "EXTRA_DECODE_STAGE": 0
+      },
+      "synthesis_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1043397504598Z\\synthesize\\triha_core.snr",
+      "synthesis_sha256": "75dc7854d8318326acde12af470d5844900e9182cfc0654818ed727004abc6ba",
+      "mapping_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1043397504598Z\\device_map\\triha_core.dmr",
+      "mapping_sha256": "48c90eecaa1e07524db0a2fbe9bd2be55d8b80e31ff4267bf17b2dd010530516",
+      "primitive_usage": {
+        "GTP_APM_E2": 4,
+        "GTP_DFF_C": 234,
+        "GTP_DFF_CE": 3853,
+        "GTP_DFF_P": 1,
+        "GTP_DFF_PE": 1033,
+        "GTP_DFF_RE": 992,
+        "GTP_GRS": 1,
+        "GTP_INV": 1,
+        "GTP_LUT1": 3,
+        "GTP_LUT2": 144,
+        "GTP_LUT3": 120,
+        "GTP_LUT4": 390,
+        "GTP_LUT5": 925,
+        "GTP_LUT6": 3638,
+        "GTP_LUT6CARRY": 2559,
+        "GTP_LUT6D": 1040,
+        "GTP_MUX2LUT7": 887,
+        "GTP_MUX2LUT8": 365,
+        "GTP_INBUF": 105,
+        "GTP_OUTBUF": 119
+      },
+      "hierarchy": [
+        {
+          "name": "+ u_cpu",
+          "lut": 8818,
+          "ff": 6113,
+          "apm": 4.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_div",
+          "lut": 384,
+          "ff": 263,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_exec0",
+          "lut": 651,
+          "ff": 98,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_exec1",
+          "lut": 1131,
+          "ff": 32,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_frontend",
+          "lut": 4565,
+          "ff": 3740,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_npc",
+          "lut": 3221,
+          "ff": 3350,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_issue",
+          "lut": 1190,
+          "ff": 1407,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_pipe0_ctrl",
+          "lut": 208,
+          "ff": 304,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_pipe1_ctrl",
+          "lut": 39,
+          "ff": 77,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_regfile",
+          "lut": 31,
+          "ff": 992,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_mul",
+          "lut": 81,
+          "ff": 33,
+          "apm": 4.0,
+          "drm": 0.0
+        }
+      ],
+      "elapsed_seconds": 87.303
+    },
+    {
+      "mode": "dual",
+      "dual_issue": 1,
+      "status": "PASS",
+      "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1043397489605Z\\result.json",
+      "result_sha256": "a7d3739adec62031b995c2079f7d09f2a8f8c4e039abd014114d0aa683fbba47",
+      "source_unchanged": true,
+      "runner_return_code": 0,
+      "synthesis_resources": {
+        "lut": 10192.0,
+        "registers": 6298.0,
+        "latches": 0.0,
+        "drm": 0.0,
+        "apm": 4.0,
+        "io": 224.0
+      },
+      "mapped_cpu_resources": {
+        "lut": 10191.0,
+        "ff": 6298.0,
+        "drm": 0.0,
+        "apm": 4.0
+      },
+      "io_separate_from_cpu_logic": 224.0,
+      "map_minus_synthesis": {
+        "lut": -1.0,
+        "registers": 0.0,
+        "drm": 0.0,
+        "apm": 0.0,
+        "io": 0.0
+      },
+      "elaborated_configuration": {
+        "SUPPORT_BRANCH_PREDICTION": 1,
+        "SUPPORT_MULDIV": 1,
+        "SUPPORT_SUPER": 0,
+        "SUPPORT_MMU": 0,
+        "SUPPORT_DUAL_ISSUE": 1,
+        "SUPPORT_LOAD_BYPASS": 1,
+        "SUPPORT_MUL_BYPASS": 1,
+        "SUPPORT_REGFILE_XILINX": 0,
+        "EXTRA_DECODE_STAGE": 0
+      },
+      "synthesis_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1043397489605Z\\synthesize\\triha_core.snr",
+      "synthesis_sha256": "5b6e2041ab1d9a747604ef8bf59311d1ce50f759d5221d7e5ff7aedd5b9f5e10",
+      "mapping_report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1043397489605Z\\device_map\\triha_core.dmr",
+      "mapping_sha256": "8337674e23380d0aa64374e3a878f8712714a79f30a4aca61f23af44c1c2e4fd",
+      "primitive_usage": {
+        "GTP_APM_E2": 4,
+        "GTP_DFF_C": 234,
+        "GTP_DFF_CE": 4038,
+        "GTP_DFF_P": 1,
+        "GTP_DFF_PE": 1033,
+        "GTP_DFF_RE": 992,
+        "GTP_GRS": 1,
+        "GTP_INV": 2,
+        "GTP_LUT1": 5,
+        "GTP_LUT2": 59,
+        "GTP_LUT3": 188,
+        "GTP_LUT4": 449,
+        "GTP_LUT5": 1328,
+        "GTP_LUT6": 3561,
+        "GTP_LUT6CARRY": 3051,
+        "GTP_LUT6D": 1551,
+        "GTP_MUX2LUT7": 954,
+        "GTP_MUX2LUT8": 366,
+        "GTP_INBUF": 105,
+        "GTP_OUTBUF": 119
+      },
+      "hierarchy": [
+        {
+          "name": "+ u_cpu",
+          "lut": 10190,
+          "ff": 6298,
+          "apm": 4.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_div",
+          "lut": 418,
+          "ff": 263,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_exec0",
+          "lut": 663,
+          "ff": 98,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_exec1",
+          "lut": 695,
+          "ff": 98,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_frontend",
+          "lut": 4337,
+          "ff": 3740,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_npc",
+          "lut": 3280,
+          "ff": 3350,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_issue",
+          "lut": 3097,
+          "ff": 1526,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_pipe0_ctrl",
+          "lut": 178,
+          "ff": 305,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_pipe1_ctrl",
+          "lut": 160,
+          "ff": 195,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_regfile",
+          "lut": 544,
+          "ff": 992,
+          "apm": 0.0,
+          "drm": 0.0
+        },
+        {
+          "name": "+ u_mul",
+          "lut": 90,
+          "ff": 33,
+          "apm": 4.0,
+          "drm": 0.0
+        }
+      ],
+      "elapsed_seconds": 98.211
+    }
+  ],
+  "comparison": {
+    "lut_increase": 1372,
+    "lut_increase_percent": 15.557319423970961,
+    "ff_increase": 185,
+    "ff_increase_percent": 3.026337313921146,
+    "apm_delta": 0,
+    "drm_delta": 0
+  },
+  "mapping": {
+    "multiplier": "one 33x33 operation; four GTP_APM_E2",
+    "drm36k": 0,
+    "distributed_ram_lut": 0,
+    "storage": "generic register file and predictor tables use FF/LUT; no TCM or cache in target"
+  },
+  "coremark_cpu_sources_identical": true,
+  "coremark_index_sha256": "277146fe2c01785f09741d167398fbcb8d01fb120793cb77405653df0c45c37e",
+  "report_parser_tests": "12 resource/stage/configuration checks; current test script passed",
+  "missing_tool_negative": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-single-20261018T1043402031454Z\\result.json",
+    "sha256": "459be8cc339a6a8484b67ffc0a814122d86a68b01515520a3e79b11f15605c7f",
+    "runner_return_code": 1,
+    "error": "Could not find file 'D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\missing-pds-shell.exe'."
+  },
+  "excluded_parameter_probe": {
+    "path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\pds-dual-20261018T1036274036084Z\\result.json",
+    "sha256": "f2750922aedcc791808c79baf2bb6cca638fa7e47ff537351eb088915f8a9697",
+    "reason": "DUAL_ISSUE=1 syntax was silently ignored; actual parameter was 0. Excluded from dual measurement.",
+    "rejected_by_final_validator": true
+  },
+  "map_stage_note": "Dual synthesis reports 10192 LUT; device mapping optimizes one away to 10191. Counts remain distinct.",
+  "single_issue_followup": "Mapped u_exec1 still has 1131 LUT/32 FF and u_pipe1_ctrl 39 LUT/77 FF. Names alone do not prove them dead; dependency/retirement/exception validation is required before specialization.",
+  "routed": false,
+  "timing_closed": false,
+  "board_validated": false,
+  "soc_integrated": false,
+  "timing_boundary": "10ns synthesis clock only; CPU bus I/O timing and board pins not constrained. Synthesis slack is not routed frequency proof."
+}

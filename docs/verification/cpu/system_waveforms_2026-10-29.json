@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "scope": "B.4 whole-core system simulation",
+  "positive_runs": 4,
+  "negative_runs_rejected": 2,
+  "run_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\system-run-index.json",
+  "run_index_sha256": "a3484f00952ea38631bf42c6abc40768a22bef37e245a0919789b57ebbea0411",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\cpu-system-support-2026-10-29.zip",
+  "archive_sha256": "27a146bf07f84b9f142c4aeff959eea2401e307b6272dde2e6a7f6d73b7f49ea",
+  "archive_bytes": 1049360,
+  "archive_entries_verified": 194,
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+    "pages": 61,
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+    "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+    "compile_return_code": 0,
+    "overfull_boxes": false,
+    "unresolved_references": false,
+    "pdf_rendered_or_previewed": false
+  },
+  "production_rtl_modified_in_this_batch": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false
+}

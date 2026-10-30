@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "scope": "Single-issue full-core external interrupt and return",
+  "positive_tests_pass": 1,
+  "negative_tests_rejected": 1,
+  "checks_passed": 18,
+  "cycles": 3582,
+  "retired": 864,
+  "stores": 92,
+  "run_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\irq-run-index.json",
+  "run_index_sha256": "ce0c15e863d9da25ff3d843a0d84bec4242496412a305e217a9f05e1f3e93b02",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\cpu-irq-support-2026-10-29.zip",
+  "archive_sha256": "96eceab56c74641d7ffc37500191d45b1cc1a3a5162a530e8caa73a93316c002",
+  "archive_entries_verified": 86,
+  "archive_bytes": 465562,
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "appendix_sha256": "16f11618d6adb15f6a3a421947670998927f5d424126e5c000e78dde6e562fbf",
+    "pdf_sha256": "15503c4896ad92268278faa58aaec0b736b280ad533da0a1fe97338ac29f0ab6",
+    "compile_log_sha256": "d42f06266e6a8c9bcee14b1450e66af06ac4dd1bbae7ba9a8f73cda60e00dda8",
+    "pages": 62,
+    "compile_return_code": 0,
+    "pdf_rendered_or_previewed": false,
+    "unresolved_references": false,
+    "overfull_boxes": false
+  },
+  "production_rtl_modified": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false
+}

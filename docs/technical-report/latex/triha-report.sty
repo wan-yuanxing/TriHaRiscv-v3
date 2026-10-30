@@ -17,12 +17,13 @@
 \RequirePackage{enumitem}
 \RequirePackage{fvextra}
 \RequirePackage{caption}
+\RequirePackage{placeins}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc,fit}
 \RequirePackage[numbers,sort&compress,square]{natbib}
 \RequirePackage{xurl}
 \RequirePackage[hidelinks,unicode]{hyperref}
-\hypersetup{bookmarksnumbered=true,pdftitle={TriHaRiscv v3 技术文档模板},pdfauthor={},pdfsubject={RV32 FPGA heterogeneous system technical document template}}
+\hypersetup{bookmarksnumbered=true,pdftitle={TriHaRiscv 技术文档},pdfauthor={},pdfsubject={RISC-V CPU-NPU heterogeneous vision system}}
 \ctexset{
   contentsname={目\ \ 录},
   chapter={name={第,部分},number=\chinese{chapter},format=\centering\sffamily\bfseries\zihao{-2},aftername={\ },tocline={\CTEXnumberline{#1}#2},beforeskip=4pt,afterskip=10pt},
@@ -42,6 +43,17 @@
 \setlength{\LTpre}{8pt}
 \setlength{\LTpost}{8pt}
 \captionsetup{font=small,labelfont=bf,labelsep=space}
+\renewcommand{\fps@figure}{!htbp}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.7}
+\setlength{\textfloatsep}{12pt plus 3pt minus 3pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
 \renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
 \renewcommand{\thetable}{\arabic{chapter}-\arabic{table}}
 \renewcommand{\theequation}{\arabic{chapter}-\arabic{equation}}
@@ -54,6 +66,8 @@
 \renewcommand{\headruleskip}{1pt}
 \fancypagestyle{plain}{\fancyhf{}\fancyhead[C]{\officialreportheader}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0.75pt}}
 \newenvironment{reporttable}{\par\small\linespread{1.1}\selectfont}{\par}
+% longtable takes over the output routine; clear any already queued top floats.
+\AtBeginEnvironment{longtable}{\FloatBarrier\ifx\@toplist\@empty\else\clearpage\fi}
 \AtBeginEnvironment{thebibliography}{\small\linespread{1.1}\selectfont\setlength{\bibsep}{4pt}}
 \DefineVerbatimEnvironment{verbatim}{Verbatim}{breaklines,fontsize=\small}
 \newcommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}

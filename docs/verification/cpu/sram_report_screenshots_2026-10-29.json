@@ -1,0 +1,135 @@
+{
+  "status": "PASS",
+  "capture_date": "2026-10-28",
+  "screenshot_document_date": "2026-10-29",
+  "application": "Fabric Debugger 2022.2-SP6.4",
+  "mode": "Offline native project copies only; no server, programming or new sampling",
+  "new_hardware_activity": false,
+  "prepared": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\prepared.json",
+  "prepared_sha256": "0d352d61cb3179335854b25728f396658f92f612628ecfbee9a36bce7cc2ca2d",
+  "frozen_originals_unchanged": true,
+  "original_capture_hashes": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\list.wdf": "e573a46ea15ddac632be7e2a893b26388ed51df11b554bf4c71abd1c9f592d65",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\list.dprj": "5483b1ca721a3aef0e14a341d33b2a492fced0797d717fd4b93c171cb6b3680f",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\list.samples.csv": "4c5bea9c79f92670a1e9c1beabbb628022f4385780d50847a949e8159670c351",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\matrix.wdf": "7d51766653e007fc5e5d78bf61efeef85c74d34d9dd4ccf4c2f39461ac2c4a06",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\matrix.dprj": "ddc05427a0384feb650980810ddaf508ae4c82cb6ede08bf5e40dd9440c59d6c",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\matrix.samples.csv": "cf7d73ad7cc639b95798976372a7429ad2f93a84e8c89fba3583783bc7050489",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\state.wdf": "eb195c9672a2194493b811c2c2fa39701c7417590b8665f08c84d004d03409d0",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\state.dprj": "23d6cf0565d61cef498b94a18c26ba4e55d473e24621a079af352a3ea734ec18",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\state.samples.csv": "453462edc105406078ad0503e8a4ff1a232ce3b3760c5f5ce46fcda35f1c5bd2"
+  },
+  "image_processing": "Rectangular crop only; no redraw, resizing, interpolation, relabeling or trace edits",
+  "sample_axis": "Native viewer trigger 0 corresponds to raw CSV index 1; native -1 is raw CSV index 0",
+  "title_bar_limitation": "Viewer title remains an earlier project name; actual load is verified from offline import log and PC. Report crop excludes title bar.",
+  "images": {
+    "list": {
+      "source_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\list.wdf",
+      "source_wdf_sha256": "e573a46ea15ddac632be7e2a893b26388ed51df11b554bf4c71abd1c9f592d65",
+      "offline_copy_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\projects\\list.wdf",
+      "offline_copy_wdf_sha256": "e573a46ea15ddac632be7e2a893b26388ed51df11b554bf4c71abd1c9f592d65",
+      "native_cursor_pc_word": "0x4752",
+      "trigger_byte_pc": "0x00011D48",
+      "fullscreen": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\list-fullscreen.png",
+      "fullscreen_sha256": "bfa5c397d588d3ee176ad310d505e2fcdc326f8e85b5842203afd922aa8bf555",
+      "fullscreen_dimensions": [
+        2560,
+        1392
+      ],
+      "maximized": true,
+      "viewer_load_proof": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\list-viewer.txt",
+      "viewer_load_proof_sha256": "c5db3a3c1803a78dde4f3a30ad5eed25d9900bceaacd435126d3625d35e21fcd",
+      "crop_box_left_top_right_bottom": [
+        278,
+        124,
+        2540,
+        376
+      ],
+      "report_image": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-sram-list-native.png",
+      "report_image_sha256": "866c5fbe4d5936610a0fbb97f7cd48047d33a6a3a57cb52d11b04e581765ca94",
+      "report_image_dimensions": [
+        2262,
+        252
+      ],
+      "exact_pixel_crop_verified": true
+    },
+    "matrix": {
+      "source_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\matrix.wdf",
+      "source_wdf_sha256": "7d51766653e007fc5e5d78bf61efeef85c74d34d9dd4ccf4c2f39461ac2c4a06",
+      "offline_copy_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\projects\\matrix.wdf",
+      "offline_copy_wdf_sha256": "7d51766653e007fc5e5d78bf61efeef85c74d34d9dd4ccf4c2f39461ac2c4a06",
+      "native_cursor_pc_word": "0x493A",
+      "trigger_byte_pc": "0x000124E8",
+      "fullscreen": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\matrix-fullscreen.png",
+      "fullscreen_sha256": "d305a040c6d26ee699d0db212566c782706ec773a7ddf4019c3712447cfd9128",
+      "fullscreen_dimensions": [
+        2560,
+        1392
+      ],
+      "maximized": true,
+      "viewer_load_proof": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\matrix-viewer.txt",
+      "viewer_load_proof_sha256": "0e360ad0fb483e409afa05c25ca8e446cb1185e2df6d24c38263452e50ddc9a0",
+      "crop_box_left_top_right_bottom": [
+        278,
+        124,
+        2540,
+        376
+      ],
+      "report_image": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-sram-matrix-native.png",
+      "report_image_sha256": "927106a3b87af69201804d0463092f8d0acb56a4e5f08c665abea04ad211df18",
+      "report_image_dimensions": [
+        2262,
+        252
+      ],
+      "exact_pixel_crop_verified": true
+    },
+    "state": {
+      "source_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\state.wdf",
+      "source_wdf_sha256": "eb195c9672a2194493b811c2c2fa39701c7417590b8665f08c84d004d03409d0",
+      "offline_copy_wdf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\projects\\state.wdf",
+      "offline_copy_wdf_sha256": "eb195c9672a2194493b811c2c2fa39701c7417590b8665f08c84d004d03409d0",
+      "native_cursor_pc_word": "0x4B07",
+      "trigger_byte_pc": "0x00012C1C",
+      "fullscreen": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\state-fullscreen.png",
+      "fullscreen_sha256": "beab731ae1e17857a5e11e449e607a6a2729a9d7cf8afd92ec9c3e9c3b90a967",
+      "fullscreen_dimensions": [
+        2560,
+        1392
+      ],
+      "maximized": true,
+      "viewer_load_proof": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\state-viewer.txt",
+      "viewer_load_proof_sha256": "df890a431de080a03268047b66281f9633079bbc198490a84f763bd369dd1bd3",
+      "crop_box_left_top_right_bottom": [
+        278,
+        124,
+        2540,
+        376
+      ],
+      "report_image": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-sram-state-native.png",
+      "report_image_sha256": "43405faff5cdedd029670f4dca5ed16344179ac3fad498f28d2f8b4fcee12bed",
+      "report_image_dimensions": [
+        2262,
+        252
+      ],
+      "exact_pixel_crop_verified": true
+    }
+  },
+  "unrelated_report_files_unchanged_count": 241,
+  "outside_targeted_cpu_paragraphs_unchanged": true,
+  "report_sources": {
+    "README.md": "5f6c1e28c97d3839ae6223a25a062d8642be54d18edd73b62fb6a2177a4d845f",
+    "latex/chapters/03-results.tex": "3555d86a6d41a3a9137d18a8e5fb6ad505188fd92f799b70ca8fb5d7fb858fcf",
+    "latex/chapters/06-appendix.tex": "1167bc236c6d37bbde1c8a5688ce0d8d2b9837da10f7d783ff51698490729d96"
+  },
+  "historical_record_unchanged": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\sram_report_2026-10-28.json",
+  "document_build": {
+    "status": "PASS",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "2c0cbf99b03a08093ff255f6164af27448eeae0897a09adc26e7c9cad9361231",
+    "log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "log_sha256": "c4cdee5b8cca96f48d685c0d22112631661d134f903305a2e1f4d62216c1653e",
+    "console_log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\native-report-screenshots-20261029-v1\\build-console.log",
+    "console_sha256": "2986526913b6c58e08cf10f3eb2fca74c99c6935e75a2d627f3ec93b6f90fd95",
+    "rendered_or_previewed": false
+  }
+}

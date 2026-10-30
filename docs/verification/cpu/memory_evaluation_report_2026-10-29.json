@@ -1,0 +1,82 @@
+{
+  "status": "PASS",
+  "date": "2026-10-29",
+  "scope": "Two board-measured configurations: TCM local SRAM and L1 Cache with board DDR; TCM as highest-score debug example",
+  "new_measurements_or_hardware_activity": false,
+  "measurement_sources": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\sram_debug_led_fix_2026-10-28.json": "26ca44a4b6dbc3bdb383dd3c56cacb80cd77ef4a1a7bf63d74359fbe3cecb0f0",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\dcache_overlap_board.json": "efa07d62bf86cecf94ee1b77ba24584f7e880582c17309c149e298a1c92f2414"
+  },
+  "original_result_and_uart_bindings_verified": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\ddr-coremark-physical-20261023T020247339677Z\\result.json": "32a86f084b49d8b4cbfbefdcf46824052b937dabb5aba27e8ba6da4accfd261b",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\ddr-coremark-physical-20261023T020247339677Z\\uart.bin": "ac0aa98c6b9053c4476551e9b3f84bb107da060d732082f48eee1ad074b2f64e",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\ddr-coremark-physical-20261023T020247339677Z\\measurement-uart.txt": "d05ba913f4d34f46b4879669022095b170fa47f9241bb3ee907b29f34b00fdf6"
+  },
+  "measurements": {
+    "TCM": {
+      "iterations": 5000,
+      "cycles": 1636465356,
+      "clock_hz": 100000000,
+      "seconds": 16.36465356,
+      "coremark": 305.5365627917393,
+      "coremark_per_mhz": 3.055365627917393,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "duration_valid": true,
+      "official_submission": false,
+      "cpu_core_luts": 5933,
+      "coremark_per_lut": 0.051497819449138595,
+      "coremark_per_actual_debug_cpu_lut": 0.04976976100207514,
+      "report_cpu_lut_denominator": 6139,
+      "report_coremark_per_lut": 0.04976976100207514
+    },
+    "L1 Cache + board DDR": {
+      "iterations": 5000,
+      "cycles": 2002053973,
+      "clock_hz": 100000000,
+      "seconds": 20.02053973,
+      "coremark": 249.74351677980462,
+      "coremark_per_mhz": 2.497435167798046,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "duration_valid": true,
+      "official_submission": false,
+      "cpu_core_luts": 6507,
+      "coremark_per_lut": 0.03838074639308508,
+      "report_cpu_lut_denominator": 6507,
+      "report_coremark_per_lut": 0.03838074639308508
+    }
+  },
+  "tcm_cpu_lut_note": "Immutable firmware metadata5933; current debug-build denominator6139, score unchanged",
+  "previous_screenshot_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\sram_report_screenshots_2026-10-29.json",
+  "previous_screenshot_index_sha256": "fd35bce95fc7d7b9b06b30dc03b803a49e44326b4dddb508a92217ef46891e2c",
+  "screenshot_index_scope": "Native image and capture source bindings retained; its older document output hash is historical",
+  "original_capture_and_screenshot_hashes_unchanged": true,
+  "unrelated_report_inputs_unchanged": 47,
+  "system_changed_lines": [
+    82,
+    83
+  ],
+  "npu_video_and_non_cpu_results_unchanged": true,
+  "report_sources": {
+    "README.md": "cd729053d5bb758764b5221f8f1f940ecc59314c1b1d7cb10a826c031bae775b",
+    "latex/chapters/02-system.tex": "fe226a964f98979ad707b5968c0318caf7bcc93ac20a2a830e83d27d62c2afc6",
+    "latex/chapters/03-results.tex": "f871caa87bd8af3ac6d0699699026d21f78559fbcc57f3cb8d9cfda4efb2a999",
+    "latex/chapters/06-appendix.tex": "7afdbd7b42ebc69e126549ab7547b92638dd28904696caf62e6dbb43497b3f42"
+  },
+  "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+  "pdf_sha256": "4b113ed2624e0020e68230ecd45f2d4df334593c472548b1df401dc0ba3b0016",
+  "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+  "compile_log_sha256": "4a7371fac8e9716528fbb52c40a06e9569eba287b1c97071acbca31a923117f8",
+  "build_console": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\memory-evaluation-report-20261029-v1\\build-console.log",
+  "build_console_sha256": "53da200dca6744e1424d2511f282dd2b65e856c04991ff2c43d1a535ea179407",
+  "pdf_rendered_or_previewed": false
+}

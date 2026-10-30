@@ -1,0 +1,669 @@
+{
+  "status": "PASS",
+  "date": "2026-10-29",
+  "scope": "Remove duplicate CoreMark appendix; fill B.3 ISA validation from existing six-stage directed evidence",
+  "reference_document": "D:\\RV-CPU\\TriHaRiscv\\复赛文档\\CICC1002692+分区决赛+技术文档.md",
+  "reference_sha256": "9b6e5e3c187307ee08917592c81c25c9129a183b6e1f805bdb20ccb7f049282d",
+  "reference_use": "Editorial structure only; old five-stage official PASS totals not transferred",
+  "tools": "ModelSim SE-64 2020.4; GCC15.2; native Windows",
+  "directed_records": {
+    "V01": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z\\result.json",
+      "sha256": "b4f323711f32bbf70a99528933b0390cc368acd604e83064267fdfb7633120d5",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "test": "mularith",
+          "status": "PASS"
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z\\compile.stdout.log": {
+          "sha256": "f1b6b010bf3c32a11b895c44c63475cf05ddef6acf2792445794763d8cd9904d",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z\\mularith.stdout.log": {
+          "sha256": "e1a010eca468d07e8f7df186735d6560df4aae24231c2b09b5dd7eb4c512c4ee",
+          "markers": [
+            "# MUL_PAYLOAD_PASS checks=2730 holds=904"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757077521693Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V02": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z\\result.json",
+      "sha256": "ca756f5395206a1aff18a66f0ae0a3dabd2f66c1bd9edfaa0f66fcb0918ee2ca",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "test": "mulforward",
+          "status": "PASS"
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z\\compile.stdout.log": {
+          "sha256": "e9b1657ee44ee26a1b9fed86ca6f6bfa862a333d24187e4380fb72ad20f9eaf2",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z\\mulforward.stdout.log": {
+          "sha256": "29af98c74548d982c035e7106e9f8e0ad8e16e34716e2be3424c65f107c08cc2",
+          "markers": [
+            "# MUL_FORWARD_PASS checks=1032"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757103883144Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V03": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859310704060Z\\result.json",
+      "sha256": "3d5d233862af3af35f588c5c31285c7d658a639cab5a5b15095967d2f6f4bec5",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "status": "PASS",
+          "test": "divarith"
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859310704060Z\\compile.stdout.log": {
+          "sha256": "afed955feb39ef5453d1fc786ed0fab59688c39731644faee0fb13c227c09a10",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859310704060Z\\divarith.stdout.log": {
+          "sha256": "8d2e8e870ac9ef737ec813e552ec71b4bea7f3a1c26314fd70b87d171f4a88ee",
+          "markers": [
+            "# DIV_ARITH_PASS operations=        308 checks=        312 cached=         16 random_stream_cycles=1000"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859310704060Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859310704060Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V04": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\result.json",
+      "sha256": "eaea4dbf78faeb227148bc78b3793ca29da1aa53e605fe8b04df0e1e82671db6",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "status": "PASS",
+          "mode": "single",
+          "kind": "golden",
+          "stores": 91,
+          "retired": 844,
+          "trap_mask": 255,
+          "delayed": 1161,
+          "cycles": 3652
+        },
+        {
+          "status": "PASS",
+          "mode": "dual",
+          "kind": "golden",
+          "stores": 91,
+          "retired": 844,
+          "trap_mask": 255,
+          "delayed": 1114,
+          "cycles": 3601
+        },
+        {
+          "status": "PASS",
+          "mode": "single",
+          "kind": "candidate",
+          "stores": 91,
+          "retired": 844,
+          "trap_mask": 255,
+          "delayed": 1089,
+          "cycles": 3587
+        },
+        {
+          "status": "PASS",
+          "mode": "dual",
+          "kind": "candidate",
+          "stores": 91,
+          "retired": 844,
+          "trap_mask": 255,
+          "delayed": 1100,
+          "cycles": 3530
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\candidate-dual.stdout.log": {
+          "sha256": "d7f42526e1cdb38a0398f6e37a1ab38888db64b459b3718245c8008497c065a2",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3530 traps=255 retired=844 stores=91 delayed=1100"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\candidate-single.stdout.log": {
+          "sha256": "de38e9d61df37f83b58469a1d1031e63909bc7bbc7b94f911db616d2f8435559",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3587 traps=255 retired=844 stores=91 delayed=1089"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\compile-candidate.stdout.log": {
+          "sha256": "9bf54a323395f563561c55197fac4eb3d67d6c50a8bc2136bbe5ce44b1f3836f",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\compile-golden.stdout.log": {
+          "sha256": "3ff129cd76c52bef36caa0852b62eff41928aa82b926111ddb3e67f614262aad",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\firmware.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\golden-dual.stdout.log": {
+          "sha256": "5d30c59b0f971df8c8f5993b44e909d0501f11115e369cd241dd99e8dc496857",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3601 traps=255 retired=844 stores=91 delayed=1114"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\golden-single.stdout.log": {
+          "sha256": "6bdba05564d76777315b00704b32bc6ca31fd2d0eab54ab76bab9bf9d7deb5c3",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3652 traps=255 retired=844 stores=91 delayed=1161"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\symbols.stdout.log": {
+          "sha256": "6c260f9619feaeb825fb511c48034563f316f76e6faec83c548a2e5495a7bd65",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\vlib-candidate.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\vlib-golden.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0757526117601Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V05": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\result.json",
+      "sha256": "a3c5536efd9627aa3c318a2a3613d5119a3cabd0c2a55468178f0a044b779308",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "cycles": 3603,
+          "stores": 91,
+          "mode": "single",
+          "retired": 844,
+          "delayed": 1211,
+          "status": "PASS",
+          "trap_mask": 255,
+          "kind": "golden"
+        },
+        {
+          "cycles": 3603,
+          "stores": 91,
+          "mode": "dual",
+          "retired": 844,
+          "delayed": 1225,
+          "status": "PASS",
+          "trap_mask": 255,
+          "kind": "golden"
+        },
+        {
+          "cycles": 3560,
+          "stores": 91,
+          "mode": "single",
+          "retired": 844,
+          "delayed": 1161,
+          "status": "PASS",
+          "trap_mask": 255,
+          "kind": "candidate"
+        },
+        {
+          "cycles": 3560,
+          "stores": 91,
+          "mode": "dual",
+          "retired": 844,
+          "delayed": 1137,
+          "status": "PASS",
+          "trap_mask": 255,
+          "kind": "candidate"
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\candidate-dual.stdout.log": {
+          "sha256": "c70b727c34c86d22c015259777fa2a6b60a7c2e520a27f31c93e665f1c8f384e",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3560 traps=255 retired=844 stores=91 delayed=1137"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\candidate-single.stdout.log": {
+          "sha256": "7f5de5408d3c5bb399cf83f4fc1567f37662fcde86111e64017a5d85befb725a",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3560 traps=255 retired=844 stores=91 delayed=1161"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\compile-candidate.stdout.log": {
+          "sha256": "5f58ab1e29b0279577216aa95a2fc620d4054e73ee214fb9f33e9dbd892c16ed",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\compile-golden.stdout.log": {
+          "sha256": "d942c419e92f75782184f6a56e8fa42bf6f1f5587ee1958a4ce862d9b8060cde",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\firmware.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\golden-dual.stdout.log": {
+          "sha256": "387551be054ed442ae9833c58cfc16bd8073520fc072705c7a05db112c52c8d6",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3603 traps=255 retired=844 stores=91 delayed=1225"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\golden-single.stdout.log": {
+          "sha256": "9cc48c68b9e50cb4b5ddab9bb7ac4a00477ab461155c840f25ed4e641a74c54e",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3603 traps=255 retired=844 stores=91 delayed=1211"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\symbols.stdout.log": {
+          "sha256": "6c260f9619feaeb825fb511c48034563f316f76e6faec83c548a2e5495a7bd65",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\vlib-candidate.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\vlib-golden.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758026852447Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V06": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\result.json",
+      "sha256": "9bd1761fd51de879d92a48e3c51494750a1c87e2984df5c0968fef801822df73",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "status": "PASS",
+          "stores": 91,
+          "delayed": 1147,
+          "retired": 844,
+          "cycles": 3558,
+          "mode": "single",
+          "kind": "golden",
+          "trap_mask": 255
+        },
+        {
+          "status": "PASS",
+          "stores": 91,
+          "delayed": 1117,
+          "retired": 844,
+          "cycles": 3501,
+          "mode": "dual",
+          "kind": "golden",
+          "trap_mask": 255
+        },
+        {
+          "status": "PASS",
+          "stores": 91,
+          "delayed": 1126,
+          "retired": 844,
+          "cycles": 3482,
+          "mode": "single",
+          "kind": "candidate",
+          "trap_mask": 255
+        },
+        {
+          "status": "PASS",
+          "stores": 91,
+          "delayed": 1105,
+          "retired": 844,
+          "cycles": 3482,
+          "mode": "dual",
+          "kind": "candidate",
+          "trap_mask": 255
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\candidate-dual.stdout.log": {
+          "sha256": "2ca14b86e18d9831819f2ce1a3b65c9dd3b9e2fce6b9802b63408b0be8df8cf6",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3482 traps=255 retired=844 stores=91 delayed=1105"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\candidate-single.stdout.log": {
+          "sha256": "5be431abe88f5ff0a7ba81b333a6e38f0991cb1f25ca2caf5091f63a574ca531",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3482 traps=255 retired=844 stores=91 delayed=1126"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\compile-candidate.stdout.log": {
+          "sha256": "f5750ac8202cd8f464c2e3eba64b1e5d5dab4049814bbf4881f20d3cc4ce83df",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\compile-golden.stdout.log": {
+          "sha256": "edab77c8d2a185c607c1e0989dd84cb1faa6b0756ce233109c81f6a00c0a9659",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\firmware.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\golden-dual.stdout.log": {
+          "sha256": "9d5c6eccdff3c5c0a7718e1febc830813f0c468c00920424855ef381381545bc",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3501 traps=255 retired=844 stores=91 delayed=1117"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\golden-single.stdout.log": {
+          "sha256": "ee6d6757ed834d81566ece8c71ad3f0ad15e623afb215cca35641922f8be6e5a",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3558 traps=255 retired=844 stores=91 delayed=1147"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\symbols.stdout.log": {
+          "sha256": "6c260f9619feaeb825fb511c48034563f316f76e6faec83c548a2e5495a7bd65",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\vlib-candidate.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\vlib-golden.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758120242386Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V07": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\result.json",
+      "sha256": "23f508cd79b130000fa63d06dcd340d0b72ec498928fda48359aebd629abf74c",
+      "status": "PASS",
+      "expected_rejection": false,
+      "runner_return_code": 0,
+      "source_unchanged_at_run": true,
+      "executions": [
+        {
+          "kind": "golden",
+          "trap_mask": 511,
+          "cycles": 3735,
+          "status": "PASS",
+          "retired": 865,
+          "stores": 92,
+          "delayed": 1197,
+          "mode": "single"
+        },
+        {
+          "kind": "golden",
+          "trap_mask": 511,
+          "cycles": 3730,
+          "status": "PASS",
+          "retired": 865,
+          "stores": 92,
+          "delayed": 1168,
+          "mode": "dual"
+        },
+        {
+          "kind": "candidate",
+          "trap_mask": 511,
+          "cycles": 3688,
+          "status": "PASS",
+          "retired": 865,
+          "stores": 92,
+          "delayed": 1128,
+          "mode": "single"
+        },
+        {
+          "kind": "candidate",
+          "trap_mask": 511,
+          "cycles": 3610,
+          "status": "PASS",
+          "retired": 864,
+          "stores": 92,
+          "delayed": 1131,
+          "mode": "dual"
+        }
+      ],
+      "error": null,
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\candidate-dual.stdout.log": {
+          "sha256": "088b902d8f741888788ba777ce5a3f98b93bc3af1ca15fde44b93c7f8c5edaf7",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3610 traps=511 retired=864 stores=92 delayed=1131"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\candidate-single.stdout.log": {
+          "sha256": "9164c445792b6aa9469a0af4b5f05355edba00978381da7b03f975751bbbb7ed",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3688 traps=511 retired=865 stores=92 delayed=1128"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\compile-candidate.stdout.log": {
+          "sha256": "2c412dbe43afe3cbf3c64dfd2f214e79af510d656098446ba92c9d9978575998",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\compile-golden.stdout.log": {
+          "sha256": "b6521e48a110cd4597afac929613795b1e795732bdc1786d9721b3d6fd6070e3",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\firmware.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\golden-dual.stdout.log": {
+          "sha256": "9687c6ab7427e235c03a1e81d6ae9ed8fc1840e5e4d8eb5aa4278705c9aa96d6",
+          "markers": [
+            "# CPU_ORDER_PASS dual=1 cycles=3730 traps=511 retired=865 stores=92 delayed=1168"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\golden-single.stdout.log": {
+          "sha256": "61b13ef92ec5b75dec2f7eaee4e4376b404545c23d3331b9a0342f608eb47c00",
+          "markers": [
+            "# CPU_ORDER_PASS dual=0 cycles=3735 traps=511 retired=865 stores=92 delayed=1197"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\symbols.stdout.log": {
+          "sha256": "68b664d79bca541e0da0e8d1bf8eb85d56ebc430c133a6e49331e425cdd64ae7",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\vlib-candidate.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\vlib-golden.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-ordered-20261020T0758222342313Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V08": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z\\result.json",
+      "sha256": "eaeccdd5c72c253a657e8e331d28937af09f8bc3b7e7c7e8b66b921d76484725",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "runner_return_code": 1,
+      "source_unchanged_at_run": true,
+      "executions": [],
+      "error": "Component contract failed.",
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z\\compile.stdout.log": {
+          "sha256": "aa546d7b5b4613bf22fcd6f11cff0201138060d52fff72dab7280d579670f786",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z\\mulforward.stdout.log": {
+          "sha256": "41eea6c299fe59e43732a0038b266ebdaad5d6eb609beb8f8ef7b0dd6c9b0cca",
+          "markers": [
+            "# ** Fatal: MUL_FORWARD_FAIL operand expected=0000003f actual=00000000"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mulforward-20261020T0757526117978Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V09": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z\\result.json",
+      "sha256": "4c3e0371df8756b26206bc243631ea107a84105709d5ed31fcd3460b45d6d9e3",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "runner_return_code": 1,
+      "source_unchanged_at_run": true,
+      "executions": [],
+      "error": "Component contract failed.",
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z\\compile.stdout.log": {
+          "sha256": "651a240a109507447c8a3975ab51fef29f2380eb0465ede09127c68194f28bee",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z\\mularith.stdout.log": {
+          "sha256": "2c4a67442f570f6f28aaa4d6827fb0783336083b976c54d2ec7954bafe954dba",
+          "markers": [
+            "# ** Fatal: MUL_PAYLOAD_FAIL expected=80000000 actual=00000000"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-mularith-20261020T0757556735566Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    },
+    "V10": {
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859330287955Z\\result.json",
+      "sha256": "fa1efcacc256120a8c0c3c370e3b48e9c427594977b5d87173edf19cb8378bbe",
+      "status": "FAIL",
+      "expected_rejection": true,
+      "runner_return_code": 1,
+      "source_unchanged_at_run": true,
+      "executions": [],
+      "error": "Component contract failed.",
+      "logs": {
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859330287955Z\\compile.stdout.log": {
+          "sha256": "8ad5eecce6f23b152bff8a79575abe0bf10045efbfc96ab25a7a57b0779f9899",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859330287955Z\\divarith.stdout.log": {
+          "sha256": "13b6b33a1f77baaf123719c8af5fc5da3aaa7801c9cae64707e9cde399478146",
+          "markers": [
+            "# ** Fatal: DIV_ARITH_FAIL value op=02004033 a=00000000 b=00000000 got=c0ffee00 golden=ffffffff expected=ffffffff"
+          ]
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859330287955Z\\vlib.stdout.log": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "markers": []
+        },
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\redirect-divarith-20261019T0859330287955Z\\vmap.stdout.log": {
+          "sha256": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+          "markers": []
+        }
+      }
+    }
+  },
+  "source_summaries": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\operand_hazard.json": "cd8c4cdff1e3bad82a63eeb81246a429c72a3fe68235a0e029a200178dd7983a",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\divider_input_timing.json": "7d6e44cf6cacc045ac5d9966e8cab2fcf05600c0ce0f8d59275f233e1252cda9"
+  },
+  "official_riscv_tests_and_act4_for_current_core": "No archived full-suite result bound to current six-stage core; no official total claimed",
+  "record_scope": "Each result is for its frozen development snapshot; no new simulation was run for this document update",
+  "new_simulation_or_hardware_activity": false,
+  "appendix_b3_filled_and_numbering_verified": true,
+  "unrelated_chapters_figures_unchanged_count": 40,
+  "known_concurrent_changes_preserved": {
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc.drawio": "d1ae66efef6591dbfcfa638a7fae6698158e57070fd1336a1c7c1ceca0d17615",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page10.pdf": "f19960fa5e3c5304b489910739d839e0cf70ea4604a0f09b509c18401fd9eee1",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\02-system.tex": "64cdfaf360de2e37401f4055459e01bff8e5e535cd270fc52d75e461f0aae8b0"
+  },
+  "appendix_a_and_b4_through_f_unchanged": true,
+  "sources": {
+    "appendix": "4f30db9c47efc483a1589a3c0b2a9457e3deccd6954ef2d51a67b5254e9173ef",
+    "readme": "e636fe8e89d29239d598dda66344f441da0032f89839a83f102c9075b4834f7b"
+  },
+  "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+  "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+  "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+  "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+  "build_console_sha256": "82452b662bd0393b5cd0a3839a080f50ad63a614136b86f435f05651d7c26eaa",
+  "pdf_rendered_or_previewed": false,
+  "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+  "pages": 61,
+  "latest_document_update": {
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  }
+}

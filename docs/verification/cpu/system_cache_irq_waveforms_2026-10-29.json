@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "scope": "B.4 cache-enabled IRQ interaction",
+  "positive_runs": 1,
+  "negative_runs_rejected": 1,
+  "unchanged_runtime_regression": true,
+  "statistics": {
+    "cycles": 11758,
+    "checks": 12655,
+    "reads": 40,
+    "writes": 192,
+    "entries": 3,
+    "returns": 3,
+    "resumes": 3,
+    "retired": 1110,
+    "wait_irq_cycles": 66
+  },
+  "raw_evidence_checks": 18,
+  "index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\cache_irq_run_2026-10-29.json",
+  "index_sha256": "70fc9d5f598f72573c1c46e4f84b4afd70cc36640087da42e98cd85c20959599",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\cpu-cache-irq-support-2026-10-29.zip",
+  "archive_sha256": "e3a67934c78e5a46a462f606d2a998059052b9d98b210c2532658d38b8f2401d",
+  "archive_entries_verified": 442,
+  "archive_bytes": 5918858,
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "59d1bfa334ab2bd201159f8e05c91ec97045ae2a734a9e9d1b35cd5f4ab3f3ae",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "79f3411dfe9f30940b5fcc48432efa8a66e0fda7bf7b7fbb32eed12e0100d95c",
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "5adbc5b3bd66aeb43ebd1bef9d198f5a836b99bb4e9edc675fac12ad5c0785f6",
+    "pages": 63,
+    "compile_return_code": 0,
+    "pdf_rendered_or_previewed": false
+  },
+  "production_rtl_modified": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false
+}

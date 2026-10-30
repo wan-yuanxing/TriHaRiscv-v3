@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "positive_runs": 2,
+  "negative_runs_rejected": 4,
+  "retirement_sequences_equal": true,
+  "retirement_rows_each": 162,
+  "scenarios": 7,
+  "independent_checks": 13,
+  "index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\squash_run_2026-10-30.json",
+  "index_sha256": "65958a7b20a2397f45ba28d832f012f88a099d227372827dae3f497add24bd33",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\system_support\\cpu-squash-support-2026-10-30.zip",
+  "archive_sha256": "9ff721406872d9d991e3ce9560bf6dbd8d4bc151f5e38caee7ed87a98702aca3",
+  "archive_entries_verified": 323,
+  "archive_bytes": 1142951,
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "547f7484155f78198b7e78990453b495ff323710778f64572951b91d7598d463",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "b75d1b1666aadb92b0bece88b35999201ba76281485d19656a90e5a5b17a8471",
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "09fd4e76471155b937b3ed5ebee1cb42bd4579b796102d41f7b5117155323765",
+    "compile_return_code": 0,
+    "pages": 71,
+    "pdf_rendered_or_previewed": false
+  },
+  "screenshot_sha256": "7ca81ff1840ed51ad7fdd75608e5e14d877cfd669328c0559779cf2b343e24b3",
+  "production_rtl_modified": false,
+  "physical_implementation_run": false,
+  "board_programmed": false,
+  "desktop_recovery": "Prior kernel-assets initialization failed with os error 3; fresh runtime enumerated windows and saved original screenshot. Prior missing path remains unknown."
+}

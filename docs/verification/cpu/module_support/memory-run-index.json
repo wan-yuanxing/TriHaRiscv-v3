@@ -1,0 +1,1141 @@
+{
+  "status": "PASS",
+  "section": "B.3",
+  "scope": "LSU and I/D Cache module verification",
+  "simulator": "ModelSim SE-64 2020.4",
+  "positive_tests_pass": 4,
+  "negative_tests_rejected": 4,
+  "positive_checks": "3014/3014",
+  "runs": [
+    {
+      "name": "wave-unit-lsufunctional-20261029T1031435610458Z",
+      "test": "lsufunctional",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\result.json",
+      "result_sha256": "fb53aba5e14e389161e1ec46bd4d374835fe1d51b6c85b906422f04255b22b3d",
+      "functional_log_lines": [
+        "# LSU_UNIT_PASS operations=18 checks=220 held=45 loads=11 stores=4 alignment_faults=3 bus_faults=2"
+      ],
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+        "tb/cpu/tb_lsu_functional.v": "1c003bdeed03b0dc6ef98682760594a6ae87afcfa6435b4ae1dbd98107b7508a",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "75c8bb0aa7c138a115b9ce05d353a76b8a1fcc214f6dddb38b3f151219164abf",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\capture.do": "b173a71e5325065e757b1c1316ccb915109ac246a4b3577d031a94667f1c8388"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "07a811cd1f2dbfadc3724aa0ff7f6140b96fc248e63ce56bf7d7f0d12acada85",
+        "capture.do": "b173a71e5325065e757b1c1316ccb915109ac246a4b3577d031a94667f1c8388",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "72e53c06dd7503fde39d056a706859bd365f879badc6df43f9bd414bcd8bc59f",
+        "lsufunctional.vcd": "4b59bee58e0629723ea8666813aa0aac69ba65da28082db00930c6eb039e5838",
+        "lsufunctional.wlf": "fc049fb4dfeef42b84aac1b834772c54e706425e19e3c9c2cfdb455b06b0b037",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "40162ea9a6adeab5c96f1539bb18b1a7917290439294f77c9f9b9247e204e829",
+        "view.do": "e560fdff32c2f97350b91e66ac000c6e614016c31ca9af45736355a8c6fbbfbf",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 9372,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.06
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 16732,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_lsu.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_lsu_functional.v"
+          ],
+          "pid": 39204,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.068
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\lsufunctional.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_lsu_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\capture.do"
+          ],
+          "pid": 39652,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.931
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-components-20261029T0928207902867Z",
+      "test": "components",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\result.json",
+      "result_sha256": "c7d1479efa2e49bd7b730eede7b1e74f4e2754831f2ad1097fb2629efc02b66d",
+      "functional_log_lines": [
+        "# CPU_CACHE_PASS checks=1297 i_reads=25 d_reads=27 writes=25 i_hits=2 d_hits=2 overlap=35"
+      ],
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_cache.v": "5e348d439db616fc8525b7f649bb776649de0a072faf31b20c4960edca7b1818",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\capture.do": "a1876f91b7e9e8dfd52e30b8f96d9f68cb23e846a9ad309809a1ab91094c9912"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "c3a28b847d2eaa7437fafe4a8f24663ec04a2d30c3ce040fbda8ee76d0529d5d",
+        "capture.do": "a1876f91b7e9e8dfd52e30b8f96d9f68cb23e846a9ad309809a1ab91094c9912",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "2025b9d8abb5f2cac532e50bf2f6b89c686c2300072f8e50ba2b2d709bdfaa7f",
+        "components.vcd": "c3b7f61264f02f614a2e1dae6666ac4cc3720b78dd92c8589b68d032e626065a",
+        "components.wlf": "e3eb7e0562338b03aabdc49dc81133601c1482456938fd0fc9ec03433fbe525c",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "ea99eeda721a342426f6be09edafec77fd8db3a881ef8c84b5eee1d8733b67d7",
+        "view.do": "0c11a14e6df22012084c0bcdc5c56b61ecffe3acfe99eb3dd480df6fa79c808a",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 43856,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.055
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 12896,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.053
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_cache.v"
+          ],
+          "pid": 2192,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.078
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\components.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=0",
+            "work.tb_cpu_cache",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\capture.do"
+          ],
+          "pid": 39948,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.79
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-writeback-20261029T0928232927363Z",
+      "test": "writeback",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\result.json",
+      "result_sha256": "792f84272fcd46725423e1c6765010e02ad0440f61957a1eaa9802b0c1595702",
+      "functional_log_lines": [
+        "# CPU_DCACHE_WB_PASS checks=1355 reads=35 writes=184"
+      ],
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_dcache_writeback.v": "5afa6d8f5e0a102009112db212f1517778f464e626097369197ac9abb037c44b",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\capture.do": "5c0ce812f26d917ebcca7defe316bd625f7cd4a04bffee4e92c5736ce4ca1b45"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "301e3d2a142f46a0021bf7b27473f206a7b6457d93eab28ee460281702be156f",
+        "capture.do": "5c0ce812f26d917ebcca7defe316bd625f7cd4a04bffee4e92c5736ce4ca1b45",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "a723e3c4e9ad48479e2f2b4b1efcd9822bf65cb34e689539054c7c03569415ad",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "678ab0e1afea0d7f177d17efaa6da6ee0aa486aa6f515c990670a579ff296f98",
+        "view.do": "d9c7b028067dfb8911b6e91e60f97018adb3c7981eaa569727132c3da8bc65eb",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+        "writeback.vcd": "ab747997a407006b020a25984ec89285fafbeb5d225f2940b37830340e3e0db4",
+        "writeback.wlf": "e67913d827118061fd68fb85e97a13335ef9984f6d13d245954a7965014f2495"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 14228,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.06
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 7504,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.051
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_dcache_writeback.v"
+          ],
+          "pid": 7380,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.076
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\writeback.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=0",
+            "work.tb_cpu_dcache_writeback",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\capture.do"
+          ],
+          "pid": 18928,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.833
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-overlap-20261029T0928258091657Z",
+      "test": "overlap",
+      "broken": false,
+      "expected_outcome": "PASS",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\result.json",
+      "result_sha256": "35f0d7a43edff5fe180e8711c9081dcc8b2f87383381ea9dc2a75e07df681c2c",
+      "functional_log_lines": [
+        "# CPU_DCACHE_OVERLAP_PASS checks=142 reads=11 writes=25"
+      ],
+      "runner_return_code": 0,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_dcache_overlap.v": "7c13c7bd0e212eb3cce1bec49e0c6f4fd95885ddf75811e04f731d7626388ef2",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\capture.do": "71f095a5f9936d585416a91edb29a4b32009539fbf14c6b1952fb1c87c321d1a"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "a5646a6b0ed0ea232be69bf59e7b634f6bce0c395d2deaa7e5807e23ef56f9bd",
+        "capture.do": "71f095a5f9936d585416a91edb29a4b32009539fbf14c6b1952fb1c87c321d1a",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "0cff7a702b8d79f9bec02a639efdabb42e72724eafd333a962e1b082790d5f31",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "overlap.vcd": "30edba19a09836ceb174c7f34b83d323eca94dce7ae909a2738a3e7e7e75c7d8",
+        "overlap.wlf": "5201328a7012dc3f9c6afaf16a7f8d2751ca48bec2655fbc8c85ae478d5b53e1",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "cb51fe3073a434256199ac5833dd05af9050b1e733c3266fced0d5961408ee34",
+        "view.do": "70e2f042acb98705272e4b4911ef73f09e2669e19642a9e091bd592872ea184b",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 43272,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.057
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 22796,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.051
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_dcache_overlap.v"
+          ],
+          "pid": 41164,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.074
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\overlap.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=0",
+            "work.tb_cpu_dcache_overlap",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\capture.do"
+          ],
+          "pid": 20460,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.756
+        }
+      ]
+    },
+    {
+      "name": "wave-unit-lsufunctional-20261029T1032295476480Z",
+      "test": "lsufunctional",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1032295476480Z\\result.json",
+      "result_sha256": "13260e483d3f092beb0dac731690f6aa815642658c33abdba00b32eec63bbb97",
+      "functional_log_lines": [
+        "# ** Fatal: LSU_UNIT_FAIL load byte halfword sign extension op=00000013 address=00000000 wb=00000000 exception=00"
+      ],
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+        "tb/cpu/tb_lsu_functional.v": "1c003bdeed03b0dc6ef98682760594a6ae87afcfa6435b4ae1dbd98107b7508a",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "75c8bb0aa7c138a115b9ce05d353a76b8a1fcc214f6dddb38b3f151219164abf",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1032295476480Z\\capture.do": "adc0fbdcdef660d4a5385f23932fba1291ae3b98245a07a3228093d9571c693d"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "7337d28f05c7919ea3533e598b892120b4076963a24be5f9cf2aa5bc1951eea6",
+        "capture.do": "adc0fbdcdef660d4a5385f23932fba1291ae3b98245a07a3228093d9571c693d",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "097ab1e0a778d8b16f5d0c14046ab8bac80e66958a416b8f0cba04a1a799f65f",
+        "lsufunctional.vcd": "1db27170c60a6b9480799d2e3d39aecf00905490d201bc05f9bfebe39464f753",
+        "lsufunctional.wlf": "528a59b28606f79cf4dde1daf4684f1af8c385050f7caf67dbaef4ba572dbef8",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "97758828a73a9bbf8698d841d2d87a9a48b2e573361752335429550d5344ac38",
+        "view.do": "e560fdff32c2f97350b91e66ac000c6e614016c31ca9af45736355a8c6fbbfbf",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 39948,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.054
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 17432,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_lsu.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_lsu_functional.v"
+          ],
+          "pid": 6256,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.074
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1032295476480Z\\lsufunctional.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_RESULT=1",
+            "work.tb_lsu_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1032295476480Z\\capture.do"
+          ],
+          "pid": 21456,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.693
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-components-20261029T0928135595679Z",
+      "test": "components",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928135595679Z\\result.json",
+      "result_sha256": "865221a61bd91316313febd4d24f70a7c96ee7237a9d49ab60da2e32a822b44a",
+      "functional_log_lines": [
+        "# CPU_CACHE_FAIL D returned load word cycle=396"
+      ],
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_cache.v": "5e348d439db616fc8525b7f649bb776649de0a072faf31b20c4960edca7b1818",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928135595679Z\\capture.do": "2444fb8b753850facbc3b65c45153cb4cc2bfaaaa0f333c20e7bc1521bc0ecd0"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "d4bd604b195532bbe60165f3ce5800583d81c4993b1becdb0361cb79c923350f",
+        "capture.do": "2444fb8b753850facbc3b65c45153cb4cc2bfaaaa0f333c20e7bc1521bc0ecd0",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "17beccbe4caadf78660f47dfad2d383b0490d8592861668a84d19b850c97acc4",
+        "components.vcd": "0652bd52e82a11e2dd5605276967a30d3352e62ca5e3fd4cb1bdc4fdadd99802",
+        "components.wlf": "ad65d7f032628dff5e643967ea5e284f8c7bfae5ebde98d51dd7b5e91e3b160e",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "2b304ccca928083f334ffdd34dc65988ae6a7d2e821a36a9bba11d1018e818ef",
+        "view.do": "0c11a14e6df22012084c0bcdc5c56b61ecffe3acfe99eb3dd480df6fa79c808a",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 11528,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.055
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 42944,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.051
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_cache.v"
+          ],
+          "pid": 32644,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.085
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928135595679Z\\components.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=1",
+            "work.tb_cpu_cache",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928135595679Z\\capture.do"
+          ],
+          "pid": 22148,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.739
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-writeback-20261029T0928160045160Z",
+      "test": "writeback",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928160045160Z\\result.json",
+      "result_sha256": "e29fb2449d86d8ff7405049f13cb0bf4d2de49ed71ed18df2a0c5a07dff3e60e",
+      "functional_log_lines": [
+        "# CPU_DCACHE_WB_FAIL architectural load value cycles=2258 addr=80004100"
+      ],
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_dcache_writeback.v": "5afa6d8f5e0a102009112db212f1517778f464e626097369197ac9abb037c44b",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928160045160Z\\capture.do": "60ee3c6aee1273e9de91f1fac8a651d31cae34ffda62b97b71925ab4593378f2"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "5964115f5cf8420ce89203fcfed2254b9fda639dd5b21eddc6e8c5d17179adc5",
+        "capture.do": "60ee3c6aee1273e9de91f1fac8a651d31cae34ffda62b97b71925ab4593378f2",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "3210e464b566fcbbaccb111c1a9533572e44845b27cbb20c07dc6a7bda9fb6e2",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "a8ec35d4ecda243657934d9e8d5aba12016205f1540c57f7c97db685ee0135e9",
+        "view.do": "d9c7b028067dfb8911b6e91e60f97018adb3c7981eaa569727132c3da8bc65eb",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+        "writeback.vcd": "394920cdebff4331dd7c5a09fdda7a47af8513efe2eb1b8c3978f51356053ee8",
+        "writeback.wlf": "63a728977f5634bd467f5fee9e46e771c60a6985d68469f38aaacc92699a1ec3"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 20000,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.051
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 24268,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.048
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_dcache_writeback.v"
+          ],
+          "pid": 42072,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.073
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928160045160Z\\writeback.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=1",
+            "work.tb_cpu_dcache_writeback",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928160045160Z\\capture.do"
+          ],
+          "pid": 37524,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.727
+        }
+      ]
+    },
+    {
+      "name": "wave-cache-overlap-20261029T0928183905658Z",
+      "test": "overlap",
+      "broken": true,
+      "expected_outcome": "REJECTED",
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928183905658Z\\result.json",
+      "result_sha256": "296b1550db91235580c44ab7070f5803af62132e6fe91141372cffcb06e7cb80",
+      "functional_log_lines": [
+        "# CPU_DCACHE_OVERLAP_FAIL serialized architectural load cycle=290"
+      ],
+      "runner_return_code": 1,
+      "native_vsim_return_code": 0,
+      "source_unchanged": true,
+      "input_hashes": {
+        "rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+        "rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+        "rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+        "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+        "rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+        "rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+        "rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+        "tb/cpu/tb_cpu_dcache_overlap.v": "7c13c7bd0e212eb3cce1bec49e0c6f4fd95885ddf75811e04f731d7626388ef2",
+        "config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+        "config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+        "scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928183905658Z\\capture.do": "a74f822d49f36d521976ea3d38b2907fc68ef80efa6d7a911b4dd33ff08a39a0"
+      },
+      "output_hashes": {
+        "batch-transcript.log": "be3d857b34aa25ebc9a0a9d5c967b82600ffde4c0d36537830a23d501ec249ef",
+        "capture.do": "a74f822d49f36d521976ea3d38b2907fc68ef80efa6d7a911b4dd33ff08a39a0",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "a1d91157e4f5e0a35fa7d6633a1fba36f0da8da8ffc5642cde601b0a150d3dc8",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "overlap.vcd": "809a3d1073d309123798cb92749dd9d7819bf2ba5ed4e520bab696d3cb1ad48d",
+        "overlap.wlf": "c0d292c5e8e44a88d3ce2a7d4323a9ff7ab56a8379d1acf5568a5f25dad1d634",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "dce3186b269ede296e3f476f0564ed1998e7616831278d4b7aaa6668d2723b13",
+        "view.do": "70e2f042acb98705272e4b4911ef73f09e2669e19642a9e091bd592872ea184b",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      },
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 37448,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.056
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 21360,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_icache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_ifetch_uncached.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_tag_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache_data_ram.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_dcache.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_cpu_dcache_overlap.v"
+          ],
+          "pid": 13376,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.073
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928183905658Z\\overlap.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_DATA=1",
+            "work.tb_cpu_dcache_overlap",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928183905658Z\\capture.do"
+          ],
+          "pid": 32668,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.695
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-module-lsu-modelsim-original.jpg",
+      "sha256": "1fcfa70233d0e67b79a2a0ee830123d229f0249203eed4d82bcb22ccbb1abdb3",
+      "test": "lsufunctional",
+      "wlf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\lsufunctional.wlf",
+      "wlf_sha256": "fc049fb4dfeef42b84aac1b834772c54e706425e19e3c9c2cfdb455b06b0b037",
+      "window_ns": [
+        1000,
+        1500
+      ],
+      "view_do": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-lsufunctional-20261029T1031435610458Z\\report-memory-view.do",
+      "view_do_sha256": "003a17aa71e571798da2f66040290999444a0f39f962dff498bdb256fdf101f2",
+      "width": 2553,
+      "height": 1440,
+      "mouse_pointer_visible": false,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original @oai/sky screenshot bytes, no crop, redraw or pixel edits"
+    },
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-module-icache-modelsim-original.jpg",
+      "sha256": "a6b7fff5ee711ac36aa37d09a17f027ee819354b772acaa17abb5438ad5e4ba8",
+      "test": "components",
+      "wlf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\components.wlf",
+      "wlf_sha256": "e3eb7e0562338b03aabdc49dc81133601c1482456938fd0fc9ec03433fbe525c",
+      "window_ns": [
+        2580,
+        3260
+      ],
+      "view_do": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-components-20261029T0928207902867Z\\report-memory-view.do",
+      "view_do_sha256": "b23eea7f079800b9982e88aaca076514a47da557dbe9cfa76c1bd4a08d7f64d4",
+      "width": 2553,
+      "height": 1440,
+      "mouse_pointer_visible": false,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original @oai/sky screenshot bytes, no crop, redraw or pixel edits"
+    },
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-module-dcache-writeback-modelsim-original.jpg",
+      "sha256": "60e9d50a3ed8e72538ab51f7738ad2a185cb4eba53f6f34e5261597efa8797bf",
+      "test": "writeback",
+      "wlf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\writeback.wlf",
+      "wlf_sha256": "e67913d827118061fd68fb85e97a13335ef9984f6d13d245954a7965014f2495",
+      "window_ns": [
+        2920,
+        4140
+      ],
+      "view_do": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-writeback-20261029T0928232927363Z\\report-memory-view.do",
+      "view_do_sha256": "ca5ef6f30d8d46aa0cda5bb3098cd0440883796c8df88b3e442cd54181e22c26",
+      "width": 2553,
+      "height": 1440,
+      "mouse_pointer_visible": false,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original @oai/sky screenshot bytes, no crop, redraw or pixel edits"
+    },
+    {
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-module-dcache-overlap-modelsim-original.jpg",
+      "sha256": "92ba43f4f4979be2137151fb2816b8758a299c034cfc3c8806fd7b3b7afd2a04",
+      "test": "overlap",
+      "wlf": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\overlap.wlf",
+      "wlf_sha256": "5201328a7012dc3f9c6afaf16a7f8d2751ca48bec2655fbc8c85ae478d5b53e1",
+      "window_ns": [
+        3690,
+        3970
+      ],
+      "view_do": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-cache-overlap-20261029T0928258091657Z\\report-memory-view.do",
+      "view_do_sha256": "0987c99a21036d2e7e8475999a6a933dc5d49d7f5a192218cfe658f9bcf57b5e",
+      "width": 2553,
+      "height": 1440,
+      "mouse_pointer_visible": false,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "source": "Original @oai/sky screenshot bytes, no crop, redraw or pixel edits"
+    }
+  ],
+  "coverage": {
+    "lsu": {
+      "operations": 18,
+      "checks": 220,
+      "held_cycles": 45,
+      "loads_with_bus_requests": 11,
+      "stores_with_bus_requests": 4,
+      "alignment_faults": 3,
+      "bus_faults_within_bus_requests": 2
+    },
+    "paired_cache": {
+      "checks": 1297,
+      "instruction_lower_reads": 25,
+      "data_lower_reads": 27,
+      "lower_writes": 25,
+      "checked_i_hits": 2,
+      "checked_d_hits": 2,
+      "simultaneous_outstanding_cycles": 35
+    },
+    "writeback": {
+      "checks": 1355,
+      "lower_reads": 35,
+      "lower_writes": 184,
+      "nonzero_byte_masks": 15,
+      "failed_write_word_positions": 8,
+      "failed_allocation_read_beats": 8
+    },
+    "overlap": {
+      "checks": 142,
+      "lower_reads": 11,
+      "lower_writes": 25,
+      "continuous_resident_loads": 12,
+      "initiation_interval_cycles": 2
+    }
+  },
+  "scope_notes": [
+    "LSU checks use only public instruction, operand, request and response ports.",
+    "Cache data oracles are independent memory/byte-mask models; no internal DUT state is forced.",
+    "Paired I/D ports have independent lower-memory responders; this is not a shared-fabric or physical DDR test.",
+    "Raw native ModelSim exit codes and wrapper return codes are recorded separately; negatives require actual self-check failure.",
+    "Native RAM inference models are RTL simulation, not a physical timing or board test."
+  ],
+  "remaining": [
+    "B.4 whole-core firmware, exception/interrupt and cache-subsystem integration"
+  ],
+  "production_rtl_modified_in_this_batch": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false,
+  "packaged_file_hashes": {
+    "README.md": "6de839fd89c1a00b6b4951835b230912449d5a8c573ceee1e7022038d35a90e5",
+    "figures/cpu-module-dcache-overlap-modelsim-original.jpg": "92ba43f4f4979be2137151fb2816b8758a299c034cfc3c8806fd7b3b7afd2a04",
+    "figures/cpu-module-dcache-writeback-modelsim-original.jpg": "60e9d50a3ed8e72538ab51f7738ad2a185cb4eba53f6f34e5261597efa8797bf",
+    "figures/cpu-module-icache-modelsim-original.jpg": "a6b7fff5ee711ac36aa37d09a17f027ee819354b772acaa17abb5438ad5e4ba8",
+    "figures/cpu-module-lsu-modelsim-original.jpg": "1fcfa70233d0e67b79a2a0ee830123d229f0249203eed4d82bcb22ccbb1abdb3",
+    "runs/wave-cache-components-20261029T0928135595679Z/batch-transcript.log": "d4bd604b195532bbe60165f3ce5800583d81c4993b1becdb0361cb79c923350f",
+    "runs/wave-cache-components-20261029T0928135595679Z/capture.do": "2444fb8b753850facbc3b65c45153cb4cc2bfaaaa0f333c20e7bc1521bc0ecd0",
+    "runs/wave-cache-components-20261029T0928135595679Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928135595679Z/compile.stdout.log": "17beccbe4caadf78660f47dfad2d383b0490d8592861668a84d19b850c97acc4",
+    "runs/wave-cache-components-20261029T0928135595679Z/components.vcd": "0652bd52e82a11e2dd5605276967a30d3352e62ca5e3fd4cb1bdc4fdadd99802",
+    "runs/wave-cache-components-20261029T0928135595679Z/components.wlf": "ad65d7f032628dff5e643967ea5e284f8c7bfae5ebde98d51dd7b5e91e3b160e",
+    "runs/wave-cache-components-20261029T0928135595679Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-components-20261029T0928135595679Z/result.json": "865221a61bd91316313febd4d24f70a7c96ee7237a9d49ab60da2e32a822b44a",
+    "runs/wave-cache-components-20261029T0928135595679Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928135595679Z/simulation.stdout.log": "2b304ccca928083f334ffdd34dc65988ae6a7d2e821a36a9bba11d1018e818ef",
+    "runs/wave-cache-components-20261029T0928135595679Z/view.do": "0c11a14e6df22012084c0bcdc5c56b61ecffe3acfe99eb3dd480df6fa79c808a",
+    "runs/wave-cache-components-20261029T0928135595679Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928135595679Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928135595679Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928135595679Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-components-20261029T0928207902867Z/batch-transcript.log": "c3a28b847d2eaa7437fafe4a8f24663ec04a2d30c3ce040fbda8ee76d0529d5d",
+    "runs/wave-cache-components-20261029T0928207902867Z/capture.do": "a1876f91b7e9e8dfd52e30b8f96d9f68cb23e846a9ad309809a1ab91094c9912",
+    "runs/wave-cache-components-20261029T0928207902867Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928207902867Z/compile.stdout.log": "2025b9d8abb5f2cac532e50bf2f6b89c686c2300072f8e50ba2b2d709bdfaa7f",
+    "runs/wave-cache-components-20261029T0928207902867Z/components.vcd": "c3b7f61264f02f614a2e1dae6666ac4cc3720b78dd92c8589b68d032e626065a",
+    "runs/wave-cache-components-20261029T0928207902867Z/components.wlf": "e3eb7e0562338b03aabdc49dc81133601c1482456938fd0fc9ec03433fbe525c",
+    "runs/wave-cache-components-20261029T0928207902867Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-components-20261029T0928207902867Z/report-memory-view.do": "b23eea7f079800b9982e88aaca076514a47da557dbe9cfa76c1bd4a08d7f64d4",
+    "runs/wave-cache-components-20261029T0928207902867Z/result.json": "c7d1479efa2e49bd7b730eede7b1e74f4e2754831f2ad1097fb2629efc02b66d",
+    "runs/wave-cache-components-20261029T0928207902867Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928207902867Z/simulation.stdout.log": "ea99eeda721a342426f6be09edafec77fd8db3a881ef8c84b5eee1d8733b67d7",
+    "runs/wave-cache-components-20261029T0928207902867Z/view.do": "0c11a14e6df22012084c0bcdc5c56b61ecffe3acfe99eb3dd480df6fa79c808a",
+    "runs/wave-cache-components-20261029T0928207902867Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928207902867Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928207902867Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-components-20261029T0928207902867Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/batch-transcript.log": "be3d857b34aa25ebc9a0a9d5c967b82600ffde4c0d36537830a23d501ec249ef",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/capture.do": "a74f822d49f36d521976ea3d38b2907fc68ef80efa6d7a911b4dd33ff08a39a0",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/compile.stdout.log": "a1d91157e4f5e0a35fa7d6633a1fba36f0da8da8ffc5642cde601b0a150d3dc8",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/overlap.vcd": "809a3d1073d309123798cb92749dd9d7819bf2ba5ed4e520bab696d3cb1ad48d",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/overlap.wlf": "c0d292c5e8e44a88d3ce2a7d4323a9ff7ab56a8379d1acf5568a5f25dad1d634",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/result.json": "296b1550db91235580c44ab7070f5803af62132e6fe91141372cffcb06e7cb80",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/simulation.stdout.log": "dce3186b269ede296e3f476f0564ed1998e7616831278d4b7aaa6668d2723b13",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/view.do": "70e2f042acb98705272e4b4911ef73f09e2669e19642a9e091bd592872ea184b",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928183905658Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/batch-transcript.log": "a5646a6b0ed0ea232be69bf59e7b634f6bce0c395d2deaa7e5807e23ef56f9bd",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/capture.do": "71f095a5f9936d585416a91edb29a4b32009539fbf14c6b1952fb1c87c321d1a",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/compile.stdout.log": "0cff7a702b8d79f9bec02a639efdabb42e72724eafd333a962e1b082790d5f31",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/overlap.vcd": "30edba19a09836ceb174c7f34b83d323eca94dce7ae909a2738a3e7e7e75c7d8",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/overlap.wlf": "5201328a7012dc3f9c6afaf16a7f8d2751ca48bec2655fbc8c85ae478d5b53e1",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/report-memory-view.do": "0987c99a21036d2e7e8475999a6a933dc5d49d7f5a192218cfe658f9bcf57b5e",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/result.json": "35f0d7a43edff5fe180e8711c9081dcc8b2f87383381ea9dc2a75e07df681c2c",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/simulation.stdout.log": "cb51fe3073a434256199ac5833dd05af9050b1e733c3266fced0d5961408ee34",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/view.do": "70e2f042acb98705272e4b4911ef73f09e2669e19642a9e091bd592872ea184b",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-overlap-20261029T0928258091657Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/batch-transcript.log": "5964115f5cf8420ce89203fcfed2254b9fda639dd5b21eddc6e8c5d17179adc5",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/capture.do": "60ee3c6aee1273e9de91f1fac8a651d31cae34ffda62b97b71925ab4593378f2",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/compile.stdout.log": "3210e464b566fcbbaccb111c1a9533572e44845b27cbb20c07dc6a7bda9fb6e2",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/result.json": "e29fb2449d86d8ff7405049f13cb0bf4d2de49ed71ed18df2a0c5a07dff3e60e",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/simulation.stdout.log": "a8ec35d4ecda243657934d9e8d5aba12016205f1540c57f7c97db685ee0135e9",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/view.do": "d9c7b028067dfb8911b6e91e60f97018adb3c7981eaa569727132c3da8bc65eb",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/writeback.vcd": "394920cdebff4331dd7c5a09fdda7a47af8513efe2eb1b8c3978f51356053ee8",
+    "runs/wave-cache-writeback-20261029T0928160045160Z/writeback.wlf": "63a728977f5634bd467f5fee9e46e771c60a6985d68469f38aaacc92699a1ec3",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/batch-transcript.log": "301e3d2a142f46a0021bf7b27473f206a7b6457d93eab28ee460281702be156f",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/capture.do": "5c0ce812f26d917ebcca7defe316bd625f7cd4a04bffee4e92c5736ce4ca1b45",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/compile.stdout.log": "a723e3c4e9ad48479e2f2b4b1efcd9822bf65cb34e689539054c7c03569415ad",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/report-memory-view.do": "ca5ef6f30d8d46aa0cda5bb3098cd0440883796c8df88b3e442cd54181e22c26",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/result.json": "792f84272fcd46725423e1c6765010e02ad0440f61957a1eaa9802b0c1595702",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/simulation.stdout.log": "678ab0e1afea0d7f177d17efaa6da6ee0aa486aa6f515c990670a579ff296f98",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/view.do": "d9c7b028067dfb8911b6e91e60f97018adb3c7981eaa569727132c3da8bc65eb",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/writeback.vcd": "ab747997a407006b020a25984ec89285fafbeb5d225f2940b37830340e3e0db4",
+    "runs/wave-cache-writeback-20261029T0928232927363Z/writeback.wlf": "e67913d827118061fd68fb85e97a13335ef9984f6d13d245954a7965014f2495",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/batch-transcript.log": "07a811cd1f2dbfadc3724aa0ff7f6140b96fc248e63ce56bf7d7f0d12acada85",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/capture.do": "b173a71e5325065e757b1c1316ccb915109ac246a4b3577d031a94667f1c8388",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/compile.stdout.log": "72e53c06dd7503fde39d056a706859bd365f879badc6df43f9bd414bcd8bc59f",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/lsufunctional.vcd": "4b59bee58e0629723ea8666813aa0aac69ba65da28082db00930c6eb039e5838",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/lsufunctional.wlf": "fc049fb4dfeef42b84aac1b834772c54e706425e19e3c9c2cfdb455b06b0b037",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/report-memory-view.do": "003a17aa71e571798da2f66040290999444a0f39f962dff498bdb256fdf101f2",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/result.json": "fb53aba5e14e389161e1ec46bd4d374835fe1d51b6c85b906422f04255b22b3d",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/simulation.stdout.log": "40162ea9a6adeab5c96f1539bb18b1a7917290439294f77c9f9b9247e204e829",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/view.do": "e560fdff32c2f97350b91e66ac000c6e614016c31ca9af45736355a8c6fbbfbf",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1031435610458Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/batch-transcript.log": "7337d28f05c7919ea3533e598b892120b4076963a24be5f9cf2aa5bc1951eea6",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/capture.do": "adc0fbdcdef660d4a5385f23932fba1291ae3b98245a07a3228093d9571c693d",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/compile.stdout.log": "097ab1e0a778d8b16f5d0c14046ab8bac80e66958a416b8f0cba04a1a799f65f",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/lsufunctional.vcd": "1db27170c60a6b9480799d2e3d39aecf00905490d201bc05f9bfebe39464f753",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/lsufunctional.wlf": "528a59b28606f79cf4dde1daf4684f1af8c385050f7caf67dbaef4ba572dbef8",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/result.json": "13260e483d3f092beb0dac731690f6aa815642658c33abdba00b32eec63bbb97",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/simulation.stdout.log": "97758828a73a9bbf8698d841d2d87a9a48b2e573361752335429550d5344ac38",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/view.do": "e560fdff32c2f97350b91e66ac000c6e614016c31ca9af45736355a8c6fbbfbf",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wave-unit-lsufunctional-20261029T1032295476480Z/vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc",
+    "source/config/cpu_cache.json": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+    "source/config/cpu_cache_sources.f": "c4e1aca69f05612de17d2df83696fffed74256f7582dad4f730253c7b486e273",
+    "source/rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+    "source/rtl/cpu/CACHE_ADAPTATIONS.json": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+    "source/rtl/cpu/triha_dcache.v": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+    "source/rtl/cpu/triha_dcache_data_ram.v": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+    "source/rtl/cpu/triha_dcache_tag_ram.v": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+    "source/rtl/cpu/triha_icache.v": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+    "source/rtl/cpu/triha_icache_data_ram.v": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+    "source/rtl/cpu/triha_icache_tag_ram.v": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+    "source/rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+    "source/rtl/cpu/triha_lsu.v": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+    "source/rtl/cpu/vendor/LICENSE": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+    "source/rtl/cpu/vendor/cache/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "source/rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+    "source/scripts/cpu/capture_cache_waveforms.ps1": "6616b47ec8243deae785e8b11a4c70e566ee7d34788fadf3c0d630aae8cfb55a",
+    "source/scripts/cpu/capture_unit_waveforms.ps1": "75c8bb0aa7c138a115b9ce05d353a76b8a1fcc214f6dddb38b3f151219164abf",
+    "source/scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+    "source/scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+    "source/scripts/cpu/simulation_common.ps1": "c9a3612e641b87a634d64ce5fdcdfbcac89a36303f54a00bced0f126b3f16a79",
+    "source/tb/cpu/tb_cpu_cache.v": "5e348d439db616fc8525b7f649bb776649de0a072faf31b20c4960edca7b1818",
+    "source/tb/cpu/tb_cpu_dcache_overlap.v": "7c13c7bd0e212eb3cce1bec49e0c6f4fd95885ddf75811e04f731d7626388ef2",
+    "source/tb/cpu/tb_cpu_dcache_writeback.v": "5afa6d8f5e0a102009112db212f1517778f464e626097369197ac9abb037c44b",
+    "source/tb/cpu/tb_lsu_functional.v": "1c003bdeed03b0dc6ef98682760594a6ae87afcfa6435b4ae1dbd98107b7508a"
+  }
+}

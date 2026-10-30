@@ -1,0 +1,186 @@
+{
+  "status": "PASS",
+  "scope": "four high-value Video system simulations with native ModelSim waveforms",
+  "generated_at": "2026-10-30",
+  "production_rtl_modified": false,
+  "source_unchanged": true,
+  "tool_versions": {
+    "D:\\modeltech64_2020.4\\win64\\vlib.exe": "12fa9f43fac4af70f9694e6055f376dcc419c39518a0e30d7aa047c37aaca576",
+    "D:\\modeltech64_2020.4\\win64\\vlog.exe": "39e7f5cbae66a5aa65a179f5ab8faee01a0c53dc838e5e2b76510ac6c77e80a6",
+    "D:\\modeltech64_2020.4\\win64\\vsim.exe": "011f110291dc69707d7118e8f8d712b91438e0c837f9bc10ce6bf53c1d048cfd"
+  },
+  "frozen_inputs": {
+    "fpga/pg2l100h/project/video_capture_rearm.json": "3f407abf5ac366a0cc9b958da5ae6f12d42a854782e9790b7ddcf1311cbd7807",
+    "fpga/pg2l100h/project/video_display_slot_owner.json": "413573a4f5cb4282c92a1e22bcf5234230678c047c0fd3f71e2e7db6b5fdf3b1",
+    "fpga/pg2l100h/project/video_shared_ddr.json": "847f3c54b2b29ae2962b75e798f02be143d76aaeba44a7698c00668d2fd4bdad",
+    "rtl/video/axi128_hmic256.sv": "128febb0a3c2b2084594971ab6ef08b4e69ab4c421784c2807389470c41d05cd",
+    "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "rtl/video/detect_nchw_dma.sv": "5f24996e1537a7ea5579cd2275a88da09d6d48fa15dd67c5a94b2530e0e66c02",
+    "rtl/video/display_slot_owner.sv": "6965094c8a9bf77587ce287ec30298aecd506fde1fc5232a58409e689a1d5eda",
+    "rtl/video/include/video_capture_v2.vh": "5a80126d23216aa4b045c5f688e9d22679c3738d9941dcd7c98b3c44f6ec6e56",
+    "rtl/video/include/video_cfg.vh": "38df3942ab56958e82f2f139587dcfbb393cfbea9804d8574a8f12d59f959b35",
+    "rtl/video/include/video_display.vh": "9205dfd879506ceba0624ea3e423212ea0462afd1a495885cf6ac60b6def72d8",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/include/video_regs.vh": "e0a418d3e54445d1b61ef6488c0573922d26cc11cc7e9c7471ba4082ff7fe1e0",
+    "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+    "rtl/video/raw_display.sv": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+    "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+    "rtl/video/video_async_fifo.sv": "b9762c8bde764e1855935d99a3220a9e9a86ea895fde3daa5f257d11ddcc2dbe",
+    "rtl/video/video_capture_ingress.sv": "172188fc8dd869d1799471ed9a66579e3925cdac45f41a13594595ca83a6054e",
+    "rtl/video/video_capture_mmio_v2.sv": "39121cbd168d6693362ad596e858d05cc19af39124c039da68b99112a5a710c3",
+    "rtl/video/video_capture_rearm_core.sv": "61bd20ef6bd8393fac0f9e4ac0920287d59b56e28710a5c74e7ac86c480c22c9",
+    "rtl/video/video_memory_scheduler.sv": "27795643f33e04a7560049e016a9cced5937a12609f134dea856ed20f6e86aa0",
+    "rtl/video/video_shared_ddr.sv": "6b0a282bfbcf58dc1cb6ff2c96a478c19bd8689b4776443bc1220334b6bdd8e6",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "rtl/video/video_three_branch_capture.sv": "6b4c48686903e632ffbebcd110b9bd2541616e6c8223199d6beeaaeb4a414126",
+    "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+    "tb/video/models/axi_bridge_native_model.sv": "7b202877281e2f58a46a2ca9a5b245027f468ace1e23d5d0784fa1efcccd3442",
+    "tb/video/models/video_shared_memory_model.sv": "38266d6703c8ee21e19affb5510ddf6a4bb2f801b2b01b96b5fea52f6b61bb4d",
+    "tb/video/tb_display_slot_owner.sv": "f55af08456fd4f752fd3f01a7b53fe1ec50c55ad3d0c7a3b04b4a2cd6268cb20",
+    "tb/video/tb_video_capture_rearm.sv": "a160c3fad203bb22d8c7dc19a70bb9328bc64325544db93b9a9f1648f2dbd8bc",
+    "tb/video/tb_video_memory_scheduler.sv": "7416e4eeccc29052845f196cdfb94470db3db82977b25b19725ea8104e29472c",
+    "tb/video/tb_video_shared_memory.sv": "80183ac3c774bf95a6e1ccb8c793bbbe425f841f30fe6ab89166613fc096990c"
+  },
+  "cases": {
+    "capture": {
+      "entry": "capture_rearm",
+      "top": "tb_video_capture_rearm",
+      "marker": "VIDEO_CAPTURE_REARM_PASS case=0 successful=7 arms=7 bytes=18522",
+      "checks": {
+        "successful": 7,
+        "arms": 7,
+        "bytes": 18522
+      },
+      "full_vcd_ps": [
+        0,
+        764632000
+      ],
+      "screenshot": {
+        "path": "build/video-key-simulations-20261030/capture/capture_wave_native.png",
+        "window_ps": [
+          0,
+          120000000
+        ],
+        "sha256": "818d69b2a3ed48fdd60fe69c579dcfc84c951b1c00f7279e8a5d28ac94108f80",
+        "size_bytes": 505443,
+        "document_figure_path": "docs/technical-report/figure/video-capture-rearm-modelsim-native.png",
+        "document_figure_sha256": "818d69b2a3ed48fdd60fe69c579dcfc84c951b1c00f7279e8a5d28ac94108f80"
+      }
+    },
+    "slots": {
+      "entry": "display_slots",
+      "top": "tb_display_slot_owner",
+      "marker": "DISPLAY_SLOTS_PASS case=0 width=128 checks=155",
+      "checks": {
+        "width": 128,
+        "checks": 155
+      },
+      "full_vcd_ps": [
+        0,
+        936000
+      ],
+      "screenshot": {
+        "path": "build/video-key-simulations-20261030/slots/slots_wave_native.png",
+        "window_ps": [
+          0,
+          900000
+        ],
+        "sha256": "ee5c1bbd44fd81aa85e46e2776d6ca7767de97e273a2f0fa6dcdba0118d93ca8",
+        "size_bytes": 515908,
+        "document_figure_path": "docs/technical-report/figure/video-slot-owner-modelsim-native.png",
+        "document_figure_sha256": "ee5c1bbd44fd81aa85e46e2776d6ca7767de97e273a2f0fa6dcdba0118d93ca8"
+      }
+    },
+    "backpressure": {
+      "entry": "shared_video",
+      "top": "tb_video_memory_scheduler",
+      "marker": "VIDEO_MEMORY_SCHEDULER_PASS case=3 reads=12 writes=12 maxRwait=0 maxWwait=0 quota=4",
+      "checks": {
+        "reads": 12,
+        "writes": 12,
+        "maxRwait": 0,
+        "maxWwait": 0,
+        "quota": 4
+      },
+      "full_vcd_ps": [
+        0,
+        2828000
+      ],
+      "screenshot": {
+        "path": "build/video-key-simulations-20261030/backpressure/backpressure_wave_native.png",
+        "window_ps": [
+          0,
+          2000000000
+        ],
+        "sha256": "2faed778c3c7ea1e1af7b3b8ed2322030ec5aaba382b13ccf483d9637528df67",
+        "size_bytes": 453984,
+        "document_figure_path": "docs/technical-report/figure/video-ddr-backpressure-modelsim-native.png",
+        "document_figure_sha256": "2faed778c3c7ea1e1af7b3b8ed2322030ec5aaba382b13ccf483d9637528df67"
+      }
+    },
+    "shared": {
+      "entry": "shared_video",
+      "top": "tb_video_shared_memory",
+      "marker": "VIDEO_SHARED_MEMORY_PASS jobs=7 bytes=18522 pixels=7800 rasters=13 overlap=11690 contested=2 read_grants=262 write_grants=441 releases=6 underflows=0",
+      "checks": {
+        "jobs": 7,
+        "bytes": 18522,
+        "pixels": 7800,
+        "rasters": 13,
+        "overlap": 11690,
+        "contested": 2,
+        "read_grants": 262,
+        "write_grants": 441,
+        "releases": 6,
+        "underflows": 0
+      },
+      "full_vcd_ps": [
+        0,
+        3096879000
+      ],
+      "screenshot": {
+        "path": "build/video-key-simulations-20261030/shared/shared_wave_native.png",
+        "window_ps": [
+          0,
+          2000000000
+        ],
+        "sha256": "0a53373f9ec316c6d4659fd75c20e8233a6e3ffb97efbedd79eb14a75d3a6221",
+        "size_bytes": 842739,
+        "document_figure_path": "docs/technical-report/figure/video-shared-memory-modelsim-native.png",
+        "document_figure_sha256": "0a53373f9ec316c6d4659fd75c20e8233a6e3ffb97efbedd79eb14a75d3a6221"
+      }
+    }
+  },
+  "canonical_waveforms": {
+    "capture": {
+      "vcd": "build/video-key-simulations-20261030/capture/wave.vcd",
+      "wlf": "build/video-key-simulations-20261030/capture/wave.wlf",
+      "vcd_sha256": "811c50f53aa146cb6669da269e1cf3e1ad6273d1868968b803e0e8214a3dd261",
+      "wlf_sha256": "d8d4e90c7e138e7e8334da83ef21ac667679226a63bf865c4cb178682c8f6f84"
+    },
+    "slots": {
+      "vcd": "build/video-key-simulations-20261030/slots/wave.vcd",
+      "wlf": "build/video-key-simulations-20261030/slots/wave.wlf",
+      "vcd_sha256": "499a3b19141a751250811d67e2278f03eb4effd63b774be3a3ca13bed8d24f93",
+      "wlf_sha256": "a5a6911aaf18b9a1f98131ec25dee1631684c302c5a341ba82102fd1f150ca5a"
+    },
+    "backpressure": {
+      "vcd": "build/video-key-simulations-20261030/backpressure/wave.vcd",
+      "wlf": "build/video-key-simulations-20261030/backpressure/wave.wlf",
+      "vcd_sha256": "2eb0d27a2c09026650241654482de381da4aeb42064a2872cd8a00758436e938",
+      "wlf_sha256": "fa7aad8ff5e0ae9324af00c71a2c5917cd1d2a2a4a4652b3d4fa6bcad171fbc1"
+    },
+    "shared": {
+      "vcd": "build/video-key-simulations-20261030/shared/wave.vcd",
+      "wlf": "build/video-key-simulations-20261030/shared/wave.wlf",
+      "vcd_sha256": "793c91cbfabb181b911d6b4473e17cbb5ddf48cea94e1ed31bda81819acea1dc",
+      "wlf_sha256": "27bd187d917b936a663a322ae2a7753a001414baaf294f41a8bdd22040062203"
+    }
+  },
+  "scope_boundary": [
+    "native ModelSim digital simulation only",
+    "full existing regression remains the acceptance source",
+    "no PDS, board download, physical HDMI throughput, or real NPU inference in this batch"
+  ]
+}

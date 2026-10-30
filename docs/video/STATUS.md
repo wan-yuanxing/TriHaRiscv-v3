@@ -1,5 +1,13 @@
 # Video 工作台账
 
+## 2026-10-30 CPU流水冲刷副作用隔离验证
+
+完成既有CPU工作树的七个分支重定向/加载访问异常场景。32/64周期加载返回延迟正例分别为750周期/2199项检查、1102周期/3031项检查，各162条退休序列独立比较一致；四个软件或端口错误输入负例均被副作用检查拒绝。原始VCD复核四次精确异常、四次MRET及同目的寄存器恢复加载，禁止指令零退休。当前LSU为阻塞式，未将尚未接纳的年轻加载描述为跨重定向迟到返回。
+
+桌面工具旧会话在写kernel assets时返回os error 3；当前新运行时窗口枚举与实际截图均已恢复，旧会话具体缺失路径未确认。已保存3060×1920无鼠标指针的ModelSim原始截图，并关闭本轮只读查看器。技术报告B.4新增方法、七项结果表与波形，现有build.ps1编译成功；最终日志无错误、未定义引用或Overfull，未渲染或预览PDF。
+
+摘要：`docs/verification/cpu/system_squash_side_effects_2026-10-30.json`；支撑说明与323项逐SHA核验的增量包位于`docs/verification/cpu/system_support/SQUASH_README.md`和`cpu-squash-support-2026-10-30.zip`。本批未修改生产RTL，未运行PDS、PNR或板卡操作，未开展DMA可见性第二类场景，NPU/Video设计不变。
+
 更新：2026-10-21。分支：`video/windows-bringup`。用户已确认板卡、HDMI 源和显示器已就绪；当前开发在主工程内执行，未建立第二份源码副本。
 
 ## 全屏显示设计变更
@@ -441,6 +449,84 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 
 物理汇总见 [hdmi_raw_capture.json](../verification/video/evidence/hdmi_raw_capture.json)，现场补验见 [hdmi_raw_capture_key0.json](../verification/video/evidence/hdmi_raw_capture_key0.json)，详细结果见 [hdmi_raw_capture.md](../verification/video/hdmi_raw_capture.md)。[hdmi_raw_capture_preboard.json](../verification/video/evidence/hdmi_raw_capture_preboard.json) 保留为前一天上板前的历史状态，不重写或混作当前物理结论。
 
+## 2026-10-20 NPU最新交付验证与合拢评估
+
+外部NPU已拉取至`D:/FPGA/npu_zgtc`，固定`178c3ad1ba515d43725dd80ab19e20b50d471413`。
+本轮7项资产哈希、241参数数组、3×79张量INT64及程序回放、27头历史golden哈希、
+6图1843200字节预处理交接比对通过；14个ModelSim平台仿真任务及4个独立PDS
+顶层布线通过，BIST位流已生成，无本轮下载。完整NPU计算/控制/DMA仍缺席，
+不能将平台探针视为真实推理。报告见[合拢评估](../verification/npu/2026-10-20-integration-readiness.md)。
+
+旧160/C8/256KiB差异已由当前320 UINT8 BGR NCHW/320KiB槽消除。当前新增核实的
+阻塞是主规格逐算子调度与外部整图程序、五点与bbox九头的契约冲突，以及NPU
+候选100DRM与当前三模式板级73.5DRM直接相加超过155DRM容量。还需生产CPU/fabric、
+100↔125MHz CDC、唯一DDR通路及跨master可见性；CPU100MHz收敛状态仍按CPU证据。
+可以先推进契约和RAW系统仿真，完整合成/真实推理/板测准入尚未满足。
+
+完整WIDER AP、天然图golden及上游完整程序ABI入口未复现；干净克隆缺失reports依赖
+的失败与仅用已提交资产重建的补充验证均保留。此次没有修改Video RTL、公共配置或
+已有技术报告，也未执行新的Video回归、系统PDS或板测。
+
+## 2026-10-20 NPU平台自检首次SRAM下载
+
+用户随后授权开始NPU片上自检上板。本地硬件手册哈希、两套厂商LED例程各10引脚、
+电平/方向/驱动和省略SCBV策略已复核；复制同名sbit/smsk并逐项核对原仿真/PDS证据。
+19:58完成PG2L100H ID识别、Program/Verify及下载后DONE=1，全部成功，无Flash写入。
+板卡当前运行独立PLL/RAM/APM自检，HDMI画面暂停；原三模式恢复包保留。
+20:25登记用户确认初始灯态/心跳符合预期、实体KEY0五次复测均正常，片上自检与
+重复复位现场功能通过。10分钟稳定性仍待单独确认，未以消息间隔推断通过。
+见[上板记录](../verification/npu/2026-10-20-board-selftest.md)及[机器证据](../verification/npu/evidence/board_selftest.json)。
+
+
+## 2026-10-21 NPU合拢准备：CPU表、候选地址和资源方案
+
+- 用户授权继续推进，并确认最终保留五点关键点，bbox仅为中间验证。沿用主规格CPU逐算子控制，新增主机候选配置与标准库准备入口；现有Video公共配置和RTL未改。
+- 从冻结包生成三槽地址、80张量/150参数/79算子的21728B离线CPU表；输入直接绑定0x82800000/0x82850000/0x828A0000，参数转入model区。C头默认DDR指针，未交付MMIO寄存器编码、板级装载器或可运行NPU驱动。
+- 最终33测试通过，独立核验240张量地址、150参数地址及全部算子字节；两种C头模式实际RV32I/ILP32编译通过。硬件准入选项实际退出2，hardware_ready=false。
+- 按Video73.5DRM（含64头像cache）和NPU保留100.5重核：原样174超155；RAW候选计入CPU10/fabric8后128，换16DRM按需DDR素材cache候选144。均为规划，尚无合并实现/新素材路径或全系统时序签核。
+- 独立CPU侧已存在dc00f80的100MHz通过记录（setup+0.113ns），纠正旧评估阶段性结论；主工程未合CPU，当前CPU工作区另有实验，本批不迁入。五点FP32候选保留九头的三输入比对通过，额外MAC约1.81%；关键点INT8与硬件仍开放。
+- 原始结果`build/npu/integration_preparation_20261021/`；[本轮记录](../verification/npu/2026-10-21-integration-preparation.md)、[机器证据](../verification/npu/evidence/integration_preparation.json)。49项其他既有文件保持哈希，Video旧流水线计划在期间变化另记；本台账仅追加。
+- 本批无RTL仿真/PDS/JTAG/串口操作，未提交或推送。BIST10分钟观察仍待明确反馈；下一批实现单算子MMIO/DMA回读仿真闭环，再逐层扩展及五点量化。
+
+
+## 2026-10-21 NPU 真实单算子 CPU 闭环
+
+- 已按白名单迁入单通路 Dense/DW、JSON 单源寄存器、AXI128 DMA、RV32I 驱动和固件；native AXI-Lite 仅参数化地址前缀，默认 Video 行为保留。固定 CPU dc00f80 从 Git blob 导出联测，未导入 CPU 工作树实验源码。
+- 主工程完整 26 组 poll/IRQ、52 任务、6308 字节实际回读通过，断开控制/破坏输出两反例拒绝；18 组数值场景、DMA72、MMIO785+生成器20，以及原 Video cpu_axil 回归通过。上批准备33项、报告4项、源/副本注改6项共43项测试通过。
+- 100MHz 组件最终布线 setup slow/fast +0.424/+2.480ns、hold +0.118/+0.101ns；3339LUT/2807FF/16APM/0DRM，含542扫描边界FF，约束未放宽。保留两轮真实时序失败；质量审查发现并修复完成快照竞态、runner源绑定及优化模式验收问题，最终无阻塞项。
+- 34个交付文件迁移保护检查通过；复制瞬间46个既有文件保持哈希，本台账只追加。早期快照以来Video头像计划、迁移后Video renderer测试的并行变化单列保留，未恢复或归入本批。
+- [验证记录](../verification/npu/2026-10-21-operator-loop.md)、[机器摘要](../verification/npu/evidence/operator_loop.json)、[接口](../interfaces/npu.md)。真实Conv_0仅7×5裁剪输入；CPU回读为同一数字DDR模型的本地端口。完整网络、最终五点INT8、正式fabric跨master可见性、物理DDR/CDC、全系统时序/资源/帧率与整机板测仍开放。
+- 本轮无JTAG/串口/Flash、提交或推送，未确认当前板卡镜像；历史BIST初始灯态/KEY0五次通过、10分钟稳定性待明确反馈的状态保留。下一步逐层整数/五点量化及共享fabric/DDR/CDC集成。
+
+
+## 2026-10-21 NPU 真实卷积逐层验证
+
+- 复用178c3ad冻结程序、参数、整数参考及golden，47个真实卷积（Dense30/DW17）×zero/full255/pattern共141次全尺寸RTL仿真通过；全部11736000字节一致，无裁剪/抽样。名义MAC253569000、有效MAC252434112逐层核对通过。
+- 未修改npu_scalar_conv（仍ea9cf1af…）；Windows原生编译仿真跑全量，ModelSim四态独立复核4个代表层，7400字节完全一致。第三方工具只在build解压并锁SHA，实际自报rev vUNKNOWN-built20260516-4e853d8，未替代物理验证。
+- 规格/质量审查通过，修复manifest/segment封存窗口并严格区分PARTIAL与完整资格。主工程12个文件迁移、26项测试及两后端入口复测通过，上一批34文件交付保持哈希；复制瞬间88个既有文件不变，Video renderer计划/测试/STATUS并行变化单列保留。本台账只追加。
+- [验证记录](../verification/npu/2026-10-21-layer-validation.md)、[机器摘要](../verification/npu/evidence/layer_validation.json)。各层输入为主机参考中间张量，尚未硬件串联；Add2/Pool4/Resize2/Transpose9/Reshape9/Sigmoid6共32算子仍缺，不能称整网完成。
+- 最终五点INT8/精度、正式fabric/DDR/CDC、整机资源/时序/帧率和板测仍开放。本轮无DUT/约束修改，未重跑PDS、未JTAG/串口/Flash、未提交推送。历史BIST10分钟反馈仍待明确确认。下一步补辅助算子/调度并做整图串联。
+
+
+## 2026-10-22 NPU上游DDR更新审查与处理顺序
+
+- 上游已fetch到89acc7b（相对178c3ad新增4提交/59文件）；外部工作树仍保留178c3ad与本地台账，本轮按283文件冻结快照审查。46个既有数值/参考文件及关键控制/地址契约未变，47卷积×3的141次结果继续有效，不重做量化或卷积回归。
+- 更新集中于HMIC原生DDR自检、监督器、正确器件IP及B00/B01下载包，没有新增辅助算子、整图引擎或五点INT8。主工程与新HMIC的371参数/71个DDR端口最终属性一致；复用唯一DDR，现桥已有按WSTRB读回匹配后才返回B的实现。
+- 本机代理26正常/28故障（含7非法）/2忙时复位、监督器2正常/5故障/8复位通过。真实HMIC+双DDR模型九轮27写/27读、5184字节比较通过；首轮旧acc选项兼容失败留存，仅自有重放脚本改为npr。初始化加速及297告警保留，不作严格DDR时序或物理签核。
+- P0功能主线继续补32辅助算子并串联79算子；P0接口验证并行处理保护库76ns失败归因、真实NPU DMA经正式候选fabric/CDC/唯一桥的末B→DONE→另一master读回及协调复位。P1保留最终五点INT8/精度要求，bbox仅为中间出口；P2待数字准入后做全系统PDS与同路径静态图板测。
+- 新B01板测仍0次、两个Git包均缺同构建smsk，当前作为诊断后备，不切换板卡镜像。上游B00与本线程历史位流不同，不合并身份，KEY0五次通过及10分钟稳定性待明确反馈的状态保留。
+- [完整审查](../verification/npu/2026-10-22-upstream-update-priority.md)、[机器摘要](../verification/npu/evidence/upstream_update_20261022.json)。原34/12交付文件保持哈希；92既有文件保护中观察到Video译码测试并行变化，保留并单列，本台账只追加。本轮无产品RTL/模型/公共配置修改、PDS、JTAG/串口/Flash、提交或推送；辅助算子新阶段尚未开始实现。
+
+
+## 2026-10-22 B01独立DDR实际SRAM下载与现场功能通过
+
+- 用户要求先验证远端DDR自检。远端89acc7b包缺smsk，本机以未修改的冻结RTL/FDC与同版HMIC重新构建同构建sbit/smsk；实际下载本地9ababdacf26e…，远端原953172e6…分列，未混用身份。
+- 本轮PDS：6572LUT/6422FF/8DRM/2GPLL，125MHz UI slow setup+0.379ns，现有约束满足；83实际I/O全部属性与既有DDR/LED参考一致。保留3195行工具警告，不代表严格外部DDR时序或CDC签核。
+- 10:19完成ID00602899核对、SRAM Program/Verify及下载后DONE=1，无Flash/串口。板卡当前为独立B01，原三模式恢复包sbit/smsk哈希重新核验并保留。
+- 用户明确“与上述通过灯态一致”“5次均正常”：LED0/2/4/5/6亮、LED1闪、LED3/7灭及KEY0五次恢复通过。本镜像的16MiB九轮DDR功能和重复复位验收通过；九轮每次150994944比较字节为设计计数，结果来源为用户灯态，没有硬件计数转储。
+- 十分钟稳定性用户反馈“正在观察，尚未满10分钟”，保持观察中，不推断完成；后续NPU实现等待稳定性反馈。完整图/五点/fabric/CDC/P18/整机门槛继续开放，原B00历史十分钟项不由B01替代。
+- [上板记录](../verification/npu/2026-10-22-ddr-board-selftest.md)、[机器摘要](../verification/npu/evidence/ddr_board_selftest_20261022.json)。原34/12交付、283冻结源及上轮审查结果保持哈希；仅新增记录和追加台账，无产品RTL/模型/公共配置修改、提交或推送。
+
 
 ## 2026-10-22 Video F4c5b 组件时序基线
 
@@ -459,6 +545,8 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 同扫描边界新版综合35254LUT/44517FF/69.5DRM，比旧版少67LUT/1FF。相同seed4/performance及估计连线模型布局core−2.953/pixel−1.184ns，旧版−2.841/−1.393ns；最差路径由15降13级但core未改善，地址计算和高扇出写控制仍需处理。普通report_timing读placement DB的零连线正值单列，不能签核。
 - 初次route中断诚实留存；旧冻结版和字节使能版分别独立布线，最终报告均未取得。旧helper额外绑定的当前验证器变化有旧副本/哈希审计，不能将其expected hash拒绝改为helper成功。新wrapper/FDC/manifest与冻结版完全相同。125MHz系统时序仍未闭合。
 - [验证记录](../verification/video/record_probe.md)、[机器证据](../verification/video/evidence/record_probe.json)；CPU交付不阻塞本批。95项既有状态中94项非STATUS条目未变，台账只追加并按index projection仅提交本段，保留CPU/NPU/技术报告修改。无CPU/NPU迁入、JTAG/COM/Flash或板测；后续先取得真实route，再按实际关键路径继续收敛。
+
+
 ## 2026-10-22 Video F4c5d shadow AW 并行译码
 
 - 在 F4c5c 字节使能基础上，AW 握手时锁存160位绝对字地址选择，每字固定四字节写入；AW/W仍独立缓存，原地址/四态/locked/WSTRB检查、B/R保持、健康和owner、ABI及响应拍数不变，无公共配置/FDC变化。
@@ -466,6 +554,7 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 完整采显综合：32881 LUT、44678 FF、69.5 DRM；相对F4c5c减少2373 LUT、增加161 FF。core综合setup−1.306 ns仍为负。相同seed/约束布局估计 core setup−2.135 ns、pixel+0.216 ns，较F4c5c core改善0.818 ns；core hold−0.027 ns、recovery−0.954 ns、fast setup−1.306 ns仍未闭合。
 - F4c5c原 merged shadow 版本的真实续跑因Route-4022拥塞、Route-0008无法布线退出，未生成最终STA；不外推到其他版本。本轮AW译码版route在第10次迭代后进程消失，最后43247个未布通net，没有routed DB/STA，记为interrupted且不推断原因。F4c5c字节使能版和本轮AW译码版分别保留冻结DB/route身份，布局估计不能替代签核。
 - [验证记录](../verification/video/shadow_address.md)、[机器证据](../verification/video/evidence/shadow_address.json)。CPU/NPU交付不阻塞本批；无JTAG/COM/Flash/下载/板测。下一步等待新route最终报告，若仍失败则按扫描输出、reset network和内部guard路径分别处理。
+
 
 ## 2026-10-22 Video F4c5e overlay共享像素边界
 
@@ -475,6 +564,7 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 - 像素16场景、renderer14仲裁/6显示、scanout6交接/3扫描和真实C↔RTL采显联动3场景通过；全尺寸像素2440179、scanout3360000逐像素检查。两份早启FULL像素仿真900秒超时原样保留，FULL预算改1800秒后完整通过，小场景仍900秒；时钟/仿真周期/DUT/检查不变。部分外层汇总因无关测试脚本在运行中变化而拒绝，未改写为PASS；最终逐项核验内层真实依赖、工具和输出哈希。
 - 同seed4/performance估计连线布局：slow core setup−2.102ns、pixel+0.295ns、core hold−0.027ns，fast core setup−1.565ns。core仅改善0.033ns，fast恶化0.259ns，不能称时序收敛；扫描输出和reset/enable路径仍需处理。新冻结布局已用seed11独立布线，旧AW版保留自身DB和结果，未取得最终routed DB/STA，125MHz仍未闭合。
 - [验证记录](../verification/video/overlay_geometry.md)、[机器证据](../verification/video/evidence/overlay_geometry.json)。94项无关非STATUS条目保持；共享台账只追加，提交投影另去除上批重复F4c5d段，保留NPU未提交内容。无CPU/NPU迁入、JTAG/COM/Flash或板测，不改变当前板卡镜像。
+
 
 ## 2026-10-23 Video F4c5f组件复位释放与I/O输出寄存器
 
@@ -505,3 +595,82 @@ TX-only 彩条验收记录：`build/video/board_program/20261016T082259_109276Z`
 前两轮物理失败记录保留；定宽NCHW掩码、去掉故障控制对宽scratch CE的扇出，并为新存活的generation字段补齐原握手6ns约束。最终 `build/video/pds/20261023T042858_495450Z` 内部布线时序通过，slow setup/hold +0.063/+0.129ns、fast +2.911/+0.097ns，recovery/removal均通过。16770LUT /18150FF /73.5DRM，其中64DRM为测试纹理；release34、generation1、MODE3、素材2个存活CDC端点两角均通过6ns，原数据库及报告哈希保持。
 
 位流 `50ea2b124300` 已Program/Verify，未写Flash。用户确认完整RAW连续更新，三次单独KEY1后BOX、AVATAR和返回RAW均正常且底图保持动态；一次KEY0后恢复完整动态RAW。持续串口共514包，复位后连续健康87.000秒，新图30.1548fps，欠载/溢出/错误为0。串口已关闭，开发板保持新镜像运行。详见[连续三模式记录](../verification/video/live_modes.md)和[机器证据](../verification/video/evidence/live_modes.json)。本阶段实体交付关闭；下一步接真实NPU结果与正式CPU/共享DDR契约，不能以本诊断测试替代整机推理验收。
+
+
+## 2026-10-25 B02远端原始程序实际上板通过
+
+- 用户指定B02。最新b7ce46a已fetch并导出605文件冻结快照；原始发布sbit SHA33c8ca921095…、包7项和四验证摘要哈希一致，84源管脚含UART C24复核。未修改产品或本机重建。
+- COM12先启动记录，再执行SRAM Program与下载后DONE=1；远端包无smsk，配置读回Verify未执行，未借用掩码、未Flash。功能由实际UART CRC/身份/分项日志验收，保留原始字节及切片边界。
+- 首次及一次实体KEY0重启两轮均VERIFIED_PASS：16项全PASS，executed/passed=FFFF，failed/blocked=0000，协议及解析错误0，epoch 1→3→4符合。每轮DDR实际读写各151034112B、输入echo307200B、小卷积及32组回归通过；两轮完整记录最终结果后至少10秒。
+- 用户确认首次4F/5F灯态、按住KEY0全灭、松开后恢复4F/5F。两次启动各自日志独立，KEY0轮无再次下载。B02是平台和小算子实板验收，完整YuNet/五点/生产共享fabric/严格CDC时序/30fps仍开放。
+- 记录：D:/FPGA/TriHaRiscv-main/docs/verification/npu/2026-10-25-b02-board-selftest.md；摘要evidence/b02_board_selftest_20261025.json。原始证据D:/FPGA/TriHaRiscv-npu-operator/build/npu/b02_20261025/。B01历史10分钟项不推断关闭，未提交推送。
+
+
+## 2026-10-28 技术文档采用SRAM CPU实物结果
+
+按用户要求更新主工程LaTeX报告，仅涉及CPU说明、CPU性能/流水分析、附录CPU复现及README。采用已通过100MHz后布线的独立SRAM调试镜像：3.055365628 CoreMark/MHz、CPU核6139 LUT、0.049769761 CoreMark/CPU LUT，setup最差+0.366ns、hold最差+0.034ns；固件历史5933-LUT元数据与原发布版效率单独说明。
+
+正文三幅图改为hash核对后的38位真实硬件list/matrix/state窗口，各1024拍，图中展示前48拍；Cache/DDR板测2.497435168/MHz和数字模型0.717562 WB IPC分开保留。新增六个PDF/SVG矢量文件及 docs/verification/cpu/sram_report_2026-10-28.json 绑定，未混用Cache事件或整段板测IPC。独立检查确认234个其他报告输入及CPU小节之外正文不变。
+
+现有 latex/scripts/build.ps1 成功编译48页技术文档.pdf，无LaTeX错误、未定义引用或overfull hbox；按约定未渲染、预览PDF。本批没有新仿真、综合、PNR或板卡操作，NPU/Video内容未改。
+
+## 2026-10-29 技术文档改用最大化软件原生截图
+
+按用户要求，离线打开已冻结的list/matrix/state硬件WDF副本，在最大化的Fabric Debugger 2022.2-SP6.4中放大入口附近波形，保存三张2560×1392完整截图。正文改用原像素裁剪PNG，保留原生信号名、游标PC和采样刻度，不重绘；原生游标0对应CSV索引1。原始DPRJ/WDF/CSV及上一版矢量图证据均未改。
+
+更新主工程技术报告03-results、06-appendix及README；性能、时序和资源数据不变，241项其他报告输入及目标段落之外正文核对不变。现有build.ps1成功编译48页PDF，无LaTeX错误、未定义引用或overfull hbox，未渲染或预览PDF。截图、裁剪逐像素一致性和输出哈希见主工程docs/verification/cpu/sram_report_screenshots_2026-10-29.json；完整截图与加载记录位于CPU工作树build/cpu/native-report-screenshots-20261029-v1/。
+
+本批无新硬件采样、下载、仿真或实现，NPU/Video内容不变。本次原生截图替换完成，无待处理项。
+
+## 2026-10-29 CPU性能叙述调整为TCM与L1 Cache实测
+
+按用户PDF批注及随后澄清，CPU性能只并列TCM本地存储与L1 Cache＋板载DDR两种实际板测配置，不纳入DDR直访历史版本。明确TCM由32KiB本地SRAM实现、L1 I/D各16KiB；保留-O2/5000次、3.055365628与2.497435168 CoreMark/MHz及对应资源/时序结果。以最高分TCM配置讲解DebugCore加载、入口触发与原生波形采集，三张最大化原生截图及全部原始采样未变。
+
+正文02-system、03-results、06-appendix与README已调整，48页PDF重新编译通过，无LaTeX错误、未定义引用或overfull hbox，未渲染预览。核对两个实测结果及缓存版原始UART绑定，47个其他报告输入、NPU/Video及非CPU结果不变。当前文档输出绑定见主工程docs/verification/cpu/memory_evaluation_report_2026-10-29.json；此前截图索引继续提供图像和采样来源绑定，其旧PDF哈希属于历史输出。
+
+本批仅修改文档，无新增仿真、综合、布线、采样或板卡下载。本次批注处理完成，无待处理项。
+
+## 2026-10-29 插入用户提供的两张CoreMark原始串口截图
+
+两张原始PNG按字节复制到主工程docs/technical-report/figure/cpu-tcm-coremark-uart-original.png及cpu-l1-cache-ddr-coremark-uart-original.png，尺寸1087×765和1076×840，均未裁剪、重绘或修改文字。CPU性能小节插入两图并引用，说明TCM图中5933-LUT固件历史打印值与调试构建6139-LUT分母的区别，以及整数秒字段不用于精确评分；原有性能数据及其他章节不变。
+
+原文件与docs副本字节一致，原有正文移除新增段落后逐字一致；现有build.ps1成功编译49页PDF，无LaTeX错误、未定义引用、overfull hbox或浮动体过高警告，未渲染预览。原图、正文和输出哈希见主工程docs/verification/cpu/coremark_uart_screenshots_2026-10-29.json。无新采样、下载、仿真或实现；本次插图请求完成。
+
+## 2026-10-29 三张原生波形图移除鼠标指针
+
+按用户要求，用现有Fabric Debugger离线打开冻结WDF的新副本，在最大化窗口中重截list/matrix/state。截图前把鼠标移至控制台，确认鼠标与蓝色光晕均在文档裁剪区域外；仅按原像素裁剪，未涂抹、修补或重绘。三幅docs/technical-report/figure/cpu-sram-*-native.png已替换，旧完整截图保留，新完整截图及加载记录在CPU工作树build/cpu/native-report-screenshots-20261029-v2/。
+
+原始DPRJ/WDF/CSV、CPU性能正文及用户提供的两张串口原图哈希不变。README和附录仅更新截图来源记录；实际49页PDF重新编译通过，无LaTeX错误、未定义引用或overfull hbox，未渲染预览。当前图形、逐像素裁剪和PDF绑定见主工程docs/verification/cpu/sram_report_screenshots_2026-10-29_v2.json。没有新采样、下载或实现；本次请求完成。
+
+## 2026-10-29 附录B去除重复性能说明并补齐B.3
+
+按用户要求参考D:/RV-CPU/TriHaRiscv/复赛文档/CICC1002692+分区决赛+技术文档附录B的组织方式，移除当前附录的CoreMark观测/复现、跑分元数据和重复板上采样说明，相关内容保留正文。B.2改为Windows ModelSim SE-64 2020.4/GCC15.2测试平台与判定规则，B.3补入RV32IM/CSR覆盖分类、V01至V10实际定向记录、官方测试集统计边界及Windows复现命令，B.3编号已核对。
+
+逐项核对七项正常记录及三项预期失败的result和原始stdout日志哈希，保留负例FAIL；乘法2730次有效结果/904次保持、前递1032项、除法308组操作等使用原始日志值。旧五级文档134/134和165/165官方通过数未移用于当前六级核；当前核官方riscv-tests/ACT4全量绑定记录仍需补充，本轮未声称全量ISA或退休证明。
+
+当前51页PDF编译通过，无LaTeX错误、未定义引用或overfull hbox，未渲染预览。正文性能、五张原生截图及附录B.4以后内容保持；检测到并保留其他任务的02-system/FIFO图源/page10图更新，未覆盖。当前文档、V01至V10及日志来源绑定见主工程docs/verification/cpu/appendix_b3_isa_2026-10-29.json。未新跑仿真、综合、布线或板卡操作。
+
+## 2026-10-29 CPU模块级LSU与Cache功能仿真
+
+在既有CPU工作树完成LSU端口测试，18次访问、220项检查通过，错误数据负例被检出。复核三组Cache正例及负例的当前输入与原始输出哈希，复用已完成的Windows ModelSim结果，未重复运行。四组正例合计3014/3014项检查，四组错误数据负例均按实际自检失败拒绝；不修改生产RTL，不进行PDS或板卡操作。
+
+主工程技术文档B.3新增LSU、I/D Cache、写回维护和响应重叠统计及四张2553×1440原生ModelSim截图，无鼠标光标、裁剪或重绘。60页PDF编译通过，无LaTeX错误、未定义引用或Overfull警告，未渲染预览。新增提交包docs/verification/cpu/module_support/cpu-memory-support-2026-10-29.zip约2.45MB，154项条目逐项哈希核验；汇总见docs/verification/cpu/module_memory_waveforms_2026-10-29.json。各模块下层由独立内存模型服务，不作为共享总线、物理DDR或整核系统验收；后续B.4继续整核固件、异常/中断及Cache子系统联调。
+
+## 2026-10-29 CPU B.4整核系统仿真第一批
+
+Cache开启的最小整核固件完成1277项检查、26356周期、14次读、35次写和3次受控异常；关闭Cache对照完成809项检查。独立路由完成476项检查，覆盖片上地址隔离、Cache命中和共享区旁路、刷新、错误锁存与复位恢复。下层数据错误负例在固件退出检查处失败，退出码1；正例均返回0。路由测试台原有全量刷新1000周期上限和写穿可见性预期与当前写回Cache不符，本批仅修正测试台预期并复测，生产RTL未修改。
+
+整核WLF/VCD和日志保存在CPU工作树build/cpu/wave-system-runtime-20261029T110017121207Z/，原生ModelSim截图插入技术文档B.4，窗口172700--173650 ns，显示平台故障、三次异常计数、mcause/mtval、mepc加4和MRET返回。Cache开启下的三次中断交互另有原生WLF/VCD、事件日志和截图，摘要见docs/verification/cpu/system_support/cache_irq_run_2026-10-29.json。63页PDF重新编译通过，无LaTeX错误、未定义引用或Overfull警告，未渲染预览。物理/板级验证仍未在本批声称完成。
+
+## F4c3d 高价值系统级波形
+
+四个短场景已在 Windows 原生 ModelSim 中生成原生 Wave 波形，并保留完整 WLF/VCD：采集重武装、显示槽所有权、共享 DDR 背压和采显联合。四个入口均通过，关键统计分别为 7 次采集/重武装、槽状态 155 项检查、12 读/12 写且最大等待为 0，以及 7 个任务/7800 像素/13 次光栅/欠载 0。联合场景在 2 ms 窗口核对四帧提交/释放和共享读写重叠；完整 13 次光栅及全部哈希仍以机器证据为准。
+
+四张无鼠标指针截图、WLF/VCD、ModelSim 工具哈希和冻结输入绑定见 [高价值波形证据](../verification/video/evidence/video_high_value_waveforms_20261030.json)，结果摘要见 [验证记录](../verification/video/high_value_waveforms_20261030.md)。技术文档附录已增加四类场景表和四张波形图。本批不运行 PDS、不下载板卡，不把数字背压模型或空检测前提写成物理 HDMI、整机时序或真实 NPU 验收。
+
+
+## 2026-10-30 系统互联与存储仿真
+
+完成主工程现有 CPU→Video、CPU→NPU 和 Video 共享 DDR 联测。CPU→Video 单/双发射 6 个正例及 2 个负例通过；CPU→NPU Dense U8、DW S8 的轮询/中断 4 个正例通过；Video 共享 DDR 回归通过。两份原生 ModelSim WLF 和结果哈希登记在 docs/verification/soc/system_interconnect_storage_20261030.json。
+
+本批验证了控制面路由、AXI 独立通道、背压保持、DMA 几何和完成顺序。主工程当前仍没有正式 CPU/NPU/Video 共享 fabric 或缓存一致性模块，因此跨主端可见性、CPU fence/cache maintenance 和物理 DDR CDC 仍开放，不能把本批结果写成整机互联验收。

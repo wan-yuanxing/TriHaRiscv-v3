@@ -1,0 +1,58 @@
+{
+  "status": "PASS",
+  "scope": "B.2 first batch: multiplier, divider, CSR",
+  "positive_tests_pass": 3,
+  "negative_tests_rejected": 3,
+  "run_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\run-index.json",
+  "run_index_sha256": "a98e83e58ad9fc4a8debb295e95b2a6d2b5f814f67137649272646cfa1762e71",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\cpu-unit-support-2026-10-29.zip",
+  "archive_sha256": "6f7a7ec3f45d834d910e27536794390ee8d7f25d51f71f9b9a4ba174efb68ebb",
+  "archive_bytes": 3277033,
+  "archive_entries_verified": 109,
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+    "pages": 61,
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+    "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+    "compile_return_code": 0,
+    "overfull_boxes": false,
+    "unresolved_references": false,
+    "pdf_rendered_or_previewed": false
+  },
+  "isa_section": "B.1",
+  "isa_results_unchanged": {
+    "riscv_tests": "50/50 PASS",
+    "act4": "53/53 PASS"
+  },
+  "document_structure": [
+    "B.1 ISA",
+    "B.2 Unit",
+    "B.3 Module",
+    "B.4 System"
+  ],
+  "production_rtl_modified_in_this_batch": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false,
+  "latest_document_update": {
+    "scope": "B.3 frontend and issue/forwarding module validation; B.1/B.2 evidence retained",
+    "evidence": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_waveforms_2026-10-29.json",
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  }
+}

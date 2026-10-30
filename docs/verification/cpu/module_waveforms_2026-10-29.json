@@ -1,0 +1,45 @@
+{
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+    "pages": 61,
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+    "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+    "compile_return_code": 0,
+    "overfull_boxes": false,
+    "unresolved_references": false,
+    "pdf_rendered_or_previewed": false
+  },
+  "board_programmed": false,
+  "status": "PASS",
+  "negative_tests_rejected": 2,
+  "production_rtl_modified_in_this_batch": false,
+  "scope": "B.3 frontend and issue/forwarding module batch",
+  "run_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_support\\module-run-index.json",
+  "positive_tests_pass": 2,
+  "physical_timing_revalidated": false,
+  "archive_entries_verified": 108,
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_support\\cpu-module-support-2026-10-29.zip",
+  "archive_sha256": "378a7d9b10161e1fb4fd32df2a00a5f49d94edc8fd011c828f793fb2de3a3260",
+  "archive_bytes": 1125657,
+  "run_index_sha256": "9e03a1900a706db26c120c769cba21078c5dded6d214f9c17d8d4b374cc6acb8",
+  "latest_document_update": {
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  }
+}

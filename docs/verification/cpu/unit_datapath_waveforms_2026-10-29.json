@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\cpu-datapath-support-2026-10-29.zip",
+  "archive_entries_verified": 79,
+  "archive_sha256": "4f305a8290ad4a388a5383e3673b947c792a143d7c71283c2804992bed23101a",
+  "board_programmed": false,
+  "first_batch_archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\cpu-unit-support-2026-10-29.zip",
+  "production_rtl_modified_in_this_batch": false,
+  "first_batch_archive_sha256": "6f7a7ec3f45d834d910e27536794390ee8d7f25d51f71f9b9a4ba174efb68ebb",
+  "negative_tests_rejected": 2,
+  "total_unit_groups_completed": 5,
+  "run_index_sha256": "4eacc2451306e39302ec8ad163b45258cee240b03d88b0c72f78caed34c83440",
+  "archive_bytes": 2602317,
+  "run_index": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\datapath-run-index.json",
+  "document": {
+    "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+    "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+    "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+    "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+    "pages": 61,
+    "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+    "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+    "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+    "compile_return_code": 0,
+    "overfull_boxes": false,
+    "unresolved_references": false,
+    "pdf_rendered_or_previewed": false
+  },
+  "scope": "B.2 second unit batch: ALU and register file",
+  "physical_timing_revalidated": false,
+  "positive_tests_pass": 2,
+  "latest_document_update": {
+    "scope": "B.3 frontend and issue/forwarding module validation; B.1/B.2 evidence retained",
+    "evidence": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_waveforms_2026-10-29.json",
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  }
+}

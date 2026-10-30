@@ -1,0 +1,88 @@
+{
+  "status": "PASS_WITH_SCOPE_LIMIT",
+  "generated_at": "2026-10-30",
+  "scope": "System interconnect and storage digital simulation using the existing CPU->Video and CPU->NPU diagnostic benches plus Video shared DDR regression.",
+  "source_unchanged": {
+    "cpu_video": true,
+    "cpu_npu": true
+  },
+  "cases": {
+    "cpu_video_control_and_storage": {
+      "status": "pass",
+      "positive_runs": 6,
+      "negative_tests": 2,
+      "result_json": "build/video/cpu_video_firmware/result.json",
+      "result_sha256": "6d9ccc48fd7d12fd23605cde24b7049254c7a038281bbcd4213305901ba24ac1",
+      "waveform_wlf": "build/video/cpu_video_firmware/20261030T055556_583756Z/system_cpu_video.wlf",
+      "waveform_sha256": "4f9659bc8e88d3f805160c4ac032fa17cb0b52d8742570e80a9e10640fd45852",
+      "pass_markers": [
+        "# CPU_VIDEO_FIRMWARE_PASS dual=0 case=0 cycles=3557 retired=1498 native=230 bytes=2646 irq_rises=1 irq_falls=1 eof_guard=101 b_guard=161",
+        "# CPU_VIDEO_FIRMWARE_PASS dual=0 case=1 cycles=3965 retired=1290 native=40 bytes=2646 irq_rises=2 irq_falls=2 eof_guard=101 b_guard=161",
+        "# CPU_VIDEO_FIRMWARE_PASS dual=0 case=2 cycles=1793 retired=538 native=39 bytes=72 irq_rises=1 irq_falls=1 eof_guard=0 b_guard=0"
+      ]
+    },
+    "cpu_npu_axi128_storage": {
+      "status": "pass",
+      "positive_runs": 4,
+      "negative_tests": 0,
+      "result_json": "build/npu/cpu_operator_20261030_135631_6fe3ddaa/result.json",
+      "result_sha256": "835ca8e00fa12afae67ec713cfbcfed2a2c1c6f618f59aa44d0379f2d83ca3ae",
+      "waveform_wlf": "build/npu/cpu_operator_20261030_135631_6fe3ddaa/system_npu.wlf",
+      "waveform_sha256": "1c604b49e24478d99de2a51eb7305365b064ecfbc2c897bde24a000755230b45",
+      "pass_markers": [
+        "# CPU_NPU_OPERATOR_PASS irq=0 tasks=2 cycles=94449 native=7512 output_reads=200 dma_reads=4700 dma_writes=200 AWfirst=76 Wfirst=63 final_b_guard=62"
+      ]
+    },
+    "video_shared_ddr": {
+      "status": "pass",
+      "passed": [
+        "shared_video"
+      ],
+      "result_json": "build/video/regression/20261030T055700_642058Z/result.json",
+      "result_sha256": "d3175d4a73e171b757fa1e95060870c03d4b6c304a3b4e902de5396363ab5f33",
+      "artifact_index": "build/video/latest_shared_video.json"
+    },
+    "video_control_decode": {
+      "status": "pass",
+      "simulator": "Icarus Verilog/VVP",
+      "checks": 118,
+      "positive_runs": 1,
+      "mutation_tests": 3,
+      "mutation_exit_codes": {
+        "wrong_target": 1,
+        "early_w": 1,
+        "wrong_response": 1
+      },
+      "result_json": "build/video/control_decode/20261030T061132_214550Z/result.json",
+      "result_sha256": "43a32e5ca1a2b1c92bb79135a1dc07fd8bdf202a2929180355a71132d4246830"
+    }
+  },
+  "scope_boundary": [
+    "MMIO routing, AW/W independent ordering, response holding, CPU control of Video and NPU, local byte-memory visibility, AXI128 read/write geometry and completion-after-B were exercised.",
+    "The independent Video control decoder regression passed 118 checks; wrong target, early W acceptance and wrong read-response routing mutations each exited nonzero with the expected diagnostic.",
+    "The main project currently has no production CPU/NPU/Video shared fabric or cache-coherence module; cross-master visibility, CPU fence/cache maintenance against NPU/Video, and physical DDR CDC are therefore still open.",
+    "This evidence does not claim PDS timing, board throughput, HDMI electrical timing, or full NPU inference."
+  ],
+  "waveform_figures": [
+    {
+      "path": "docs/technical-report/figure/system-interconnect-cpu-video-modelsim-original.png",
+      "sha256": "6d357ebba1b6954cc13ab4859a4c7f6f5c8cdb30fc4efe238f5ecdd2d214eb3e",
+      "source_wlf": "build/video/cpu_video_firmware/20261030T055556_583756Z/system_cpu_video.wlf"
+    },
+    {
+      "path": "docs/technical-report/figure/system-interconnect-cpu-npu-control-modelsim-original.png",
+      "sha256": "bf7bd4515191336fd91472b587d4208d1f613709e8a469645091084bad95c54e",
+      "source_wlf": "build/npu/cpu_operator_20261030_135631_6fe3ddaa/system_npu.wlf"
+    },
+    {
+      "path": "docs/technical-report/figure/system-interconnect-cpu-npu-complete-modelsim-original.png",
+      "sha256": "61d780fe4292e32673c8c3cf6aefb39350c8c9b0f5ad19c2578b83c17ddfc3c7",
+      "source_wlf": "build/npu/cpu_operator_20261030_135631_6fe3ddaa/system_npu.wlf"
+    }
+  ],
+  "waveform_generation": {
+    "method": "ModelSim Wave 窗口原始截图，直接来源于已保存 WLF",
+    "mouse_cursor": "excluded",
+    "redrawn": false
+  }
+}

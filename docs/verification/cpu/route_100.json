@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "TIMING_FAIL",
+  "flow_status": "PASS",
+  "recorded_utc": "2026-10-18T11:41:58.8057611Z",
+  "branch": "cpu/windows-baseline",
+  "cpu_revision": "3caa32d",
+  "source_unchanged": true,
+  "result_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1118048281426Z\\result.json",
+  "result_sha256": "0b6856124d62ad6dafedb4c5e12af19a872c1b0c0515d5b011586c150585124d",
+  "report_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1118048281426Z\\report_timing\\triha_core.rtr",
+  "report_sha256": "2040d48f24068915b4b760778dae5756f32933d98c055c541eb5a9715a4c5f4c",
+  "place_route_log": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\route-single-20261018T1118048281426Z\\place_route\\run.log",
+  "place_route_log_sha256": "55f34025deab6c2ecfa4c8674a2326a7b9a1eae0f697e155a7a102c48025bbd7",
+  "native_pds_return_code": 0,
+  "runner_return_code": 2,
+  "elapsed_seconds": 302.997,
+  "timing": {
+    "met": false,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": -15.557,
+        "total_negative_slack_ns": -67266.679,
+        "failing_endpoints": 7945,
+        "endpoints": 19757
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.126,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 19757
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.346,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 5673
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": -7.704,
+        "total_negative_slack_ns": -21195.354,
+        "failing_endpoints": 5775,
+        "endpoints": 19757
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.104,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 19757
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.345,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 5673
+      }
+    ],
+    "performance_slack_ns": -15.557,
+    "worst_setup_ns": -15.557,
+    "performance_consistent": true,
+    "all_constraints_met": false
+  },
+  "timing_closed": false,
+  "fully_routed": true,
+  "main_detailed_iteration": 116,
+  "unrouted_nets": 0,
+  "boundary": {
+    "schema_version": 1,
+    "core_manifest": "fpga/pg2l100h/project/cpu_core.json",
+    "top": "triha_core",
+    "dual_issue": 0,
+    "constraints": "fpga/pg2l100h/constraints/cpu_route.fdc",
+    "period_ns": 10.0,
+    "input_max_ns": 2.0,
+    "input_min_ns": 0.5,
+    "output_max_ns": 2.0,
+    "output_min_ns": 0.5,
+    "setup_uncertainty_ns": 0.1,
+    "hold_uncertainty_ns": 0.05,
+    "pnr_action_minutes": 10,
+    "outer_seconds": 900,
+    "scope": "CPU-only isolated physical diagnostic with explicit assumed I/O timing; automatic device I/O placement, no board pin or SoC acceptance"
+  },
+  "mapped_resources": {
+    "lut": 7123.0,
+    "registers": 6017.0,
+    "drm": 0.0,
+    "apm": 4.0,
+    "io": 224.0
+  },
+  "area_note": "Full-I/O timing constraints produced a different mapping (7123 LUT/6017 FF); do not compare it as an RTL area improvement against the clock-only 7709 LUT baseline.",
+  "critical_path": {
+    "start": "data_error_i (port)",
+    "endpoint": "u_cpu/u_frontend/u_fetch/pc_f_q[24]/opit_0_inv_L6Q_perm/I4",
+    "logic_levels": 23,
+    "logic_delay_ns": 4.886,
+    "route_delay_ns": 21.343,
+    "route_fraction_percent": 81.372,
+    "significant_nets": [
+      {
+        "name": "nt_data_error_i",
+        "fanout": 11,
+        "delay_ns": 5.704
+      },
+      {
+        "name": "u_cpu/branch_info_request_w",
+        "fanout": 52,
+        "delay_ns": 4.227
+      }
+    ],
+    "effective_setup_uncertainty_ns": 0.15
+  },
+  "targeted_internal_path": {
+    "scope": "One point-selected internal path, not global internal worst; global summary tables remain unfiltered.",
+    "start": "u_cpu/u_frontend/u_decode/genblk1.u_fifo/rd_ptr_q[0]/opit_0_inv_L6Q_perm/CLK",
+    "endpoint": "u_cpu/u_frontend/u_fetch/pc_f_q[24]/opit_0_inv_L6Q_perm/I4",
+    "slack_ns": -8.827,
+    "logic_levels": 21,
+    "logic_delay_ns": 4.48,
+    "route_delay_ns": 13.841,
+    "report": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\internal-sta-20261018T1139524013499Z\\report_timing\\triha_core.rtr",
+    "report_sha256": "3c59cb952e25b142563e8dc1febf065c1cec28f79a10cc9e46cf9f4bfecdd69f",
+    "receipt": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\internal-sta-20261018T1139524013499Z\\receipt.json",
+    "receipt_sha256": "f2535043d09b0b55830cdb2ed70913b4dc2a74912b67e2702d9716549ba65288",
+    "no_ignored_selection_notices": true,
+    "routed_database_unchanged": true
+  },
+  "functional_ports_unconstrained_notices": 0,
+  "scope": "CPU-only isolation with assumed same-clock I/O timing and automatic device I/O placement; not final SoC/board timing",
+  "bitstream_generated": false,
+  "board_programmed": false,
+  "next_diagnostic": "Both the external-error path and an internal FIFO-pointer path violate timing through frontend redirect/predictor/next-PC logic. Investigate that combinational chain and routing, preserving 100MHz; verify control changes with exceptions/retirement and CoreMark."
+}

@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "date_saved": "2026-10-29",
+  "source": "Two original PNG screenshots supplied by the user; no new board acquisition",
+  "images": [
+    {
+      "user_original": "C:\\Users\\m\\AppData\\Local\\Temp\\codex-clipboard-4837887f-3754-4bbb-8fb0-01842aaa1367.png",
+      "docs_copy": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-tcm-coremark-uart-original.png",
+      "sha256": "c5ff87a7a7f48f3de56331273ca591ed27e465a02a31b5f0ce93ffd525bc4b63",
+      "bytes": 65243,
+      "dimensions": [
+        1087,
+        765
+      ],
+      "byte_identical": true,
+      "processing": "None; original PNG bytes copied intact"
+    },
+    {
+      "user_original": "C:\\Users\\m\\AppData\\Local\\Temp\\codex-clipboard-c9aed5e3-0c47-460c-bac5-18ca0babb989.png",
+      "docs_copy": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-l1-cache-ddr-coremark-uart-original.png",
+      "sha256": "5e9e1f479ca93e8c0b30f777fd63df513ea82988295177944155ffcdc5d5542a",
+      "bytes": 65849,
+      "dimensions": [
+        1076,
+        840
+      ],
+      "byte_identical": true,
+      "processing": "None; original PNG bytes copied intact"
+    }
+  ],
+  "chapter": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\03-results.tex",
+  "chapter_sha256": "36e848a9074d454bfa4a0d55a87ff151d670a6d927b66bef1165639a437e26d3",
+  "readme_sha256": "2cac94e368f80db69ce295fb1625c9fc7a850e66cac1ff881d2ffa5564c7edb8",
+  "only_two_figures_and_explanatory_paragraphs_added_to_chapter": true,
+  "other_chapters_and_previous_data_unchanged": true,
+  "tcm_area_note": "Screenshot prints historical5933 CPU LUTs; report distinguishes current debug build6139 LUTs",
+  "prior_document_record": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\memory_evaluation_report_2026-10-29.json",
+  "prior_record_sha256": "01d716056c874fd1ffb81905481e0639256a0dc20aa3b23013f1630ceca9bdf7",
+  "prior_pdf_hash_is_historical": true,
+  "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+  "pdf_sha256": "dc1a1b683300e520f89a1ed04c6ea9e9e1ab7cea61814b5f00be1c57cf61142c",
+  "log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+  "log_sha256": "5ef6805f1e3dc09ab612e007bb8a6d7b6ac35f30acf071499156bcaed5d60ff7",
+  "build_console_sha256": "5222428a1cf5c4ec99862fd6fb5a5091bfa0e766c0b737d70fde27d97251ae9e",
+  "pdf_rendered_or_previewed": false
+}

@@ -1,0 +1,482 @@
+{
+  "status": "PASS",
+  "section": "B.2",
+  "scope": "Second batch: ALU and single-issue Pango native-RAM register file",
+  "simulator": "ModelSim SE-64 2020.4",
+  "positive_tests_pass": 2,
+  "negative_tests_rejected": 2,
+  "timing_model": "ALU is combinational. Register-file test manually advances write clock and changes asynchronous read addresses between edges.",
+  "runs": [
+    {
+      "result_sha256": "927ea04b3e78c2ad00e00445c92d7b0ff5d5cf195ef55a1907dd72d98cb3a99e",
+      "name": "wave-unit-alu-20261029T0824536785083Z",
+      "input_hashes": {
+        "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+        "tb/cpu/tb_alu_functional.v": "73110874f0956afff844751bee5c3755c787a64e55539a7f48014fe211ee3517",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "509f3e052806f4f89bea7383ba0ea7cc0d8e53a56c5c561bf65ca989954af49a",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824536785083Z\\capture.do": "02b2cf028e8ab1d54392ff4fbbfa97c359530b00cb88c34b373e805fa4a6da49"
+      },
+      "native_vsim_return_code": 0,
+      "external_hashes": {},
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824536785083Z\\result.json",
+      "functional_log_line": "# ALU_UNIT_PASS checks=17804 shift_sweep=384 controls=16 boundary_pairs=64 random_pairs=1024",
+      "runner_return_code": 0,
+      "current_hashes_verified": true,
+      "broken": false,
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 23500,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.049
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 25084,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.043
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_alu.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_alu_functional.v"
+          ],
+          "pid": 6252,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.058
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824536785083Z\\alu.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_alu_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824536785083Z\\capture.do"
+          ],
+          "pid": 24924,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.589
+        }
+      ],
+      "test": "alu",
+      "expected_outcome": "PASS",
+      "output_hashes": {
+        "alu.vcd": "6f330918922a4635ab3dd36855fd563c2f88f43add83f4199ab7902ca166a0b3",
+        "alu.wlf": "24090a474cd42ea5c3b2de533ef4ab09a8ddaa8604ddaa40379f1cb4476d6a61",
+        "batch-transcript.log": "c4bbc3defae5ae93cbfc02b516e77e1ac0d81e61eed8eb7a1ad9971c15d06883",
+        "capture.do": "02b2cf028e8ab1d54392ff4fbbfa97c359530b00cb88c34b373e805fa4a6da49",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "06f1418a27e5b7253c37c7852f1af34486eac02ee514f13d9a838b3e38187965",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "0667416ab4590d52ac9eb348cf2fbd48a3f0c6eae66a428f18c8366f029677a8",
+        "view.do": "1bcf09a0bb143d7167c5a56ae9ab86bfb9316782a3cf3ac29dae1a5fc49b5389",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      }
+    },
+    {
+      "result_sha256": "c0a2b45ed807b1477f2f2c9ea060df4c6e3f805bdfa432c0dc347dec2590bf90",
+      "name": "wave-unit-regfile-20261029T0824558771578Z",
+      "input_hashes": {
+        "config/cpu_primitives.json": "facc28ac7bc97623df97e1bb10b92be26a36698b435baaf971b75d25dfbb0484",
+        "scripts/cpu/simulation_common.ps1": "c9a3612e641b87a634d64ce5fdcdfbcac89a36303f54a00bced0f126b3f16a79",
+        "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+        "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+        "tb/cpu/tb_regfile.v": "fbf384e7cb4535652626b41bbe7ea2499da059d78b4110823ae92e02a693a480",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "509f3e052806f4f89bea7383ba0ea7cc0d8e53a56c5c561bf65ca989954af49a",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824558771578Z\\capture.do": "d5d6b52a3e3e83d9c6ef870be946301450876d8b5ab681ad7c8e603b3599d9e6"
+      },
+      "native_vsim_return_code": 0,
+      "external_hashes": {
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+      },
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824558771578Z\\result.json",
+      "functional_log_line": "# REGFILE_PASS checks=2476 writes=1006 resets=2 async_scans=6 zero_read_latency_writes_x0_sync_reset",
+      "runner_return_code": 0,
+      "current_hashes_verified": true,
+      "broken": false,
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 9636,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.047
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 29732,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.042
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "+define+RF_MODULE=triha_regfile",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_regfile.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v"
+          ],
+          "pid": 40972,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.061
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824558771578Z\\regfile.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "work.tb_regfile",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824558771578Z\\capture.do"
+          ],
+          "pid": 9468,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.636
+        }
+      ],
+      "test": "regfile",
+      "expected_outcome": "PASS",
+      "output_hashes": {
+        "batch-transcript.log": "57dc4ad7d55547c165e0a280081617a0243deffb2a791ef2c7b1b16c34fbaaab",
+        "capture.do": "d5d6b52a3e3e83d9c6ef870be946301450876d8b5ab681ad7c8e603b3599d9e6",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "b53f36d8788d522005aa92c5a4638d9b0321d5d9b49b195cec813d6296f1f96a",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "regfile.vcd": "c96c713ebcdae1bf2508c17a9dd7399b8aee100b5837c904a7f02664fb2a371c",
+        "regfile.wlf": "ca59479b812e839dfe05a18cf441f0e3b107684ce1a9a6d9f8191dec10c70443",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "de160d387f6e3801d8dedd58ddeb1c9ce2d2539f46469358910cb947f324418f",
+        "view.do": "0fe00f25e9ea521a172f4216fbe2eb8bee4f9c533c5b87781a6cf7db39499a7a",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      }
+    },
+    {
+      "result_sha256": "3f57fbce1ec09c1b1f41ea808f5bbf3648d7f8da5b0ac6a606fefb3ebf5e858c",
+      "name": "wave-unit-alu-20261029T0824490440754Z",
+      "input_hashes": {
+        "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+        "tb/cpu/tb_alu_functional.v": "73110874f0956afff844751bee5c3755c787a64e55539a7f48014fe211ee3517",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "509f3e052806f4f89bea7383ba0ea7cc0d8e53a56c5c561bf65ca989954af49a",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824490440754Z\\capture.do": "f2c13304cc990b00d9c22f1be2c1b0dcc360883cd898b02dfad33b9588118efb"
+      },
+      "native_vsim_return_code": 0,
+      "external_hashes": {},
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824490440754Z\\result.json",
+      "functional_log_line": "# ** Fatal: ALU_UNIT_FAIL op=4 a=ffffffff b=00000001 expected=00000000 actual=c0ffee01",
+      "runner_return_code": 1,
+      "current_hashes_verified": true,
+      "broken": true,
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 10416,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.048
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 2080,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.044
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_alu.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_alu_functional.v"
+          ],
+          "pid": 37944,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.061
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824490440754Z\\alu.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gCORRUPT_RESULT=1",
+            "work.tb_alu_functional",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-alu-20261029T0824490440754Z\\capture.do"
+          ],
+          "pid": 39944,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.512
+        }
+      ],
+      "test": "alu",
+      "expected_outcome": "REJECTED",
+      "output_hashes": {
+        "alu.vcd": "96dc60d6d60176627504802be224bc0d5e2110d2d686555dc6bd49d3e9a69c06",
+        "alu.wlf": "6fa51987efe18d4c62feced7be5a6ee484b937c9f506e18406dfc56b6cd4f6c7",
+        "batch-transcript.log": "bbe24c46b0f6307f27b8664f5a554968c1d9ed67e828880fa8d2b6343f0d83be",
+        "capture.do": "f2c13304cc990b00d9c22f1be2c1b0dcc360883cd898b02dfad33b9588118efb",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "e6e4615069cee771521c9528faf0ba652bccfb05c1d886fc30ac905c17993bad",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "64e952daa3ba8e0bbe009e237ebdee2b0220060b89bedc85305b9f7bddef9e7a",
+        "view.do": "1bcf09a0bb143d7167c5a56ae9ab86bfb9316782a3cf3ac29dae1a5fc49b5389",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      }
+    },
+    {
+      "result_sha256": "c9cc36b21388b8c3682324ca63313e5df1914263913019fe4d6745c27c35d981",
+      "name": "wave-unit-regfile-20261029T0824511776081Z",
+      "input_hashes": {
+        "config/cpu_primitives.json": "facc28ac7bc97623df97e1bb10b92be26a36698b435baaf971b75d25dfbb0484",
+        "scripts/cpu/simulation_common.ps1": "c9a3612e641b87a634d64ce5fdcdfbcac89a36303f54a00bced0f126b3f16a79",
+        "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+        "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+        "tb/cpu/tb_regfile.v": "fbf384e7cb4535652626b41bbe7ea2499da059d78b4110823ae92e02a693a480",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "scripts/cpu/firmware_common.ps1": "b14ef4c74a513f7ea647136297037fb3d04f39db05c3c0e98bc82e8717aa5321",
+        "rtl/cpu/ADAPTATIONS.json": "db3118e80546e13e856ca85e4492769d2e04cfb4cf486acdcee08b4eb06e2361",
+        "scripts/cpu/capture_unit_waveforms.ps1": "509f3e052806f4f89bea7383ba0ea7cc0d8e53a56c5c561bf65ca989954af49a",
+        "scripts/cpu/run_modelsim.do": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+        "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824511776081Z\\capture.do": "faeb26272eee9c586b34e15fff30cbd44a888e8d88ff009d02c598e623ce1940"
+      },
+      "native_vsim_return_code": 0,
+      "external_hashes": {
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9",
+        "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+      },
+      "result_json": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824511776081Z\\result.json",
+      "functional_log_line": "# ** Fatal: REGFILE_FAIL read ra= 0 got=c0ffee00 expected=00000000 rb=31 got=00000000 expected=00000000",
+      "runner_return_code": 1,
+      "current_hashes_verified": true,
+      "broken": true,
+      "commands": [
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+          "arguments": [
+            "-c"
+          ],
+          "pid": 6976,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.048
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+          "arguments": [
+            "work"
+          ],
+          "pid": 7252,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.045
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+          "arguments": [
+            "-work",
+            "work",
+            "+incdir+D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core",
+            "+define+RF_MODULE=triha_regfile",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\rtl\\cpu\\triha_regfile.v",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\tb\\cpu\\tb_regfile.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+            "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v"
+          ],
+          "pid": 42440,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 0.064
+        },
+        {
+          "tool": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+          "arguments": [
+            "-c",
+            "-l",
+            "batch-transcript.log",
+            "-wlf",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824511776081Z\\regfile.wlf",
+            "-onfinish",
+            "exit",
+            "-voptargs=+acc",
+            "-gBROKEN=1",
+            "work.tb_regfile",
+            "-do",
+            "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\wave-unit-regfile-20261029T0824511776081Z\\capture.do"
+          ],
+          "pid": 29948,
+          "return_code": 0,
+          "timed_out": false,
+          "elapsed_seconds": 1.791
+        }
+      ],
+      "test": "regfile",
+      "expected_outcome": "REJECTED",
+      "output_hashes": {
+        "batch-transcript.log": "036f34fbc33bb5df6a49a768e3a591972b67b317f5f93f92b2927693f87d16eb",
+        "capture.do": "faeb26272eee9c586b34e15fff30cbd44a888e8d88ff009d02c598e623ce1940",
+        "compile.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "compile.stdout.log": "d5557f8a99efeec040ba4f2cf7815e356bedf7d818510fca8a8e9ff586e55d20",
+        "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+        "regfile.vcd": "42f70bef38f3e622575ed6f8c6ba76267751650eeb6f71ba36c8782c4c5b7b8a",
+        "regfile.wlf": "05a4c08bac9ce5b60d0b79166bb25241d04470c11136de8bc192d1b9c030cab3",
+        "simulation.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "simulation.stdout.log": "518ececae16e2ca3e395ec8fa28fd6cb23e3c336aad5ec2b9791e3e5c9e9f24c",
+        "view.do": "0fe00f25e9ea521a172f4216fbe2eb8bee4f9c533c5b87781a6cf7db39499a7a",
+        "vlib.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vlib.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "vmap.stdout.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "mouse_pointer_visible": false,
+      "height": 1440,
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-unit-alu-modelsim-original.jpg",
+      "window_ns": [
+        0,
+        120
+      ],
+      "source": "Original @oai/sky native-window screenshot bytes; no redraw or pixel edits",
+      "width": 2553,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "test": "alu",
+      "sha256": "440136cb7d353c1c667ec845a0fd7ed77377fbccb7950b0181a28a6b2c2c9aa2"
+    },
+    {
+      "mouse_pointer_visible": false,
+      "height": 1440,
+      "file": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\cpu-unit-regfile-modelsim-original.jpg",
+      "window_ns": [
+        40,
+        102
+      ],
+      "source": "Original @oai/sky native-window screenshot bytes; no redraw or pixel edits",
+      "width": 2553,
+      "native_application": "ModelSim SE-64 2020.4 (WLF View)",
+      "test": "regfile",
+      "sha256": "e9785dcf01acff9e3a3ce741ae0fae365eb802c99254276dd4230f18ceffcf4e"
+    }
+  ],
+  "coverage": {
+    "regfile_read_checks": 2476,
+    "regfile_async_full_address_scans": 6,
+    "alu_architectural_operations": 10,
+    "regfile_sync_resets": 2,
+    "alu_random_pairs": 1024,
+    "alu_control_encodings": 16,
+    "alu_boundary_pairs": 64,
+    "alu_checks": 17804,
+    "alu_shift_sweep": 384,
+    "alu_passthrough_encodings": 6,
+    "regfile_valid_writes": 1006
+  },
+  "first_batch_archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\unit_support\\cpu-unit-support-2026-10-29.zip",
+  "first_batch_archive_sha256": "6f7a7ec3f45d834d910e27536794390ee8d7f25d51f71f9b9a4ba174efb68ebb",
+  "notes": [
+    "The updated capture runner supersedes the mutable working-tree runner; the first batch preserves its original runner snapshot and result hashes in its immutable archive.",
+    "Pango primitive models are read from the installed tool and hash-verified; proprietary model files are not copied into this archive.",
+    "Batch transcript uses batch-transcript.log; GUI WLF viewers use viewer.log, leaving all registered simulation outputs unchanged."
+  ],
+  "remaining": [
+    "B.3 front-end/issue/forwarding/LSU/cache module behavior",
+    "B.4 whole-core minimal-system simulation"
+  ],
+  "production_rtl_modified_in_this_batch": false,
+  "physical_timing_revalidated": false,
+  "board_programmed": false
+}

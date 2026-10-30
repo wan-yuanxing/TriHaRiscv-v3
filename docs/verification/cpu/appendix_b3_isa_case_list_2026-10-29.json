@@ -1,0 +1,72 @@
+{
+  "status": "DOCUMENT_VERIFIED_OFFICIAL_TESTS_PASS",
+  "date": "2026-10-29",
+  "scope": "B.1 per-case results for the current six-stage single-issue RV32IM/CSR CPU; support paths stated once outside tables",
+  "case_list_scope": {
+    "riscv_tests_count": 50,
+    "act4_count": 53,
+    "current_cpu_config": "rv32im_zicsr",
+    "status_all": "PASS",
+    "out_of_scope_reference_cases": "Old RV64/C/Zba/Zbb/Zbs cases are not included",
+    "official_riscv_tests": "50/50 PASS",
+    "official_act4": "53/53 PASS"
+  },
+  "case_list_files": {
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\riscv-tests-cases.csv": "affc6f9be0a0bf8d3eb7ea0970234c504edd1649c4e71c2467efc25fc44c0327",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\act4-cases.csv": "7eedf74032c6d4edd31aef31d6f2882672e0551f202b3868441b3677cacde552",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\cases.json": "66d91d3dd8f69626c9260c9e4a24b76eaba2860f52aef425e6afb6e111b932b4",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\README.md": "7c9e5f725058dface6030aee08c124553d223ccc0cdb7abab53203b5aa9b6e0b"
+  },
+  "reference": "D:\\RV-CPU\\TriHaRiscv\\复赛文档\\CICC1002692+分区决赛+技术文档.md",
+  "reference_sha256": "9b6e5e3c187307ee08917592c81c25c9129a183b6e1f805bdb20ccb7f049282d",
+  "reference_pass_results_reused": false,
+  "official_current_cpu_executed_count": 103,
+  "official_current_cpu_pass_count": 103,
+  "previous_directed_evidence": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\appendix_b3_isa_2026-10-29.json",
+  "previous_directed_evidence_sha256": "e4c22a3222c70367c924038c5bc0077197636334006eaaa298664b3e6644099b",
+  "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+  "readme_sha256": "41cb996616c0a04669291a8e60d236c2ce1cdc5b823f68cc84da75813c8bff54",
+  "outside_b3_unchanged": false,
+  "all_other_report_chapters_and_figures_unchanged": false,
+  "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+  "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+  "pages": 61,
+  "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+  "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+  "pdf_rendered_or_previewed": false,
+  "support_materials_directory": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support",
+  "raw_official_log_directories_exist": true,
+  "new_simulation_run": true,
+  "regression_manifest": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\regression-2026-10-29.json",
+  "regression_manifest_sha256": "08e61a26b9aaf463422d25047f884d87dd6f1732bd5605eafa5188841ae5f2f2",
+  "support_archive": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\isa_support\\cpu-isa-support-2026-10-29.zip",
+  "support_archive_sha256": "79e5c590f1937cc1b994c51b692b920bdd98f80c41bd96e9b8b9423c9eeb82ab",
+  "result_conclusion": "50/50 riscv-tests PASS and 53/53 ACT4 PASS on current CSR-corrected RTL; no new physical timing or board evidence.",
+  "physical_timing_revalidated": false,
+  "board_programmed": false,
+  "coremark_remeasured": false,
+  "prior_failures": [
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\isa-20261029T053317893485Z\\result.json",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\isa-20261029T054700042738Z\\result.json",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\isa-20261029T055216016927Z\\result.json"
+  ],
+  "section": "B.1",
+  "latest_document_update": {
+    "scope": "B.3 frontend and issue/forwarding module validation; B.1/B.2 evidence retained",
+    "evidence": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\cpu\\module_waveforms_2026-10-29.json",
+    "document": {
+      "appendix": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\06-appendix.tex",
+      "appendix_sha256": "5f7229e1c96c29608d42311206be4adebd32a97e4cacc43656079b8feef4205b",
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+      "pdf_sha256": "1f4d434350d13c150c708168c9977d949d7b6063f22ab58acf44a54c74da853a",
+      "pages": 61,
+      "compile_log": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.log",
+      "compile_log_sha256": "14aaf30ccfc092c38664d4da495618a97f925d5ceeb52b1395fb794b7c904d35",
+      "compile_command": "docs/technical-report/latex/scripts/build.ps1",
+      "compile_return_code": 0,
+      "overfull_boxes": false,
+      "unresolved_references": false,
+      "pdf_rendered_or_previewed": false
+    }
+  }
+}

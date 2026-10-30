@@ -7,6 +7,16 @@
 - 用户当前已授权开始 Video 路线实施，优先 Windows 原生开发、参考例程复用和尽快上板。旧 README 的“暂不迁移”历史状态已结束；复用仍须逐项验证。
 - 现有 `docs/technical-report/` 修改属于独立工作，遵守其局部 AGENTS，不覆盖、不连带提交。
 
+## CPU 路线最新约束（2026-10-18）
+
+- 用户已将本目录确认为当前主工程；CPU 选型与维护位置见 `docs/cpu/README.md`。旧 `TriHaRiscv-v3-cpu-dualissue` 不属于本仓库工作树，只作源码来源、备份和历史证据，不能继续作为正式 CPU 维护主线。
+- CPU 当前硬件要求为 Pango、RV32I，另要求直接维护 Verilog 实现，开发环境集中在 Windows + Codex + ModelSim + PDS + RISC-V GCC；不引入 Scala/Spinal/Chisel/Bluespec 或 HDL 降低工具链，不把 WSL 设为新 CPU 流程前提。复用已安装 Windows 工具和本工程已有脚本能力，不另建环境。
+- CPU 仍需评估 CoreMark、退休 IPC、CPU-only 资源及实际 100MHz 后布线时序。M/C/PMP/Cache/发射宽度按实际需求选择；v0.6/旧 README 中 CPU 固定功能清单与这些最新指示冲突时，以用户指示为准。系统地址、MMIO、DDR、帧所有权等独立契约不能随 CPU 选型擅自改变。
+- CPU 源码及适配放 `rtl/cpu/`，SoC 互连放 `rtl/soc/`，板级适配遵守本仓库 `fpga/pg2l100h/` 结构；不复制旧 SoC、旧地址表或旧 `targets/pango676` 工程覆盖新主工程。工程、目标、分支和运行提示统一使用 TriHa/CPU 命名；来源与许可保留在独立清单和许可证中。
+- 用户确认保留新主工程顶层，CPU 内部沿用旧工程风格：四空格缩进、ANSI Verilog端口、`clk_i/rst_ni`、`*_i/*_o`、`u_*` 实例和职责清楚的模块/文件头。第三方原始文件保持字节和许可不变，不为统一风格批量改写。
+- 性能基准固定为CoreMark v1.0；软件工具目标为RV32裸机GCC。Windows GCC15.2.0已安装在`D:/AI_Tools/xpack-riscv-none-elf-gcc-15.2.0-1/`，用户接受实际前缀`riscv-none-elf-`，以RV32/ILP32能力为准；CPU工作树内的配置与检查入口为`config/cpu_toolchain.json`、`scripts/cpu/check_toolchain.ps1`。记录真实工具名和校验值，不改名伪装目标三元组。
+- 共享目录当前承载 Video 工作。需要独立 CPU 分支时，从本仓库建立独立 Git 工作树，使用相同相对目录，避免在共享目录切换分支或复制成另一套长期独立工程。选型/目录评估不等于已建立 CPU 工作树或已执行实现。
+
 ## 目录与责任
 
 - CPU：`rtl/cpu/`、`rtl/soc/`、`sw/drivers/`、`sw/runtime/`，负责正式互连、地址属性、固件和统一帧状态。
