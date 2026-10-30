@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-21",
+  "status": "PASS_WITH_OPEN_SYSTEM_GATES",
+  "scope": "same-clock single-lane Dense/DW CPU/MMIO/AXI digital loop and registered-boundary 100MHz component",
+  "main_root": "D:\\FPGA\\TriHaRiscv-main",
+  "isolated_root": "D:\\FPGA\\TriHaRiscv-npu-operator",
+  "main_head_at_migration": "3f34cce478af6cb94fc06f9eee546ae539a1e9de",
+  "cpu_revision": "dc00f801d0b3cf1e40faf32bd799c14b9d6b330e",
+  "external_npu_revision": "178c3ad1ba515d43725dd80ab19e20b50d471413",
+  "sources_sha256": {
+    "config/npu_regs.json": "1a28cacb9e82493073edf865e7db3884c9f25c58b06891fa81707cba4356117c",
+    "docs/superpowers/plans/2026-10-21-npu-operator-loop.md": "1e4c91181d70c75ba21ad3739e93ab45977a75c3199d073b449c01dfb3fb211b",
+    "docs/superpowers/specs/2026-10-21-npu-operator-loop-design.md": "224468a0eea87ac30328297be9ba61a0b8322052de70e675fce2c004c0e3dac7",
+    "docs/interfaces/npu.md": "2ad49143953eb9c59e56dfe13c24c97cfc8cd94702ab5b426e06caa96f24d423",
+    "docs/verification/npu/2026-10-21-operator-loop.md": "2ab810f641ff9f8b040900ffa6f353b18e29a2a8af5c53ce004fa838d8e23b80",
+    "fpga/pg2l100h/constraints/npu_operator_probe.fdc": "979881dcaed060a1361c917e60e07485245c2021bf2f565415abb27514d6ef11",
+    "fpga/pg2l100h/project/npu_operator_probe.json": "f21b21a42dabd00520ad0b3b63442c99b971c540745d91c959151775ab9a44de",
+    "fpga/pg2l100h/rtl/npu_operator_probe.v": "6290f30c6b13c2310334c10bdfa94d62b9047b8a3c7995cb1cba529de44264bb",
+    "rtl/soc/cpu_native_axil.v": "af76419e2b5b6146ebe1bdb6a8efa6e95f2e7534ea0a7bc461bf2605aba90a87",
+    "rtl/npu/include/npu_regs.vh": "ce81a486b7bb1c7041adeb0e06e8fe4ad753026162642fe11c27dc94652bd03f",
+    "rtl/npu/npu_axi128_single.v": "1132bf760633d3ee94031c12404d5fbc65a5fa130094ab3cb8497ddb7f98a966",
+    "rtl/npu/npu_operator_mmio.v": "e289ead11532f2d1ae802a294de755508a622fa378097dc8dfe994e2b65e561d",
+    "rtl/npu/npu_scalar_conv.v": "ea9cf1af7677aa05f6ed84c7d8d6802535b204d843e38cfa144bbf0ca294b6bd",
+    "rtl/npu/npu_operator_top.v": "e5dbfeb2938fde5cfa30eaac20fbc7b4f6929a97aa49548d4bee035eb4ae8241",
+    "scripts/npu/build_operator.py": "0e8cf13fa09bc9f36e36962a0a373d1936a72c335f560ec2aba10dec8223f174",
+    "scripts/npu/frozen_inputs.py": "1cf962d3f828e1e8255332f261515950827d621aa60789a5521b402ab03ca2f6",
+    "scripts/npu/gen_regs.py": "9ee9d0bb7b6241627291ff1b2c7d082b6be606235cf35d9b7ee22bdd7d88cd76",
+    "scripts/npu/run_cpu_operator.py": "118a4dccabafd452f9fd557bf77c4aa4e1405c93a34a8f96c537a57892b97d31",
+    "scripts/npu/run_scalar.py": "ccc62baa0e30000f6a68b799bd18c01ee1af682257f8b6aaf5658f836205a46d",
+    "scripts/npu/test_dma_runner.py": "8132b367b0fa5d7de7a3063ff8c349fe2799ce63a4adaa8543543de907ce4f2f",
+    "scripts/npu/test_mmio_runner.py": "64712c9113bb7b5cbf621658b3b31ce130fc29e1fb0f95403eca5f1b3fdf2bab",
+    "scripts/npu/test_operator_reports.py": "eacf1ddca5962534b698fe7a373085f9e5db39066cc8d09cdfbe662be0316fee",
+    "scripts/npu/test_runner_freeze.py": "facbf783618d5918f232ab4c95db7e5ac81e6ef6355e32f52bb85e5a72830122",
+    "sw/drivers/npu_operator.c": "c6c8564a662123bbbad5de90e3a58e2ea933388fee48f97aed408dcd22b9def4",
+    "sw/include/npu_operator.h": "d224571c466c181ad6bc422482a953d380d0e73a12948b3049750aa22e95e859",
+    "sw/include/npu_regs.h": "9a3cb90f9c84d9a7526c6c0bebd98d8762fcb678e14d7ef79059712a21e23911",
+    "sw/tests/npu_operator/start.S": "2aa6d7a56ee0d7bdd48f7e8413294d5115cc7d52bb9929284587866c2d4340f6",
+    "sw/tests/npu_operator/link.ld": "91b9fed757111cde71c15a1f1638d9ef17618a271f0f2b2a1180846b09cce69e",
+    "sw/tests/npu_operator/main.c": "db168c939b3a4a4b1a897b198687aafcc06ce4727b1ba2bf00bbabb70b1962ef",
+    "tb/npu/operator_oracle.py": "b85ce33c88be5c293088122f28423c5e89615a6083623ad2b9d4b4c5f9e03d63",
+    "tb/npu/tb_cpu_npu_operator.sv": "ac28b0e0a6956a9de7f77c5e07e4bfe7a90aa26f4680a8a270ea4df6064ad21f",
+    "tb/npu/tb_npu_axi128_single.sv": "527aa946c5d5f544b8e59ff2b2115c91e25a63b401f83c1c7dcb8d0aa7c01b3c",
+    "tb/npu/tb_npu_operator_mmio.sv": "ae4c34d7764fa9ca5d1fa57301350d08912504698b44ca161cf36927595e29cf",
+    "tb/npu/tb_npu_scalar_conv.sv": "7e91368e7d6c7360dd81d6989d41720c94de8604862f57cfb460b712e8a81117"
+  },
+  "audit": {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\operator_handoff_20261021\\audit.json",
+    "sha256": "53dbe39c0ce82e9f620f66a8f019b1e14e7b6ffdedc38a529a46a0e51d27012b"
+  },
+  "validation": {
+    "cpu": {
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\cpu_operator_20261021_162422_cbf813e0\\result.json",
+        "sha256": "9e1ece7d44670c079d22b51e71592e0e20a78fd5a1d67d0d839a778088552ad6"
+      },
+      "runs": 26,
+      "tasks": 52,
+      "output_bytes": 6308,
+      "cpu_blobs": 33,
+      "artifacts_checked": 469,
+      "generated_inputs_checked": 199,
+      "negative_tests": [
+        {
+          "name": "red_no_control",
+          "status": "rejected",
+          "exit_code": 2,
+          "reason": "CPU_NPU_FAIL timeout"
+        },
+        {
+          "name": "red_corrupted_output",
+          "status": "rejected",
+          "exit_code": 2,
+          "reason": "CPU_NPU_FAIL firmware signature bad00020"
+        }
+      ],
+      "all_hashes_match": true
+    },
+    "scalar": {
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\scalar-20261021T082422_067187Z\\result.json",
+        "sha256": "392e2937302306588a31f54270b390b408651082e1c3cbf46806bf77bb3f0a6e"
+      },
+      "cases": 18,
+      "all_hashes_match": true
+    },
+    "dma": {
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\dma\\20261021T082423_037038Z\\result.json",
+        "sha256": "91bd6ab8a5a7533b6483beee04107e54821f0e47cb1dd536202381b16c6b4cdf"
+      },
+      "cases": 72
+    },
+    "mmio": {
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\mmio\\20261021T082422_131696Z\\result.json",
+        "sha256": "e8bf07bbdd019fcf590a3fdb18b3d36400271b97f26972a14a52da4c6d46e3a4"
+      },
+      "checks": 785,
+      "generator_checks": 20
+    },
+    "pds": {
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\pds-20261021T081726_056120Z\\result.json",
+        "sha256": "f34239ed7eed22ed0bad32b3f30ede84f3e29728aae15af0e442c7b41fcf3978"
+      },
+      "timing": {
+        "Setup_Slow": {
+          "worst_slack_ns": 0.424,
+          "tns_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8703
+        },
+        "Setup_Fast": {
+          "worst_slack_ns": 2.48,
+          "tns_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8703
+        },
+        "Hold_Slow": {
+          "worst_slack_ns": 0.118,
+          "tns_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8703
+        },
+        "Hold_Fast": {
+          "worst_slack_ns": 0.101,
+          "tns_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 8703
+        }
+      },
+      "resources_including_scan_boundary": {
+        "APM": 16.0,
+        "FF": 2807.0,
+        "LUT": 3339.0,
+        "DRM": 0.0,
+        "GPLL": 0.0
+      },
+      "all_hashes_match_current_main": true
+    },
+    "reviews": {
+      "spec": {
+        "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\spec-review-final-20261021T080326_617778Z\\review.json",
+        "sha256": "2c7a10f67baa8ba01ddbf5d40658bc7db05c4b387efac5e49ee39fe382d6da36"
+      },
+      "quality": {
+        "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\quality-review-final.json",
+        "sha256": "5058890e7cf6fbefbe2058c4992dff588b1edda5a4f42ec3083493305c4a4cdc"
+      }
+    },
+    "adapter_regression": {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\regression\\20261021T082424_368557Z\\result.json",
+      "sha256": "d501f1c6d8377247782b50af289b26b38c8021ccaf665c798a694000f8d1ea44"
+    },
+    "python_regressions": {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\operator_handoff_20261021\\regressions.json",
+      "sha256": "7f2efedddf210d4fe2041537d8113c46bc91ba66015d6cd36c24974c5eaa8a68"
+    }
+  },
+  "historical_failures": [
+    "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\pds-20261021T074150_540646Z\\result.json",
+    "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\pds-20261021T075118_950271Z\\result.json",
+    "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\cpu_operator_20261021_154852_3573866f\\result.json",
+    "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\quality_race_493c33ea\\race_evidence.json"
+  ],
+  "hardware_actions": [],
+  "commits_created": 0,
+  "pushed": false,
+  "hardware_ready": false,
+  "final_landmark_requirement": "five_points",
+  "limits": [
+    "Conv_0 is cropped 7x5, not a complete 320x320 layer",
+    "CPU readback uses a local port of the same byte DDR simulation model",
+    "PDS resource/timing includes 542 diagnostic scan-boundary FF",
+    "cycle counters saturate at 0xffffffff"
+  ],
+  "open_gates": [
+    "formal CPU/fabric import and cross-master write visibility",
+    "physical DDR and 100/125MHz CDC",
+    "complete network/operator scheduling",
+    "five-point INT8 calibration and real-image accuracy",
+    "whole-system resources/timing/frame rate and board verification",
+    "historical BIST ten-minute stability explicit feedback"
+  ]
+}

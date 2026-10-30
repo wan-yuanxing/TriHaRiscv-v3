@@ -3,7 +3,9 @@
 // Same-clock, one-outstanding CPU native to Video AXI-Lite control adapter.
 // Native byte lanes are already aligned by the LSU. Reset is coordinated with
 // the CPU and AXI endpoint; it is not an in-flight transaction abort protocol.
-module cpu_native_axil (
+module cpu_native_axil #(
+    parameter [15:0] MMIO_PREFIX = 16'h2001
+) (
     input  wire        clk_i,
     input  wire        rst_ni,
     input  wire [31:0] cpu_addr_i,
@@ -76,7 +78,7 @@ module cpu_native_axil (
     always @* begin
         request_present = cpu_re_i || (|cpu_wstrb_i) || cpu_invalidate_i ||
                           cpu_writeback_i || cpu_flush_i;
-        request_error = cpu_addr_i[31:16] != 16'h2001 ||
+        request_error = cpu_addr_i[31:16] != MMIO_PREFIX ||
                         cpu_addr_i[1:0] != 2'b00 || cpu_cacheable_i ||
                         (cpu_re_i && (|cpu_wstrb_i)) || cpu_invalidate_i ||
                         cpu_writeback_i || cpu_flush_i;

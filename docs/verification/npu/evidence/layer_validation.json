@@ -1,0 +1,939 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-21",
+  "status": "PASS_CURRENT_CONV_SCOPE_WITH_OPEN_GRAPH_GATES",
+  "main_root": "D:\\FPGA\\TriHaRiscv-main",
+  "isolated_root": "D:\\FPGA\\TriHaRiscv-npu-operator",
+  "main_head_at_migration": "8635a91626d87eb7573beba5ea805a5f6043bb8a",
+  "external_npu_revision": "178c3ad1ba515d43725dd80ab19e20b50d471413",
+  "scope": "47 isolated full-size convolution layers; host-provided intermediate inputs",
+  "sources_sha256": {
+    "scripts/npu/layer_assets.py": "78cb2795f539bc20f19b5b361d6493ead115b0fb85b741ed50454e8e2064c272",
+    "scripts/npu/test_layer_assets.py": "cce770f4b3aceee2068e80208f2ac8039b12f85d3bf54ef9cf6314d24cc21ae6",
+    "scripts/npu/run_layer_rtl.py": "146b6aba5e1f7c760cc1d1769af30ed16d06efbfad2f03616c7fc6fdc32ffe62",
+    "scripts/npu/test_layer_rtl.py": "59e72ab0ab9d0f7d92d9c12dbae194c4ebaa2c5bfd079b398e3f3ef02e980d2d",
+    "scripts/npu/compiled_layers.py": "3a12ced3bfe615b24531540a8c145d7751d0f8df8f737ab87b62dfab3a88dbda",
+    "scripts/npu/test_compiled_layers.py": "993e845adce76287042944362e362657061f535e497991d41aa6491f27e6bf82",
+    "scripts/npu/prepare_layer_tool.py": "1082f0f15a8d4823f957999b4c1c05c24b3df60f4b629545026cb068d4494215",
+    "tb/npu/tb_npu_layer.sv": "8f86399f4a43fa4c7756633bc17e9c8d840a5af05509800da1144f09d0b2a3f3",
+    "tb/npu/npu_layer_main.cpp": "4f026c386a4e1128cf838d01f50eb5b1f38fd992be182f04e1a3894291418593",
+    "docs/superpowers/specs/2026-10-21-npu-layer-validation-design.md": "6fa1a140a9f5980b86d9aca4970b71a16ba23f6ed68edb1022680d8dda2fa298",
+    "docs/superpowers/plans/2026-10-21-npu-layer-validation.md": "4863c66593a9131e448029662a5684de6b6b0f27be2213dda30c9b4100741c9e",
+    "docs/verification/npu/2026-10-21-layer-validation.md": "b1087d17fe86b59486cd5dedfafacad61e67111c365aa8c502bc28f51e43ca3d"
+  },
+  "dut_sha256": "ea9cf1af7677aa05f6ed84c7d8d6802535b204d843e38cfa144bbf0ca294b6bd",
+  "dut_changed": false,
+  "audit": {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\layer_handoff_20261021\\audit.json",
+    "sha256": "6406a50f20ecaabe92ce734e7a1a478092a8f13400242df3bc5aed2109ec9e33"
+  },
+  "validation": {
+    "full_layers": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\layers-rtl-20261021T092832_605526Z\\result.json",
+      "sha256": "73efe927ef755f5ac973b648182d555cd761ceb0263e996c65a6bf72b16749fc"
+    },
+    "host_assets": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\layer_assets_full_20261021_final\\manifest.json",
+      "sha256": "1b3f52cffd5ce5165d3faebeb72ea7ff35233b93704da8ce184ec1b48803a71d"
+    },
+    "cross_simulator_subset": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\layer_harness_cross_final_20261021.json",
+      "sha256": "b03039ae17f8fe06f01c6be3934755c90002d5650fd59b7bf6bf4b0edb0153b3"
+    },
+    "spec_review": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\layer_spec_review_a107e52c\\final_review.json",
+      "sha256": "19c6a5276f96003b93e09814713ba189ff2d207c9c294a3a4bc0b30952927ab2"
+    },
+    "quality_review": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\layer_quality_review_final.json",
+      "sha256": "2f49ece04bd763729ce0db3882311845f59e2dc49ba5e9b9479c8394eb9ac963"
+    },
+    "main_retests": {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\layer_handoff_20261021\\result.json",
+      "sha256": "cc85d67ab879bd4a4c3ed1d38385d793bddfe002e9675b65fc538e6d561b6063"
+    }
+  },
+  "summary": {
+    "runs": 141,
+    "output_bytes": 11736000,
+    "nominal_macs": 253569000,
+    "effective_macs": 252434112,
+    "main_python_tests": 26
+  },
+  "convolutions_per_input": 47,
+  "dense": 30,
+  "depthwise": 17,
+  "input_cases": [
+    "zero",
+    "full255",
+    "pattern"
+  ],
+  "unsupported_operators": [
+    {
+      "operator_id": 3,
+      "name": "MaxPool_5",
+      "opcode": 4,
+      "op": "MaxPool",
+      "input_ids": [
+        3
+      ],
+      "output_id": 4,
+      "input_shape": [
+        1,
+        16,
+        160,
+        160
+      ],
+      "output_shape": [
+        1,
+        16,
+        80,
+        80
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 12,
+      "name": "MaxPool_18",
+      "opcode": 4,
+      "op": "MaxPool",
+      "input_ids": [
+        12
+      ],
+      "output_id": 13,
+      "input_shape": [
+        1,
+        64,
+        80,
+        80
+      ],
+      "output_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 17,
+      "name": "MaxPool_25",
+      "opcode": 4,
+      "op": "MaxPool",
+      "input_ids": [
+        17
+      ],
+      "output_id": 18,
+      "input_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "output_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 22,
+      "name": "MaxPool_32",
+      "opcode": 4,
+      "op": "MaxPool",
+      "input_ids": [
+        22
+      ],
+      "output_id": 23,
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        64,
+        10,
+        10
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 29,
+      "name": "Resize_43",
+      "opcode": 5,
+      "op": "NearestResize",
+      "input_ids": [
+        29
+      ],
+      "output_id": 30,
+      "input_shape": [
+        1,
+        64,
+        10,
+        10
+      ],
+      "output_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 30,
+      "name": "Add_44",
+      "opcode": 3,
+      "op": "Add",
+      "input_ids": [
+        22,
+        30
+      ],
+      "output_id": 31,
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 33,
+      "name": "Resize_49",
+      "opcode": 5,
+      "op": "NearestResize",
+      "input_ids": [
+        33
+      ],
+      "output_id": 34,
+      "input_shape": [
+        1,
+        64,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 34,
+      "name": "Add_50",
+      "opcode": 3,
+      "op": "Add",
+      "input_ids": [
+        17,
+        34
+      ],
+      "output_id": 35,
+      "input_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "output_shape": [
+        1,
+        64,
+        40,
+        40
+      ],
+      "input_dtype": "|u1",
+      "output_dtype": "|u1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 55,
+      "name": "Transpose_78",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        39
+      ],
+      "output_id": 56,
+      "input_shape": [
+        1,
+        1,
+        40,
+        40
+      ],
+      "output_shape": [
+        1,
+        40,
+        40,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 56,
+      "name": "Reshape_84",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        56
+      ],
+      "output_id": 57,
+      "input_shape": [
+        1,
+        40,
+        40,
+        1
+      ],
+      "output_shape": [
+        1,
+        1600,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 57,
+      "name": "Sigmoid_85",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        57
+      ],
+      "output_id": 58,
+      "input_shape": [
+        1,
+        1600,
+        1
+      ],
+      "output_shape": [
+        1,
+        1600,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 58,
+      "name": "Transpose_86",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        41
+      ],
+      "output_id": 59,
+      "input_shape": [
+        1,
+        1,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        20,
+        20,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 59,
+      "name": "Reshape_92",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        59
+      ],
+      "output_id": 60,
+      "input_shape": [
+        1,
+        20,
+        20,
+        1
+      ],
+      "output_shape": [
+        1,
+        400,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 60,
+      "name": "Sigmoid_93",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        60
+      ],
+      "output_id": 61,
+      "input_shape": [
+        1,
+        400,
+        1
+      ],
+      "output_shape": [
+        1,
+        400,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 61,
+      "name": "Transpose_94",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        43
+      ],
+      "output_id": 62,
+      "input_shape": [
+        1,
+        1,
+        10,
+        10
+      ],
+      "output_shape": [
+        1,
+        10,
+        10,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 62,
+      "name": "Reshape_100",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        62
+      ],
+      "output_id": 63,
+      "input_shape": [
+        1,
+        10,
+        10,
+        1
+      ],
+      "output_shape": [
+        1,
+        100,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 63,
+      "name": "Sigmoid_101",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        63
+      ],
+      "output_id": 64,
+      "input_shape": [
+        1,
+        100,
+        1
+      ],
+      "output_shape": [
+        1,
+        100,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 64,
+      "name": "Transpose_102",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        51
+      ],
+      "output_id": 65,
+      "input_shape": [
+        1,
+        1,
+        40,
+        40
+      ],
+      "output_shape": [
+        1,
+        40,
+        40,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 65,
+      "name": "Reshape_108",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        65
+      ],
+      "output_id": 66,
+      "input_shape": [
+        1,
+        40,
+        40,
+        1
+      ],
+      "output_shape": [
+        1,
+        1600,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 66,
+      "name": "Sigmoid_109",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        66
+      ],
+      "output_id": 67,
+      "input_shape": [
+        1,
+        1600,
+        1
+      ],
+      "output_shape": [
+        1,
+        1600,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 67,
+      "name": "Transpose_110",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        53
+      ],
+      "output_id": 68,
+      "input_shape": [
+        1,
+        1,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        20,
+        20,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 68,
+      "name": "Reshape_116",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        68
+      ],
+      "output_id": 69,
+      "input_shape": [
+        1,
+        20,
+        20,
+        1
+      ],
+      "output_shape": [
+        1,
+        400,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 69,
+      "name": "Sigmoid_117",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        69
+      ],
+      "output_id": 70,
+      "input_shape": [
+        1,
+        400,
+        1
+      ],
+      "output_shape": [
+        1,
+        400,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 70,
+      "name": "Transpose_118",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        55
+      ],
+      "output_id": 71,
+      "input_shape": [
+        1,
+        1,
+        10,
+        10
+      ],
+      "output_shape": [
+        1,
+        10,
+        10,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 71,
+      "name": "Reshape_124",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        71
+      ],
+      "output_id": 72,
+      "input_shape": [
+        1,
+        10,
+        10,
+        1
+      ],
+      "output_shape": [
+        1,
+        100,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "|i1",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 72,
+      "name": "Sigmoid_125",
+      "opcode": 8,
+      "op": "Sigmoid",
+      "input_ids": [
+        72
+      ],
+      "output_id": 73,
+      "input_shape": [
+        1,
+        100,
+        1
+      ],
+      "output_shape": [
+        1,
+        100,
+        1
+      ],
+      "input_dtype": "|i1",
+      "output_dtype": "<u2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 73,
+      "name": "Transpose_126",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        45
+      ],
+      "output_id": 74,
+      "input_shape": [
+        1,
+        4,
+        40,
+        40
+      ],
+      "output_shape": [
+        1,
+        40,
+        40,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 74,
+      "name": "Reshape_132",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        74
+      ],
+      "output_id": 75,
+      "input_shape": [
+        1,
+        40,
+        40,
+        4
+      ],
+      "output_shape": [
+        1,
+        1600,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 75,
+      "name": "Transpose_133",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        47
+      ],
+      "output_id": 76,
+      "input_shape": [
+        1,
+        4,
+        20,
+        20
+      ],
+      "output_shape": [
+        1,
+        20,
+        20,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 76,
+      "name": "Reshape_139",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        76
+      ],
+      "output_id": 77,
+      "input_shape": [
+        1,
+        20,
+        20,
+        4
+      ],
+      "output_shape": [
+        1,
+        400,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 77,
+      "name": "Transpose_140",
+      "opcode": 6,
+      "op": "Transpose",
+      "input_ids": [
+        49
+      ],
+      "output_id": 78,
+      "input_shape": [
+        1,
+        4,
+        10,
+        10
+      ],
+      "output_shape": [
+        1,
+        10,
+        10,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    },
+    {
+      "operator_id": 78,
+      "name": "Reshape_146",
+      "opcode": 7,
+      "op": "Reshape",
+      "input_ids": [
+        78
+      ],
+      "output_id": 79,
+      "input_shape": [
+        1,
+        10,
+        10,
+        4
+      ],
+      "output_shape": [
+        1,
+        100,
+        4
+      ],
+      "input_dtype": "<i2",
+      "output_dtype": "<i2",
+      "rtl_supported": false,
+      "no_crop": true,
+      "macs": 0
+    }
+  ],
+  "full_graph_executed": false,
+  "hardware_ready": false,
+  "final_landmark_requirement": "five_points",
+  "tool_package": {
+    "publisher": "dau-dev/verilator-python third-party wheel",
+    "package_version": "5.48.0",
+    "actual_frontend_version": "rev vUNKNOWN-built20260516-4e853d8",
+    "wheel_sha256": "e03aad7e023bbe585f909276f3c03af66f7ede72155f8f75fdaf4f1ec8250e09",
+    "two_state": true,
+    "modelsim_crosscheck_layers": 4
+  },
+  "open_gates": [
+    "32 auxiliary operators and graph scheduling/chaining",
+    "five-point INT8 and real-image accuracy",
+    "formal fabric cross-master visibility, physical DDR and CDC",
+    "whole-system resources/timing/frame rate and board verification"
+  ],
+  "pds_rerun": false,
+  "hardware_actions": [],
+  "commits_created": 0,
+  "pushed": false
+}

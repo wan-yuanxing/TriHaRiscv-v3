@@ -1,0 +1,389 @@
+{
+  "schema_version": "triha-npu-integration-audit-v1",
+  "review_date_local": "2026-10-20",
+  "timezone": "Asia/Shanghai",
+  "evidence_verified_at_utc": "2026-10-20T11:26:06.787348+00:00",
+  "npu": {
+    "path": "D:\\FPGA\\npu_zgtc",
+    "commit": "178c3ad1ba515d43725dd80ab19e20b50d471413",
+    "remote": "https://github.com/keep-s/npu_zgtc",
+    "product_sources_modified": false,
+    "local_tracked_change": "项目计划安排表.md audit entry"
+  },
+  "main": {
+    "path": "D:\\FPGA\\TriHaRiscv-main",
+    "commit": "869a028bc0d6b4cda9ba5422c929263b77656837",
+    "review_uses_current_working_copy": true,
+    "preexisting_cpu_and_technical_report_changes": true,
+    "product_sources_modified_by_audit": false
+  },
+  "tools": {
+    "modelsim_version_actual": "Model Technology ModelSim SE-64 vsim 2020.4 Simulator 2020.10 Oct 13 2020",
+    "modelsim_exe": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+    "modelsim_sha256": "011f110291dc69707d7118e8f8d712b91438e0c837f9bc10ce6bf53c1d048cfd",
+    "pds": "2022.2-SP6.4",
+    "pds_exe": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe",
+    "pds_sha256": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f",
+    "python": "3.13.13",
+    "numpy": "2.5.4",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.31.0",
+    "opencv": "4.11.0",
+    "metadata_note": "upstream probe generators hardcode historical dates and ModelSim10.4; actual run/tool identity is recorded here"
+  },
+  "fresh_verification": {
+    "numeric_assets_sha256_checked": 7,
+    "parameter_arrays_checked": 241,
+    "arithmetic_groups_passed": 8,
+    "synthetic_cases": 3,
+    "integer_tensors_vs_direct_INT64": 237,
+    "serialized_program_tensors_vs_reference": 237,
+    "historical_head_hashes_matched": 27,
+    "program": {
+      "program_bytes": 20160,
+      "parameter_image_bytes": 108288,
+      "program_sha256": "3b5fd2fab7baccee6b0f739447d00c2cc3930bd572d214a07072c1afb4aeb778",
+      "parameter_image_sha256": "1a69fa4e8edd20c739e0d12a437a8d076abac6029ab6dcbbbf6a7023424896f6",
+      "header": {
+        "magic": 1347768398,
+        "format_id": 1,
+        "header_bytes": 128,
+        "logical_bytes": 20160,
+        "allocated_bytes": 20160,
+        "tensor_count": 80,
+        "param_count": 150,
+        "op_count": 79,
+        "tensor_offset": 128,
+        "tensor_stride": 64,
+        "param_offset": 5248,
+        "param_stride": 32,
+        "op_offset": 10048,
+        "op_stride": 128,
+        "workspace_bytes": 4876544,
+        "model_package_version": 1,
+        "numerics_id": 1,
+        "required_ops": 511,
+        "required_numeric_caps": 127,
+        "input_count": 1,
+        "output_count": 9,
+        "flags": 0,
+        "max_rank": 4,
+        "weight_block": 16
+      },
+      "matches_committed_package": true
+    },
+    "processing_boundary_groups": 12,
+    "processing_profile_comparisons": 2,
+    "task_ABI_positive_groups": 6,
+    "task_ABI_invalid_rejected": 27,
+    "software_handoff_images": 6,
+    "software_handoff_bytes_compared": 1843200,
+    "ddr_contract_status": "passed",
+    "budget_model_scenarios": {
+      "RAM": 4,
+      "bandwidth": 8,
+      "abstract_completion_counterexamples": 4
+    },
+    "platform_simulation_jobs_passed": 14,
+    "platform_PDS_tops_routed": 4,
+    "bist": {
+      "simulation_metrics": {
+        "healthy_runs": 3,
+        "fault_runs": 2,
+        "resets": 5,
+        "periods": 200,
+        "vector_checks": 112,
+        "ram_checks_per_run": 3072,
+        "apm_checks_per_run": 16
+      },
+      "internal_STA": {
+        "setup_slow_ns": 6.554,
+        "setup_fast_ns": 7.63,
+        "hold_slow_ns": 0.28,
+        "hold_fast_ns": 0.181
+      },
+      "bitstream": {
+        "path": "build/integration_audit/20261020/board_bist/implementation/generate_bitstream/board_bringup_top.sbit",
+        "sha256": "e12be6f24b38ea42fdbf150580fbf11c10fea8558f32e4a218561e050e7a2646",
+        "bytes": 3791112,
+        "usercode": "4E505531"
+      }
+    },
+    "raw_source_vendor_and_evidence_hash_entries_verified": 91,
+    "board_tests_executed": 0
+  },
+  "platform_results": {
+    "primitives": {
+      "resources": {
+        "APM": 1.0,
+        "FF": 109.0,
+        "LUT": 111.0,
+        "DRM": 0.5,
+        "GPLL": 1.0
+      },
+      "status": "passed_for_internal_paths",
+      "timing": {
+        "setup_slow": {
+          "worst_slack_ns": 6.477,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 558
+        },
+        "setup_fast": {
+          "worst_slack_ns": 7.524,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 558
+        },
+        "hold_slow": {
+          "worst_slack_ns": 0.274,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 558
+        },
+        "hold_fast": {
+          "worst_slack_ns": 0.183,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 558
+        }
+      }
+    },
+    "memory": {
+      "resources": {
+        "APM": 0.0,
+        "FF": 154.0,
+        "LUT": 198.0,
+        "DRM": 6.0,
+        "GPLL": 1.0
+      },
+      "status": "passed_for_internal_paths",
+      "timing": {
+        "setup_slow": {
+          "worst_slack_ns": 6.046,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1097
+        },
+        "setup_fast": {
+          "worst_slack_ns": 7.52,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1097
+        },
+        "hold_slow": {
+          "worst_slack_ns": 0.207,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1097
+        },
+        "hold_fast": {
+          "worst_slack_ns": 0.143,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1097
+        }
+      }
+    },
+    "fifo": {
+      "resources": {
+        "APM": 0.0,
+        "FF": 1572.0,
+        "LUT": 639.0,
+        "DRM": 8.0,
+        "GPLL": 0.0
+      },
+      "status": "isolated_internal_STA_and_Gray_max_delay_passed_skew_signoff_pending",
+      "timing": {
+        "setup_slow_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 6.13,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1973
+        },
+        "setup_slow_ui_125m_to_compute_100m": {
+          "worst_slack_ns": 6.006,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        "setup_slow_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 4.224,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2109
+        },
+        "setup_slow_compute_100m_to_ui_125m": {
+          "worst_slack_ns": 5.742,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        "setup_fast_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 7.641,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1973
+        },
+        "setup_fast_ui_125m_to_compute_100m": {
+          "worst_slack_ns": 6.837,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        "setup_fast_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 5.711,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2109
+        },
+        "setup_fast_compute_100m_to_ui_125m": {
+          "worst_slack_ns": 6.715,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        "hold_slow_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 0.163,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1973
+        },
+        "hold_slow_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 0.152,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2109
+        },
+        "hold_fast_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 0.109,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1973
+        },
+        "hold_fast_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 0.109,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2109
+        },
+        "recovery_slow_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 8.54,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        "recovery_slow_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 6.58,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 59
+        },
+        "recovery_fast_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 9.121,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        "recovery_fast_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 7.123,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 59
+        },
+        "removal_slow_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 0.209,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        "removal_slow_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 0.247,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 59
+        },
+        "removal_fast_compute_100m_to_compute_100m": {
+          "worst_slack_ns": 0.132,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        "removal_fast_ui_125m_to_ui_125m": {
+          "worst_slack_ns": 0.162,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 59
+        }
+      }
+    }
+  },
+  "readiness": {
+    "contract_alignment_can_start": true,
+    "system_simulation_integration_can_start": true,
+    "complete_SoC_synthesis_ready": false,
+    "real_NPU_inference_ready": false,
+    "board_integration_ready": false,
+    "input_320_UINT8_BGR_NCHW_software_reference_compatible": true,
+    "complete_NPU_RTL_present": false,
+    "production_CPU_in_main_present": false,
+    "full_CDC_signoff_passed": false,
+    "cross_master_physical_handoff_verified": false,
+    "system_resource_gate_passed": false,
+    "direct_addition_DRM_warning": {
+      "NPU_candidate": 100,
+      "Video_mode_board_measured": 73.5,
+      "capacity": 155,
+      "direct_sum": 173.5,
+      "excess_before_CPU": 18.5,
+      "scope": "budget warning for unchanged combination; not a merged-netlist measurement"
+    },
+    "blockers": [
+      "complete NPU operators/controller/DMA absent",
+      "production CPU/fabric not integrated and 100MHz CPU timing open",
+      "CPU per-operator vs NPU graph-program scheduling conflict",
+      "five-landmark vs bbox-only model scope conflict",
+      "address/identity/CDC/width/fence contract not frozen",
+      "direct RAM budget exceeds capacity",
+      "full-resolution concurrent capture/display/NPU flow not integrated"
+    ]
+  },
+  "limits": {
+    "clean_clone_full_program_ABI_entry_exit_code": 1,
+    "clean_clone_failure": "unpublished reports/ptq_320_v0_1/calibration_ranges.json missing",
+    "recovered_from_committed_assets": "calibration ranges and NPZ only; synthetic golden and program replay",
+    "not_reproduced": [
+      "natural calibration golden",
+      "WIDER3226-image AP",
+      "all54 upstream program_ABI negative cases",
+      "SDF conditional Gray envelope",
+      "fresh Video RTL/full regression",
+      "complete system PDS",
+      "physical board test",
+      "actual inference fps"
+    ]
+  },
+  "artifact_sha256": {
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\numeric_verification.json": "1c2d8b5b9283ca0c8e15f0a93f2f66a81365bed6cf1186d869695556b741b731",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\processing.json": "f77f9e25df52bdc84941c1e29b0cdb6816d22f00caf4ea3e72d2f7b0156362f7",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\task_abi\\task_abi_verification_v0_1.json": "1ecc7b9a94a4fbb1007ff7c86d641299c8cc55dde5f574c08c08aea5da72cb4e",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\ddr_contract\\local_ddr_contract_audit.json": "377e32a741b1bde0f7414a1e9c1b4e55d75119cd07bd56f06e1a4185ed650493",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\system_budget\\system_budget_summary_v1.json": "2d738fe3850059468884345ba44f5351720fce5a6eeecf754bc5935c550f39f1",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\video_handoff.json": "f09588ebed0ac8487425e5aeb6886a623fdf4f12dce0f9e3e456d6d0d8e22b89",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\primitives\\primitive_validation_v1.json": "8867ecbae26097012e49a58ccfac74c250ce316df9eee2109a0fcad11d1a3255",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\memory\\memory_validation_v1.json": "e895bb28cf61d521e9c2cf604c021901f19e92169070fd5773f79468bda92753",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\fifo\\fifo_validation_v1.json": "9d78cd482bbd5309fd5749cef695ea6b5151c5b6ca1493d0529c7765af58c30d",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\board_bist\\board_bringup_validation_v1.json": "20ddefe923b9990c5454bc0ffe97ca2f2e96f219e10168aa56b0c45d1f096847",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\source_inventory.json": "8cf2a0856e2090cf3c2fac20c0cbc5c51d3610c6214fcfad065657faa700de9d",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\2026-10-20-integration-readiness.md": "fbb0c60cff085be4773925e0698405c90aa6ce23247d06f5935e9a5518afd5d4",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\main_audit.md": "ca867396e00331217c0fc7bd31bdf894516297476a1703eb98235cb478a1e9c3",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\verify_numeric.py": "89060979206b15f9de0dacab16adbf616ceea51896f4d847339482abfc9beed9",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\verify_video_handoff.py": "94d7af1678de7b46e0713c4cd9f1dba7d48abd86ea2dc39a7b7e9ad38b2f46c6",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\finalize_evidence.py": "6864b304a99f2abc27aaeb3de14f76bdb968a4e75c17aa417b3c1d46ac760b2b",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\program.bin": "3b5fd2fab7baccee6b0f739447d00c2cc3930bd572d214a07072c1afb4aeb778",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\parameter_image.bin": "1a69fa4e8edd20c739e0d12a437a8d076abac6029ab6dcbbbf6a7023424896f6",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\python_requirements_resolved.txt": "a56a33350edbc3bb631920ce5a28c93f6ffb0518c4fdd58445b27964314a9bbf",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\program_abi_initial.log": "6206f49c9019f6143f5bf26a40f0709d530929baae41e2167cbd81746725c039"
+  },
+  "notes": "platform passes do not constitute complete NPU functional or integration signoff"
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": "npu-ddr-board-selftest-v1",
+  "date": "2026-10-22",
+  "status": "PROGRAM_VERIFY_AND_PHYSICAL_FUNCTIONAL_PASS_STABILITY_IN_PROGRESS",
+  "upstream_revision": "89acc7b289a3568949e03a9239afe8eef393e0e5",
+  "source_modified": false,
+  "downloaded_artifact_origin": "local build of unchanged frozen upstream B01 RTL/FDC and regenerated same-version HMIC hardware",
+  "downloaded_remote_original_binary": false,
+  "program": {
+    "operation": "volatile_SRAM_program_and_verify",
+    "target": "ddr_board_bist_top_B01",
+    "status": "pass",
+    "started_utc": "2026-10-22T02:19:00.142401+00:00",
+    "directory": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\board_program_20261022T021900_142401Z",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "physical_initial_LED": "pending_user_observation",
+    "physical_KEY0_five": "pending_user_observation",
+    "physical_ten_minute_stability": "pending_user_observation",
+    "NPU_inference_or_cross_master_visibility_tested": false,
+    "build_result": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\result.json",
+      "sha256": "511929377b871f63af27df94483aa8bdba7015ccfbd00ca795443f403e9bfecb"
+    },
+    "actual_pin_audit": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\board_pin_audit.json",
+      "sha256": "cadce6afb694c8263cc1fbb1c6e07c4b839bbc216337a2f8271206da54a7fd0d"
+    },
+    "upstream_revision": "89acc7b289a3568949e03a9239afe8eef393e0e5",
+    "bitstream": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\package\\ddr_board_bist_top.sbit",
+    "bitstream_sha256": "9ababdacf26e18acc9a97e81ed4ba05086705101933f5817f7e103ec854c8592",
+    "verify_mask": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\package\\ddr_board_bist_top.smsk",
+    "verify_mask_sha256": "322d1d1708396ccabeaba32a922f98063362f62102452272834da75f139565ba",
+    "remote_bitstream_sha256": "953172e6e61e4c5a1b8deda629dd29b3a05564fec18a4f27c6f5dd178e5560fb",
+    "identical_to_remote_bitstream": false,
+    "intended_usercode": "4E505532",
+    "test_region": {
+      "relative_offset": 0,
+      "bytes": 16777216,
+      "phases": 9,
+      "expected_compared_bytes": 150994944
+    },
+    "recovery_package": {
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\releases\\video_mode_board_8274194d1c69\\video_mode_board_top.sbit": "8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43",
+      "D:\\FPGA\\TriHaRiscv-main\\build\\video\\releases\\video_mode_board_8274194d1c69\\video_mode_board_top.smsk": "cf8bf57d3366b28ccc56338bbeaba331d808d1d560d879b85f619bf89b88af2e"
+    },
+    "configuration_tool": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\cdt_cfg_shell.exe",
+    "configuration_tool_sha256": "8c7f1ee99a1fcad01214d1c5f330da49c1a52cf83f2a237e62cad68c38d2c54f",
+    "device_found": true,
+    "exit_code": 0,
+    "log_sha256": "53c8356f94900fb7e806c94e87999975bfe52613d3b3e02b724b757a3c328f25",
+    "script_sha256": "f6b09b5022d8e2d78e33aea2d3d15e0db5a224b53b88ee8ec244e9034de6bdad",
+    "post_program_done_bit_1": true,
+    "finished_utc": "2026-10-22T02:19:20.255082+00:00",
+    "program_entry_sha256": "4df2e2056427b184c1a94db26bd825aea1e71f756e5fb2a9c8e0b67c0cc9ca1c"
+  },
+  "build_result": {
+    "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\result.json",
+    "sha256": "511929377b871f63af27df94483aa8bdba7015ccfbd00ca795443f403e9bfecb"
+  },
+  "program_result": {
+    "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\board_program_20261022T021900_142401Z\\result.json",
+    "sha256": "c099f4fe8f261d7678385b4d684c099874a7909f386d2fc6774eedc64d42f7c4"
+  },
+  "pin_audit": {
+    "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\board_pin_audit.json",
+    "sha256": "cadce6afb694c8263cc1fbb1c6e07c4b839bbc216337a2f8271206da54a7fd0d"
+  },
+  "observations": {
+    "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\physical_observations.json",
+    "sha256": "699f468f5bdba376b9de2f3feeeb83f6d2f053108991954a9c884ec187944ce4"
+  },
+  "physical_functional_passed": true,
+  "KEY0_passed": true,
+  "KEY0_repetitions": 5,
+  "stability_acceptance_passed": false,
+  "stability_status": "in_progress_not_yet_10_minutes",
+  "test_region": {
+    "relative_offset": 0,
+    "bytes": 16777216,
+    "phases": 9,
+    "expected_compared_bytes": 150994944
+  },
+  "counters_or_full_DDR_dump_independently_measured": false,
+  "physical_evidence_type": "explicit human LED and physical KEY0 observation",
+  "PDS_runs": 1,
+  "PDS_resources": {
+    "APM": 0.0,
+    "FF": 6422.0,
+    "LUT": 6572.0,
+    "DRM": 8.0,
+    "GPLL": 2.0
+  },
+  "PDS_warning_lines": 3195,
+  "strict_external_DDR_timing_signoff": false,
+  "production_fabric_CDC_or_cross_master_visibility_proven": false,
+  "full_1GiB_tested": false,
+  "YuNet_or_five_point_inference_executed": false,
+  "next_action": "Wait for explicit ten-minute stability feedback before continuing NPU implementation",
+  "board_current_image": "9ababdacf26e18acc9a97e81ed4ba05086705101933f5817f7e103ec854c8592",
+  "recovery_package": {
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\releases\\video_mode_board_8274194d1c69\\video_mode_board_top.sbit": "8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\releases\\video_mode_board_8274194d1c69\\video_mode_board_top.smsk": "cf8bf57d3366b28ccc56338bbeaba331d808d1d560d879b85f619bf89b88af2e"
+  },
+  "source_snapshot_files_reverified": 283,
+  "previous_NPU_delivery_files_unchanged": 46,
+  "protection_baseline": {
+    "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\documentation_before.json",
+    "sha256": "c202ccacaf382c9829e5780911f6ab180eb8eae795227ae77633200a658b6d75"
+  },
+  "ledger_appends": [
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\video\\STATUS.md",
+      "backup": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\main_status_before_board_append.bin",
+      "before_sha256": "d54c27a4e91b0a72310ed68e45bfce5bea22717e23e4b799062b4781025a143e",
+      "after_sha256": "bcbd0006e59f357068a044a7b1c97e710ec62f65b292377c5fe6ee8a11385837",
+      "original_bytes": 59296,
+      "prefix_unchanged": true
+    },
+    {
+      "path": "D:\\FPGA\\npu_zgtc\\项目计划安排表.md",
+      "backup": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\ddr-b01-20261022T021510_574606Z\\external_ledger_before_board_append.bin",
+      "before_sha256": "72f87769f2230cd02d40b385f089b3684c6b9fbcf7b8ea678e90c96fe03c8d55",
+      "after_sha256": "090ccc66a17aec28bd1f73b55d2688e51417b99b2f47583ee4598fddc15917c7",
+      "original_bytes": 92150,
+      "prefix_unchanged": true
+    }
+  ],
+  "report": {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\2026-10-22-ddr-board-selftest.md",
+    "sha256": "ab4831241115caca5940b05cb77a4323f94fc44f3fa19dba48179ef38f71ff88"
+  },
+  "product_RTL_model_or_public_configuration_modified": [],
+  "flash_written": false,
+  "serial_accessed": false,
+  "commits_created": 0,
+  "pushed": false
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "top": "npu_operator_probe",
+  "sources": [
+    "rtl/npu/npu_axi128_single.v",
+    "rtl/npu/npu_operator_mmio.v",
+    "rtl/npu/npu_scalar_conv.v",
+    "rtl/npu/npu_operator_top.v",
+    "fpga/pg2l100h/rtl/npu_operator_probe.v"
+  ],
+  "constraints": ["fpga/pg2l100h/constraints/npu_operator_probe.fdc"],
+  "scope": "100MHz scalar component with 542 scan-boundary registers; no CPU, board pins, real DDR IP, CDC, complete NPU or system timing proof"
+}

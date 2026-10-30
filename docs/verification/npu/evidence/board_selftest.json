@@ -1,0 +1,348 @@
+{
+  "schema_version": "triha-npu-board-selftest-v1",
+  "status": "initial_BIST_and_five_KEY0_pass_stability_pending",
+  "program": {
+    "operation": "volatile_SRAM_program_and_verify",
+    "target": "npu_board_bringup",
+    "started_utc": "2026-10-20T11:57:47.886698+00:00",
+    "status": "pass",
+    "directory": "D:\\FPGA\\npu_zgtc\\build\\board_program\\20261020T115747_886698Z",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "physical_LED_test_status": "pending_user_observation",
+    "physical_KEY0_test_status": "pending_user_action",
+    "YuNet_inference_tested": false,
+    "trial_manifest": "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z\\trial_manifest.json",
+    "trial_manifest_sha256": "f5c6533d9b9d3e3a1ff446066cbb6378f1315beb648040cf525223b788af6012",
+    "bitstream": "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z\\board_bringup_top.sbit",
+    "bitstream_sha256": "e12be6f24b38ea42fdbf150580fbf11c10fea8558f32e4a218561e050e7a2646",
+    "verify_mask_sha256": "daf9df6815f343edd8d516d2a9c753745e133210671c9f11b1fcbee12060775c",
+    "intended_usercode": "4E505531",
+    "configuration_tool": "D:\\pango\\PDS_2022.2-SP6.4\\bin\\cdt_cfg_shell.exe",
+    "configuration_tool_sha256": "8c7f1ee99a1fcad01214d1c5f330da49c1a52cf83f2a237e62cad68c38d2c54f",
+    "device_found": true,
+    "exit_code": 0,
+    "log_sha256": "8eb38f4781cc40a5b4bb44a432a368073c136d3119a26535605c26c35bb8f3ef",
+    "script_sha256": "cb455b865a63062337162dd34a088e82428a237d975511c38809e1f0335d2d81",
+    "post_program_done_bit_1": true,
+    "finished_utc": "2026-10-20T11:58:08.030976+00:00",
+    "program_entry_sha256": "c4c35f0eae4753a87d11554d31d497deec5148660dff1990202ae5a604d08bc2"
+  },
+  "trial": {
+    "schema_version": "npu-local-board-trial-v1",
+    "prepared_utc": "2026-10-20T11:45:35.084218+00:00",
+    "status": "prepared_for_authorized_first_SRAM_trial",
+    "directory": "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z",
+    "board": "MES2L676-100HP / PG2L100H-6IFBG676",
+    "physical_board_revision_independently_verified": false,
+    "profile_basis": "same supplied examples as existing board workflow; physical trial still pending",
+    "manual": {
+      "local_path": "D:\\FPGA\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\1_Demo_document\\实验例程说明篇\\教程1_硬件实验指导手册_盘古676系列100Pro+开发板.pdf",
+      "sha256": "f2fb07625a0a31705d7e8477308f7bcb1aa5272b6b0754cfbf9daca20ebec114",
+      "matches_committed_reference": true
+    },
+    "examples": [
+      {
+        "archive": "D:\\FPGA\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\2_Demo\\2_7_key_led_test.rar",
+        "sha256": "5bfe2d18021e87767abf8c6afc57efa888b51a3f40b0882a1116ce7e3f7b62c6",
+        "target": {
+          "device": "PG2L100H",
+          "package": "FBG676",
+          "speedgrade": "-6"
+        },
+        "signals_verified": {
+          "board_clk_27m": {
+            "PAP_IO_LOC": "D18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "INPUT"
+          },
+          "reset_btn_n": {
+            "PAP_IO_LOC": "C22",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "INPUT"
+          },
+          "led[0]": {
+            "PAP_IO_LOC": "A20",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[1]": {
+            "PAP_IO_LOC": "C18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[2]": {
+            "PAP_IO_LOC": "C19",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[3]": {
+            "PAP_IO_LOC": "E18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[4]": {
+            "PAP_IO_LOC": "A17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[5]": {
+            "PAP_IO_LOC": "A18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[6]": {
+            "PAP_IO_LOC": "C17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[7]": {
+            "PAP_IO_LOC": "B17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          }
+        },
+        "members": {
+          "2_7_key_led_test/2_7_key_led_test/source/key_led_test.fdc": {
+            "sha256": "9017debebe3dc3ea7dc076572b36324f901da40ead062f42ef40dbf18bce76ac",
+            "bytes": 3569
+          },
+          "2_7_key_led_test/2_7_key_led_test/key_led_test.pds": {
+            "sha256": "a6fdc7c17dc5c43ea3ebaceb2c25c6f23cd1ddfaffd9e656e526ea1db68d0aaa",
+            "bytes": 8859
+          },
+          "2_7_key_led_test/2_7_key_led_test/source/key_led_test.v": {
+            "sha256": "41d18a66ba9a8f5ec0f5d1969a65ed1aa7b49d58002f8d747b905d08ab213d16",
+            "bytes": 1041
+          },
+          "2_7_key_led_test/2_7_key_led_test/generate_bitstream/run.log": {
+            "sha256": "0161b965d75659e82ad35e1902727ed7f4a7c860407c6585bc7b1bfaec8108ce",
+            "bytes": 1259
+          },
+          "2_7_key_led_test/2_7_key_led_test/generate_bitstream/key_led_test.bgr": {
+            "sha256": "caeacb0d4b5858bcf84e30b3c5b071b857ecbac0df4c621bb568f47237934195",
+            "bytes": 1584
+          }
+        },
+        "SCBV_explicitly_set": false
+      },
+      {
+        "archive": "D:\\FPGA\\盘古100Pro+开发板（MES2L676-100HP）配套资料\\2_Demo\\4_1_led_test.rar",
+        "sha256": "1234ab96cd7f81045a1f4903faf81a3282e6e9ad07ad21afc6d52b10f338ce3c",
+        "target": {
+          "device": "PG2L100H",
+          "package": "FBG676",
+          "speedgrade": "-6"
+        },
+        "signals_verified": {
+          "board_clk_27m": {
+            "PAP_IO_LOC": "D18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "INPUT"
+          },
+          "reset_btn_n": {
+            "PAP_IO_LOC": "C22",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "INPUT"
+          },
+          "led[0]": {
+            "PAP_IO_LOC": "A20",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[1]": {
+            "PAP_IO_LOC": "C18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[2]": {
+            "PAP_IO_LOC": "C19",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[3]": {
+            "PAP_IO_LOC": "E18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[4]": {
+            "PAP_IO_LOC": "A17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[5]": {
+            "PAP_IO_LOC": "A18",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[6]": {
+            "PAP_IO_LOC": "C17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          },
+          "led[7]": {
+            "PAP_IO_LOC": "B17",
+            "PAP_IO_STANDARD": "LVCMOS33",
+            "PAP_IO_VCCIO": "3.3",
+            "PAP_IO_DIRECTION": "OUTPUT",
+            "PAP_IO_DRIVE": "8",
+            "PAP_IO_SLEW": "SLOW"
+          }
+        },
+        "members": {
+          "4_1_led_test/4_1_led_test/5_1_led_test/source/led_test.fdc": {
+            "sha256": "c360787426ada8aa02260772cf50e76a530ff3407c132ad3d68e5bc7b6905d6e",
+            "bytes": 3326
+          },
+          "4_1_led_test/4_1_led_test/5_1_led_test/led_test.pds": {
+            "sha256": "ab907221471401af1662ae83ff2b75f217f8c4e620c6ca31d1ac4a6bd52d78be",
+            "bytes": 8683
+          },
+          "4_1_led_test/4_1_led_test/5_1_led_test/source/led_test.v": {
+            "sha256": "329ee0ba642d2fe63bcc1d2f5dd2fea4fcb12adb1f8160700ba9be13abace7c1",
+            "bytes": 886
+          },
+          "4_1_led_test/4_1_led_test/5_1_led_test/generate_bitstream/run.log": {
+            "sha256": "7f0d2afd8c925987fa9138233e76858d0cc385f30b4542ca98176f48e943d44e",
+            "bytes": 1250
+          },
+          "4_1_led_test/4_1_led_test/5_1_led_test/generate_bitstream/led_test.bgr": {
+            "sha256": "baf02ac0162c185fc231bc68b502d345a1e90e8e9166fd56414cf56d18511387",
+            "bytes": 1556
+          }
+        },
+        "SCBV_explicitly_set": false
+      }
+    ],
+    "pin_checks_per_example": 10,
+    "SCBV_policy": "same omission/default as both supplied examples; no GPIO-based voltage inference",
+    "validation_report": "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\board_bist\\board_bringup_validation_v1.json",
+    "validation_sha256": "20ddefe923b9990c5454bc0ffe97ca2f2e96f219e10168aa56b0c45d1f096847",
+    "historical_build_ready_flag_not_modified": true,
+    "bitstream": "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z\\board_bringup_top.sbit",
+    "bitstream_sha256": "e12be6f24b38ea42fdbf150580fbf11c10fea8558f32e4a218561e050e7a2646",
+    "verify_mask": "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z\\board_bringup_top.smsk",
+    "verify_mask_sha256": "daf9df6815f343edd8d516d2a9c753745e133210671c9f11b1fcbee12060775c",
+    "usercode": "4E505531",
+    "restoration_available": {
+      "target": "video_mode_board",
+      "bitstream": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\releases\\video_mode_board_8274194d1c69\\video_mode_board_top.sbit",
+      "bitstream_sha256": "8274194d1c69d219b86a4d6230da8e4d5b4ced8922ab1ea1a3b9598627f71e43",
+      "verify_mask_sha256": "cf8bf57d3366b28ccc56338bbeaba331d808d1d560d879b85f619bf89b88af2e"
+    },
+    "audit_script_sha256": "e267bb4983e8721f3944324bd76a4d23f15f820380186cc19384b47c5ead0680",
+    "RTL_modified": false,
+    "physical_board_tests_executed": 0,
+    "flash_write_prepared": false
+  },
+  "scope": "PLL/RAM/APM BIST only",
+  "physical_functional_passed": true,
+  "observations": {
+    "initial_LEDs": "passed_user_confirmed",
+    "KEY0_five_repeats": "passed_user_confirmed",
+    "ten_minutes_stability": "pending_explicit_confirmation",
+    "KEY0_successful_repeats": 5,
+    "physical_observation": {
+      "recorded_at_local": "2026-10-20 20:25:48",
+      "timezone": "Asia/Shanghai",
+      "evidence_type": "explicit human user observation in this conversation",
+      "bitstream_sha256": "e12be6f24b38ea42fdbf150580fbf11c10fea8558f32e4a218561e050e7a2646",
+      "initial_LEDs": {
+        "question": "LED1是否约每半秒翻转，LED0、2、3、4、5、7常亮，LED6熄灭？",
+        "answer_verbatim": "与上述状态一致",
+        "status": "passed_user_confirmed"
+      },
+      "KEY0_five_repeats": {
+        "question": "按住并松开KEY0共5次，每次按住是否全灭，松开后是否恢复上述灯态？",
+        "answer_verbatim": "5次均正常",
+        "successful_repeats": 5,
+        "status": "passed_user_confirmed"
+      },
+      "ten_minutes_stability": {
+        "status": "pending_explicit_confirmation",
+        "elapsed_wall_time_not_used_as_acceptance": true
+      },
+      "scope": "PLL/heartbeat, RAM3072 comparisons, APM16 fixed vectors and KEY0 recovery only",
+      "direct_frequency_measurement": false,
+      "YuNet_inference_tested": false
+    }
+  },
+  "expected_LEDs": {
+    "steady_on": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      7
+    ],
+    "off": [
+      6
+    ],
+    "heartbeat": 1,
+    "heartbeat_half_period_seconds_nominal": 0.5
+  },
+  "references_sha256": {
+    "D:\\FPGA\\npu_zgtc\\build\\latest_board_program.json": "72babcf2dea8a997fd43d15035890117ad0c0e34335512d0f92fbcfcb2aada55",
+    "D:\\FPGA\\npu_zgtc\\build\\board_program\\20261020T115747_886698Z\\result.json": "72babcf2dea8a997fd43d15035890117ad0c0e34335512d0f92fbcfcb2aada55",
+    "D:\\FPGA\\npu_zgtc\\build\\board_program\\20261020T115747_886698Z\\program_verify.log": "8eb38f4781cc40a5b4bb44a432a368073c136d3119a26535605c26c35bb8f3ef",
+    "D:\\FPGA\\npu_zgtc\\build\\board_program\\20261020T115747_886698Z\\program_verify.tcl": "cb455b865a63062337162dd34a088e82428a237d975511c38809e1f0335d2d81",
+    "D:\\FPGA\\npu_zgtc\\build\\board_trial\\20261020T114535_084218Z\\trial_manifest.json": "f5c6533d9b9d3e3a1ff446066cbb6378f1315beb648040cf525223b788af6012",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\2026-10-20-board-selftest.md": "3f3336ed2fa6e86ecd411aa564073a2e6ae0d6d22063248a9d64394de5208dd1",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\prepare_local_board_trial.py": "e267bb4983e8721f3944324bd76a4d23f15f820380186cc19384b47c5ead0680",
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020\\program_local_board_trial.py": "c4c35f0eae4753a87d11554d31d497deec5148660dff1990202ae5a604d08bc2",
+    "D:\\FPGA\\npu_zgtc\\build\\board_program\\20261020T115747_886698Z\\physical_observation_20261020_202548.json": "1c73e3424645c52a4d22891f7de18a5da2b22b18ef3e44d3a4723d43d6ff59d8"
+  },
+  "physical_functional_pass_scope": "initial PLL/RAM/APM fixed BIST and five KEY0 recoveries, user observed",
+  "stability_acceptance_passed": false
+}

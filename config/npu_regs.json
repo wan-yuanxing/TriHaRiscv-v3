@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "base": 536870912,
+  "region_bytes": 4096,
+  "id_version": 1313865729,
+  "caps": 65539,
+  "registers": [
+    {"name": "ID_VERSION", "offset": 0, "access": "RO", "fields": []},
+    {"name": "CAPS", "offset": 4, "access": "RO", "fields": []},
+    {"name": "CONTROL", "offset": 8, "access": "WO", "reset": 0, "fields": [
+      {"name": "START", "lsb": 0, "width": 1}
+    ]},
+    {"name": "STATUS", "offset": 12, "access": "RO", "fields": [
+      {"name": "IDLE", "lsb": 0, "width": 1},
+      {"name": "BUSY", "lsb": 1, "width": 1},
+      {"name": "DONE", "lsb": 2, "width": 1},
+      {"name": "ERROR", "lsb": 3, "width": 1},
+      {"name": "PLATFORM_FAULT", "lsb": 4, "width": 1}
+    ]},
+    {"name": "IRQ_STATUS", "offset": 16, "access": "W1C", "reset": 0, "fields": [
+      {"name": "DONE", "lsb": 0, "width": 1},
+      {"name": "ERROR", "lsb": 1, "width": 1}
+    ]},
+    {"name": "IRQ_ENABLE", "offset": 20, "access": "RW", "reset": 0, "fields": [
+      {"name": "DONE", "lsb": 0, "width": 1},
+      {"name": "ERROR", "lsb": 1, "width": 1}
+    ]},
+    {"name": "ERROR_CODE", "offset": 24, "access": "RO", "fields": [
+      {"name": "VALUE", "lsb": 0, "width": 8}
+    ]},
+    {"name": "OP_TAG", "offset": 28, "access": "RW", "reset": 0, "fields": []},
+    {"name": "FRAME_ID", "offset": 32, "access": "RW", "reset": 0, "fields": []},
+    {"name": "TOTAL_CYCLES", "offset": 36, "access": "RO", "fields": []},
+    {"name": "COMPUTE_CYCLES", "offset": 40, "access": "RO", "fields": []},
+    {"name": "DMA_WAIT_CYCLES", "offset": 44, "access": "RO", "fields": []},
+    {"name": "GENERATION", "offset": 48, "access": "RW", "reset": 0, "fields": []},
+    {"name": "INPUT_BASE", "offset": 256, "access": "RW", "reset": 0, "fields": []},
+    {"name": "WEIGHT_BASE", "offset": 260, "access": "RW", "reset": 0, "fields": []},
+    {"name": "BIAS_BASE", "offset": 264, "access": "RW", "reset": 0, "fields": []},
+    {"name": "REQUANT_BASE", "offset": 268, "access": "RW", "reset": 0, "fields": []},
+    {"name": "OUTPUT_BASE", "offset": 272, "access": "RW", "reset": 0, "fields": []},
+    {"name": "INPUT_WH", "offset": 276, "access": "RW", "reset": 0, "fields": [
+      {"name": "WIDTH", "lsb": 0, "width": 16},
+      {"name": "HEIGHT", "lsb": 16, "width": 16}
+    ]},
+    {"name": "CHANNELS", "offset": 280, "access": "RW", "reset": 0, "fields": [
+      {"name": "INPUT", "lsb": 0, "width": 16},
+      {"name": "OUTPUT", "lsb": 16, "width": 16}
+    ]},
+    {"name": "OUTPUT_WH", "offset": 284, "access": "RW", "reset": 0, "fields": [
+      {"name": "WIDTH", "lsb": 0, "width": 16},
+      {"name": "HEIGHT", "lsb": 16, "width": 16}
+    ]},
+    {"name": "KSP", "offset": 288, "access": "RW", "reset": 0, "fields": [
+      {"name": "KERNEL", "lsb": 0, "width": 2},
+      {"name": "STRIDE", "lsb": 8, "width": 2},
+      {"name": "PADDING", "lsb": 16, "width": 2},
+      {"name": "DEPTHWISE", "lsb": 24, "width": 1}
+    ]},
+    {"name": "FORMAT", "offset": 292, "access": "RW", "reset": 0, "fields": [
+      {"name": "INPUT_SIGNED", "lsb": 0, "width": 1},
+      {"name": "OUTPUT_FORMAT", "lsb": 8, "width": 2}
+    ]}
+  ]
+}

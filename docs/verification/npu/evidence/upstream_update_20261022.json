@@ -1,0 +1,323 @@
+{
+  "schema_version": "npu-upstream-update-review-v1",
+  "date": "2026-10-22",
+  "created_utc": "2026-10-22T02:10:55.267176+00:00",
+  "status": "REVIEW_COMPLETE_SYSTEM_GATES_OPEN",
+  "scope": "Upstream delta, numerical compatibility, local DDR functional replay, main integration priority review; no product implementation",
+  "main_root": "D:\\FPGA\\TriHaRiscv-main",
+  "isolated_root": "D:\\FPGA\\TriHaRiscv-npu-operator",
+  "main_head_at_review": "536d8c6115756861c053d9a58f7443625ba29051",
+  "external_root": "D:\\FPGA\\npu_zgtc",
+  "external_worktree_revision": "178c3ad1ba515d43725dd80ab19e20b50d471413",
+  "upstream_revision": "89acc7b289a3568949e03a9239afe8eef393e0e5",
+  "commits_added": 4,
+  "changed_files": 59,
+  "snapshot_files_checked": 283,
+  "external_worktree_pulled_or_switched": false,
+  "numeric_compatibility": {
+    "tracked_sources_checked_against_old_git_and_new_snapshot": 46,
+    "all_identical": true,
+    "critical_contract_changed_paths": [],
+    "existing_141_convolution_results_remain_applicable": true,
+    "convolution_replays_in_this_update_review": 0
+  },
+  "new_capabilities": [
+    "synthesizable nine-phase single-burst native DDR BIST in 125MHz UI domain",
+    "config capture, 32B alignment, 1GiB bounded offset, 4KiB column split, ID/LAST checking",
+    "independent 27MHz startup/run watchdog and first-error retention across whole-session reset",
+    "correct-device HMIC1.10 IDF, board-reference pin/property manifest, independent SRAM image"
+  ],
+  "not_added": [
+    "auxiliary arithmetic RTL",
+    "full graph chaining",
+    "five-landmark INT8 package",
+    "production NPU/CPU shared fabric and CDC"
+  ],
+  "ip_comparison": {
+    "main_idf": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\vendor\\ddr\\ddr3_test.idf",
+    "main_idf_sha256": "b600d6102995be4e76b060dd45786b5e1497bd2e7499bbc04b870de9355f2747",
+    "upstream_idf": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\upstream\\ip\\platform\\hmic_ddr3\\hmic_ddr3.idf",
+    "upstream_idf_sha256": "86a73fb7c2a9a0fd95a6b1193c448459ad18f9803f53ecc31558df62c75933f5",
+    "main_parameter_count": 371,
+    "upstream_parameter_count": 371,
+    "parameter_differences": {},
+    "header_differences": {
+      "instance": [
+        [
+          "ddr3_test",
+          {}
+        ],
+        [
+          "hmic_ddr3",
+          {}
+        ]
+      ]
+    },
+    "dq_bits": 32,
+    "native_data_bits": 256,
+    "native_address_bits": 28,
+    "native_address_unit_bytes": 4,
+    "physical_capacity_bytes": 1073741824,
+    "core_MHz": 125,
+    "DDR_clock_MHz": 500,
+    "replacement_needed_for_parameter_compatibility": false
+  },
+  "pin_comparison": {
+    "main_ports": 80,
+    "upstream_ports": 83,
+    "mem_ports_compared": 71,
+    "mem_final_attribute_differences": {},
+    "clock_reset_pin_equivalence": {
+      "sys_clk/free_clk": "D18 LVCMOS33 3.3V",
+      "rst_in/rst_board": "C22 LVCMOS33 3.3V",
+      "ref_clk_p": "N3 SSTL15D_I 1.5V",
+      "ref_clk_n": "N2 SSTL15D_I 1.5V"
+    },
+    "not_an_independent_physical_V1_4_pin_measurement": true
+  },
+  "main_bridge_contract": {
+    "successful_B_meaning": "All AXI W data collected, native write beats accepted, same exclusive native port readback matches all asserted WSTRB bytes. It is not only native write consumption.",
+    "sources": {
+      "description": "rtl/video/axi128_hmic256.sv:3",
+      "masked_comparator": "rtl/video/axi128_hmic256.sv:93",
+      "mismatch_fault": "rtl/video/axi128_hmic256.sv:113",
+      "bvalid": "rtl/video/axi128_hmic256.sv:171",
+      "write_then_verify": "rtl/video/axi128_hmic256.sv:223",
+      "successful_response_after_last_readback": "rtl/video/axi128_hmic256.sv:240",
+      "single_scheduler": "rtl/video/video_shared_ddr.sv:33",
+      "single_bridge": "rtl/video/video_shared_ddr.sv:103",
+      "scheduler_B_retirement": "rtl/video/video_memory_scheduler.sv:110",
+      "scheduler_R_retirement": "rtl/video/video_memory_scheduler.sv:112",
+      "NPU_B_to_memory_response": "rtl/npu/npu_axi128_single.v:174",
+      "NPU_final_output_response_to_DONE": "rtl/npu/npu_scalar_conv.v:255"
+    },
+    "native_port_must_be_exclusive": true,
+    "main_local_scheduler_releases_only_at_response_handshake": true,
+    "scheduler_read_quota_default": 4,
+    "scheduler_wallclock_bound_unconditional": false,
+    "production_CPU_NPU_fabric_present_in_Video_scheduler": false,
+    "cache_or_arbitrary_bypass_visibility_proven": false,
+    "production_CDC_NPU100_to_DDR125_proven": false,
+    "P18_closed_by_this_update": false
+  },
+  "ck_dly_difference": {
+    "main_value": 0,
+    "main_source": "fpga/pg2l100h/rtl/video_ddr_bist_top.sv:125",
+    "upstream_value": 1,
+    "upstream_source": "rtl/platform/ddr_board_bist_top.v:45",
+    "upstream_changed_debug_access_together": true,
+    "independent_causality_proven": false,
+    "upstream_source_explaining_limitation": "word/40_DDR独立自检规格与验证.md:63",
+    "main_model_failure_still_recorded": "docs/interfaces/ddr_wrapper.md:44",
+    "recommendation": "Use a 2x2 simulation matrix before changing any board-tested wrapper."
+  },
+  "local_verification": {
+    "proxy": {
+      "healthy_jobs": 26,
+      "fault_jobs": 28,
+      "invalid_jobs_included_in_faults": 7,
+      "midflight_resets": 2
+    },
+    "supervisor": {
+      "healthy": 2,
+      "faults": 5,
+      "resets": 8
+    },
+    "real_HMIC": {
+      "status": "PASS_FUNCTIONAL_ONLY",
+      "metrics": {
+        "writes": 27,
+        "reads": 27,
+        "write_beats": 162,
+        "checked_beats": 162,
+        "byte_checks": 5184,
+        "phases": 9
+      },
+      "warning_lines": 297,
+      "accelerated_initialization": true,
+      "strict_timing_signoff": false,
+      "result": {
+        "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\real_hmic_acc2020\\result.json",
+        "sha256": "766f17b0870fc82f49d91cf8e91eb57665300750f58db8faa101895a3c43cd7f"
+      },
+      "bound_artifacts_checked": 217
+    },
+    "preserved_first_failure": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\real_hmic\\result.json",
+      "sha256": "d4866e66d496e62cd742ee6a36940640611bfa5d4a0b286bfbe57ac9f38928ab",
+      "reason": "ModelSim2020.4 rejects deprecated +acc m option; independent replay changed mnpr to npr only"
+    },
+    "main_comparison_bound_sources_checked": 28
+  },
+  "package_verification": {
+    "packages": 2,
+    "payloads_checked": 4,
+    "report_references_checked": 6,
+    "all_hashes_match": true,
+    "matching_smsk_provided": false,
+    "upstream_B01_board_tests_executed": 0
+  },
+  "priority_order": [
+    {
+      "priority": "P0",
+      "work": "Continue 32 auxiliary operator occurrences then the 79-operator graph using preceding RTL outputs",
+      "completion": "Three synthetic cases, every tensor and all nine bbox heads byte-identical; no injected golden intermediates"
+    },
+    {
+      "priority": "P0_parallel",
+      "work": "Preserve the unique main bridge/HMIC; isolate vendor simulation failure, then verify production candidate fabric/CDC, final-B/DONE, cross-master reads and coordinated reset",
+      "completion": "No TB bypass; NPU/CPU/Video contention, masks/guards, delayed responses, ID/epoch and physical same-path evidence"
+    },
+    {
+      "priority": "P1",
+      "work": "Five-landmark INT8 calibration, reference and accuracy; bbox is intermediate",
+      "completion": "Freeze final numerical/capacity/postprocess contract and rerun corresponding hardware references"
+    },
+    {
+      "priority": "P2",
+      "work": "Whole-system PDS and static-image physical inference, then real video",
+      "completion": "Production CPU/fabric, resources, timing, CDC, DDR visibility and real output comparison pass"
+    }
+  ],
+  "auxiliary_implementation_started": false,
+  "full_graph_executed": false,
+  "final_landmark_requirement": "five_points",
+  "open_gates": [
+    "physical DDR B01 board test: upstream reports zero",
+    "full external DDR timing and non-accelerated strict model initialization/timing",
+    "100MHz NPU to 125MHz UI CDC bridge and MTBF/skew constraints",
+    "cross-master write visibility/fence and cache/task DONE publication (P18)",
+    "shared SoC reset/quiesce/epoch and frame ownership recovery",
+    "auxiliary arithmetic operators, complete graph, final five-point INT8, whole-system fps"
+  ],
+  "board_identity_separation": {
+    "upstream_B00": {
+      "expected_bitstream_sha256": "bd43a8c2492e42e2f4cf3579ffc890d43c78c14a23dd535abff3a56653ac7610",
+      "actual_program_file_independently_read_back": false,
+      "reset_repetitions": null,
+      "minutes": null,
+      "DDR_board_test_passed": false
+    },
+    "main_thread_B00": {
+      "programmed_sha256": "e12be6f24b38ea42fdbf150580fbf11c10fea8558f32e4a218561e050e7a2646",
+      "verify_mask_sha256": "daf9df6815f343edd8d516d2a9c753745e133210671c9f11b1fcbee12060775c",
+      "program_status": "pass",
+      "physical_functional_passed": true,
+      "status": "initial_BIST_and_five_KEY0_pass_stability_pending",
+      "stability_acceptance_passed": false
+    },
+    "same_bitstream": false,
+    "transfer_B00_claim_to_DDR_or_stability": false
+  },
+  "B01_use": "Optional independent DDR diagnosis; not a prerequisite to continue existing main function path",
+  "references": {
+    "snapshot.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\snapshot.json",
+      "sha256": "765c05db56a5cb170c51b3dfd83bbdc88e7c0f266a3d8dd7b1689a75c78cb043"
+    },
+    "numeric_compatibility.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\numeric_compatibility.json",
+      "sha256": "98e1060f65546746fee4e776261df15ef84239dfa2b18b2772210db5fd4f01c7"
+    },
+    "package_audit.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\package_audit.json",
+      "sha256": "0668a0f6a4667f960b9545a04d0d82df4df320a85ca24e7f4a9419f2cb7d3492"
+    },
+    "main_before.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\main_before.json",
+      "sha256": "8402f2ca4ba4c3c2453ab83858685878aa6d9cee74ccc7ca81b598e309494955"
+    },
+    "rtl_audit/audit.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\audit.json",
+      "sha256": "4c5bbcb233022007d1217b7bbbc59ef1a29e79b3dc3b645bbd355ae6dce2137e"
+    },
+    "rtl_audit/audit.md": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\audit.md",
+      "sha256": "ce50902c7343ed9d41d7962e4bf2b92d0d9db4241a32b9f27f74a92d40acb53c"
+    },
+    "main_compare/audit.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\main_compare\\audit.json",
+      "sha256": "b3b674a7a884989f1d24d6d4ad12ec1c88ab9fad9c9b49a10dea586979879f83"
+    },
+    "main_compare/comparison.md": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\main_compare\\comparison.md",
+      "sha256": "c8703c5bb592e8babf1ce4762476719ec705533cb38304a8a129444850184f96"
+    },
+    "rtl_audit/short_replay.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\short_replay.json",
+      "sha256": "a57f55880c3e1b3dcb4db3dfce77f8c86aeb863c0275938107480bc606ffbeda"
+    },
+    "rtl_audit/real_hmic_acc2020/result.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\real_hmic_acc2020\\result.json",
+      "sha256": "766f17b0870fc82f49d91cf8e91eb57665300750f58db8faa101895a3c43cd7f"
+    },
+    "rtl_audit/real_hmic/result.json": {
+      "path": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\rtl_audit\\real_hmic\\result.json",
+      "sha256": "d4866e66d496e62cd742ee6a36940640611bfa5d4a0b286bfbe57ac9f38928ab"
+    }
+  },
+  "previous_deliveries": {
+    "operator_loop": {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\evidence\\operator_loop.json",
+      "sha256": "a7c266bfe45e30bb9f8b1467ade738147cda28fe5c4bc8a98b81ff5f1a51658f",
+      "sources_checked": 34,
+      "unchanged": true
+    },
+    "layer_validation": {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\evidence\\layer_validation.json",
+      "sha256": "501757dffe7146cb825697607b6d04dc0a21f45a446aef5092292b6b327ac885",
+      "sources_checked": 12,
+      "unchanged": true
+    }
+  },
+  "protection": {
+    "baseline_file_count": 92,
+    "changed_files": [
+      {
+        "path": "tb/soc/tb_video_axil_decode.sv",
+        "before_sha256": "bc3c887edf278299292bda97bb871aefefc9b4e69359d9791ba47b0312aa2fb4",
+        "after_sha256": "291b1661bda9918f37bdda0e777d084d052306b5a54f8fac8b5e5e78cdb7b414",
+        "classification": "observed_parallel_change_preserved"
+      },
+      {
+        "path": "docs/video/STATUS.md",
+        "before_sha256": "87b490211c44b63cd3c1ee537f661123dcca50e2359cf35f05eb1ef6b19af805",
+        "after_sha256": "d54c27a4e91b0a72310ed68e45bfce5bea22717e23e4b799062b4781025a143e",
+        "classification": "this_batch_append"
+      }
+    ],
+    "unchanged_count": 90,
+    "ledger_updates": [
+      {
+        "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\video\\STATUS.md",
+        "before_sha256": "87b490211c44b63cd3c1ee537f661123dcca50e2359cf35f05eb1ef6b19af805",
+        "after_sha256": "d54c27a4e91b0a72310ed68e45bfce5bea22717e23e4b799062b4781025a143e",
+        "original_bytes": 57311,
+        "added_bytes": 1985,
+        "prefix_unchanged": true,
+        "backup": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\main_status_preappend.bin",
+        "baseline_sha256": "87b490211c44b63cd3c1ee537f661123dcca50e2359cf35f05eb1ef6b19af805"
+      },
+      {
+        "path": "D:\\FPGA\\npu_zgtc\\项目计划安排表.md",
+        "before_sha256": "8a4a404f352b90ba63e50ffe02b4077320dbcefd7c111cd6322509e4b4573ef7",
+        "after_sha256": "72f87769f2230cd02d40b385f089b3684c6b9fbcf7b8ea678e90c96fe03c8d55",
+        "original_bytes": 89905,
+        "added_bytes": 2245,
+        "prefix_unchanged": true,
+        "backup": "D:\\FPGA\\TriHaRiscv-npu-operator\\build\\npu\\upstream_update_20261022\\external_ledger_preappend.bin",
+        "baseline_sha256": "8a4a404f352b90ba63e50ffe02b4077320dbcefd7c111cd6322509e4b4573ef7"
+      }
+    ]
+  },
+  "report": {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\2026-10-22-upstream-update-priority.md",
+    "sha256": "cf2d015d742415eeb1468d98da97be4e3af8d7a318c15a190d4b093df3b94a8c"
+  },
+  "hardware_ready": false,
+  "PDS_runs": 0,
+  "hardware_actions": [],
+  "product_sources_modified_by_review": [],
+  "commits_created": 0,
+  "pushed": false
+}

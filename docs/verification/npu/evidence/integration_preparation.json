@@ -1,0 +1,132 @@
+{
+  "schema_version": "triha-npu-integration-preparation-v1",
+  "date_local": "2026-10-21",
+  "timezone": "Asia/Shanghai",
+  "status": "host_preparation_pass_hardware_gates_open",
+  "user_final_scope": "保留五点要求，检测框作为中间阶段",
+  "hardware_ready": false,
+  "control": "cpu_per_operator",
+  "product_rtl_modified": false,
+  "video_common_config_modified": false,
+  "board_programmed": false,
+  "bist_ten_minute_stability": "pending_explicit_user_confirmation",
+  "tests": {
+    "passed": 33,
+    "failed": 0,
+    "independent_synthetic_program": true
+  },
+  "counts": {
+    "tensors": 80,
+    "params": 150,
+    "ops": 79
+  },
+  "slots": 3,
+  "table_bytes": 21728,
+  "tensor_addresses_independently_checked": 240,
+  "parameter_addresses_independently_checked": 150,
+  "operator_records_byte_identical": 79,
+  "gcc_rv32i_compile_modes": [
+    "ddr_pointer",
+    "embedded"
+  ],
+  "required_hardware_ready_process_exit_code": 2,
+  "resource_scenarios": [
+    {
+      "name": "unchanged_video_plus_npu_only",
+      "drm": 174.0,
+      "margin_drm": -19.0,
+      "arithmetic_fits": false,
+      "hardware_ready": false,
+      "scope": "planning sum, not a combined implementation measurement"
+    },
+    {
+      "name": "raw_without_full_avatar_cache_candidate",
+      "drm": 128.0,
+      "margin_drm": 27.0,
+      "arithmetic_fits": true,
+      "hardware_ready": false,
+      "scope": "planning sum, not a combined implementation measurement"
+    },
+    {
+      "name": "ddr_avatar_cache_candidate",
+      "drm": 144.0,
+      "margin_drm": 11.0,
+      "arithmetic_fits": true,
+      "hardware_ready": false,
+      "scope": "planning sum, not a combined implementation measurement"
+    }
+  ],
+  "cpu_reference": {
+    "evidence_path": "D:\\FPGA\\TriHaRiscv-cpu-windows\\docs\\verification\\cpu\\operand_hazard.json",
+    "timing_reported_closed": true,
+    "reported_worst_setup_ns": 0.113,
+    "reported_cpu_only_resources": {
+      "lut": 5933,
+      "ff": 3528,
+      "distributed_ram": 688,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "scope": "read historical evidence only; current dirty CPU sources, timing and board image not verified by this preparation"
+  },
+  "code_review": {
+    "agent": "npu_preparation_review",
+    "findings_requiring_fix": 0,
+    "tests_at_review": 32,
+    "parent_final_tests": 33,
+    "scope": "fixed bbox package and default fixture; read-only review"
+  },
+  "kps_FP32_gap": {
+    "status": "PASS",
+    "additional_nodes": 12,
+    "additional_conv_macs": 1533000,
+    "mac_increase_percent": 1.8137075115649104,
+    "full_INT16_head_logical_bytes_if_selected": 67200,
+    "int8_numeric_package_ready": false,
+    "hardware_ready": false
+  },
+  "preexisting_files_unchanged": 49,
+  "concurrent_changes": [
+    {
+      "path": "docs/superpowers/plans/2026-10-20-video-pipeline.md",
+      "before_sha256": "f4dd4b9233281083da9b1ddedbf14c7dbbb4e61f055fd5d93314727e98f9b51a",
+      "current_sha256": "8f16c0cc801552d667821124a5603812c05d649872dd7ebfc368519b79a9d8f8",
+      "scope": "preexisting Video work changed during this task; not written or restored by NPU preparation"
+    }
+  ],
+  "open_gates": [
+    "MMIO operator encoding and driver",
+    "real NPU operator/controller/DMA",
+    "CPU stable import into main",
+    "125/100MHz fabric CDC and width conversion",
+    "cross-master visibility, drain and coordinated reset",
+    "combined resource and timing implementation",
+    "final five-landmark model and quantization",
+    "board inference and continuous stability acceptance"
+  ],
+  "references_sha256": {
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\verification\\npu\\2026-10-21-integration-preparation.md": "7f38ae7fcaf2cdadfb365c175da527452c4f97a07638554961a6d9d646e86883",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\superpowers\\specs\\2026-10-21-npu-integration-preparation-design.md": "513ab9386be5d5281a6521a327489c8e50d6a83337f92cb1e78db8bd83ed8e9d",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\superpowers\\plans\\2026-10-21-npu-integration-preparation.md": "cfc31b49755ba96aac08b4a4ecd20cfb40649468e009c7291064118202e26152",
+    "D:\\FPGA\\TriHaRiscv-main\\config\\npu_integration_fixture.json": "4d8ff370e6e1fba0c8187d62f5e2c9d8b9457d65d8acbd349d62ac88e7b37a63",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\npu\\prepare_integration.py": "9ed7e5870b44b8838e6cd7803e42fdc2093900276aa659b3b9a0c6d4404fb8dd",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\npu\\test_prepare_integration.py": "1f04e186f30c606fb5334bdfdcd8ec17b7ba17282f1d6fd22c281782ea8cff40",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\final_tests.log": "8fb6d7d92f3f8a01ecbb47567517eed14b381d1565aadfa716746a7244709a4b",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\final_package\\result.json": "74cc19cc4ccd95b374b2520dc91d065b032b3960b0e538fcc1f92620d0438fa3",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\final_hardware_gate\\result.json": "543c670028bf331753873550a9877c37563ab29f2482b82dfcf9c00d5ebc7023",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\independent_final_package.json": "3a953ffe125a82bc5685ec8ef57e39c63f596d81246c19bf1b26d766ec49deca",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\verify_prepared.py": "9b1cfadc70e555e81234c210418263ee1dba994a9986b0940f134ce012f68b5d",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\check_kps_extension.py": "80a55721aebee501daf30a5b04e8c6149236587c2494383142021d88542795dd",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\kps_gap\\result.json": "362a919c8b34b6dba50088bd48f2a9ce1a06f1c8f2438d603d917148ad7ae584",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\kps_gap\\yunet_2023mar_320_kps_candidate.onnx": "beb05bf2378aee45cd7c41056da07265b7bb91041ed1b06f923819a9c744ec36",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\red.log": "32012939688c876128ff03a93eeab6296f2085e6558e2efa5daf4d2a7d6b9a31",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\first_green_attempt.log": "4cc3eb08bccf833faceda01c021d45767d0886bda63c20321070560fb622f437",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\rom_guard_red.log": "4503062cdbf2abc02e6603e0aea44d5dbffd90e1433f71df5c4647508b04e7d9",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\rom_guard_green.log": "477b6dc72682a375576220c3e5187d09c1836cad2b1eefda764b61daa5e3c77b",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\before.json": "0a1adf685f003ce10df9180a482809e3b523764dfbc44678f18c427ae658913b",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\concurrent_changes.json": "c5969bd81f6f07b0cd3eb3749e9fa05ce89d35e587e91092e578ceada78510e5",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\code_review.json": "e0b53285962883545594053ae52e2b23bc6acf8de34f11241fbe38304224d4e0",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\ledger_updates.json": "866cd32318456d13d2527f88a800bb53d7bfe9820f1cae252858d0e1144ff2f9",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\integration_preparation_20261021\\verification_tests.log": "4a7fb11dfd3d4b3f705f22061a079ab8a292ae0c081a9fbe0aa76a92a7d9c52f"
+  }
+}

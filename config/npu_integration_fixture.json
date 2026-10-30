@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "scope": "host preparation candidate; not a released hardware ABI",
+  "control": "cpu_per_operator",
+  "final_landmarks_required": true,
+  "ddr_base": "0x80000000",
+  "ddr_bytes": 134217728,
+  "npu_mmio_base": "0x20000000",
+  "shared_regions": [
+    {"name": "frame_a", "base": "0x82000000", "bytes": 2097152},
+    {"name": "frame_b", "base": "0x82200000", "bytes": 2097152},
+    {"name": "frame_c", "base": "0x82400000", "bytes": 2097152},
+    {"name": "avatars", "base": "0x82600000", "bytes": 2097152},
+    {"name": "inputs", "base": "0x82800000", "bytes": 1048576},
+    {"name": "outputs", "base": "0x82900000", "bytes": 2097152},
+    {"name": "model", "base": "0x82B00000", "bytes": 8388608},
+    {"name": "workspace", "base": "0x83300000", "bytes": 67108864},
+    {"name": "reserve", "base": "0x87300000", "bytes": 13631488}
+  ],
+  "output_bases": ["0x82900000", "0x82920000", "0x82940000"],
+  "output_slot_bytes": 131072,
+  "weights_base": "0x82B00000",
+  "table_base": "0x82B20000",
+  "table_reserved_bytes": 65536,
+  "workspace_base": "0x83300000",
+  "resource_budget": {
+    "device_drm": 155,
+    "cpu_rom_bytes": 8192,
+    "cpu_sram_bytes": 32768,
+    "payload_bytes_per_drm": 4096,
+    "fabric_extra_drm": 8,
+    "replacement_avatar_cache_drm": 16
+  }
+}
