@@ -28,7 +28,8 @@ def clone():
 
 def adapt():
     cfg=json.loads((P/'config/cpu_board.json').read_text());cfg['cpu_hz']=95000000
-    cfg['pll'].update(input_divider=5,multiplier=1,feedback_divider=38,output_divider=10)
+    # Measured on this board: I5/F38 HIGH does not lock; OPTIMIZED does.
+    cfg['pll'].update(input_divider=5,multiplier=1,feedback_divider=38,output_divider=10,bandwidth='OPTIMIZED')
     write_json('config/cpu_board.json',cfg)
     cfg=json.loads((P/'config/soc_map.json').read_text());cfg['clock_hz']=95000000;write_json('config/soc_map.json',cfg)
     change('scripts/soc/gen_board.py','100_000_000','95_000_000')

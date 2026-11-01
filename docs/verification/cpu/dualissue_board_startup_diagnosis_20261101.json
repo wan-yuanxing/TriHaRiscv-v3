@@ -1,0 +1,544 @@
+{
+  "status": "PHYSICAL_BOOT_FAIL_CONFIRMED",
+  "cause": "Candidate95MHz HIGH PLL I5/M1/F38/O10 does not lock on this board; CPU held in reset. Known100MHz HIGH PLL I1/M1/F8/O10 locks with same125MHz reference and KEY0 released.",
+  "uart": "COM12/115200/8N1, valid XOR checked binary observer packets, not CoreMark scores",
+  "comparisons": {
+    "known100": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\clock-known100-check-20261101T110323285085Z",
+      "raw_sha256": "21a509a932b580dfa32bd01d506aadd8275e5a9b43c4492a71d52e10b643fa7a",
+      "program_result_sha256": "f688902764bf2837cee66dfa52c423b2ca0171591a38949d086db5130199098c",
+      "bytes": 336,
+      "valid_last_epoch_packets": 27,
+      "flags": 7,
+      "key_released": true,
+      "pll_locked": true,
+      "reset_released": true,
+      "reference_edges_per_sample": [
+        3814,
+        3815
+      ],
+      "cpu_edges_per_sample": [
+        3051,
+        3052
+      ],
+      "last_epoch": [
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 3814,
+          "cpu_edges": 3051,
+          "sequence": 0
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 7629,
+          "cpu_edges": 6103,
+          "sequence": 1
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 11444,
+          "cpu_edges": 9155,
+          "sequence": 2
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 15258,
+          "cpu_edges": 12207,
+          "sequence": 3
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 19073,
+          "cpu_edges": 15258,
+          "sequence": 4
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 22888,
+          "cpu_edges": 18310,
+          "sequence": 5
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 26702,
+          "cpu_edges": 21362,
+          "sequence": 6
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 30517,
+          "cpu_edges": 24414,
+          "sequence": 7
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 34332,
+          "cpu_edges": 27465,
+          "sequence": 8
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 38146,
+          "cpu_edges": 30517,
+          "sequence": 9
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 41961,
+          "cpu_edges": 33569,
+          "sequence": 10
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 45776,
+          "cpu_edges": 36621,
+          "sequence": 11
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 49591,
+          "cpu_edges": 39672,
+          "sequence": 12
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 53405,
+          "cpu_edges": 42724,
+          "sequence": 13
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 57220,
+          "cpu_edges": 45776,
+          "sequence": 14
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 61035,
+          "cpu_edges": 48828,
+          "sequence": 15
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 64849,
+          "cpu_edges": 51879,
+          "sequence": 16
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 3128,
+          "cpu_edges": 54931,
+          "sequence": 17
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 6943,
+          "cpu_edges": 57983,
+          "sequence": 18
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 10757,
+          "cpu_edges": 61035,
+          "sequence": 19
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 14572,
+          "cpu_edges": 64086,
+          "sequence": 20
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 18387,
+          "cpu_edges": 1602,
+          "sequence": 21
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 22201,
+          "cpu_edges": 4654,
+          "sequence": 22
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 26016,
+          "cpu_edges": 7706,
+          "sequence": 23
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 29831,
+          "cpu_edges": 10757,
+          "sequence": 24
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 33646,
+          "cpu_edges": 13809,
+          "sequence": 25
+        },
+        {
+          "flags": 7,
+          "key_released": true,
+          "pll_locked": true,
+          "reset_released": true,
+          "reference_edges": 37460,
+          "cpu_edges": 16861,
+          "sequence": 26
+        }
+      ]
+    },
+    "candidate95": {
+      "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\clock95-check-20261101T110918263996Z",
+      "raw_sha256": "8274d12034d8c8340edba663628b8542cd4ff55b75f20d2eb9dbd54993cbcc60",
+      "program_result_sha256": "3f66dc9dd6db7af6f8d8f12a51d5b4f133c0b9e8f88784a5b86f08b72d3de9c5",
+      "bytes": 432,
+      "valid_last_epoch_packets": 28,
+      "flags": 1,
+      "key_released": true,
+      "pll_locked": false,
+      "reset_released": false,
+      "reference_edges_per_sample": [
+        3814,
+        3815
+      ],
+      "cpu_edges_per_sample": [
+        90,
+        91
+      ],
+      "last_epoch": [
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 3814,
+          "cpu_edges": 91,
+          "sequence": 0
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 7629,
+          "cpu_edges": 182,
+          "sequence": 1
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 11444,
+          "cpu_edges": 273,
+          "sequence": 2
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 15258,
+          "cpu_edges": 364,
+          "sequence": 3
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 19073,
+          "cpu_edges": 455,
+          "sequence": 4
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 22888,
+          "cpu_edges": 546,
+          "sequence": 5
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 26702,
+          "cpu_edges": 637,
+          "sequence": 6
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 30517,
+          "cpu_edges": 728,
+          "sequence": 7
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 34332,
+          "cpu_edges": 819,
+          "sequence": 8
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 38146,
+          "cpu_edges": 910,
+          "sequence": 9
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 41961,
+          "cpu_edges": 1000,
+          "sequence": 10
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 45776,
+          "cpu_edges": 1091,
+          "sequence": 11
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 49591,
+          "cpu_edges": 1182,
+          "sequence": 12
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 53405,
+          "cpu_edges": 1273,
+          "sequence": 13
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 57220,
+          "cpu_edges": 1363,
+          "sequence": 14
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 61035,
+          "cpu_edges": 1454,
+          "sequence": 15
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 64849,
+          "cpu_edges": 1545,
+          "sequence": 16
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 3128,
+          "cpu_edges": 1636,
+          "sequence": 17
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 6943,
+          "cpu_edges": 1727,
+          "sequence": 18
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 10757,
+          "cpu_edges": 1817,
+          "sequence": 19
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 14572,
+          "cpu_edges": 1908,
+          "sequence": 20
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 18387,
+          "cpu_edges": 1999,
+          "sequence": 21
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 22201,
+          "cpu_edges": 2090,
+          "sequence": 22
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 26016,
+          "cpu_edges": 2181,
+          "sequence": 23
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 29831,
+          "cpu_edges": 2271,
+          "sequence": 24
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 33646,
+          "cpu_edges": 2362,
+          "sequence": 25
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 37460,
+          "cpu_edges": 2453,
+          "sequence": 26
+        },
+        {
+          "flags": 1,
+          "key_released": true,
+          "pll_locked": false,
+          "reset_released": false,
+          "reference_edges": 41275,
+          "cpu_edges": 2544,
+          "sequence": 27
+        }
+      ]
+    }
+  }
+}

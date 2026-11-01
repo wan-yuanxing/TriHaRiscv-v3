@@ -1,0 +1,194 @@
+{
+  "status": "PHYSICAL_PLL_LOCK_RECOVERY_PASS",
+  "scope": "Independent27MHz diagnostic only, not95MHz CPU/CoreMark acceptance; current deployed CPU is100MHz",
+  "single_change": "95MHz I5/M1/F38/O10 BANDWIDTH HIGH to OPTIMIZED",
+  "key_released": true,
+  "pll_locked": true,
+  "cpu_reset_released": true,
+  "valid_final_epoch_packets": 28,
+  "reference_edges_per_sample": [
+    3814,
+    3815
+  ],
+  "cpu_edges_per_sample": [
+    2899,
+    2900
+  ],
+  "program_result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\clock95-opt-check-20261101T112120089844Z\\result.json",
+  "program_sha256": "2e530fff4ace3f8f33744dcac678e8f07b4817c33d7e8f42e769cdb4f11a02b0",
+  "raw_uart": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\clock95-opt-check-20261101T112120089844Z\\uart.bin",
+  "raw_uart_sha256": "2bb4af6f62a5ad13c01ca2bdc22ad33c5e2b1b8ea6f1d37d9ac633aa24a53b4e",
+  "high_prepared_sha256": "9621fa9579d55f310bd8818998a59a0dfdb8eb117e00f448d48a0181379aba45",
+  "optimized_prepared_sha256": "af2209dfd900f648edb98261fc46175fc28d0555c1a0bd3a32bd8f1c829b25d8",
+  "prior_failure": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\dualissue_board_startup_diagnosis_20261101.json",
+  "last_epoch": [
+    {
+      "flags": 7,
+      "reference": 3814,
+      "cpu": 2899,
+      "sequence": 0
+    },
+    {
+      "flags": 7,
+      "reference": 7629,
+      "cpu": 5798,
+      "sequence": 1
+    },
+    {
+      "flags": 7,
+      "reference": 11444,
+      "cpu": 8697,
+      "sequence": 2
+    },
+    {
+      "flags": 7,
+      "reference": 15258,
+      "cpu": 11596,
+      "sequence": 3
+    },
+    {
+      "flags": 7,
+      "reference": 19073,
+      "cpu": 14495,
+      "sequence": 4
+    },
+    {
+      "flags": 7,
+      "reference": 22888,
+      "cpu": 17394,
+      "sequence": 5
+    },
+    {
+      "flags": 7,
+      "reference": 26702,
+      "cpu": 20294,
+      "sequence": 6
+    },
+    {
+      "flags": 7,
+      "reference": 30517,
+      "cpu": 23193,
+      "sequence": 7
+    },
+    {
+      "flags": 7,
+      "reference": 34332,
+      "cpu": 26092,
+      "sequence": 8
+    },
+    {
+      "flags": 7,
+      "reference": 38146,
+      "cpu": 28991,
+      "sequence": 9
+    },
+    {
+      "flags": 7,
+      "reference": 41961,
+      "cpu": 31890,
+      "sequence": 10
+    },
+    {
+      "flags": 7,
+      "reference": 45776,
+      "cpu": 34789,
+      "sequence": 11
+    },
+    {
+      "flags": 7,
+      "reference": 49591,
+      "cpu": 37689,
+      "sequence": 12
+    },
+    {
+      "flags": 7,
+      "reference": 53405,
+      "cpu": 40588,
+      "sequence": 13
+    },
+    {
+      "flags": 7,
+      "reference": 57220,
+      "cpu": 43487,
+      "sequence": 14
+    },
+    {
+      "flags": 7,
+      "reference": 61035,
+      "cpu": 46386,
+      "sequence": 15
+    },
+    {
+      "flags": 7,
+      "reference": 64849,
+      "cpu": 49285,
+      "sequence": 16
+    },
+    {
+      "flags": 7,
+      "reference": 3128,
+      "cpu": 52184,
+      "sequence": 17
+    },
+    {
+      "flags": 7,
+      "reference": 6943,
+      "cpu": 55084,
+      "sequence": 18
+    },
+    {
+      "flags": 7,
+      "reference": 10757,
+      "cpu": 57983,
+      "sequence": 19
+    },
+    {
+      "flags": 7,
+      "reference": 14572,
+      "cpu": 60882,
+      "sequence": 20
+    },
+    {
+      "flags": 7,
+      "reference": 18387,
+      "cpu": 63781,
+      "sequence": 21
+    },
+    {
+      "flags": 7,
+      "reference": 22201,
+      "cpu": 1144,
+      "sequence": 22
+    },
+    {
+      "flags": 7,
+      "reference": 26016,
+      "cpu": 4043,
+      "sequence": 23
+    },
+    {
+      "flags": 7,
+      "reference": 29831,
+      "cpu": 6943,
+      "sequence": 24
+    },
+    {
+      "flags": 7,
+      "reference": 33646,
+      "cpu": 9842,
+      "sequence": 25
+    },
+    {
+      "flags": 7,
+      "reference": 37460,
+      "cpu": 12741,
+      "sequence": 26
+    },
+    {
+      "flags": 7,
+      "reference": 41275,
+      "cpu": 15640,
+      "sequence": 27
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 # 六级双发射 SRAM CoreMark 上板
 
-已实际下载并回读校验成功：本轮为**95MHz板级实测版**，CPU仍为原v83六级双发射。
-95MHz实际板级时序全部通过；100MHz独立CPU的历史通过保留，但本次100MHz板级
-边界未通过，不能混用结论。用户串口实测分数待接收，当前不宣称物理CoreMark PASS。
+**最终100MHz六级双发射已通过真实板测及实体KEY0重跑。** 两次5000迭代输出完全一致：
+CoreMark409.278990、CoreMark/MHz4.092789、CoreMark/LUTs0.042293，1221660558周期、
+12.216605秒；errors=0、short=0、全部CRC正确。CPU-only9677 LUT，片上32KiB SRAM、
+无Cache/DDR，GCC15.2/-O2。实际100MHz板级STA全通过，串口采集已关闭，当前保留
+该100MHz CPU易失配置。此前95MHz/HIGH镜像实物未锁的失败记录与准入撤销仍保留。
 
 用户已授权下载后自行使用串口助手接收。目标为已通过独立100MHz物理验收的v83，
 六级顺序双发射，32KiB片上SRAM，无Cache/DDR；GCC15.2、CoreMark1.0、2000字节
@@ -29,7 +31,7 @@ COM12、115200、8N1、无流控。下载为易失Program/Verify，不写Flash�
 不继承旧单发射PAP区域及试验参数。板级STA必须重新验收，不能直接使用此前
 外部供给时钟的片上系统通过结论。只有全部实际时序通过才生成可下载位流。
 
-## 当前进度
+## 早期实施记录
 
 - 准备器5项检查通过：实际模式、双通道观察、缺失模板及哈希损坏拒绝。
 - 实际PLL模型通过；JTAG只读识别PG2L100H/00602899，尚未下载。
@@ -132,7 +134,7 @@ PLL证据为`build/soc/board-clocks-20261101T100838763601Z`；面积为
 `build/soc/board-coremark-20261101T101050905524Z`，完整短测通过：1229724 cycles、
 473709次真实双发射配对、CRC正确、errors=0/short=1；短RTL为4.065953/MHz，非板测。
 
-## 最终95MHz物理与烧录验收
+## 95MHz历史物理与烧录记录（已撤销运行准入）
 
 首次95MHz布线原始报告为Slow setup -0.080ns、1个违例，未下载；时钟表分别保留
 10.5263ns周期与5.2630ns半周期，原校验器按周期直接除二导致额外拒绝。后续独立
@@ -167,3 +169,55 @@ PLL证据为`build/soc/board-clocks-20261101T100838763601Z`；面积为
 计数计算。完整实物分数仍由用户本次UART日志验收，不把短测4.065953当作板测分数。
 
 机器摘要：[dualissue_board_coremark_deployment_20261101.json](../verification/cpu/dualissue_board_coremark_deployment_20261101.json)。
+
+## 实物启动故障定位与最终100MHz验收
+
+用户报告按KEY0无响应、LED全灭后，实际90秒COM12/115200接收为0字节，重新下载
+原95MHz包仍相同。复用已实测的27MHz独立观察器得到连续校验正确的诊断帧：同板
+125MHz参考时钟正常、KEY0已松开；100MHz I1/M1/F8/O10/HIGH锁定且复位释放，
+失败的95MHz I5/M1/F38/O10/HIGH未锁、复位保持。单因素把95MHz带宽改为OPTIMIZED
+后锁定/复位均正常，分频计数符合95MHz。此结论限于实际测过的参数组合，不把
+HIGH一概判错；100MHz仍使用已验证的HIGH配置。95MHz创建器已改为实测OPTIMIZED，
+实际生成配置回归先复现HIGH失败，再验证OPTIMIZED和分频比；旧冻结包不改写。
+
+故障摘要：[dualissue_board_startup_diagnosis_20261101.json](../verification/cpu/dualissue_board_startup_diagnosis_20261101.json)。
+失败95MHz部署保留：[dualissue_board_95mhz_boot_failure_20261101.json](../verification/cpu/dualissue_board_95mhz_boot_failure_20261101.json)。
+
+100MHz修复继续保持v83全部22个CPU文件、原PLL/管脚/IO/hold、多corner预算、seed1、
+注册LED和乘法器X1/Y2区域，原生时序修复预算从2轮增到4轮，最多40条路径；原PNR/
+外层截止不变。2轮仍-0.148ns/9违例；4轮实际运行
+`build/cpu/dual-board-v83-ledreg-20261101/project/build/soc/board-route-20261101T1117136198580Z`
+和独立复核全部通过。实际选中routed ADF与`route_constraint_ite_4`逐字节一致：
+
+| 检查 | Slow余量/ns | Fast余量/ns |
+| --- | ---: | ---: |
+| Setup | +0.220 | +3.768 |
+| Hold | +0.162 | +0.104 |
+| 最小脉宽 | +3.655 | +4.202 |
+| Recovery | +2.036 | +4.167 |
+| Removal | +0.653 | +0.441 |
+
+全部违例为0、performance与最差setup一致，源/工具/输出哈希通过。CPU-only9677 LUT/
+4968 FF/752已含RAM-LUT/4APM/0DRM；UART分母9677与实际层次综合一致。
+程序包为该项目`build/soc/releases/cpu_coremark_4a3932361535`。
+
+先打开接收再调用未修改的100MHzProgram/Verify工具，实际设备00602899、返回0、
+写入/回读均成功。实际接收目录为
+`build/soc/dual100-physical-uart-20261101T114717089665Z`。自动下载后完整`boot-2.txt`
+通过；随后用户短按KEY0并回复“已按”，完整`boot-3.txt`再通过。两次UART文本、周期、
+CRC和精确三项分数完全相同。原自动采集器不推断物理按键，实体KEY0验收由用户
+确认文件与随后第二个完整启动共同绑定，原采集记录不改写。
+
+最终精确板测（非短RTL、非官方提交）：
+
+| 指标 | 两次实测值 |
+| --- | ---: |
+| 迭代 | 5000 |
+| 周期 | 1221660558 |
+| 时间/s | 12.216605 |
+| CoreMark | 409.278990 |
+| CoreMark/MHz | 4.092789 |
+| CoreMark/LUTs | 0.042293 |
+
+seed/list/matrix/state/final CRC为e9f5/e714/1fd7/8e3a/bd59，errors=0/short=0；
+接收器已正常关闭COM12，串口未发送任何字节，不写Flash、不恢复Video或改动主工程。

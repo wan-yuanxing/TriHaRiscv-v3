@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,sys,unittest
+import importlib.util,json,sys,tempfile,unittest
 from decimal import Decimal,ROUND_DOWN
 P=Path(__file__).resolve().parents[2]/'build/cpu/dual-board-v83-95mhz-20261101/project'
 sys.path.insert(0,str(P/'scripts/soc'))
@@ -25,7 +25,19 @@ CPU_COREMARK_BOARD_PASS iterations=5000
 '''
 
 class ClockBoundary(unittest.TestCase):
-    def test_real_pll_ratio_is_exact95(self):
+    def test_generator_uses_measured_locking_bandwidth(self):
+        root=Path(__file__).resolve().parents[2]
+        spec=importlib.util.spec_from_file_location('board95_generator_regression',root/'scripts/cpu/prepare_dual_board_95.py')
+        helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+        with tempfile.TemporaryDirectory(prefix='board95-pll-test-',dir=root/'build/cpu') as directory:
+            temporary=Path(directory).resolve()
+            self.assertTrue(temporary.is_relative_to((root/'build/cpu').resolve()))
+            helper.DEST=temporary/'candidate';helper.P=helper.DEST/'project'
+            helper.clone();helper.adapt()
+            cfg=json.loads((helper.P/'config/cpu_board.json').read_text())
+            self.assertEqual(cfg['pll']['bandwidth'],'OPTIMIZED')
+            self.assertEqual(cfg['cpu_hz'],95000000)
+    def test_pll_ratio_is_exact95(self):
         cfg=json.loads((P/'config/cpu_board.json').read_text())
         self.assertEqual(gen_board.validate(cfg)[2],95000000)
     def test_accepts_cycle_correct95_measurement(self):
