@@ -103,3 +103,5 @@ docs/verification/cpu/dualissue_sram_local_command.patch -text -whitespace
 docs/verification/cpu/dualissue_fifo_predicate.patch -text -whitespace
 docs/verification/cpu/dualissue_align_precheck.patch -text -whitespace
 docs/verification/cpu/dualissue_align_precheck_sources.json -text whitespace=cr-at-eol
+docs/verification/cpu/dualissue_direct_load_forward.patch -text -whitespace
+docs/verification/cpu/dualissue_role_predecode.patch -text -whitespace

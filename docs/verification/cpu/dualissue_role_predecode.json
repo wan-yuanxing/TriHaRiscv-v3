@@ -1,0 +1,339 @@
+{
+  "status": "RTL_PASS_TIMING_FAIL",
+  "timing_closed": false,
+  "overall_target_met": false,
+  "candidate": "v82 source-use roles predecoded with opcode bulk; independently derived from v78",
+  "functional_evidence": {
+    "status": "PASS",
+    "receipts": {
+      "component": {
+        "file": "build/cpu/role-predecode-validation-v82/result.json",
+        "result_sha256": "a02944e258e9ef1f5414cf64c1d37f3244eeaf0472f6c5491382fba67bafe5a7",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 5,
+          "output_hashes": 7
+        }
+      },
+      "red_control": {
+        "file": "build/cpu/role-predecode-red-v82/result.json",
+        "result_sha256": "d5e059a9e40b9d0969d2f1ce8d5c7f64470c5d1bfb1bb9e368eaafc8b5fd4c0d",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 4,
+          "output_hashes": 6
+        }
+      },
+      "queue": {
+        "file": "build/cpu/role-predecode-queue-v82-v3/result.json",
+        "result_sha256": "11bcabeefa2564928bd667b494596f61aa344152803e23535bc8817612f3c75d",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 9,
+          "output_hashes": 10
+        }
+      },
+      "ordered": {
+        "file": "build/cpu/redirect-ordered-20261101T0759014457244Z/result.json",
+        "result_sha256": "5ef0005b73fa2ff7f78675aaf2cb09434fcf37ed7992e576679395dd863ed3a4",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 46,
+          "external_input_hashes": 5,
+          "output_hashes": 38
+        }
+      },
+      "irq": {
+        "file": "build/cpu/redirect-ordered-20261101T0759014822170Z/result.json",
+        "result_sha256": "33aaf2ca5a111cac00deed8605d92a7011d6bb875283ed537adffb57c6b18dc8",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 46,
+          "external_input_hashes": 5,
+          "output_hashes": 38
+        }
+      },
+      "recovery": {
+        "file": "build/cpu/dual-diagnostic-20261101T075901249685Z/result.json",
+        "result_sha256": "293c32c5b8288570e90de9c91242d7d92a3a615a380edbd22f738058959f3289",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 40,
+          "external_hashes": 12,
+          "output_hashes": 75
+        }
+      },
+      "sram": {
+        "file": "build/cpu/dual-sram/coremark-20261101T075720177450Z/result.json",
+        "result_sha256": "7601e808807687fa39ab4d57f3ba2132168c3c45d600b1e81f8b1927a7ea66de",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 77,
+          "external_hashes": 11,
+          "output_hashes": 122,
+          "origin_hashes": 77
+        }
+      },
+      "native": {
+        "file": "build/cpu/role-predecode-native-gate-v82/native-result.json",
+        "result_sha256": "1a126cf60185c71e982e558c73a3e7e580bb17378e083c28b3d479e86ffb87db",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 4,
+          "output_hashes": 68
+        }
+      }
+    },
+    "mappings": {
+      "role-predecode-mapping-v82-v6.json": {
+        "file": "build/cpu/role-predecode-mapping-v82-v6.json",
+        "sha256": "63c9df7b432385dcd6f86b84cb1a530104c87f5a008523ed6617001a27a0adce",
+        "status": "PASS"
+      },
+      "role-predecode-mapping-v82-negative-opcode-v2.json": {
+        "file": "build/cpu/role-predecode-mapping-v82-negative-opcode-v2.json",
+        "sha256": "54c4bf608e74adca14afc5e86b0caf8690f5696a6e28918bb01f8bd2cffe3dfb",
+        "status": "HOLD"
+      },
+      "role-predecode-mapping-v82-negative-role-v2.json": {
+        "file": "build/cpu/role-predecode-mapping-v82-negative-role-v2.json",
+        "sha256": "25fe40a8788656897b34cd4ed5841931cf01f86542472d60fece8eb399caa403",
+        "status": "HOLD"
+      },
+      "role-predecode-prior-branch-v82.json": {
+        "file": "build/cpu/role-predecode-prior-branch-v82.json",
+        "sha256": "1b3113a98532abba497fa5995c8e7e7be59b97ba2978ba9174d76a0dbd57448f",
+        "status": "PASS"
+      },
+      "role-predecode-prior-sum-v82.json": {
+        "file": "build/cpu/role-predecode-prior-sum-v82.json",
+        "sha256": "675ff3bd63ce54a3ee71ffdd74d6ba5fec22efdb5531cb9f41e97e0cce894342",
+        "status": "PASS"
+      },
+      "role-predecode-prior-btb-v82.json": {
+        "file": "build/cpu/role-predecode-prior-btb-v82.json",
+        "sha256": "ae2594b9f03125d5a0ccde3ca90c5d07f77125fea9cae9c4a40a4f7a84aefe17",
+        "status": "PASS"
+      },
+      "role-predecode-prior-memory-v82.json": {
+        "file": "build/cpu/role-predecode-prior-memory-v82.json",
+        "sha256": "0fbbdb203e39060ed09e664abeefd8648793cc537dddf041fdf964dbab2fa328",
+        "status": "PASS"
+      }
+    },
+    "source_manifest_sha256": "4f3bad2c076593177585619c671aa1e0135250e79c219ab244b8ead89458557f",
+    "sources_verified": 22,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "same_parent_profile": true,
+    "same_parent_files": {
+      "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "sram.hex": "5c99851883b4347e30483fbe9cf1867d8e8804fa427ae84433afabc917a26fb7",
+      "sram.wb.log": "94b46e276990d7a3fd630205a291c632124eed000913cfd395731fd12938fffd",
+      "sram.store.log": "9a4f78277a479a1301a28f11607ba4a8fdc69fab53a1a16dfb0ad476ca300af8"
+    },
+    "preserved95_record_sha256": "b440bc1d0d0a34617ba445a172df54b914cd5dee86a17212a801be00a25f2474",
+    "archive_sha256": "f5480495ec71eb680aff55ea953a631a0301cc3cc214395654493035e8db53d8",
+    "timing_closed": false,
+    "scope": "Receipt/source/trace integrity audit; not a replacement for final routed STA"
+  },
+  "physical": {
+    "status": "100MHZ_TIMING_FAIL",
+    "run": "build/cpu/dual-role-predecode-io-physical-v82",
+    "result_sha256": "1b3057ad357e88618a9129bc1c217841eba6b81dbb4922e2b845a49c331de0c3",
+    "prepared_sha256": "8999460164617eee1be6c77111dda6082d5643e3239d27a79f8feb0b730bada0",
+    "stages": {
+      "compile": true,
+      "synthesize": true,
+      "dev_map": true,
+      "pnr": true,
+      "report_timing": true
+    },
+    "source_unchanged": true,
+    "verified_inputs": 30,
+    "verified_outputs": 408,
+    "native_return_code": 0,
+    "runner_return_code": 2,
+    "timing": {
+      "met": false,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": -0.994,
+          "total_negative_slack_ns": -20.274,
+          "failing_endpoints": 41,
+          "endpoints": 26373
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.112,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26373
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4608
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.52,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26373
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.099,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26373
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4608
+        }
+      ],
+      "performance_slack_ns": -0.994,
+      "worst_setup_ns": -0.994,
+      "performance_consistent": true,
+      "requested_period_ns": 10.0,
+      "reported_period_ns": 10.0,
+      "reported_frequency_mhz": 100.0,
+      "period_quantization_ns": 0.0,
+      "all_constraints_met": false
+    },
+    "cpu_synthesis_resources": {
+      "lut": 9877,
+      "ff": 5003,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    },
+    "route_mapping_sha256": "8600aca5ef1e7648c9be46daab95e7be0f2a70895d09df8077432027c4a21d08",
+    "same_parent_constraints_recipe_seed_budget": true,
+    "last_main_detailed": {
+      "iteration": 158,
+      "unrouted": 0
+    },
+    "report_sha256": "ceb14e60cca80afe7dc784828fed7966536fc31c978ae8f505e63b2b6e0a6a7f",
+    "reported_slow_max_paths": 200,
+    "worst_paths": [
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_write_tag[9].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.994
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_target[4].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.968
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_target[6].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.968
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_write_tag[5].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.962
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_metadata[9].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.838
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_target[11].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.813
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_target[14].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.813
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_metadata[6].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.719
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_write_tag[0].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.709
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_write_tag[1].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.709
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_write_tag[2].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.709
+      },
+      {
+        "start": "rst_ni (port)",
+        "end": "u_core/u_cpu/u_frontend/u_npc/BRANCH_PREDICTION.g_indexed.u_btb/g_bank[1].u_bank/g_block[3].g_target[2].u_ram/ram32x2d/WADDR[4]",
+        "slack_ns": -0.641
+      }
+    ],
+    "non_reset_negative_paths": [
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_fetch/genblk1.branch_pc_q[3]/opit_0_inv_L6Q_perm/CE",
+        "slack_ns": -0.1
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_fetch/genblk1.branch_pc_q[5]/opit_0_inv_L6Q_perm/CE",
+        "slack_ns": -0.1
+      },
+      {
+        "start": "u_core/u_cpu/u_issue/u_pipe1_ctrl/opcode_e1_q[18]/opit_0_inv_L6QL5Q_perm/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_fetch/genblk1.branch_pc_q[9]/opit_0_inv_L6Q_perm/CE",
+        "slack_ns": -0.1
+      }
+    ]
+  },
+  "review": "Inline source, scalar/queue/whole-core negative controls, complete actual mapped cones, independent final report and hash audit; no new subagents",
+  "decision": "Retain v82 as a fully measured diagnostic, not an accepted100MHz or a replacement for retained95MHz v78. Do not repeat this PNR.",
+  "remaining_bottleneck": "38 external-reset-to-BTB-WADDR setup endpoints;3 E1 branch recovery to fetch CE endpoints at -0.100ns. Reset is unnecessarily present in write-address hold helpers despite unchanged WE already suppressing reset writes.",
+  "next_diagnostic": "Evaluate enable-qualified address equivalence: replace reset/train dependent address gating with stable bank-address predicates while retaining write enables and actual two-stage hold structure. No new reset synchronization or timing exceptions.",
+  "board_validated": false,
+  "official_score": false,
+  "tools": {
+    "scripts\\cpu\\check_role_predecode.py": "79f9b9742fbcc128d6e325cffabd4a961f0b90e00a0b33aa13da99fee13a7346",
+    "scripts\\cpu\\check_role_queue.py": "4ffe07dfa1285ac3fa3701b2a79f19d8636ebee7ee6dd22d01f7fd78a47b1bd7",
+    "scripts\\cpu\\check_role_mapping.py": "85d26f3f41bcbcba22a7d42de4343fa1d80292a77f2975625affb1e338c27fec",
+    "tb\\cpu\\tb_role_predecode.v": "57f1c7e447673dfbeb825e3466692296d91cdcdbe88a906cec5ac115afa93cd4",
+    "tb\\cpu\\tb_role_queue.v": "fcd825454abfd1287fe9d6ea3ce60ffa80b4ac680627e4bb16ed8407a6358844",
+    "build\\cpu\\audit-role-predecode-v82.py": "89d43c9d5d629e8eb86bd64e67277fcabc2b29a1030eb3a8be6324edb42ed44c",
+    "build\\cpu\\audit-role-predecode-route-v82.py": "4845d7bdebb1158a463dcb29aad208e993a87817a08fd39548d21ae100e8646d"
+  }
+}

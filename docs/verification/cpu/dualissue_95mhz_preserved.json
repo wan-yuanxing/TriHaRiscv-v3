@@ -1,0 +1,11 @@
+{
+  "status": "PRESERVED_AND_VERIFIED",
+  "commit": "541185bde773f4bf83ebd8ca7459a9d0463aa09e",
+  "tag": "cpu-dual-sram-95mhz-20261101",
+  "archive": "build/cpu/preserved-dual-sram-95mhz-20261101/dual-sram-95mhz.zip",
+  "archive_sha256": "f5480495ec71eb680aff55ea953a631a0301cc3cc214395654493035e8db53d8",
+  "archived_files": 534,
+  "archive_bytes": 19897504,
+  "timing": "95MHz PASS; original100MHz remains FAIL",
+  "source_evidence_sha256": "2af01e733d6588139fb51dc7d2605a1721c3bf3e762402cfd735aa0751748479"
+}
