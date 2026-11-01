@@ -1,5 +1,11 @@
 # TriHa CPU 开发与维护
 
+2026-11-01：GitHub `cpu`分支已将通过版v83及当前100MHz板级源纳入标准目录。
+本地工作树为`TriHaRiscv-cpu-dualissue-windows`，发布分支`cpu-github`。
+真实5000次CoreMark/MHz为4.092789，两次含实体KEY0重跑相同；当前目标是双发射、
+32KiB SRAM、无Cache/DDR。构建和源码哈希入口见
+[CPU分支交付](CPU_GITHUB_RELEASE_2026-11-01.md)。下文保留早期单发射开发入口和历史说明。
+
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-19。
 
 当前已实现六级单发射CPU＋8KiB启动只读窗口＋32KiB片上SRAM＋本地总线＋UART TX。正式地址为ROM 0x0/SRAM 0x10000，CPU宽总线内部连接。CoreMark短RTL为1685831周期、WB观察IPC0.870694、估算2.965896 CoreMark/MHz；非官方分数或板级CoreMark。实际板级100MHz后布线通过，Slow/Fast setup+0.023/+1.752ns，hold/脉宽无违例。HIGH带宽PLL修正版cpu_board_df5475cbb154已实际Program/Verify，通过8KiB自检、持续UART运行及实体KEY0重启；按用户指示保留CPU配置，未写Flash、未恢复Video。详见[现场验收](../verification/cpu/board_system_physical.md)、[STA记录](../verification/cpu/board_system_100mhz.md)、[STATUS.md](STATUS.md)与[接口](../interfaces/cpu_local_bus.md)。DDR/Video/NPU及完整ISA另行验收，主目录Video分支未自动合入。

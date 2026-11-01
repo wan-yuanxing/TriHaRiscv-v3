@@ -93,6 +93,7 @@ void portable_init(core_portable *port, int *argc, char *argv[])
     port->portable_id = 1;
 #if TRIHA_COREMARK_BOARD
     ee_printf("CPU_COREMARK_START iterations=%lu clock_hz=100000000\n", (ee_u32)ITERATIONS);
+    triha_puts("CPU_COREMARK_CONFIG stages=6 issue=2 memory=SRAM cache=0\n");
     triha_puts("CoreMark running; precise scores follow the CRC report.\n");
 #endif
 }

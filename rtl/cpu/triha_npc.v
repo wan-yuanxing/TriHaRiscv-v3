@@ -87,6 +87,7 @@ wire [31:0] btb_next_pc_w;
 wire        btb_is_call_w;
 wire        btb_is_ret_w;
 wire        btb_is_jmp_w;
+wire btb_call_valid_w,btb_ret_valid_w;
 
 //-----------------------------------------------------------------
 // Return Address Stack (actual)
@@ -119,8 +120,8 @@ reg [NUM_RAS_ENTRIES_W-1:0] ras_index_q;
 reg [NUM_RAS_ENTRIES_W-1:0] ras_index_r;
 
 wire [31:0] ras_pc_pred_w   = ras_stack_q[ras_index_q];
-wire        ras_call_pred_w = RAS_ENABLE & (btb_valid_w & btb_is_call_w) & ~ras_pc_pred_w[0];
-wire        ras_ret_pred_w  = RAS_ENABLE & (btb_valid_w & btb_is_ret_w) & ~ras_pc_pred_w[0];
+wire        ras_call_pred_w = RAS_ENABLE & btb_call_valid_w & ~ras_pc_pred_w[0];
+wire        ras_ret_pred_w  = RAS_ENABLE & btb_ret_valid_w & ~ras_pc_pred_w[0];
 
 always @ *
 begin
@@ -264,7 +265,8 @@ if (BTB_DIRECT_MAPPED) begin: g_indexed
         .train_i(branch_request_i), .taken_i(branch_is_taken_i),
         .source_i(branch_source_i), .target_i(branch_pc_i),
         .kind_i({branch_is_call_i,branch_is_ret_i,branch_is_jmp_i}), .pc_i(pc_f_i),
-        .valid_o(btb_valid_w), .upper_o(btb_upper_w), .target_o(target), .kind_o(kind)
+        .valid_o(btb_valid_w), .upper_o(btb_upper_w), .target_o(target), .kind_o(kind),
+        .call_valid_o(btb_call_valid_w),.ret_valid_o(btb_ret_valid_w)
     );
     assign {btb_is_call_w,btb_is_ret_w,btb_is_jmp_w} = kind;
     assign btb_next_pc_w = btb_valid_w ? target : sequential_pc_w;
@@ -460,6 +462,8 @@ assign btb_is_call_w = btb_is_call_r;
 assign btb_is_ret_w  = btb_is_ret_r;
 assign btb_is_jmp_w  = btb_is_jmp_r;
 assign btb_next_pc_w = btb_next_pc_r;
+assign btb_call_valid_w=btb_valid_w & btb_is_call_w;
+assign btb_ret_valid_w=btb_valid_w & btb_is_ret_w;
 end
 assign next_pc_f_o   = ras_ret_pred_w      ? ras_pc_pred_w : 
                        (bht_predict_taken_w | btb_is_jmp_w) ? btb_next_pc_w :

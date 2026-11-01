@@ -1,5 +1,10 @@
 # 双发射独立路线状态
 
+GitHub `cpu`分支发布：当前100MHz板级时序与两次真实5000迭代CoreMark均通过，
+CoreMark/MHz4.092789；通过版源码已纳入标准目录。见
+[分支交付](CPU_GITHUB_RELEASE_2026-11-01.md)和[板测记录](DUAL_ISSUE_BOARD_COREMARK_2026-11-01.md)。
+以下为源码发布前的独立诊断历史。
+
 更新：2026-11-01。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
 **当前v83原100MHz完整后布线已通过**：实际10.0000ns，setup Slow/Fast **+0.307/+2.753ns**，hold **+0.114/+0.103ns**，MPW **+3.655/+4.202ns**，所有corner无违例、performance一致。原IO/hold/多corner/seed1预算不变，原生/验收0；主详细布线135次到0，30冻结输入及362输出核验。CPU-only **9845LUT/5001FF/752已含RAM-LUT/4APM/0DRM**，实际route全部结构门槛重新核对。完整SRAM短RTL **1221907cycles、4.091964/MHz、observed IPC1.185400**，WB/store/profile仍同v78；未上板，非官方分数。改动为v82角色预译码＋BTB地址锥去除重复reset/train条件，WE/读口/valid复位及六级流水/周期不变。95MHz完整归档继续保留，失败记录不覆盖；默认生产RTL和集成主工程不变。本轮冻结通过版本，不扫描更高频率或重复PNR。见[v83验收](DUAL_ISSUE_BTB_ADDRESS_2026-11-01.md)及[证据](../verification/cpu/dualissue_btb_address_control.json)。

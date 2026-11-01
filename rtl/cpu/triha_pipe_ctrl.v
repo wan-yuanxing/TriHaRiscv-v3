@@ -41,6 +41,7 @@ module triha_pipe_ctrl
     // Issue
     ,input           issue_valid_i
     ,input           issue_accept_i
+    ,input cancel_e1_i
     ,input           issue_stall_i
     ,input           issue_lsu_i
     ,input           issue_csr_i
@@ -53,6 +54,12 @@ module triha_pipe_ctrl
     ,input           take_interrupt_i
     ,input           issue_branch_taken_i
     ,input [31:0]    issue_branch_target_i
+    ,input [31:0] issue_pred_pc_i
+    ,input [31:0] resolved_next_e1_i
+    ,input resolved_taken_e1_i
+    ,output [31:0] conditional_pc_e1_o
+    ,output [31:0] pred_pc_e1_o
+    ,output resolve_e1_o
     ,input [31:0]    issue_pc_i
     ,input [31:0]    issue_opcode_i
     ,input [31:0]    issue_operand_ra_i
@@ -71,6 +78,7 @@ module triha_pipe_ctrl
     ,output          load_e1_o
     ,output          store_e1_o
     ,output          mul_e1_o
+    ,output          mul_low_e1_o
     ,output          branch_e1_o
     ,output [  4:0]  rd_e1_o
     ,output [31:0]   pc_e1_o
@@ -81,6 +89,7 @@ module triha_pipe_ctrl
     // Execution stage 2: Other results
     ,input           mem_complete_i
     ,input [31:0]    mem_result_e2_i
+    ,input          mem_bypass_zero_e2_i
     ,input [31:0]   mem_bypass_e2_i
     ,input  [5:0]    mem_exception_e2_i
     ,input [31:0]    mul_result_e2_i
@@ -90,6 +99,7 @@ module triha_pipe_ctrl
     ,output          mul_e2_o
     ,output [  4:0]  rd_e2_o
     ,output [  4:0]  rd_bypass_e2_o
+    ,output          result_zero_e2_o
     ,output [31:0]   result_e2_o
 
     // Out of pipe: Divide Result
@@ -122,8 +132,12 @@ module triha_pipe_ctrl
 //-------------------------------------------------------------
 `include "biriscv_defs.v"
 
+reg [4:0] rd_tag_e1_q;
+reg [4:0] rd_tag_e2_q;
+reg [4:0] rd_tag_wb_q;
+
 wire squash_e1_e2_w;
-wire branch_misaligned_w = (issue_branch_taken_i && issue_branch_target_i[1:0] != 2'b0);
+wire branch_misaligned_w = branch_e1_o && resolved_taken_e1_i && resolved_next_e1_i[1:0] != 2'b0;
 
 //-------------------------------------------------------------
 // E1 / Address
@@ -144,9 +158,15 @@ wire branch_misaligned_w = (issue_branch_taken_i && issue_branch_target_i[1:0] !
 
 reg                     valid_e1_q;
 reg [`PCINFO_W-1:0]     ctrl_e1_q;
+// Preserve the pure sum boundary before the packet clear/hold selection.
+wire [31:0] issue_conditional_pc_w /* synthesis syn_keep=1 */;
+assign issue_conditional_pc_w = issue_pc_i + {{19{issue_opcode_i[31]}},issue_opcode_i[31],
+    issue_opcode_i[7],issue_opcode_i[30:25],issue_opcode_i[11:8],1'b0};
+reg [31:0]              conditional_pc_e1_q;
 reg [31:0]              pc_e1_q;
 reg [31:0]              npc_e1_q;
 reg [31:0]              opcode_e1_q;
+reg                     mul_low_e1_q;
 reg [31:0]              operand_ra_e1_q;
 reg [31:0]              operand_rb_e1_q;
 reg [`EXCEPTION_W-1:0]  exception_e1_q;
@@ -156,9 +176,11 @@ if (rst_i)
 begin
     valid_e1_q      <= 1'b0;
     ctrl_e1_q       <= `PCINFO_W'b0;
+    conditional_pc_e1_q <= 32'b0;
     pc_e1_q         <= 32'b0;
     npc_e1_q        <= 32'b0;
     opcode_e1_q     <= 32'b0;
+    mul_low_e1_q    <= 1'b0;
     operand_ra_e1_q <= 32'b0;
     operand_rb_e1_q <= 32'b0;
     exception_e1_q  <= `EXCEPTION_W'b0;
@@ -180,22 +202,26 @@ begin
     ctrl_e1_q[`PCINFO_INTR]     <= take_interrupt_i;
     ctrl_e1_q[`PCINFO_COMPLETE] <= 1'b1;
 
+    // Same packet sampling boundary as PC/opcode; no extra resolution cycle.
+    conditional_pc_e1_q <= issue_conditional_pc_w;
     pc_e1_q         <= issue_pc_i;
-    npc_e1_q        <= issue_branch_taken_i ? issue_branch_target_i : issue_pc_i + 32'd4;
+    npc_e1_q        <= issue_pred_pc_i;
     opcode_e1_q     <= issue_opcode_i;
+    mul_low_e1_q    <= ((issue_opcode_i & `INST_MUL_MASK)==`INST_MUL);
     operand_ra_e1_q <= issue_operand_ra_i;
     operand_rb_e1_q <= issue_operand_rb_i;
-    exception_e1_q  <= (|issue_exception_i) ? issue_exception_i : 
-                       branch_misaligned_w  ? `EXCEPTION_MISALIGNED_FETCH : `EXCEPTION_W'b0;
+    exception_e1_q  <= issue_exception_i;
 end
 // No valid instruction (or pipeline flush event)
 else
 begin
     valid_e1_q      <= 1'b0;
     ctrl_e1_q       <= `PCINFO_W'b0;
+    conditional_pc_e1_q <= 32'b0;
     pc_e1_q         <= 32'b0;
     npc_e1_q        <= 32'b0;
     opcode_e1_q     <= 32'b0;
+    mul_low_e1_q    <= 1'b0;
     operand_ra_e1_q <= 32'b0;
     operand_rb_e1_q <= 32'b0;
     exception_e1_q  <= `EXCEPTION_W'b0;
@@ -207,8 +233,12 @@ assign store_e1_o      = ctrl_e1_q[`PCINFO_STORE];
 wire   csr_e1_w        = ctrl_e1_q[`PCINFO_CSR];
 wire   div_e1_w        = ctrl_e1_q[`PCINFO_DIV];
 assign mul_e1_o        = ctrl_e1_q[`PCINFO_MUL];
+assign mul_low_e1_o    = mul_low_e1_q;
 assign branch_e1_o     = ctrl_e1_q[`PCINFO_BRANCH];
-assign rd_e1_o         = {5{ctrl_e1_q[`PCINFO_RD_VALID]}} & opcode_e1_q[`RD_IDX_R];
+assign conditional_pc_e1_o = conditional_pc_e1_q;
+assign pred_pc_e1_o = npc_e1_q;
+assign resolve_e1_o = valid_e1_q && !ctrl_e1_q[`PCINFO_INTR] && !(|exception_e1_q);
+assign rd_e1_o         = rd_tag_e1_q;
 assign pc_e1_o         = pc_e1_q;
 assign opcode_e1_o     = opcode_e1_q;
 assign operand_ra_e1_o = operand_ra_e1_q;
@@ -248,7 +278,7 @@ end
 else if (issue_stall_i)
     ;
 // Pipeline flush
-else if (squash_e1_e2_o || squash_e1_e2_i)
+else if (squash_e1_e2_o || squash_e1_e2_i || cancel_e1_i)
 begin
     valid_e2_q      <= 1'b0;
     ctrl_e2_q       <= `PCINFO_W'b0;
@@ -270,7 +300,7 @@ begin
     csr_wr_e2_q     <= csr_result_write_e1_i;
     csr_wdata_e2_q  <= csr_result_wdata_e1_i;
     pc_e2_q         <= pc_e1_q;
-    npc_e2_q        <= npc_e1_q;
+    npc_e2_q        <= branch_e1_o ? resolved_next_e1_i : pc_e1_q + 32'd4;
     opcode_e2_q     <= opcode_e1_q;
     operand_ra_e2_q <= operand_ra_e1_q;
     operand_rb_e2_q <= operand_rb_e1_q;
@@ -283,6 +313,10 @@ begin
     begin
         valid_e2_q      <= 1'b0;
         exception_e2_q  <= exception_e1_q;
+    end
+    else if(branch_misaligned_w)begin
+        valid_e2_q<=1'b0;
+        exception_e2_q<=`EXCEPTION_MISALIGNED_FETCH;
     end
     else
         exception_e2_q  <= csr_result_exception_e1_i;
@@ -315,22 +349,40 @@ assign load_e2_o       = ctrl_e2_q[`PCINFO_LOAD];
 assign mul_e2_o        = ctrl_e2_q[`PCINFO_MUL];
 assign rd_e2_o         = {5{(valid_e2_w && ctrl_e2_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_e2_q[`RD_IDX_R];
 // Data selection uses registered stage metadata; late stall gates commit only.
-assign rd_bypass_e2_o = {5{valid_e2_q && ctrl_e2_q[`PCINFO_RD_VALID]}} & opcode_e2_q[`RD_IDX_R];
+assign rd_bypass_e2_o = rd_tag_e2_q;
 assign result_e2_o     = result_e2_r;
+reg result_zero_e2_r;
+always @* begin
+    result_zero_e2_r=(result_e2_q==32'b0);
+    if(SUPPORT_LOAD_BYPASS && valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]))
+        result_zero_e2_r=mem_bypass_zero_e2_i;
+    else if(SUPPORT_MUL_BYPASS && valid_e2_q && ctrl_e2_q[`PCINFO_MUL])
+        result_zero_e2_r=(mul_result_e2_i==32'b0);
+end
+assign result_zero_e2_o=result_zero_e2_r;
+
 
 // Load store result not ready when reaching E2
 assign stall_o         = (ctrl_e1_q[`PCINFO_DIV] && ~div_complete_i) || ((ctrl_e2_q[`PCINFO_LOAD] | ctrl_e2_q[`PCINFO_STORE]) & ~mem_complete_i);
 
 reg [`EXCEPTION_W-1:0] exception_e2_r;
+// Reduce both sources before the late completion selector. Full exception
+// metadata still follows the original procedural branch for writeback.
+(* syn_keep = 1 *) wire mem_exception_any_w = |mem_exception_e2_i;
+(* syn_keep = 1 *) wire saved_exception_any_w = |exception_e2_q;
+reg exception_any_r;
 always @ *
 begin
-    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i)
+    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i) begin
         exception_e2_r = mem_exception_e2_i;
-    else
+        exception_any_r = mem_exception_any_w;
+    end else begin
         exception_e2_r = exception_e2_q;
+        exception_any_r = saved_exception_any_w;
+    end
 end
 
-assign squash_e1_e2_w = |exception_e2_r;
+assign squash_e1_e2_w = exception_any_r;
 
 reg squash_e1_e2_q;
 
@@ -428,13 +480,55 @@ begin
         result_wb_q <= result_e2_q;
 end
 
+// Carry qualified destination metadata beside the unchanged opcode/control.
+// This moves the mask before each existing stage boundary, with no new stage.
+
+always @ (posedge clk_i or posedge rst_i)
+if (rst_i)
+    rd_tag_e1_q <= 5'b0;
+else if (issue_stall_i)
+    ;
+else if ((issue_valid_i && issue_accept_i) && ~(squash_e1_e2_o || squash_e1_e2_i))
+    rd_tag_e1_q <= {5{issue_rd_valid_i & ~take_interrupt_i}} & issue_opcode_i[`RD_IDX_R];
+else
+    rd_tag_e1_q <= 5'b0;
+
+always @ (posedge clk_i or posedge rst_i)
+if (rst_i)
+    rd_tag_e2_q <= 5'b0;
+else if (issue_stall_i)
+    ;
+else if (squash_e1_e2_o || squash_e1_e2_i || cancel_e1_i)
+    rd_tag_e2_q <= 5'b0;
+else if (ctrl_e1_q[`PCINFO_INTR])
+    rd_tag_e2_q <= {5{valid_e1_q}} & rd_tag_e1_q;
+else if (|exception_e1_q)
+    rd_tag_e2_q <= 5'b0;
+else
+    rd_tag_e2_q <= {5{valid_e1_q}} & rd_tag_e1_q;
+
+always @ (posedge clk_i or posedge rst_i)
+if (rst_i)
+    rd_tag_wb_q <= 5'b0;
+else if (issue_stall_i)
+    ;
+else if (squash_wb_i)
+    rd_tag_wb_q <= 5'b0;
+// Every special memory-fault valid-clear case is nonzero and also clears
+// RD_VALID. The original procedural exception gate covers those cases;
+// an unknown reduction takes the original else path, preserving X behavior.
+else if (|exception_e2_r)
+    rd_tag_wb_q <= 5'b0;
+else
+    rd_tag_wb_q <= rd_tag_e2_q;
+
 // Instruction completion (for debug)
 wire complete_wb_w     = ctrl_wb_q[`PCINFO_COMPLETE] & ~issue_stall_i;
 
 assign valid_wb_o      = valid_wb_q & ~issue_stall_i;
 assign csr_wb_o        = ctrl_wb_q[`PCINFO_CSR] & ~issue_stall_i; // TODO: Fault disable???
 assign rd_wb_o         = {5{(valid_wb_o && ctrl_wb_q[`PCINFO_RD_VALID] && ~stall_o)}} & opcode_wb_q[`RD_IDX_R];
-assign rd_bypass_wb_o = {5{valid_wb_q && ctrl_wb_q[`PCINFO_RD_VALID]}} & opcode_wb_q[`RD_IDX_R];
+assign rd_bypass_wb_o = rd_tag_wb_q;
 assign result_wb_o     = result_wb_q;
 assign pc_wb_o         = pc_wb_q;
 assign opcode_wb_o     = opcode_wb_q;

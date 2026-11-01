@@ -9,20 +9,13 @@
     "fpga/pg2l100h/rtl/triha_cpu_board_top.v"
   ],
   "constraints": "fpga/pg2l100h/constraints/cpu_board.fdc",
-  "physical_constraints": [
-    "fpga/pg2l100h/constraints/cpu_board_core_clock.fdc",
-    "fpga/pg2l100h/constraints/cpu_board_sram_local.fdc"
-  ],
-  "slack_prior_in_global_router": true,
+  "physical_constraints": [],
+  "slack_prior_in_global_router": false,
   "placement_trials": 1,
-  "placement_parallelism": 2,
+  "placement_parallelism": 1,
   "route_constraint_iterations": 0,
   "period_ns": 10,
   "pnr_action_minutes": 20,
   "outer_seconds": 1500,
-  "scope": "Actual CPU board pins and 125->100MHz PLL; local SRAM/UART; no DDR or Video; physical programming separate",
-  "refineplacement_iterations": 40,
-  "lut6d_packing_strategy": 3,
-  "route_mode": "performance",
-  "placement_decongestion": 1
+  "scope": "Frozen v83 dual CPU with original board pins/HIGH PLL100MHz/IO/hold; free placement, no inherited single-core PAP regions"
 }

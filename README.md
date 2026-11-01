@@ -1,8 +1,14 @@
 # TriHaRiscv-main
 
+本`cpu`分支交付已通过100MHz实际板级时序与真实跑分的六级双发射CPU。当前
+Verilog源码、SoC SRAM边界和板级构建入口已放回标准目录，详见
+[CPU分支交付与构建说明](docs/cpu/CPU_GITHUB_RELEASE_2026-11-01.md)。
+真实CoreMark/MHz为4.092789（GCC15.2/-O2、32KiB SRAM、无Cache/DDR），实体KEY0
+重跑结果一致。NPU/Video集成在其各自分支推进。
+
 TriHaRiscv 的总工程目录，按 CPU、NPU、Video 三条路线并行开发，由 CPU 路线牵头系统集成。目标平台为 PG2L100H-6IFBG676，当前应用为 YuNet 全画面人脸检测与预设动漫头像叠加，通过一路 800×600 HDMI 输出左右两个 400×300 同帧视图。
 
-CPU 目标为 RV32IMC_Zicsr 六级单发射、顺序执行、顺序提交。先完成真实推理与稳定显示，再争取有效输出帧率 ≥24 fps；30 fps 不是强制门槛或限速上限。
+本分支CPU为RV32IM/Zicsr六级顺序双发射，支持综合参数选择单发射。系统应用仍以完成真实推理与稳定显示为目标，再争取有效输出帧率 ≥24 fps；30 fps不是强制门槛或限速上限。
 
 ## 当前状态与文档入口
 

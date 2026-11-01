@@ -65,21 +65,64 @@ module triha_soc_memory #(
                              (data_addr_i == `TRIHA_UART_BASE + 4 && (|data_wstrb_i)))) ||
                  (d_system && (|data_wstrb_i) && data_addr_i != `TRIHA_SYSTEM_BASE + 4);
     wire d_fire = data_accept_o && d_request;
-    wire d_write = d_fire && d_sram && !d_local_bad && (|data_wstrb_i);
+    // Qualify the physical SRAM command locally. General maintenance requests
+    // still use d_fire for their error response, but never enable this RAM.
+    // Keep the original expression for unknown controls in RTL simulation.
+    reg sram_data_command;
+    always @* begin
+        sram_data_command = d_fire && d_sram && !d_local_bad;
+        case (data_invalidate_i | data_writeback_i | data_flush_i)
+            1'b1: sram_data_command = 1'b0;
+            1'b0: begin
+                case ({data_re_i, |data_wstrb_i})
+                    2'b00, 2'b11: sram_data_command = 1'b0;
+                    2'b01, 2'b10: sram_data_command = data_accept_o && d_sram &&
+                                                           (data_addr_i[1:0] == 2'b00);
+                    default: sram_data_command = d_fire && d_sram && !d_local_bad;
+                endcase
+            end
+            default: sram_data_command = d_fire && d_sram && !d_local_bad;
+        endcase
+    end
+    wire d_write = sram_data_command && (|data_wstrb_i);
     wire collision = d_write && i_sram && inst_service_word == data_addr_i[14:3];
     assign data_accept_o = rst_ni && !uart_pending_q;
     assign inst_accept_o = rst_ni && !inst_pending_q;
     wire i_fire = inst_req_i && inst_accept_o;
     wire i_service = rst_ni && (inst_pending_q || i_fire) && !collision;
+    // A decoded ROM fetch cannot collide with a SRAM write. Preserve the
+    // old four-state expression when the ROM decode is not known true.
+    reg rom_inst_service;
+    always @* begin
+        case (i_rom)
+            1'b1: rom_inst_service = rst_ni && i_fire;
+            default: rom_inst_service = i_service && i_rom;
+        endcase
+    end
+    // These two selects already have an asynchronous reset branch. Their
+    // update decision need not duplicate reset gating from external accepts.
+    wire select_write = !uart_pending_q && d_request && d_sram &&
+                        !d_local_bad && (|data_wstrb_i);
+    wire select_collision = select_write && i_sram &&
+                            inst_service_word == data_addr_i[14:3];
+    wire select_service_raw = (inst_pending_q || (inst_req_i && !inst_pending_q)) &&
+                              !select_collision;
+    reg select_service;
+    always @* begin
+        case (rst_ni)
+            1'b0, 1'b1: select_service = select_service_raw;
+            default: select_service = i_service;
+        endcase
+    end
     wire [63:0] ram_inst, ram_data, rom_inst, rom_data;
     wire [7:0] ram_we = d_write ? (data_addr_i[2] ? {data_wstrb_i, 4'b0} : {4'b0, data_wstrb_i}) : 8'b0;
     triha_sram #(.INIT_FILE(SRAM_FILE)) u_sram (
         .clk_i(clk_i), .inst_en_i(i_service && i_sram), .inst_addr_i(inst_service_word), .inst_rdata_o(ram_inst),
-        .data_en_i(d_fire && d_sram && !d_local_bad), .data_addr_i(data_addr_i[14:3]),
+        .data_en_i(sram_data_command), .data_addr_i(data_addr_i[14:3]),
         .data_wdata_i({data_wdata_i, data_wdata_i}), .data_wstrb_i(ram_we), .data_rdata_o(ram_data)
     );
     triha_boot_rom #(.INIT_FILE(ROM_FILE)) u_rom (
-        .clk_i(clk_i), .inst_en_i(i_service && i_rom), .inst_addr_i(inst_addr_i[12:3]), .inst_rdata_o(rom_inst),
+        .clk_i(clk_i), .inst_en_i(rom_inst_service), .inst_addr_i(inst_addr_i[12:3]), .inst_rdata_o(rom_inst),
         .data_en_i(d_fire && d_rom && !d_bad), .data_addr_i(data_addr_i[12:3]), .data_rdata_o(rom_data)
     );
     assign inst_rdata_o = inst_rom_q ? rom_inst : inst_sram_q ? ram_inst : 64'b0;
@@ -110,7 +153,7 @@ module triha_soc_memory #(
             cycle_q <= cycle_q + 1'b1;
             inst_valid_o <= i_service;
             inst_error_o <= i_service && !(i_rom || i_sram);
-            if (i_service) begin inst_rom_q <= i_rom; inst_sram_q <= i_sram; end
+            if (select_service) begin inst_rom_q <= i_rom; inst_sram_q <= i_sram; end
             if (inst_pending_q) begin
                 if (i_service) inst_pending_q <= 0;
             end else if (i_fire && collision) begin

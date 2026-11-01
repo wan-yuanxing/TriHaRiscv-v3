@@ -7,7 +7,7 @@ module triha_cpu_board_top #(
     input  wire       ref_clk_ni,
     input  wire       rst_ni,
     output wire       uart_tx_o,
-    output wire [3:0] led_o
+    output reg  [3:0] led_o
 );
     wire cpu_clk;
     wire cpu_reset_n;
@@ -28,6 +28,12 @@ module triha_cpu_board_top #(
         else
             heartbeat_q <= heartbeat_q + 1'b1;
     end
-    assign led_o = {done && (exit_code != 8'b0), done && (exit_code == 8'b0),
-                    cpu_reset_n, heartbeat_q[25]};
+    // Register the status decode before the slow physical LED outputs.
+    always @(posedge cpu_clk or negedge cpu_reset_n) begin
+        if (!cpu_reset_n)
+            led_o <= 4'b0;
+        else
+            led_o <= {done && (exit_code != 8'b0), done && (exit_code == 8'b0),
+                      1'b1, heartbeat_q[25]};
+    end
 endmodule

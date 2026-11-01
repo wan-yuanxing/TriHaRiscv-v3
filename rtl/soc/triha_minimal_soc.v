@@ -20,7 +20,7 @@ module triha_minimal_soc #(
     wire data_accept, data_ack, data_error;
     wire [3:0] data_wstrb;
     wire [10:0] data_req_tag, data_resp_tag;
-    triha_core #(.RESET_VECTOR(32'h00000000), .DUAL_ISSUE(0)) u_core (
+    triha_core #(.RESET_VECTOR(32'h00000000), .DUAL_ISSUE(1)) u_core (
         .clk_i(clk_i), .rst_ni(rst_ni), .external_irq_i(external_irq_i),
         .inst_req_o(inst_req), .inst_flush_o(inst_flush), .inst_invalidate_o(inst_invalidate),
         .inst_addr_o(inst_addr), .inst_accept_i(inst_accept), .inst_valid_i(inst_valid),

@@ -2,8 +2,10 @@ from pathlib import Path
 import importlib.util,json,sys,tempfile,unittest
 from decimal import Decimal,ROUND_DOWN
 P=Path(__file__).resolve().parents[2]/'build/cpu/dual-board-v83-95mhz-20261101/project'
-sys.path.insert(0,str(P/'scripts/soc'))
-import gen_board,coremark_board
+ARCHIVED_FIXTURE_AVAILABLE=(P/'scripts/soc/coremark_board.py').is_file()
+if ARCHIVED_FIXTURE_AVAILABLE:
+    sys.path.insert(0,str(P/'scripts/soc'))
+    import gen_board,coremark_board
 
 def report(hz=95000000):
     ticks=1250000000
@@ -24,7 +26,10 @@ CoreMark/LUTs  : {fixed(score/9677)}
 CPU_COREMARK_BOARD_PASS iterations=5000
 '''
 
+@unittest.skipUnless(ARCHIVED_FIXTURE_AVAILABLE,'Archived95MHz build fixture is not included in source checkouts')
 class ClockBoundary(unittest.TestCase):
+    @unittest.skipUnless((P.parents[1]/'dual-board-v83-ledreg-20261101/prepared-board.json').is_file(),
+                         'Accepted local source package required for generator replay')
     def test_generator_uses_measured_locking_bandwidth(self):
         root=Path(__file__).resolve().parents[2]
         spec=importlib.util.spec_from_file_location('board95_generator_regression',root/'scripts/cpu/prepare_dual_board_95.py')

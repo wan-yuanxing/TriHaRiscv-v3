@@ -1,0 +1,3 @@
+# Only the multiplier is localized to one actual X1/Y2 clock region.
+# PAP_REGION order: Xmin,Xmax,Ymin,Ymax; no timing exceptions.
+define_attribute {i:u_soc/u_core/u_cpu/u_mul} {PAP_REGION} {soc_board_mul(65,116,100,149)}

@@ -106,3 +106,13 @@ docs/verification/cpu/dualissue_align_precheck_sources.json -text whitespace=cr-
 docs/verification/cpu/dualissue_direct_load_forward.patch -text -whitespace
 docs/verification/cpu/dualissue_role_predecode.patch -text -whitespace
 docs/verification/cpu/dualissue_btb_address_control.patch -text -whitespace
+
+# Preserve accepted release input bytes for source-hash verification after clone.
+rtl/cpu/triha_btb.v -text -whitespace
+rtl/cpu/triha_cpu.v -text -whitespace
+rtl/cpu/triha_issue.v -text -whitespace
+rtl/cpu/triha_lsu.v -text -whitespace
+rtl/cpu/triha_multiplier.v -text -whitespace
+rtl/cpu/triha_pipe_ctrl.v -text -whitespace
+rtl/soc/triha_soc_memory.v -text -whitespace
+scripts/soc/run_dual_board100_repair4_route.ps1 -text -whitespace
