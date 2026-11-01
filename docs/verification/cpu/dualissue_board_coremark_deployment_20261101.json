@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "status": "PROGRAM_VERIFY_PASS_UART_PENDING",
+  "scope": "Volatile program and config readback verified; physical CoreMark score not yet received",
+  "configuration": {
+    "stages": 6,
+    "issue": 2,
+    "execution": "in-order",
+    "nominal_cpu_hz": 95000000,
+    "sram_bytes": 32768,
+    "cache": false,
+    "ddr": false,
+    "iterations": 5000,
+    "optimization": "-O2",
+    "cpu_sources_matching_accepted_v83": 22
+  },
+  "physical": {
+    "timing_closed": true,
+    "source_unchanged": true,
+    "reported_period_ns": 10.5263,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.341,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25327
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.05,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25327
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.918,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4515
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 4.097,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25327
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.013,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25327
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.465,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4515
+      }
+    ],
+    "reset_checks": [
+      {
+        "corner": "Slow",
+        "check": "Recovery",
+        "slack_ns": 2.539,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Slow",
+        "check": "Removal",
+        "slack_ns": 0.971,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Recovery",
+        "slack_ns": 4.676,
+        "failing_endpoints": 0
+      },
+      {
+        "corner": "Fast",
+        "check": "Removal",
+        "slack_ns": 0.663,
+        "failing_endpoints": 0
+      }
+    ],
+    "cpu_only_resources": {
+      "lut": 9615,
+      "ff": 4966,
+      "distributed_ram": 752,
+      "apm": 4,
+      "drm36k_equivalent": 0.0
+    },
+    "selected_routed_db_sha256": "a4d469ac07139171f3ea3d5b359017b79af43cd02fa0721cca53e5b2ad1d3c08",
+    "matches_route_constraint_iteration": 2,
+    "scope": "Actual board PLL/pins timing at nominal95MHz; does not establish100MHz"
+  },
+  "program": {
+    "status": "PASS",
+    "native_return_code": 0,
+    "device_id": "00602899",
+    "bitstream_sha256": "7edd33c0c21b3516b841047c15116c343140f6e8814ba90ea729216d31bfb5a8",
+    "verify_mask_sha256": "db87eeea73b15bbb9db0e3edfed54600ae39fe88dce16a77618b22f1af0ec4aa",
+    "flash_written": false,
+    "serial_port_opened": false,
+    "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-coremark-program-20261101T104828807762Z"
+  },
+  "uart": {
+    "port": "COM12",
+    "baud": 115200,
+    "data_bits": 8,
+    "parity": "none",
+    "stop_bits": 1,
+    "flow_control": "none",
+    "restart": "short KEY0 press",
+    "physical_score_validated": false,
+    "expected_pass": "CPU_COREMARK_BOARD_PASS iterations=5000"
+  },
+  "rtl_preflight": {
+    "status": "PASS",
+    "measurement": {
+      "iterations": 5,
+      "cycles": 1229724,
+      "clock_hz": 95000000,
+      "seconds": 0.012944463157894737,
+      "coremark": 386.2655360064535,
+      "coremark_per_mhz": 4.065953010594247,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "duration_valid": false,
+      "official_submission": false,
+      "cpu_core_luts": 9615,
+      "coremark_per_lut": 0.040173222673578105
+    },
+    "actual_dual_pairs": 473709,
+    "scope": "5-iteration short RTL; not a board score or official submission"
+  },
+  "prior100mhz_board_runs": [
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-20261101\\project\\build\\soc\\board-route-20261101T0923010007891Z\\result.json",
+      "sha256": "a3ac4a3ddde4711347f1dbff625bbfdc256e32d05afd72a431b4604961e9ada7",
+      "status": "TIMING_FAIL",
+      "setup_ns": -0.501,
+      "programmed": false
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\board-route-20261101T0937289142859Z\\result.json",
+      "sha256": "06c308e110dd0f89c1e55e0f95cba3fee4e2d7e737a9a76e1406939d6400c4d7",
+      "status": "TIMING_FAIL",
+      "setup_ns": -0.535,
+      "programmed": false
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\board-route-20261101T0943154182621Z\\result.json",
+      "sha256": "59d33b78ac6fe68a1e86a32221a2ecdc30669ef1c67a5719a37502df1e79ae79",
+      "status": "TIMING_FAIL",
+      "setup_ns": -0.535,
+      "programmed": false
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\board-route-20261101T0950466640275Z\\result.json",
+      "sha256": "4a16d7cdedd0a63c741530ab0830225d8e0d38d1c37cb3c8edfcd44dc0b3ae94",
+      "status": "TIMING_FAIL",
+      "setup_ns": -0.223,
+      "programmed": false
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\board-route-20261101T0957278520915Z\\result.json",
+      "sha256": "971a67acb51e515360ec43ae8a076196b20d5d8160ab70aac2f465ae58c3fd20",
+      "status": "TIMING_FAIL",
+      "setup_ns": -0.445,
+      "programmed": false
+    }
+  ],
+  "paths_and_sha256": {
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\prepared-board.json": "01561f35c0e49b92b9eedb0b531aea8e07ca8e7fe52524f9e4ca65fd11f460fb",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\board95-independent-review.json": "4baea573d49594684dfe4770af26eab205dfd19bf465d4d086ae8263bb8917aa",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\board95-routed-selection-audit.json": "158156846e94afdaecb29148e9f450c3d22cd2681af9f3e19fa4e7b6e48ea364",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\board95-timing-repair-adapter.json": "ab1bc0442d9d7940aaf067269fae0f6768777fe346ca73b23374fdfb6551cf9c",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-route-20261101T1025077899326Z\\result.json": "2f5aed4067a05f47bdaa9864128b1ea71de755efbce429438ce10979fdf4ee08",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-route-20261101T1025077899326Z\\report_timing\\triha_cpu_board_top.rtr": "a01d0aff4ee0880b318e7648a4b5c6b795387abd8826065aee53bb0d6f879788",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\releases\\cpu_coremark_7edd33c0c21b\\manifest.json": "820c24ace25deee4ad87522a704cc365f9fce817b5d0a82a67b3ea2c65f0f1aa",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\releases\\cpu_coremark_7edd33c0c21b\\review.json": "4baea573d49594684dfe4770af26eab205dfd19bf465d4d086ae8263bb8917aa",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-coremark-program-20261101T104828807762Z\\result.json": "64e3069273cd523ec8aa3d594c5e28e4b9d330712dd0ff0cc7851608ac38a985",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-coremark-program-20261101T104828807762Z\\program_verify.log": "688b4c389de126115d8f192410eba2c1ea9d193f8f04165f6fe6e6f10b595075",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-95mhz-20261101\\project\\build\\soc\\board-coremark-20261101T101050905524Z\\result.json": "f129b1025545778dee95b10d927e20aa1dfda0deb4cd4b947fd776f9f07847f5",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\dualissue_btb_address_control_sources.json": "39a162d6ddfce2f806a3fe603a96dbb9ff4fcfd3c05096c372149fc62b804853",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\scripts\\cpu\\prepare_dual_board.py": "4eb885302f8835cdf96dcdaacc1b58800b6ec65c3ba21298f624d2b46de50485",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\scripts\\cpu\\prepare_dual_board_95.py": "194e93746c1a6036ec875bc3e8d29cb22ffd574e11a33bb8f39e64ad92cad572",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\scripts\\cpu\\test_dual_board_prepare.py": "b8ce38d5cb2f1c7c9c94cc8d22777d6f3556e46c9c381aeaecb494de83c6ca37",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\scripts\\cpu\\test_dual_board_95.py": "1f59a70b110ac3dbb867d884df53f87e6d00e77765e3a39f48d1ec5a9bb16d10",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_dual_board_led.v": "e19b24aa6ad902e109f4403fbcfddd5a918a8d06887b658b4ee278df9b949367"
+  }
+}
