@@ -32,6 +32,9 @@ module detect_nchw_dma #(
     reg [1:0] plane;
     reg [3:0] lane;
     reg [31:0] row_base;
+    // Keep the DMA descriptor base registered.  The previous combinational
+    // row_base/plane mux became a very high fanout path after flattening.
+    reg [31:0] dma_base_reg;
     reg [127:0] pack_data;
     reg [15:0] pack_keep;
     reg pack_last,inflight,seen_online;
@@ -43,7 +46,6 @@ module detect_nchw_dma #(
     wire [31:0] dma_written,dma_tag;
     wire stopping=abort || !online || fault || dma_fault;
     wire dma_req_valid=state==ISSUE && !stopping;
-    wire [31:0] dma_base=row_base+(plane==0?32'd0:plane==1?PLANE32:TWO_PLANE32);
     wire [7:0] selected_byte=plane==0?row_q[7:0]:plane==1?row_q[15:8]:row_q[23:16];
     wire [12:0] remaining=WIDTH13-{1'b0,read_x};
 
@@ -73,7 +75,7 @@ module detect_nchw_dma #(
     end
     video_write_dma #(.AXI_ID(AXI_ID)) u_dma(
         .clk(clk),.reset_n(reset_n),.online(online),.abort(abort||fault),
-        .req_valid(dma_req_valid),.req_ready(dma_req_ready),.req_base(dma_base),
+        .req_valid(dma_req_valid),.req_ready(dma_req_ready),.req_base(dma_base_reg),
         .req_row_bytes(WIDTH32),.req_stride(STRIDE32),.req_rows(16'd1),.req_tag(result_tag),
         .s_valid(state==SEND&&!stopping),.s_ready(dma_s_ready),.s_data(pack_data),.s_keep(pack_keep),.s_row_last(pack_last),
         .result_valid(dma_result_valid),.result_ready(inflight),.result_success(dma_result_success),
@@ -84,7 +86,7 @@ module detect_nchw_dma #(
 
     always @(posedge clk or negedge reset_n)begin
         if(!reset_n)begin
-            state<=IDLE;row_index<=0;input_x<=0;read_x<=0;plane<=0;lane<=0;row_base<=0;
+            state<=IDLE;row_index<=0;input_x<=0;read_x<=0;plane<=0;lane<=0;row_base<=0;dma_base_reg<=0;
             pack_data<=0;pack_keep<=0;pack_last<=0;inflight<=0;seen_online<=0;
             result_code<=0;result_tag<=0;written_bytes<=0;fault<=0;
         end else begin
@@ -98,10 +100,15 @@ module detect_nchw_dma #(
                     // A later cancel/offline must not replace its first cause.
                     if(result_code==0)result_code<=!dma_result_success?dma_result_code:
                         abort?ABORTED:!online?OFFLINE:BAD_STREAM;
-                end else if(plane!=2)begin plane<=plane+1'b1;state<=ISSUE;end
+                end else if(plane!=2)begin
+                    plane<=plane+1'b1;
+                    dma_base_reg<=row_base+(plane==0?PLANE32:TWO_PLANE32);
+                    state<=ISSUE;
+                end
                 else if(row_index==HEIGHT-1)state<=RESULT;
                 else begin
-                    plane<=0;row_index<=row_index+1'b1;row_base<=row_base+STRIDE32;input_x<=0;
+                    plane<=0;row_index<=row_index+1'b1;row_base<=row_base+STRIDE32;
+                    dma_base_reg<=row_base+STRIDE32;input_x<=0;
                     state<=(row_index+1>=PAD_TOP&&row_index+1<PAD_TOP+ACTIVE_HEIGHT)?COLLECT:ISSUE;
                 end
             end else if(state!=IDLE&&state!=RESULT&&state!=DRAIN&&stopping)begin
@@ -112,7 +119,7 @@ module detect_nchw_dma #(
             end else case(state)
                 IDLE:if(req_valid&&req_ready)begin
                     result_tag<=req_tag;written_bytes<=0;result_code<=0;plane<=0;row_index<=0;
-                    row_base<=req_base;input_x<=0;
+                    row_base<=req_base;dma_base_reg<=req_base;input_x<=0;
                     if(!descriptor_ok(req_base,req_tag))begin fault<=1;result_code<=BAD_DESCRIPTOR;state<=RESULT;end
                     else state<=PAD_TOP==0?COLLECT:ISSUE;
                 end

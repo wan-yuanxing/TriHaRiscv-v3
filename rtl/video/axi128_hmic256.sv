@@ -52,14 +52,14 @@ module axi128_hmic256 #(
  reg [1:0] response_q;
  reg [127:0] rdata_q;
  reg [TIMER_WIDTH-1:0] timer_q;
- // Nine entries cover a 16-beat burst starting at the upper 16-byte lane.
- // The expected buffer is kept intact during verification. LUT storage and
- // external clocked read registers avoid an asynchronous output RAM path.
- (* ram_style="distributed", syn_ramstyle="select_ram" *) reg [255:0] expected[0:8];
- (* ram_style="distributed", syn_ramstyle="select_ram" *) reg [31:0] masks[0:8];
+ // Independent 144-bit half-word banks use one full write port each.
+ // Their synchronous read outputs replace payload_q/mask_q without adding
+ // a cycle: WPRE/VPRE fetch beat zero, native retire fetches the next beat.
+ (* syn_ramstyle="block_ram" *) reg [143:0] expected_low[0:8],expected_high[0:8];
  (* ram_style="distributed", syn_ramstyle="select_ram" *) reg [255:0] returned[0:8];
- reg [255:0] payload_q;
- reg [31:0] mask_q;
+ reg [143:0] expected_low_q,expected_high_q;
+ wire [255:0] payload_q={expected_high_q[127:0],expected_low_q[127:0]};
+ wire [31:0] mask_q={expected_high_q[143:128],expected_low_q[143:128]};
  wire [8:0] lane=up_q+{8'b0,half_q};
  wire [8:0] next_lane=lane+9'd1;
  wire aw_take=awvalid&&awready;
@@ -170,11 +170,27 @@ module axi128_hmic256 #(
  assign bvalid=state==BRESP;assign bid=id_q;assign bresp=response_q;
  assign rvalid=state==RRESP;assign rid=id_q;assign rresp=response_q;
  assign rdata=rdata_q;assign rlast=up_q==beats_q-1;
+ // These private data banks are unreset. A complete legal AXI burst
+ // overwrites all native lanes (including masked padding) before address VALID.
+ wire expected_first=state==WPRE||state==VPRE;
+ wire expected_next=((state==WADDR||state==WDATA)&&nw_take)||
+                    ((state==VADDR||state==VDATA)&&nr_take);
+ wire [3:0] expected_index=expected_first?4'd0:pos_q+4'd1;
+ always @(posedge clk)begin
+  if(rst_n&&w_take&&legal_q)begin
+   expected_high[lane[4:1]]<=lane[0]?{wstrb,wdata}:144'd0;
+   if(!lane[0]||up_q==0)expected_low[lane[4:1]]<=lane[0]?144'd0:{wstrb,wdata};
+  end
+  if(rst_n&&(expected_first||(expected_next&&pos_q!=span_q-1)))begin
+   expected_low_q<=expected_low[expected_index];
+   expected_high_q<=expected_high[expected_index];
+  end
+ end
  always @(posedge clk or negedge rst_n) begin
   if(!rst_n) begin
    state<=IDLE;id_q<=0;pos_q<=0;span_q<=1;base_q<=0;beats_q<=1;up_q<=0;
    half_q<=0;legal_q<=0;seen_online<=0;response_q<=0;rdata_q<=0;
-   timer_q<=0;payload_q<=0;mask_q<=0;fault<=0;fault_code<=0;
+   timer_q<=0;fault<=0;fault_code<=0;
   end else begin
    if(init_done===1'b1) seen_online<=1;
    if(!fault && fault_now!=0) begin fault<=1;fault_code<=fault_now;end
@@ -198,17 +214,6 @@ module axi128_hmic256 #(
      end
     end
     COLLECT:if(w_take) begin
-     // Rejected LEN may be 255: never use its count to index these RAMs.
-     if(legal_q) begin
-      if(!lane[0]) begin
-       expected[lane[4:1]]<={128'b0,wdata};
-       masks[lane[4:1]]<={16'b0,wstrb};
-      end else begin
-       expected[lane[4:1]][255:128]<=wdata;
-       masks[lane[4:1]][31:16]<=wstrb;
-       if(up_q==0) begin expected[0][127:0]<=0;masks[0][15:0]<=0;end
-      end
-     end
      if(up_q==beats_q-1) begin
       if(collect_phase_poisoned) begin response_q<=2'b10;state<=BRESP;end
       else if(!legal_q) begin response_q<=2'b11;state<=BRESP;end
@@ -216,7 +221,7 @@ module axi128_hmic256 #(
      end else up_q<=up_q+1'b1;
     end
     WPRE:begin
-     pos_q<=0;payload_q<=expected[0];mask_q<=masks[0];
+     pos_q<=0;
      if(quiet_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=WADDR;
     end
     WADDR,WDATA:begin
@@ -225,12 +230,12 @@ module axi128_hmic256 #(
       if(pos_q==span_q-1) begin
        if(write_phase_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VPRE;
       end else begin
-       pos_q<=pos_q+1'b1;payload_q<=expected[pos_q+1'b1];mask_q<=masks[pos_q+1'b1];
+       pos_q<=pos_q+1'b1;
       end
      end
     end
     VPRE:begin
-     pos_q<=0;payload_q<=expected[0];mask_q<=masks[0];
+     pos_q<=0;
      if(quiet_poisoned) begin response_q<=2'b10;state<=BRESP;end else state<=VADDR;
     end
     VADDR,VDATA:begin
@@ -238,7 +243,7 @@ module axi128_hmic256 #(
      if(nr_take) begin
       if(pos_q==span_q-1) begin response_q<=poisoned ? 2'b10:2'b00;state<=BRESP;end
       else begin
-       pos_q<=pos_q+1'b1;payload_q<=expected[pos_q+1'b1];mask_q<=masks[pos_q+1'b1];
+       pos_q<=pos_q+1'b1;
       end
      end
     end

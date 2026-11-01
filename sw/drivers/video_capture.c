@@ -56,6 +56,7 @@ int video_capture_read_events(const struct video_capture_io *io,struct video_cap
     if(e.pending&~7u)return VIDEO_CAPTURE_PROTOCOL;
     if((e.pending&1u)&&identity(io,&e.accepted,VCAP_REG_ACCEPTED_SLOT,VCAP_REG_ACCEPTED_GENERATION))return VIDEO_CAPTURE_IO;
     if(e.pending&2u) {
+        if(io->read32(io->context,VCAP_REG_CAPABILITIES,&e.capabilities))return VIDEO_CAPTURE_IO;
         /* Completion has RESULT between identity VERSION and RAW_BASE. */
         if(io->read32(io->context,VCAP_REG_COMPLETED_SLOT,&c->identity.id.slot)||
            io->read32(io->context,VCAP_REG_COMPLETED_FRAME_ID_RECORD,&c->identity.id.frame)||
@@ -99,9 +100,10 @@ int video_capture_validate_completion(const struct video_capture_events *e,const
     if(c->result!=1u) {
         return !(c->result&1u)&&(c->result&0xff00u) ? VIDEO_CAPTURE_FAILED:VIDEO_CAPTURE_PROTOCOL;
     }
-    if(c->raw_pixels!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE || c->preview_pixels!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE/4 ||
+    if(c->raw_pixels!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE || c->preview_pixels!=((e->capabilities&VCAP_CAP_PREVIEW_OMITTED)?0u:VIDEO_H_ACTIVE*VIDEO_V_ACTIVE/4) ||
        c->input_pixels!=VIDEO_INPUT_WIDTH*(VIDEO_V_ACTIVE*2/5) ||
-       c->raw_bytes!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE*3 || c->preview_bytes!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE/4*3 ||
+       c->raw_bytes!=VIDEO_H_ACTIVE*VIDEO_V_ACTIVE*3 || c->preview_bytes!=((e->capabilities&VCAP_CAP_PREVIEW_OMITTED)?0u:VIDEO_H_ACTIVE*VIDEO_V_ACTIVE/4*3) ||
+       ((e->capabilities&VCAP_CAP_PREVIEW_OMITTED)&&c->preview_crc!=0) ||
        c->input_bytes!=VIDEO_INPUT_BYTES || !c->fifo_peak || c->fifo_peak>2048)return VIDEO_CAPTURE_PROTOCOL;
     return (e->pending&4u)?VIDEO_CAPTURE_FAILED:VIDEO_CAPTURE_OK;
 }

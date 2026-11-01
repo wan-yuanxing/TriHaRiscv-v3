@@ -1,0 +1,22 @@
+# Explicit admitted production CPU core; cache list is in cpu_admission.json.
+rtl/cpu/vendor/src/core/biriscv_alu.v
+rtl/cpu/vendor/src/core/biriscv_csr_regfile.v
+rtl/cpu/triha_csr.v
+rtl/cpu/triha_decode.v
+rtl/cpu/vendor/src/core/biriscv_decoder.v
+rtl/cpu/vendor/src/core/biriscv_divider.v
+rtl/cpu/vendor/src/core/biriscv_exec.v
+rtl/cpu/vendor/src/core/biriscv_fetch.v
+rtl/cpu/triha_frontend.v
+rtl/cpu/triha_issue.v
+rtl/cpu/triha_regfile.v
+rtl/cpu/triha_divider.v
+rtl/cpu/triha_lsu.v
+rtl/cpu/vendor/src/core/biriscv_mmu.v
+rtl/cpu/triha_multiplier.v
+rtl/cpu/triha_npc.v
+rtl/cpu/triha_btb.v
+rtl/cpu/triha_pipe_ctrl.v
+rtl/cpu/vendor/src/core/biriscv_regfile.v
+rtl/cpu/triha_cpu.v
+rtl/cpu/triha_core.v

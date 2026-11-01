@@ -131,6 +131,20 @@ int video_frame_pool_result_ready(struct video_frame_pool *p,const struct video_
     increment(&p->stats.results);
     return VIDEO_FRAME_OK;
 }
+int video_frame_pool_frame_done(struct video_frame_pool *p,const struct video_frame_token *id,uint32_t result_valid,uint32_t workspace_released) {
+    if (!p || !valid_id(id) || result_valid>1 || workspace_released>1) return VIDEO_FRAME_INVALID;
+    if (p->recovering) return VIDEO_FRAME_FAULT;
+    if (!matches(p,id) || !p->graph.active || !same_id(id,&p->graph.id)) {
+        fault(p,E_PROTOCOL,0); return VIDEO_FRAME_STALE;
+    }
+    if (p->slots[id->slot].state!=VIDEO_FRAME_PROCESSING || p->graph.issued || p->graph.op_pending) {
+        fault(p,E_PROTOCOL,id); return VIDEO_FRAME_STATE;
+    }
+    if (!result_valid || !workspace_released) return VIDEO_FRAME_BUSY;
+    p->slots[id->slot].state=VIDEO_FRAME_READY_DISPLAY; p->graph.active=0;
+    increment(&p->stats.results);
+    return VIDEO_FRAME_OK;
+}
 int video_frame_pool_drop(struct video_frame_pool *p,const struct video_frame_token *id,uint32_t reason) {
     uint32_t state;
     if (!p || !valid_id(id) || !reason) return VIDEO_FRAME_INVALID;

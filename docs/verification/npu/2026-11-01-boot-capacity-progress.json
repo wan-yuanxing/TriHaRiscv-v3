@@ -1,0 +1,39 @@
+{
+  "scope": "Boot and component verification; natural-face full run and timing candidate pending",
+  "board_verified": false,
+  "routed_timing_closed": false,
+  "evidence": [
+    {
+      "path": "build/soc/face_system-20261101T042618_814181Z/result.json",
+      "sha256": "9a5ef73cbcc898746575ba0dd330f8f0c2b69114f37f09d45fae9b3616e3decf"
+    },
+    {
+      "path": "build/soc/face_system-20261101T050522_122159Z/result.json",
+      "sha256": "1e312220f44790f8029aff080fbbc9d66068a27237aa9c9f7bebe3f35fc7a234"
+    },
+    {
+      "path": "build/soc/boot_uart-20261101T052826_245791Z/result.json",
+      "sha256": "6ab32883d495b832623dd58f43f3461f42dd4e15f8f9c9450d86d27a33ec00ea"
+    },
+    {
+      "path": "build/soc/model_upload-20261101T050037_099881Z/result.json",
+      "sha256": "01e8baf9a379f161aeb97453674a1d71dec93e856d4002474828d998973b00fd"
+    },
+    {
+      "path": "build/video/pds/20261101T050627_702707Z/result.json",
+      "sha256": "5c2089d13eba8d609507e24a9bee2c08350dc5bb27d68fa91c32da701c82049e"
+    },
+    {
+      "path": "build/soc/boot_buffer_synth_20261101/synthesize/triha_boot_buffer.snr",
+      "sha256": "c7a22121fcdf3e2dca8df02f2b779949a5e877e003c42ae85ce4318124301466"
+    },
+    {
+      "path": "build/npu/quant_capacity_red3_20261101/result.json",
+      "sha256": "12e165fbe759fae9c25cfcadacd4e74b6ca677b479cee8b9407f671b3283a20b"
+    },
+    {
+      "path": "build/npu/quant_capacity_candidate_green2_20261101/result.json",
+      "sha256": "8cca801af922b5f5430e1bc222b4d00d0df57ce8a5b92ef7958fe6b68dd23144"
+    }
+  ]
+}

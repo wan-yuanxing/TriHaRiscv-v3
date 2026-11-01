@@ -10,7 +10,7 @@ from common import BUILD, ROOT, sha256, write_json
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_live_mode_board','video_mode_board'),default='video_board_smoke')
+    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_live_mode_board','video_mode_board','triha_face_board'),default='video_board_smoke')
     args=parser.parse_args([] if argv is None else argv)
     for path in (BUILD/'latest_package.json', BUILD/f'latest_package_{args.target}.json'):
         write_json(path,{"status":"running","target":args.target,"physical_board":False})
@@ -65,7 +65,7 @@ def package_current(target='video_board_smoke'):
          "AXI/DMA destructive selftest: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART C24 at115200.\n" if target=='video_axi_capture' else
          "DDR standalone destructive BIST: LED0 heartbeat; LED1 calibrated; LED2 PASS; LED3 error. UART C24 at115200.\n" if target=='video_ddr_bist' else
          "LED0 heartbeat; LED1 PLL lock; LED2 input mode good; LED3 init error. UART C24 at115200.\n" if target=='video_rx_board'
-         else "LED0 A20 heartbeat; LED1 C18 PLL lock; LED2 C19 error; LED3 E18 init done.\n")+
+         else "Face application: LED0 heartbeat; LED1 DDR calibrated; LED2 model sealed and input mode ready; LED3 error. UART RX B24 / TX C24, 115200 8N1.\n" if target=='triha_face_board' else "LED0 A20 heartbeat; LED1 C18 PLL lock; LED2 C19 error; LED3 E18 init done.\n")+
         "KEY0 C22 active-low reset.\n"+
         ("Continuous three-mode diagnostic; source keeps updating in all modes. KEY0 resets to RAW and restarts capture. No true NPU or CPU ownership/fence.\n" if target=='video_live_mode_board' else
          "Continuous raw frames, A/B slots reused only after display release; three capture branches. No full-frame diagnostic readback. KEY0 resets and restarts continuous operation.\n" if target=='video_live_board' else
@@ -74,6 +74,7 @@ def package_current(target='video_board_smoke'):
          "Raw/preview/input writes retire before CRC/checksum readback and two preview windows. Input checksum is not an independent arbitrary-scene numerical proof.\n" if target=='video_three_board' else
          "One captured HDMI frame appears in two shared-preview windows after both CRCs pass.\n" if target=='video_preview_board' else
          "Local HDMI color bars remain active during single-frame input capture.\n" if target=='video_hdmi_capture'
+         else "After reset and DDR calibration, upload the audited B03 assets with python scripts/soc/upload_face_model.py --port COMx from the matching source tree. CPU/NPU capture and RAW+BOX display start only after loader seal. TX carries boot ACKs; periodic TRV1 telemetry is omitted. The separate DEMO_BOX_ONLY override draws an artificial box and is not inference proof.\n" if target=='triha_face_board'
          else "Standalone DDR targets interrupt HDMI output.\n")+
         "Power board and connect PDS JTAG; scan target before programming.\n"
         "PDS Configuration: Scan Device, assign this .sbit to PG2L100H, Program, Verify.\n"

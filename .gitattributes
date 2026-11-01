@@ -12,3 +12,29 @@
 
 # Preserve the official DDR placement constraints byte for byte.
 fpga/pg2l100h/constraints/video_ddr_bist.rcf -text whitespace=cr-at-eol
+
+# Frozen B03 source bytes include upstream line-ending variants.
+rtl/npu/upstream/b03/** -text whitespace=cr-at-eol
+tb/npu/upstream/b03/** -text whitespace=cr-at-eol
+model/yunet/upstream/** -text whitespace=cr-at-eol
+
+# Preserve admitted CPU/CDC sources and their original regression fixtures.
+rtl/cpu/** -text whitespace=cr-at-eol
+rtl/soc/triha_axi128_cdc.v -text whitespace=cr-at-eol
+rtl/soc/triha_boot_rom.v -text whitespace=cr-at-eol
+rtl/soc/triha_cpu_cache_axi.v -text whitespace=cr-at-eol
+rtl/soc/triha_sram.v -text whitespace=cr-at-eol
+rtl/soc/triha_uart_tx.v -text whitespace=cr-at-eol
+tb/cpu/** -text whitespace=cr-at-eol
+tb/soc/tb_cpu_cache_*.v -text whitespace=cr-at-eol
+config/cpu_toolchain.json -text whitespace=cr-at-eol
+scripts/cpu/run_modelsim.do -text whitespace=cr-at-eol
+sw/runtime/triha_tcm.ld -text whitespace=cr-at-eol
+sw/runtime/triha_sram.ld -text whitespace=cr-at-eol
+sw/runtime/triha_cache_irq.ld -text whitespace=cr-at-eol
+sw/tests/squash_runtime.S -text whitespace=cr-at-eol
+sw/tests/cache_soc_runtime.S -text whitespace=cr-at-eol
+sw/tests/cache_irq_runtime.S -text whitespace=cr-at-eol
+
+# Keep the pending timing candidate identical to its frozen simulation inputs.
+experiments/npu/stage_split_20261101/*.v -text whitespace=cr-at-eol

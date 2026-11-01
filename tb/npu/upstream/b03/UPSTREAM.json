@@ -1,0 +1,101 @@
+{
+  "control_scope": "Lifetime/ACK tests inject leaf completions; they do not execute full inference.",
+  "destination": "tb/npu/upstream/b03",
+  "files": [
+    {
+      "bytes": 31456,
+      "git_blob": "71f788ea5d7d07250584c620324a87cc0075d099",
+      "path": "Testbench/platform/b03_full_frame_payload_driver.svh",
+      "sha256": "944d8aebdb8a5e8e13fa681eb5008a732e22c5f18aaae3e3f53695c906ddf441"
+    },
+    {
+      "bytes": 5282,
+      "git_blob": "23a0bc7d7d6fdfc516075f96b8daab00e08236c3",
+      "path": "Testbench/platform/tb_b03_full_frame_payload.sv",
+      "sha256": "05ccdad4a814709a27d226ea621d03cbbde38f2cf716c7e8d02c70edcfc4a397"
+    },
+    {
+      "bytes": 6486,
+      "git_blob": "2fe9183f57dc782512e21f312b51daa965f22f8f",
+      "path": "Testbench/platform/tb_b03_payload_ack_reset.sv",
+      "sha256": "971e0eda41fe003d07528b95d5aba79f7313901e278d6e8166af90daac82b0ab"
+    },
+    {
+      "bytes": 8894,
+      "git_blob": "3aefe51949f57d3de4849bc830b709d347b6ac17",
+      "path": "Testbench/platform/tb_b03_payload_lifetime.sv",
+      "sha256": "194b63f11b49fd4f91d2494d25894b2dfc87ec9aebd98bb88e663ab1b11a2e87"
+    },
+    {
+      "bytes": 4967,
+      "git_blob": "f8cad6e85dfa95df28345ad30bec6b3c20ff1756",
+      "path": "rtl/platform/async_fifo256_probe.v",
+      "sha256": "c002a9fb78433a3966910fad07d94c0ba1fccbe6e77e0d6ba344db618d431603"
+    },
+    {
+      "bytes": 2580,
+      "git_blob": "e16f5e164ee685e1976015893e347e08dded706a",
+      "path": "rtl/platform/cdc_payload_mailbox.v",
+      "sha256": "dc44f48116806b135cc77756970b7ec917054f1dd299c292318ba3a77048b604"
+    },
+    {
+      "bytes": 4830,
+      "git_blob": "58bbee61b24162053c4136963f3d01cf555839d1",
+      "path": "rtl/platform/native_rx_reserver.v",
+      "sha256": "616615331db69b7da505361c2ff6e48a4c36c3ae4085fb9549a08e5a70d4661f"
+    },
+    {
+      "bytes": 5510,
+      "git_blob": "36f761fbf36fd43cab46a71a4d312233e3fad0bb",
+      "path": "rtl/platform/native_tx_writer.v",
+      "sha256": "77f520cb8043776a05ad417e39f08538611ce9132a2ac926f645d8db5de57bac"
+    },
+    {
+      "bytes": 5585,
+      "git_blob": "21768c3f00092eb73b68e43d1de401e23aeb12a4",
+      "path": "rtl/platform/npu_mem_bridge_burst.v",
+      "sha256": "c807342892dd622b0e48a2e77aead6507c66c7aa07b0b4c706fba0423738f20b"
+    },
+    {
+      "bytes": 8936,
+      "git_blob": "9a4df3d43851e9d53baea45387a84ff9834c6b50",
+      "path": "rtl/platform/npu_read_bridge_burst.v",
+      "sha256": "102e6940326731854c7ba7b2f8ceef8272926d866a913e59598862bbf78062ea"
+    },
+    {
+      "bytes": 9415,
+      "git_blob": "f252e50bd670245d5ee3e1db7f8d92879d207de6",
+      "path": "rtl/platform/npu_session_mem_bridge_burst.v",
+      "sha256": "0740b06c5b5c2743b3544a5548284c9b16bb4d9b1da8712463d1458973965f4e"
+    },
+    {
+      "bytes": 10369,
+      "git_blob": "f2e75949ac2842f2ae32fa99b40bf6ec7d5b5dc6",
+      "path": "rtl/platform/npu_session_supervisor.v",
+      "sha256": "13e9965a23e6fb44789fe56f7fcd98dd0106a3d1072c250bd67638fe96f3f9ff"
+    },
+    {
+      "bytes": 8725,
+      "git_blob": "d7cf535f01e82aab7b55cefeaa61499d38284612",
+      "path": "rtl/platform/npu_write_bridge_burst.v",
+      "sha256": "8f0f0056a62db739f63f2704f72ac788f4bd1d0ad39c008d891b627b1f83a715"
+    },
+    {
+      "bytes": 3288,
+      "git_blob": "85cd2f57456af761e1e7589b18804f862a775a10",
+      "path": "rtl/platform/session_fault_endpoint.v",
+      "sha256": "1d69bff8babd36f0240d7d752ae4ddce7b82ace3db439b3735f5b17458787c72"
+    },
+    {
+      "bytes": 5873,
+      "git_blob": "15bd87d10cc43487bfc2a521f1bf9351d5d50d08",
+      "path": "rtl/platform/tx_packet_collector_burst.v",
+      "sha256": "07f9a38a30c87e44dc69d748e0f7f9906e41ecc979135b0a1be5184ae0118e46"
+    }
+  ],
+  "license_note": "Upstream RTL files retained verbatim; no repository-level RTL license declared in this snapshot.",
+  "schema": "triha-b03-test-sources-v1",
+  "scope": "Test-only CDC/native memory proxy support; excluded from production RTL admission.",
+  "source_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "source_repository": "https://github.com/keep-s/npu_zgtc"
+}

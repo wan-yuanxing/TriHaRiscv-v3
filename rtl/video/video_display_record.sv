@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `default_nettype none
 // Frozen software ABI, sole MMIO owner, actual RAW/material consumers.
-module video_display_record #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,TIMEOUT_CYCLES=125000000)(
+module video_display_record #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,ENABLE_AVATAR=1,TIMEOUT_CYCLES=125000000)(
  input wire  core_clk,
  input wire  core_reset_n,
  input wire  pixel_clk,
@@ -249,7 +249,7 @@ module video_display_record #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600
   .s_axi_rresp_o(s_axi_rresp_o),
   .s_axi_rvalid_o(s_axi_rvalid_o),
   .s_axi_rready_i(s_axi_rready_i),
-  .modes_i(3'b111),
+  .modes_i(ENABLE_AVATAR ? 3'b111 : 3'b011),
   .asset_ready_i(asset_ready),
   .asset_id_i(asset_id),
   .asset_generation_i(asset_generation),
@@ -428,7 +428,7 @@ module video_display_record #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600
   .out_y(raw_y),
   .out_sof(raw_sof)
  );
- video_record_renderer #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_renderer(
+ video_record_renderer #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.ENABLE_AVATAR(ENABLE_AVATAR)) u_renderer(
   .core_clk(core_clk),
   .core_reset_n(core_reset_n),
   .pixel_clk(pixel_clk),

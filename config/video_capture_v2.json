@@ -11,6 +11,9 @@
     "GENERATION": 4,
     "DRAIN_PROOF": 5
   },
+  "optional_capabilities": {
+    "PREVIEW_OMITTED": 6
+  },
   "registers": [
     {
       "name": "VERSION",

@@ -6,7 +6,7 @@
 // Completion covers good EOF and all AXI B retirements, not CPU visibility.
 module video_three_branch_capture #(
     parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,PAD_TOP=40,PAD_BOTTOM=40,
-    parameter integer TIMEOUT_CYCLES=625000000,ENABLE_REARM=0
+    parameter integer TIMEOUT_CYCLES=625000000,ENABLE_REARM=0,ENABLE_PREVIEW=1
 )(
     input wire clk,reset_n,init_done,abort,
     input wire req_valid,output wire req_ready,input wire [1:0] req_slot,
@@ -44,6 +44,9 @@ module video_three_branch_capture #(
     reg seen_online,eof_seen,accepted_started,accepted_consumed;
     reg [TIMER_WIDTH-1:0] timer;
     reg [31:0] source_x,source_y,preview_x,input_x,raw_crc_state,preview_crc_state;
+    // Keep the counter carry independent from late job-clear/stream controls.
+    (* syn_keep=1 *) wire [31:0] source_x_incremented=source_x+32'd1;
+    (* syn_keep=1 *) wire [31:0] source_y_incremented=source_y+32'd1;
     wire [2:0] req_ready_vec,result_valid_vec,result_success_vec,writer_fault,result_bad;
     wire [23:0] result_codes;
     wire [95:0] result_tags,result_bytes;
@@ -72,7 +75,9 @@ module video_three_branch_capture #(
         captured_pixels===RPIX&&source_x===0&&source_y===SH&&m_data[31:0]===(~raw_crc_state);
     wire all_pixels_ready=raw_pixel_ready&&preview_input_ready&&input_input_ready;
     wire packet_present=state==CAPTURE&&!eof_seen&&m_valid;
-    wire count_good=captured_pixels===RPIX&&preview_pixels===PPIX&&input_pixels===IPIX&&preview_x===0&&input_x===0;
+    wire count_good=captured_pixels===RPIX&&
+        ((!ENABLE_PREVIEW)||(preview_pixels===PPIX&&preview_x===0))&&
+        input_pixels===IPIX&&input_x===0;
     reg [7:0] transport_fault,fault_now;
     reg [7:0] fault_stage_code,commit_fast_fault;
     wire fault_pending=fault_stage_code!=0;
@@ -163,23 +168,39 @@ module video_three_branch_capture #(
         .pixel_valid(pixel_offer&&preview_input_ready&&input_input_ready),.pixel_ready(raw_pixel_ready),
         .pixel_rgb(m_data[23:0]),.pixel_last(m_data[45]),.s_valid(stream_valid[0]),.s_ready(stream_ready[0]),
         .s_data(stream_data[0+:128]),.s_keep(stream_keep[0+:16]),.s_row_last(stream_last[0]));
-    preview_downscale #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_preview_scale(
-        .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
-        .s_ready(preview_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
-        .m_valid(preview_valid),.m_ready(preview_ready),.m_rgb(preview_rgb),.m_row_last(preview_last),.fault(preview_fault));
+    generate
+    if (ENABLE_PREVIEW) begin : g_preview
+        preview_downscale #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_preview_scale(
+            .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
+            .s_ready(preview_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
+            .m_valid(preview_valid),.m_ready(preview_ready),.m_rgb(preview_rgb),.m_row_last(preview_last),.fault(preview_fault));
+        rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_preview_packer(
+            .clk(clk),.reset_n(reset_n),.flush(job_clear),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
+            .pixel_rgb(preview_rgb),.pixel_last(preview_last),.s_valid(stream_valid[1]),.s_ready(stream_ready[1]),
+            .s_data(stream_data[128+:128]),.s_keep(stream_keep[16+:16]),.s_row_last(stream_last[1]));
+    end else begin : g_no_preview
+        assign preview_input_ready=1'b1;
+        assign preview_valid=1'b0;
+        assign preview_last=1'b0;
+        assign preview_fault=1'b0;
+        assign preview_rgb=24'd0;
+        assign preview_pixel_ready=1'b1;
+        assign stream_valid[1]=1'b0;
+        assign stream_data[128+:128]=128'd0;
+        assign stream_keep[16+:16]=16'd0;
+        assign stream_last[1]=1'b0;
+    end
+    endgenerate
     detect_bilinear #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_input_scale(
         .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&preview_input_ready),
         .s_ready(input_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
         .m_valid(input_valid),.m_ready(input_ready),.m_rgb(input_rgb),.m_row_last(input_last),.fault(input_fault));
-    rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_preview_packer(
-        .clk(clk),.reset_n(reset_n),.flush(job_clear),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
-        .pixel_rgb(preview_rgb),.pixel_last(preview_last),.s_valid(stream_valid[1]),.s_ready(stream_ready[1]),
-        .s_data(stream_data[128+:128]),.s_keep(stream_keep[16+:16]),.s_row_last(stream_last[1]));
     genvar g;
     generate for(g=0;g<2;g=g+1)begin:g_dma
         localparam [3:0] ID=g+1;
         localparam [31:0] ROW=g==0?RROW:PROW,STRIDE=g==0?RSTRIDE:PSTRIDE;
         localparam [15:0] ROWS=g==0?SH:SH/2;
+        if (g==0 || ENABLE_PREVIEW) begin : g_enabled
         video_write_dma #(.AXI_ID(ID)) u_dma(
             // Registered cancel breaks the READY -> payload validation ->
             // cancel -> READY feedback. Already buffered valid bytes may
@@ -196,6 +217,27 @@ module video_three_branch_capture #(
             .awvalid(s_awvalid[g]),.awready(s_awready[g]),.wdata(s_wdata[g*128+:128]),.wstrb(s_wstrb[g*16+:16]),
             .wlast(s_wlast[g]),.wvalid(s_wvalid[g]),.wready(s_wready[g]),
             .bid(bid),.bresp(bresp),.bvalid(s_bvalid[g]),.bready(s_bready[g]));
+        end else begin : g_disabled
+            assign req_ready_vec[g]=1'b1;
+            assign result_valid_vec[g]=1'b0;
+            assign result_success_vec[g]=1'b1;
+            assign result_codes[g*8+:8]=8'd0;
+            assign result_tags[g*32+:32]=32'd0;
+            assign result_bytes[g*32+:32]=32'd0;
+            assign writer_fault[g]=1'b0;
+            assign s_awid[g*4+:4]=4'd0;
+            assign s_awaddr[g*32+:32]=32'd0;
+            assign s_awlen[g*8+:8]=8'd0;
+            assign s_awsize[g*3+:3]=3'd0;
+            assign s_awburst[g*2+:2]=2'd0;
+            assign s_awvalid[g]=1'b0;
+            assign stream_ready[g]=1'b1;
+            assign s_wdata[g*128+:128]=128'd0;
+            assign s_wstrb[g*16+:16]=16'd0;
+            assign s_wlast[g]=1'b0;
+            assign s_wvalid[g]=1'b0;
+            assign s_bready[g]=1'b0;
+        end
     end endgenerate
     detect_nchw_dma #(.WIDTH(IW),.ACTIVE_HEIGHT(AH),.PAD_TOP(TOP),.PAD_BOTTOM(BOTTOM),
         .ROW_STRIDE(ISTRIDE),.PLANE_STRIDE(IPLANE),.AXI_ID(4'd3)) u_input_dma(
@@ -227,7 +269,7 @@ module video_three_branch_capture #(
     integer branch;
     always @(posedge clk or negedge reset_n)begin
         if(!reset_n)begin
-            state<=IDLE;requested<=0;retired<=0;seen_online<=0;eof_seen<=0;timer<=0;arm_toggle<=0;
+            state<=IDLE;requested<=0;retired<=ENABLE_PREVIEW?3'b000:3'b010;seen_online<=0;eof_seen<=0;timer<=0;arm_toggle<=0;
             accepted_valid<=0;accepted_started<=0;accepted_consumed<=0;completion_valid<=0;completion_success<=0;completion_code<=0;
             error<=0;error_code<=0;slot<=0;frame_id<=0;preprocess_version<=0;raw_base<=0;preview_base<=0;input_base<=0;
             captured_pixels<=0;preview_pixels<=0;input_pixels<=0;source_crc<=0;preview_crc<=0;fifo_peak<=0;
@@ -254,7 +296,7 @@ module video_three_branch_capture #(
             end else if(!error)case(state)
                 IDLE:if(req_valid&&req_ready)begin
                     if(ENABLE_REARM)begin
-                        requested<=0;retired<=0;eof_seen<=0;timer<=0;
+                        requested<=0;retired<=ENABLE_PREVIEW?3'b000:3'b010;eof_seen<=0;timer<=0;
                         accepted_started<=0;accepted_consumed<=0;
                         completion_success<=0;completion_code<=0;
                         captured_pixels<=0;preview_pixels<=0;input_pixels<=0;source_crc<=0;preview_crc<=0;fifo_peak<=0;
@@ -286,7 +328,7 @@ module video_three_branch_capture #(
                 if(pixel_kind)begin
                     captured_pixels<=captured_pixels+1'b1;raw_crc_state<=raw_crc_next;
                     if(!accepted_started)begin accepted_started<=1;accepted_valid<=1;end
-                    if(source_x==SW-1)begin source_x<=0;source_y<=source_y+1'b1;end else source_x<=source_x+1'b1;
+                    if(source_x==SW-1)begin source_x<=0;source_y<=source_y_incremented;end else source_x<=source_x_incremented;
                 end else begin eof_seen<=1;source_crc<=m_data[31:0];fifo_peak<={20'd0,m_data[43:32]};end
             end
             if(preview_take&&!stopping&&preview_legal)begin

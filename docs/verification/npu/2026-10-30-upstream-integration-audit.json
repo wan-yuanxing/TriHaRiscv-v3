@@ -1,0 +1,203 @@
+{
+  "date": "2026-10-30",
+  "scope": "read-only upstream/current-project audit and integration planning; no new RTL/PDS/board execution",
+  "remote": "https://github.com/keep-s/npu_zgtc",
+  "upstream_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "upstream_code_checkpoint": "580174a493f615cd2308e92ae0f429de70a21422",
+  "remote_verified_by": "git fetch and git ls-remote over Windows system proxy using existing Git Credential Manager identity; no credential exported",
+  "remote_HEAD_and_main": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "main_commit": "18d4c4cca82e5dc7dd7c687f23387fefe90a2c54",
+  "user_confirmed_architecture": "B03 autonomous graph and hardware decode/NMS; CPU frame ownership, avatar selection and display submission",
+  "snapshot_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\upstream-review-558280b-20261030",
+  "upstream_sources": [
+    {
+      "path": "README.md",
+      "sha256": "44bcab2ded2faba6cae1cd426b143faa208b72c26f023951525706f15b463332",
+      "git_blob": "c9d1306e5abd46ca62725f8cace7913015a31378"
+    },
+    {
+      "path": "word/93_B03完整程序整合与持续开发规格.md",
+      "sha256": "16deb805dd507f6f377c132bf95d915d6d85fcf7223a8a62a836b26357f46d24",
+      "git_blob": "65c5d302b136c404cdae004fca6df99275848e82"
+    },
+    {
+      "path": "word/95_B03完整帧执行与私有结果头规格.md",
+      "sha256": "9a370439ecb39d6cd90436c166f4cd5f8bc8328ecc0d97700e7332df8087018c",
+      "git_blob": "c2379b5705ebd8f7325c0f9843c094885dc2bae1"
+    },
+    {
+      "path": "word/160_B03信用寄存与独立控制路由实现规格.md",
+      "sha256": "f7d7943f72ce0d71e8db9e9ed2f3dd86897e679d65cf314ef26f61e530cb44f2",
+      "git_blob": "db12569cb6a9412d2fea30231d180eb3b6dde3b3"
+    },
+    {
+      "path": "word/163_B03宽寄存器逐字异步复位分组规格.md",
+      "sha256": "e78f91f0b15a1c81260ebbc5ac604601ff663d61b6f90b7137a0e0a834cf3045",
+      "git_blob": "2312883d90169d2c0af09474d0ab467ade5b55a4"
+    },
+    {
+      "path": "word/164_B03资源面积审计与旧Xilinx工程对照.md",
+      "sha256": "210c5eb77fac5d13415f56aa73e1eba3e9da75611824b1ee4a86f6db66fe301e",
+      "git_blob": "a82b541e9a49942c8e62db547b0b3266f96f3a0f"
+    },
+    {
+      "path": "yunet/baseline/b03_area_review_20261030_v1.json",
+      "sha256": "07e3f8af5760dfded582ad9ec21402f4d71b203dde31c5c0e2dfe39b383835fb",
+      "git_blob": "762e8f4eb7538066b04099e93e107ab3590d1c26"
+    },
+    {
+      "path": "yunet/reports/b03_runtime_v1/package_manifest.json",
+      "sha256": "d1305ad11d4997cf79e3646af2f31a5306b75d751210505de9a80fd0a259bbd0",
+      "git_blob": "553771c99147656b67393783f15a994dcaef2736"
+    },
+    {
+      "path": "rtl/platform/b03_frame_exec_payload.v",
+      "sha256": "51b03d424bde918d85e76bc524093e55520e56a46d7bb2f95b152fea3294522a",
+      "git_blob": "79568e19b7208916cff1c87db72be1027b3b5c87"
+    },
+    {
+      "path": "rtl/platform/b03_platform_soc_payload.v",
+      "sha256": "b2dac8700912117f77d75c9d648b13a7e5aa5efd77d95059d1d10ed4fc5df44b",
+      "git_blob": "15f8a0c57b53e0b4599a43cf85e0f2b593dea909"
+    },
+    {
+      "path": "yunet/python/compile_b03_runtime.py",
+      "sha256": "ea57a21d24318f11ea0897d4b08cdce24c35d741b15dd022caf672a667abaa4e",
+      "git_blob": "8071363e54b941b9ba347b89f872f28df8fcd3a1"
+    }
+  ],
+  "local_sources": [
+    {
+      "path": "config/video_cfg.json",
+      "sha256": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565"
+    },
+    {
+      "path": "config/npu_regs.json",
+      "sha256": "1a28cacb9e82493073edf865e7db3884c9f25c58b06891fa81707cba4356117c"
+    },
+    {
+      "path": "config/npu_integration_fixture.json",
+      "sha256": "4d8ff370e6e1fba0c8187d62f5e2c9d8b9457d65d8acbd349d62ac88e7b37a63"
+    },
+    {
+      "path": "docs/interfaces/npu.md",
+      "sha256": "2ad49143953eb9c59e56dfe13c24c97cfc8cd94702ab5b426e06caa96f24d423"
+    },
+    {
+      "path": "docs/interfaces/ddr_wrapper.md",
+      "sha256": "3de14158665f7f0fd1ac468ab724aaec44202983be4c8ec1918adb7b360a0706"
+    },
+    {
+      "path": "docs/verification/video/live_modes.md",
+      "sha256": "f4352fb6003b6e62d5b83b3a624197aabb2848340fc71f50f789d452b62707e4"
+    },
+    {
+      "path": "docs/verification/npu/2026-10-21-layer-validation.md",
+      "sha256": "b1087d17fe86b59486cd5dedfafacad61e67111c365aa8c502bc28f51e43ca3d"
+    },
+    {
+      "path": "docs/verification/soc/system_interconnect_storage_20261030.md",
+      "sha256": "805e0f42cda599ca7f260db55549dc0ed6204e65ee332919783e3588935db763"
+    }
+  ],
+  "runtime_package": {
+    "manifest_entries": 68,
+    "tracked_entries_at_declared_paths": 0,
+    "missing_paths": [
+      "compile_report.json",
+      "frame_task.bin",
+      "frame_task.hex",
+      "frame_task_template.json",
+      "heads_init.bin",
+      "heads_init.hex",
+      "ops.hex",
+      "parameter_image.bin",
+      "parameter_image.hex",
+      "post_table.bin",
+      "post_table.hex",
+      "program.bin",
+      "program.hex",
+      "runtime_decoded.json",
+      "cases/calibration_image_000/heads_golden.bin",
+      "cases/calibration_image_000/heads_golden.hex",
+      "cases/calibration_image_000/input.bin",
+      "cases/calibration_image_000/input.hex",
+      "cases/calibration_image_000/manifest.json",
+      "cases/calibration_image_000/records_golden.bin",
+      "cases/calibration_image_000/task.bin",
+      "cases/calibration_image_000/task.hex",
+      "cases/full255/heads_golden.bin",
+      "cases/full255/heads_golden.hex",
+      "cases/full255/input.bin",
+      "cases/full255/input.hex",
+      "cases/full255/manifest.json",
+      "cases/full255/records_golden.bin",
+      "cases/full255/task.bin",
+      "cases/full255/task.hex",
+      "cases/pattern/heads_golden.bin",
+      "cases/pattern/heads_golden.hex",
+      "cases/pattern/input.bin",
+      "cases/pattern/input.hex",
+      "cases/pattern/manifest.json",
+      "cases/pattern/records_golden.bin",
+      "cases/pattern/task.bin",
+      "cases/pattern/task.hex",
+      "cases/wider_stress_0/all_integer_tensors_reference.npz",
+      "cases/wider_stress_0/heads_golden.bin",
+      "cases/wider_stress_0/heads_golden.hex",
+      "cases/wider_stress_0/input.bin",
+      "cases/wider_stress_0/input.hex",
+      "cases/wider_stress_0/manifest.json",
+      "cases/wider_stress_0/records_golden.bin",
+      "cases/wider_stress_0/task.bin",
+      "cases/wider_stress_0/task.hex",
+      "cases/wider_stress_1/all_integer_tensors_reference.npz",
+      "cases/wider_stress_1/heads_golden.bin",
+      "cases/wider_stress_1/heads_golden.hex",
+      "cases/wider_stress_1/input.bin",
+      "cases/wider_stress_1/input.hex",
+      "cases/wider_stress_1/manifest.json",
+      "cases/wider_stress_1/records_golden.bin",
+      "cases/wider_stress_1/task.bin",
+      "cases/wider_stress_1/task.hex",
+      "cases/zero/heads_golden.bin",
+      "cases/zero/heads_golden.hex",
+      "cases/zero/input.bin",
+      "cases/zero/input.hex",
+      "cases/zero/manifest.json",
+      "cases/zero/records_golden.bin",
+      "cases/zero/task.bin",
+      "cases/zero/task.hex",
+      "inputs_snapshot/jiaoben/python/compile_b03_runtime.ps1",
+      "inputs_snapshot/word/93_B03完整程序整合与持续开发规格.md",
+      "inputs_snapshot/word/94_B03完整层执行器与输出行缓存补充规格.md",
+      "inputs_snapshot/yunet/python/compile_b03_runtime.py"
+    ],
+    "interpretation": "Manifest exists in Git; listed output files are not in the declared package directory in this commit. This is not a claim that equivalent inputs cannot be rebuilt or found elsewhere."
+  },
+  "upstream_claims_not_rerun": {
+    "candidate_map": {
+      "LUT": 55663,
+      "FF": 49055,
+      "APM": 177,
+      "DRM36_equivalent": 90.5
+    },
+    "B03_bitstream": false,
+    "full_board_STA_passed": false,
+    "new_graph_six_case_common_source_passed": false,
+    "frame_proxy_cycles": [
+      9578901,
+      9112373
+    ],
+    "compute_clock_hz": 100000000,
+    "cycle_time_ms": [
+      95.78901,
+      91.12373
+    ],
+    "production_release": false
+  },
+  "main_preexisting_changes": [
+    "?? docs/technical-report/figure/backups/"
+  ],
+  "upstream_checkout_preserved": true
+}

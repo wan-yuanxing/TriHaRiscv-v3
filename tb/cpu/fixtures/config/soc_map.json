@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "clock_hz": 100000000,
+  "uart_baud": 115200,
+  "rom_base": 0,
+  "rom_bytes": 8192,
+  "sram_base": 65536,
+  "sram_bytes": 32768,
+  "uart_base": 268435456,
+  "system_base": 537001984,
+  "system_id": 1414678529,
+  "stack_bytes": 4096,
+  "reserved": {"timer": "0x02000000", "npu": "0x20000000", "video": "0x20010000", "ddr": "0x80000000..0x87ffffff"}
+}

@@ -2,7 +2,7 @@
 `default_nettype none
 // Composition only. Caller supplies actual RAW pixels/identity and retains
 // global ownership; faults are separate platform inputs for coordinated reset.
-module video_record_renderer #(parameter integer MAX_RAW_BURSTS=4,TIMEOUT_CYCLES=125000000)(
+module video_record_renderer #(parameter integer MAX_RAW_BURSTS=4,ENABLE_AVATAR=1,TIMEOUT_CYCLES=125000000)(
  input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,online,memory_fault,display_urgent,
  input wire load_valid,output wire load_ready,input wire [31:0] load_base,load_bytes,load_asset_id,load_generation,expected_crc,
  output wire result_valid,input wire result_ready,output wire result_success,output wire [7:0] result_code,
@@ -87,6 +87,7 @@ module video_record_renderer #(parameter integer MAX_RAW_BURSTS=4,TIMEOUT_CYCLES
   .m_rready(m_rready),
   .raw_grants(raw_grants),
   .asset_grants(asset_grants));
+ generate if(ENABLE_AVATAR)begin:g_avatar
  avatar_ddr_cache #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_asset(
   .fault(material_fault),.fault_code(material_code),.port_drained(material_drained),.pixel_asset_ready(pixel_cache_ready),
   .pixel_req_valid(avatar_req_valid),.pixel_req_addr(avatar_req_addr),.pixel_req_asset_id(avatar_req_asset_id),.pixel_req_generation(avatar_req_generation),
@@ -118,6 +119,18 @@ module video_record_renderer #(parameter integer MAX_RAW_BURSTS=4,TIMEOUT_CYCLES
   .sample_valid(sample_valid),
   .sample_error(sample_error),
   .sample_rgba(sample_rgba));
+ end else begin:g_no_avatar
+  // RAW/BOX build: unavailable material stays unavailable. The owning display
+  // endpoint advertises modes 0/1 only, so AVATAR is rejected before rendering.
+  assign a_arid=0;assign a_araddr=0;assign a_arlen=0;assign a_arsize=4;
+  assign a_arburst=1;assign a_arvalid=0;assign a_rready=0;
+  assign material_fault=0;assign material_code=0;assign material_drained=1;
+  assign pixel_cache_ready=0;assign load_ready=0;assign result_valid=0;
+  assign result_success=0;assign result_code=0;assign result_asset_id=0;
+  assign result_generation=0;assign checked_bytes=0;assign crc=0;
+  assign asset_ready=0;assign asset_id=0;assign asset_generation=0;assign words_written=0;
+  assign sample_valid=0;assign sample_error=0;assign sample_rgba=0;
+ end endgenerate
  display_record_pixels u_pixels(.fault(pixels_fault),.fault_code(pixels_code),.asset_ready(pixel_material_ready),.asset_id(pixel_id),.asset_generation(pixel_generation),.core_clk(core_clk),
   .core_reset_n(core_reset_n),
   .pixel_clk(pixel_clk),

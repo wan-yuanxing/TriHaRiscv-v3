@@ -23,7 +23,7 @@ struct video_capture_completion {
     uint32_t raw_bytes,preview_bytes,input_bytes,raw_crc,preview_crc,fifo_peak,drained;
 };
 struct video_capture_events {
-    uint32_t pending,error;
+    uint32_t pending,error,capabilities;
     struct video_capture_identity accepted;
     struct video_capture_completion completed;
 };

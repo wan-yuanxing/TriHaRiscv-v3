@@ -73,3 +73,20 @@ PDS 2022.2-SP6.4端点组件综合816 LUT、982寄存器、0 DRM/APM/锁存器�
 CPU fabric、不决定跨master DDR排序、不自动调用frame_pool_capture_done；调用前
 仍需平台可信可见性证明。共享DDR仲裁、CPU执行、真实显示/素材退休和连续视频
 带宽仍在下一批，本机fence标记不能充当这些物理证明。
+
+
+## 2026-11-01 最小框模式的可选能力
+
+ABI2 的寄存器地址与必需能力掩码仍为原值（0x3f）。新增可选
+`CAP_PREVIEW_OMITTED`（bit 6），由同一个 `ENABLE_PREVIEW` 配置同时决定
+采集核和 MMIO。能力置位时，preview pixels/bytes/CRC 必须为零；RAW、
+NCHW、帧身份、端口排空、FIFO 峰值和故障检查均保持。
+能力未置位时仍严格要求完整预览计数，不能把缺失预览当作成功。
+JSON 新增 optional_capabilities，生成器单独生成该位而不扩张必需能力掩码。
+
+C 驱动在完整完成记录内读取并保存能力，仍以所有读取成功后原子发布事件。
+新增主机用例先在旧驱动上以 BOX_ONLY_COMPLETION 失败；修改后通过，并覆盖
+关闭预览时 RAW 数量损坏、未声明能力却缺失预览等拒绝情况。
+完整 capture_v2 RTL/驱动事务回放回归通过于
+`build/video/regression/20261101T041438_726113Z`。实际 CPU 板级配置回归已越过
+此前的首帧协议错误 0x0c，进入真实 NPU 执行；整机完成结果另行记录。

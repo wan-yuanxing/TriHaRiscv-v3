@@ -1,0 +1,180 @@
+{
+  "schema": "triha-b03-asset-audit-v1",
+  "status": "PARTIAL",
+  "scope": "Historical byte identity only; no RTL execution, physical DDR, PDS, board or frame-rate proof.",
+  "upstream_revision": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "historical_manifest_sha256": "d1305ad11d4997cf79e3646af2f31a5306b75d751210505de9a80fd0a259bbd0",
+  "asset_root": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\b03_assets_20261030\\assets",
+  "expected_count": 68,
+  "matched_count": 39,
+  "matched": [
+    "frame_task.bin",
+    "frame_task.hex",
+    "frame_task_template.json",
+    "heads_init.bin",
+    "heads_init.hex",
+    "ops.hex",
+    "parameter_image.bin",
+    "parameter_image.hex",
+    "post_table.bin",
+    "post_table.hex",
+    "program.bin",
+    "program.hex",
+    "runtime_decoded.json",
+    "cases/calibration_image_000/records_golden.bin",
+    "cases/full255/heads_golden.bin",
+    "cases/full255/heads_golden.hex",
+    "cases/full255/input.bin",
+    "cases/full255/input.hex",
+    "cases/full255/records_golden.bin",
+    "cases/full255/task.bin",
+    "cases/full255/task.hex",
+    "cases/pattern/heads_golden.bin",
+    "cases/pattern/heads_golden.hex",
+    "cases/pattern/input.bin",
+    "cases/pattern/input.hex",
+    "cases/pattern/records_golden.bin",
+    "cases/pattern/task.bin",
+    "cases/pattern/task.hex",
+    "cases/zero/heads_golden.bin",
+    "cases/zero/heads_golden.hex",
+    "cases/zero/input.bin",
+    "cases/zero/input.hex",
+    "cases/zero/records_golden.bin",
+    "cases/zero/task.bin",
+    "cases/zero/task.hex",
+    "inputs_snapshot/jiaoben/python/compile_b03_runtime.ps1",
+    "inputs_snapshot/word/93_B03完整程序整合与持续开发规格.md",
+    "inputs_snapshot/word/94_B03完整层执行器与输出行缓存补充规格.md",
+    "inputs_snapshot/yunet/python/compile_b03_runtime.py"
+  ],
+  "missing": [
+    "compile_report.json",
+    "cases/calibration_image_000/heads_golden.bin",
+    "cases/calibration_image_000/heads_golden.hex",
+    "cases/calibration_image_000/input.bin",
+    "cases/calibration_image_000/input.hex",
+    "cases/calibration_image_000/manifest.json",
+    "cases/calibration_image_000/task.bin",
+    "cases/calibration_image_000/task.hex",
+    "cases/full255/manifest.json",
+    "cases/pattern/manifest.json",
+    "cases/wider_stress_0/all_integer_tensors_reference.npz",
+    "cases/wider_stress_0/heads_golden.bin",
+    "cases/wider_stress_0/heads_golden.hex",
+    "cases/wider_stress_0/input.bin",
+    "cases/wider_stress_0/input.hex",
+    "cases/wider_stress_0/manifest.json",
+    "cases/wider_stress_0/records_golden.bin",
+    "cases/wider_stress_0/task.bin",
+    "cases/wider_stress_0/task.hex",
+    "cases/wider_stress_1/all_integer_tensors_reference.npz",
+    "cases/wider_stress_1/heads_golden.bin",
+    "cases/wider_stress_1/heads_golden.hex",
+    "cases/wider_stress_1/input.bin",
+    "cases/wider_stress_1/input.hex",
+    "cases/wider_stress_1/manifest.json",
+    "cases/wider_stress_1/records_golden.bin",
+    "cases/wider_stress_1/task.bin",
+    "cases/wider_stress_1/task.hex",
+    "cases/zero/manifest.json"
+  ],
+  "mismatches": [],
+  "core_ready": true,
+  "runtime_ready_cases": [
+    "zero",
+    "full255",
+    "pattern"
+  ],
+  "RTL_executed": false,
+  "DDR_executed": false,
+  "PDS_executed": false,
+  "board_verified": false,
+  "board_30fps_verified": false,
+  "frozen_sources_sha256": {
+    "yunet/reports/b03_runtime_v1/package_manifest.json": "d1305ad11d4997cf79e3646af2f31a5306b75d751210505de9a80fd0a259bbd0",
+    "jiaoben/python/compile_b03_runtime.ps1": "a7ab601c1cb92ad10c2b39e06bc78cf0b836e24ff3b0e9e8ff60d0d44be80886",
+    "word/93_B03完整程序整合与持续开发规格.md": "16deb805dd507f6f377c132bf95d915d6d85fcf7223a8a62a836b26357f46d24",
+    "word/94_B03完整层执行器与输出行缓存补充规格.md": "ca56dc2e73d15eb904dc2e1ba58a68115b817ec44d570fc94ac9a6687621d073",
+    "yunet/baseline/b03_m01_review_v0_1.json": "094ceb364a98926baaf7edf9edbdfbad8761c02f88b13222a9a8c273d45a068c",
+    "yunet/baseline/b03_post_reference_v0_2.json": "f9761a4668be5e82e274e62f2151480910b4224d59c4f153f39b6d1f2fad1d88",
+    "yunet/baseline/program_package_manifest_v0_1.json": "3c0eba5b72f4db830e5c573058e955b8ca69539849d598b95dd966daf7a275d8",
+    "yunet/baseline/ptq_integer_golden_summary_v1.json": "961bcf5a6b34a0c24a722a84022b0105f55bc70f029a4cddf62ea96407a9af46",
+    "yunet/models/integer_numerics_v1.json": "8152d6bbf187bb7041d225f23f35f731d5e20ccc1be7410c46e000c9aeb060a2",
+    "yunet/python/address_plan.py": "ba1821beef9cacff6f7faee5259a1b48e0925f13f8da464de671f6e093dc8d59",
+    "yunet/python/audit_ddr_contract.py": "d13a2de2720dd2bde11966f6aad02986a3c0bff9ef0208fd2f47d3fead6d6daf",
+    "yunet/python/b03_post_reference.py": "c3e90e5bee6fc948df42ff9b883441065e47b84919951d726752b30ef6d241ed",
+    "yunet/python/calibrate_ptq.py": "b950a649ba30a71a68b02d188a03349fd3076e6519b8dea41ee36a27872d1d71",
+    "yunet/python/compile_b03_runtime.py": "ea57a21d24318f11ea0897d4b08cdce24c35d741b15dd022caf672a667abaa4e",
+    "yunet/python/evaluate_ptq.py": "e1d7796aa39ca2af148b878395fe5837283b8cd22ed413541a9d9e60c35efa8e",
+    "yunet/python/evaluate_wider_fp32.py": "3245247a975cdb71dc0377385a74e766da7564b2050f6c55608e172d70192335",
+    "yunet/python/export_integer_golden.py": "3bff6c30013e2b820ed406b75f1dea31b4cf80959401fd31db6b12e400dc7dbe",
+    "yunet/python/prepare_wider_data.py": "3fe41179a72df1261176fac198589fd69969d087487f604db69eb7c7e4def9ba",
+    "yunet/python/profile_read_reuse.py": "48dbbd9630d64887a986173c1ef869f1616809cf6151b63fe783732e9b496a12",
+    "yunet/python/profile_schedule.py": "74f8d109ff675f4d90b3235b00060a0c731eda4aaeaa7c1d0fea59ae00d7a7c4",
+    "yunet/python/program_abi.py": "ff5befaeb2ec0eac03315dd94f53b9f9364b3ef8441654b36a0c592a3a701ab0",
+    "yunet/python/ptq_integer.py": "78454d13a2175379e3f12b8ae65f6eb101ed95961063a506d3bb92be8a56e42f",
+    "yunet/python/task_abi.py": "82fd10938623a553b0d1697361f28bd534e778363be3e7b274b0b2b0e5c2872e",
+    "yunet/python/yunet_pipeline.py": "afed18478c3a4d42cc643a931f5040930f3a93c31bf6f10b08a78b8b814e1d18",
+    "yunet/reports/program_abi_v0_1_checked/program.bin": "3b5fd2fab7baccee6b0f739447d00c2cc3930bd572d214a07072c1afb4aeb778",
+    "yunet/reports/program_abi_v0_1_checked/parameter_image.bin": "1a69fa4e8edd20c739e0d12a437a8d076abac6029ab6dcbbbf6a7023424896f6",
+    "recovered_inputs/zero.bin": "7818f5542a0404157573be6cffc0e0c8e68ce3c0f5d17d07ccdd9313fb700baf",
+    "recovered_inputs/full255.bin": "a682fa570213181c0f6fd50f7da5ef6f263c855222c8f7441f19227d925383a3",
+    "recovered_inputs/pattern.bin": "da243f6f3cb83334d928653b2e8eedc9f7633d5d36f8dcd00bb33626e0aae452"
+  },
+  "search_roots": [
+    "D:\\FPGA\\npu_zgtc\\build\\integration_audit\\20261020",
+    "D:\\FPGA\\npu_zgtc\\yunet",
+    "D:\\FPGA\\TriHaRiscv-npu-operator\\build",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\npu"
+  ],
+  "missing_generator_inputs": [],
+  "host_reference": {
+    "tensor_comparisons": 237,
+    "cases": [
+      {
+        "name": "zero",
+        "tensor_comparisons": 79,
+        "face_count": 0
+      },
+      {
+        "name": "full255",
+        "tensor_comparisons": 79,
+        "face_count": 0
+      },
+      {
+        "name": "pattern",
+        "tensor_comparisons": 79,
+        "face_count": 0
+      }
+    ],
+    "unavailable_cases": [
+      {
+        "case": "calibration_image_000",
+        "reason": "historical natural-image input bytes missing",
+        "input_sha256": "39c43ca5ec4f3f3e5df5767d61e8bf831765c06b3ff97c942b1f64bc3566464c"
+      },
+      {
+        "case": "wider_stress_0",
+        "reason": "historical natural-image input bytes missing",
+        "input_sha256": "f1b7c932c308b03d5dda8dbfe339c4a441ef0dd736887d9badd20097114740b1"
+      },
+      {
+        "case": "wider_stress_1",
+        "reason": "historical natural-image input bytes missing",
+        "input_sha256": "c95a398e5acc45bc7fd1f6279c7822ac91231931af3ba967cc9626ce6c3bbd09"
+      }
+    ]
+  },
+  "evidence_root": "build/npu/b03_assets_20261030",
+  "tests": {
+    "command": "python -m unittest discover -s scripts/npu -p test_b03_assets.py -v",
+    "passed": 20
+  },
+  "reference_tensor_bytes": {
+    "manifest": "build/npu/b03_assets_20261030/reference_tensor_manifest.json",
+    "sha256": "907435e02a6d5691869afc1f3c5e030f853a575e99e32b64d1dfc72e8643002d",
+    "count": 237,
+    "bytes": 13365600
+  }
+}

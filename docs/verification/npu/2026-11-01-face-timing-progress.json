@@ -1,0 +1,1431 @@
+{
+  "schema_version": 1,
+  "scope": "Production face box application; engineering and timing before board connection",
+  "functional": {
+    "directory": "build/soc/face_system-20261101T084921_612281Z",
+    "status": "PASS",
+    "inputs_unchanged": true,
+    "pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
+    "simulator_errors": 0,
+    "simulator_warnings": 0,
+    "physical_ddr": false,
+    "new_extra_decode_stage": 1,
+    "total_cycles_vs_previous": {
+      "old": 51716858,
+      "new": 51716858,
+      "note": "Frame paced full regression; not CoreMark or arbitrary CPU workload performance"
+    }
+  },
+  "synthesis": {
+    "directory": "build/video/pds/control_decode_probe_20261101",
+    "status": "PASS",
+    "lut": 43457,
+    "lut_percent": 65.25,
+    "registers": 45519,
+    "drm": 77.5,
+    "apm": 59,
+    "core_setup_estimate_ns": -1.774,
+    "timing_closed": false
+  },
+  "startup_reset_audit": {
+    "directory": "build/video/face_reset_audit_20261101/control_decode",
+    "alias_width_or_unknown_errors": [],
+    "core_pin_counts": {
+      "C": 47,
+      "P": 1
+    },
+    "core_data_sinks": [],
+    "phase_hold": "26 functional flops remain at reset values for both DONE cases; six input pipeline flops",
+    "pll_release": "Exact candidate netlist retains first core PLL release at edge 202",
+    "limitation": "Protocol and netlist proof, not analog reset recovery or board training proof",
+    "production_protocol_simulation": "build/video/face_reset_audit_20261101/control_decode/result.json"
+  },
+  "physical": {
+    "directory": "build/video/pds/control_decode_place_20261101",
+    "status": "PLACEMENT_ANALYZED_NOT_CLOSED",
+    "seed": 4,
+    "route_started": false,
+    "timing_closed": false,
+    "gate_sites_verified": true,
+    "core_slow_setup_wns_ns": -0.603,
+    "core_slow_setup_failing_endpoints": 69,
+    "core_slow_setup_tns_ns": -12.379,
+    "core_fast_setup_wns_ns": 0.758,
+    "core_slow_hold_ns": 0.12,
+    "all_pairs_slow_hold_ns": -0.211,
+    "all_pairs_fast_hold_ns": -0.255,
+    "core_slow_recovery_ns": 1.119,
+    "core_slow_removal_ns": 0.447,
+    "minimum_pulse_width_ns": 0.035,
+    "analysis": "build/video/pds/control_decode_place_20261101/placement_analysis/result.json"
+  },
+  "board": {
+    "status": "DEFERRED_BY_USER",
+    "scan_again": false
+  },
+  "constraints_sha256": {
+    "fpga/pg2l100h/constraints/triha_face_board.fdc": "ab1d1c2f44289cbce07c7980abb371a185de170edfb4dd22482246f93672b8dd",
+    "fpga/pg2l100h/constraints/triha_face_cdc.fdc": "66c9b6785568951774030c3e6fbb0a266dbe54615ffdeffc91a6f1c725b98360",
+    "fpga/pg2l100h/constraints/triha_face_phy.pcf": "6677a4df98328db161fd0d7af77824fabd8b76f681576e44612508d9629631e3",
+    "fpga/pg2l100h/constraints/triha_face_phy.rcf": "12ead76ebfa70a33e9c51cee5f08eb8bc3149908dabae9310c45fc02fb800746"
+  },
+  "evidence_sha256": {
+    "build/soc/face_system-20261101T062158_690425Z/result.json": "36f488b0fdd4f5fb289f4898de7ab4bfdff93a6004e7403fdd75af12646e90d6",
+    "build/soc/face_system-20261101T062158_690425Z/simulation.log": "6d265e742f14b1928fd019c92dc3681bad5ccb60fc1ef4ea0acde0c68a397831",
+    "build/video/pds/20261101T063504_655125Z/result.json": "b39cf3d7e2b7bff7bfe55c52b428ec8759329f0530efaf1578dda55888b7aaa4",
+    "build/video/face_reset_audit_20261101/production_source_fanout.json": "3ee160760c5227f5db367869ac48b27d8f66e5993e503edc18a35a67c623bb55",
+    "build/video/face_reset_audit_20261101/phase_result.json": "5e6b48fd4cdad94af86980968b50ae588564ea52fcc68c2555e6046544dae133",
+    "build/video/face_reset_audit_20261101/sequence_result.json": "8a84ee58b5ab2fc6418955eaaf62db99fd01d35d51b826c0c3026aba5bfd0ea6",
+    "build/video/face_reset_audit_20261101/production/result.json": "12ecbef079666fb1c12252b7f21d1609c6efbecea7c707cd7da359e77448e2be",
+    "build/video/pds/vector_address_probe_20261101/receipt.json": "b193f343952e03c5c8580a22241dd9b226b7a72227cecb5e5764060df7d610a0",
+    "build/video/pds/vector_address_probe_20261101/synthesize/triha_face_board_top.snr": "6332bf8cfd8c53f1c50d2062eb476ccf0fa25960a954b0a89d20b9d216a1a6be",
+    "build/video/face_reset_audit_20261101/vector_address/result.json": "8a1de728ec9d618def5fa588b0504b9852bd32913423986ce1444dfc190ca613",
+    "build/video/face_reset_audit_20261101/vector_address/source_fanout.json": "0ff57effb07c45c00e34f059b103e6f97c9a4bece256ced7a5ad867feeb65033",
+    "build/soc/model_upload-20261101T071935_627966Z/result.json": "01e8baf9a379f161aeb97453674a1d71dec93e856d4002474828d998973b00fd",
+    "build/video/pds/vector_address_place_20261101/receipt.json": "b0fe0a0cd148953b377f4e47f589e8c6f4907f572690cc1ef7dc136bfa643b16",
+    "build/video/pds/vector_address_place_20261101/placement_analysis/result.json": "6e2ebf19837521911c98279eacf999986fd8ac403b1d4e84e8ef17eefbb879cc",
+    "build/npu/vector_address_production_20261101/result.json": "a4766112556b962128f6cbd93b0e0b295d716c767b481793a3eba576172fac57",
+    "build/soc/face_system-20261101T073150_408427Z/result.json": "bba20d3ecefb31f81611d8d8e2bd949b171e7da2d6f8f8eeac06d794bfe6ec5a",
+    "build/soc/face_system-20261101T073150_408427Z/simulation.log": "cae3fb4e95c22a16ff3ef6ad5fbbd63c291f5b273aef2cbad831630ec63a0408",
+    "build/video/pds/control_paths_probe_20261101/receipt.json": "136ce8a3b6cd32265db1fcbf904a4308995210d54700fb3c90caa77a1fd5b7f8",
+    "build/video/face_reset_audit_20261101/control_paths/result.json": "6f05217ac3ebde735f75b904595b10a8e02f9b66ba0d9316cfa5bd6620d1810f",
+    "build/video/face_reset_audit_20261101/control_paths/source_fanout.json": "88cfbac8c93361449d5f24e4fe5df6737c3db3c1f136928d98c914045ba6b741",
+    "build/soc/face_system-20261101T084921_612281Z/result.json": "55750b60b354c0a9c2e40e5961284853a3567811042cadd32bfde37c6b9062ff",
+    "build/video/pds/control_decode_probe_20261101/receipt.json": "ac7353c99adfc9192d07d48a34a0d8e5e53f7718c67940c1526825556bca8922",
+    "build/video/pds/control_decode_place_20261101/placement_analysis/result.json": "0638f31ecba40713930edb544c2054700b19fe3104fbb8a2af8d16976c7a953f",
+    "build/npu/control_decode_adoption_20261101/result.json": "ccf4f3ac97edb93edcdd7c645dfc9494dda83ad5eb6047e62ab2da4cb45b7281",
+    "build/npu/mul_stage_green_20261101/result.json": "b2b85932d78b456fab0ef18fc7545ec9a2571aeeba87448587c55f10e8963fc7",
+    "build/npu/mul_stage_control_20261101/result.json": "a1304295b065f1cd1033583a339c7c5164dad60fcd883b77612bb3f8c7dceeb2",
+    "build/npu/input_finish_green2_20261101/result.json": "d1266e67445748ff9c26606d20b4c4621deb1cae9bc5e27ea4d1170d38746580",
+    "build/npu/input_finish_lockstep3_20261101/result.json": "f29b7b4931792a5ebfd9f7affa38a973b685c59eb0d599daad2375d06236f3ad",
+    "build/npu/input_plan_green3_20261101/result.json": "6d9235a0888d293724cd9c7d192a0a41680d22d51e6ed4a1c02b551169ca38b2",
+    "build/npu/input_plan_baseline_20261101/result.json": "53e4f86ec07c9a2dc6c5064102edddfb0f4c4c7504084a6bb0a4f5ffda42405f",
+    "build/video/pds/stage_split_probe_20261101/receipt.json": "7cb121f2df769f294a8fdd9cd2a33a3cfe23a4ad72b1891f0dfb0f9802c491ce",
+    "build/video/pds/stage_split_probe_20261101/simulation_source_identity.json": "539b9c3c5f87f2ab6bc942ff7a04519abc1b28c55ee4350547fc1d12b7b6e276",
+    "build/soc/face_system-20261101T092149_415619Z/result.json": "51cf881ce101e485fc52c0fe0ab76cd0bced3e734ad0900ede0513c8e89e974d",
+    "build/soc/face_system-20261101T092149_415619Z/simulation.log": "29f6c3bf18a5448507816ed1d431a7184f31ec0d5b0bff2c785d2c7dee0b9d89",
+    "build/video/pds/stage_split_place_20261101/placement_analysis/result.json": "204a4e7fc8384341f0490e29f6991ab288bb6fc9f62978808bbb66961ca10dbf",
+    "build/video/face_reset_audit_20261101/stage_split/result.json": "7c6156137b44dc4605d5d2c3c5f477f2bbe2745fbc2b0a3fb20321cbc45fc90d",
+    "build/video/face_reset_audit_20261101/stage_split/source_fanout.json": "cff7bf64641ccf240abd016dbd181d4ec14920e09c9be93896f0f9c8b5e441d9"
+  },
+  "isolated_followup": {
+    "adopted": false,
+    "directory": "build/soc/block_count_compare_20261101",
+    "description": "Precompute terminal-count comparisons before late handshakes; no state or latency changes",
+    "exhaustive_defined_inputs": 2048,
+    "mutation_detected": true,
+    "cycle_miters": [
+      "build/soc/block_count_miter_20261101",
+      "build/soc/block_count_default_miter_20261101"
+    ],
+    "timing_benefit": "UNMEASURED"
+  },
+  "build_flow_fix": {
+    "status": "UNIT_AND_REAL_PCF_REPLAY_PASS",
+    "test": "scripts/video/test_physical_constraints.py",
+    "tests_passed": 3,
+    "replay": "build/video/physical_merge_replay_20261101/result.json",
+    "scope": "Post-map merge retains 140 board ports and 3 primitive sites; immutable custom source PCF; resumed actual placement accepted both gate commands",
+    "full_builder_route": "NOT_RUN"
+  },
+  "vector_address_candidate": {
+    "adopted": true,
+    "status": "ADOPTED_SYSTEM_PASS",
+    "directory": "build/video/pds/vector_address_probe_20261101",
+    "functional": "66,051 transfer cases + 8,192 address/CE/wrap cases PASS",
+    "negative_control": "vector_address_red_20261101 detected +1 address mutation",
+    "change": "Associative parallel chunk-base/channel-offset addition; no added state or cycle",
+    "synthesis_status": "PASS",
+    "synthesis_inputs_unchanged": true,
+    "lut": 43503,
+    "lut_percent": 65.32,
+    "registers": 45485,
+    "drm": 77.5,
+    "apm": 59,
+    "core_synthesis_setup_ns": -2.033,
+    "placement_directory": "build/video/pds/vector_address_place_20261101",
+    "adoption_gate": "Placement slow setup -0.924 vs -1.119 ns, 380 vs 535 failing endpoints; targeted address path no longer leads; no extra cycles; route deferred",
+    "reset_audit": {
+      "netlist_protocol": "build/video/face_reset_audit_20261101/vector_address/result.json",
+      "netlist_fanout": "build/video/face_reset_audit_20261101/vector_address/source_fanout.json",
+      "core_pin_counts": {
+        "C": 47,
+        "P": 1
+      },
+      "core_data_sinks": []
+    },
+    "production_test": "build/npu/vector_address_production_20261101",
+    "core_placement_slow_setup_ns": -0.924,
+    "core_placement_slow_failing_endpoints": 380,
+    "phy_core_hold_worst_fast_ns": -0.36,
+    "placement_analysis": "build/video/pds/vector_address_place_20261101/placement_analysis/result.json",
+    "gate_sites_verified": true
+  },
+  "asset_audit": {
+    "status": "PASS_ASSET_AUDIT",
+    "directory": "build/soc/model_upload-20261101T071935_627966Z",
+    "port": null,
+    "serial_lower_bound_seconds": 170.4986111111111
+  },
+  "current_revalidation": {
+    "status": "PASS",
+    "directory": "build/soc/face_system-20261101T084921_612281Z",
+    "scope": "Adopted control_decode bytes; identity audited against full model boot and pixel simulation"
+  },
+  "graph_pair_candidate": {
+    "adopted": false,
+    "synthesis": "build/video/pds/graph_pair_probe_20261101",
+    "status": "SYNTHESIS_PASS",
+    "change": "Register four selected region operands before overlap check; one extra admission cycle per pair, at most 15 per frame",
+    "functional": [
+      "build/npu/graph_pair_green_20261101",
+      "build/npu/graph_pair_cancel_green_20261101"
+    ],
+    "negative_control": "build/npu/graph_pair_red_20261101",
+    "lut": 43686,
+    "lut_percent": 65.59,
+    "registers": 45570,
+    "drm": 77.5,
+    "apm": 59,
+    "core_synthesis_setup_ns": -2.016
+  },
+  "gather_address_candidate": {
+    "adopted": false,
+    "status": "COMPONENT_SYNTHESIS_PASS",
+    "change": "Unmasked address carry runs in parallel with late row-present lookup; no state/cycle changes",
+    "functional": "build/npu/gather_address_green_20261101",
+    "negative_control": "build/npu/gather_address_red_20261101",
+    "cases": 50000,
+    "mapping": "build/npu/gather_mapping_20261101/result.json",
+    "baseline_lut": 1991,
+    "candidate_lut": 2015,
+    "registers": 777,
+    "baseline_setup_ns": -0.265,
+    "candidate_setup_ns": 0.622,
+    "full_board_synthesis": "build/video/pds/control_paths_probe_20261101",
+    "input_scoreboard": {
+      "directory": "build/npu/gather_input_green2_20261101",
+      "status": "PASS_TRUSTED_INPUT_SCOREBOARD",
+      "cases": 34,
+      "cycles": 694490,
+      "first_attempt": "gather_input_green_20261101 failed before simulation: default Python lacks onnx; rerun uses existing upstream Windows venv"
+    }
+  },
+  "combined_control_candidate": {
+    "status": "REJECTED_AFTER_PLACEMENT",
+    "directory": "build/video/pds/control_paths_probe_20261101",
+    "adopted": false,
+    "route_started": false,
+    "lut": 43460,
+    "lut_percent": 65.26,
+    "registers": 45569,
+    "drm": 77.5,
+    "apm": 59,
+    "core_synthesis_setup_ns": -1.847,
+    "placement_directory": "build/video/pds/control_paths_place_20261101",
+    "reset_audit_directory": "build/video/face_reset_audit_20261101/control_paths",
+    "core_placement_slow_setup_ns": -1.067,
+    "core_placement_slow_failing_endpoints": 402,
+    "core_placement_slow_tns_ns": -95.003,
+    "gate_sites_verified": true,
+    "reason": "Worse than vector-only -0.924 ns; no route"
+  },
+  "previous_functional": {
+    "directory": "build/soc/face_system-20261101T062158_690425Z",
+    "status": "PASS",
+    "inputs_unchanged": true,
+    "pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
+    "simulator_errors": 0,
+    "simulator_warnings": 0,
+    "physical_ddr": false,
+    "new_extra_decode_stage": 1,
+    "total_cycles_vs_previous": {
+      "old": 51716858,
+      "new": 51716858,
+      "note": "Frame paced full regression; not CoreMark or arbitrary CPU workload performance"
+    }
+  },
+  "board_profile": {
+    "MINIMAL_CONTROL_CPU": 1,
+    "CACHE_ENABLE": 0,
+    "M_LANES": 2,
+    "QUANTIZER_LANES": 1,
+    "TRUSTED_MODEL": 1,
+    "ENABLE_HARDWARE_POST": 0,
+    "note": "Existing board defaults; no further CPU feature reduction in these timing candidates"
+  },
+  "layout_admission": {
+    "status": "PASS",
+    "directory": "build/soc/frame_control/20261101T081236_249238Z",
+    "illegal_layout_rejections": 1056,
+    "slots": 3,
+    "negative_control": "build/npu/layout_admission_negative_20261101"
+  },
+  "layout_metadata_candidate": {
+    "status": "REJECTED_AFTER_PLACEMENT",
+    "adopted": false,
+    "synthesis": "build/video/pds/layout_metadata_probe_20261101",
+    "placement": "build/video/pds/layout_metadata_place_20261101",
+    "lut": 43501,
+    "lut_percent": 65.32,
+    "registers": 45518,
+    "drm": 77.5,
+    "apm": 59,
+    "core_synthesis_setup_ns": -2.032,
+    "functional": "build/soc/face_system-20261101T082202_226530Z",
+    "functional_status": "PASS",
+    "reset_audit": "build/video/face_reset_audit_20261101/layout_metadata",
+    "shared_source_and_firmware_identity_files": 122,
+    "route_started": false,
+    "functional_cycles": 51716858,
+    "functional_metrics_unchanged": true,
+    "functional_simulator_errors": 0,
+    "functional_simulator_warnings": 0,
+    "core_placement_slow_setup_ns": -1.245,
+    "core_placement_slow_failing_endpoints": 1231,
+    "core_placement_slow_tns_ns": -505.909,
+    "gate_sites_verified": true,
+    "reason": "Control decode to input enable and quantizer payload mux now dominate; no route"
+  },
+  "control_decode_candidate": {
+    "adopted": true,
+    "status": "ADOPTED_FUNCTIONAL_PLACEMENT_IMPROVEMENT",
+    "adoption_receipt": "build/npu/control_decode_adoption_20261101/result.json",
+    "synthesis": "build/video/pds/control_decode_probe_20261101/receipt.json",
+    "placement": "build/video/pds/control_decode_place_20261101/placement_analysis/result.json",
+    "functional": "build/soc/face_system-20261101T084921_612281Z/result.json",
+    "cycles": 51716858,
+    "added_cycles": 0,
+    "timing_closed": false,
+    "production_tests": [
+      "build/npu/layer_control_production_20261101",
+      "build/npu/vector_metadata_production_20261101",
+      "build/npu/control_decode_production_20261101"
+    ]
+  },
+  "stage_split_candidate": {
+    "adopted": false,
+    "status": "SYSTEM_PASS_ROUTING_CANDIDATE",
+    "changes": [
+      "Reuse existing graph accumulator to separate final addition from overflow/shape checks; preserve mathematical checks and error detail",
+      "Precompute input region end/continuation in existing PLAN; unchanged transfer cycles and 32-bit comparison semantics"
+    ],
+    "synthesis": "build/video/pds/stage_split_probe_20261101/receipt.json",
+    "lut": 43503,
+    "lut_percent": 65.32,
+    "registers": 45555,
+    "drm": 77.5,
+    "apm": 59,
+    "core_synthesis_setup_ns": -2.066,
+    "functional": "build/soc/face_system-20261101T092149_415619Z/result.json",
+    "functional_status": "PASS",
+    "placement": "build/video/pds/stage_split_place_20261101/receipt.json",
+    "placement_status": "PLACEMENT_COMPLETE",
+    "timing_closed": false,
+    "route_started": true,
+    "component_tests": {
+      "multiply": "build/npu/mul_stage_green_20261101/result.json",
+      "graph_control": "build/npu/mul_stage_control_20261101/result.json",
+      "input_trusted": "build/npu/input_finish_green2_20261101/result.json",
+      "input_lockstep": "build/npu/input_finish_lockstep3_20261101/result.json",
+      "input_plan": "build/npu/input_plan_green3_20261101/result.json",
+      "input_plan_baseline": "build/npu/input_plan_baseline_20261101/result.json"
+    },
+    "theoretical_extra_enabled_cycles_per_frame": 632,
+    "cycle_note": "4 added checks x 79 operators x 2 passes; full frame pacing can hide these cycles",
+    "reset_audit": "build/video/face_reset_audit_20261101/stage_split",
+    "source_identity": "build/video/pds/stage_split_probe_20261101/simulation_source_identity.json",
+    "negative_controls": {
+      "multiply_boundary": "build/npu/mul_stage_red_20261101",
+      "input_end": "build/npu/input_plan_red2_20261101"
+    },
+    "invalid_test_attempts": {
+      "build/npu/input_finish_lockstep_20261101": "discarded: runner source edited during simulation, source hash verification rejected result",
+      "build/npu/input_finish_lockstep2_20261101": "discarded: source override argument shadowed by fixture loop variable; fixed and rerun in lockstep3"
+    },
+    "production": "control_decode remains production until functional and physical adoption gates",
+    "placement_analysis": "build/video/pds/stage_split_place_20261101/placement_analysis/result.json",
+    "physical_summaries": {
+      "setup_slow": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 34.806,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 3.714,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 7030
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "pixel_clk"
+          ],
+          "slack_ns": 1.032,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1248
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 92.023,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1828
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 18.991,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 33
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 7.001,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2331
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 4.257,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 12
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 3.646,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 423
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": -0.44,
+          "total_slack_ns": -8.557,
+          "failing_endpoints": 89,
+          "total_endpoints": 128847
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 4.737,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 260
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 6.523,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 2.262,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 207
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 18.873,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 12
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 1.796,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 196
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.439,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 420
+        }
+      ],
+      "setup_fast": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 35.281,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 4.756,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 7030
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "pixel_clk"
+          ],
+          "slack_ns": 1.362,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1248
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 93.643,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1828
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 19.161,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 33
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 7.855,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2331
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 4.397,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 12
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 3.94,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 423
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.576,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 128847
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 4.953,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 260
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 6.604,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 2.481,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 207
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 18.979,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 12
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 2.25,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 196
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.839,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 420
+        }
+      ],
+      "hold_slow": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 0.389,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 0.228,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 7030
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.307,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1828
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 0.228,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2331
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.31,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 423
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.023,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 128847
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": -0.086,
+          "total_slack_ns": -0.223,
+          "failing_endpoints": 3,
+          "total_endpoints": 260
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": -0.125,
+          "total_slack_ns": -0.125,
+          "failing_endpoints": 1,
+          "total_endpoints": 1
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": -0.226,
+          "total_slack_ns": -1.503,
+          "failing_endpoints": 10,
+          "total_endpoints": 196
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": -0.205,
+          "total_slack_ns": -1.105,
+          "failing_endpoints": 12,
+          "total_endpoints": 420
+        }
+      ],
+      "hold_fast": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 0.287,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 60
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 0.19,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 7030
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.237,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 1828
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 0.19,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 2331
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.237,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 423
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.057,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 128847
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": -0.153,
+          "total_slack_ns": -0.585,
+          "failing_endpoints": 7,
+          "total_endpoints": 260
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": -0.146,
+          "total_slack_ns": -0.146,
+          "failing_endpoints": 1,
+          "total_endpoints": 1
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": -0.27,
+          "total_slack_ns": -1.99,
+          "failing_endpoints": 11,
+          "total_endpoints": 196
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": -0.246,
+          "total_slack_ns": -1.653,
+          "failing_endpoints": 16,
+          "total_endpoints": 420
+        }
+      ],
+      "recovery_slow": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 35.16,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 13
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 19.263,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3184
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 97.806,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 205
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 9.766,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 648
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 9.163,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 469
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 3.253,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 98
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 1.359,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 26264
+        }
+      ],
+      "recovery_fast": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 35.452,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 13
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 19.602,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3184
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 98.168,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 205
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 10.125,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 648
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 9.61,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 469
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 3.473,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 98
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 1.57,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 26264
+        }
+      ],
+      "removal_slow": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 1.056,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 13
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 0.763,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3184
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.979,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 205
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 0.72,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 648
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 1.299,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 469
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.625,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 98
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.448,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 26264
+        }
+      ],
+      "removal_fast": [
+        {
+          "clocks": [
+            "sys_clk",
+            "sys_clk"
+          ],
+          "slack_ns": 0.932,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 13
+        },
+        {
+          "clocks": [
+            "pixel_clk",
+            "pixel_clk"
+          ],
+          "slack_ns": 0.688,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3184
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "cfg_clk"
+          ],
+          "slack_ns": 0.839,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 205
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 0.645,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 648
+        },
+        {
+          "clocks": [
+            "cfg_clk",
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 1.234,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 469
+        },
+        {
+          "clocks": [
+            "rst_clk",
+            "rst_clk"
+          ],
+          "slack_ns": 0.549,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 98
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk",
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 0.372,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 26264
+        }
+      ],
+      "minimum pulse width_slow": [
+        {
+          "clocks": [
+            "sys_clk"
+          ],
+          "slack_ns": 18.318,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        {
+          "clocks": [
+            "pixel_clk"
+          ],
+          "slack_ns": 11.539,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3534
+        },
+        {
+          "clocks": [
+            "cfg_clk"
+          ],
+          "slack_ns": 49.038,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 411
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 11.54,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 659
+        },
+        {
+          "clocks": [
+            "rst_clk"
+          ],
+          "slack_ns": 3.8,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 99
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 2.655,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 32060
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_0"
+          ],
+          "slack_ns": 0.035,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 1.85,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_1"
+          ],
+          "slack_ns": 0.035,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 84
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.4,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 84
+        }
+      ],
+      "minimum pulse width_fast": [
+        {
+          "clocks": [
+            "sys_clk"
+          ],
+          "slack_ns": 18.318,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 15
+        },
+        {
+          "clocks": [
+            "pixel_clk"
+          ],
+          "slack_ns": 11.929,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 3534
+        },
+        {
+          "clocks": [
+            "cfg_clk"
+          ],
+          "slack_ns": 49.428,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 411
+        },
+        {
+          "clocks": [
+            "rx_pixel_clk"
+          ],
+          "slack_ns": 11.93,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 659
+        },
+        {
+          "clocks": [
+            "rst_clk"
+          ],
+          "slack_ns": 3.8,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 99
+        },
+        {
+          "clocks": [
+            "ddrphy_sysclk"
+          ],
+          "slack_ns": 3.202,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 32060
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_0"
+          ],
+          "slack_ns": 0.035,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_0"
+          ],
+          "slack_ns": 1.85,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 35
+        },
+        {
+          "clocks": [
+            "phy_dq_clk_1"
+          ],
+          "slack_ns": 0.035,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 84
+        },
+        {
+          "clocks": [
+            "phy_dq_sysclk_1"
+          ],
+          "slack_ns": 2.4,
+          "total_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "total_endpoints": 84
+        }
+      ]
+    },
+    "worst_paths": [
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/pad_left[0]/opit_0_inv/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/k_ci[2]/opit_0_inv_L6QL5Q/CE",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.44
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/pad_left[0]/opit_0_inv/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/k_ci[3]/opit_0_inv_L6QL5Q/CE",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.44
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/pad_left[0]/opit_0_inv/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/k_ci[4]/opit_0_inv_L6Q/CE",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.44
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/pad_left[0]/opit_0_inv/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/k_ci[5]/opit_0_inv_L6Q/CE",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.385
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/pad_left[0]/opit_0_inv/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/gather_pipeline/k_ci[6]/opit_0_inv_L6Q/CE",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.385
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/collected[2]/opit_0_inv_L6QL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dense/row[0].pair[3].leaf/apm/gopapm/CE_P",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.275
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/co_base[4]/opit_0_inv_L6Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/done_detail[2]/opit_0_inv_L6Q/I5",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.243
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/collected[2]/opit_0_inv_L6QL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dense/row[1].pair[3].leaf/apm/gopapm/CE_P",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.154
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/collected[2]/opit_0_inv_L6QL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/done_detail[20]/opit_0_inv_L6Q/I4",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.153
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/state[1]/opit_0_inv_AL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/core/lane[0].shift_pipe[1][0]/opit_0_L6QQ/I1",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.153
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/collected[2]/opit_0_inv_L6QL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/shadow_valid[30]/opit_0_inv_L6Q/I2",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.141
+      },
+      {
+        "Startpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/g_quantizer_tdm1.quantizer/collected[2]/opit_0_inv_L6QL5Q/CLK",
+        "Endpoint": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/shadow_valid[19]/opit_0_inv_L6Q/I2",
+        "Path Group": "ddrphy_sysclk",
+        "Path Class": "sequential timing path",
+        "slack_ns": -0.139
+      }
+    ],
+    "functional_pass_line": "# FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
+    "route": "build/video/pds/stage_split_route_20261101",
+    "route_status": "ROUTE_RUNNING"
+  },
+  "followup": {
+    "kind": "heartbeat",
+    "id": "automation-5",
+    "name": "\u4eba\u8138\u6846\u5de5\u7a0b\u65f6\u5e8f\u6536\u655b\u8ddf\u8fdb",
+    "status": "ACTIVE",
+    "interval_minutes": 5,
+    "scope": "Current thread: monitor existing route, audit physical result, continue authorized critical-path work; silent without actionable change",
+    "active_run": "build/video/pds/stage_split_route_20261101",
+    "unified_exec_session": 37156,
+    "board_deferred": true
+  }
+}

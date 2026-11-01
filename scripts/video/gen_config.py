@@ -78,7 +78,10 @@ def generated_files(config, digest):
     rtl = note + "`ifndef TRIHA_VIDEO_CFG_VH\n`define TRIHA_VIDEO_CFG_VH\n"
     c = note + "#ifndef TRIHA_VIDEO_CFG_H\n#define TRIHA_VIDEO_CFG_H\n"
     for name, value in values.items():
-        rtl += f"`define VIDEO_{name} {value}\n"
+        # DDR addresses have bit31 set. Unsized decimal literals are signed in
+        # Verilog and trigger overflow diagnostics in the native ModelSim flow.
+        literal = f"32'h{value:08x}" if value >= 0x80000000 else str(value)
+        rtl += f"`define VIDEO_{name} {literal}\n"
         c += f"#define VIDEO_{name} {value}u\n"
     return {"rtl/video/include/video_cfg.vh": rtl + "`endif\n",
             "sw/include/video_cfg.h": c + "#endif\n"}

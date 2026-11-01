@@ -5,7 +5,7 @@
 // The source must supply the actual pixel-domain RAW identity. All resets are
 // coordinated. pixel retirement is only one contribution to global retirement;
 // scanner reads, owner events and software ACK must also finish independently.
-module display_record_pixels(
+module display_record_pixels #(parameter integer BOX_ONLY=0)(
     input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,
     input wire cmd_valid,output wire cmd_ready,
     input wire [1:0] cmd_mode,cmd_slot,
@@ -183,6 +183,7 @@ module display_record_pixels(
     assign {avatar_req_asset_id,avatar_req_generation}=asset_tags[8];
     wire [23:0] overlay_rgb;wire [10:0] overlay_x,overlay_y;wire [31:0] overlay_frame;
     wire overlay_de,overlay_hs,overlay_vs,overlay_sof,overlay_box,overlay_point,overlay_avatar;
+    generate if(!BOX_ONLY) begin:g_full_overlay
     display_overlay u_overlay(
         .clk(pixel_clk),.rst(!pixel_reset_n),.pixel_frame_id(raw_frame),.pixel_x(raw_x),.pixel_y(raw_y),
         .pixel_rgb(raw_rgb),.pixel_de(raw_de),.pixel_hs(raw_hs),.pixel_vs(raw_vs),.pixel_sof(raw_sof),
@@ -196,6 +197,20 @@ module display_record_pixels(
         .out_rgb(overlay_rgb),.out_x(overlay_x),.out_y(overlay_y),.out_frame_id(overlay_frame),
         .out_de(overlay_de),.out_hs(overlay_hs),.out_vs(overlay_vs),.out_sof(overlay_sof),
         .out_box(overlay_box),.out_point(overlay_point),.out_avatar(overlay_avatar),.out_fault(overlay_pixel_fault),.overlay_fault(overlay_error));
+    end else begin:g_box_only
+    display_box_only #(.SINGLE_PRIMARY(BOX_ONLY)) u_overlay(
+            .clk(pixel_clk),.rst(!pixel_reset_n),.pixel_frame_id(raw_frame),.pixel_x(raw_x),.pixel_y(raw_y),
+            .pixel_rgb(raw_rgb),.pixel_de(raw_de),.pixel_hs(raw_hs),.pixel_vs(raw_vs),.pixel_sof(raw_sof),
+            .mode(selected_mode),.result_valid(qualified_context&&selected_flags[0]),.result_has_face(!selected_flags[1]),
+            .result_frame_id(word(selected,`VDISP_FIELD_RESULT_FRAME)),.primary_valid(selected_flags[4]),
+            .primary_index(selected[13*32+:4]),.box_valid(selected[12*32+:16]),.box_x0(box_x0),.box_y0(box_y0),
+            .box_x1(box_x1),.box_y1(box_y1),.out_rgb(overlay_rgb),.out_x(overlay_x),.out_y(overlay_y),
+            .out_frame_id(overlay_frame),.out_de(overlay_de),.out_hs(overlay_hs),.out_vs(overlay_vs),
+            .out_sof(overlay_sof),.out_box(overlay_box),.out_point(overlay_point),.out_avatar(overlay_avatar),
+            .out_fault(overlay_pixel_fault),.overlay_fault(overlay_error));
+        assign avatar_req_valid=1'b0;
+        assign avatar_req_addr=18'd0;
+    end endgenerate
     always @(posedge pixel_clk or negedge pixel_reset_n)begin
         if(!pixel_reset_n)begin
             out_rgb<=0;out_x<=0;out_y<=0;out_frame<=0;out_generation<=0;out_seq<=0;out_slot<=0;out_mode<=0;

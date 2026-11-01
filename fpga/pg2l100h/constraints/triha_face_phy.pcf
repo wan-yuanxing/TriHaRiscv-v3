@@ -1,0 +1,4 @@
+# DDR IP gate sites, applied to mapped primitives after vector bit splitting.
+# PDS 2022.2-SP6.4 PG2L100H; no -no_check: missing names must be diagnosed.
+def_inst_site {g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_reset_ctrl/ddrphy_ioclk_gate[0]/opit_0_inv} CLMA_357_354 FF3
+def_inst_site {g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_reset_ctrl/ddrphy_ioclk_gate[1]/opit_0_inv} CLMA_357_660 FF3

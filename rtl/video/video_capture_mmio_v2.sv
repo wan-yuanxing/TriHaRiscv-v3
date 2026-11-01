@@ -9,7 +9,7 @@
 // accepted/completion records. accepted samples only identity and bases;
 // completion additionally samples all counts, CRCs and FIFO peak.
 module video_capture_mmio_v2 #(
-    parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,PAD_TOP=40,PAD_BOTTOM=40
+    parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,PAD_TOP=40,PAD_BOTTOM=40,ENABLE_PREVIEW=1
 )(
     input wire clk_i,rst_ni,
     input wire [31:0] s_axi_awaddr_i,input wire [2:0] s_axi_awprot_i,
@@ -187,7 +187,7 @@ module video_capture_mmio_v2 #(
         if(!valid_address(s_axi_araddr_i))read_response=DECERR;
         else case(s_axi_araddr_i-`VCAP_MMIO_BASE)
             `VCAP_REG_VERSION:read_word=`VCAP_ABI_VERSION;
-            `VCAP_REG_CAPABILITIES:read_word=`VCAP_CAPABILITIES;
+            `VCAP_REG_CAPABILITIES:read_word=`VCAP_CAPABILITIES|(ENABLE_PREVIEW?32'd0:`VCAP_CAP_PREVIEW_OMITTED);
             `VCAP_REG_CONTROL:read_word={31'd0,enabled};
             `VCAP_REG_STATUS,`VCAP_REG_CAPTURE_STATUS:read_word=status_word;
             `VCAP_REG_IRQ_MASK:read_word={29'd0,irq_mask};
@@ -249,10 +249,11 @@ module video_capture_mmio_v2 #(
         capture_input_pixels_i,capture_raw_bytes_i,capture_preview_bytes_i,capture_input_bytes_i,
         capture_raw_crc_i,capture_preview_crc_i,capture_fifo_peak_i}))!==1'bx;
     wire success_counts_good=capture_raw_pixels_i===FRAME_WIDTH*FRAME_HEIGHT &&
-        capture_preview_pixels_i===(FRAME_WIDTH*FRAME_HEIGHT/4) &&
+        capture_preview_pixels_i===(ENABLE_PREVIEW?FRAME_WIDTH*FRAME_HEIGHT/4:0) &&
         capture_input_pixels_i===(INPUT_WIDTH*(FRAME_HEIGHT*2/5)) &&
         capture_raw_bytes_i===(FRAME_WIDTH*FRAME_HEIGHT*3) &&
-        capture_preview_bytes_i===(FRAME_WIDTH*FRAME_HEIGHT/4*3) &&
+        capture_preview_bytes_i===(ENABLE_PREVIEW?FRAME_WIDTH*FRAME_HEIGHT/4*3:0) &&
+        (ENABLE_PREVIEW||capture_preview_crc_i===32'd0) &&
         capture_input_bytes_i===(INPUT_WIDTH*INPUT_HEIGHT*3) &&
         capture_fifo_peak_i>=1 && capture_fifo_peak_i<=2048;
     wire completion_good=shot_used&&dispatched&&!completion_seen&&identity_good&&completion_known&&capture_port_drained_i===1'b1&&

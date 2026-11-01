@@ -2,7 +2,7 @@
 import argparse,hashlib,json,re,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-FINGERPRINT='19528f655dc781ccd118b11a84c56d7c757f098e4cc81131c22d70533b1f6e9a'
+FINGERPRINT='97acf7de3c55950306c981a5be21181bbd0c744d173a97d2da7d14c4e4494a52'
 def unique_object(pairs):
     out={}
     for key,value in pairs:
@@ -20,6 +20,7 @@ def generated_files(cfg,digest):
     values={'MMIO_BASE':cfg['base'],'MMIO_BYTES':cfg['region_bytes'],'ABI_VERSION':cfg['abi_version'],
             'CAPABILITIES':sum(1<<v for v in cfg['capabilities'].values())}
     for name,bit in sorted(cfg['capabilities'].items()):values['CAP_'+name]=1<<bit
+    for name,bit in sorted(cfg.get('optional_capabilities',{}).items()):values['CAP_'+name]=1<<bit
     for reg in sorted(cfg['registers'],key=lambda r:r['offset']):
         name=reg['name'];values['REG_'+name]=reg['offset']
         if 'reset' in reg:values['REG_'+name+'_RESET']=reg['reset']

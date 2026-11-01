@@ -1,0 +1,3 @@
+# Re-rooted from hash-locked DDR IP ddr3_test.rcf.
+def_route -prior_net {g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_ioclk_gate [0]}
+def_route -prior_net {g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_ioclk_gate [1]}

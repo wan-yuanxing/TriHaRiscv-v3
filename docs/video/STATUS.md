@@ -674,3 +674,647 @@ Cache开启的最小整核固件完成1277项检查、26356周期、14次读、3
 完成主工程现有 CPU→Video、CPU→NPU 和 Video 共享 DDR 联测。CPU→Video 单/双发射 6 个正例及 2 个负例通过；CPU→NPU Dense U8、DW S8 的轮询/中断 4 个正例通过；Video 共享 DDR 回归通过。两份原生 ModelSim WLF 和结果哈希登记在 docs/verification/soc/system_interconnect_storage_20261030.json。
 
 本批验证了控制面路由、AXI 独立通道、背压保持、DMA 几何和完成顺序。主工程当前仍没有正式 CPU/NPU/Video 共享 fabric 或缓存一致性模块，因此跨主端可见性、CPU fence/cache maintenance 和物理 DDR CDC 仍开放，不能把本批结果写成整机互联验收。
+
+
+## 2026-10-30：B03 主工程集成调研与规划
+
+用户要求获取 keep-s/npu_zgtc 最新状态并在本主工程开展集成，当前先完成规划。通过系统代理和现有 Git 身份 fetch/ls-remote 确认上游 main 为558280b（源码检查点580174a）；已核对 B03 整网/FPGA后处理、最新面积审计与尚未完成的物理/板测出口。用户确认采用 NPU 整网及解码/NMS、CPU 管理帧/头像/显示的职责。
+
+[设计提案](../superpowers/specs/2026-10-30-b03-main-integration-design.md)与[阶段计划](../superpowers/plans/2026-10-30-b03-main-integration.md)明确复用现有320×320 BGR NCHW、唯一HMIC/AXI128桥及同帧显示，补共享fabric、100/125MHz CDC、帧级ABI、生产发布和全局恢复。首阶段完成来源/资产准入及统一资源预算；bbox先作中间验收，五点与最终性能要求保留。
+
+本轮仅远端/源码/证据审查与文档落盘，没有导入产品RTL、修改ABI、执行RTL/PDS或板测。新发现：runtime清单68项在提交的包目录缺失，需重建/核SHA；最新163候选缺同Graph六图统一证明；B03候选55663 LUT/90.5 DRM尚无CPU/Video统一预算，私有scope0不等于生产发布。上游具体数值是引用证据，未在本机重跑。来源和哈希见[审查JSON](../verification/npu/2026-10-30-upstream-integration-audit.json)。原Video交付与技术报告修改保持原位。
+
+## 2026-10-31：CPU 后处理与资源收敛
+
+最终应用路径已改为“B03 整网写 heads，CPU 解码/NMS，CPU 提交 BOX 记录”。板级默认保留完整 CPU 配置，`ENABLE_HARDWARE_POST=0` 时综合裁掉 FPGA decode、sort、ROI 和结果记录写回模块；NPU 仍执行真实图和真实 heads，CPU 使用 B03 lookup table、0.6 阈值和 IoU 0.3 生成真实人脸框。无五点关键点时点字段继续保持零。
+
+主机/RV32 `FACE_AVATAR_PASS checks=3896`、显示 MMIO 回归 `RECORD_MMIO_PASS` 通过，独立 CPU heads smoke 通过。完整 CPU 综合基线为 58886/66600 LUT；板级默认切到可选的 `MINIMAL_CONTROL_CPU=1` 后，再用 primary-box overlay 裁剪显示比较器，综合降至 53468/66600（80.3%）、寄存器 49955/133200（37.5%）、DRM 76/155（49.0%），完整 CPU 仍可用参数恢复。该显示裁剪不减少 NPU 算力和输入吞吐，只保留当前最小展示所需的 primary 框。约束审查无 rejected 时钟项。已补齐 DDR PHY 站点和 `mem_*`/`ref_clk_*` 约束；80% 资源单 seed route 已进入详细布线，尚未声称布局布线或板上时序通过。
+
+## 2026-10-31：NPU 诊断网络裁剪与单 seed route 监控
+
+在保持 B03 算术、输入/输出格式和 CPU heads 解码不变的前提下，给 dense APM 阵列和 depthwise 阵列增加 `ENABLE_DIAGNOSTICS` 综合参数。板级 CPU-post 配置关闭每拍返回一致性、溢出归约和最低 lane 诊断树；完整诊断配置仍可恢复。B03 frame runner、asset 回归和导入回归通过，显示 MMIO 回归通过。
+
+板级综合结果从 53468 LUT/49955 FF 降至 52544 LUT/48866 FF/76 DRM（78.9% LUT、36.7% FF、49.0% DRM），综合输入快照和产物分别保存在 `build/video/pds/20261031T090816_033912Z` 与 `build/video/pds/20261031T091657_906206Z`。随后对 52544-LUT 候选启动单 seed route，工作目录为 `build/video/pds/20261031T092657_451272Z`；运行约 20 分钟仍停留在 `place_route` 前段，没有 routed STA、`unrouted=0`、`All Constraints Met` 或 bitstream，已主动停止。该候选仍不能宣称物理时序通过，下一步需继续压 NPU 并行数据路径后再布线。
+## Final application integration (2026-10-30)
+
+- Added the board-level `triha_face_board_top` entry. It connects HDMI RX/TX,
+  the single DDR3 owner, capture/preprocess, `triha_face_system`, and HDMI
+  scanout in one explicit production source list.
+- Added `fpga/pg2l100h/project/triha_face_board.json` and the top-level pin
+  constraint set `fpga/pg2l100h/constraints/triha_face_board.fdc`.
+- The board target is BOX-only. The checked-in B03 model has no landmark
+  branch; point/landmark fields are zero and AVATAR remains disabled until a
+  real model and asset package are supplied.
+- The digital final-application regression remains the acceptance check for
+  CPU frame management and same-frame display. It uses a native DDR byte
+  proxy and does not establish PDS or board timing.
+- The formal `build_pds.py --target triha_face_board --stage synth` entry was
+  exercised. PDS reached RTL analysis and set `triha_face_board_top` as the
+  top, then stopped on the current CPU source set (`biriscv_alu.v` and related
+  files) because the installed PDS Verilog front end rejects the SystemVerilog
+  syntax used by the admitted CPU. No synthesis, mapping, timing or bitstream
+  result is claimed from this run.
+
+## Minimal face-box board demonstration (2026-10-31)
+
+The first board deliverable now defaults `triha_face_board_top` to
+`DEMO_BOX_ONLY=1`. It uses the real HDMI TX PLL/I2C/timing path and renders a
+visible 800x600 BOX record shape; DDR and HDMI RX pins are held inactive in
+this resource-bounded demonstration. The preserved CPU+B03 full application
+is still selected with `DEMO_BOX_ONLY=0`.
+
+Formal PDS synth and bitstream both pass. The verified bitstream package is
+`build/video/releases/triha_face_board_5eea0d2922fb/` with sbit SHA256
+`5eea0d292fbeaff00fd65b376b6386feb3674a94fa81667294b5bbd7a3e6520` and
+matching verify mask. Synthesis uses 281 LUT, 225 registers and 0.5 DRM;
+internal routed timing is marked met. This is a display-function and BOX
+shape demonstration, not a claim of live B03 inference or physical board
+program/verify. The full CPU+B03 path remains over the PG2L100H LUT budget
+(79,167/66,600 from the previous formal run) and remains the next closure
+item.
+
+## NPU CPU-post resource/timing convergence (2026-10-31)
+
+The production profile now uses B03 for the full network and head writes, while
+the CPU decodes heads, applies threshold/IoU filtering, and submits the BOX
+display record. Hardware decode/sort/NMS/ROI/result-writer logic remains disabled
+for this minimum face-box application. The dense APM array is reduced to
+`M_LANES=8`; the board top passes that profile through the SoC and NPU service.
+
+The two-frame native B03 proxy run passed with 79/79 operations, independent
+HEAD/result checks, and shared task/op/epoch stability. A dedicated `M_LANES=8`
+two-frame run also passed; its model cycle count increased as expected from the
+reduced spatial parallelism. Synthesis result
+`build/video/pds/20261031T112725_557724Z` used 49,632 LUTs (74.52%), 48,702
+registers (36.56%), and 74 DRM (47.74%).
+
+Three NPU reset nets with fanout above 10,000 were given bounded replication
+attributes. The follow-up synthesis
+`build/video/pds/20261031T133843_830059Z` has no warnings for those reset nets
+and uses 49,921 LUTs (74.96%), 48,702 registers, and 74 DRM. One-seed routed
+placement improved from about `-1.811 ns` to `-1.686 ns`, but routing still
+reported about `-4.691 ns` before detailed route completion and was stopped;
+there is still no `unrouted=0`, routed WNS/TNS pass, `All Constraints Met`, or
+bitstream evidence for the live B03 path. The next optimization target is the
+remaining high-fanout control/data nets, especially the video-side `dma_base`
+path and residual NPU control/reset nets, before another P&R attempt.
+
+## DMA descriptor fanout reduction (2026-10-31)
+
+The NCHW input DMA now registers its descriptor base when a frame, plane, or row
+changes. This removes the flattened combinational `row_base + plane` mux from
+the DMA request path while preserving the row/plane address sequence. The full
+NCHW DMA regression passed. Synthesis
+`build/video/pds/20261031T144128_284603Z` reports 49,610 LUTs (74.49%), 48,728
+registers (36.58%), and 74 DRM (47.74%); the previous `dma_base` fanout warnings
+are gone.
+
+A single-seed P&R reached global `unrouted nets = 0` at iteration 33 in
+`build/video/pds/20261031T145228_761769Z`. Detailed routing remained at 48,541
+unrouted subnets after iteration 13. Placement WNS was `-2.330 ns` and the
+pre-global-route report was `-4.191 ns`; the run was stopped before routed STA,
+so no routed WNS/TNS, `All Constraints Met`, or bitstream claim is made.
+
+The CPU admission manifest now records the parameterized `triha_core.v` as a
+reviewed working-tree delta with its original Git baseline hash; this keeps the
+default CPU configuration unchanged while admitting the board's
+`MINIMAL_CONTROL_CPU` parameter. The face-system testbench hierarchy was updated
+to the compact display MMIO instance. Compile-only integration passes. A full
+face-system run starts real capture and B03 execution (capture slots complete and
+operator 0 reaches 2,035,035 cycles), but the 300-second bounded run does not
+finish the 79-op frame and is recorded as a simulation timeout rather than a
+functional pass.
+
+## Current resource-bounded baseline (2026-11-01)
+
+The board profile now uses `M_LANES=4`. This keeps the fixed 16-row accumulator ABI
+and all 79 model operations while serializing the dense output tiles further. The
+result is `build/video/pds/20261031T155456_149654Z`: 48,878 LUTs (73.39%), 48,684
+registers (36.55%), 73 DRM (47.10%), and 79 APMs (32.92%). Compared with the
+8-lane baseline, this saves 732 LUTs, 32 APMs, and one DRM; it has not yet been
+through placement or routing.
+
+An additional trusted-graph experiment was rejected after synthesis increased the
+mapped design to 48,935 LUTs. The graph source and admission manifest were restored
+to the 4-lane baseline. Given the remaining 73% LUT occupancy and the previous
+detailed-route runtime, the next work item is a structural reduction in the NPU
+vector/input path; another full route is deferred until that reduction produces a
+clear front-end gain.
+
+
+## 2026-11-01: Quantizer serialization and two-lane dense profile
+
+The minimum board profile now uses an exact one-physical-lane Q8 quantizer
+(`b03_quant8_tdm1`) behind a parameterized selector; the default two-lane
+quantizer remains available for non-board users. The external mask, tag, error,
+and output ordering ABI is unchanged. Compile-only face-system integration and
+source admission pass.
+
+The first one-lane synthesis measured 48,687 LUTs (73.10%), 48,437 registers
+(36.36%), 73 DRM (47.10%), and 75 APM (31.25%). The LUT reduction was only 191
+against the 4-lane baseline and introduced high-fanout quantizer control nets,
+so the main resource gain comes from dense serialization rather than the
+quantizer itself.
+
+The board dense profile was then reduced from `M_LANES=4` to `M_LANES=2` while
+keeping the fixed 16-row accumulator ABI and all 79 operations. Synthesis
+`build/video/pds/20261101T014928_479909Z` reports 48,205 LUTs (72.38%), 48,414
+registers (36.35%), 72.5 DRM (46.77%), and 59 APM (24.58%). This saves 482 LUTs
+and 16 APMs versus the one-lane-quantizer/4-lane-dense result. No placement,
+routed timing, or bitstream result has been claimed for this candidate yet.
+
+
+The single-seed route monitor for this 2-lane candidate was
+`build/video/pds/20261101T020153_597477Z`. Placement reached about -1.94 ns
+worst slack before routing, but detailed routing still had 66,653 unrouted
+subnets at iteration 4 (115,701 total subnets); the run was stopped to avoid
+another long low-yield route. There is no routed STA, `unrouted=0`, constraint
+pass, or bitstream evidence for this candidate.
+
+
+## 2026-11-01: Trusted input repair and application-profile audit
+
+The earlier trusted-input candidate was not functionally admissible: bypassing
+PARAM_BOUND also bypassed publication of shadow_valid. A new trusted-mode test
+failed on the empty mask before the fix. The mask is now published atomically
+at successful parameter KEY_SAVE; transport errors, cancellation, epoch and bank
+checks remain. The default 34-case input regression retains its cycle comparison
+against the frozen upstream reference. Trusted-mode scoreboards cover the same
+parameter/A/B/DW data, with only the approved content-invalid cases admitted.
+
+The old route at build/video/pds/20261101T031831_616772Z was cancelled because
+its source had that functional defect. Its partial route is not timing evidence.
+Also, ddrphy_sysclk is the actual 125 MHz CPU/NPU core clock, not an external-only
+PHY exception. Its negative setup slack must be resolved. Earlier Python runner
+unit tests and default-profile face-system compilation did not establish trusted
+board-profile frame correctness.
+
+The repaired trusted profile passed two complete zero/pattern frames in
+build/npu/board_heads2_20261101: 79 preflights and 79 real operations per frame,
+all 26,368 head bytes equal to the immutable golden data, no hardware POST,
+and no outstanding transaction debt. Source hashes are frozen in result.json.
+This is NPU/native-memory-proxy proof, not CPU/video, routed timing or board proof.
+Synthesis 20261101T033530_744971Z measured 45,615 LUTs (68.49%), 47,485 FF,
+72.5 DRM and 59 APM, with core setup estimate -2.580 ns.
+
+The vector transfer descriptor is now registered before boundary/tag validation.
+The 66,051-case boundary/CE/cancel test rejects the old same-cycle implementation
+and passes the registered implementation. Two-frame regression
+build/npu/board_heads_pipeline_20261101 preserves every head byte and transaction
+count; frame cycles increase from 16,826,075 / 16,809,495 to
+16,831,475 / 16,815,020 (about 0.033%, including proxy stall variation).
+The modelcycles diagnostic is zero in this trimmed profile and is not used for
+performance claims. Vector-path synthesis saved 78 LUTs but exposed a worse reset
+feedback path (-2.951 ns); it was not sent to routing.
+
+Internal input receipt accounting now uses the capacity predicate under the
+sequential reset branch, while public ready remains qualified by interface reset.
+The first stage passed both 34-case input suites and reduced synthesis to
+45,359 LUTs (68.11%), core estimate -1.888 ns. A further equivalent ready-path
+simplification is being checked; no routed timing closure has been established.
+
+The application audit found incorrect CPU head halfword strides and the wrong
+lookup-table column for width/height. The corrected CPU decoder reads packed
+16-bit heads, uses the already-stride-scaled exponential extent, retains subpixel
+coordinates until ROI clipping, and keeps the strongest 64 candidates before
+16-box NMS. It emits FP32 score bits using integer arithmetic. Independent host
+cases include three frozen empty heads, three scales, odd/even candidates,
+fractional boxes, a late strong candidate, overlap suppression and score cutoffs.
+The old driver produced false boxes on the zero fixture. The CPU decoder remains
+a bounded Q16/pixel-ROI implementation; this does not assert equivalence to the
+full upstream Q40/model-coordinate NMS for every possible scene.
+
+The face-system runner now has --board-profile, matching trusted input, CPU POST,
+two dense lanes, one quantizer lane, disabled preview/row cache, minimal BOX and
+the existing board CPU profile. Compile elaboration exposed a missing
+explicit display_box_only source, now included. Runtime exposed another integration
+mismatch: preview DMA is disabled but capture MMIO/software still require full
+preview counts (protocol error 0x0c). This must be fixed before board admission.
+The top-level CPU configuration has not been reduced in this batch.
+
+## 2026-11-01: CPU application, real boot assets and natural-face validation
+
+The preview capability and CPU-post MMIO completion format mismatches are fixed.
+`build/soc/face_system-20261101T042618_814181Z` passes the actual CPU application
+with zero input: 43,427,258 cycles, four capture requests, two NPU/CPU results,
+two display records/commits, one release/reuse and two complete pixel frames.
+This run preloaded model assets and did not demonstrate a positive face.
+
+The board target now enables the fixed-range model loader, receives UART on
+vendor-verified B24 and transmits ACKs on C24 at 115200 8N1. CPU application
+admission requires the model seal; TX remains available for final-packet retries.
+`build/soc/boot_uart-20261101T043614_136337Z` passes 265 UART checks and 1,966
+loader checks each with direct-byte and actual UART-wire transport. Full frozen
+assets pass six segments/6,916 packets through the real loader and shared DDR
+bridge in `build/soc/face_system-20261101T050522_122159Z`; all DDR bytes match
+before seal and the CPU then enters its first capture request. Memory remains
+a simulation storage proxy, not a physical DDR test.
+
+The host uploader `scripts/soc/upload_face_model.py` audits asset hashes without
+opening hardware unless `--port` is supplied. Its six host tests pass. Audit
+`build/soc/model_upload-20261101T050037_099881Z` covers 1,770,496 payload bytes;
+the 115200-baud minimum wire duration is 170.50 seconds. No serial upload or
+board download has occurred.
+
+A new independent natural-face fixture in `build/npu/face_fixture_20261101`
+uses the hash-recorded OpenCV 4.10 Lena sample and frozen integer reference.
+It predicts one face: candidate 902, ROI (349,215,166,257), FP32 score bits
+1063575960. The CPU host decoder matches that record. This is a new fixture,
+not a recovered historical WIDER case. The actual two-frame CPU/capture/NPU/
+display regression with full model boot is running in
+`build/soc/face_system-20261101T051349_433163Z`; first-frame HEAD/result/record
+checks have passed, but full completion is still pending at this update.
+
+Enabled-loader synthesis `build/video/pds/20261101T050627_702707Z` uses the
+actual application ELF: 46,945 LUT (70.49%), 50,130 FF and 73 DRM. Core setup
+estimate is -2.126 ns. The preceding `20261101T050242_884004Z` run failed on an
+unresolved internal UART pin constraint; the current constraint covers only
+the asynchronous RX pad, whose sole sink is the first synchronizer register.
+The worst current core path is NPU reset feedback through quantizer readiness
+to layer state, so CPU configuration is unchanged. No new route or timing
+closure is claimed.
+
+The standalone boot packet RAM helper passes 1,213 checks in
+`build/soc/boot_uart-20261101T051747_103925Z`. Independent synthesis
+`build/soc/boot_buffer_synth_20261101` maps it to 9 LUT, 132 FF and one DRM18K
+(0.5 DRM36K). Integration into the loader is pending the active frozen run.
+The narrowed AXI address predicate passes 2,359,296 known-bit comparisons,
+but the new X-address test correctly rejects the current implementation in
+`build/soc/arbiter_legal_x_red_20261101`; conservative unknown-bit rejection
+must be restored before final admission.
+
+## 2026-11-01: Positive-face full-system PASS and additional RAM conversion
+
+The complete natural-face run `build/soc/face_system-20261101T051349_433163Z`
+passed with unchanged frozen inputs and clean simulator diagnostics. It loaded
+all model assets through the real loader, checked captured RGB and preprocessed
+input bytes, checked both 26,368-byte NPU HEADs, checked the CPU face record,
+and checked two full 800x600 source-plus-box pixel frames. Final counters:
+47,572,058 cycles, captures=4, requests=4, results=2, records=2, commits=2,
+releases=1, reuses=1, cpu_reads=4,296, nativeAW=91,016, nativeAR=358,483.
+The expected positive box is (349,215,166,257). This is actual CPU/RTL/native
+storage-proxy evidence, not a physical HDMI/DDR/board demonstration.
+
+The boot packet block RAM is now integrated. Expanded UART/loader regression
+`build/soc/boot_uart-20261101T053425_647934Z` passes UART=265, buffer=1,213,
+and loader=2,066 checks in both direct and UART-wire modes, including parser
+timeout/framing recovery and irrevocable AW/W retirement after an RX error.
+`build/soc/face_system-20261101T053455_541912Z` passes full six-segment model
+admission in 7,755,382 cycles. Extra packing cycles occur only during boot;
+they are negligible beside the roughly 170.50-second UART wire-time minimum.
+
+The AXI narrowed-address predicate now rejects unknown middle address bits.
+`build/soc/arbiter_legal_x_green_20261101` passes 2,359,301 legality cases,
+two/three-master scoreboards and actual shared bridge/fabric checks. The failed
+X-bit regression remains preserved as the red case.
+
+Reset-independent private quantizer capacity now drives layer sequential
+accounting under its reset branch. Public quantizer handshakes remain qualified
+by reset. `build/npu/quant_capacity_main_green_20261101` compares the previous
+hash-checked implementation cycle by cycle: 40,000 checks for each one/two-lane
+profile, with CE, clear, reset, random data and long stalls. No arithmetic or
+transaction latency changed. The production import manifest retains upstream
+hashes and explicitly identifies these local derivatives.
+
+Combined boot-buffer/quantizer synthesis `build/video/pds/20261101T053455_594394Z`
+measures 46,305 LUT (69.53%), 48,210 FF, 73.5 DRM, and core setup estimate
+-1.827 ns. The remaining worst path passes from command acceptance into the
+NPU read-response qualification; this is not acceptable routed timing evidence.
+
+Two further optimizations are now applied and under combined revalidation:
+
+- The shared DDR bridge expected-write cache uses two synchronous half-word
+  block-RAM banks. The standalone same-fixture mapping drops from 3,739 LUT /
+  3,369 FF / 0 DRM to 874 LUT / 489 FF / 4 DRM. Both old and new versions pass
+  215 byte/fault scenarios in exactly 133,784,000 ps. Main-source evidence is
+  `build/video/bridge_storage_main_20261101`; mapped candidate evidence is
+  `build/video/bridge_storage_candidate_synth_20261101`. No transaction cycle
+  is added. Final board-level resource savings must come from the new synthesis.
+- The NPU block service keeps default same-command-cycle response support for
+  general users, but the actual SoC connection disables that bypass because
+  its AXI adapter registers read/completion responses. `registered_block_main_20261101`
+  passes 33 adapter checks and 86 block checks with unchanged transaction and
+  cycle counts; the adapter test also asserts no command-ready/response overlap.
+  `arbiter_bram_fabric_20261101` passes the shared-memory regression with the
+  new DDR bridge storage.
+
+The intermediate full-system run `face_system-20261101T053522_639068Z` was
+deliberately terminated at roughly 23 million cycles to combine these changes;
+its nonzero exit and `superseded.json` are retained, and it is not a PASS.
+The combined natural-image regression is `face_system-20261101T054415_775926Z`;
+the corresponding synthesis is `build/video/pds/20261101T054415_781459Z`.
+Both are pending at this update. CPU configuration and operating clock remain
+unchanged. No new route, bitstream or physical-board PASS is claimed.
+
+Read-only scan `build/video/jtag_scan/20261101T053649_452352Z` found no JTAG
+cable/PG2L100H; serial inventory showed no board USB serial port. The user
+confirmed that engineering and timing should finish first, with hardware
+connection later. Do not repeat hardware scans until that changes.
+
+The combined synthesis `build/video/pds/20261101T054415_781459Z` has now
+completed: 43,038 LUT (64.62%), 45,321 FF and 77.5 DRM (50%). This saves
+3,267 LUT and 2,889 FF relative to `20261101T053455_594394Z`, using four
+additional DRM. Core synthesis setup estimate is still -2.148 ns; the worst
+path is now CPU fetch-FIFO read pointer through instruction decode/issue into
+CSR exception state. These are synthesis estimates, not timing closure.
+
+An isolated evaluation enables the CPU's existing extra decode stage without
+changing cache, predictor, ISA, issue width or clocks. The main wrapper remains
+unchanged while the complete natural-image run is active. Candidate evidence:
+`build/cpu/decode_stage_eval_20261101/project/build/cpu/isa-20261101T055147745696Z`
+passes all 103 ISA programs; `squash-20261101T055147806360Z` and
+`cache-soc-irq-20261101T055334701600Z` pass wrong-path and cache/IRQ checks.
+Candidate synthesis `build/video/pds/cpu_decode_probe_20261101` is pending.
+These isolated results are not production CPU admission or a performance benchmark.
+
+The installed PDS can resume mapping and single-seed placement from synthesis
+ADF (`build/video/place_resume_smoke2_20261101`) and report timing from placed
+ADF (`build/video/place_timing_smoke_20261101`). This allows placement/path
+screening before committing to full routing. Placement timing is still an
+estimate; final acceptance requires actual routed setup/hold and other checks,
+zero unrouted nets, and separate physical-board acceptance.
+
+The combined natural-image run `face_system-20261101T054415_775926Z` now
+passes with unchanged inputs and zero simulator errors/warnings: 51,716,858
+cycles, captures=4, requests=4, results=2, records=2, commits=2, releases=1,
+reuses=1, full_pixel_frames=2, cpu_reads=4,296, nativeAW=91,476 and
+nativeAR=366,236. It covers the boot/bridge BRAM, quantizer capacity and
+registered-response optimizations together. It still uses the native DDR
+storage proxy, and the production CPU still has EXTRA_DECODE_STAGE=0.
+
+The isolated CPU extra-decode synthesis passes and verifies its input hashes:
+43,259 LUT (64.95%), 45,434 FF, 77.5 DRM and 59 APM. Core setup estimate is
+-2.088 ns; the leading path moved to video capture job-clear/control followed
+by the source-coordinate carry chain. The extra stage alone does not close
+timing. Single-seed performance placement `cpu_decode_place3_20261101`
+completes in 434.6 seconds including mapping, but its final optimizer worst
+slack is -4.502 ns. No routing was launched.
+
+Important PDS qualification: the independent `report_timing` command accepts
+a placed ADF, but reports zero delay for unrouted interconnect. The resulting
+positive core number is not a usable placement-delay estimate or timing PASS.
+Also, adding FDC beside that command did not replace constraints embedded in
+the ADF. The baseline and CDC report experiments under `cpu_decode_place3_20261101`
+must not be used as closure evidence. Fresh synthesis from compiled ADF does
+apply updated FDC, independently checked with `resynth_constraint_smoke_20261101`.
+
+Two isolated follow-ups are pending: `capture_sum_probe_20261101` preserves
+independent coordinate increment carry chains without adding state or cycles;
+`face_cdc_probe_20261101` audits the existing display mailbox, ingress Gray
+pointer and RX telemetry protocols with explicit per-endpoint constraints.
+No clock-group cut or same-domain CPU/NPU timing exception has been added.
+The live source remains frozen during each run; adoption awaits measured
+benefit and corresponding functional evidence.
+
+
+### 2026-11-01 production adoption and board constraint review
+
+The earlier pending statuses above are superseded as follows. Production
+`triha_core.v` now enables the CPU's existing `EXTRA_DECODE_STAGE=1`, with
+no change to its other feature parameters or clock. Admission validates all
+89 files. Production ISA `isa-20261101T061512235475Z` passes all 103 programs;
+`cache-soc-irq-20261101T061512240765Z` and
+`squash-20261101T061512253326Z` also pass. These are functional tests, not
+CoreMark results.
+
+Production capture now preserves separate 32-bit x/y increment carry wires.
+`build/video/capture_sum_miter_20261101` passes 20 scenarios, comparing all
+38 public outputs cycle by cycle, including three consecutive 800x600 frames.
+The +2 mutation is detected. No state or latency was added; source hashes
+remain unchanged during the test. Its isolated synthesis is 43,304 LUT
+(65.02%), 45,436 FF and 77.5 DRM, with core estimate -1.884 ns.
+
+The new combined production natural-image run is
+`build/soc/face_system-20261101T062158_690425Z`; it is still running at this
+update. Do not substitute the older extra-decode=0 system PASS for this run.
+
+Board CDC constraints now explicitly bound display mailboxes, ingress Gray
+pointers and RX telemetry. Gray source regular expressions exclude the
+synchronizer destination registers. Candidate `face_cdc_probe2_20261101`
+has zero constraint errors. The DDR clock definitions are restored from the
+hash-locked generated IP, preserving its divide-edge phase, cross-clock
+uncertainty and multicycle requirements; the core remains 125 MHz with
+0.2 ns setup margin. No generic vendor board pin file is imported.
+`face_timing_contract2_20261101` synthesizes at 43,524 LUT (65.35%), 45,484 FF,
+77.5 DRM; core setup estimate is -1.796 ns, not closure.
+
+PDS `report_place_timing` exists, but its report is an internal binary table,
+not the text timing signoff used by the build runner. `generate_constraint`
+requires both placed and device-map databases. The correctly exported PCF
+confirms the old placement did NOT honor the two vendor gate FF sites.
+The main project now includes explicit CDC FDC plus gate-site PCF and route
+priority RCF. Mapped-instance site validation is still pending. Source-bound
+production synthesis with real ELF is `build/video/pds/20261101T063504_655125Z`.
+
+`build/video/face_reset_audit_20261101` independently flattens the candidate
+netlist (331 modules, 90,762 primitives): the startup/free-release sources
+reach exactly 47 clear and one preset core-domain pins and zero core data/CE
+pins, with zero alias-width or unknown-output errors. Exact synthesized
+vendor phase logic passes the 26-functional-register reset hold check;
+the exact reset controller retains the guarded PLL release at edge 202.
+These support a narrow startup-protocol exception, not analog reset signoff.
+The final source-bound netlist must be rechecked before adopting that exception.
+
+No complete route or board PASS is claimed. The user requested engineering
+and timing first and will connect the board later; hardware scanning remains
+paused.
+
+
+The production combined regression `face_system-20261101T062158_690425Z`
+now PASSES: two natural-image HEAD comparisons, two actual CPU records,
+two full display frames, commit/release/reuse, 51,716,858 cycles, zero
+simulator errors/warnings and unchanged input hashes. Total cycles equal
+the preceding extra-decode=0 version in this frame-paced test; this is not
+a general CPU performance benchmark. Source-bound synthesis `063504`
+passes with 43,524 LUT (65.35%), 45,484 FF, 77.5 DRM and 59 APM. The current
+production netlist independently confirms exactly 48 startup-source C/P
+sinks and no core data/CE sinks. The narrow source-qualified exception has
+therefore been adopted. One seed-4 performance placement is running in
+`build/video/pds/face_contract_place_20261101`; no full route is started.
+Evidence index: `docs/verification/npu/2026-11-01-face-timing-progress.json`.
+
+
+A further PDS report-location clarification: `report_place_timing` writes
+both the explicitly requested binary `.rpt` and a text `.rtr` beside the
+input placed ADF. The latter was found at
+`cpu_decode_place3_20261101/place_route/triha_face_board_top.rtr`, timestamp
+14:25:46 matching the `report_place_timing` invocation. It contains nonzero
+estimated data-net delays and reports core-to-core setup -1.990 ns; the old
+worst cross-domain paths are separately covered by the new CDC/reset review.
+This is a usable placement estimate, still not routed signoff. The earlier
+standalone `report_timing` zero-wire reports remain invalid for this purpose.
+The fresh production phase/reset-controller netlists also pass both protocol
+checks in `face_reset_audit_20261101/production`.
+
+
+The first `face_contract_place_20261101` placement was stopped when its live
+log showed PDS dev_map had OVERWRITTEN the input PCF, deleting the two gate
+sites. Its receipt remains FAIL/inputs_unchanged=false. The overwritten file
+was preserved, and the exact original main PCF restored from its verified
+snapshot. Synthesis and mapping were retained; no full route was started.
+
+`face_contract_place2_20261101` resumes that immutable mapped database with
+a combined post-map PCF. Its placer explicitly accepts both gate sites.
+Final placement export must still verify them. The formal builder now uses
+`post_map_constraints`: dev_map emits the generated pin map, Python merges
+it with immutable custom sites, then PNR starts from the mapped database.
+Three tests pass (pin/source preservation, missing pin-map rejection and
+duplicate-site rejection); real-PCF replay matches the live placement's
+140 ports and three primitive-site commands. Firmware tests also pass.
+The full route/bitstream builder with this new orchestration remains unrun.
+
+
+The corrected seed-4 placement completes in 559.5 seconds with unchanged
+inputs. Both DDR gate sites are verified by exporting the placed primitive
+locations. Final optimizer WNS is -0.988 ns. The text placement timing report
+has core slow setup -1.119 ns (535 failing endpoints), fast setup +0.051 ns,
+core slow hold +0.023 ns, recovery +1.072 ns and removal +0.443 ns. PHY/core
+hold still has small negative paths (worst fast hold -0.270 ns). No routed
+signoff or route launch is claimed. The leading slow path is now NPU vector
+`op[172]` to `io_address[31]`, not CPU or reset startup.
+
+An isolated candidate associates vector transpose addressing as parallel
+chunk-base and channel-offset calculations followed by one final add. It
+adds no state or cycles. `vector_address_green_20261101` passes 66,051 transfer
+cases and 8,192 address/CE/wrap cases with zero warnings; the +1 mutation is
+detected in `vector_address_red_20261101`. Main RTL is not yet changed.
+Resource/timing evaluation runs in `build/video/pds/vector_address_probe_20261101`.
+The first two baseline address runs failed due to test-runner sequencing and
+missing explicit unused output connections; `vector_address_baseline3_20261101`
+is the clean baseline PASS. Failed receipts are retained.
+
+
+Vector-address candidate synthesis finishes with unchanged inputs and no tool
+errors: 43,503 LUT (65.32%), 45,485 FF, 77.5 DRM and 59 APM. The core synthesis
+estimate is -2.033 ns, worse than baseline on a different input-gather path;
+this is not a proven timing improvement. Main vector RTL remains unchanged.
+One seed-4 performance placement runs in `vector_address_place_20261101`,
+reusing the synthesized ADF and the verified post-map PCF merge. No route starts.
+`place_frozen_face_20261101.py` records immutable input hashes at map/place
+boundaries. Three physical-merge and four firmware tests pass using their
+standalone script entry points (package-style unittest invocation does not
+resolve their local imports and is not a passing test).
+
+`FINAL_APPLICATION.md` now documents the board-profile boot/natural-image
+regression and the later UART model upload. It explicitly records the existing
+MINIMAL_CONTROL_CPU=1 board profile rather than claiming a full CPU performance
+configuration. No further CPU feature reduction is made in this batch.
+
+
+The vector-address placement completes with immutable inputs and both gate sites
+verified. Its full placement estimate is core slow setup -0.924 ns / 380 failing
+endpoints (baseline -1.119 ns / 535), fast setup +0.263 ns, core slow hold +0.120 ns,
+slow recovery +1.496 ns and removal +0.443 ns. Worst PHY/core fast hold is -0.360 ns.
+The optimizer's -0.678 ns value is not the full report WNS. No route starts.
+The no-extra-cycle vector change is adopted byte-for-byte; the admission manifest
+retains the actual upstream blob/source hash and new local blob identity.
+Production 66,051 transfer + 8,192 address tests pass. New whole-system natural
+image revalidation is running in `face_system-20261101T073150_408427Z`; the previous
+062158 PASS does not cover the new source bytes.
+
+The next measured paths are graph TASK_PAIR region-selection/end-comparison and
+gather row-presence/address-bound checking. An isolated graph candidate adds one
+admission cycle per region pair (15 per frame) and passes 1,024 independent
+64-bit region/overlap cases plus 80 cancellation placements; removing overlap
+checking is detected by the negative control. Synthesis is running in
+`graph_pair_probe_20261101`. A separate gather candidate removes the late dummy
+lookup from the address-check carry, preserving public addresses and all cycles;
+50,000 random internal-state/public-output comparisons pass and a disabled range
+check mutation is detected. Neither candidate is adopted yet.
+
+
+Standalone gather mapping compares the exact old/new candidates with no I/O
+insertion: 1,991 -> 2,015 LUT, unchanged 777 FF, setup estimate -0.265 -> +0.622 ns.
+The board path report confirms the late row-present mux formerly fed first_word,
+then three carry stages, then completion CE. The candidate separates that lookup
+from address checking. Combined graph+gather board synthesis is running in
+`control_paths_probe_20261101`; no additional placement or route has started.
+
+
+Adopted-vector full natural-face boot regression `073150_408427Z` PASSES with
+unchanged inputs, 51,716,858 cycles, two real HEAD comparisons/CPU results/full
+pixel frames and slot release/reuse; zero ModelSim errors/warnings. All metrics
+match the preceding production baseline. This remains a native DDR proxy test.
+The gather candidate's full 34-case input scoreboard also passes with every
+metric matching `reset_receipt_trusted_20261101`, including 694,490 cycles.
+The first gather-scoreboard attempt failed before simulation because the default
+Python lacked onnx; the rerun used the existing upstream Windows venv.
+
+Combined graph+gather synthesis passes at 43,460 LUT (65.26%), 45,569 FF, 77.5 DRM,
+59 APM and -1.847 ns core setup estimate. Reset fanout and the exact vendor phase
+protocol are rechecked successfully. One seed-4 placement completed in
+`control_paths_place_20261101`: slow setup -1.067 ns / 402 failing endpoints,
+worse than the vector-only baseline. This combination is rejected. A route
+resume helper is prepared, but has not been invoked and does not certify STA.
+Board defaults were checked explicitly: MINIMAL_CONTROL_CPU=1, CACHE_ENABLE=0,
+M_LANES=2 and QUANTIZER_LANES=1. Documentation now states these accurately;
+no additional CPU configuration reduction is made by this batch.
+
+## 2026-11-01 控制路径组合放置结果更新
+
+此前“PLACEMENT_RUNNING”已结束：组合候选实际 slow setup 为 -1.067 ns、402 个失败端点，比已采用向量版 -0.924 ns 更差，因此淘汰，未启动 route。固定布局入口证明已通过：三槽共 1056 次非法字段变异均被拒绝，任务快照保持不变。下一轮仅在此入口之后复用检查，并提前计算向量控制信息。按用户安排，先完成工程与时序，暂不扫描或连接板卡。
+
+固定布局/向量元数据候选 `layout_metadata_candidate_20261101` 的整机自然图回归通过：两帧真实 HEAD、CPU 框、逐像素显示和槽位复用均通过，51,716,858 周期与生产基线一致，零仿真错误/警告。综合为 43,501 LUT / 45,518 FF / 77.5 DRM / 59 APM，输入及固件内容已核对。但实际放置为 -1.245 ns、1,231 个失败端点，差于生产基线，因此不合入、不布线。
+
+新瓶颈已定位到层操作码→高扇出输入使能，以及状态/有效位→宽量化数据选择→偏置加法。`control_decode_candidate_20261101` 在原 START 边沿预译码操作类型，并移除宽数据上的无效周期清零门控；有效位、标签和错误检查不变。8,416 个独立场景通过，错误使能和错误数据选择负对照均检出。当前综合及完整 boot 回归已启动，生产仍保持已验收的向量地址版；未新增 route 或板卡访问。
+
+## 2026-11-01 控制重构已采用，继续拆分真实关键路径
+
+主工程已采用 control_decode（七个 RTL 的采用前备份及新旧哈希见
+`build/npu/control_decode_adoption_20261101/result.json`）。完整模型加载、真实
+CPU/NPU 两帧 HEAD/人脸框及逐像素显示通过，51,716,858 周期与基线相同，
+ModelSim 零错误/零警告；采用后组件回归通过。整机证据为
+`build/soc/face_system-20261101T084921_612281Z`，采用脚本核对编译字节一致。
+
+综合 43,457 LUT（65.25%）、45,519 FF、77.5 DRM、59 APM。seed 4 放置
+慢角 setup -0.603 ns / 69 失败端点 / TNS -12.379 ns，相比前生产
+-0.924 ns / 380 / -128.017 ns 显著改善，仅少 46 LUT。快角 setup +0.758 ns；
+PHY/core 最差 hold slow -0.211 ns、fast -0.255 ns，尚待布线修复。
+gate sites、冻结输入与复位协议/网表扇出均验证通过。
+
+未启动完整 route，时序未闭合，无新位流或板测。下一步拆分 graph 的
+64 位累加→溢出/尺寸比较→状态控制路径，并评估 input transfer 末尾的
+重复加法/比较前移；保持 CPU、125 MHz、额外 0.2 ns setup margin 不变。
+
+## 2026-11-01 关键路径拆分候选：整机通过，启动单次布线
+
+隔离 stage_split 候选将 graph 最终乘加结果先写入原累加寄存器，再做溢出及
+尺寸检查，保留数学检查和错误码；在原 input PLAN 提前保存下一偏移及结束标志，
+保留 32 位比较语义和传输周期。CPU 配置、时钟约束不变。
+
+512 组乘积/错误检查、5 类新状态退出、4,096 组 burst 规划边界及负对照通过。
+输入默认模式 34 场景/46 公开输出逐周期对照通过，信任模式 34 场景也通过。
+完整自然图/模型加载/CPU 人脸框/逐像素显示两帧通过：
+`build/soc/face_system-20261101T092149_415619Z`，零错误/警告，所有事务计数及
+总周期 51,716,858 与基线一致。尺寸检查理论上每帧多 632 个使能周期，但该
+受视频帧节奏控制的完整测试总周期未增加，不据此推导通用 FPS。
+
+综合 43,503 LUT / 45,555 FF / 77.5 DRM / 59 APM，相对生产多 46 LUT / 36 FF。
+seed 4 放置慢角 setup -0.440 ns（原 -0.603），TNS -8.557 ns（原 -12.379），
+89 失败端点（原 69）；快角 setup +0.576 ns。core hold slow +0.023 ns，
+全 clock-pair hold slow -0.226 ns / fast -0.270 ns；复位检查通过。
+原 graph 乘加检查和 input transfer 完成链退出最差路径，当前首要路径是
+gather pad_left 到 k_ci CE，其次量化器 collected 到 dense CE。
+
+`stage_split_place_20261101` gate sites/输入核对通过；现复用该放置结果在
+`stage_split_route_20261101` 做单次完整布线和 hold 修复。生产仍为 control_decode，
+候选尚未采用。时序尚未闭合，无新位流/板测。
+
+长布线跟进：当前线程已创建每 5 分钟 heartbeat `automation-5`（人脸框工程时序收敛跟进），
+检查现有 stage_split_route，正常运行且无可行动变化时保持静默；结束后继续核对
+全部物理时序并按实际路径推进。不得重复启动当前运行。生产与候选、仿真与物理
+结论仍按上述记录区分；用户暂不接板。工具会话 37156 仍在运行。
+
+## 2026-11-01 SoC 分支源码检查点
+
+用户要求将当前工程推送 GitHub，并新建 SoC 分支。本检查点分支为
+`soc/face-box-integration`，远端为 `wan-yuanxing/TriHaRiscv-v3`。
+生产源码保持 control_decode；正在布线的两份 stage_split 覆盖源码以完全相同
+字节存入 `experiments/npu/stage_split_20261101/`，附哈希、验证摘要和显式测试入口，
+未加入生产 filelist，未宣称时序闭合或上板成功。构建产物仍保存在忽略的 build/。
+
+推送前 CPU 89 文件及 B03 41 文件源码准入通过，SoC/Video/采集配置生成检查通过；
+6 项帧配置、19 项 B03 导入器、3 项物理约束测试通过，归档候选的乘加与输入规划
+组件仿真均通过。Git 暂存字节额外核对 CPU/NPU/上游测试及候选清单；补充上游
+测试与模型清单的换行保护，防止重新克隆后破坏已冻结 SHA。保留已准入源码的
+原始空白格式。独立技术报告备份不随本提交发布。现有布线和自动跟进继续运行。

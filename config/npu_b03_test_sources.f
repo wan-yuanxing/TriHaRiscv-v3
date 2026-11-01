@@ -1,0 +1,14 @@
+tb/npu/upstream/b03/Testbench/platform/tb_b03_full_frame_payload.sv
+tb/npu/upstream/b03/Testbench/platform/tb_b03_payload_ack_reset.sv
+tb/npu/upstream/b03/Testbench/platform/tb_b03_payload_lifetime.sv
+tb/npu/upstream/b03/rtl/platform/async_fifo256_probe.v
+tb/npu/upstream/b03/rtl/platform/cdc_payload_mailbox.v
+tb/npu/upstream/b03/rtl/platform/native_rx_reserver.v
+tb/npu/upstream/b03/rtl/platform/native_tx_writer.v
+tb/npu/upstream/b03/rtl/platform/npu_mem_bridge_burst.v
+tb/npu/upstream/b03/rtl/platform/npu_read_bridge_burst.v
+tb/npu/upstream/b03/rtl/platform/npu_session_mem_bridge_burst.v
+tb/npu/upstream/b03/rtl/platform/npu_session_supervisor.v
+tb/npu/upstream/b03/rtl/platform/npu_write_bridge_burst.v
+tb/npu/upstream/b03/rtl/platform/session_fault_endpoint.v
+tb/npu/upstream/b03/rtl/platform/tx_packet_collector_burst.v

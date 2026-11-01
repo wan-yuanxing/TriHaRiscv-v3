@@ -1,0 +1,24 @@
+{
+  "url": "https://github.com/ultraembedded/biriscv",
+  "revision": "6af9c4be5a0807d368eaad5e49af52322e31d073",
+  "license": "Apache-2.0",
+  "files": {
+    "cache/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "src/dcache/dcache_core.v": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+    "src/dcache/dcache_core_data_ram.v": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+    "src/dcache/dcache_core_tag_ram.v": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+    "src/icache/icache.v": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+    "src/icache/icache_data_ram.v": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+    "src/icache/icache_tag_ram.v": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389"
+  },
+  "git_blobs": {
+    "cache/LICENSE": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+    "src/dcache/dcache_core.v": "61cde13e55aed42141cb05bc07b4ee40d8b8890d",
+    "src/dcache/dcache_core_data_ram.v": "c7d1294b19e806a6660a427d0156f2d528d5e173",
+    "src/dcache/dcache_core_tag_ram.v": "aec0ff378e7c8606b1da7269713c43aae3cd0b8a",
+    "src/icache/icache.v": "2e8201d9b87971e46e66bb22e7e4b7fc48f0f64d",
+    "src/icache/icache_data_ram.v": "afac0b6da5ea811b583ad480c451745f6465efbf",
+    "src/icache/icache_tag_ram.v": "c2cd252d9891f48f22602a68d53c846a75ad85d6"
+  },
+  "modifications": "none; core UPSTREAM.json and its 28 files preserved"
+}

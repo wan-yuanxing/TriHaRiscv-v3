@@ -1,0 +1,90 @@
+{
+  "status": "PASS_CONTROL_ONLY",
+  "source_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "suite": "control",
+  "simulator": "D:\\modeltech64_2020.4\\win64\\vsim.EXE",
+  "simulator_version": "Model Technology ModelSim SE-64 vsim 2020.4 Simulator 2020.10 Oct 13 2020",
+  "board_verified": false,
+  "actual_HMIC": false,
+  "physical_DDR_verified": false,
+  "production_release": false,
+  "host_seconds": 5.723467200004961,
+  "header_sha256": "4c7c1cc72be5ef72a49bfce0fd9f99b133899fcbf89ca4d03a3f6f781cc91fcb",
+  "leaf_completions_injected": true,
+  "actual_full_79op_MODEL_POST": false,
+  "scope": "Actual payload parent lifetime/ACK RTL; successful graph and POST leaf completions injected.",
+  "simulations": [
+    {
+      "top": "tb_b03_payload_lifetime",
+      "host_seconds": 2.8752891999902204,
+      "simulation_exit_code": 0,
+      "diagnostics": {
+        "console.log": {
+          "diagnostics": [],
+          "summaries": [
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ]
+          ]
+        },
+        "transcript.log": {
+          "diagnostics": [],
+          "summaries": [
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ]
+          ]
+        }
+      },
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\b03_frame_control_20261030\\tb_b03_payload_lifetime",
+      "vcd_sha256": "131612025d16b1ca8739349ac78e7bcfeca01cb8c83007e833f8a098d5314b5d"
+    },
+    {
+      "top": "tb_b03_payload_ack_reset",
+      "host_seconds": 2.848178000014741,
+      "simulation_exit_code": 0,
+      "diagnostics": {
+        "console.log": {
+          "diagnostics": [],
+          "summaries": [
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ]
+          ]
+        },
+        "transcript.log": {
+          "diagnostics": [],
+          "summaries": [
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ]
+          ]
+        }
+      },
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\npu\\b03_frame_control_20261030\\tb_b03_payload_ack_reset",
+      "vcd_sha256": "be4ea3e12c4434c251523e5316b78084b5e5dfda1e90360e28ef0484dee524fa"
+    }
+  ],
+  "evidence_root": "build/npu/b03_frame_control_20261030",
+  "runner_unit_tests_passed": 11
+}

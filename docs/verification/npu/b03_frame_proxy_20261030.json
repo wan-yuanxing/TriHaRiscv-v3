@@ -1,0 +1,122 @@
+{
+  "status": "PASS_TWO_FRAME_NATIVE_PROXY",
+  "source_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "suite": "frames",
+  "simulator": "D:\\modeltech64_2020.4\\win64\\vsim.EXE",
+  "simulator_version": "Model Technology ModelSim SE-64 vsim 2020.4 Simulator 2020.10 Oct 13 2020",
+  "host_seconds": 478.71188399998937,
+  "frames": [
+    {
+      "case": "zero",
+      "metrics": {
+        "frame": 0,
+        "ops": 79,
+        "preflights": 79,
+        "faces": 0,
+        "headbytes": 26368,
+        "recordbytes": 0,
+        "framecycles": 9578629,
+        "modelcycles": 9063082,
+        "postcycles": 4632,
+        "hostcommands": 7965,
+        "hostW": 63280,
+        "hostR": 64108,
+        "checkeduploadbytes": 2024960,
+        "globalcommands": 127181,
+        "globaldones": 127181,
+        "modelcommands": 115208,
+        "postcommands": 52,
+        "tableCRCcommands": 3072,
+        "nativeAR": 102963,
+        "nativeAW": 24218,
+        "nativeR": 524077,
+        "nativeW": 206764,
+        "CE0reads": 8780,
+        "CE0dones": 3275,
+        "headCRC": 297000254,
+        "recordsCRC": 0
+      },
+      "independent_output_check": {
+        "faces": 0,
+        "records_bytes": 0,
+        "header_crc32": 2130059077,
+        "records_crc32": 0,
+        "head_sha256": "4ea319be976dd86456626cdff48939e871c6d4184d2b25c06700d4a75f750877",
+        "result_sha256": "72afc8b9dbed2000e3c2d6cdaa5c0aabd96fda5a3d965497421fecc6e629e93a"
+      }
+    },
+    {
+      "case": "pattern",
+      "metrics": {
+        "frame": 1,
+        "ops": 79,
+        "preflights": 79,
+        "faces": 0,
+        "headbytes": 26368,
+        "recordbytes": 0,
+        "framecycles": 9051521,
+        "modelcycles": 9046798,
+        "postcycles": 4635,
+        "hostcommands": 9218,
+        "hostW": 72880,
+        "hostR": 74536,
+        "checkeduploadbytes": 2332160,
+        "globalcommands": 240709,
+        "globaldones": 240709,
+        "modelcommands": 111623,
+        "postcommands": 52,
+        "tableCRCcommands": 0,
+        "nativeAR": 195629,
+        "nativeAW": 45080,
+        "nativeR": 891129,
+        "nativeW": 359848,
+        "CE0reads": 16865,
+        "CE0dones": 6592,
+        "headCRC": 2454873529,
+        "recordsCRC": 0
+      },
+      "independent_output_check": {
+        "faces": 0,
+        "records_bytes": 0,
+        "header_crc32": 2268701576,
+        "records_crc32": 0,
+        "head_sha256": "c0cfd0d37e0d685c6c855358edbdc5483c583a4d80fb464f2f1d3db175f9cee8",
+        "result_sha256": "6561e78801cc627547880229f1befac79158a0ad0e00cb90ff04d35f55df3cf4"
+      }
+    }
+  ],
+  "scope": "Actual 79-op MODEL plus FPGA POST and CDC/native bridge; native memory is byte proxy; not shared DDR/board.",
+  "actual_full_79op_MODEL_POST": true,
+  "leaf_completions_injected": false,
+  "actual_CDC_session_bridge": true,
+  "native_byte_memory_proxy": true,
+  "actual_HMIC": false,
+  "physical_DDR_verified": false,
+  "board_verified": false,
+  "production_release": false,
+  "evidence_root": "build/npu/b03_frame_proxy_zero_pattern_20261030",
+  "service_regression": {
+    "status": "PASS_RTL_SERVICE_SCOREBOARD",
+    "host_seconds": 0.09246150002581999,
+    "metrics": {
+      "checks": 33,
+      "AW": 20,
+      "B": 20,
+      "AR": 19,
+      "WbeforeAW": 16,
+      "AWbeforeW": 15,
+      "splits": 4
+    },
+    "sources_sha256": {
+      "rtl/soc/npu_service_axi128.v": "28aa34fb7080dae4d0d33e8429f3bc32265ff8a78ff57050fb08670371381ed8",
+      "tb/soc/tb_npu_service_axi128.sv": "1c88ad1106f248e55a33fa65e61aeab6f108a0ea07f7323efb458285f34ac49d",
+      "scripts/soc/run_npu_service.py": "4e4305619ef7ad2962705c88e46cc7ecd407d889679f0925173286c9aea6bb21"
+    },
+    "tools_sha256": {
+      "D:\\iverilog\\bin\\iverilog.EXE": "803b8844af2cc8ed70b5f08b07ffa749901280e81339617ca3e72cbbb852bd2b",
+      "D:\\iverilog\\bin\\vvp.EXE": "e2f442f4d5aa76e55c85c3ff77e4446fbfdb9946b7cfe8a2dff87f275da17b62"
+    },
+    "scope": "RTL byte scoreboard and protocol injection; no physical DDR, timing or board proof.",
+    "board_verified": false
+  }
+}

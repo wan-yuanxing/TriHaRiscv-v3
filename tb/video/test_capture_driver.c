@@ -109,6 +109,16 @@ int main(int argc,char **argv) {
         }
         CHECK(video_capture_validate_completion(&bad,&a)!=0,"CORRUPT_COMPLETE");}
     e.completed.identity.id.generation^=1;CHECK(video_capture_validate_completion(&e,&a)==VIDEO_CAPTURE_PROTOCOL,"STALE_GENERATION");
+    /* Optional ABI2 capability bit 6 declares that preview writes are omitted. */
+    reset();event(&a);regs[VCAP_REG_CAPABILITIES/4]|=64u;
+    regs[VCAP_REG_COMPLETED_PREVIEW_PIXELS/4]=0;regs[VCAP_REG_COMPLETED_PREVIEW_BYTES/4]=0;
+    regs[VCAP_REG_COMPLETED_PREVIEW_CRC/4]=0;
+    CHECK(video_capture_read_events(&io,&e)==0,"BOX_ONLY_EVENTS");
+    CHECK(video_capture_validate_completion(&e,&a)==0,"BOX_ONLY_COMPLETION");
+    e.completed.raw_bytes--;CHECK(video_capture_validate_completion(&e,&a)==VIDEO_CAPTURE_PROTOCOL,"BOX_ONLY_RAW_STILL_CHECKED");
+    reset();event(&a);regs[VCAP_REG_COMPLETED_PREVIEW_PIXELS/4]=0;regs[VCAP_REG_COMPLETED_PREVIEW_BYTES/4]=0;
+    CHECK(video_capture_read_events(&io,&e)==0,"FULL_PROFILE_MISSING_PREVIEW_READ");
+    CHECK(video_capture_validate_completion(&e,&a)==VIDEO_CAPTURE_PROTOCOL,"MISSING_PREVIEW_WITHOUT_CAPABILITY");
     reset();regs[VCAP_REG_VERSION/4]=0x10000;CHECK(video_capture_submit(&io,&a)==VIDEO_CAPTURE_VERSION,"OLD_ABI");
     reset();regs[VCAP_REG_STATUS/4]|=2;CHECK(video_capture_submit(&io,&a)==VIDEO_CAPTURE_BUSY,"SLOT_BUSY");
     reset();a.raw_base++;CHECK(video_capture_submit(&io,&a)==VIDEO_CAPTURE_INVALID,"BAD_BASE");a=allocation(0,1);

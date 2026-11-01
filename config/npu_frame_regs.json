@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "base": 536870912,
+  "region_bytes": 4096,
+  "id_version": 1313210369,
+  "caps": 7,
+  "registers": [
+    {
+      "name": "ID_VERSION",
+      "offset": 0,
+      "access": "RO"
+    },
+    {
+      "name": "CAPS",
+      "offset": 4,
+      "access": "RO"
+    },
+    {
+      "name": "CONTROL",
+      "offset": 8,
+      "access": "WO"
+    },
+    {
+      "name": "STATUS",
+      "offset": 12,
+      "access": "RO"
+    },
+    {
+      "name": "IRQ_STATUS",
+      "offset": 16,
+      "access": "W1C"
+    },
+    {
+      "name": "IRQ_ENABLE",
+      "offset": 20,
+      "access": "RW"
+    },
+    {
+      "name": "FAULT",
+      "offset": 24,
+      "access": "RO"
+    },
+    {
+      "name": "SESSION_EPOCH",
+      "offset": 28,
+      "access": "RO"
+    },
+    {
+      "name": "ACK_CMD",
+      "offset": 32,
+      "access": "RW"
+    },
+    {
+      "name": "ACK_FRAME",
+      "offset": 36,
+      "access": "RW"
+    },
+    {
+      "name": "ACK_EPOCH",
+      "offset": 40,
+      "access": "RW"
+    },
+    {
+      "name": "ACK",
+      "offset": 44,
+      "access": "WO"
+    }
+  ],
+  "task_base": 256,
+  "task_words": 32,
+  "completion_base": 512,
+  "completion_words": 20,
+  "control_start": 1,
+  "status": {
+    "IDLE": 1,
+    "BUSY": 2,
+    "HELD": 4,
+    "FAULT": 8
+  },
+  "interrupts": {
+    "DONE": 1,
+    "ERROR": 2
+  },
+  "completion_fields": [
+    "STATUS",
+    "DETAIL",
+    "CMD_ID",
+    "FRAME_ID_LO",
+    "FRAME_ID_HI",
+    "EPOCH",
+    "FACES",
+    "RESULT_OFFSET",
+    "RESULT_BYTES",
+    "CRC",
+    "TOTAL_LO",
+    "TOTAL_HI",
+    "MODEL_LO",
+    "MODEL_HI",
+    "POST_LO",
+    "POST_HI",
+    "LIVE",
+    "PUBLISHED",
+    "RESERVED0",
+    "RESERVED1"
+  ]
+}

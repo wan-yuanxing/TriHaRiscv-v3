@@ -66,6 +66,9 @@ int video_frame_pool_graph_begin(struct video_frame_pool *, uint32_t npu_idle, s
 int video_frame_pool_operator_begin(struct video_frame_pool *, const struct video_frame_token *, uint32_t op_tag);
 int video_frame_pool_operator_done(struct video_frame_pool *, const struct video_frame_token *, uint32_t op_tag, uint32_t last, uint32_t success);
 int video_frame_pool_result_ready(struct video_frame_pool *, const struct video_frame_token *, uint32_t workspace_released);
+/* Whole-frame NPU path: only after collect validated the published result and
+ * hardware ACK proved the shared workspace idle. Never mix with operator tickets. */
+int video_frame_pool_frame_done(struct video_frame_pool *, const struct video_frame_token *, uint32_t result_valid, uint32_t workspace_released);
 int video_frame_pool_drop(struct video_frame_pool *, const struct video_frame_token *, uint32_t reason);
 int video_frame_pool_present(struct video_frame_pool *, const struct video_display_io *, const struct video_display_record *, uint32_t mode, uint32_t seq, uint32_t mode_only);
 int video_frame_pool_poll_display(struct video_frame_pool *, const struct video_display_io *);

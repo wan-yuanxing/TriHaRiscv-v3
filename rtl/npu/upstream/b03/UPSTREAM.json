@@ -1,0 +1,456 @@
+{
+  "destination": "rtl/npu/upstream/b03",
+  "excluded": [
+    "board/UART/PLL/HMIC top",
+    "exclusive native session bridge",
+    "other optimization candidates"
+  ],
+  "external_modules": [
+    "GTP_APM_E2",
+    "GTP_DRM18K_E1",
+    "GTP_LUT1",
+    "GTP_RAM32X1DP"
+  ],
+  "files": [
+    {
+      "bytes": 10404,
+      "git_blob": "d7927d4f3d9ae47e47dc3a7bd4bdcee4fedc2cb2",
+      "path": "rtl/platform/b03_array_apmacc_rowctrl.v",
+      "sha256": "89ebe11bb255196ef842402018de68301436a7658efc4b747e7a92866ae99da5",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "77af4926e38f0ae5a826dd23a186e0b68f6e4d97",
+      "upstream_sha256": "be6252f351efa5bb483e4d050cf0c0c959506c9ff62d6d349d7e821181235123"
+    },
+    {
+      "bytes": 3399,
+      "git_blob": "beaccdb3643cd2a154dd4e7a18ec00a991fd6308",
+      "path": "rtl/platform/b03_bank_array.v",
+      "sha256": "667f7fe9e2170c3857ea8cebe080110a03e81e0f0aed0f83ceeb8b57102724ef"
+    },
+    {
+      "bytes": 1991,
+      "git_blob": "3ea702d791aacd581ced1bd57cd661f4c6c0dac9",
+      "path": "rtl/platform/b03_bank_array_payload.v",
+      "sha256": "28a1c24295a7692b0c427a55c2bdc0ce309ab5dccf9471cc1cc696a6e60a0e17"
+    },
+    {
+      "bytes": 9441,
+      "git_blob": "f63caeb6afb1790d7eb3a717ccc12a050f215197",
+      "path": "rtl/platform/b03_block_dma.v",
+      "sha256": "c8e7936f60ed4bb9cc72e21eedacb24293ea60a5605816b9b3674c90e14ce21b"
+    },
+    {
+      "bytes": 2404,
+      "git_blob": "21868f41672ecd6a5a78b7bb45f7d9f65f1ba1be",
+      "path": "rtl/platform/b03_crc32_parallel4.v",
+      "sha256": "50ec54e52f3e1e4dd5f9990ce72910243d1775d494a0d7b9526394d446f3a412"
+    },
+    {
+      "bytes": 3745,
+      "git_blob": "89a638c690b7501fadbcb9c94f7580f7e87c0cc5",
+      "path": "rtl/platform/b03_crc32_word_pipe.v",
+      "sha256": "76975c64dcfd7cfe6334e4862259967867ae241fe6788a441b98fb20b2914d0c"
+    },
+    {
+      "bytes": 6744,
+      "git_blob": "8d2b748efac5646aa4f96ca88c50ef303970023d",
+      "path": "rtl/platform/b03_decode_lookup_roundstage.v",
+      "sha256": "05cffc242f5f86e9f14a21cb07a995361ac00fe7c638f16fec9c0cf09945350d"
+    },
+    {
+      "bytes": 6843,
+      "git_blob": "9da22aa1912fbfd8b998e30ee5db8eb12beb8405",
+      "path": "rtl/platform/b03_decode_math_roundstage.v",
+      "sha256": "98b53eff0c185766ce08e845697b15a5527b00f6e480f3ef87b3741c127aec2e"
+    },
+    {
+      "bytes": 1869,
+      "git_blob": "5b070a58638b227d48a74b80a608b4b98fbf602e",
+      "path": "rtl/platform/b03_feature_pack_compact.v",
+      "sha256": "cf9a665e15edb511cd7e9275d7cf3def77716032a1d1629dd6cea7a1cd382799"
+    },
+    {
+      "bytes": 990,
+      "git_blob": "cf07233dab1b8c14b21ca89f935c9a894dc0a57f",
+      "path": "rtl/platform/b03_fp32_q40.v",
+      "sha256": "0380055b8dc102b69e83d86cda738579a1d407b4bee9d48413ee03237794cfef"
+    },
+    {
+      "bytes": 29955,
+      "git_blob": "6247c52b0061a5a353362b8126ec67e1c9abc2cb",
+      "path": "rtl/platform/b03_frame_exec_payload.v",
+      "sha256": "30f22602f78f83ea8fbc09a772226760c3a7fcc734b29427253d5d67b16d6b19",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "79568e19b7208916cff1c87db72be1027b3b5c87",
+      "upstream_sha256": "51b03d424bde918d85e76bc524093e55520e56a46d7bb2f95b152fea3294522a"
+    },
+    {
+      "bytes": 6989,
+      "git_blob": "4b7d7212167185d3f472dbdbd057b5a3f374149d",
+      "path": "rtl/platform/b03_full_dw16_parallelfault.v",
+      "sha256": "92f4157694da6df0964fbe31e27e082ebb650819ba74f728cc3aa9bba9ad369c",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "d6f733fca0175973881720643cdd1cdd79b7ea89",
+      "upstream_sha256": "06aabc344440970adf5ce72194213b14306a90513ad93e7f444eefedb5fe83c9"
+    },
+    {
+      "bytes": 2544,
+      "git_blob": "895f8d63089714fffd4d5b547592ab9d26ffa0e1",
+      "path": "rtl/platform/b03_full_mul_pair.v",
+      "sha256": "3724e0f41d6f30ad8c0d515b0479554f44db51ae0396b0f1290b016150511c64"
+    },
+    {
+      "bytes": 8887,
+      "git_blob": "0daba9849dde4a63b6e0afca7e3d9be6e4a9d250",
+      "path": "rtl/platform/b03_gather_lean.v",
+      "sha256": "ab864e477548b1bc1dc06a87381eb7f335f83867e475ea66fca8b363443f6564",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "de6b17648eedd557ae2935fb910685d966ac53e7",
+      "upstream_sha256": "5f84707097d6506c143d30e830c4249a721c73289c8bb9c0a53a0b728606401d"
+    },
+    {
+      "bytes": 25632,
+      "git_blob": "54dcedef965d1d6df99855861c8108c20ae5f222",
+      "path": "rtl/platform/b03_graph_engine_cap.v",
+      "sha256": "73fe8e48937f121494f2ce315e356673b8d89be1e3e30ad9b59ae723fc5aaee7",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "65d6bdfbecb8c18e30c88556454a01e2b03ac536",
+      "upstream_sha256": "c7fd0b8ea21ddb11abebffe806759e17d6e2d2445f000f98885697bc82b808d4"
+    },
+    {
+      "bytes": 5114,
+      "git_blob": "294080199a67d09d716c9bdceed108ffc35a4398",
+      "path": "rtl/platform/b03_key_sort_mem2.v",
+      "sha256": "76c877aa455e11f79d4605a1afa68bafa0e6cd430af9da2267c90671455330d6"
+    },
+    {
+      "bytes": 40849,
+      "git_blob": "60097d6b84560cf00cf3dff9f9d23adc3145a398",
+      "path": "rtl/platform/b03_layer_exec_payload.v",
+      "sha256": "3dd3acd47565f3413522d8c6735fbbb8573615674e6c232d3b4bd1fd82c5247e",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "58e88e41db33f0c219c63dc3286a2b85d2d7ca41",
+      "upstream_sha256": "4c7185ae2a69e416929d025b8c5ff772c53575f780e4bf0b80384ab5ae39496b"
+    },
+    {
+      "bytes": 2756,
+      "git_blob": "4946d9d6bde1329cc0154891efdbb54f24501544",
+      "path": "rtl/platform/b03_mac_pair_rowctrl.v",
+      "sha256": "adc4b878f19651c01c176b667c8a9a66efeb175a5c76a2f12e5310dc65a1c29c"
+    },
+    {
+      "bytes": 50994,
+      "git_blob": "a542924f38bca19edb922d203e32a3a895e7f6eb",
+      "path": "rtl/platform/b03_model_input_payload.v",
+      "sha256": "1fea8d1fe915b66dd38c2225b2fff73c8b2936465a4686e87c986d6bb2b2a2c2",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "694c49e35c9228ae13466a6f520e73f3dca68c98",
+      "upstream_sha256": "c4d665864fb5fd92a6c8568e61dc79ae32cf318e78600e9719990f0a591fbe95"
+    },
+    {
+      "bytes": 1691,
+      "git_blob": "fca777a03c88868e70d61af3c6a73232ff1a73c3",
+      "path": "rtl/platform/b03_mul25x18_loan.v",
+      "sha256": "432abd17523f0bd4eb0c9826c8cde62b6955ba6319b85c428b5db2de90db52e9"
+    },
+    {
+      "bytes": 860,
+      "git_blob": "11659bc54f401c21885275d824b74baecd00be26",
+      "path": "rtl/platform/b03_mul_pool32_probe.v",
+      "sha256": "2bb05705837e52e12afe2037409e8c0311dbe52fc021fa2120ae0e00cf3fe14f"
+    },
+    {
+      "bytes": 8092,
+      "git_blob": "263493984858ccc5dab338d24f72ce15484c707d",
+      "path": "rtl/platform/b03_nms1_faultreg.v",
+      "sha256": "03c7e3ae30a01a341bc73a6b5bb779145810b2a7a2ea3800239bac0a0c1f1246"
+    },
+    {
+      "bytes": 12052,
+      "git_blob": "3389487fe9aa7a595147c4076a76df0af0ed0349",
+      "path": "rtl/platform/b03_phase_mem_mux_burst.v",
+      "sha256": "f06fcf8f4591f284075a284536fb2f5ab25a8ec5157460fd0afc5569458cf8fb"
+    },
+    {
+      "bytes": 64269,
+      "git_blob": "8d6c97f20034eef0a2fe928f404d2264a6060716",
+      "path": "rtl/platform/b03_post_frame_payload.v",
+      "sha256": "447b1c1fff749950bc2ba79f7f388b6cec16e25a9495994b1e19e6e9da22e4b5"
+    },
+    {
+      "bytes": 10258,
+      "git_blob": "431cbc722e05cade4fc445a995c0955fb7ccc5ec",
+      "path": "rtl/platform/b03_post_mem_arbiter.v",
+      "sha256": "b569ecceae34fbc6d7685454dc495331d31b51130ad88a3b96822ab0ec95eaab"
+    },
+    {
+      "bytes": 26201,
+      "git_blob": "d815f2dca8defff956a9c6ed591d0668b28658f0",
+      "path": "rtl/platform/b03_post_memory_engine_payload.v",
+      "sha256": "cbb4badf5ed3b0a851935a889e04488389af08d76af40937db4bc18ac5f2129f"
+    },
+    {
+      "bytes": 14250,
+      "git_blob": "bd09e2e86bc5b1f26601720a49e26137296c931e",
+      "path": "rtl/platform/b03_post_read_dma.v",
+      "sha256": "7eb93afce0a5c75b72dd1c25c132680c2997013a479354b76776a723d0350bae"
+    },
+    {
+      "bytes": 1402,
+      "git_blob": "13937429738df885bee5571feab3e70a71fa6ec7",
+      "path": "rtl/platform/b03_probability_pipe.v",
+      "sha256": "a8f4bdc0f2624b4d4d7288376f226efeb1d0f57d120b38fb33949e247574a2c5"
+    },
+    {
+      "bytes": 4024,
+      "git_blob": "07bcc1fe89bbbf12638f90818110957d82f69cdf",
+      "path": "rtl/platform/b03_q40_round2_stage.v",
+      "sha256": "1ce251af8d8a34f68e697c5032faada64e4a65bb40e4ef9436c367e20554b85f"
+    },
+    {
+      "bytes": 12833,
+      "git_blob": "c0f23c1dfa94c39de2499772a9da42a543b08250",
+      "path": "rtl/platform/b03_quant4_core.v",
+      "sha256": "0c2cfa6840ca9fae7b8a2a54935c050c1b71dd794f9019e58d68bb1a25082db9"
+    },
+    {
+      "bytes": 7984,
+      "git_blob": "22afffcf3c98150ab1b96f8d25af179c7718d5c8",
+      "path": "rtl/platform/b03_quant8_tdm1.v",
+      "sha256": "6f1d239f82b42cb1bbbb08a701c0358e77d8d99ce78ac526e24be97bfcbb9d95",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "15636d08460450f8e5aa9f2122c8c73654283c6e",
+      "upstream_sha256": "1a9affa447ffc4d61ea8f19ed88298eab3060a6281640a28a566160ce062ef38"
+    },
+    {
+      "bytes": 6348,
+      "git_blob": "de7bfd54851e6cebcbde0e595af0e9a76cab4e2e",
+      "path": "rtl/platform/b03_quant8_tdm2.v",
+      "sha256": "99a0bf634548bf725097948992273af21542eebf6ef4d8b9098c4f6ba90cb1a9",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "8e693b4698f3dd85f205d4208e3958fa20bcb752",
+      "upstream_sha256": "c2dbe3afb60f87bab2ab38d4b59444c0e7ce87b2a5d47609a94035389b762ec2"
+    },
+    {
+      "bytes": 5509,
+      "git_blob": "54c44ac5fc326f64f790977dcb566e662a1dfef8",
+      "path": "rtl/platform/b03_raw_bank_response_pipe.v",
+      "sha256": "52de64802b8a73c61b6bdd7c7bf97fe35aeeef635e6e3cf3db10e13d97b41af8"
+    },
+    {
+      "bytes": 10800,
+      "git_blob": "9c43459da4eaa07e60612cb8990d398daada63fd",
+      "path": "rtl/platform/b03_record_batch_tx.v",
+      "sha256": "3a00f1c9bda4833153cc804a829976443481d033322ecb00c3bec977e9e99639"
+    },
+    {
+      "bytes": 7274,
+      "git_blob": "1f36eced9e0dc7741b6c8b64f49433eb12c91b6f",
+      "path": "rtl/platform/b03_roi4_loan_registered.v",
+      "sha256": "3f17145903b6fba8f4b00d2e09792b24c49014d6a2044f927572ebd1ce3e72fd"
+    },
+    {
+      "bytes": 10015,
+      "git_blob": "a3bedddb4a8919aaa1446f25538bdd46b66800dc",
+      "path": "rtl/platform/b03_row_tile_store_rotate.v",
+      "sha256": "aab18a4bcc2fcb467e8a969125fa547c49c9f7208f1f4866044eabe8118727b5"
+    },
+    {
+      "bytes": 3841,
+      "git_blob": "9846db727e598a9ae1b6190569474ddf408e816f",
+      "path": "rtl/platform/b03_score_root.v",
+      "sha256": "31599d548bb7ea4740d1a39b6e4db80f6f074dc39e23bf206ea0ab22bd83b043"
+    },
+    {
+      "bytes": 1938,
+      "git_blob": "57229fb239d8d5ff443d54cdc771eb337c21dfb7",
+      "path": "rtl/platform/b03_table_validation_cache.v",
+      "sha256": "f5348844d0f5ba091e93a5c3623c2a2275ff1aae796cf5800c5da0431eef3885"
+    },
+    {
+      "bytes": 1778,
+      "git_blob": "f16360bc9dcaac76549a29dfbd37b2517b2be7c5",
+      "path": "rtl/platform/b03_tdp2048_loan_bank.v",
+      "sha256": "49e1c712a18cca737026111378688e6f3e5ffed0c119115d86ea69beacfe5f10"
+    },
+    {
+      "bytes": 17787,
+      "git_blob": "150f1e8912d08a4aac16a0e7eef26bf4f5d8bc53",
+      "path": "rtl/platform/b03_vector_exec_compact.v",
+      "sha256": "baddf2d19efdfe50374c46076571169dee8bac12a5e716c35311cfbee12e8c45",
+      "source_kind": "derived_local_optimization",
+      "upstream_git_blob": "cf6c55f13ee6b785bf89e4480652a20ee53a553d",
+      "upstream_sha256": "c008b7a7a707df3e04a397d115de8dc6bcc2b55760e0d8ebcbdfe676171803ce"
+    },
+    {
+      "bytes": 2273,
+      "git_blob": "05e8992300704de01b2b43d1d37f82704846850f",
+      "path": "rtl/platform/tdp32_probe.v",
+      "sha256": "de8e5f2201de2be33d420c12059ffaeb644d17da4db5f3611ca6ccd5d51ffd32"
+    }
+  ],
+  "license_note": "Upstream RTL files retained verbatim; no repository-level RTL license declared in this snapshot.",
+  "module_dependencies": {
+    "rtl/platform/b03_array_apmacc_rowctrl.v": [
+      "GTP_LUT1",
+      "b03_mac_pair_rowctrl"
+    ],
+    "rtl/platform/b03_bank_array.v": [
+      "GTP_DRM18K_E1",
+      "b03_tdp2048_loan_bank",
+      "tdp32_probe"
+    ],
+    "rtl/platform/b03_bank_array_payload.v": [
+      "b03_bank_array"
+    ],
+    "rtl/platform/b03_block_dma.v": [],
+    "rtl/platform/b03_crc32_parallel4.v": [],
+    "rtl/platform/b03_crc32_word_pipe.v": [],
+    "rtl/platform/b03_decode_lookup_roundstage.v": [
+      "b03_decode_math_roundstage"
+    ],
+    "rtl/platform/b03_decode_math_roundstage.v": [
+      "b03_fp32_q40",
+      "b03_q40_round2_stage"
+    ],
+    "rtl/platform/b03_feature_pack_compact.v": [],
+    "rtl/platform/b03_fp32_q40.v": [],
+    "rtl/platform/b03_frame_exec_payload.v": [
+      "GTP_LUT1",
+      "b03_crc32_parallel4",
+      "b03_graph_engine_cap",
+      "b03_layer_exec_payload",
+      "b03_post_memory_engine_payload",
+      "b03_table_validation_cache"
+    ],
+    "rtl/platform/b03_full_dw16_parallelfault.v": [
+      "b03_full_mul_pair"
+    ],
+    "rtl/platform/b03_full_mul_pair.v": [
+      "GTP_APM_E2"
+    ],
+    "rtl/platform/b03_gather_lean.v": [],
+    "rtl/platform/b03_graph_engine_cap.v": [
+      "b03_crc32_parallel4"
+    ],
+    "rtl/platform/b03_key_sort_mem2.v": [],
+    "rtl/platform/b03_layer_exec_payload.v": [
+      "GTP_LUT1",
+      "b03_array_apmacc_rowctrl",
+      "b03_bank_array_payload",
+      "b03_full_dw16_parallelfault",
+      "b03_model_input_payload",
+      "b03_quant8_tdm1",
+      "b03_quant8_tdm2",
+      "b03_row_tile_store_rotate",
+      "b03_vector_exec_compact"
+    ],
+    "rtl/platform/b03_mac_pair_rowctrl.v": [
+      "GTP_APM_E2"
+    ],
+    "rtl/platform/b03_model_input_payload.v": [
+      "GTP_LUT1",
+      "GTP_RAM32X1DP",
+      "b03_bank_array_payload",
+      "b03_feature_pack_compact",
+      "b03_gather_lean"
+    ],
+    "rtl/platform/b03_mul25x18_loan.v": [
+      "GTP_APM_E2"
+    ],
+    "rtl/platform/b03_mul_pool32_probe.v": [
+      "b03_mul25x18_loan"
+    ],
+    "rtl/platform/b03_nms1_faultreg.v": [],
+    "rtl/platform/b03_phase_mem_mux_burst.v": [],
+    "rtl/platform/b03_post_frame_payload.v": [
+      "GTP_LUT1",
+      "b03_bank_array_payload",
+      "b03_crc32_word_pipe",
+      "b03_decode_lookup_roundstage",
+      "b03_key_sort_mem2",
+      "b03_mul_pool32_probe",
+      "b03_nms1_faultreg",
+      "b03_probability_pipe",
+      "b03_raw_bank_response_pipe",
+      "b03_roi4_loan_registered",
+      "b03_score_root"
+    ],
+    "rtl/platform/b03_post_mem_arbiter.v": [],
+    "rtl/platform/b03_post_memory_engine_payload.v": [
+      "GTP_LUT1",
+      "b03_post_frame_payload",
+      "b03_post_mem_arbiter",
+      "b03_post_read_dma",
+      "b03_record_batch_tx"
+    ],
+    "rtl/platform/b03_post_read_dma.v": [],
+    "rtl/platform/b03_probability_pipe.v": [],
+    "rtl/platform/b03_q40_round2_stage.v": [],
+    "rtl/platform/b03_quant4_core.v": [
+      "b03_mul25x18_loan"
+    ],
+    "rtl/platform/b03_quant8_tdm1.v": [
+      "b03_quant4_core"
+    ],
+    "rtl/platform/b03_quant8_tdm2.v": [
+      "b03_quant4_core"
+    ],
+    "rtl/platform/b03_raw_bank_response_pipe.v": [],
+    "rtl/platform/b03_record_batch_tx.v": [],
+    "rtl/platform/b03_roi4_loan_registered.v": [],
+    "rtl/platform/b03_row_tile_store_rotate.v": [],
+    "rtl/platform/b03_score_root.v": [],
+    "rtl/platform/b03_table_validation_cache.v": [],
+    "rtl/platform/b03_tdp2048_loan_bank.v": [
+      "tdp32_probe"
+    ],
+    "rtl/platform/b03_vector_exec_compact.v": [
+      "b03_bank_array",
+      "b03_tdp2048_loan_bank"
+    ],
+    "rtl/platform/tdp32_probe.v": [
+      "GTP_DRM18K_E1"
+    ]
+  },
+  "optimization_profile": {
+    "derived_files": [
+      "rtl/platform/b03_array_apmacc_rowctrl.v",
+      "rtl/platform/b03_frame_exec_payload.v",
+      "rtl/platform/b03_full_dw16_parallelfault.v",
+      "rtl/platform/b03_gather_lean.v",
+      "rtl/platform/b03_graph_engine_cap.v",
+      "rtl/platform/b03_layer_exec_payload.v",
+      "rtl/platform/b03_model_input_payload.v",
+      "rtl/platform/b03_quant8_tdm1.v",
+      "rtl/platform/b03_quant8_tdm2.v",
+      "rtl/platform/b03_vector_exec_compact.v"
+    ],
+    "diagnostics": 0,
+    "gather_address_check": "Run unmasked address carry in parallel with row-present lookup; retain dummy gating and public ROI address.",
+    "hardware_post": 0,
+    "input_content_validation": false,
+    "input_receipt_reset": "Share unreset capacity/inflight predicates for internal receipt; external ready qualifies only the local interface reset, bypassing redundant child reset LUT trees.",
+    "layer_control_decode": "Capture full-width dense/DW opcode predicates on accepted START; select quantizer payload from stable operation mode independently of valid/mask/tag. No new cycles.",
+    "m_lanes": 2,
+    "name": "cpu_post_mlanes2_quantizer1",
+    "parameter_validity": "published atomically at successful KEY_SAVE; transport/cancel/epoch checks retained",
+    "physical_evidence": "control_decode_place_20261101: slow setup -0.603 ns / 69 failing endpoints versus prior -0.924 ns / 380. Placement only; no routed closure.",
+    "prevalidated_task_layout": "Default OFF in reusable graph/frame/service; enabled only after fixed-layout MMIO admission and immutable task snapshot.",
+    "quantizer_capacity": "Reset-independent private capacity for layer sequential accounting; public ready unchanged. No added cycles or arithmetic changes.",
+    "quantizer_lanes": 1,
+    "trusted_model": 1,
+    "vector_control_metadata": "Prepare terminal chunk and quantizer position in existing NEXT/QPREP states; qualified tags and elapsed cycles unchanged.",
+    "vector_transfer_validation": "Registered address/count before range check; tag exhaustion, CE and pre-issue cancel retained.",
+    "vector_transpose_address": "Parallel chunk-base/channel-offset addition before final sum; arithmetic modulo 2^32; unchanged state/cycle count. Source-bound placement improves core slow setup -1.119 to -0.924 ns; not routed closure."
+  },
+  "root_modules": [
+    "b03_frame_exec_payload",
+    "b03_block_dma",
+    "b03_phase_mem_mux_burst"
+  ],
+  "schema_version": 1,
+  "scope": "upstream B03 source closure with reviewed local resource/timing optimizations; derived files retain upstream_sha256/upstream_git_blob.",
+  "source_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+  "source_repository": "https://github.com/keep-s/npu_zgtc"
+}
