@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 import shutil
@@ -9,6 +10,21 @@ ROOT=Path(__file__).resolve().parents[2]
 
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def clock_period(clock_hz):
+    if type(clock_hz) is not int or clock_hz not in (95000000,100000000):
+        raise ValueError('Clock must be original 100MHz or explicit user-authorized 95MHz')
+    return 1000000000/clock_hz
+
+
+def clock_constraints(original,clock_hz):
+    period=clock_period(clock_hz)
+    if clock_hz==100000000:return original
+    needle=b'create_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]'
+    if original.count(needle)!=1:raise ValueError('Expected one original 10ns clock declaration')
+    replacement=b'create_clock -name cpu_clk -period '+f'{period:.9f}'.encode('ascii')+b' [get_ports {clk_i}]'
+    return original.replace(needle,replacement)
 
 
 def physical_constraints(compact=False,io_registers=False,central=False,datapath=False):
@@ -23,8 +39,9 @@ def physical_constraints(compact=False,io_registers=False,central=False,datapath
 
 def verify_file_hashes(work, row):
     work=Path(work).resolve()
-    if row['cpu_mode']!=1 or row['period_ns']!=10:
-        raise ValueError('Expected dual issue at original 100MHz')
+    expected=clock_period(row.get('clock_hz',100000000))
+    if row['cpu_mode']!=1 or type(row['period_ns']) not in (int,float) or not math.isfinite(row['period_ns']) or abs(row['period_ns']-expected)>1e-9:
+        raise ValueError('Expected dual issue with consistent explicit clock metadata')
     for base,entries in [(work/'src',row['input_hashes']),(work,row['files'])]:
         for name,digest in entries.items():
             path=(base/name).resolve()
@@ -69,8 +86,9 @@ def verify_package(work):
     for name in names:
         if row['input_hashes'][name]!=evidence['input_hashes'][name]:
             raise ValueError('Physical input differs from measured source: '+name)
-    if row['input_hashes'][recipe['constraints']]!=sha(ROOT/recipe['constraints']):
-        raise ValueError('Physical constraints differ from original system constraints')
+    expected_fdc=clock_constraints((ROOT/recipe['constraints']).read_bytes(),row.get('clock_hz',100000000))
+    if row['input_hashes'][recipe['constraints']]!=hashlib.sha256(expected_fdc).hexdigest():
+        raise ValueError('Physical constraints differ beyond the authorized clock period')
     minutes=row.get('pnr_minutes',10)
     if ('pnr_minutes' in row)!=('outer_seconds' in row) or type(minutes) is not int or not 1<=minutes<=60 or row.get('outer_seconds',900)!=minutes*60+300:
         raise ValueError('Invalid bounded PDS execution budget')
@@ -114,8 +132,9 @@ def tcl(work,core,sources,fdc,pnr_minutes=10,physical_constraints=(),placement_s
     return '\n'.join(lines)+'\n'
 
 
-def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False,placement_seed=1,retiming=False,central=False,datapath=False):
+def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False,placement_seed=1,retiming=False,central=False,datapath=False,clock_hz=100000000):
     if type(pnr_minutes) is not int or not 1<=pnr_minutes<=60:raise ValueError('PNR minutes must be 1..60')
+    period_ns=clock_period(clock_hz)
     placement_seed=checked_seed(placement_seed)
     retiming=checked_retiming(retiming)
     physical=physical_constraints(compact,io_registers,central,datapath)
@@ -149,7 +168,7 @@ def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False,pl
         src=simulation/'src'/name;dst=output/'src'/name
         dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst);frozen[name]=sha(dst)
     fdc=recipe['constraints'];dst=output/'src'/fdc;dst.parent.mkdir(parents=True,exist_ok=True)
-    shutil.copyfile(ROOT/fdc,dst);frozen[fdc]=sha(dst)
+    dst.write_bytes(clock_constraints((ROOT/fdc).read_bytes(),clock_hz));frozen[fdc]=sha(dst)
     for name in physical:
         dst=output/'src'/name;dst.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(ROOT/name,dst);frozen[name]=sha(dst)
@@ -157,15 +176,16 @@ def prepare(simulation,output,pnr_minutes=10,compact=False,io_registers=False,pl
         shutil.copyfile(simulation/name,output/name)
     (output/'build.tcl').write_text(tcl(output,core,core['sources']+recipe['sources'],fdc,pnr_minutes,physical,placement_seed,retiming),encoding='utf-8',newline='\n')
     prepared=dict(status='PREPARED_NOT_EXECUTED',simulation=str(simulation),simulation_result_sha256=sha(simulation/'result.json'),
-        physical_constraints=physical,placement_seed=placement_seed,retiming=retiming,pnr_minutes=pnr_minutes,outer_seconds=pnr_minutes*60+300,cpu_mode=1,period_ns=10,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
+        physical_constraints=physical,placement_seed=placement_seed,retiming=retiming,pnr_minutes=pnr_minutes,outer_seconds=pnr_minutes*60+300,cpu_mode=1,period_ns=period_ns,boundary='Real 8KiB ROM/32KiB SRAM/MMIO, external system clock; no board pins or PLL',
         input_hashes=frozen,files={p.name:sha(p) for p in output.iterdir() if p.is_file()},
         timing_closed=False,pds_started=False,board_validated=False,
         required_acceptance=['compile hierarchy dual=1; six stages and predictor settings bound',
         'fresh compile/synthesize/dev_map/pnr/report_timing success',
         'Slow/Fast setup hold pulse-width all pass; performance slack consistent',
-        'unchanged hashes; original 100MHz I/O/hold constraints',
+        'unchanged hashes; original I/O/hold constraints; default 100MHz or explicit 95MHz clock',
         'u_core area only; memory/fixture area separately',
         'SRAM benchmark is distinct from 128KiB simulated TCM'])
+    if clock_hz!=100000000:prepared['clock_hz']=clock_hz
     (output/'prepared.json').write_text(json.dumps(prepared,indent=2)+'\n',encoding='utf-8',newline='\n')
     return prepared
 
@@ -173,6 +193,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('simulation',type=Path);parser.add_argument('output',type=Path,nargs='?');parser.add_argument('--verify',action='store_true');parser.add_argument('--pnr-minutes',type=int,default=10)
     parser.add_argument('--placement-seed',type=int,choices=[1,8],default=1,help='Original placement or one bounded seed-8 comparison; constraints unchanged')
     parser.add_argument('--retiming',action='store_true',help='Explicit ADS register-retiming diagnostic; RTL and constraints unchanged')
+    parser.add_argument('--clock-hz',type=int,choices=[95000000,100000000],default=100000000,help='Original 100MHz or user-authorized 95MHz; change only the clock period')
     physical=parser.add_mutually_exclusive_group()
     physical.add_argument('--compact',action='store_true')
     physical.add_argument('--io-registers',action='store_true',help='Pack existing port FFs; no region or timing exceptions')
@@ -183,4 +204,4 @@ if __name__=='__main__':
         verify_package(args.simulation);print('FROZEN_PACKAGE_PASS')
     else:
         if args.output is None:parser.error('output is required for preparation')
-        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact,args.io_registers,args.placement_seed,args.retiming,args.central,args.datapath_region)['status'])
+        print(prepare(args.simulation,args.output,args.pnr_minutes,args.compact,args.io_registers,args.placement_seed,args.retiming,args.central,args.datapath_region,args.clock_hz)['status'])

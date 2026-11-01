@@ -17,4 +17,17 @@ if((Get-TrihaRouteTiming ($text.Replace('9.8000 0.200','9.0000 1.000'))).met){th
 $rejected=$false
 try{Get-TrihaRouteTiming ($text.Replace('Minimum Pulse Width Summary(Fast Corner):','Missing final section:'))|Out-Null}catch{$rejected=$true}
 if(-not $rejected){throw 'Missing Fast pulse width was accepted.'}
+$lower=$text.Replace('10.0000 {0.0000 5.0000}','10.5260 {0.0000 5.2630}').Replace('100.0000 MHz 102.0408 MHz 10.0000','95.0029 MHz 102.0408 MHz 10.5260')
+$value=Get-TrihaRouteTiming $lower -RequestedPeriodNs (1000.0/95)
+if(-not $value.met -or $value.reported_period_ns -ne 10.526){throw 'Explicit95MHz clock quantization was rejected.'}
+foreach($item in @(
+    @{text=$lower;period=10.0},
+    @{text=$text;period=(1000.0/95)},
+    @{text=$lower.Replace('95.0029 MHz','100.0000 MHz');period=(1000.0/95)},
+    @{text=$lower;period=[double]::NaN}
+)) {
+    $rejected=$false
+    try{Get-TrihaRouteTiming $item.text -RequestedPeriodNs $item.period|Out-Null}catch{$rejected=$true}
+    if(-not $rejected){throw 'Inconsistent frequency/clock metadata was accepted.'}
+}
 Write-Host 'CPU_ROUTE_REPORT_TEST PASS'

@@ -43,6 +43,7 @@ $row=[ordered]@{status='RUNNING';flow_status='RUNNING';timing_closed=$false;sour
     prepared_sha256=$preparedHash;verification_tool_hashes=$toolHashes;native_commands=$commands;output_hashes=[ordered]@{}
     timing=$null;error=$null;runner_return_code=$null;board_validated=$false
     cpu_only_resources=$null;cpu_area_status='UNKNOWN: system resources are not CPU-only'
+    clock_hz=$(if('clock_hz' -in $prepared.PSObject.Properties.Name){[int]$prepared.clock_hz}else{100000000});period_ns=[double]$prepared.period_ns
     scope='Isolated dual CPU plus actual ROM/SRAM/MMIO; no board or official CoreMark acceptance'}
 $result=Join-Path $work 'result.json'
 Save-TrihaJson $result $row
@@ -62,7 +63,9 @@ try {
     $row['predictor']=Assert-TrihaPdsPredictorConfiguration $compile
     $unconstrained=@([regex]::Matches($output,"(?m)^W: Timing-408[67]: Port '([^']+)' is not constrained.*$")|Where-Object {$_.Groups[1].Value -ne 'clk_i'})
     if($unconstrained.Count){throw 'Unconstrained functional port.'}
-    $row.timing=Get-TrihaRouteTiming ([IO.File]::ReadAllText((Join-Path $work 'report_timing/triha_minimal_soc.rtr')))
+    $report=[IO.File]::ReadAllText((Join-Path $work 'report_timing/triha_minimal_soc.rtr'))
+    $row.timing=Get-TrihaRouteTiming $report -RequestedPeriodNs ([double]$prepared.period_ns)
+    $row['reported_period_ns']=$row.timing.reported_period_ns
     $row['system_resources']=Get-TrihaPdsMappedResources ([IO.File]::ReadAllText((Join-Path $work 'device_map/triha_minimal_soc.dmr')))
     if($row.system_resources.drm -lt 8){throw 'SRAM native block mapping missing.'}
     $row.flow_status='PASS';$row.timing_closed=$row.timing.met

@@ -1,8 +1,10 @@
 # 双发射独立路线状态
 
-更新：2026-10-30。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
+更新：2026-11-01。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
-最新 v80 已完成，**TIMING_FAIL 且不采用**。从 v78 独立派生的目标对齐预判定通过四态、真实整核恢复、ordered/IRQ、完整 SRAM CoreMark 和实际路由包映射检查，但原 100MHz 后布线 setup Slow/Fast **−1.112/+2.808ns**，hold **+0.114/+0.105ns**，MPW **+3.655/+4.202ns**；24 个 Slow 违例。主详细布线 189 次到 0，PDS 原生 0/验收 2，30 冻结输入及 470 输出已核。短测仍 4.091964/MHz、1221907 周期，WB/store/profile 与 v78 相同；CPU-only 9588 LUT/4976 FF。新最差为 E1 目的标签→旁路/配对许可→fetch1_accept→FIFO 头部，另有 A 方向→fault→FIFO；对 v78 −0.175ns 回退 0.937ns，新网表/新布局不能靠资源减少推断收敛。保留 v78 及历史最佳 v57 −0.009ns（仍 FAIL），不提升默认 RTL、不重跑 v80。下一步先分析发射接受/FIFO 更新的组合边界和性能代价。详见 [v80 记录](DUAL_ISSUE_ALIGN_PRECHECK_2026-10-30.md)。
+用户允许小幅降频后，**v78 六级顺序双发射的 95MHz 完整后布线已通过独立终态核验**：实际量化周期 10.5260ns（95.0029MHz），setup Slow/Fast **+0.438/+3.165ns**，hold **+0.013/0.000ns**，MPW **+3.918/+4.465ns**，全部 corner 无违例；Fast hold 没有报告的正余量。30 冻结输入、524 输出及原工具快照已核，主详细布线 216 次到 0。CPU-only **9719 LUT/4975 FF/752 RAM-LUT 已含/4 APM/0 DRM**。RTL/固件与 v78 相同，短测仍 **4.091964/MHz、1221907 周期**，95MHz 绝对短测性能线性估算 **388.736622**，相对 100MHz 下降 5%，非新增板测或官方分数。原运行器因时钟量化容差过严保留 FAIL/退出1，PDS 原生0；独立审计接受同一份最终报告，未重跑或改写原记录。**100MHz 历史结果仍 FAIL**。本次边界为外部时钟的 CPU+ROM/SRAM/MMIO，未接 Cache/DDR、未合入主工程、未上板。详见 [95MHz 记录](DUAL_ISSUE_95MHZ_2026-11-01.md)和[验收证据](../verification/cpu/dualissue_95mhz.json)。
+
+此前 v80 已完成，**TIMING_FAIL 且不采用**。从 v78 独立派生的目标对齐预判定通过四态、真实整核恢复、ordered/IRQ、完整 SRAM CoreMark 和实际路由包映射检查，但原 100MHz 后布线 setup Slow/Fast **−1.112/+2.808ns**，hold **+0.114/+0.105ns**，MPW **+3.655/+4.202ns**；24 个 Slow 违例。主详细布线 189 次到 0，PDS 原生 0/验收 2，30 冻结输入及 470 输出已核。短测仍 4.091964/MHz、1221907 周期，WB/store/profile 与 v78 相同；CPU-only 9588 LUT/4976 FF。新最差为 E1 目的标签→旁路/配对许可→fetch1_accept→FIFO 头部，另有 A 方向→fault→FIFO；对 v78 −0.175ns 回退 0.937ns，新网表/新布局不能靠资源减少推断收敛。保留 v78 及历史最佳 v57 −0.009ns（仍 FAIL），不提升默认 RTL、不重跑 v80。下一步先分析发射接受/FIFO 更新的组合边界和性能代价。详见 [v80 记录](DUAL_ISSUE_ALIGN_PRECHECK_2026-10-30.md)。
 
 最新v79 FIFO预判定实验完成，**TIMING_FAIL且不采用为更好物理基线**：原100MHz setup Slow/Fast **-0.431/+2.677ns**，hold **+0.111/+0.099ns**，MPW **+3.655/+4.202ns**；22个Slow违例、328输出及冻结输入已核。完整短测仍4.091964/MHz，周期和WB/store/profile相同；CPU-only9619LUT/4972FF（较v78 -237/-3），面积减少未带来全核时序改善。实际FIFO预判定结构保留，但最差变为A分支方向→目标低位→对齐异常→misprediction→fetch CE，另9条SRAM→B ALU。下一从v78独立评估目标对齐预判定，不自动叠加v79。详见[v79终态](DUAL_ISSUE_FIFO_PREDICATE_2026-10-27.md)。历史最佳v57 -0.009ns仍FAIL。
 

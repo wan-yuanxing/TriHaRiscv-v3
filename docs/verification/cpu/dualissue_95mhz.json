@@ -1,0 +1,142 @@
+{
+  "status": "95MHZ_TIMING_PASS",
+  "timing_closed": true,
+  "target_hz": 95000000,
+  "original_100mhz_closed": false,
+  "board_validated": false,
+  "official_coremark_score": false,
+  "scope": "Six-stage in-order dual issue, ROM/SRAM/MMIO; no Cache/DDR; supplied external clock",
+  "physical_directory": "build/cpu/dual-sram-command-95mhz-physical-20261101",
+  "preserved_runtime_result": {
+    "status": "FAIL",
+    "error": "Actual report clock differs from frozen requested period.",
+    "runner_return_code": 1,
+    "sha256": "4d8e6d49306686cd50202171ac1bb8f197179c95aa917ec1e337e83639b9f982"
+  },
+  "native_exit": 0,
+  "native_seconds": 333.059,
+  "reason_for_separate_audit": "PDS quantizes clock to1ps; strict nominal-period checker rejected a valid report. Original FAIL record is preserved.",
+  "source_unchanged_during_run": true,
+  "frozen_inputs_verified": 30,
+  "output_files_verified": 524,
+  "parent_output_files_verified": 326,
+  "successful_stages": {
+    "compile": true,
+    "synthesize": true,
+    "dev_map": true,
+    "pnr": true,
+    "report_timing": true
+  },
+  "timing": {
+    "met": true,
+    "corners": [
+      {
+        "corner": "Slow",
+        "check": "Setup",
+        "slack_ns": 0.438,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25680
+      },
+      {
+        "corner": "Slow",
+        "check": "Hold",
+        "slack_ns": 0.013,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25680
+      },
+      {
+        "corner": "Slow",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 3.918,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4567
+      },
+      {
+        "corner": "Fast",
+        "check": "Setup",
+        "slack_ns": 3.165,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25680
+      },
+      {
+        "corner": "Fast",
+        "check": "Hold",
+        "slack_ns": 0.0,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 25680
+      },
+      {
+        "corner": "Fast",
+        "check": "Minimum Pulse Width",
+        "slack_ns": 4.465,
+        "total_negative_slack_ns": 0.0,
+        "failing_endpoints": 0,
+        "endpoints": 4567
+      }
+    ],
+    "performance_slack_ns": 0.438,
+    "worst_setup_ns": 0.438,
+    "performance_consistent": true,
+    "requested_period_ns": 10.526315789473685,
+    "reported_period_ns": 10.526,
+    "reported_frequency_mhz": 95.0029,
+    "period_quantization_ns": -0.0003157894736851574,
+    "all_constraints_met": true
+  },
+  "main_detailed_iterations": 216,
+  "main_detailed_unrouted": 0,
+  "cpu_only": {
+    "lut": 9719,
+    "ff": 4975,
+    "ram_lut_included": 752,
+    "apm": 4,
+    "drm": 0
+  },
+  "measurement_reused": {
+    "directory": "build/cpu/dual-sram/coremark-20261027T075648276873Z",
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "verified_outputs": 122,
+    "scope": "Existing unchanged RTL short-run measurement; no new board score"
+  },
+  "projected_absolute_coremark": {
+    "at_100mhz": 409.19644457393235,
+    "at_nominal_95mhz": 388.73662234523573,
+    "change_percent": -5.0,
+    "measured": false
+  },
+  "artifact_hashes": {
+    "prepared.json": "2ca16623ceb6825d7c773eb2346abe32e743950aa1604db77b0e03759fc9fd4d",
+    "build.tcl": "cc75470498ffe8ad9368baf89d0abbb93ba8abc5d1b76a03c53bb1605e08ffde",
+    "report_timing/triha_minimal_soc.rtr": "d272261a23a48bf90586731b073f9bd76217d47b64442c0fdafb6058e4c9ce01",
+    "synthesize/triha_minimal_soc.snr": "ea44e6f25388dc0670818d4b55725afabd1d1e55df1d074450b7a19a358dcea3",
+    "place_route/triha_minimal_soc_pnr.adf": "5a0f746c58bf9fb9722f62efd0e655efd1602729f5c3544c5c2ce8ff25b68ec2"
+  },
+  "audit_tools": {
+    "build\\cpu\\dual-v78-95mhz-final-audit-20261101\\audit.py": "f7d786dec2804594188a96c9895838880952174c64c6be33ced7a12390121f23",
+    "build\\cpu\\dual-v78-95mhz-final-audit-20261101\\timing.json": "26e1415c88d1a261829738e029c392a3e34ddcd8fde731feac64014aab578661",
+    "scripts\\cpu\\route_reports.ps1": "22a0f91c767732492e23610521257b95dfb41913c0fbdc1febb4fcd83b65ff11",
+    "scripts\\cpu\\prepare_dual_physical.py": "374f1e544fc359fa0c5ed26aaad753c0432fb61364415b23d40b16544b3dc10b"
+  },
+  "worst_setup_path": {
+    "start": "u_memory/u_sram/memory_8/gopdrm_36k/CLKA[0]",
+    "end": "u_core/u_cpu/gen_dual_exec.u_exec1/result_q[24]/opit_0_inv_L6Q_perm/I5",
+    "slack_ns": 0.438
+  }
+}

@@ -6,6 +6,29 @@ from pathlib import Path
 import prepare_dual_physical as m
 
 class PhysicalGateTests(unittest.TestCase):
+    def test_clock_override_changes_only_the_single_period(self):
+        original=(b'# preserved bytes\r\ncreate_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]\r\n'
+                  b'set_input_delay 2.000 -clock [get_clocks {cpu_clk}] -max [get_ports {rst_ni}]\r\n')
+        changed=m.clock_constraints(original,95000000)
+        self.assertEqual(changed.replace(b'10.526315789',b'10.000'),original)
+        self.assertEqual(m.clock_constraints(original,100000000),original)
+        for frequency in (True,90000000,95000001,'95000000',None):
+            with self.subTest(frequency=frequency),self.assertRaises(ValueError):
+                m.clock_constraints(original,frequency)
+        with self.assertRaises(ValueError):m.clock_constraints(original+original,95000000)
+        with self.assertRaises(ValueError):m.clock_constraints(b'create_clock -period 20',95000000)
+
+    def test_lower_clock_requires_explicit_consistent_metadata(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            row=dict(cpu_mode=1,period_ns=1e9/95000000,clock_hz=95000000,input_hashes={},files={})
+            m.verify_file_hashes(root,row)
+            for invalid in (dict(row,clock_hz=100000000),dict(row,clock_hz=90000000),
+                            dict(row,period_ns=10),dict(row,period_ns=float('nan')),
+                            {k:v for k,v in row.items() if k!='clock_hz'}):
+                with self.subTest(metadata=invalid),self.assertRaises(ValueError):
+                    m.verify_file_hashes(root,invalid)
+
     def test_retiming_changes_only_the_explicit_synthesis_switch(self):
         core=dict(family='Logos2',device='PG2L100H',speedgrade='-6',package='FBG676')
         first=m.tcl(Path('package'),core,['cpu.v'],'clock.fdc',retiming=False)
@@ -99,7 +122,7 @@ class PhysicalGateTests(unittest.TestCase):
             (root/'fpga/pg2l100h/project/cpu_minimal_soc.json').write_text(json.dumps(recipe))
             (sim/'src/fpga/pg2l100h/project/cpu_core.json').write_text(json.dumps(core))
             (work/'src/cpu.v').write_text('module cpu; endmodule')
-            (root/'clock.fdc').write_text('original constraints')
+            (root/'clock.fdc').write_text('create_clock -name cpu_clk -period 10.000 [get_ports {clk_i}]\nset_input_delay 2.000 -max [get_ports {rst_ni}]\n')
             (work/'src/clock.fdc').write_bytes((root/'clock.fdc').read_bytes())
             for name in ['rom.hex','sram.hex','firmware.elf']:
                 (sim/name).write_text(name);(work/name).write_text(name)
@@ -114,6 +137,21 @@ class PhysicalGateTests(unittest.TestCase):
             (work/'prepared.json').write_text(json.dumps(row))
             with patch.object(m,'ROOT',root):
                 m.verify_package(work)
+                original_fdc=(root/'clock.fdc').read_bytes()
+                lower_fdc=m.clock_constraints(original_fdc,95000000)
+                (work/'src/clock.fdc').write_bytes(lower_fdc)
+                row['clock_hz']=95000000;row['period_ns']=1e9/95000000
+                row['input_hashes']['clock.fdc']=m.sha(work/'src/clock.fdc')
+                (work/'prepared.json').write_text(json.dumps(row))
+                m.verify_package(work)
+                (work/'src/clock.fdc').write_bytes(lower_fdc.replace(b'set_input_delay 2.000',b'set_input_delay 0.000'))
+                row['input_hashes']['clock.fdc']=m.sha(work/'src/clock.fdc')
+                (work/'prepared.json').write_text(json.dumps(row))
+                with self.assertRaisesRegex(ValueError,'beyond the authorized clock'):m.verify_package(work)
+                (work/'src/clock.fdc').write_bytes(original_fdc)
+                row['input_hashes']['clock.fdc']=m.sha(work/'src/clock.fdc')
+                del row['clock_hz'];row['period_ns']=10
+                (work/'prepared.json').write_text(json.dumps(row))
                 row['pnr_minutes']=20
                 (work/'build.tcl').write_text(m.tcl(work,core,['cpu.v'],'clock.fdc',20))
                 row['files']['build.tcl']=m.sha(work/'build.tcl')
