@@ -105,3 +105,4 @@ docs/verification/cpu/dualissue_align_precheck.patch -text -whitespace
 docs/verification/cpu/dualissue_align_precheck_sources.json -text whitespace=cr-at-eol
 docs/verification/cpu/dualissue_direct_load_forward.patch -text -whitespace
 docs/verification/cpu/dualissue_role_predecode.patch -text -whitespace
+docs/verification/cpu/dualissue_btb_address_control.patch -text -whitespace

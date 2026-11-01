@@ -1,0 +1,14 @@
+{
+  "status": "PRESERVED_AND_VERIFIED",
+  "tag": "cpu-dual-sram-100mhz-20261101",
+  "archive": "build/cpu/preserved-dual-sram-100mhz-20261101/dual-sram-100mhz.zip",
+  "archive_sha256": "7ddfa9006cab6aa6641103d485586f47a983e4b0ef04b5c9c14c87235e09a54b",
+  "archive_bytes": 19882660,
+  "archived_files": 409,
+  "manifest": "build/cpu/preserved-dual-sram-100mhz-20261101/manifest.json",
+  "manifest_sha256": "d57a6d3ddbf495a96d731e1d0779ade1739adba88b2f1d929fdaf17ceedc5524",
+  "scope": "Complete frozen physical run plus22 candidate sources, replay patch, actual mapping/audit tools and benchmark summary/images. Full functional ModelSim libraries/WB/store remain in their original build directories and are hash-bound; they are not copied into this archive.",
+  "timing": "Original100MHz PASS,allSlow/Fast setup/hold/MPW pass",
+  "retained95": "docs/verification/cpu/dualissue_95mhz_preserved.json",
+  "board_validated": false
+}

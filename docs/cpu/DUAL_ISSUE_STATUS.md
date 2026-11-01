@@ -2,7 +2,11 @@
 
 更新：2026-11-01。工作树 `D:/FPGA/TriHaRiscv-cpu-dualissue-windows`，分支 `cpu/dualissue-windows`。
 
-v82从v78独立预存3位源寄存器使用角色，功能/队列/完整CoreMark等周期及实际映射均PASS，仍1221907cycles、短测4.091964/MHz；CPU9877LUT/5003FF/752已含RAM-LUT/4APM/0DRM。原100MHz完整后布线 **TIMING_FAIL**：setup Slow/Fast **−0.994/+2.520ns**，hold **+0.112/+0.099ns**，MPW **+3.655/+4.202ns**。41个Slow违例中38个为外部reset→BTB WADDR，另3个为E1分支恢复→fetch CE，−0.100ns。PDS原生0/验收2，30冻结输入/408输出核验，主详细布线158次到0。不重复v82，不提升默认RTL；95MHz归档保持。下一验证WE资格下的BTB写地址等价，去除地址锥中多余reset/train依赖，保留写许可和hold结构。见[v82终态](DUAL_ISSUE_ROLE_PREDECODE_2026-11-01.md)。
+**当前v83原100MHz完整后布线已通过**：实际10.0000ns，setup Slow/Fast **+0.307/+2.753ns**，hold **+0.114/+0.103ns**，MPW **+3.655/+4.202ns**，所有corner无违例、performance一致。原IO/hold/多corner/seed1预算不变，原生/验收0；主详细布线135次到0，30冻结输入及362输出核验。CPU-only **9845LUT/5001FF/752已含RAM-LUT/4APM/0DRM**，实际route全部结构门槛重新核对。完整SRAM短RTL **1221907cycles、4.091964/MHz、observed IPC1.185400**，WB/store/profile仍同v78；未上板，非官方分数。改动为v82角色预译码＋BTB地址锥去除重复reset/train条件，WE/读口/valid复位及六级流水/周期不变。95MHz完整归档继续保留，失败记录不覆盖；默认生产RTL和集成主工程不变。本轮冻结通过版本，不扫描更高频率或重复PNR。见[v83验收](DUAL_ISSUE_BTB_ADDRESS_2026-11-01.md)及[证据](../verification/cpu/dualissue_btb_address_control.json)。
+
+通过版标签为 `cpu-dual-sram-100mhz-20261101`，409文件实现归档已逐文件解压验证；[保留记录](../verification/cpu/dualissue_100mhz_preserved.json)。95MHz的独立标签、完整归档和验收记录均保留。
+
+此前v82从v78独立预存3位源寄存器使用角色，功能/队列/完整CoreMark等周期及实际映射均PASS，仍1221907cycles、短测4.091964/MHz；CPU9877LUT/5003FF/752已含RAM-LUT/4APM/0DRM。原100MHz完整后布线 **TIMING_FAIL**：setup Slow/Fast **−0.994/+2.520ns**，hold **+0.112/+0.099ns**，MPW **+3.655/+4.202ns**。41个Slow违例中38个为外部reset→BTB WADDR，另3个为E1分支恢复→fetch CE，−0.100ns。PDS原生0/验收2，30冻结输入/408输出核验，主详细布线158次到0。不重复v82，不提升默认RTL；95MHz归档保持。该问题随后由v83验证WE资格下的BTB写地址等价并收敛。见[v82终态](DUAL_ISSUE_ROLE_PREDECODE_2026-11-01.md)。
 
 按用户要求保留 95MHz 并继续优化 100MHz：已新增标签 `cpu-dual-sram-95mhz-20261101` 和 534 文件完整归档，逐文件解压及 SHA 验证通过。v81 从 v78 独立展开 B 路直接 load 前递；四态/负例/整核及完整 SRAM CoreMark 等周期通过，仍为 1221907 cycles、短测 4.091964/MHz，observed IPC1.185400。实际 route 网表的 64 位 B 操作数均避开 shared E2 数据选择，但原 100MHz 后布线 **TIMING_FAIL，不采用**：setup Slow/Fast **−0.951/+2.676ns**，hold **+0.053/+0.024ns**，MPW **+3.655/+4.202ns**；357 个 Slow setup 违例。PDS 原生0/验收2，30冻结输入及398输出核验，主详细布线153次到0。CPU-only **9736LUT/4977FF/752RAM-LUT已含/4APM/0DRM**。最差 FIFO opcode bit3→源使用角色译码/发射许可→FIFO头回写，logic1.592ns/route8.961ns。局部数据通路变化未改善全核，不覆盖95MHz、不重复v81 PNR；继续分析该控制环。见[v81终态](DUAL_ISSUE_DIRECT_LOAD_2026-11-01.md)。
 

@@ -1,0 +1,353 @@
+{
+  "status": "100MHZ_TIMING_AND_RTL_SHORT_COREMARK_PASS",
+  "timing_closed": true,
+  "overall_target_met": true,
+  "scope": "Authorized isolated six-stage in-order dual-issue SRAM CPU100MHz and >4/MHz short RTL gates; not board, full ISA, official benchmark or full SoC acceptance",
+  "candidate": "v83 v82 roles plus enable-qualified stable-row BTB write-address controls; no extra cycles/stages",
+  "functional_evidence": {
+    "status": "PASS",
+    "receipts": {
+      "component": {
+        "file": "build/cpu/btb-address-validation-v83/result.json",
+        "result_sha256": "7f492a60ba63c873f2f0040d5f385d65e3da85035715aff381d7d7640d74f990",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 10,
+          "output_hashes": 7
+        }
+      },
+      "red_control": {
+        "file": "build/cpu/btb-address-red-v83-v2/result.json",
+        "result_sha256": "254584467339ba1d40ef4ca4a0af684e1a1c18ebf8c067d805550599c78db931",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 9,
+          "output_hashes": 7
+        }
+      },
+      "complete_btb": {
+        "file": "build/cpu/btb-address-full-btb-v83/result.json",
+        "result_sha256": "38422e893929a4f1fdf66ff8354f51171e2910682d9a2ac1491cc83a0ff40075",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 30,
+          "output_hashes": 6
+        }
+      },
+      "ordered": {
+        "file": "build/cpu/redirect-ordered-20261101T0826052625545Z/result.json",
+        "result_sha256": "318ba9d4fd28384290833de5cacb3c191e3be4795ccafaf7d8acd595debf666f",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 46,
+          "external_input_hashes": 5,
+          "output_hashes": 38
+        }
+      },
+      "irq": {
+        "file": "build/cpu/redirect-ordered-20261101T0826053608014Z/result.json",
+        "result_sha256": "666502ba0560ff7bc5e75b73d010d5ceaa87f0783da558bc7b64dc70f6abe01e",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 46,
+          "external_input_hashes": 5,
+          "output_hashes": 38
+        }
+      },
+      "recovery": {
+        "file": "build/cpu/dual-diagnostic-20261101T082605053046Z/result.json",
+        "result_sha256": "6eb86fb03dddf61b46847d1b3ef05ba2d546dcb1c0feff0293c2fd152d03bb83",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 40,
+          "external_hashes": 12,
+          "output_hashes": 75
+        }
+      },
+      "sram": {
+        "file": "build/cpu/dual-sram/coremark-20261101T082604859171Z/result.json",
+        "result_sha256": "8b698ba9e4b762c5ed916877d56974390d78e8c568de1b74ffa70b6cde84d3aa",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 77,
+          "external_hashes": 11,
+          "output_hashes": 122,
+          "origin_hashes": 77
+        }
+      },
+      "native": {
+        "file": "build/cpu/btb-address-native-gate-v83/native-result.json",
+        "result_sha256": "95dd04e7977de5468613d4ccc23773b29a607b5f5c87144701282481e5a41631",
+        "status": "PASS",
+        "verified": {
+          "input_hashes": 4,
+          "output_hashes": 68
+        }
+      }
+    },
+    "mappings": {
+      "btb-address-mapping-v83-v2.json": {
+        "file": "build/cpu/btb-address-mapping-v83-v2.json",
+        "sha256": "9b6b3d9d6345958e8a49c301825e5b6f782982f8ecba85b2bf08e2d90aea3fa4",
+        "status": "PASS"
+      },
+      "btb-address-mapping-v83-negative-control-v2.json": {
+        "file": "build/cpu/btb-address-mapping-v83-negative-control-v2.json",
+        "sha256": "2700231204ade195e1ded617abd79fe332cb1f9966e9b58148352796f74940a6",
+        "status": "HOLD"
+      },
+      "btb-address-mapping-v83-negative-delay-v2.json": {
+        "file": "build/cpu/btb-address-mapping-v83-negative-delay-v2.json",
+        "sha256": "f269042c152a464f988250c33993a9d545d76a482f9cf5329230ff1eb273ed34",
+        "status": "HOLD"
+      },
+      "btb-address-mapping-composite-v83.json": {
+        "file": "build/cpu/btb-address-mapping-composite-v83.json",
+        "sha256": "d83b3883f9df8930b6dfa2317894bb9d52be85d493021878a0eddc1fd2f07bda",
+        "status": "PASS"
+      },
+      "btb-address-prior-branch-v83.json": {
+        "file": "build/cpu/btb-address-prior-branch-v83.json",
+        "sha256": "d2437892d31699407b186a2530a15fad6ac24e624f0147ba1aff850a2402ca5f",
+        "status": "PASS"
+      },
+      "btb-address-prior-sum-v83.json": {
+        "file": "build/cpu/btb-address-prior-sum-v83.json",
+        "sha256": "178f08ad0a99d4ca915177d22b5bf0c23d8f00ce0980c5879fa9575bb0524933",
+        "status": "PASS"
+      },
+      "btb-address-prior-role-v83.json": {
+        "file": "build/cpu/btb-address-prior-role-v83.json",
+        "sha256": "d467e3e7f559755be65d2d289471b3dabfb79cfef7c94105057ac824aecd9bad",
+        "status": "PASS"
+      },
+      "btb-address-prior-memory-v83.json": {
+        "file": "build/cpu/btb-address-prior-memory-v83.json",
+        "sha256": "8b83affe58dd8ef316810e4691c01fee878bb7ba15f340bc41545c7208e00fe2",
+        "status": "PASS"
+      }
+    },
+    "source_manifest_sha256": "39a162d6ddfce2f806a3fe603a96dbb9ff4fcfd3c05096c372149fc62b804853",
+    "sources_verified": 22,
+    "measurement": {
+      "cycles": 1221907,
+      "wb_completed": 1448448,
+      "observed_ipc": 1.1853995435004465,
+      "coremark_per_mhz_short_estimate": 4.091964445739324,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "official_score": false
+    },
+    "same_parent_profile": true,
+    "same_parent_files": {
+      "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+      "sram.hex": "5c99851883b4347e30483fbe9cf1867d8e8804fa427ae84433afabc917a26fb7",
+      "sram.wb.log": "94b46e276990d7a3fd630205a291c632124eed000913cfd395731fd12938fffd",
+      "sram.store.log": "9a4f78277a479a1301a28f11607ba4a8fdc69fab53a1a16dfb0ad476ca300af8"
+    },
+    "preserved95_record_sha256": "b440bc1d0d0a34617ba445a172df54b914cd5dee86a17212a801be00a25f2474",
+    "archive_sha256": "f5480495ec71eb680aff55ea953a631a0301cc3cc214395654493035e8db53d8",
+    "timing_closed": false,
+    "scope": "Receipt/source/trace integrity audit; not a replacement for final routed STA"
+  },
+  "physical": {
+    "status": "100MHZ_TIMING_PASS",
+    "run": "build/cpu/dual-btb-address-io-physical-v83",
+    "result_sha256": "148849e5876b135aede775a1b2115bb4e9e51b113d79e3cbd3f675c7777eeb5a",
+    "prepared_sha256": "9db852ea511f954a415872d2e3913dfe4e59391a1b393b437f7c8609e5fa4c7a",
+    "stages": {
+      "compile": true,
+      "synthesize": true,
+      "dev_map": true,
+      "pnr": true,
+      "report_timing": true
+    },
+    "source_unchanged": true,
+    "verified_inputs": 30,
+    "verified_outputs": 362,
+    "native_return_code": 0,
+    "runner_return_code": 0,
+    "timing": {
+      "met": true,
+      "corners": [
+        {
+          "corner": "Slow",
+          "check": "Setup",
+          "slack_ns": 0.307,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26161
+        },
+        {
+          "corner": "Slow",
+          "check": "Hold",
+          "slack_ns": 0.114,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26161
+        },
+        {
+          "corner": "Slow",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 3.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4607
+        },
+        {
+          "corner": "Fast",
+          "check": "Setup",
+          "slack_ns": 2.753,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26161
+        },
+        {
+          "corner": "Fast",
+          "check": "Hold",
+          "slack_ns": 0.103,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 26161
+        },
+        {
+          "corner": "Fast",
+          "check": "Minimum Pulse Width",
+          "slack_ns": 4.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 4607
+        }
+      ],
+      "performance_slack_ns": 0.307,
+      "worst_setup_ns": 0.307,
+      "performance_consistent": true,
+      "requested_period_ns": 10.0,
+      "reported_period_ns": 10.0,
+      "reported_frequency_mhz": 100.0,
+      "period_quantization_ns": 0.0,
+      "all_constraints_met": true
+    },
+    "cpu_synthesis_resources": {
+      "lut": 9845,
+      "ff": 5001,
+      "ram_lut_included": 752,
+      "apm": 4,
+      "drm": 0
+    },
+    "route_mapping_sha256": "e353d8072964b4435f241ffdbeab9904d1203f7c2ccf879b28303e23b8a2c0ad",
+    "same_parent_constraints_recipe_seed_budget": true,
+    "last_main_detailed": {
+      "iteration": 135,
+      "unrouted": 0
+    },
+    "report_sha256": "efab3e19100199d6bb3c4c801f34c6ce1eff13a633bb0786b8651daa52e7d520",
+    "reported_slow_max_paths": 200,
+    "worst_paths": [
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_issue/u_pipe1_ctrl/operand_rb_e1_q[21]/opit_0_inv_L6QL5Q1_perm/I4",
+        "slack_ns": 0.307
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[43]_5/opit_0_inv/D",
+        "slack_ns": 0.337
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q[2]/opit_0_inv_L5Q_perm/CE",
+        "slack_ns": 0.344
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[41]_5/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/gen_dual_exec.u_exec1/result_q[1]/opit_0_inv_L6Q_perm/I5",
+        "slack_ns": 0.396
+      },
+      {
+        "start": "u_core/u_cpu/u_mul/N71/gopapm/CLK",
+        "end": "u_core/u_cpu/u_mul/result_e2_q[18]/opit_0_inv_L6Q_LUT6DQL5Q_perm/I4",
+        "slack_ns": 0.402
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[43]_1/opit_0_inv/D",
+        "slack_ns": 0.412
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[43]_6/opit_0_inv/D",
+        "slack_ns": 0.412
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_issue/u_pipe1_ctrl/conditional_pc_e1_q[22]/opit_0_inv_L6QL5Q_perm/I3",
+        "slack_ns": 0.439
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head1_q_copy[43]_7/opit_0_inv/D",
+        "slack_ns": 0.462
+      },
+      {
+        "start": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[40]_6/opit_0_inv/CLK",
+        "end": "u_core/u_cpu/u_frontend/u_decode/genblk1.u_fifo/head0_q_copy[35]/opit_0_inv/CE",
+        "slack_ns": 0.485
+      }
+    ]
+  },
+  "actual_route_composite_sha256": "7b5b0c19b0458614a3cd38d860b71daacdf86fc69aa03a5bdcd028de35b9c38a",
+  "recovery_removal": [
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "slack_ns": 3.099,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "slack_ns": 0.11,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "slack_ns": 4.803,
+      "failing_endpoints": 0
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "slack_ns": 0.217,
+      "failing_endpoints": 0
+    }
+  ],
+  "raw_runtime_status_preserved": "TIMING_PASS_AREA_PENDING",
+  "cpu_only_area_complete": true,
+  "board_validated": false,
+  "official_score": false,
+  "review": "Inline actual-source review; true corruption negatives; actual route remapping; independent six-corner/report/hash/CPU-only area audit; no new subagents",
+  "accepted_100mhz_tag": "cpu-dual-sram-100mhz-20261101",
+  "retained_95mhz_tag": "cpu-dual-sram-95mhz-20261101",
+  "decision": "Accept v83 as isolated100MHz physical candidate. Retain95MHz archive and all rejected runs. Do not alter main integration, default production RTL or board configuration.",
+  "next": "Freeze this passing implementation. Board PLL/pins/firmware/UART and sustained CoreMark remain a separate deployment step; no higher-frequency or repeated PNR in this task.",
+  "preserved_100mhz": {
+    "status": "PRESERVED_AND_VERIFIED",
+    "tag": "cpu-dual-sram-100mhz-20261101",
+    "archive": "build/cpu/preserved-dual-sram-100mhz-20261101/dual-sram-100mhz.zip",
+    "archive_sha256": "7ddfa9006cab6aa6641103d485586f47a983e4b0ef04b5c9c14c87235e09a54b",
+    "archive_bytes": 19882660,
+    "archived_files": 409,
+    "manifest": "build/cpu/preserved-dual-sram-100mhz-20261101/manifest.json",
+    "manifest_sha256": "d57a6d3ddbf495a96d731e1d0779ade1739adba88b2f1d929fdaf17ceedc5524",
+    "scope": "Complete frozen physical run plus22 candidate sources, replay patch, actual mapping/audit tools and benchmark summary/images. Full functional ModelSim libraries/WB/store remain in their original build directories and are hash-bound; they are not copied into this archive.",
+    "timing": "Original100MHz PASS,allSlow/Fast setup/hold/MPW pass",
+    "retained95": "docs/verification/cpu/dualissue_95mhz_preserved.json",
+    "board_validated": false
+  }
+}
