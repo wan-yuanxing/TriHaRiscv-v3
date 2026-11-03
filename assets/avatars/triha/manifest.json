@@ -26,7 +26,7 @@
     "texels": 34331,
     "bytes": 137324,
     "table": "rtl/video/include/avatar_span_table.vh",
-    "table_sha256": "d711cd8650a498cfa8aeb24f0be958919411e105dcb64fa034378398810bf2c8"
+    "table_sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e"
   },
   "limitations": "Fixed 2D square overlay; not segmentation, tracking, or a guarantee of full profile-face coverage"
 }

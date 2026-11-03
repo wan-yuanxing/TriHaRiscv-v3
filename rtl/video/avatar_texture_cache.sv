@@ -19,20 +19,20 @@ module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
     generate if(TEXELS<1||TEXELS>65536)begin:invalid_parameters
         initial $fatal(1,"avatar_texture_cache requires 1..65536 texels");
     end endgenerate
-    reg loading;
+    reg loading,sealing;
     reg [15:0] write_index;
     reg core_run=0,pixel_run=0;
     always @(posedge core_clk)core_run<=core_reset_n;
     always @(posedge pixel_clk)pixel_run<=pixel_reset_n;
     assign load_ready=core_run&&core_reset_n&&!loading&&!asset_ready&&!load_fault;
-    assign s_ready=core_run&&core_reset_n&&loading&&!load_fault;
+    assign s_ready=core_run&&core_reset_n&&loading&&!load_fault&&!sealing;
     wire last_matches=s_last===(words_written==TEXELS-1);
     wire known_rgba=(^s_rgba!==1'bx);
-    wire storage_ok;
+    wire storage_ok,write_complete;
     wire write_word=core_run&&s_valid&&s_ready&&last_matches&&known_rgba&&storage_ok;
     always @(posedge core_clk or negedge core_reset_n)begin
         if(!core_reset_n)begin
-            loading<=0;write_index<=0;asset_ready<=0;load_fault<=0;
+            loading<=0;sealing<=0;write_index<=0;asset_ready<=0;load_fault<=0;
             asset_id<=0;asset_generation<=0;words_written<=0;
         end else begin
             if(load_valid&&load_ready)begin
@@ -43,10 +43,13 @@ module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
                 if(!last_matches||!known_rgba||!storage_ok)begin loading<=0;load_fault<=1;end
                 else begin
                     words_written<=words_written+1'b1;
-                    if(words_written==TEXELS-1)begin loading<=0;asset_ready<=1;end
+                    if(words_written==TEXELS-1)sealing<=1;
                     else write_index<=write_index+1'b1;
                 end
             end
+            // Complete only after the final physical RAM write; reject further
+            // input while a compact-cache final write is still in flight.
+            if(write_complete)begin loading<=0;sealing<=0;asset_ready<=1;end
         end
     end
     (* ASYNC_REG="TRUE" *) reg ready_meta,ready_sync;
@@ -73,6 +76,7 @@ module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
         reg [31:0] texture[0:TEXELS-1];
         reg [31:0] read_data;
         assign storage_ok=1'b1;
+        assign write_complete=write_word&&s_last;
         always @(posedge core_clk)if(write_word)texture[write_index]<=s_rgba;
         always @(posedge pixel_clk)
             if(pixel_run&&pixel_req_valid&&request_ok)read_data<=texture[pixel_req_addr[17:2]];
@@ -88,32 +92,46 @@ module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
         reg [31:0] main_data,tail_data;
         reg [16:0] packed_write;
         reg [7:0] row_left;
-        reg [8:0] row_count;
+        reg [8:0] row_right;
         wire [32:0] first_span=avatar_span(8'd0);
         wire [32:0] next_span=avatar_span(write_index[15:8]+8'd1);
-        wire keep_word=write_index[7:0]>=row_left&&
-                      ({1'b0,write_index[7:0]}-{1'b0,row_left})<row_count;
+        wire keep_word=write_index[7:0]>=row_left&&{1'b0,write_index[7:0]}<row_right;
         assign storage_ok=(keep_word||s_rgba==32'd0)&&
-                          (!s_last||(packed_write+keep_word)==AVATAR_PACKED_TEXELS);
+                          (!s_last||(keep_word?packed_write==AVATAR_PACKED_TEXELS-1:
+                                              packed_write==AVATAR_PACKED_TEXELS));
         always @(posedge core_clk or negedge core_reset_n)begin
-            if(!core_reset_n)begin packed_write<=0;row_left<=0;row_count<=0;end
+            if(!core_reset_n)begin packed_write<=0;row_left<=0;row_right<=0;end
             else begin
                 if(load_valid&&load_ready)begin
-                    packed_write<=0;row_left<=first_span[16:9];row_count<=first_span[8:0];
+                    packed_write<=0;row_left<=first_span[16:9];row_right<=first_span[8:0];
                 end
                 if(write_word)begin
                     if(keep_word)packed_write<=packed_write+1'b1;
-                    if(write_index[7:0]==255)begin row_left<=next_span[16:9];row_count<=next_span[8:0];end
+                    if(write_index[7:0]==255)begin row_left<=next_span[16:9];row_right<=next_span[8:0];end
                 end
             end
         end
-        always @(posedge core_clk)begin
-            if(write_word&&keep_word&&!packed_write[15])main_ram[packed_write[14:0]]<=s_rgba;
-            if(write_word&&keep_word&&packed_write[15])tail_ram[packed_write[14:0]]<=s_rgba;
+        // Isolate the 125 MHz RAM enable/address/data from span validation.
+        // Accepted-word counting can lead the physical write by one clock;
+        // neither core nor pixel readiness is published until it commits.
+        reg delayed_write,delayed_last;
+        reg [15:0] delayed_address;
+        reg [31:0] delayed_rgba;
+        always @(posedge core_clk or negedge core_reset_n)begin
+            if(!core_reset_n)begin delayed_write<=0;delayed_last<=0;end
+            else begin delayed_write<=write_word&&keep_word;delayed_last<=write_word&&s_last;end
         end
+        always @(posedge core_clk)if(write_word&&keep_word)begin
+            delayed_address<=packed_write[15:0];delayed_rgba<=s_rgba;
+        end
+        always @(posedge core_clk)begin
+            if(delayed_write&&!delayed_address[15])main_ram[delayed_address[14:0]]<=delayed_rgba;
+            if(delayed_write&&delayed_address[15])tail_ram[delayed_address[14:0]]<=delayed_rgba;
+        end
+        assign write_complete=delayed_last&&!load_fault;
         wire [32:0] read_span=avatar_span(pixel_req_addr[17:10]);
         wire [8:0] read_delta={1'b0,pixel_req_addr[9:2]}-{1'b0,read_span[16:9]};
-        wire read_stored=pixel_req_addr[9:2]>=read_span[16:9]&&read_delta<read_span[8:0];
+        wire read_stored=pixel_req_addr[9:2]>=read_span[16:9]&&{1'b0,pixel_req_addr[9:2]}<read_span[8:0];
         wire [15:0] packed_read=read_span[32:17]+read_delta;
         reg read_zero,read_tail;
         always @(posedge pixel_clk)if(pixel_run&&pixel_req_valid&&request_ok)begin

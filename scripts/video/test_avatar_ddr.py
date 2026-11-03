@@ -66,6 +66,19 @@ def main():
             if args.compact:expected_code=1 if case in (6,20,21) else 5 if case==22 else 7 if case==23 else 0
             if row['code']!=expected_code:raise RuntimeError('Wrong precise result code '+name)
             result['cases'][name]=row
+        if args.compact:
+            result['stream']={}
+            for name,reset,half in [('continuous',0,12.5),('reset_pending',1,12.5),('continuous_ratio',0,17)]:
+                cw=work/name;fixtures(cw,65536,asset);binary=cw/'simulation.vvp'
+                top='tb_avatar_span_stream'
+                run_logged([tool('iverilog'),'-g2012','-Wall','-s',top,'-o',binary,
+                            '-I',ROOT/'rtl/soc/include','-I',ROOT/'rtl/video/include',
+                            f'-P{top}.RESET_DURING_LOAD={reset}',f'-P{top}.PIXEL_HALF={half}',
+                            *[ROOT/p for p in m['sources']+m['tests']]],cw/'compile.log')
+                log=run_logged([tool('vvp'),binary,'+DIR='+cw.as_posix()],cw/'simulation.log',timeout=180)
+                token=f'AVATAR_SPAN_STREAM_PASS accepted=65536 compared=65536 reset={reset}'
+                if log.count(token)!=1:raise RuntimeError('Incomplete continuous stream '+name)
+                result['stream'][name]=dict(accepted=65536,compared=65536,reset=reset,pixel_half_ns=half)
         if result['inputs']!=input_hashes(paths) or any(sha256(p)!=h for p,h in result['tools'].items()):raise RuntimeError('Inputs/tools changed')
         result.update(status='pass',physical_board=False,raw_owner_integrated=False,live_replacement=False,artifacts=input_hashes(p for p in work.rglob('*') if p.is_file()))
     except Exception as error:result.update(status='fail',error=str(error));print(str(error),file=sys.stderr)

@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_LOSSLESS_CACHE_IDENTITY_INCLUDE_FIX_PRODUCTION_BUILD_RUNNING",
-  "updated_at": "2026-11-03T23:14:09.353974+08:00",
+  "status": "USER_PHOTO_PIPELINED_CACHE_SYNTHESIS_PASS_PHYSICAL_IMPLEMENTATION_RUNNING",
+  "updated_at": "2026-11-04T00:06:22.062032+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -13,13 +13,13 @@
     "video_ddr": 125000000,
     "pixel": 40000000
   },
-  "avatar_cache": "build/video/avatar_ddr/20261103T151205_807340Z",
+  "avatar_cache": "build/video/avatar_ddr/20261103T155459_320871Z",
   "scope": "Fixed transparent 2D preset positioned/scaled from real primary face rectangle; KEY1 RAW/BOX/AVATAR; no five-point alignment or head rotation",
   "avatar_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete formal synthesis and repeated exact-source full-system simulations; continue mapping, routing, STA/CDC, then qualified bitstream and board.",
+  "next_step": "Repeat exact-source full-system simulation and synthesis; map and performance-mode seed-5 route, then full STA/CDC. No photo programming until qualified.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -41,11 +41,9 @@
   },
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
-  "firmware_sha256": "13d97fb46c514b0ebfa593c2730086fff36ad5728dbafeee456b42c54d5fdfa5",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
   "board_scan": "build/video/jtag_scan/20261103T132743_664738Z",
   "board_scan_status": "identified PG2L100H 0x00602899 after user reconnected power/JTAG",
-  "placement_estimated_worst_slack_ns": 0.452,
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
   "first_route_timing": {
@@ -73,9 +71,6 @@
     "simulation_alignment": "build/video/face_photo_50_sim_alignment_20261103.json",
     "simulation_performance": "build/video/face_photo_performance_20261103.json"
   },
-  "positive": "build/soc/face_system-20261103T151233_715409Z",
-  "negative": "build/soc/face_system-20261103T151233_715084Z",
-  "synthesis": "build/video/pds/20261103T151254_336880Z",
   "second_route_review": "build/video/face_photo_50_priority_review_20261103/result.json",
   "second_route_timing": {
     "worst_setup_ns": -0.934,
@@ -90,12 +85,18 @@
     "stored_texels": 34331,
     "stored_bytes": 137324,
     "unchanged_full_rgba_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
-    "table_sha256": "d711cd8650a498cfa8aeb24f0be958919411e105dcb64fa034378398810bf2c8",
+    "table_sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e",
     "reads_per_successful_case": 65538,
     "cases": 8,
     "red_before_implementation": "build/video/avatar_ddr/20261103T144745_953286Z",
-    "generic_regression": "build/video/avatar_ddr/20261103T145108_741843Z",
-    "mode_resources": "build/video/regression/20261103T145237_139598Z"
+    "generic_regression": "build/video/avatar_ddr/20261103T155600_896370Z",
+    "mode_resources": "build/video/regression/20261103T145237_139598Z",
+    "constant_identity_header_sha256": "b7d813f73304070c96a4091b9ee98b47d20e5e74b66800e7b8f7160bb8983e20",
+    "table_fields": "base16 / left8 / exclusive_right9",
+    "write_pipeline_cycles": 1,
+    "core_seal_after_physical_write": true,
+    "pixel_response_latency_unchanged": true,
+    "continuous_stream_cases": 3
   },
   "synthesis_failures": [
     "build/video/pds/20261103T145127_860103Z",
@@ -116,7 +117,6 @@
     "status": "PASS",
     "identity_header": "Before extracting unused DDR-loader function into constant-only include; exact old frozen sources, cannot qualify the revised build."
   },
-  "offline_pipeline": "build/video/face_photo_spans_50_pipeline_admitted_20261103/receipt.json",
   "pds_workaround_diagnostic": {
     "directory": "build/video/avatar_span_identity_only_probe_20261103",
     "status": "PASS_DIAGNOSTIC_ONLY",
@@ -127,5 +127,41 @@
     "registers": 47745,
     "drm": 112.5,
     "not_production_acceptance": true
-  }
+  },
+  "previous_unpipelined_spans": {
+    "positive": "build/soc/face_system-20261103T151233_715409Z",
+    "negative": "build/soc/face_system-20261103T151233_715084Z",
+    "synthesis": "build/video/pds/20261103T151254_336880Z",
+    "mapping": "build/video/pds/face_photo_spans_50_map_20261103",
+    "route": "build/video/pds/face_photo_spans_50_route_20261103",
+    "offline_pipeline": "build/video/face_photo_spans_50_pipeline_admitted_20261103/receipt.json",
+    "resources": {
+      "lut": 48883,
+      "registers": 47745,
+      "drm": 112.5
+    },
+    "simulation_alignment": "build/video/face_photo_spans_50_sim_alignment_20261103.json",
+    "simulation_performance": "build/video/face_photo_spans_performance_20261103.json",
+    "positive_result_sha256": "77c563091707b772fe406a64cf1732b184f6df5096523fd1676262ed14cd76ec",
+    "negative_result_sha256": "d544d83fd739dd088da591459db19dc551ab79316dc87c4d587ceae0206764b9",
+    "firmware_sha256": "93c50c9033782f84262b0db52bb3575d27cb8e98e12533ac779db667a5fc00c0",
+    "placement_estimated_worst_slack_ns": -0.884,
+    "review": "build/video/face_photo_spans_50_review_20261103/result.json",
+    "worst_setup_ns": -1.886,
+    "worst_hold_ns": 0.121,
+    "critical_path": "Span-control ROM to main RAM write enable, 10 logic levels; setup DDR domain 330 failing endpoints. CPU +1.180 ns, pixel +8.727 ns.",
+    "native_sta_3017_count": 0
+  },
+  "positive": "build/soc/face_system-20261103T155600_633574Z",
+  "negative": "build/soc/face_system-20261103T155600_655389Z",
+  "synthesis": "build/video/pds/20261103T155625_876936Z",
+  "mapping": "build/video/pds/face_photo_pipe_50_map_20261103",
+  "route": "build/video/pds/face_photo_pipe_50_route_20261103",
+  "offline_pipeline": "build/video/face_photo_pipe_50_pipeline_admitted_20261103/receipt.json",
+  "resources": {
+    "lut": 48902,
+    "registers": 47797,
+    "drm": 112.5
+  },
+  "previous_source_checkpoint": "1a36b55"
 }
