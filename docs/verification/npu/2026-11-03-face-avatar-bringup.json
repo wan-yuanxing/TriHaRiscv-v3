@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_CONTROL_OPTIMIZATION_FULL_REBUILD",
-  "updated_at": "2026-11-04T04:53:40.909367+08:00",
+  "status": "USER_PHOTO_CONTROL_FULL_SYSTEM_PASS_PHY_PLACEMENT",
+  "updated_at": "2026-11-04T05:06:46.291651+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete current-source positive/negative seven-segment full-system simulations and fresh synthesis/map/PHY-constrained placement/route; rerun all physical qualification before any bitstream.",
+  "next_step": "Finish 550-site current-map placement and route; independently verify dual-corner timing, actual retained locations, Gray clocks and native diagnostics before generating any bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T204441_917993Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -70,7 +70,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_control2_phy_place_20261104",
+  "placement": "build/video/pds/face_photo_control3_phy_place_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -350,8 +350,8 @@
   "negative": "build/soc/face_system-20261103T204514_170957Z",
   "synthesis": "build/video/pds/20261103T205045_995914Z",
   "mapping": "build/video/pds/face_photo_control2_50_map_20261104",
-  "route": "build/video/pds/face_photo_control2_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_control2_50_pipeline_20261104/receipt.json",
+  "route": "build/video/pds/face_photo_control3_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_control3_50_pipeline_20261104/receipt.json",
   "guard_row_optimization": {
     "guard": "build/video/face_guard_production_20261104/result.json",
     "guard_cases": 248,
@@ -513,13 +513,40 @@
     "production_control_scenarios": 19,
     "cache_ddr_cases": 8,
     "cache_stream_cases": 3,
-    "full_system_status": "RUNNING",
-    "physical_status": "WAIT_SYNTHESIS",
-    "isolated_cache_probe": "build/video/avatar_ddr_data_probe/20261103T203540_565427Z/result.json"
+    "full_system_status": "PASS",
+    "physical_status": "PLACE",
+    "isolated_cache_probe": "build/video/avatar_ddr_data_probe/20261103T203540_565427Z/result.json",
+    "shared_sources": 136,
+    "frames_per_scene": 2,
+    "all_modes": "111",
+    "captures": 4,
+    "requests": 4,
+    "results": 2,
+    "records": 2,
+    "commits": 2,
+    "releases": 1,
+    "reuses": 1
   },
   "firmware_build_restart": {
     "supersession": "build/video/pds/20261103T204514_147251Z/supersession.json",
     "identity_diagnostic": "build/video/control_firmware_identity_20261104.json",
     "reason": "Initial build mistakenly selected the previous positive ELF. All ROM/SRAM words identical; nonallocated .strtab differs. Owned build jobs stopped; new synthesis binds the exact current positive ELF. Simulations continue unchanged."
+  },
+  "simulation_alignment": "build/video/face_photo_control2_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_control2_performance_20261104.json",
+  "positive_result_sha256": "0f52bf3c95d5698a08e3efb8f9e87b5062f55ca59200f2b928e882e7fa059eb7",
+  "negative_result_sha256": "a572f88bd383b441b6cd21a6fc780f37e016af0079c255c961262e18190ca9c6",
+  "map_result_sha256": "8052a38eb8b5b69dd092ac126bcebf3ff5e86ab29d55dfe18a688ef14e068f41",
+  "resources": {
+    "lut": 48850.0,
+    "registers": 47758.0,
+    "drm": 112.5
+  },
+  "control_phy_location_retry": {
+    "failed_placement": "build/video/pds/face_photo_control2_phy_place_20261104/receipt.json",
+    "failed_pipeline": "build/video/face_photo_control2_50_pipeline_20261104/receipt.json",
+    "exclusion_evidence": "build/video/face_photo_control_phy_exclusions_20261104.json",
+    "selected_locations": 550,
+    "scope": "Exactly two optional stale names rejected by native current-map checking removed; no no_check, clock or mandatory pin change. All 550 retained hints accepted; final site retention not yet checked."
   }
 }
