@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_STORAGE_SYNTH_MAP_PASS_PLACEMENT_RUNNING",
-  "updated_at": "2026-11-04T07:03:38.915074+08:00",
+  "status": "USER_PHOTO_STORAGE_FULL_SYSTEM_PASS_ROUTING",
+  "updated_at": "2026-11-04T07:10:24.575224+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish exact-source whole-system simulations and synthesis, then map/place with observed PHY hints and independently qualify the full routed result.",
+  "next_step": "Finish the frozen compressed-record route and independent dual-corner timing, all 552 actual PHY locations, Gray clocks and qualification before bit generation and release replay.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -761,5 +761,22 @@
     "cdc_commands": 71,
     "unchanged_cdc_commands": 70,
     "unchanged_held_record_max_delay_ns": 6.0
+  },
+  "simulation_alignment": "build/video/face_photo_storage_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_storage_performance_20261104.json",
+  "positive_result_sha256": "0d3606a006bb80c65b1c36f1c9d2125e8a5ee374a3159de30d2dff11bceecd0d",
+  "negative_result_sha256": "9e22e182217925209b84454bb2b49204e6a50d8ddb8979170fd103a491478bc1",
+  "current_placement_pass": {
+    "directory": "build/video/pds/face_photo_storage_phy_place_20261104",
+    "requested_phy_locations": 552,
+    "ff_locations": 548,
+    "packed_cells": 4,
+    "final_estimated_setup_ns": 0.932,
+    "placed_db_sha256": "e3382105addfc76826087239405e79e501a2a6362021271993dfff413e1beba7",
+    "clma_used": 10563,
+    "clma_available": 11675,
+    "clms_used": 4474,
+    "clms_available": 4975,
+    "actual_routed_retention_pending": true
   }
 }
