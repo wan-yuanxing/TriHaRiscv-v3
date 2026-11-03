@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_PIPELINED_FUNCTIONAL_PASS_FROZEN_PLACEMENT_PRIORITY_ROUTE_RUNNING",
-  "updated_at": "2026-11-04T01:39:48.478172+08:00",
+  "status": "USER_PHOTO_FUNCTIONAL_PASS_PHY_SITES_RETAINED_PRIORITY_ROUTING",
+  "updated_at": "2026-11-04T02:57:59.898119+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete route-only normal-mode implementation of the previously completed performance placement with 29 measured original-net priorities; final STA/CDC and current-route diagnostics remain mandatory. Board power/JTAG reconfirmation is pending.",
+  "next_step": "Finish measured 24-net priority routing on frozen PHY-site placement. Repeat all STA, actual-site retention, CDC and current-route diagnostic checks. Current board power/JTAG confirmation remains pending.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -42,12 +42,13 @@
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261103T162537_568188Z",
-  "board_scan_status": "Latest fresh-server 1MHz and 500KHz read-only scans see cable but no FPGA; COM12 remains present. User asked to verify current power/JTAG; earlier successful identification is historical only.",
+  "board_scan": "build/video/jtag_scan/20261103T185217_344946Z",
+  "board_scan_status": "Fresh-server 1MHz scan at 02:52 again saw USB Cable II but no FPGA; no programming/upload. Earlier successful identification remains historical.",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
-    "build/video/jtag_scan/20261103T162537_568188Z"
+    "build/video/jtag_scan/20261103T162537_568188Z",
+    "build/video/jtag_scan/20261103T185217_344946Z"
   ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
@@ -57,7 +58,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_pipe_50_route_20261103",
+  "placement": "build/video/pds/face_photo_phy_sites_place2_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -159,8 +160,8 @@
   "negative": "build/soc/face_system-20261103T155600_655389Z",
   "synthesis": "build/video/pds/20261103T155625_876936Z",
   "mapping": "build/video/pds/face_photo_pipe_50_map_20261103",
-  "route": "build/video/pds/face_photo_pipe_priority2_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_pipe_priority2_verified_flow_20261104/receipt.json",
+  "route": "build/video/pds/face_photo_phy_sites_priority_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_phy_sites_priority_50_pipeline_20261104/receipt.json",
   "resources": {
     "lut": 48902,
     "registers": 47797,
@@ -217,7 +218,13 @@
     "accepted_priority_nets": 29,
     "mode": "normal",
     "new_placement": false,
-    "same_source_map_and_functional_results": true
+    "same_source_map_and_functional_results": true,
+    "result": "TIMING_FAILED",
+    "review": "build/video/face_photo_pipe_priority2_50_review_20261104/result.json",
+    "report_sha256": "ff6c3d0756f1e8a62703b4574f26567946e7cf7b19598d5519a0931e036a0b47",
+    "worst_setup_ns": -1.707,
+    "worst_hold_ns": -0.77,
+    "ddr_system_setup_ns": -0.473
   },
   "placement_message_scope_fix": {
     "source": "scripts/video/qualify_face_bitstream.py",
@@ -230,5 +237,79 @@
     "simulation_reaudit": "build/video/face_photo_pipe_50_sim_reaudit_20261104.json",
     "auditor_sha256": "87ad16c23c24a0e7b47ac28f0881a5f67d7069da9bcb46424494cce7db09fca5",
     "scope": "When only a completed placement is reused, bind and retain the full combined native log but review only its unambiguously delimited placement prefix. Record prior unused route diagnostics separately. Always review all current-route errors/critical warnings. No timing constraints or thresholds change."
+  },
+  "phy_site_attempt": {
+    "placement": "build/video/pds/face_photo_phy_sites_place2_20261104",
+    "source_review": "build/video/face_photo_spans_50_review_20261103/result.json",
+    "source_routed_hold_min_ns": 0.121,
+    "selected_named_ff_sites": 552,
+    "vendor_input_hashes_identical": true,
+    "current_mapped_logic_unchanged": true,
+    "no_timing_exception_changes": true,
+    "native_names_validated": true,
+    "runner": "build/video/place_photo_phy2_20261104.py",
+    "retention_checker": "build/video/check_photo_phy_sites_20261104.py",
+    "first_monitor_overrejection": "build/video/pds/face_photo_phy_sites_place_20261104/diagnosis.json",
+    "mapped_netlist_probe_limitation": "build/video/face_phy_placement_probe_20261104/console.log: native gen_netlist requires PNR database; no mapped netlist was generated.",
+    "result": "TIMING_FAILED",
+    "route": "build/video/pds/face_photo_phy_sites_50_route_20261104",
+    "pipeline": "build/video/face_photo_phy_sites_50_pipeline_20261104/receipt.json",
+    "review": "build/video/face_photo_phy_sites_50_review_20261104/result.json",
+    "report_sha256": "5b534d99278bf536f8a6767f64f17491b4fb58525650b96ed4e20e9746053a51",
+    "placement_estimated_wns_ns": 0.668,
+    "routed_minimum_slack_ns": {
+      "setup": -0.464,
+      "hold": 0.018,
+      "recovery": 1.416,
+      "removal": 0.278,
+      "pulse_width": 0.035
+    },
+    "negative_setup": [
+      {
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "ddrphy_sysclk",
+        "wns_ns": -0.464,
+        "total_negative_slack_ns": -8.831,
+        "failing_endpoints": 60,
+        "endpoints": 53750
+      },
+      {
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "phy_dq_sysclk_0",
+        "wns_ns": -0.32,
+        "total_negative_slack_ns": -0.512,
+        "failing_endpoints": 2,
+        "endpoints": 196
+      },
+      {
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "phy_dq_sysclk_1",
+        "wns_ns": -0.163,
+        "total_negative_slack_ns": -0.163,
+        "failing_endpoints": 1,
+        "endpoints": 420
+      }
+    ],
+    "native_sta3017_count": 1,
+    "retention": "build/video/face_photo_phy_sites_50_retention_20261104.json",
+    "retained_ff_sites": 552,
+    "gray_datapath_bound_groups": 23,
+    "gray_datapath_bound_bits": 116,
+    "full_gray_clock_review_performed": false
+  },
+  "phy_site_priority_attempt": {
+    "result": "RUNNING",
+    "placement": "build/video/pds/face_photo_phy_sites_place2_20261104",
+    "constraints": "build/video/face_photo_phy_sites_priority_20261104.rcf",
+    "provenance": "build/video/face_photo_phy_sites_priority_20261104.json",
+    "accepted_original_net_names": 24,
+    "distinct_negative_launch_paths": 12,
+    "mode": "normal",
+    "hold_repair_target_ps": 200,
+    "same_mapped_logic": true,
+    "same_timing_constraints": true
   }
 }
