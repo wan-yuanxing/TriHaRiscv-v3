@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_STORAGE_COMPONENT_PASS_SYNTH_AND_SYSTEM_RUNNING",
-  "updated_at": "2026-11-04T06:56:16.882304+08:00",
+  "status": "USER_PHOTO_STORAGE_SYNTH_MAP_PASS_PLACEMENT_RUNNING",
+  "updated_at": "2026-11-04T07:03:38.915074+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -21,7 +21,7 @@
   "external_io_ac_verified": false,
   "next_step": "Finish exact-source whole-system simulations and synthesis, then map/place with observed PHY hints and independently qualify the full routed result.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
-  "mode_key": "build/soc/face_mode_key-20261103T214701_729786Z",
+  "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
   "source_png": "assets/avatars/triha/source.png",
   "source_sha256": {
@@ -78,7 +78,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_rect2_phy_place_20261104",
+  "placement": "build/video/pds/face_photo_storage_phy_place_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -743,5 +743,23 @@
     "failed_synthesis": "build/video/pds/20261103T224958_563106Z",
     "constraint_fix": "Same 6 ns held-record datapath bound now targets g_rectangle_record* instead of removed record_data*.",
     "planned_locations": "548 prior PHY FF locations plus four packed PHY cells, all observed in the hold-clean reference and latest route; native admission and final retention still required."
+  },
+  "resources": {
+    "lut": 45802.0,
+    "registers": 42034.0,
+    "drm": 112.5
+  },
+  "synthesis_result_sha256": "05dd6d029cd8b0a343eb16f60dd1191e543e739bc1292e7b68b7426289663a81",
+  "map_result_sha256": "b0954c50aa5c10f8aceb05e12a79f767e779d55e944846d6a052ffe616e45620",
+  "storage_physical_admission": {
+    "phy_ff_locations": 548,
+    "critical_packed_phy_locations": 4,
+    "total_locations": 552,
+    "native_constraint_admitted": true,
+    "actual_routed_retention_pending": true,
+    "cdc_retarget_proof": "build/video/face_photo_storage_cdc_retarget_20261104.json",
+    "cdc_commands": 71,
+    "unchanged_cdc_commands": 70,
+    "unchanged_held_record_max_delay_ns": 6.0
   }
 }
