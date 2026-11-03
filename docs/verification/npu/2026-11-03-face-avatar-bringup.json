@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_STORAGE_FULL_SYSTEM_PASS_ROUTING",
-  "updated_at": "2026-11-04T07:10:24.575224+08:00",
+  "status": "USER_PHOTO_STORAGE_PRIORITY_ROUTE_RUNNING",
+  "updated_at": "2026-11-04T07:35:14.648021+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish the frozen compressed-record route and independent dual-corner timing, all 552 actual PHY locations, Gray clocks and qualification before bit generation and release replay.",
+  "next_step": "Complete the six-net priority reroute on the unchanged 552-site placement. Require nonnegative dual-corner timing and zero unaccepted native critical messages, then Gray clocks, qualification, export/replay and hardware acceptance.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -720,8 +720,8 @@
   "negative": "build/soc/face_system-20261103T224930_044577Z",
   "synthesis": "build/video/pds/20261103T225355_414590Z",
   "mapping": "build/video/pds/face_photo_storage_50_map_20261104",
-  "route": "build/video/pds/face_photo_storage_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_storage2_50_pipeline_20261104/receipt.json",
+  "route": "build/video/pds/face_photo_storage_priority_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_storage_priority_50_pipeline_20261104",
   "current_owner_regression": "build/video/regression/20261103T224911_023270Z",
   "firmware_sha256": "2ed6d32f36940781a2e5d1a10937ad2129f3ce66e337f573a673d8d0f60ef9d3",
   "record_storage_optimization": {
@@ -777,6 +777,54 @@
     "clma_available": 11675,
     "clms_used": 4474,
     "clms_available": 4975,
-    "actual_routed_retention_pending": true
+    "actual_routed_retention_pending": false
+  },
+  "storage_route_failure": {
+    "review": "build/video/face_photo_storage_50_review_20261104/result.json",
+    "review_sha256": "854ff8dfc73fac4c41747176ac6d2dec7720269fbf8d1214970c18e836d6e980",
+    "routed_db_sha256": "b33fd32f48a7e85c82bf96b1f3b27b5d94477ae4e7506cd2be9b5d824a00ea30",
+    "negative_tables": [
+      {
+        "kind": "setup",
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "ddrphy_sysclk",
+        "wns_ns": -0.247,
+        "total_negative_slack_ns": -0.454,
+        "failing_endpoints": 6,
+        "endpoints": 47173
+      },
+      {
+        "kind": "setup",
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "phy_dq_sysclk_1",
+        "wns_ns": -0.194,
+        "total_negative_slack_ns": -0.475,
+        "failing_endpoints": 3,
+        "endpoints": 420
+      }
+    ],
+    "min_hold_slack_ns": 0.009,
+    "cross_srb_below_200ps": 3,
+    "critical_messages": [
+      "C: STA-3017: There are 3 clock cross SRB paths do not meet the required hold violation threshold(200ps)."
+    ],
+    "retention": "build/video/face_photo_storage_50_retention_20261104.json",
+    "retained_locations": 552,
+    "diagnostic": "build/video/face_photo_storage_failed_paths_20261104",
+    "route_elapsed_seconds": 1350.8919768333435,
+    "bitstream_generated": false
+  },
+  "storage_priority_retry": {
+    "priority_nets": 6,
+    "negative_launch_groups": 3,
+    "evidence": "build/video/face_photo_storage_priority_20261104.json",
+    "constraints": "build/video/face_photo_storage_priority_20261104.rcf",
+    "placement_unchanged": true,
+    "logic_unchanged": true,
+    "timing_constraints_unchanged": true,
+    "hold_repair_target_ps": 200,
+    "hold_iterations": 30
   }
 }
