@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RECT_PROFILE_COMPONENT_PASS_FULL_SYSTEM_AND_SYNTHESIS_RUNNING",
-  "updated_at": "2026-11-04T05:51:35.737957+08:00",
+  "status": "USER_PHOTO_RECT_SYNTHESIS_MAP_PASS_PLACEMENT",
+  "updated_at": "2026-11-04T06:00:43.264957+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish current rectangle-only board-profile full-system simulations and synthesis; measure resource reduction, then perform independent placement/route/STA/CDC qualification.",
+  "next_step": "Finish current 548-hint placement, route, full-system simulations and independent internal timing/CDC checks.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T214701_729786Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -55,15 +55,16 @@
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261103T201338_456442Z",
-  "board_scan_status": "After user reported power/JTAG reconnected, fresh-server read-only 1MHz and 100KHz scans at 04:12/04:13 saw USB Cable II but no FPGA. No photo programming or upload.",
+  "board_scan": "build/video/jtag_scan/20261103T215645_584462Z",
+  "board_scan_status": "05:56 fresh-server read-only 1MHz scan still finds USB Cable II but no FPGA; asked user to verify power LED and JTAG pin-1 orientation. No photo programming/upload.",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
     "build/video/jtag_scan/20261103T162537_568188Z",
     "build/video/jtag_scan/20261103T185217_344946Z",
     "build/video/jtag_scan/20261103T201230_540501Z",
-    "build/video/jtag_scan/20261103T201338_456442Z"
+    "build/video/jtag_scan/20261103T201338_456442Z",
+    "build/video/jtag_scan/20261103T215645_584462Z"
   ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
@@ -73,7 +74,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_rect_phy_place_20261104",
+  "placement": "build/video/pds/face_photo_rect2_phy_place_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -353,8 +354,8 @@
   "negative": "build/soc/face_system-20261103T214841_598583Z",
   "synthesis": "build/video/pds/20261103T214904_417986Z",
   "mapping": "build/video/pds/face_photo_rect_50_map_20261104",
-  "route": "build/video/pds/face_photo_rect_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_rect_50_pipeline_20261104/receipt.json",
+  "route": "build/video/pds/face_photo_rect2_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_rect2_50_pipeline_20261104/receipt.json",
   "guard_row_optimization": {
     "guard": "build/video/face_guard_production_20261104/result.json",
     "guard_cases": 248,
@@ -535,16 +536,7 @@
     "identity_diagnostic": "build/video/control_firmware_identity_20261104.json",
     "reason": "Initial build mistakenly selected the previous positive ELF. All ROM/SRAM words identical; nonallocated .strtab differs. Owned build jobs stopped; new synthesis binds the exact current positive ELF. Simulations continue unchanged."
   },
-  "simulation_alignment": "build/video/face_photo_control2_50_sim_alignment_20261104.json",
-  "simulation_performance": "build/video/face_photo_control2_performance_20261104.json",
-  "positive_result_sha256": "0f52bf3c95d5698a08e3efb8f9e87b5062f55ca59200f2b928e882e7fa059eb7",
-  "negative_result_sha256": "a572f88bd383b441b6cd21a6fc780f37e016af0079c255c961262e18190ca9c6",
-  "map_result_sha256": "8052a38eb8b5b69dd092ac126bcebf3ff5e86ab29d55dfe18a688ef14e068f41",
-  "resources": {
-    "lut": 48850.0,
-    "registers": 47758.0,
-    "drm": 112.5
-  },
+  "map_result_sha256": "ec543edb44dd9414d3aed84ed8f5536e1c4c7093ad633eb138e3450c68eaaf27",
   "control_phy_location_retry": {
     "failed_placement": "build/video/pds/face_photo_control2_phy_place_20261104/receipt.json",
     "failed_pipeline": "build/video/face_photo_control2_50_pipeline_20261104/receipt.json",
@@ -552,21 +544,12 @@
     "selected_locations": 550,
     "scope": "Exactly two optional stale names rejected by native current-map checking removed; no no_check, clock or mandatory pin change. All 550 retained hints accepted; final site retention not yet checked."
   },
-  "current_placement_pass": {
-    "directory": "build/video/pds/face_photo_control3_phy_place_20261104",
-    "selected_phy_sites": 550,
-    "final_estimated_setup_ns": 0.071,
-    "actual_routed_retention_pending": true
-  },
   "release_component_binding": {
-    "checks": "build\\video\\face_release_component_checks_20261104.json",
-    "audit": "build/video/face_photo_release_components_20261104.json",
+    "audit": "build/video/face_photo_rect_release_components_20261104.json",
     "components": 6,
-    "source_files": 154,
-    "bound_files": 461,
-    "raw_current": "build/video/regression/20261103T212425_074554Z",
-    "tests": 12,
-    "scope": "Export dependency verification only; not timing qualification or actual photo release."
+    "source_files": 155,
+    "bound_files": 467,
+    "scope": "Current component identity preflight only; actual photo export remains pending internal qualification."
   },
   "previous_control3_timing": {
     "review": "build\\video\\face_photo_control3_50_review_20261104\\result.json",
@@ -607,5 +590,35 @@
     ],
     "reason": "Configured legacy compiler path missing; failed before HDL simulation. Retried with existing TRIHA_RISCV_GCC D:/xpack-riscv-gcc path override.",
     "configuration_files_changed": false
+  },
+  "previous_control3_validation": {
+    "simulation_alignment": "build/video/face_photo_control2_50_sim_alignment_20261104.json",
+    "simulation_performance": "build/video/face_photo_control2_performance_20261104.json",
+    "positive_result_sha256": "0f52bf3c95d5698a08e3efb8f9e87b5062f55ca59200f2b928e882e7fa059eb7",
+    "negative_result_sha256": "a572f88bd383b441b6cd21a6fc780f37e016af0079c255c961262e18190ca9c6",
+    "current_placement_pass": {
+      "directory": "build/video/pds/face_photo_control3_phy_place_20261104",
+      "selected_phy_sites": 550,
+      "final_estimated_setup_ns": 0.071,
+      "actual_routed_retention_pending": false,
+      "retention": "build/video/face_photo_control3_50_retention_20261104.json"
+    },
+    "resources": {
+      "lut": 48850.0,
+      "registers": 47758.0,
+      "drm": 112.5
+    }
+  },
+  "resources": {
+    "lut": 46316.0,
+    "registers": 45089.0,
+    "drm": 112.5
+  },
+  "synthesis_result_sha256": "c77ce07f1f532505376b8eefa164f1b3818230bbb788d30e8c738618449b8cce",
+  "rect_phy_retry": {
+    "failed": "build/video/pds/face_photo_rect_phy_place_20261104",
+    "exclusions": "build/video/face_photo_rect_phy_exclusions_20261104.json",
+    "requested": 548,
+    "scope": "Four optional locations omitted: two previous native-rejected names and two newly rejected names. Original pins/gates/timing remain mandatory."
   }
 }
