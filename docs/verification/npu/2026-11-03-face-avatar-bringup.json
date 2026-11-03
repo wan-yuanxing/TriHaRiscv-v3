@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_CONTROL_FULL_SYSTEM_PASS_PHY_PLACEMENT",
-  "updated_at": "2026-11-04T05:06:46.291651+08:00",
+  "status": "USER_PHOTO_CONTROL_FULL_SYSTEM_PASS_ROUTING",
+  "updated_at": "2026-11-04T05:27:17.040093+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish 550-site current-map placement and route; independently verify dual-corner timing, actual retained locations, Gray clocks and native diagnostics before generating any bitstream.",
+  "next_step": "Complete current frozen route and independent dual-corner timing/CDC review; generate and export only after qualification.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T204441_917993Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -548,5 +548,21 @@
     "exclusion_evidence": "build/video/face_photo_control_phy_exclusions_20261104.json",
     "selected_locations": 550,
     "scope": "Exactly two optional stale names rejected by native current-map checking removed; no no_check, clock or mandatory pin change. All 550 retained hints accepted; final site retention not yet checked."
+  },
+  "current_placement_pass": {
+    "directory": "build/video/pds/face_photo_control3_phy_place_20261104",
+    "selected_phy_sites": 550,
+    "final_estimated_setup_ns": 0.071,
+    "actual_routed_retention_pending": true
+  },
+  "release_component_binding": {
+    "checks": "build\\video\\face_release_component_checks_20261104.json",
+    "audit": "build/video/face_photo_release_components_20261104.json",
+    "components": 6,
+    "source_files": 154,
+    "bound_files": 461,
+    "raw_current": "build/video/regression/20261103T212425_074554Z",
+    "tests": 12,
+    "scope": "Export dependency verification only; not timing qualification or actual photo release."
   }
 }

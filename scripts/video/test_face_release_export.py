@@ -125,6 +125,51 @@ class ExportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'existing releases are immutable'):self.export()
         self.assertEqual(digest(self.output/'manifest.json'),before)
 
+    def component(self):
+        source=self.write('tb/component.sv',b'// additional component fixture\n')
+        artifact=self.write('build/component/run.log',b'component transport fixture\n')
+        result=self.write_json('build/component/result.json',{'status':'pass',
+            'inputs':{'tb/component.sv':digest(source)},
+            'artifacts':{'build/component/run.log':digest(artifact)}})
+        return source,artifact,result
+
+    def test_component_sources_bound_for_restoration(self):
+        source,artifact,result=self.component()
+        exporter.export(self.qualified,self.output,[],[result])
+        manifest=verify(self.output,self.root)
+        self.assertEqual(manifest['source_sha256']['tb/component.sv'],digest(source))
+        self.assertEqual(manifest['archive_members']['build/component/run.log']['sha256'],digest(artifact))
+
+    def test_changed_component_source_rejected(self):
+        source,artifact,result=self.component();source.write_bytes(b'changed source')
+        with self.assertRaisesRegex(ValueError,'Component input changed'):
+            exporter.export(self.qualified,self.output,[],[result])
+        self.assertFalse(self.output.exists())
+
+    def test_changed_component_artifact_rejected(self):
+        source,artifact,result=self.component();artifact.write_bytes(b'changed log')
+        with self.assertRaisesRegex(ValueError,'Component artifact changed'):
+            exporter.export(self.qualified,self.output,[],[result])
+        self.assertFalse(self.output.exists())
+
+    def test_failed_component_rejected(self):
+        source,artifact,result=self.component()
+        record=json.loads(result.read_text());record['status']='fail'
+        result.write_text(json.dumps(record),encoding='utf-8')
+        with self.assertRaisesRegex(ValueError,'Component regression has not passed'):
+            exporter.export(self.qualified,self.output,[],[result])
+        self.assertFalse(self.output.exists())
+
+    def test_host_component_hash_schema(self):
+        source,artifact,result=self.component()
+        record={'status':'PASS','input_hashes':{'tb/component.sv':digest(source)},
+                'output_hashes':{'run.log':digest(artifact)}}
+        result.write_text(json.dumps(record),encoding='utf-8')
+        exporter.export(self.qualified,self.output,[],[result])
+        manifest=verify(self.output,self.root)
+        self.assertEqual(manifest['source_sha256']['tb/component.sv'],digest(source))
+        self.assertIn('build/component/run.log',manifest['archive_members'])
+
 
 if __name__=='__main__':
     print('TRANSPORT_FIXTURES_ONLY',WORK,flush=True)

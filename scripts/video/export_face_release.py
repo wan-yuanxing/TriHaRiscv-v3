@@ -16,7 +16,7 @@ from face_profiles import require_profile
 from restore_face_release import digest, verify
 
 
-def export(qualified, output, additional):
+def export(qualified, output, additional, components=()):
     qualified=qualified.resolve();output=output.resolve()
     qualification_bytes=qualified.read_bytes()
     q=json.loads(qualification_bytes)
@@ -81,6 +81,37 @@ def export(qualified, output, additional):
     for name in ('scripts/video/program_board.py','scripts/video/restore_face_release.py',
                  'scripts/video/export_face_release.py','scripts/soc/upload_face_model.py'):
         sources[name]=digest(ROOT/name)
+    # Explicit current component results contribute their test sources as well
+    # as logs. Historical physical provenance supplied through --include stays
+    # historical and is not mistaken for a current-source regression.
+    for component in components:
+        component=(ROOT/component).resolve()
+        if not component.is_relative_to(ROOT/'build') or not component.is_file():
+            raise ValueError('Component result must be an existing build file')
+        raw=component.read_bytes()
+        record=json.loads(raw)
+        if record.get('status') not in ('pass','PASS'):
+            raise ValueError('Component regression has not passed: '+str(component))
+        check_bound(component,hashlib.sha256(raw).hexdigest(),'Component result changed: ')
+        tree(component.parent)
+        for key in ('inputs','source_sha256','input_hashes'):
+            for original,expected in record.get(key,{}).items():
+                path=(ROOT/Path(original)).resolve()
+                check_bound(path,expected,'Component input changed: ')
+                if path.is_relative_to(ROOT/'build'):
+                    add(path)
+                elif path.is_relative_to(ROOT):
+                    name=path.relative_to(ROOT).as_posix()
+                    if name in sources and sources[name]!=expected:
+                        raise ValueError('Conflicting component source identities: '+name)
+                    sources[name]=expected
+        artifact_maps=[(key,ROOT) for key in record if key=='artifacts' or key.endswith('_artifacts')]
+        artifact_maps += [('output_sha256',component.parent),('output_hashes',component.parent)]
+        for key,origin in artifact_maps:
+            for original,expected in record.get(key,{}).items():
+                path=(origin/Path(original)).resolve()
+                check_bound(path,expected,'Component artifact changed: ')
+                add(path)
     for name,expected in sources.items():
         check_bound(ROOT/name,expected,'Qualified source changed: ')
     for name in ('build/video/vendor','build/npu/b03_assets_20261030','build/npu/face_fixture_20261103'):
@@ -197,8 +228,10 @@ def main():
     p.add_argument('--qualified',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--include',type=Path,action='append',default=[])
+    p.add_argument('--component',type=Path,action='append',default=[],
+                   help='Passed current component result.json; bind its sources and artifacts')
     args=p.parse_args()
-    export(args.qualified,args.output,args.include)
+    export(args.qualified,args.output,args.include,args.component)
 
 
 if __name__=='__main__':main()
