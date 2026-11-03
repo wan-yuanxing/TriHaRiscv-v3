@@ -1,6 +1,6 @@
 {
   "status": "USER_PHOTO_GUARD_SETUP_FAILED_PRIORITY_REROUTE",
-  "updated_at": "2026-11-04T04:20:53.087963+08:00",
+  "updated_at": "2026-11-04T04:27:53.042903+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -393,7 +393,21 @@
     "retention": "build/video/face_photo_guard_50_retention_20261104.json",
     "retained_phy_locations": 552,
     "failed_paths": "build/video/face_photo_guard_50_failed_paths_20261104.txt",
-    "bitstream_generated": false
+    "bitstream_generated": false,
+    "sampled_pixel_hold_below_target": [
+      {
+        "endpoint": "context_pipe[6][14]/opit_0_inv_srl/D",
+        "hold_fast_ns": 0.149
+      },
+      {
+        "endpoint": "context_pipe[8][15]/opit_0_inv/D",
+        "hold_fast_ns": 0.149
+      },
+      {
+        "endpoint": "asset_tags[4][54]/opit_0_inv_srl/D",
+        "hold_fast_ns": 0.199
+      }
+    ]
   },
   "guard_priority_reroute": {
     "pipeline": "build/video/face_photo_guard_priority_50_pipeline_20261104/receipt.json",
@@ -416,6 +430,41 @@
       "Split 100-bit pixel-commit identity comparison into six 16-bit and one 4-bit equality with documented syn_keep"
     ],
     "cases": 19,
-    "checks": "Every output compared each cycle; complete 4096-address page plus invalid aliases; 2723 byte writes / 2883 reads; every 100-bit commit identity mismatch rejected."
+    "checks": "Every output compared each cycle; complete 4096-address page plus invalid aliases; 2723 byte writes / 2883 reads; every 100-bit commit identity mismatch rejected.",
+    "native_synthesis": {
+      "result": "build/video/face_control_paths_synth2_20261104/result.json",
+      "sha256": "b24c0d17bd66b010ab2777ae8d69a89682053eb8b1eb566bffc62a1aa081b78c",
+      "status": "PASS_SYNTHESIS_EXPERIMENT_ONLY",
+      "scope": "Native standalone synthesis only; no placement, route or board timing conclusion.",
+      "cases": {
+        "display_record_link_original": {
+          "setup_estimate_ns": 1.183,
+          "luts": 526,
+          "registers": 1070
+        },
+        "display_record_link_variant": {
+          "setup_estimate_ns": 1.217,
+          "luts": 531,
+          "registers": 1070
+        },
+        "video_display_mmio_compact_original": {
+          "setup_estimate_ns": 1.388,
+          "luts": 2796,
+          "registers": 6156
+        },
+        "video_display_mmio_compact_variant": {
+          "setup_estimate_ns": 2.727,
+          "luts": 2790,
+          "registers": 6156
+        }
+      },
+      "first_attempt": "build/video/face_control_paths_synth_20261104/result.json",
+      "first_attempt_note": "Original leaf native synthesis succeeded; reuse of a broader timing parser rejected absent recovery clock coverage in this diagnostic scope. Production timing checker unchanged."
+    }
+  },
+  "compact_runner_guard_marker": {
+    "commit": "773012d",
+    "evidence": "build/video/compact_guard_marker_20261104.json",
+    "scope": "Expected count aligned with existing 248-case passing guard result; no full compact rerun."
   }
 }
