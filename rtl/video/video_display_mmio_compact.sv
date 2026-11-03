@@ -86,8 +86,11 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
     function automatic [31:0] mask_word(input [3:0] strobe);
         mask_word={{8{strobe[3]}},{8{strobe[2]}},{8{strobe[1]}},{8{strobe[0]}}};
     endfunction
-    wire [31:0] write_offset=awaddr-`VDISP_BASE;
-    wire [31:0] read_offset=read_addr-`VDISP_BASE;
+    // Only offsets of valid addresses reach a decoder. Their maximum
+    // is REGION_BYTES-1; keep the subtractor at that width.
+    localparam integer OFFSET_BITS=$clog2(`VDISP_REGION_BYTES);
+    wire [OFFSET_BITS-1:0] write_offset=awaddr-`VDISP_BASE;
+    wire [OFFSET_BITS-1:0] read_offset=read_addr-`VDISP_BASE;
     wire execute_write=aw_full&&w_full&&!s_axi_bvalid_o;
     reg [1:0] write_response,read_response;
     reg do_shadow,do_mode,do_seq,do_mask,do_submit,do_ack;

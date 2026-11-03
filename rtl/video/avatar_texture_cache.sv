@@ -121,7 +121,9 @@ module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
             if(!core_reset_n)begin delayed_write<=0;delayed_last<=0;end
             else begin delayed_write<=write_word&&keep_word;delayed_last<=write_word&&s_last;end
         end
-        always @(posedge core_clk)if(write_word&&keep_word)begin
+        // Data is consumed only when delayed_write is asserted. Capture it
+        // unconditionally to remove span validation from these data-register enables.
+        always @(posedge core_clk)begin
             delayed_address<=packed_write[15:0];delayed_rgba<=s_rgba;
         end
         always @(posedge core_clk)begin

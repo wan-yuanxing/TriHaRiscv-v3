@@ -12,7 +12,7 @@ def main():
         result.update(inputs=input_hashes(paths),tools={str(tool(t)):sha256(tool(t)) for t in ('iverilog','vvp')},link={},scanout={})
         for t in ('iverilog','vvp'):run_logged([tool(t),'-V'],work/(t+'_version.log'))
         files=[ROOT/p for p in m['sources']+m['tests']]
-        for case in range(6):
+        for case in range(7):
             cw=work/f'link_{case}';cw.mkdir();binary=cw/'sim.vvp'
             run_logged([tool('iverilog'),'-g2012','-Wall','-I',ROOT/'rtl/video/include','-s','tb_display_record_link',f'-Ptb_display_record_link.CASE_ID={case}','-o',binary,*files],cw/'compile.log')
             log=run_logged([tool('vvp'),binary],cw/'simulation.log');found=re.findall('DISPLAY_RECORD_LINK_PASS (.*)',log)

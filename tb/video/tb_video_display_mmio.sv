@@ -292,6 +292,29 @@ module tb_video_display_mmio;
             check(!s_axi_rvalid_o,"reset discards queued read without ghost response");
             expect_read(0,32'h10000,0);
         end
+        11:begin
+            // Exhaust the complete 4 KiB ABI page, including every unaligned
+            // address, plus high-address aliases of readable registers.
+            for(j=0;j<4096;j=j+1)begin
+                if(j%4!=0)expect_read(j,0,3);
+                else if(j=='h18||j=='h20)expect_read(j,0,2);
+                else if(j==0)expect_read(j,32'h10000,0);
+                else if(j==4)expect_read(j,15,0);
+                else if(j=='h1c||j=='h80)expect_read(j,7,0);
+                else if(j=='h2c)expect_read(j,640,0);
+                else if(j<='h80||(j>='h100&&j<'h380))expect_read(j,0,0);
+                else expect_read(j,0,3);
+            end
+            for(j=12;j<32;j=j+1)begin
+                expect_read(32'd1<<j,0,3);
+                expect_read((32'd1<<j)+'h100,0,3);
+                write_word((32'd1<<j)+'h100,32'hbad01234,15,3,0);
+                expect_read('h100,0,0);
+            end
+            expect_read(32'hfffff000,0,3);
+            expect_read(32'hfffff100,0,3);
+            expect_read(32'hxxxx0100,0,3);
+        end
         default:$fatal(1,"unknown case");
         endcase
         $display("DISPLAY_MMIO_PASS case=%0d checks=%0d",test_case,checks);$finish;
