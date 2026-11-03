@@ -311,5 +311,12 @@
     "hold_repair_target_ps": 200,
     "same_mapped_logic": true,
     "same_timing_constraints": true
+  },
+  "release_exporter_checks": {
+    "evidence": "build/video/face_release_export_checks_20261104.json",
+    "status": "PASS_TRANSPORT_TESTS_ONLY",
+    "tests": 7,
+    "actual_avatar_package_exported": false,
+    "actual_avatar_native_replay_performed": false
   }
 }
