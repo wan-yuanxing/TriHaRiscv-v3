@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_CONTROL_FULL_SYSTEM_PASS_ROUTING",
-  "updated_at": "2026-11-04T05:27:17.040093+08:00",
+  "status": "USER_PHOTO_RECT_PROFILE_COMPONENT_PASS_FULL_SYSTEM_AND_SYNTHESIS_RUNNING",
+  "updated_at": "2026-11-04T05:51:35.737957+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,21 +19,24 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete current frozen route and independent dual-corner timing/CDC review; generate and export only after qualification.",
+  "next_step": "Finish current rectangle-only board-profile full-system simulations and synthesis; measure resource reduction, then perform independent placement/route/STA/CDC qualification.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
-  "mode_key": "build/soc/face_mode_key-20261103T204441_917993Z",
+  "mode_key": "build/soc/face_mode_key-20261103T214701_729786Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
   "source_png": "assets/avatars/triha/source.png",
   "source_sha256": {
-    "rtl/video/display_record_guard.sv": "8398e9ecec22903534e0935ab0515e2ca040ee319d733cb443bb697832205005",
-    "rtl/video/raw_display.sv": "1ba07dbe1dd577e677f6392d0aa5a457b53f7d2ff1785a88580ca90b1a3ee47d",
-    "tb/video/tb_display_record_guard.sv": "4c7461b9136ec08d31154d3a0a1368da53789a3ccf52b24c781e369374674de0",
-    "rtl/video/avatar_texture_cache.sv": "64047d7d16a3e2afa3acddfc0c97fee5eead350b8ae4ee8f91c311dc5be1a175",
-    "rtl/video/display_record_link.sv": "a5b2b50de313af4d910a05199ecac0d9e429f18ba6eaf9ad8afd8f5be513caf1",
-    "rtl/video/video_display_mmio_compact.sv": "a1f3602978979d72d5e9a7b6adb49dc90e788e2353b0db9a3a6153a3575c05de",
-    "tb/video/tb_video_display_mmio.sv": "50d3413f6efd9ff0097ddaed066c9e38f5e8d9401901f67ce0782e44ea5bd612",
-    "tb/video/tb_display_record_link.sv": "c90fed7426f389f22050e5707cf11bec3b1a8aa4c98329241bf1b7c9d831309e",
-    "scripts/video/test_display_control_paths.py": "35432ffa7e1b9199ce0c4d8f5ba7a1b0f4ffbcd71a6876238e03052be91ae2c2"
+    "fpga/pg2l100h/rtl/triha_face_board_top.sv": "dd829b2ce7d5e39d11a9dc7d161da4ce3efb6aec5473ef05ce5b82644761d762",
+    "rtl/soc/triha_face_system.v": "6e144dc1fd0211491adcc9f58de1588660425b71059ab20b556903f79ae0f011",
+    "rtl/video/display_record_guard.sv": "3e5d01b75523764c843cd6d197e7b18143eaad5eb23f0c7cf7196b2a00adcf95",
+    "rtl/video/display_record_pixels_compact.sv": "046c60deddea1b532a4e98d29ff78b13977beaad48d2d01db1743beed97c5496",
+    "rtl/video/raw_display.sv": "747a124021ce526d2ee0a24ac7b1be71846afa9baab3ce4918136c70dfa8cb4a",
+    "rtl/video/video_application_engine.sv": "650cfaedfd4b6fea68a2231dd56410f66cd732f2e9b8c45c8385f825a05b3e26",
+    "rtl/video/video_display_mmio_compact.sv": "bfdd31391831db5a09aca01d7ab9135926c8733282a8d352dbcc18ef38515eb3",
+    "rtl/video/video_display_record_compact.sv": "4ffb7ca80c6e6946015b968d985adb0208b2cb3b2d20062878e12d029e107372",
+    "rtl/video/video_record_renderer_compact.sv": "f4a1136ed764187936571ddcdc4552a90502e77513c27c449430f4084f54eff8",
+    "scripts/video/test_face_rect_profile.py": "659ec8159cd6b77ec56bc6a3532ed9c10f633b57b519a2480b581712c0a8b3ee",
+    "tb/soc/tb_face_system.sv": "3e990868b9305d3c3550bfbaf980f4852098fc5ffd9b3dd6c95aaf14b15011fe",
+    "tb/video/tb_display_record_guard.sv": "824a391ea747e58d1ad111aa4e06d7902267a8cb40934ec491be6f146d9d59f3"
   },
   "alignment": {
     "anchor_x": 128,
@@ -70,7 +73,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_control3_phy_place_20261104",
+  "placement": "build/video/pds/face_photo_rect_phy_place_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -345,13 +348,13 @@
     "negative_result_sha256": "53838a549042582c3d62dd9d117ac427dfe3dfb547d84b1d26b0345243e36ab6",
     "firmware_sha256": "09b964f9a837c2e07bb0fae48ef1b744902413a4ad530ddbc17481e0187aa7d2"
   },
-  "source_commit": "76d3d5344de5524a00be74d4d72fd6389e9a1ab9",
-  "positive": "build/soc/face_system-20261103T204514_140784Z",
-  "negative": "build/soc/face_system-20261103T204514_170957Z",
-  "synthesis": "build/video/pds/20261103T205045_995914Z",
-  "mapping": "build/video/pds/face_photo_control2_50_map_20261104",
-  "route": "build/video/pds/face_photo_control3_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_control3_50_pipeline_20261104/receipt.json",
+  "source_commit": "debec426c64e1e146650eb28a7a36d63dcf7db3e",
+  "positive": "build/soc/face_system-20261103T214841_598876Z",
+  "negative": "build/soc/face_system-20261103T214841_598583Z",
+  "synthesis": "build/video/pds/20261103T214904_417986Z",
+  "mapping": "build/video/pds/face_photo_rect_50_map_20261104",
+  "route": "build/video/pds/face_photo_rect_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_rect_50_pipeline_20261104/receipt.json",
   "guard_row_optimization": {
     "guard": "build/video/face_guard_production_20261104/result.json",
     "guard_cases": 248,
@@ -373,7 +376,7 @@
     "reference_preview": "build/video/face_photo_guard_reference_20261104.json",
     "preview_scope": "Independent simulation oracle, not a board screenshot."
   },
-  "firmware_sha256": "862ad9a0de23c34d25117bedfb1671936705ae70de719cd1b7cac143910aab42",
+  "firmware_sha256": "9be73886f14396b37f0c0c49464a6aa1ffdd495e474815c51b48abecf77abbeb",
   "guard_route_failure": {
     "review": "build/video/face_photo_guard_50_review_20261104/result.json",
     "review_sha256": "1c0a60cd57b16e32548e9e7ce3a8b9a068192918d01659e8076c91e52842a1d3",
@@ -564,5 +567,45 @@
     "raw_current": "build/video/regression/20261103T212425_074554Z",
     "tests": 12,
     "scope": "Export dependency verification only; not timing qualification or actual photo release."
+  },
+  "previous_control3_timing": {
+    "review": "build\\video\\face_photo_control3_50_review_20261104\\result.json",
+    "review_sha256": "d5ff283feed0e96ede23786eafb47c5997df021c5304dd1835c146132e3383d4",
+    "report_sha256": "e0ab61bd6b95629bba58406c61385fa0d454c7025665cb4d2cb583b86ed8f7ad",
+    "setup_ns": -0.564,
+    "hold_ns": -0.001,
+    "ddr_negative_setup_endpoints": 170,
+    "compute_negative_setup_endpoints": 2,
+    "phy_negative_setup_endpoints": 3,
+    "retention": "build/video/face_photo_control3_50_retention_20261104.json",
+    "retained_phy_locations": 550,
+    "clma_used": 11101,
+    "clma_available": 11675,
+    "diagnostic": "build/video/face_photo_control3_failed_paths_20261104/paths.json",
+    "scope": "Failed physical iteration; no bitstream generated."
+  },
+  "board_landmarks": {
+    "enabled": false,
+    "generic_default_enabled": true,
+    "rectangles": 16,
+    "primary_avatar": true,
+    "record_abi_bytes": 640,
+    "policy": "Board guard rejects landmark flag and point payloads; CPU/NPU already emit none. Generic RTL retains landmark support.",
+    "component": "build/video/face_rect_profile/20261103T214904_335940Z",
+    "cases": {
+      "generic": 248,
+      "board": 249
+    }
+  },
+  "current_raw_regression": "build/video/regression/20261103T214659_218214Z",
+  "current_control_regression": "build/video/display_control_paths/20261103T214659_204909Z",
+  "superseded_component_export_audit": "build/video/face_photo_release_components_20261104.json (control3 snapshot; rerun against current components after current qualification)",
+  "rect_launch_environment_retry": {
+    "failed": [
+      "build/soc/face_system-20261103T214812_229739Z",
+      "build/soc/face_system-20261103T214812_268174Z"
+    ],
+    "reason": "Configured legacy compiler path missing; failed before HDL simulation. Retried with existing TRIHA_RISCV_GCC D:/xpack-riscv-gcc path override.",
+    "configuration_files_changed": false
   }
 }
