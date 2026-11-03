@@ -8,7 +8,7 @@ def main():
     result=dict(status='running',directory=work.relative_to(ROOT).as_posix());write_json(latest,result)
     try:
         mp=ROOT/'fpga/pg2l100h/project/video_record_scanout.json';m=json.loads(mp.read_text())
-        paths=[ROOT/p for p in m['sources']+m['tests']+m['constraints']]+[mp,ROOT/'scripts/video/test_record_scanout.py',ROOT/'scripts/video/test_record_renderer.py',ROOT/'scripts/video/common.py',ROOT/'tb/video/check_record_pixels.py',ROOT/'tb/video/overlay_reference.py',ROOT/'rtl/video/include/video_display.vh',ROOT/'rtl/video/include/video_cfg.vh']
+        paths=[ROOT/p for p in m['sources']+m['tests']+m['constraints']]+[mp,ROOT/'scripts/video/test_record_scanout.py',ROOT/'scripts/video/test_record_renderer.py',ROOT/'scripts/video/common.py',ROOT/'tb/video/check_record_pixels.py',ROOT/'tb/video/overlay_reference.py',ROOT/'rtl/video/include/avatar_span_table.vh',ROOT/'rtl/video/include/avatar_span_identity.vh',ROOT/'rtl/video/include/video_display.vh',ROOT/'rtl/video/include/video_cfg.vh']
         result.update(inputs=input_hashes(paths),tools={str(tool(t)):sha256(tool(t)) for t in ('iverilog','vvp')},link={},scanout={})
         for t in ('iverilog','vvp'):run_logged([tool(t),'-V'],work/(t+'_version.log'))
         files=[ROOT/p for p in m['sources']+m['tests']]

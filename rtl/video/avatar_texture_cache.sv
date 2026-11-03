@@ -3,7 +3,7 @@
 // One RGBA material, loaded once and immutable until a coordinated reset.
 // No replacement/invalidation while pixel references may exist. A future DDR
 // fetcher or CPU producer feeds this stream; this module performs no DDR DMA.
-module avatar_texture_cache #(parameter integer TEXELS=65536)(
+module avatar_texture_cache #(parameter integer TEXELS=65536,COMPACT_PRESET=0)(
     input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,
     input wire load_valid,output wire load_ready,
     input wire [31:0] load_asset_id,load_generation,
@@ -13,12 +13,12 @@ module avatar_texture_cache #(parameter integer TEXELS=65536)(
     output reg pixel_asset_ready,
     input wire pixel_req_valid,input wire [17:0] pixel_req_addr,
     input wire [31:0] pixel_req_asset_id,pixel_req_generation,
-    output reg sample_valid,sample_error,output reg [31:0] sample_rgba
+    output reg sample_valid,sample_error,output wire [31:0] sample_rgba
 );
+    `include "avatar_span_table.vh"
     generate if(TEXELS<1||TEXELS>65536)begin:invalid_parameters
         initial $fatal(1,"avatar_texture_cache requires 1..65536 texels");
     end endgenerate
-    reg [31:0] texture [0:TEXELS-1];
     reg loading;
     reg [15:0] write_index;
     reg core_run=0,pixel_run=0;
@@ -28,9 +28,8 @@ module avatar_texture_cache #(parameter integer TEXELS=65536)(
     assign s_ready=core_run&&core_reset_n&&loading&&!load_fault;
     wire last_matches=s_last===(words_written==TEXELS-1);
     wire known_rgba=(^s_rgba!==1'bx);
-    wire write_word=core_run&&s_valid&&s_ready&&last_matches&&known_rgba;
-    // Neither RAM contents nor the synchronous RAM read register is reset.
-    always @(posedge core_clk)if(write_word)texture[write_index]<=s_rgba;
+    wire storage_ok;
+    wire write_word=core_run&&s_valid&&s_ready&&last_matches&&known_rgba&&storage_ok;
     always @(posedge core_clk or negedge core_reset_n)begin
         if(!core_reset_n)begin
             loading<=0;write_index<=0;asset_ready<=0;load_fault<=0;
@@ -41,7 +40,7 @@ module avatar_texture_cache #(parameter integer TEXELS=65536)(
                 else begin loading<=1;asset_id<=load_asset_id;asset_generation<=load_generation;end
             end
             if(s_valid&&s_ready)begin
-                if(!last_matches||!known_rgba)begin loading<=0;load_fault<=1;end
+                if(!last_matches||!known_rgba||!storage_ok)begin loading<=0;load_fault<=1;end
                 else begin
                     words_written<=words_written+1'b1;
                     if(words_written==TEXELS-1)begin loading<=0;asset_ready<=1;end
@@ -68,9 +67,62 @@ module avatar_texture_cache #(parameter integer TEXELS=65536)(
                     {1'b0,pixel_req_addr[17:2]}<TEXELS;
     wire request_ok=pixel_asset_ready&&address_ok&&pixel_req_asset_id===pixel_asset_id&&
                     pixel_req_generation===pixel_generation;
-    always @(posedge pixel_clk)begin
-        if(pixel_run&&pixel_req_valid&&request_ok)sample_rgba<=texture[pixel_req_addr[17:2]];
-    end
+    // RAM and read data registers have no reset. Readiness remains the only
+    // publication event, after the complete checked stream is immutable.
+    generate if(!COMPACT_PRESET)begin:g_full
+        reg [31:0] texture[0:TEXELS-1];
+        reg [31:0] read_data;
+        assign storage_ok=1'b1;
+        always @(posedge core_clk)if(write_word)texture[write_index]<=s_rgba;
+        always @(posedge pixel_clk)
+            if(pixel_run&&pixel_req_valid&&request_ok)read_data<=texture[pixel_req_addr[17:2]];
+        assign sample_rgba=read_data;
+    end else begin:g_spans
+        if(TEXELS!=65536||AVATAR_PACKED_TEXELS<1||AVATAR_PACKED_TEXELS>65536)begin:invalid_preset
+            initial $fatal(1,"compact preset requires one nonempty 256x256 image");
+        end
+        localparam integer MAIN_WORDS=AVATAR_PACKED_TEXELS>32768?32768:AVATAR_PACKED_TEXELS;
+        localparam integer TAIL_WORDS=AVATAR_PACKED_TEXELS>32768?AVATAR_PACKED_TEXELS-32768:1;
+        reg [31:0] main_ram[0:MAIN_WORDS-1];
+        reg [31:0] tail_ram[0:TAIL_WORDS-1];
+        reg [31:0] main_data,tail_data;
+        reg [16:0] packed_write;
+        reg [7:0] row_left;
+        reg [8:0] row_count;
+        wire [32:0] first_span=avatar_span(8'd0);
+        wire [32:0] next_span=avatar_span(write_index[15:8]+8'd1);
+        wire keep_word=write_index[7:0]>=row_left&&
+                      ({1'b0,write_index[7:0]}-{1'b0,row_left})<row_count;
+        assign storage_ok=(keep_word||s_rgba==32'd0)&&
+                          (!s_last||(packed_write+keep_word)==AVATAR_PACKED_TEXELS);
+        always @(posedge core_clk or negedge core_reset_n)begin
+            if(!core_reset_n)begin packed_write<=0;row_left<=0;row_count<=0;end
+            else begin
+                if(load_valid&&load_ready)begin
+                    packed_write<=0;row_left<=first_span[16:9];row_count<=first_span[8:0];
+                end
+                if(write_word)begin
+                    if(keep_word)packed_write<=packed_write+1'b1;
+                    if(write_index[7:0]==255)begin row_left<=next_span[16:9];row_count<=next_span[8:0];end
+                end
+            end
+        end
+        always @(posedge core_clk)begin
+            if(write_word&&keep_word&&!packed_write[15])main_ram[packed_write[14:0]]<=s_rgba;
+            if(write_word&&keep_word&&packed_write[15])tail_ram[packed_write[14:0]]<=s_rgba;
+        end
+        wire [32:0] read_span=avatar_span(pixel_req_addr[17:10]);
+        wire [8:0] read_delta={1'b0,pixel_req_addr[9:2]}-{1'b0,read_span[16:9]};
+        wire read_stored=pixel_req_addr[9:2]>=read_span[16:9]&&read_delta<read_span[8:0];
+        wire [15:0] packed_read=read_span[32:17]+read_delta;
+        reg read_zero,read_tail;
+        always @(posedge pixel_clk)if(pixel_run&&pixel_req_valid&&request_ok)begin
+            read_zero<=!read_stored;read_tail<=packed_read[15];
+            if(read_stored&&!packed_read[15])main_data<=main_ram[packed_read[14:0]];
+            if(read_stored&&packed_read[15])tail_data<=tail_ram[packed_read[14:0]];
+        end
+        assign sample_rgba=read_zero?32'd0:read_tail?tail_data:main_data;
+    end endgenerate
     always @(posedge pixel_clk or negedge pixel_reset_n)begin
         if(!pixel_reset_n)begin sample_valid<=0;sample_error<=0;end
         else begin sample_valid<=pixel_req_valid;

@@ -2,7 +2,7 @@
 `default_nettype none
 // Composition only. Caller supplies actual RAW pixels/identity and retains
 // global ownership; faults are separate platform inputs for coordinated reset.
-module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,TIMEOUT_CYCLES=125000000)(
+module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,TIMEOUT_CYCLES=125000000)(
  input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,online,memory_fault,display_urgent,
  input wire load_valid,output wire load_ready,input wire [31:0] load_base,load_bytes,load_asset_id,load_generation,expected_crc,
  output wire result_valid,input wire result_ready,output wire result_success,output wire [7:0] result_code,
@@ -103,7 +103,7 @@ module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE
    .arid(a_arid),.araddr(a_araddr),.arlen(a_arlen),.arsize(a_arsize),.arburst(a_arburst),.arvalid(a_arvalid),.arready(a_arready),.rid(a_rid),.rdata(a_rdata),.rresp(a_rresp),.rlast(a_rlast),.rvalid(a_rvalid),.rready(a_rready));
   assign sample_valid=sample_rsp_valid;assign sample_error=sample_rsp_error;assign sample_rgba=sample_rsp_rgba;
  end else begin:g_full_cache
-  avatar_ddr_cache #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_asset(
+  avatar_ddr_cache #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.COMPACT_PRESET(COMPACT_AVATAR)) u_asset(
   .fault(material_fault),.fault_code(material_code),.port_drained(material_drained),.pixel_asset_ready(pixel_cache_ready),
   .pixel_req_valid(avatar_req_valid),.pixel_req_addr(avatar_req_addr),.pixel_req_asset_id(avatar_req_asset_id),.pixel_req_generation(avatar_req_generation),
   .arid(a_arid),.araddr(a_araddr),.arlen(a_arlen),.arsize(a_arsize),.arburst(a_arburst),.arvalid(a_arvalid),.arready(a_arready),

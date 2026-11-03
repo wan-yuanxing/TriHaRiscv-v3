@@ -4,7 +4,7 @@
 // and visible for the whole load. This client needs arbitration before sharing
 // the sole physical DDR port. It is not a global allocator or a visibility fence.
 module avatar_ddr_cache #(
-    parameter integer TEXELS=65536,TIMEOUT_CYCLES=125000000,
+    parameter integer TEXELS=65536,TIMEOUT_CYCLES=125000000,COMPACT_PRESET=0,
     parameter [3:0] AXI_ID=4'h9
 )(
     input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,online,
@@ -22,6 +22,7 @@ module avatar_ddr_cache #(
     output wire arvalid,input wire arready,input wire [3:0] rid,
     input wire [127:0] rdata,input wire [1:0] rresp,input wire rlast,rvalid,output wire rready
 );
+    `include "avatar_span_identity.vh"
     generate if(TEXELS<4||TEXELS>65536||TEXELS%4!=0||TIMEOUT_CYCLES<16)begin:invalid_parameters
         initial $fatal(1,"avatar_ddr_cache requires 4..65536 texels divisible by 4, timeout>=16");
     end endgenerate
@@ -40,7 +41,8 @@ module avatar_ddr_cache #(
         begin
             last_byte={1'b0,base}+{1'b0,bytes};
             descriptor_ok=(^{base,bytes,id,generation,checksum})!==1'bx&&base[3:0]==0&&
-                bytes==TEXELS*4&&base>=32'h82600000&&last_byte<=33'h082800000;
+                bytes==TEXELS*4&&base>=32'h82600000&&last_byte<=33'h082800000&&
+                (!COMPACT_PRESET||(id==AVATAR_SPAN_ID&&generation==AVATAR_SPAN_GENERATION&&checksum==AVATAR_SPAN_CRC));
         end
     endfunction
     function automatic [4:0] burst_length(input [31:0] address,left_bytes);
@@ -70,7 +72,7 @@ module avatar_ddr_cache #(
     assign rready=core_reset_n&&state==RECEIVE;
     assign port_drained=core_reset_n&&!outstanding&&!arvalid&&!uncertain;
     assign result_valid=core_reset_n&&state==RESULT;assign result_success=result_code==0;
-    avatar_texture_cache #(.TEXELS(TEXELS)) u_cache(
+    avatar_texture_cache #(.TEXELS(TEXELS),.COMPACT_PRESET(COMPACT_PRESET)) u_cache(
         .core_clk(core_clk),.core_reset_n(core_reset_n),.pixel_clk(pixel_clk),.pixel_reset_n(pixel_reset_n),
         .load_valid(state==OPEN&&!stopping),.load_ready(cache_load_ready),
         .load_asset_id(result_asset_id),.load_generation(result_generation),

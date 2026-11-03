@@ -210,7 +210,7 @@ module triha_face_full_top #(
     triha_uart_tx #(.DIVISOR(BOOT_UART_DIVISOR)) boot_uart_tx(
         .clk_i(ddr_clk),.rst_ni(video_reset_n),.valid_i(boot_tx_valid),.data_i(boot_tx_data),
         .ready_o(boot_tx_ready),.tx_o(uart_tx));
-    triha_face_system #(.CACHE_ENABLE(CACHE_ENABLE),.ENABLE_AVATAR(ENABLE_AVATAR),.BOOT_AVATAR(ENABLE_AVATAR),.ENABLE_MODE_KEY(ENABLE_AVATAR),.ENABLE_CAPTURE_PREVIEW(0),.ENABLE_MODEL_LOADER(1),.ENABLE_ROW_CACHE(0),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) face(
+    triha_face_system #(.CACHE_ENABLE(CACHE_ENABLE),.ENABLE_AVATAR(ENABLE_AVATAR),.BOOT_AVATAR(ENABLE_AVATAR),.ENABLE_MODE_KEY(ENABLE_AVATAR),.ENABLE_CAPTURE_PREVIEW(0),.ENABLE_MODEL_LOADER(1),.ENABLE_ROW_CACHE(0),.COMPACT_AVATAR(ENABLE_AVATAR),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) face(
         .compute_clk_i(compute_clk),.video_clk_i(ddr_clk),.pixel_clk(pix_clk),.rst_ni(application_reset_n),
         .mode_button_n(mode_button_n),
         .pixel_reset_n(display_reset_n),.init_done_i(native_ready),.model_sealed_i(1'b0),

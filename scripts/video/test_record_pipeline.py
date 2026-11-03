@@ -153,7 +153,7 @@ def main():
             'sw/include/video_display.h', 'sw/include/video_display_abi.h',
             'sw/include/video_frame_pool.h', 'sw/include/video_cfg.h',
             'rtl/video/include/video_cfg.vh', 'rtl/video/include/video_capture_v2.vh',
-            'rtl/video/include/video_display.vh']
+            'rtl/video/include/video_display.vh','rtl/video/include/avatar_span_table.vh','rtl/video/include/avatar_span_identity.vh']
         paths = [ROOT / n for n in names]
         result['inputs'] = input_hashes(paths)
         result['tools'] = {str(p): sha256(p) for p in (cc, iv, vvp)}

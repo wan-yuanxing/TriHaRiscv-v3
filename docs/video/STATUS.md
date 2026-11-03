@@ -2500,3 +2500,40 @@ build/video/face_photo_50_sim_alignment_20261103.json。
 （2.76850结果/秒）。每场景仅一个间隔，含CPU后处理及调度，使用native DDR仿真代理，
 不能称为实板FPS或端到端延迟。记录为build/video/face_photo_performance_20261103.json。
 当前仍在详细布线，没有新位流、Program/Verify或照片板测结论。
+
+### 2026-11-03 21:58 新照片第一轮布通，正式时序未通过，继续定向重布线
+
+第一轮face_photo_50_route_20261103共402轮、0未布通网络，保持修复6轮；
+完整STA为TIMING_FAILED，不生成位流。最差setup -1.331ns为DDR PHY写DQS，
+125MHz内部控制域最差-0.832ns、249个setup端点；最差hold -0.001ns为采集DMA到SRB。
+CPU50MHz最差setup +0.150ns，像素40MHz +1.224ns。主要慢路径布线占比高，
+例如帧所有权检查的最差路径85.3%为连线延迟；不能把此次失败归因于照片存放位置。
+
+从每个违例起点的最坏路径选两条最大数据连线，共18条优先级，保留原2条DDR约束并合成
+唯一RCF。证据build/video/face_photo_50_priority_20261103.json绑定原报告及RCF哈希。
+复用已冻结布局，在build/video/pds/face_photo_50_priority_20261103重新路由；
+源RTL、固件、50/125/40MHz时钟、时序例外及约束均未改变，继续使用同一套已通过照片仿真。
+自动流程为build/video/face_photo_50_priority_pipeline_20261103/receipt.json。
+旧失败日志和报告保留；没有Program/Verify、模型上传或照片画面验收声明。
+代码与素材已本地提交ab4e999，未推送新版本；原BOX tag不变。
+
+### 2026-11-03 22:53 — supplied-photo lossless cache to relieve RAM pressure
+
+- Second full-cache route is **TIMING_FAILED**, not downloadable: `build/video/face_photo_50_priority_review_20261103/result.json`. Setup: DDR system −0.405 ns, compute −0.491 ns, DDR-to-PHY −0.934 ns; hold minimum 0.000 ns. Four native cross-SRB paths remain below the extra 200 ps requirement. Clocks and acceptance thresholds have not been relaxed.
+- Keep the user's photo and all 65,536 RGBA texels exactly unchanged. Per-row all-zero margins need no storage; retain 34,331 texels / 137,324 bytes and return zero outside the admitted spans. Split main/tail RAM avoids rounding one 34,331-word array to 65,536 words. Display still responds at one pixel per clock with the same latency.
+- New compact-preset rejection test first failed against the generic implementation (`build/video/avatar_ddr/20261103T144745_953286Z`). After implementation, all eight compact cases pass (`build/video/avatar_ddr/20261103T145037_751939Z`): 65,538 reads in each positive/ratio/reset case; wrong ID, generation or CRC rejected before DDR; changed payload fails CRC; nonzero omitted data fails closed. Generic 24-case DDR suite and mode-resources suite also pass.
+- Generated span table is included in frozen synthesis/simulation inputs. Source PNG SHA and runtime RGBA SHA remain unchanged. Asset storage is an implementation detail; upload remains the same seven-segment full RGBA protocol.
+- New full-system positive/negative simulations: `build/soc/face_system-20261103T145108_340149Z` / `...385397Z`; synthesis: `build/video/pds/20261103T145127_860103Z`. **Running**, no claimed resource or timing result yet. Then map, route, full STA/CDC and bitstream qualification. No photo-version board programming has occurred; accepted BOX release remains available.
+
+### 2026-11-03 23:00 — compact-cache PDS diagnosis
+
+- Production synthesis attempts `20261103T145127_860103Z` and `20261103T145530_412154Z` failed with native PDS signal 11 / Flow-0189 (compile database creation, then synthesis architecture building). The failures are preserved; neither supplies resource or timing acceptance.
+- Isolated DDR/cache synthesis succeeds in `build/video/avatar_span_synth_probe_ddr_20261103`, physically inferring 32 main + 2 tail DRM for RGBA (34 vs prior 64), plus two half-DRM lookup tables: 35 equivalent DRM total. This is a synthesis-only diagnostic without production timing constraints.
+- A separate full-design diagnostic copy `build/video/avatar_span_tail_probe2_20261103` uses power-of-two tail allocation and explicitly narrow tail RAM addressing. It cannot produce a qualified package. Current production source and the two ongoing frozen full-system simulations remain unchanged.
+
+### 2026-11-03 23:13 — lossless-cache simulations pass; unused-function workaround
+
+- Both original compact-cache full-system runs are **PASS**, zero errors/warnings: `build/soc/face_system-20261103T145108_340149Z` (face) and `...385397Z` (no face). Each has 41,410,743 compute cycles, 4 captures/requests, 2 results/records/commits, 1 release/reuse, full-frame RAW/BOX/AVATAR checks (`modes=111`). They remain evidence for their exact frozen source version.
+- Tail address-width experiment did not cure PDS signal 11. The successful isolated full-design experiment removes the **unused** 256-row function from `avatar_ddr_cache`, retaining its generated constant identity line. Of 377 copied inputs, only that file differs. `build/video/avatar_span_identity_only_probe_20261103` synthesizes with 48,883 LUT, 47,745 FF and 112.5 DRM (72.58%), vs 141.5 DRM previously. The cache still contains the actual row lookup. This diagnostic is not physical timing or downloadable acceptance.
+- Production now generates a separate constant-only `avatar_span_identity.vh`; both headers are explicitly frozen in build/simulation inputs. Eight compact component cases pass again in `build/video/avatar_ddr/20261103T151205_807340Z`.
+- Formal revised-source positive/negative runs: `build/soc/face_system-20261103T151233_715409Z` / `...715084Z`; synthesis: `build/video/pds/20261103T151254_336880Z`; coordinator: `build/video/face_photo_spans_50_pipeline_admitted_20261103/receipt.json`. All running. Original full-cache control experiment stopped intentionally after the useful diagnostic succeeded; marked cancelled, not a tool failure. No timing constraints, clock targets or photo bytes have been relaxed/changed.

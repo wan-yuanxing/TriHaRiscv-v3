@@ -19,7 +19,7 @@ def add_inputs(result,paths):
 def simulate(work, name, top, sources, includes=(), defines=(), timeout=120, parameters=(), run_args=()):
     binary = work / (name + ".vvp")
     command = [tool("iverilog"), "-g2012", "-Wall", "-s", top, "-o", binary]
-    for directory in includes:
+    for directory in dict.fromkeys([*includes,ROOT/'rtl/video/include']):
         command += ["-I", directory]
     command += ["-D"+define for define in defines]
     command += [f"-P{top}.{key}={value}" for key,value in parameters]
@@ -49,7 +49,8 @@ def main():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         paths = [ROOT / relative for relative in manifest["sources"] + manifest["tests"]]
         paths += [manifest_path, ROOT / "config/video_cfg.json",
-                  ROOT / "rtl/video/include/video_cfg.vh", ROOT / "sw/include/video_cfg.h"]
+                  ROOT / "rtl/video/include/video_cfg.vh", ROOT / "sw/include/video_cfg.h",
+                  ROOT / "rtl/video/include/avatar_span_table.vh", ROOT / "rtl/video/include/avatar_span_identity.vh"]
         paths += list((ROOT / "scripts/video").glob("*.py"))
         paths += list((ROOT / "tb/video").glob("test_*.py"))
         if args.suite in ('config','capture_mmio','all'):

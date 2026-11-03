@@ -7,7 +7,7 @@
 // Recovery requests never reset the DDR controller from the NPU independently.
 module triha_face_system #(
     parameter ROM_FILE="rom.hex", SRAM_FILE="sram.hex",
-    parameter integer CACHE_ENABLE=1, ENABLE_AVATAR=0, ENABLE_MODEL_LOADER=0, ENABLE_ROW_CACHE=1, ENABLE_MINIMAL_BOX=0, MINIMAL_CONTROL_CPU=0,
+    parameter integer CACHE_ENABLE=1, ENABLE_AVATAR=0, ENABLE_MODEL_LOADER=0, ENABLE_ROW_CACHE=1,COMPACT_AVATAR=0, ENABLE_MINIMAL_BOX=0, MINIMAL_CONTROL_CPU=0,
     parameter integer BOOT_AVATAR=0, ENABLE_MODE_KEY=0, MODE_KEY_CLOCK_HZ=125000000,
     parameter integer ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,
     parameter integer ENABLE_HARDWARE_POST=1, TRUSTED_MODEL=0, M_LANES=16, QUANTIZER_LANES=2
@@ -597,7 +597,7 @@ module triha_face_system #(
     end else begin:g_no_mode_key
         assign requested_mode=0;
     end endgenerate
-    video_application_engine #(.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_COMPACT(1),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.ENABLE_CAPTURE_PREVIEW(ENABLE_CAPTURE_PREVIEW)) u_video (
+    video_application_engine #(.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_COMPACT(1),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.COMPACT_AVATAR(COMPACT_AVATAR),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.ENABLE_CAPTURE_PREVIEW(ENABLE_CAPTURE_PREVIEW)) u_video (
         .mode_request_i(requested_mode),
         .clk_i(video_clk_i),
         .rst_ni(video_reset_n),

@@ -6,7 +6,7 @@
 // automatic slot allocator or diagnostic boxes are instantiated here.
 // memory_fault comes from the shared fabric; accepted traffic must drain before
 // coordinated reset. ENABLE_AVATAR=0 advertises RAW/BOX only and rejects mode 2.
-module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVATAR=0,ENABLE_COMPACT=0,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,TIMEOUT_CYCLES=125000000)(
+module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVATAR=0,ENABLE_COMPACT=0,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,TIMEOUT_CYCLES=125000000)(
  input wire  clk_i,
  input wire  rst_ni,
  input wire [1:0] mode_request_i,
@@ -324,7 +324,7 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .bvalid(c_bvalid),
         .bready(c_bready));
  generate if(ENABLE_COMPACT)begin:g_compact
- video_display_record_compact #(.FRAME_HEIGHT(FRAME_HEIGHT),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_display(
+ video_display_record_compact #(.FRAME_HEIGHT(FRAME_HEIGHT),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.COMPACT_AVATAR(COMPACT_AVATAR),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_display(
   .core_clk(clk_i),
   .core_reset_n(rst_ni),
   .mode_request_i(mode_request_i),

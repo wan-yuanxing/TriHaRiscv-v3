@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_SYSTEM_SIMULATION_PASS_ROUTE_RUNNING",
-  "updated_at": "2026-11-03T21:32:21.582293+08:00",
+  "status": "USER_PHOTO_LOSSLESS_CACHE_IDENTITY_INCLUDE_FIX_PRODUCTION_BUILD_RUNNING",
+  "updated_at": "2026-11-03T23:14:09.353974+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -13,15 +13,13 @@
     "video_ddr": 125000000,
     "pixel": 40000000
   },
-  "positive": "build/soc/face_system-20261103T131024_940165Z",
-  "negative": "build/soc/face_system-20261103T131024_940464Z",
-  "avatar_cache": "build/video/avatar_ddr/20261103T123631_710851Z",
+  "avatar_cache": "build/video/avatar_ddr/20261103T151205_807340Z",
   "scope": "Fixed transparent 2D preset positioned/scaled from real primary face rectangle; KEY1 RAW/BOX/AVATAR; no five-point alignment or head rotation",
   "avatar_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete photo full-pixel regressions and native route; qualify the exact new physical database before generating/programming.",
+  "next_step": "Complete formal synthesis and repeated exact-source full-system simulations; continue mapping, routing, STA/CDC, then qualified bitstream and board.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -41,25 +39,93 @@
     "pipeline": "build/video/face_avatar_50_pipeline_20261103/receipt.json",
     "reason": "User replaced asset before route completion; route stopped intentionally, no final timing result"
   },
-  "sd_fallback": "User permits SD card storage if timing closure is difficult. Current DDR asset plus full on-chip display cache retained pending physical evidence; SD alone would not reduce cache size.",
-  "synthesis": "build/video/pds/20261103T131112_702512Z",
-  "mapping": "build/video/pds/face_photo_50_map_20261103",
-  "route": "build/video/pds/face_photo_50_route_20261103",
-  "offline_pipeline": "build/video/face_photo_50_pipeline_20261103/receipt.json",
+  "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
-  "resources": {
-    "lut": 48670.0,
-    "registers": 47708.0,
-    "drm": 141.5
-  },
   "firmware_sha256": "13d97fb46c514b0ebfa593c2730086fff36ad5728dbafeee456b42c54d5fdfa5",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
   "board_scan": "build/video/jtag_scan/20261103T132743_664738Z",
   "board_scan_status": "identified PG2L100H 0x00602899 after user reconnected power/JTAG",
   "placement_estimated_worst_slack_ns": 0.452,
   "board_programmed_this_goal": false,
-  "simulation_alignment": "build/video/face_photo_50_sim_alignment_20261103.json",
-  "simulation_performance": "build/video/face_photo_performance_20261103.json",
-  "positive_result_sha256": "2950d9f6e977ab77f14425e7340f17f5af7657472500fbd69766c165f10e1217",
-  "negative_result_sha256": "c8a3068a5bcb4178c413d1d4685f4a4c9bc4804f45d09d67d0456cadd23d4408"
+  "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
+  "first_route_timing": {
+    "worst_setup_ns": -1.331,
+    "worst_hold_ns": -0.001,
+    "ddr_system_setup_ns": -0.832,
+    "ddr_system_failing_setup_endpoints": 249
+  },
+  "placement": "build/video/pds/face_photo_50_route_20261103",
+  "route_priority": "build/video/face_photo_50_priority_20261103.rcf",
+  "previous_full_cache_photo": {
+    "positive": "build/soc/face_system-20261103T131024_940165Z",
+    "negative": "build/soc/face_system-20261103T131024_940464Z",
+    "synthesis": "build/video/pds/20261103T131112_702512Z",
+    "mapping": "build/video/pds/face_photo_50_map_20261103",
+    "route": "build/video/pds/face_photo_50_priority_20261103",
+    "offline_pipeline": "build/video/face_photo_50_priority_pipeline_20261103/receipt.json",
+    "resources": {
+      "lut": 48670.0,
+      "registers": 47708.0,
+      "drm": 141.5
+    },
+    "positive_result_sha256": "2950d9f6e977ab77f14425e7340f17f5af7657472500fbd69766c165f10e1217",
+    "negative_result_sha256": "c8a3068a5bcb4178c413d1d4685f4a4c9bc4804f45d09d67d0456cadd23d4408",
+    "simulation_alignment": "build/video/face_photo_50_sim_alignment_20261103.json",
+    "simulation_performance": "build/video/face_photo_performance_20261103.json"
+  },
+  "positive": "build/soc/face_system-20261103T151233_715409Z",
+  "negative": "build/soc/face_system-20261103T151233_715084Z",
+  "synthesis": "build/video/pds/20261103T151254_336880Z",
+  "second_route_review": "build/video/face_photo_50_priority_review_20261103/result.json",
+  "second_route_timing": {
+    "worst_setup_ns": -0.934,
+    "ddr_system_setup_ns": -0.405,
+    "compute_setup_ns": -0.491,
+    "worst_hold_ns": 0.0,
+    "cross_srb_below_200ps": 4
+  },
+  "lossless_cache": {
+    "format": "row_spans_zero_elision",
+    "logical_texels": 65536,
+    "stored_texels": 34331,
+    "stored_bytes": 137324,
+    "unchanged_full_rgba_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+    "table_sha256": "d711cd8650a498cfa8aeb24f0be958919411e105dcb64fa034378398810bf2c8",
+    "reads_per_successful_case": 65538,
+    "cases": 8,
+    "red_before_implementation": "build/video/avatar_ddr/20261103T144745_953286Z",
+    "generic_regression": "build/video/avatar_ddr/20261103T145108_741843Z",
+    "mode_resources": "build/video/regression/20261103T145237_139598Z"
+  },
+  "synthesis_failures": [
+    "build/video/pds/20261103T145127_860103Z",
+    "build/video/pds/20261103T145530_412154Z"
+  ],
+  "synthesis_error": "PDS signal 11 / Flow-0189; first during compile DB creation, second during synthesis architecture building. No resource or timing acceptance.",
+  "compact_component_synthesis": {
+    "path": "build/video/avatar_span_synth_probe_ddr_20261103",
+    "drm": 35,
+    "scope": "Synthesis-only module diagnostic without production timing constraints; not board timing proof.",
+    "rgba_data_drm": 34,
+    "lookup_table_drm": 1
+  },
+  "previous_compact_cache_simulations": {
+    "positive": "build/soc/face_system-20261103T145108_340149Z",
+    "negative": "build/soc/face_system-20261103T145108_385397Z",
+    "avatar_cache": "build/video/avatar_ddr/20261103T145037_751939Z",
+    "status": "PASS",
+    "identity_header": "Before extracting unused DDR-loader function into constant-only include; exact old frozen sources, cannot qualify the revised build."
+  },
+  "offline_pipeline": "build/video/face_photo_spans_50_pipeline_admitted_20261103/receipt.json",
+  "pds_workaround_diagnostic": {
+    "directory": "build/video/avatar_span_identity_only_probe_20261103",
+    "status": "PASS_DIAGNOSTIC_ONLY",
+    "compared_files": 377,
+    "changed_files": 1,
+    "change": "No unused row-span function in DDR loader; constants only. Runtime logic unchanged.",
+    "lut": 48883,
+    "registers": 47745,
+    "drm": 112.5,
+    "not_production_acceptance": true
+  }
 }

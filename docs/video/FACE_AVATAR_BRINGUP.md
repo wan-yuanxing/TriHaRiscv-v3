@@ -21,7 +21,12 @@
 - KEY0 会复位并使模型/素材封存失效，需重新加载全部七段。易失 JTAG 配置断电后需重新下载。
 - 确认素材字节、CRC、代数及 C/RTL 常量完全匹配后才允许叠加；换图需重建对应固件和位流。
 
-输入 PNG、原始 RGBA、生成的 C/RTL 常量均由源码和验收记录绑定。
+片上缓存使用无损行区间压缩：只省去每行两侧 RGBA 四字节均为零的像素，
+其余 34,331 个像素全部保留，读取时补零。原始 256×256 图像、上传字节、CRC、
+一个时钟的采样延迟均不变。生成的 `avatar_span_table.vh` 与指定素材身份、CRC 绑定，
+身份不符或被省略位置出现非零数据时拒绝封存。换图时必须重新生成表并重建硬件。
+
+输入 PNG、原始 RGBA、生成的 C/RTL 常量及行区间表均由源码和验收记录绑定。
 运行 `python scripts/video/gen_fixed_avatar.py --check` 检查生成结果；Python 依赖见
 `config/avatar_python_requirements.txt`。PNG 压缩字节可不同，解码像素必须相同；
 硬件加载的 RGBA、元数据和常量要求逐字节一致。
@@ -57,6 +62,7 @@ $env:TRIHA_PDS_SHELL='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe'
 python -m pip install --target build/python-deps --only-binary=:all: -r config/face_python_requirements.txt -r config/avatar_python_requirements.txt
 $env:PYTHONPATH="$PWD/build/python-deps"
 python scripts/video/gen_fixed_avatar.py --check
+python scripts/video/test_avatar_ddr.py --asset assets/avatars/triha/avatar.rgba --compact
 python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot --fixture build/npu/face_fixture_20261103
 python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot
 ```
@@ -83,8 +89,8 @@ python scripts/video/package_board.py --target triha_face_board
 ## SD 卡后备方案
 
 用户允许在收敛困难时把头像放在 SD 卡。当前方案把头像从 UART 加载到 DDR，
-再装入 65,536 texel 的片上缓存，显示期间不变。SD 可以替换加载来源，但若仍保留完整缓存，
-不会减少这部分片上 RAM 或改变像素读取路径。是否缩小头像/改为行缓存，须由实际后布线
-瓶颈决定；当前没有将未经验证的 SD 控制器接入正式构建。
+再装入无损压缩的片上缓存，显示期间不变。SD 可以替换加载来源，但只有缓存结构改变
+才能减少显示所占片上 RAM。当前优先验证不改变照片像素的行区间压缩；
+没有将未经验证的 SD 控制器接入正式构建。
 
 已验收 BOX 版本始终保留在 Git 标签 `face-box-20261103`。
