@@ -13,6 +13,9 @@
 
 - 目标 `triha_face_board`，profile `avatar`：`ENABLE_AVATAR=1`、
   `ENABLE_MINIMAL_BOX=0`、`DEMO_BOX_ONLY=0`。
+- 实板设置 `ENABLE_LANDMARKS=0`，省去当前 NPU 未输出的五点存储及绘制电路；
+  保留 640 字节记录格式、16 个人脸矩形和主脸照片叠加。实板拒绝五点标志或非零点数据；
+  通用模块默认仍支持五点。`--board-profile` 整机仿真采用相同配置。
 - CPU/NPU 50MHz，Video/DDR 125MHz，像素 40MHz。HDMI 输入为 800×600 标称 60Hz。
 - 七段上传包含模型 1,770,496 字节和头像 262,144 字节，共 2,032,640 字节、7,940 包。
   最后 ACK 游标必须为 `(7,0)`；不能使用 BOX 版本的 `--model-only`。
@@ -63,6 +66,7 @@ $env:TRIHA_PDS_SHELL='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe'
 python -m pip install --target build/python-deps --only-binary=:all: -r config/face_python_requirements.txt -r config/avatar_python_requirements.txt
 $env:PYTHONPATH="$PWD/build/python-deps"
 python scripts/video/gen_fixed_avatar.py --check
+python scripts/video/test_face_rect_profile.py
 python scripts/video/test_avatar_ddr.py --asset assets/avatars/triha/avatar.rgba --compact
 python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot --fixture build/npu/face_fixture_20261103
 python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot

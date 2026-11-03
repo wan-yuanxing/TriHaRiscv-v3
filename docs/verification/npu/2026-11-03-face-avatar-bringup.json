@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RECT_FULL_SYSTEM_PASS_ROUTING",
-  "updated_at": "2026-11-04T06:10:46.566357+08:00",
+  "status": "USER_PHOTO_RECT_ROUTED_TIMING_FAILED",
+  "updated_at": "2026-11-04T06:39:28.996677+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish frozen rectangle-profile route and independent slow/fast timing, actual PHY-site retention and Gray-clock checks before generating a bitstream.",
+  "next_step": "Reduce the live rectangle-record storage without changing the 640-byte ABI, verify all legal commands and invalid point rejection, then rebuild and inspect physical DDR/PHY timing.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T214701_729786Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -634,6 +634,79 @@
     "clma_available": 11675,
     "clms_used": 4584,
     "clms_available": 4975,
-    "actual_routed_retention_pending": true
+    "actual_routed_retention_pending": false
+  },
+  "rect2_timing_failure": {
+    "review": "build/video/face_photo_rect2_50_review_20261104/result.json",
+    "report_sha256": "a38f380fbbb8efbe8bd665eb910cf3432ec8cce13d616c43332f02fab149a631",
+    "negative_rows": {
+      "setup": {
+        "slow": [
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": -0.672,
+            "total_negative_slack_ns": -36.492,
+            "failing_endpoints": 198,
+            "endpoints": 52905
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": -1.464,
+            "total_negative_slack_ns": -2.447,
+            "failing_endpoints": 3,
+            "endpoints": 196
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": -0.158,
+            "total_negative_slack_ns": -0.316,
+            "failing_endpoints": 2,
+            "endpoints": 420
+          }
+        ],
+        "fast": []
+      },
+      "hold": {
+        "slow": [
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": -0.465,
+            "total_negative_slack_ns": -1.616,
+            "failing_endpoints": 4,
+            "endpoints": 196
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": -0.513,
+            "total_negative_slack_ns": -1.884,
+            "failing_endpoints": 4,
+            "endpoints": 196
+          }
+        ]
+      },
+      "recovery": {
+        "slow": [],
+        "fast": []
+      },
+      "removal": {
+        "slow": [],
+        "fast": []
+      },
+      "pulse_width": {
+        "slow": [],
+        "fast": []
+      }
+    },
+    "retention": "build/video/face_photo_rect2_50_retention_20261104.json",
+    "retention_sha256": "88b03752cac389dee34a123d1d59a3bd8cdc84ac11edc3260d48e2cc2a29a2ba",
+    "diagnostic": "build/video/face_photo_rect2_failed_paths_20261104/paths.json",
+    "bitstream_generated": false
   }
 }
