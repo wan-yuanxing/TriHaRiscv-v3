@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_GUARD_SETUP_FAILED_PRIORITY_REROUTE",
-  "updated_at": "2026-11-04T04:27:53.042903+08:00",
+  "status": "USER_PHOTO_CONTROL_OPTIMIZATION_FULL_REBUILD",
+  "updated_at": "2026-11-04T04:53:40.909367+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -13,21 +13,27 @@
     "video_ddr": 125000000,
     "pixel": 40000000
   },
-  "avatar_cache": "build/video/avatar_ddr/20261103T155459_320871Z",
+  "avatar_cache": "build/video/avatar_ddr/20261103T204441_906508Z",
   "scope": "Fixed transparent 2D preset positioned/scaled from real primary face rectangle; KEY1 RAW/BOX/AVATAR; no five-point alignment or head rotation",
   "avatar_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete eight-net priority routing from the frozen guard/row placement; require all original routed timing, native diagnostics, retained PHY locations and Gray clock checks before any bitstream.",
+  "next_step": "Complete current-source positive/negative seven-segment full-system simulations and fresh synthesis/map/PHY-constrained placement/route; rerun all physical qualification before any bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
-  "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
+  "mode_key": "build/soc/face_mode_key-20261103T204441_917993Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
   "source_png": "assets/avatars/triha/source.png",
   "source_sha256": {
     "rtl/video/display_record_guard.sv": "8398e9ecec22903534e0935ab0515e2ca040ee319d733cb443bb697832205005",
     "rtl/video/raw_display.sv": "1ba07dbe1dd577e677f6392d0aa5a457b53f7d2ff1785a88580ca90b1a3ee47d",
-    "tb/video/tb_display_record_guard.sv": "4c7461b9136ec08d31154d3a0a1368da53789a3ccf52b24c781e369374674de0"
+    "tb/video/tb_display_record_guard.sv": "4c7461b9136ec08d31154d3a0a1368da53789a3ccf52b24c781e369374674de0",
+    "rtl/video/avatar_texture_cache.sv": "64047d7d16a3e2afa3acddfc0c97fee5eead350b8ae4ee8f91c311dc5be1a175",
+    "rtl/video/display_record_link.sv": "a5b2b50de313af4d910a05199ecac0d9e429f18ba6eaf9ad8afd8f5be513caf1",
+    "rtl/video/video_display_mmio_compact.sv": "a1f3602978979d72d5e9a7b6adb49dc90e788e2353b0db9a3a6153a3575c05de",
+    "tb/video/tb_video_display_mmio.sv": "50d3413f6efd9ff0097ddaed066c9e38f5e8d9401901f67ce0782e44ea5bd612",
+    "tb/video/tb_display_record_link.sv": "c90fed7426f389f22050e5707cf11bec3b1a8aa4c98329241bf1b7c9d831309e",
+    "scripts/video/test_display_control_paths.py": "35432ffa7e1b9199ce0c4d8f5ba7a1b0f4ffbcd71a6876238e03052be91ae2c2"
   },
   "alignment": {
     "anchor_x": 128,
@@ -64,7 +70,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_phy_sites_place2_20261104",
+  "placement": "build/video/pds/face_photo_control2_phy_place_20261104",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -339,13 +345,13 @@
     "negative_result_sha256": "53838a549042582c3d62dd9d117ac427dfe3dfb547d84b1d26b0345243e36ab6",
     "firmware_sha256": "09b964f9a837c2e07bb0fae48ef1b744902413a4ad530ddbc17481e0187aa7d2"
   },
-  "source_commit": "d75966442062975400ef719e25fc4704deeaba1c",
-  "positive": "build/soc/face_system-20261103T192755_147749Z",
-  "negative": "build/soc/face_system-20261103T192755_158958Z",
-  "synthesis": "build/video/pds/20261103T192820_624589Z",
-  "mapping": "build/video/pds/face_photo_guard_50_map_20261104",
-  "route": "build/video/pds/face_photo_guard_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_guard_50_pipeline_20261104/receipt.json",
+  "source_commit": "76d3d5344de5524a00be74d4d72fd6389e9a1ab9",
+  "positive": "build/soc/face_system-20261103T204514_140784Z",
+  "negative": "build/soc/face_system-20261103T204514_170957Z",
+  "synthesis": "build/video/pds/20261103T205045_995914Z",
+  "mapping": "build/video/pds/face_photo_control2_50_map_20261104",
+  "route": "build/video/pds/face_photo_control2_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_control2_50_pipeline_20261104/receipt.json",
   "guard_row_optimization": {
     "guard": "build/video/face_guard_production_20261104/result.json",
     "guard_cases": 248,
@@ -367,17 +373,7 @@
     "reference_preview": "build/video/face_photo_guard_reference_20261104.json",
     "preview_scope": "Independent simulation oracle, not a board screenshot."
   },
-  "resources": {
-    "lut": 48833.0,
-    "registers": 47759.0,
-    "drm": 112.5
-  },
-  "positive_result_sha256": "bd77f632e2d63916f1ccc9b523123d91ce4521bcdc7d6db033173f67805f888d",
-  "negative_result_sha256": "4d87eac134809da8fc5f84aef093df559ab2d4befde333258037cf822056115f",
-  "firmware_sha256": "61e01b57face364f49b22ab1330bd16b936336dadf9059b1aea40a15a2fd3e82",
-  "map_result_sha256": "09665f7664cd798cde9a6219ca8686b99778a0e2c6f3b736ab14b7f84a124b91",
-  "simulation_alignment": "build/video/face_photo_guard_50_sim_alignment_20261104.json",
-  "simulation_performance": "build/video/face_photo_guard_performance_20261104.json",
+  "firmware_sha256": "862ad9a0de23c34d25117bedfb1671936705ae70de719cd1b7cac143910aab42",
   "guard_route_failure": {
     "review": "build/video/face_photo_guard_50_review_20261104/result.json",
     "review_sha256": "1c0a60cd57b16e32548e9e7ce3a8b9a068192918d01659e8076c91e52842a1d3",
@@ -418,7 +414,20 @@
     "mode": "performance",
     "hold_repair_target_ps": 200,
     "timing_constraints_unchanged": true,
-    "status": "RUNNING"
+    "status": "TIMING_FAILED",
+    "review": "build/video/face_photo_guard_priority_50_review_20261104/result.json",
+    "report_sha256": "afc11ca08ec61fc33edc6903ba84eec3bc525dded7be4366fa501e80b4edec79",
+    "setup_ns": -0.653,
+    "hold_ns": -0.553,
+    "compute_setup_ns": -0.408,
+    "ddr_same_failing_endpoints": 339,
+    "compute_failing_endpoints": 25,
+    "ddr_to_phy1_failing_endpoints": 2,
+    "retained_phy_locations": 552,
+    "retention": "build/video/face_photo_guard_priority_50_retention_20261104.json",
+    "native_sta3017_messages": 1,
+    "cross_srb_paths_below_200ps_target": 3,
+    "bitstream_generated": false
   },
   "isolated_control_path_experiment": {
     "result": "build/video/face_control_paths_probe_20261104/result.json",
@@ -466,5 +475,51 @@
     "commit": "773012d",
     "evidence": "build/video/compact_guard_marker_20261104.json",
     "scope": "Expected count aligned with existing 248-case passing guard result; no full compact rerun."
+  },
+  "previous_guard_row_checkpoint": {
+    "source_commit": "d75966442062975400ef719e25fc4704deeaba1c",
+    "positive": "build/soc/face_system-20261103T192755_147749Z",
+    "negative": "build/soc/face_system-20261103T192755_158958Z",
+    "synthesis": "build/video/pds/20261103T192820_624589Z",
+    "mapping": "build/video/pds/face_photo_guard_50_map_20261104",
+    "route": "build/video/pds/face_photo_guard_50_route_20261104",
+    "offline_pipeline": "build/video/face_photo_guard_50_pipeline_20261104/receipt.json",
+    "resources": {
+      "lut": 48833.0,
+      "registers": 47759.0,
+      "drm": 112.5
+    },
+    "positive_result_sha256": "bd77f632e2d63916f1ccc9b523123d91ce4521bcdc7d6db033173f67805f888d",
+    "negative_result_sha256": "4d87eac134809da8fc5f84aef093df559ab2d4befde333258037cf822056115f",
+    "map_result_sha256": "09665f7664cd798cde9a6219ca8686b99778a0e2c6f3b736ab14b7f84a124b91",
+    "simulation_alignment": "build/video/face_photo_guard_50_sim_alignment_20261104.json",
+    "simulation_performance": "build/video/face_photo_guard_performance_20261104.json",
+    "firmware_sha256": "61e01b57face364f49b22ab1330bd16b936336dadf9059b1aea40a15a2fd3e82"
+  },
+  "guard_all_setup_diagnostic": {
+    "path": "build/video/face_photo_guard_all_setup_20261104/paths.json",
+    "endpoints": 260,
+    "unique_launches": 6,
+    "scope": "Filtered analysis only, never qualification; exposed a -0.135 ns cache data-enable path beyond the first 128 paths."
+  },
+  "control_optimization": {
+    "changes": [
+      "12-bit valid-region MMIO offsets preserve full-address validity checks",
+      "Six 16-bit and one 4-bit kept pixel-commit identity compares; no extra cycle",
+      "Capture compact cache data/address unconditionally; delayed valid still exclusively controls physical RAM writes"
+    ],
+    "adoption": "build/video/face_control_adoption_20261104/receipt.json",
+    "production_controls": "build/video/display_control_paths/20261103T204412_300713Z/result.json",
+    "production_control_scenarios": 19,
+    "cache_ddr_cases": 8,
+    "cache_stream_cases": 3,
+    "full_system_status": "RUNNING",
+    "physical_status": "WAIT_SYNTHESIS",
+    "isolated_cache_probe": "build/video/avatar_ddr_data_probe/20261103T203540_565427Z/result.json"
+  },
+  "firmware_build_restart": {
+    "supersession": "build/video/pds/20261103T204514_147251Z/supersession.json",
+    "identity_diagnostic": "build/video/control_firmware_identity_20261104.json",
+    "reason": "Initial build mistakenly selected the previous positive ELF. All ROM/SRAM words identical; nonallocated .strtab differs. Owned build jobs stopped; new synthesis binds the exact current positive ELF. Simulations continue unchanged."
   }
 }
