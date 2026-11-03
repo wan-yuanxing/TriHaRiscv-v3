@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RECT_SYNTHESIS_MAP_PASS_PLACEMENT",
-  "updated_at": "2026-11-04T06:00:43.264957+08:00",
+  "status": "USER_PHOTO_RECT_FULL_SYSTEM_PASS_ROUTING",
+  "updated_at": "2026-11-04T06:10:46.566357+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish current 548-hint placement, route, full-system simulations and independent internal timing/CDC checks.",
+  "next_step": "Finish frozen rectangle-profile route and independent slow/fast timing, actual PHY-site retention and Gray-clock checks before generating a bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T214701_729786Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -620,5 +620,20 @@
     "exclusions": "build/video/face_photo_rect_phy_exclusions_20261104.json",
     "requested": 548,
     "scope": "Four optional locations omitted: two previous native-rejected names and two newly rejected names. Original pins/gates/timing remain mandatory."
+  },
+  "simulation_alignment": "build\\video\\face_photo_rect_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_rect_performance_20261104.json",
+  "positive_result_sha256": "475aca8d034efc7b13508da1e41846128f24a12bd5223709fbee019720beef05",
+  "negative_result_sha256": "333ec6507952b7964c40dd2744f9c34e36556005bb48aa32dc1b40fc70604e38",
+  "current_placement_pass": {
+    "directory": "build/video/pds/face_photo_rect2_phy_place_20261104",
+    "requested_phy_sites": 548,
+    "final_estimated_setup_ns": 0.548,
+    "placed_db_sha256": "b3f185965a3d0cef13cd19c40fead40a0c0800a79aca9c118a64cc2d5db7a597",
+    "clma_used": 10800,
+    "clma_available": 11675,
+    "clms_used": 4584,
+    "clms_available": 4975,
+    "actual_routed_retention_pending": true
   }
 }
