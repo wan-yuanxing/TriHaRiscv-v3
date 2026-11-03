@@ -15,11 +15,13 @@ set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_generation*}]
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/active_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/commit_generation*}]
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/release_pixel_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/release_generation*}]
-# Compact owner holds the complete record before request synchronization until
+# Compact owner holds the rectangle record before request synchronization until
 # combined scanner/pixel feedback. Bound every pixel-domain data/control sink
 # fed by this exact source bank: active_data capture and asset admission.
 # Overlay uses only pixel-local active_data; no payload false path or clock-group cut.
-set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/g_full_mmio.u_mmio/record_data*}] -to [get_clocks {pixel_clk}]
+# Include the packed data and rejection summary registers. Disabled landmark
+# fields are constant zero at pixel consumers; no live source bank is omitted.
+set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/g_full_mmio.u_mmio/g_rectangle_record*}] -to [get_clocks {pixel_clk}]
 # Either domain can assert the lease reset. Deassertion is synchronized locally;
 # only the two async clear pins of the opposite-domain release chain are cut.
 set_false_path -from [get_clocks {pixel_clk}] -to [get_pins {g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/u_context/core_release[1:0]/C}]

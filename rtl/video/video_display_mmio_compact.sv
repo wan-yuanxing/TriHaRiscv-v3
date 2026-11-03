@@ -38,7 +38,8 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
     (* syn_ramstyle = "block_ram" *) reg [31:0] shadow[0:159];
     (* syn_ramstyle = "block_ram" *) reg [31:0] active_words[0:159];
     reg [31:0] shadow_q,active_q;
-    reg [5119:0] record_data;
+    wire [5119:0] record_data;
+    wire [31:0] archive_word;
     reg [7:0] word_index;
     reg compare_changed,shadow_read_pending,deferred_submit,lease_inflight;
     wire owner_data;
@@ -133,7 +134,63 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
         endcase
     end
     wire ack_fire=execute_write&&write_response==0&&do_ack;
+    wire [99:0] feedback_identity={feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i};
+    wire [99:0] command_identity={cmd_slot_o,cmd_mode_o,cmd_frame_o,cmd_generation_o,cmd_seq_o};
+    (* syn_keep=1 *) wire [6:0] feedback_identity_matches;
+    generate for(genvar part=0;part<7;part=part+1)begin:g_feedback_identity
+        localparam integer BITS=part==6?4:16;
+        assign feedback_identity_matches[part]=(feedback_identity[part*16+:BITS]===command_identity[part*16+:BITS]);
+    end endgenerate
     generate
+        if(ENABLE_LANDMARKS||SKIP_GUARD)begin:g_full_record
+            reg [5119:0] data_q;
+            assign record_data=data_q;
+            assign archive_word=data_q[31:0];
+            always @(posedge clk_i or negedge rst_ni)begin
+                if(!rst_ni)data_q<=0;
+                else if(phase==LOAD)data_q<={shadow_q,data_q[5119:32]};
+                else if(phase==ARCHIVE)data_q<={32'd0,data_q[5119:32]};
+            end
+        end else begin:g_rectangle_record
+            // A legal rectangle-profile record has six zero payload words
+            // per box. Shift only the 32 header + 16*2 rectangle words; keep
+            // one rejection bit per box so forbidden payloads cannot vanish.
+            // The full RAM shadow/readback and 160-word history comparison
+            // remain exact. Only guard-approved records can reach ARCHIVE.
+            reg [2047:0] data_q;
+            reg [15:0] forbidden_payload;
+            wire retained_word=word_index<32||word_index[2:0]<2;
+            wire [3:0] payload_lane=(word_index-8'd32)>>3;
+            function automatic fold_payload(input previous,input [31:0] value,input first);
+                begin
+                    // Preserve the guard's unknown-data precedence in RTL
+                    // simulation, including X/Z mixed with known one bits.
+                    if((^value)===1'bx||(!first&&previous===1'bx))fold_payload=1'bx;
+                    else fold_payload=(first?1'b0:previous)||(|value);
+                end
+            endfunction
+            function automatic [5119:0] expand_record(input [2047:0] data,input [15:0] forbidden);
+                integer box;
+                begin
+                    expand_record=0;
+                    expand_record[1023:0]=data[1023:0];
+                    for(box=0;box<16;box=box+1)begin
+                        expand_record[(32+box*8)*32+:64]=data[(32+box*2)*32+:64];
+                        expand_record[(34+box*8)*32]=forbidden[box];
+                    end
+                end
+            endfunction
+            assign record_data=expand_record(data_q,forbidden_payload);
+            assign archive_word=retained_word?data_q[31:0]:32'd0;
+            always @(posedge clk_i or negedge rst_ni)begin
+                if(!rst_ni)begin data_q<=0;forbidden_payload<=0;end
+                else if(phase==LOAD)begin
+                    if(retained_word)data_q<={shadow_q,data_q[2047:32]};
+                    else forbidden_payload[payload_lane]<=fold_payload(
+                        forbidden_payload[payload_lane],shadow_q,word_index[2:0]==2);
+                end else if(phase==ARCHIVE&&retained_word)data_q<={32'd0,data_q[2047:32]};
+            end
+        end
         if(SKIP_GUARD) begin : g_skip_guard
             // Minimal BOX records are built and range-checked by the CPU before
             // submission.  Keep the same one-cycle completion handshake while
@@ -218,7 +275,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             read_pending<=0;read_addr<=0;
             s_axi_bvalid_o<=0;s_axi_bresp_o<=0;s_axi_rvalid_o<=0;s_axi_rresp_o<=0;s_axi_rdata_o<=0;
             request_mode<=0;request_seq<=0;mode_only<=0;phase<=INIT;guard_start<=0;
-            word_index<=0;record_data<=0;compare_changed<=0;shadow_read_pending<=0;deferred_submit<=0;lease_inflight<=0;
+            word_index<=0;compare_changed<=0;shadow_read_pending<=0;deferred_submit<=0;lease_inflight<=0;
             irq_mask<=0;reject_pending<=0;reject_code<=0;reject_seq<=0;guard_rejected<=0;external_error<=0;
         end else begin
             if(EXTERNAL_HEALTH!=0&&external_fault_i!==1'b0)external_error<=1;
@@ -254,13 +311,11 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
                 INIT:if(word_index==159)begin phase<=IDLE;word_index<=0;end else word_index<=word_index+1'b1;
                 FETCH:phase<=LOAD;
                 LOAD:begin
-                    record_data<={shadow_q,record_data[5119:32]};
                     compare_changed<=compare_changed||(shadow_q!=active_q);
                     if(word_index==159)begin phase<=CHECK;guard_start<=1;end
                     else begin word_index<=word_index+1'b1;phase<=FETCH;end
                 end
                 ARCHIVE:begin
-                    record_data<={32'd0,record_data[5119:32]};
                     if(word_index==159)begin
                         word_index<=0;deferred_submit<=0;
                         if(deferred_submit||(execute_write&&write_response==0&&do_submit))phase<=FETCH;
@@ -270,9 +325,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
                 default:begin end
             endcase
             if(cmd_valid_o&&cmd_ready_i)lease_inflight<=1;
-            if(feedback_valid_i&&feedback_ready_o&&lease_inflight&&
-                {feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i}===
-                {cmd_slot_o,cmd_mode_o,cmd_frame_o,cmd_generation_o,cmd_seq_o})begin
+            if(feedback_valid_i&&feedback_ready_o&&lease_inflight&&(&feedback_identity_matches))begin
                 lease_inflight<=0;
                 if(!cmd_mode_only_o)begin phase<=ARCHIVE;word_index<=0;end
             end
@@ -300,7 +353,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             if(ram_write_enable[byte_lane])shadow[ram_write_index][8*byte_lane+:8]<=ram_write_data[8*byte_lane+:8];
         if(phase==FETCH)begin shadow_q<=shadow[word_index];active_q<=active_words[word_index];end
         else if(execute_read&&shadow_read_address)shadow_q<=shadow[shadow_read_index];
-        if(phase==ARCHIVE)active_words[word_index]<=record_data[31:0];
+        if(phase==ARCHIVE)active_words[word_index]<=archive_word;
     end
 endmodule
 `default_nettype wire
