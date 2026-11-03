@@ -44,6 +44,7 @@ def main():
             raise RuntimeError('Invalid evidence was accepted: '+name)
 
     try:
+        profile=json.loads((args.base/'result.json').read_text(encoding='utf-8'))['face_profile']
         review = json.loads(inputs[1].read_text(encoding='utf-8'))
         report, sites = (Path(review[n]['path']) for n in ('report', 'sites'))
         inputs += [report, sites]
@@ -65,7 +66,7 @@ def main():
             inputs += [Path(review['gray_netlist'][key]['path']) for key in ('netlist','model')]
         gray_check = lambda report: gray_bounds(report, fdc, physical, netlist)
         gray = gray_check(text)
-        check_sites(requested, physical)
+        check_sites(requested, physical, profile)
         rejected('wrong_database', lambda: require_routed_report(text, 'wrong_pnr.adf'))
         rejected('missing_corner', lambda: parse_tables(replace_once(
             r'Hold Summary\(Fast Corner\):', 'Removed hold corner:', text)))
@@ -88,9 +89,12 @@ def main():
         violated = re.sub(r'Slack \(MET\)\s+[\d.]+', f'Slack (VIOLATED) {need-7:.3f}', violated)
         rejected('numeric_gray_violation', lambda: gray_check(text.replace(block, violated, 1)))
         wrong_pin = replace_once(r'(^def_port \{uart_rx\} [^\n]*?)LOC=\S+', r'\g<1>LOC=A1', physical)
-        rejected('wrong_pin', lambda: check_sites(requested, wrong_pin))
+        rejected('wrong_pin', lambda: check_sites(requested, wrong_pin, profile))
         wrong_gate = replace_once(r'(ddrphy_ioclk_gate\[0\]/opit_0_inv\} )CLMA_357_354', r'\g<1>CLMA_351_354', physical)
-        rejected('wrong_ddr_gate', lambda: check_sites(requested, wrong_gate))
+        rejected('wrong_ddr_gate', lambda: check_sites(requested, wrong_gate, profile))
+        if profile=='avatar':
+            missing_key=replace_once(r'^def_port \{mode_button_n\} [^\n]*\n', '', physical)
+            rejected('missing_avatar_mode_key',lambda: check_sites(requested,missing_key,profile))
         if args.clock_review:
             receipt_path = args.clock_review/'result.json'
             receipt = json.loads(receipt_path.read_text(encoding='utf-8'))

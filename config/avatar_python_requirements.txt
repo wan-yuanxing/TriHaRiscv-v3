@@ -1,0 +1,3 @@
+# Fixed avatar generation/checking and seven-segment UART upload.
+Pillow==11.1.0
+pyserial==3.5

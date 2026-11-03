@@ -1,7 +1,7 @@
-"""Reproducible, original vector-style preset; no runtime PNG decoding.
+"""Compile the user-supplied PNG to the fixed FPGA avatar memory format.
 
-Geometry below is the editable source. SVG and PNG are human previews; FPGA
-uses exactly the admitted row-major, non-premultiplied R,G,B,A bytes.
+Keep the source PNG byte-exact. Only deterministic size/format conversion is
+performed; FPGA uses row-major, non-premultiplied R,G,B,A, with no PNG decoder.
 """
 import argparse
 import hashlib
@@ -9,55 +9,54 @@ import io
 import json
 from pathlib import Path
 import zlib
-from PIL import Image, ImageDraw
+from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[2]
 DEST=ROOT/'assets/avatars/triha'
 
 
 def render():
-    scale=4
-    im=Image.new('RGBA',(256*scale,256*scale),(0,0,0,0))
-    draw=ImageDraw.Draw(im)
-    svg=['<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">']
-    def ellipse(box,color):
-        draw.ellipse(tuple(round(v*scale) for v in box),fill=color)
-        x0,y0,x1,y1=box
-        svg.append(f'<ellipse cx="{(x0+x1)/2:g}" cy="{(y0+y1)/2:g}" rx="{(x1-x0)/2:g}" ry="{(y1-y0)/2:g}" fill="{color}"/>')
-    def polygon(points,color):
-        draw.polygon([(x*scale,y*scale) for x,y in points],fill=color)
-        svg.append(f'<polygon points="{" ".join(f"{x},{y}" for x,y in points)}" fill="{color}"/>')
-    # A simple front-facing cartoon head, transparent outside its silhouette.
-    ellipse((32,12,224,231),'#172d43')
-    ellipse((18,101,62,158),'#172d43');ellipse((194,101,238,158),'#172d43')
-    ellipse((23,107,62,154),'#efb99e');ellipse((194,107,233,154),'#efb99e')
-    ellipse((40,38,216,227),'#f9d3b4')
-    ellipse((49,45,207,207),'#ffe1c4')
-    polygon([(36,103),(42,48),(78,19),(144,15),(205,42),(222,108),(180,73),(161,43),(151,96),(122,64),(98,98),(88,58),(58,106)],'#172d43')
-    polygon([(43,63),(58,36),(94,23),(160,25),(184,36),(179,47),(142,38),(98,36),(66,46)],'#2b5669')
-    # Teal hair clip and a small highlight keep the preset recognizable at 256px.
-    polygon([(183,62),(204,78),(199,85),(178,68)],'#38c5bf')
-    ellipse((68,110,105,161),'#172d43');ellipse((151,110,188,161),'#172d43')
-    ellipse((74,123,99,155),'#328f9b');ellipse((157,123,182,155),'#328f9b')
-    ellipse((78,126,94,153),'#122d43');ellipse((161,126,177,153),'#122d43')
-    ellipse((73,115,85,129),'#ffffff');ellipse((156,115,168,129),'#ffffff')
-    ellipse((91,142,97,148),'#c5ffff');ellipse((174,142,180,148),'#c5ffff')
-    ellipse((54,159,84,174),'#f0ac9c');ellipse((172,159,202,174),'#f0ac9c')
-    ellipse((123,156,133,163),'#da9c86')
-    ellipse((111,175,145,194),'#9a4c55');ellipse((110,172,146,185),'#ffe1c4')
-    ellipse((120,187,136,192),'#f29b9e')
-    im=im.resize((256,256),Image.Resampling.LANCZOS)
+    source=json.loads((DEST/'source.json').read_text(encoding='utf-8'))
+    source_path=DEST/source['source_file']
+    if source_path.resolve().parent != DEST.resolve():
+        raise ValueError('Avatar source must be a file inside the preset directory')
+    original=source_path.read_bytes()
+    if hashlib.sha256(original).hexdigest()!=source['source_sha256']:
+        raise ValueError('Original user avatar changed')
+    with Image.open(io.BytesIO(original)) as image:
+        if image.mode!='RGBA' or list(image.size)!=source['source_size'] or image.width!=image.height:
+            raise ValueError('Expected the admitted square RGBA source PNG')
+        # Pillow resamples RGBA through premultiplied alpha to avoid dark edges,
+        # then returns the straight RGBA required by the display blend contract.
+        im=image.resize((256,256),Image.Resampling.LANCZOS)
     rgba=im.tobytes();png=io.BytesIO();im.save(png,format='PNG')
-    svg.append('</svg>')
-    meta=dict(schema_version=1,name='TriHa cartoon preset',asset_id=1,generation=1,
+    if not (0<=source['anchor_x']<=256 and 0<=source['anchor_y']<=256 and 0<source['coverage_q8']<=1024):
+        raise ValueError('Invalid fixed avatar alignment')
+    meta=dict(schema_version=1,name=source['name'],asset_id=source['asset_id'],generation=source['generation'],
               base=0x82600000,width=256,height=256,stride=1024,bytes=len(rgba),
               format='RGBA8888',byte_order='R G B A',premultiplied=False,
-              anchor_x=128,anchor_y=128,coverage_q8=320,
+              anchor_x=source['anchor_x'],anchor_y=source['anchor_y'],coverage_q8=source['coverage_q8'],
               crc32=zlib.crc32(rgba),sha256=hashlib.sha256(rgba).hexdigest(),
-              source='scripts/video/gen_fixed_avatar.py',origin='Original geometric drawing authored for TriHaRiscv; no third-party artwork',
+              source=source_path.relative_to(ROOT).as_posix(),source_sha256=source['source_sha256'],
+              conversion=source['conversion'],generator='scripts/video/gen_fixed_avatar.py',origin=source['origin'],
               limitations='Fixed 2D square overlay; not segmentation, tracking, or a guarantee of full profile-face coverage')
-    return {'avatar.rgba':rgba,'avatar.png':png.getvalue(),'avatar.svg':('\n'.join(svg)+'\n').encode(),
+    return {'avatar.rgba':rgba,'avatar.png':png.getvalue(),
             'manifest.json':(json.dumps(meta,ensure_ascii=False,indent=2)+'\n').encode('utf-8')}
+
+
+def verify_products(products):
+    for path, data in products.items():
+        if not path.is_file():
+            raise ValueError('preset missing: '+str(path))
+        if path.suffix == '.png':
+            # PNG is a human preview: zlib/Pillow can encode identical pixels
+            # differently. Runtime RGBA, metadata and generated constants below
+            # still require byte-for-byte identity.
+            with Image.open(path) as actual, Image.open(io.BytesIO(data)) as expected:
+                if actual.size != expected.size or actual.convert('RGBA').tobytes() != expected.convert('RGBA').tobytes():
+                    raise ValueError('preset preview pixels mismatch: '+str(path))
+        elif path.read_bytes() != data:
+            raise ValueError('preset mismatch: '+str(path))
 
 
 def main():
@@ -75,8 +74,7 @@ def main():
         '// Generated by scripts/video/gen_fixed_avatar.py; fixed admitted RGBA bytes.\n'+
         ''.join(f"`define TRIHA_AVATAR_{k} 32'h{v:08x}\n" for k,v in constants.items())+'`endif\n').encode('ascii')
     if args.check:
-        for path,data in products.items():
-            if not path.is_file() or path.read_bytes()!=data:raise ValueError('preset mismatch: '+str(path))
+        verify_products(products)
     else:
         DEST.mkdir(parents=True,exist_ok=True)
         for path,data in products.items():path.write_bytes(data)

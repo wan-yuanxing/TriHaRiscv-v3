@@ -9,6 +9,7 @@ import time
 from build_pds import tcl_path, verify_build_inputs
 from common import sha256
 from face_route_evidence import placement_record
+from face_profiles import require_profile
 
 
 def merge_route_constraints(paths, output):
@@ -61,8 +62,9 @@ def main():
 
     try:
         build = json.loads((base/'result.json').read_text(encoding='utf-8'))
-        if build.get('face_profile') != 'box' or build.get('status') == 'running':
-            raise ValueError('Expected completed frozen BOX synthesis')
+        require_profile(build)
+        if build.get('status') == 'running':
+            raise ValueError('Expected completed frozen face synthesis')
         verify_build_inputs(base, build)
         mapped = base/'device_map/triha_face_board_top_map.adf'
         constraints = [base/'physical.pcf', base/'src/fpga/pg2l100h/constraints/triha_face_phy.rcf']
@@ -170,7 +172,7 @@ def main():
                   + (' -input_place_db_file '+tcl_path(placed) if placed else '')]
         script.write_text('\n'.join(lines)+'\n', encoding='utf-8')
         inputs = [mapped, *constraint_sources, *constraints, *placement_inputs, *fixed_route_inputs,
-                  base/'result.json', script, Path(__file__), args.pds.resolve()]
+                  base/'result.json', script, Path(__file__), Path(__file__).with_name('face_profiles.py'), args.pds.resolve()]
         result['inputs'] = {str(path): sha256(path) for path in inputs}
         save()
         with (out/'route.log').open('wb') as log:
