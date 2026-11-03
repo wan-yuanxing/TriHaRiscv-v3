@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_FUNCTIONAL_PASS_PHY_SITES_RETAINED_PRIORITY_ROUTING",
-  "updated_at": "2026-11-04T02:57:59.898119+08:00",
+  "status": "USER_PHOTO_GUARD_ROW_COUNTER_COMPONENT_PASS_FULL_REBUILD_RUNNING",
+  "updated_at": "2026-11-04T03:32:15.634120+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,12 +19,16 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish measured 24-net priority routing on frozen PHY-site placement. Repeat all STA, actual-site retention, CDC and current-route diagnostic checks. Current board power/JTAG confirmation remains pending.",
+  "next_step": "Complete new positive/negative full-system simulation and synthesis; map, reuse reviewed PHY site constraints, route performance mode, and repeat all physical qualification. No new bitstream or board acceptance yet.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
   "source_png": "assets/avatars/triha/source.png",
-  "source_sha256": "c2904a1831374d73c1b1b83d58de6f7cfd54f14b9dbc029a585179f71094b3b1",
+  "source_sha256": {
+    "rtl/video/display_record_guard.sv": "8398e9ecec22903534e0935ab0515e2ca040ee319d733cb443bb697832205005",
+    "rtl/video/raw_display.sv": "1ba07dbe1dd577e677f6392d0aa5a457b53f7d2ff1785a88580ca90b1a3ee47d",
+    "tb/video/tb_display_record_guard.sv": "4c7461b9136ec08d31154d3a0a1368da53789a3ccf52b24c781e369374674de0"
+  },
   "alignment": {
     "anchor_x": 128,
     "anchor_y": 160,
@@ -156,24 +160,7 @@
     "critical_path": "Span-control ROM to main RAM write enable, 10 logic levels; setup DDR domain 330 failing endpoints. CPU +1.180 ns, pixel +8.727 ns.",
     "native_sta_3017_count": 0
   },
-  "positive": "build/soc/face_system-20261103T155600_633574Z",
-  "negative": "build/soc/face_system-20261103T155600_655389Z",
-  "synthesis": "build/video/pds/20261103T155625_876936Z",
-  "mapping": "build/video/pds/face_photo_pipe_50_map_20261103",
-  "route": "build/video/pds/face_photo_phy_sites_priority_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_phy_sites_priority_50_pipeline_20261104/receipt.json",
-  "resources": {
-    "lut": 48902,
-    "registers": 47797,
-    "drm": 112.5
-  },
   "previous_source_checkpoint": "1a36b55",
-  "source_commit": "2c9e0e9",
-  "simulation_alignment": "build/video/face_photo_pipe_50_sim_alignment_20261103.json",
-  "simulation_performance": "build/video/face_photo_pipe_performance_20261103.json",
-  "positive_result_sha256": "d6729dafc5281a4cada57132215eb9cf884242768772084e15eb2866ec19f94d",
-  "negative_result_sha256": "53838a549042582c3d62dd9d117ac427dfe3dfb547d84b1d26b0345243e36ab6",
-  "firmware_sha256": "09b964f9a837c2e07bb0fae48ef1b744902413a4ad530ddbc17481e0187aa7d2",
   "pipelined_performance_attempt": {
     "route": "build/video/pds/face_photo_pipe_50_route_20261103",
     "review": "build/video/face_photo_pipe_50_review_20261103/result.json",
@@ -301,7 +288,7 @@
     "full_gray_clock_review_performed": false
   },
   "phy_site_priority_attempt": {
-    "result": "RUNNING",
+    "result": "TIMING_FAILED",
     "placement": "build/video/pds/face_photo_phy_sites_place2_20261104",
     "constraints": "build/video/face_photo_phy_sites_priority_20261104.rcf",
     "provenance": "build/video/face_photo_phy_sites_priority_20261104.json",
@@ -310,7 +297,19 @@
     "mode": "normal",
     "hold_repair_target_ps": 200,
     "same_mapped_logic": true,
-    "same_timing_constraints": true
+    "same_timing_constraints": true,
+    "route": "build/video/pds/face_photo_phy_sites_priority_50_route_20261104",
+    "pipeline": "build/video/face_photo_phy_sites_priority_50_pipeline_20261104/receipt.json",
+    "review": "build/video/face_photo_phy_sites_priority_50_review_20261104/result.json",
+    "report_sha256": "3707ce69ef7f228ed30fa03de4713cfa517b4fa60aa49466cd4e41ac8e558b43",
+    "worst_setup_ns": -0.78,
+    "worst_hold_ns": 0.018,
+    "ddr_system_failed_setup_endpoints": 56,
+    "native_sta3017_messages": 1,
+    "native_cross_srb_below_repair_target_paths": 4,
+    "retention": "build/video/face_photo_phy_sites_priority_50_retention_20261104.json",
+    "retained_ff_sites": 552,
+    "failed_paths": "build/video/face_photo_phy_sites_priority_50_failed_paths_20261104.txt"
   },
   "release_exporter_checks": {
     "evidence": "build/video/face_release_export_checks_20261104.json",
@@ -318,5 +317,43 @@
     "tests": 7,
     "actual_avatar_package_exported": false,
     "actual_avatar_native_replay_performed": false
+  },
+  "previous_cache_pipeline_checkpoint": {
+    "positive": "build/soc/face_system-20261103T155600_633574Z",
+    "negative": "build/soc/face_system-20261103T155600_655389Z",
+    "synthesis": "build/video/pds/20261103T155625_876936Z",
+    "mapping": "build/video/pds/face_photo_pipe_50_map_20261103",
+    "route": "build/video/pds/face_photo_phy_sites_priority_50_route_20261104",
+    "offline_pipeline": "build/video/face_photo_phy_sites_priority_50_pipeline_20261104/receipt.json",
+    "resources": {
+      "lut": 48902,
+      "registers": 47797,
+      "drm": 112.5
+    },
+    "source_commit": "2c9e0e9",
+    "simulation_alignment": "build/video/face_photo_pipe_50_sim_alignment_20261103.json",
+    "simulation_performance": "build/video/face_photo_pipe_performance_20261103.json",
+    "positive_result_sha256": "d6729dafc5281a4cada57132215eb9cf884242768772084e15eb2866ec19f94d",
+    "negative_result_sha256": "53838a549042582c3d62dd9d117ac427dfe3dfb547d84b1d26b0345243e36ab6",
+    "firmware_sha256": "09b964f9a837c2e07bb0fae48ef1b744902413a4ad530ddbc17481e0187aa7d2"
+  },
+  "source_commit": "d75966442062975400ef719e25fc4704deeaba1c",
+  "positive": "build/soc/face_system-20261103T192755_147749Z",
+  "negative": "build/soc/face_system-20261103T192755_158958Z",
+  "synthesis": "build/video/pds/20261103T192820_624589Z",
+  "mapping": "build/video/pds/face_photo_guard_50_map_20261104",
+  "route": "build/video/pds/face_photo_guard_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_guard_50_pipeline_20261104/receipt.json",
+  "guard_row_optimization": {
+    "guard": "build/video/face_guard_production_20261104/result.json",
+    "guard_cases": 248,
+    "isolated_cycle_equivalence": "build/video/face_guard_pipeline_extended_probe_20261104/result.json",
+    "raw": "build/video/regression/20261103T192655_124424Z/result.json",
+    "raw_scenarios": 46,
+    "full_frame_pixels_checked": 1440000,
+    "guard_behavior": "Latch 16 per-lane checks on record acceptance; existing header cycle separates check from select. Exact result latency/backpressure preserved.",
+    "raw_behavior": "Remaining row beats bounded to clog2(ROW_WORDS+1); 150 max at width 800, 8 bits. Only completed bounded bursts subtract.",
+    "timing_reference": "build/video/face_photo_phy_sites_priority_50_review_20261104/result.json",
+    "new_physical_result_available": false
   }
 }
