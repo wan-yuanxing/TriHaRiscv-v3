@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module tb_model_loader #(parameter integer SERIAL=0);
+module tb_model_loader #(parameter integer SERIAL=0,AVATAR=0,AVATAR_BLOCKS=1);
+ localparam SEGMENTS=AVATAR?7:6;
+ localparam IMAGE_BLOCKS=6+(AVATAR?AVATAR_BLOCKS:0);
  reg clk=0; always #4 clk=~clk;
  reg rst=0,healthy=1,rx_valid=0,tx_ready=1; reg[7:0] rx_data=0;
  wire rx_ready,tx_valid,sealed,fault; wire[7:0] tx_data;
@@ -7,7 +9,8 @@ module tb_model_loader #(parameter integer SERIAL=0);
  reg awready=0,wready=0,bvalid=0; reg[1:0] bresp=0;
  integer checks=0,cycles=0,writes=0,beats=0,ack_count=0,ack_status=0,ack_segment=0;
  reg[31:0] ack_offset=0; reg[7:0] reply[0:11]; reg[31:0] saved_addr=0;
- reg[7:0] mem[0:1535]; reg[7:0] payload[0:255];
+ reg[7:0] mem[0:(IMAGE_BLOCKS+4)*256-1]; reg[7:0] payload[0:255];
+ integer block_index,block_count,writes_before;
  reg hold_b=0,hold_aw=0,hold_w=0,injected_rx_error=0; integer delay_b=0,i,j;
  reg serial_rx=1;
  wire wire_rx_valid,wire_rx_error,wire_tx_ready,serial_tx,reply_valid,reply_error;
@@ -20,7 +23,8 @@ module tb_model_loader #(parameter integer SERIAL=0);
    .ready_i(1'b1),.valid_o(reply_valid),.data_o(reply_data),.error_o(reply_error));
  triha_model_loader #(.PROGRAM_BYTES(256),.PARAMETER_BYTES(256),.TABLE_BYTES(256),.HEADS_BYTES(256),
    .PROGRAM_CRC(32'h29058c73),.PARAMETER_CRC(32'h29058c73),.TABLE_CRC(32'h29058c73),
-   .HEADS_CRC(32'h29058c73),.RX_TIMEOUT_CYCLES(2000)) dut(
+   .HEADS_CRC(32'h29058c73),.AVATAR_BYTES(AVATAR?256*AVATAR_BLOCKS:0),
+   .AVATAR_CRC(AVATAR_BLOCKS==1?32'h29058c73:32'hc790bff6),.RX_TIMEOUT_CYCLES(2000)) dut(
    .clk_i(clk),.rst_ni(rst),.healthy_i(healthy),.rx_valid_i(SERIAL?wire_rx_valid:rx_valid),.rx_ready_o(rx_ready),.rx_data_i(SERIAL?wire_rx_data:rx_data),
    .rx_error_i(injected_rx_error||(SERIAL&&wire_rx_error)),.tx_valid_o(tx_valid),.tx_ready_i(SERIAL?wire_tx_ready:tx_ready),.tx_data_o(tx_data),
    .model_sealed_o(sealed),.fault_o(fault),.m_awvalid_o(awvalid),.m_awready_i(awready),.m_awaddr_o(awaddr),
@@ -80,11 +84,24 @@ module tb_model_loader #(parameter integer SERIAL=0);
    packet(0,0,1);ack(1);check(writes==0&&!sealed,"bad CRC no DDR writes");
    packet(1,0,0);ack(2);check(writes==0,"wrong segment no DDR writes");
    packet(0,256,0);ack(2);check(writes==0,"wrong offset no DDR writes");
-   for(i=0;i<6;i=i+1)begin
-     hold_b=1;packet(i,0,0);wait(delay_b!=0);repeat(20)@(negedge clk);
+   for(i=0;i<SEGMENTS;i=i+1)begin
+     if(i==6)begin
+       packet(7,0,0);ack(2);check(writes==6&&!sealed,"out-of-range asset segment rejected");
+       packet(6,256*AVATAR_BLOCKS,0);ack(2);check(writes==6&&!sealed,"asset offset cannot escape fixed range");
+     end
+     block_count=i==6?AVATAR_BLOCKS:1;
+     for(block_index=0;block_index<block_count;block_index=block_index+1)begin
+     writes_before=writes;
+     if(i==6&&block_index==block_count-1)begin
+       payload[0]=8'hff;packet(6,block_index*256,0);ack(3);
+       check(writes==writes_before&&!sealed,"avatar whole-image CRC failure cannot seal or write");payload[0]=0;
+     end
+     hold_b=1;packet(i,block_index*256,0);wait(delay_b!=0);repeat(20)@(negedge clk);
      check(!sealed&&ack_count==0,"B debt prevents seal and ACK");hold_b=0;ack(0);
-     check(ack_segment==i+1&&ack_offset==0,"next segment identity");
-     check(writes==i+1,"one packet one burst");
+     check(ack_segment==(block_index==block_count-1?i+1:i)&&
+       ack_offset==(block_index==block_count-1?0:(block_index+1)*256),"next segment identity");
+     check(writes==writes_before+1,"one packet one burst");
+     check(sealed==(i==SEGMENTS-1&&block_index==block_count-1),"seal only after final required segment B");
      case(i)
        0:check(saved_addr==32'h82b00000,"program address");
        1:check(saved_addr==32'h8378c200,"parameter address");
@@ -92,16 +109,18 @@ module tb_model_loader #(parameter integer SERIAL=0);
        3:check(saved_addr==32'h82900000,"HEAD A");
        4:check(saved_addr==32'h82940000,"HEAD B");
        5:check(saved_addr==32'h82980000,"HEAD C");
+       6:check(saved_addr==32'h82600000+block_index*256,"fixed avatar address");
      endcase
-     packet(i,0,0);ack(0);check(writes==i+1,"lost ACK retry is idempotent");
+     packet(i,block_index*256,0);ack(0);check(writes==writes_before+1,"lost ACK retry is idempotent");
+     end
    end
    check(sealed&&!fault,"all segments sealed after B");
-   for(i=0;i<1536;i=i+1)check(mem[i]==(i%256),"DDR bytes exact");
-   packet(0,0,0);ack(5);check(writes==6&&sealed,"sealed image immutable");
+   for(i=0;i<IMAGE_BLOCKS*256;i=i+1)check(mem[i]==(i%256),"DDR bytes exact");
+   packet(0,0,0);ack(5);check(writes==IMAGE_BLOCKS&&sealed,"sealed image immutable");
    healthy=0;repeat(3)@(negedge clk);check(fault&&!sealed,"health loss revokes seal");
    healthy=1;repeat(3)@(negedge clk);check(fault&&!sealed,"fault sticky until shared reset");
    reset_all();check(!fault&&!sealed,"coordinated reset clears state");
-   payload[0]=8'hff;packet(0,0,0);ack(3);check(writes==6&&!sealed,"whole image CRC enforced");payload[0]=0;
+   payload[0]=8'hff;packet(0,0,0);ack(3);check(writes==IMAGE_BLOCKS&&!sealed,"whole image CRC enforced");payload[0]=0;
    bresp=2;packet(0,0,0);ack(4);check(fault&&!sealed,"B error never seals");
    bresp=0;reset_all();
    word_in(32'h31424854);word_in(0);ack(6);
@@ -119,7 +138,7 @@ module tb_model_loader #(parameter integer SERIAL=0);
    repeat(8)@(negedge clk);
    check(wvalid&&fault&&!sealed,"error preserves held W");
    hold_w=0;ack(4);check(beats==0&&!bvalid,"faulted W drains all W and B");
-   $display("PASS MODEL_LOADER serial=%0d checks=%0d writes=%0d",SERIAL,checks,writes);$finish;
+   $display("PASS MODEL_LOADER serial=%0d avatar=%0d avatar_blocks=%0d checks=%0d writes=%0d",SERIAL,AVATAR,AVATAR_BLOCKS,checks,writes);$finish;
  end
  initial begin #20000000;$fatal(1,"MODEL_LOADER_TIMEOUT");end
 endmodule

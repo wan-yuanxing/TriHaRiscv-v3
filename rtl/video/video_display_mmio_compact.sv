@@ -8,8 +8,9 @@
 // copy. Mode-only content equality is exact over all 160 words, not a hash.
 // RAM is cleared after reset before MMIO accepts traffic.
 // Actual commit and full retirement are supplied by external consumers.
-module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUARD=0)(
+module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUARD=0,ENABLE_MODE_KEY=0)(
     input wire clk_i,rst_ni,
+    input wire [1:0] mode_request_i,
     input wire [31:0] s_axi_awaddr_i,input wire [2:0] s_axi_awprot_i,
     input wire s_axi_awvalid_i,output wire s_axi_awready_o,
     input wire [31:0] s_axi_wdata_i,input wire [3:0] s_axi_wstrb_i,
@@ -120,7 +121,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
                 else begin do_ack=1;ack=wdata[2:0];end
             end
             default:begin
-                if(write_offset<=`VDISP_REG_MODES)write_response=2;else write_response=3;
+                if(write_offset<=`VDISP_REG_MODES||(ENABLE_MODE_KEY&&write_offset==`VDISP_REG_MODE_REQUEST))write_response=2;else write_response=3;
             end
         endcase
     end
@@ -167,7 +168,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             read_data=0; // The synchronous shadow port completes separately.
         else case(read_offset)
             `VDISP_REG_VERSION:read_data=`VDISP_VERSION;
-            `VDISP_REG_CAPABILITIES:read_data=`VDISP_CAPABILITIES;
+            `VDISP_REG_CAPABILITIES:read_data=`VDISP_CAPABILITIES|(ENABLE_MODE_KEY?`VDISP_CAP_MODE_KEY:32'd0);
             `VDISP_REG_STATUS:read_data=status_word;
             `VDISP_REG_ERROR_CODE:read_data={24'd0,error_code};
             `VDISP_REG_IRQ_MASK:read_data={28'd0,irq_mask};
@@ -198,6 +199,9 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             `VDISP_REG_RELEASES:read_data=releases;
             `VDISP_REG_REJECTED:read_data=owner_rejected+guard_rejected;
             `VDISP_REG_MODES:read_data={29'd0,modes_i};
+            `VDISP_REG_MODE_REQUEST:begin
+                if(ENABLE_MODE_KEY)read_data={30'd0,mode_request_i};else read_response=3;
+            end
             default:read_response=3;
         endcase
     end

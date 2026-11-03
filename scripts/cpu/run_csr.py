@@ -20,7 +20,7 @@ def main():
     save(work / 'result.json', row)
     try:
         validate()
-        sources = ['rtl/cpu/vendor/src/core/biriscv_csr_regfile.v', 'rtl/cpu/triha_csr.v',
+        sources = ['rtl/cpu/triha_csr_regfile.v', 'rtl/cpu/triha_csr.v',
                    'tb/cpu/tb_csr_functional.v']
         names = sources + ['rtl/cpu/vendor/src/core/biriscv_defs.v', 'config/cpu_admission.json',
                            'scripts/cpu/run_csr.py', 'scripts/cpu/admission_common.py',

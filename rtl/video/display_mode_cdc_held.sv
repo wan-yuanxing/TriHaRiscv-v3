@@ -28,11 +28,25 @@ module display_mode_cdc_held #(parameter integer CONTEXT_WIDTH=128)(
         initial $fatal(1,"display_mode_cdc requires positive context width");
     end endgenerate
     wire lease_reset_n=core_reset_n&&pixel_reset_n;
+    // Assert either reset immediately; release functional flops only through
+    // the destination clock's two-stage chain. Cross-domain reset exceptions
+    // apply to these four async C pins only, never to local data/reset fanout.
+    (* ASYNC_REG="TRUE" *) reg [1:0] core_release,pixel_release;
+    wire core_lease_reset_n=core_release[1];
+    wire pixel_lease_reset_n=pixel_release[1];
+    always @(posedge core_clk or negedge lease_reset_n)begin
+        if(!lease_reset_n)core_release<=0;
+        else core_release<={core_release[0],1'b1};
+    end
+    always @(posedge pixel_clk or negedge lease_reset_n)begin
+        if(!lease_reset_n)pixel_release<=0;
+        else pixel_release<={pixel_release[0],1'b1};
+    end
     reg [99:0] mailbox_payload,pixel_payload;
     reg request_toggle,core_busy,request_seen,pixel_ack;
     (* ASYNC_REG="TRUE" *) reg request_meta,request_sync;
     (* ASYNC_REG="TRUE" *) reg ack_meta,ack_sync,error_meta,error_sync;
-    assign cmd_ready=lease_reset_n&&!core_busy;
+    assign cmd_ready=core_lease_reset_n&&!core_busy;
     assign pixel_cmd_data=cmd_data;
     assign commit_data=cmd_data;
     assign {pixel_cmd_mode,pixel_cmd_slot,pixel_cmd_seq,pixel_cmd_frame_id,
@@ -42,13 +56,13 @@ module display_mode_cdc_held #(parameter integer CONTEXT_WIDTH=128)(
     assign {commit_mode,commit_slot,commit_seq,commit_frame_id,
             commit_generation}=mailbox_payload;
     assign protocol_error=error_sync;
-    always @(posedge core_clk or negedge lease_reset_n)begin
-        if(!lease_reset_n)begin ack_meta<=0;ack_sync<=0;error_meta<=0;error_sync<=0;end
+    always @(posedge core_clk or negedge core_lease_reset_n)begin
+        if(!core_lease_reset_n)begin ack_meta<=0;ack_sync<=0;error_meta<=0;error_sync<=0;end
         else begin ack_meta<=pixel_ack;ack_sync<=ack_meta;
             error_meta<=pixel_protocol_error;error_sync<=error_meta;end
     end
-    always @(posedge core_clk or negedge lease_reset_n)begin
-        if(!lease_reset_n)begin mailbox_payload<=0;request_toggle<=0;core_busy<=0;commit_valid<=0;end
+    always @(posedge core_clk or negedge core_lease_reset_n)begin
+        if(!core_lease_reset_n)begin mailbox_payload<=0;request_toggle<=0;core_busy<=0;commit_valid<=0;end
         else begin
             if(cmd_valid&&cmd_ready)begin
                 mailbox_payload<={cmd_mode,cmd_slot,cmd_seq,cmd_frame_id,cmd_generation};
@@ -58,12 +72,12 @@ module display_mode_cdc_held #(parameter integer CONTEXT_WIDTH=128)(
             if(commit_valid&&commit_ready)begin commit_valid<=0;core_busy<=0;end
         end
     end
-    always @(posedge pixel_clk or negedge lease_reset_n)begin
-        if(!lease_reset_n)begin request_meta<=0;request_sync<=0;end
+    always @(posedge pixel_clk or negedge pixel_lease_reset_n)begin
+        if(!pixel_lease_reset_n)begin request_meta<=0;request_sync<=0;end
         else begin request_meta<=request_toggle;request_sync<=request_meta;end
     end
-    always @(posedge pixel_clk or negedge lease_reset_n)begin
-        if(!lease_reset_n)begin
+    always @(posedge pixel_clk or negedge pixel_lease_reset_n)begin
+        if(!pixel_lease_reset_n)begin
             pixel_payload<=0;request_seen<=0;pixel_ack<=0;
             pixel_cmd_valid<=0;pixel_waiting_commit<=0;pixel_protocol_error<=0;
         end else begin
@@ -85,8 +99,8 @@ module display_mode_cdc_held #(parameter integer CONTEXT_WIDTH=128)(
     // synthesis translate_off
     reg checked_lease;
     reg [CONTEXT_WIDTH-1:0] checked_data;
-    always @(posedge core_clk or negedge lease_reset_n)begin
-        if(!lease_reset_n)begin checked_lease<=0;checked_data<=0;end
+    always @(posedge core_clk or negedge core_lease_reset_n)begin
+        if(!core_lease_reset_n)begin checked_lease<=0;checked_data<=0;end
         else begin
             if(checked_lease&&cmd_data!==checked_data)
                 $fatal(1,"HELD_RECORD_SOURCE_CHANGED");

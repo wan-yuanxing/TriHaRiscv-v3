@@ -102,6 +102,7 @@ static void commit(void) {
     const struct video_frame_submission *p=&f.app.pool.pending;uint32_t *r=f.disp;CHECK(p->valid);
     r[VDISP_REG_EVENTS/4]|=1;r[VDISP_REG_COMMIT_FRAME/4]=p->id.frame;r[VDISP_REG_COMMIT_GENERATION/4]=p->id.generation;
     r[VDISP_REG_COMMIT_SLOT/4]=p->id.slot;r[VDISP_REG_COMMIT_MODE/4]=p->mode;r[VDISP_REG_COMMIT_SEQ/4]=p->seq;
+    r[VDISP_REG_COMMIT_MODE_ONLY/4]=p->mode_only;
 }
 static void release(unsigned slot) {
     const struct video_frame_token *id=&f.app.pool.slots[slot].id;uint32_t *r=f.disp;
@@ -193,7 +194,92 @@ static void callback_failures(void) {
         }
     }
 }
+static void primary_selection(void) {
+    struct video_display_record r;
+    struct video_frame_token id={0,1,7};
+    struct npu_frame_result result={0};
+    unsigned p,other;
+    result.valid=1;result.face_count=result.display_count=3;
+    result.boxes[0]=(struct npu_frame_box){10,20,10,10,0x3f700000,10,8};
+    result.boxes[1]=(struct npu_frame_box){20,30,40,30,0x3f600000,20,8};
+    result.boxes[2]=(struct npu_frame_box){30,40,20,20,0x3f500000,30,8};
+    CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==1); /* area beats score */
+    CHECK(r.words[VDISP_HEADER_WORDS]==(10u|(20u<<16))); /* keep BOX order */
+    result.boxes[2].width=40;result.boxes[2].height=30;
+    CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==1); /* score breaks area tie */
+    result.boxes[2].score_bits=result.boxes[1].score_bits;
+    result.boxes[2].candidate=5;
+    CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==2); /* stable candidate key */
+    result.boxes[1].candidate=5;
+    CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==1); /* exact tie keeps first */
+    result.face_count=result.display_count=16;
+    for(p=0;p<16;++p) {
+        for(other=0;other<16;++other)result.boxes[other]=(struct npu_frame_box){0,0,1,1,0x3f000000,other,8};
+        result.boxes[p].width=800;result.boxes[p].height=600;
+        CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+        CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==p);
+    }
+    result.face_count=result.display_count=0;
+    CHECK(face_avatar_build_record(&r,&id,&result)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_FLAGS]==(VDISP_FLAG_RESULT_VALID|VDISP_FLAG_RESULT_EMPTY));
+    CHECK(r.words[VDISP_FIELD_PRIMARY_INDEX]==0);
+}
+static void avatar_records_and_modes(void) {
+    struct video_display_record r;
+    struct video_frame_token id={0,1,7};
+    struct npu_frame_result result={0};
+    struct face_avatar_asset asset={1,7,SOC_AVATAR_BASE,128,128,384},bad;
+    unsigned i;
+    result.valid=1;result.face_count=result.display_count=1;
+    result.boxes[0]=(struct npu_frame_box){0,0,40,20,0x3f000000,0,8};
+    CHECK(face_avatar_build_avatar_record(&r,&id,&result,&asset)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_AVATAR_XY0]==(0xfff6u|(0xffecu<<16))); /* (-10,-20), side60 */
+    CHECK(r.words[VDISP_FIELD_AVATAR_XY1]==(50u|(40u<<16)));
+    CHECK(r.words[VDISP_FIELD_FLAGS]==(VDISP_FLAG_RESULT_VALID|VDISP_FLAG_PRIMARY_VALID|VDISP_FLAG_AVATAR_ENABLE));
+    CHECK(r.words[VDISP_FIELD_ASSET_ID]==1 && r.words[VDISP_FIELD_ASSET_GENERATION]==7);
+    CHECK(r.words[VDISP_FIELD_ASSET_BASE]==SOC_AVATAR_BASE && r.words[VDISP_FIELD_ASSET_BYTES]==262144);
+    CHECK(r.words[VDISP_FIELD_ASSET_WIDTH]==256 && r.words[VDISP_FIELD_ASSET_HEIGHT]==256 && r.words[VDISP_FIELD_ASSET_STRIDE]==1024);
+    asset.anchor_x=0;asset.anchor_y=256;asset.coverage_q8=257;
+    result.boxes[0]=(struct npu_frame_box){797,597,3,3,0x3f000000,0,8};
+    CHECK(face_avatar_build_avatar_record(&r,&id,&result,&asset)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_AVATAR_XY0]==(798u|(594u<<16)));
+    CHECK(r.words[VDISP_FIELD_AVATAR_XY1]==(802u|(598u<<16))); /* do not clip source mapping */
+    for(i=0;i<8;++i) {
+        bad=asset;
+        switch(i) {
+        case 0:bad.id=0;break;case 1:bad.generation=0;break;
+        case 2:bad.base=SOC_AVATAR_BASE-16;break;case 3:bad.base=0x82800000u-262144u+16;break;
+        case 4:bad.base++;break;case 5:bad.anchor_x=257;break;
+        case 6:bad.coverage_q8=0;break;default:bad.coverage_q8=1025;break;
+        }
+        CHECK(face_avatar_build_avatar_record(&r,&id,&result,&bad)==FACE_AVATAR_INVALID);
+    }
+    result.face_count=result.display_count=0;
+    CHECK(face_avatar_build_avatar_record(&r,&id,&result,&asset)==FACE_AVATAR_OK);
+    CHECK(r.words[VDISP_FIELD_FLAGS]==(VDISP_FLAG_RESULT_VALID|VDISP_FLAG_RESULT_EMPTY));
+    for(i=14;i<=22;++i)CHECK(r.words[i]==0);
+    setup();CHECK(face_avatar_select_mode(&f.app,2)==FACE_AVATAR_INVALID);
+    CHECK(face_avatar_configure_asset(&f.app,&asset)==FACE_AVATAR_OK);
+    CHECK(face_avatar_select_mode(&f.app,3)==FACE_AVATAR_INVALID);
+    step();CHECK(face_avatar_configure_asset(&f.app,&asset)==FACE_AVATAR_INVALID);
+    capture_done();step();npu_done(1);step();
+    CHECK(f.app.pool.pending.mode==0 && !f.app.pool.pending.mode_only);
+    CHECK(f.app.records[0].words[VDISP_FIELD_FLAGS]&VDISP_FLAG_AVATAR_ENABLE);
+    CHECK(face_avatar_select_mode(&f.app,2)==FACE_AVATAR_OK);step();
+    CHECK(f.app.pool.pending.mode==0); /* outstanding immutable request */
+    commit();step();CHECK(f.app.pool.pending.mode==2 && f.app.pool.pending.mode_only);
+    CHECK(f.app.pool.pending.id.frame==f.app.pool.active.id.frame);
+    CHECK(face_avatar_select_mode(&f.app,1)==FACE_AVATAR_OK);step();
+    CHECK(f.app.pool.pending.mode==2);
+    commit();step();CHECK(f.app.pool.pending.mode==1 && f.app.pool.pending.mode_only);
+    commit();step();CHECK(f.app.pool.active.mode==1 && !f.app.pool.pending.valid);
+    CHECK(f.app.pool.stats.mode_commits==2 && !f.app.pool.stats.releases);
+}
 int main(void) {
-    pipeline();failures();busy_and_pool();callback_failures();
+    primary_selection();avatar_records_and_modes();pipeline();failures();busy_and_pool();callback_failures();
     printf("PASS FACE_AVATAR checks=%u\n",checks);return 0;
 }

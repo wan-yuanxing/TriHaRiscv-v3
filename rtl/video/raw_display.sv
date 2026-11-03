@@ -92,12 +92,23 @@ module raw_display #(
     (* async_reg="true" *) reg commit_ack_sync1,commit_ack_sync2,release_ack_sync1,release_ack_sync2;
     (* async_reg="true" *) reg fault_sync1,fault_sync2;
     reg commit_seen,release_seen,scan_seen,underflow_seen;
-    localparam [63:0] LAST_ROW=FRAME_HEIGHT-1,ROW_BUS_BYTES=ROW_WORDS*16;
-    wire [63:0] record_bus_end={32'd0,record_base}+
-        {32'd0,record_stride}*LAST_ROW+ROW_BUS_BYTES;
+    // Aligned descriptors address a fixed 128 MiB window. Reject a pitch
+    // that cannot fit even at its start before using the bounded low bits.
+    // For any supported height the row product then fits in 24 beat bits,
+    // including pitches rounded up to the next power of two by STRIDE_BITS.
+    // A one-row image never advances by stride, so all aligned pitches remain
+    // eligible. This replaces the wide byte-address multiply without latency.
+    localparam [24:0] WINDOW_BEATS=25'd8388608,ROW_BEATS=ROW_WORDS;
+    localparam [9:0] RANGE_LAST_ROW=(FRAME_HEIGHT>=1 && FRAME_HEIGHT<=600) ? FRAME_HEIGHT-1 : 0;
+    localparam [27:0] MAX_ROW_STRIDE_BEATS=RANGE_LAST_ROW ?
+        (WINDOW_BEATS-ROW_BEATS)/RANGE_LAST_ROW : 28'hfffffff;
+    localparam integer STRIDE_BITS=RANGE_LAST_ROW ? $clog2(MAX_ROW_STRIDE_BEATS+1) : 1;
+    wire [23:0] record_row_beats=record_stride[STRIDE_BITS+3:4]*RANGE_LAST_ROW;
+    wire [24:0] record_end_beat={2'b0,record_base[26:4]}+{1'b0,record_row_beats}+ROW_BEATS;
     wire descriptor_invalid=record_base[3:0]!==0 || record_stride[3:0]!==0 ||
-        record_stride<ROW_BYTES || record_base<32'h80000000 ||
-        record_bus_end>64'h0000000088000000 || FRAME_WIDTH<1 || FRAME_WIDTH>800 ||
+        record_stride<ROW_BYTES || record_base[31:27]!==5'b10000 ||
+        record_stride[31:4]>MAX_ROW_STRIDE_BEATS || record_end_beat>WINDOW_BEATS ||
+        FRAME_WIDTH<1 || FRAME_WIDTH>800 ||
         FRAME_HEIGHT<1 || FRAME_HEIGHT>600 || record_slot>2 ||
         (^record_base===1'bx) || (^record_stride===1'bx) ||
         (^record_frame_id===1'bx) || (^record_slot===1'bx);

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Production face box application; engineering and timing before board connection",
+  "scope": "Face application: CPU/NPU 100 MHz, DDR/video 125 MHz, pixel 40 MHz; three-mode functional integration and physical timing before board connection",
   "functional": {
     "directory": "build/soc/face_system-20261101T084921_612281Z",
     "status": "PASS",
@@ -174,8 +174,8 @@
   },
   "graph_pair_candidate": {
     "adopted": false,
-    "synthesis": "build/video/pds/graph_pair_probe_20261101",
-    "status": "SYNTHESIS_PASS",
+    "synthesis": "build/video/pds/graph_pair_compat_probe_20261102",
+    "status": "REJECTED_AFTER_PLACEMENT",
     "change": "Register four selected region operands before overlap check; one extra admission cycle per pair, at most 15 per frame",
     "functional": [
       "build/npu/graph_pair_green_20261101",
@@ -187,7 +187,52 @@
     "registers": 45570,
     "drm": 77.5,
     "apm": 59,
-    "core_synthesis_setup_ns": -2.016
+    "core_synthesis_setup_ns": -2.016,
+    "functional_run": "build/soc/face_system-20261101T225931_930740Z",
+    "candidate_sha256": "aed7beb354d8ed2338f00f21bb48a7b1a837621667d254fd5721a18f79e6c266",
+    "failed_functional_run": "build/soc/face_system-20261101T224859_860905Z",
+    "failure": "candidate lacked PREVALIDATED_TASK_LAYOUT parameter required by current b03_frame_exec_payload; ModelSim optimization failed before execution",
+    "compat_candidate": "build/npu/graph_pair_candidate_20261102/b03_graph_engine_cap.v",
+    "compat_candidate_sha256": "b6295ef6459473e4b2c8e6e828e9fe0422e2636a291d30623f483a59efb8aa4b",
+    "functional_status": "PASS",
+    "functional_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
+    "functional_cycles": 51716858,
+    "functional_candidate_sha256": "b6295ef6459473e4b2c8e6e828e9fe0422e2636a291d30623f483a59efb8aa4b",
+    "compatibility_fix": "Added PREVALIDATED_TASK_LAYOUT parameter only to match current frame_exec interface; no behavior change",
+    "compat_synthesis_resource": {
+      "lut": 43686,
+      "registers": 45570,
+      "drm": 77.5,
+      "apm": 59,
+      "core_synthesis_setup_ns": -2.016
+    },
+    "placement": {
+      "setup_slow_wns_ns": -1.42,
+      "setup_slow_tns_ns": -468.681,
+      "setup_slow_failing_endpoints": 1337,
+      "setup_fast_wns_ns": -0.594,
+      "hold_slow_wns_ns": -0.227,
+      "hold_fast_wns_ns": -0.294,
+      "recovery_slow_wns_ns": -0.317,
+      "recovery_fast_wns_ns": 0.158,
+      "removal_slow_wns_ns": 0.433,
+      "removal_fast_wns_ns": 0.358,
+      "minimum_pulse_width_slow_wns_ns": 0.035,
+      "minimum_pulse_width_fast_wns_ns": 0.035,
+      "recovery_slow_failing_endpoints": 1,
+      "hold_slow_failing_endpoints": 50,
+      "hold_fast_failing_endpoints": 86,
+      "max_skew": "not available from placement-only report; no route signoff",
+      "worst_path": "g_full.impl/face/u_compute/u_npu/u_service/u_phase/saved_write/opit_0_inv_L6Q_LUT6DQL5/CLK -> g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/input_path/state[2]/opit_0_inv_L6Q/I4, ddrphy_sysclk, -1.420 ns"
+    },
+    "placement_analysis": "build/video/pds/graph_pair_compat_place_20261102b/placement_analysis/result.json",
+    "placement_analysis_sha256": "3b56f1f25f6fb92434f6aa8192dfb033e2fbf66f8ac6dae05be47ac56d620ff7",
+    "placement_seed": 4,
+    "placement_inputs_unchanged": true,
+    "placement_gate_sites_verified": true,
+    "route_started": false,
+    "timing_closed": false,
+    "reason": "Placement is substantially worse than production control_decode (-0.603 ns / 69 / -12.379 ns); no route started and no adoption."
   },
   "gather_address_candidate": {
     "adopted": false,
@@ -1415,17 +1460,1287 @@
     ],
     "functional_pass_line": "# FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
     "route": "build/video/pds/stage_split_route_20261101",
-    "route_status": "ROUTE_RUNNING"
+    "route_status": "FAIL_TIMEOUT",
+    "route_receipt": "build/video/pds/stage_split_route_20261101/receipt.json",
+    "route_receipt_sha256": "d33df53144fcff6a54bb82f0659dce7d965d209a3f5c9a92ab82cc086005fd29",
+    "route_timeout_seconds": 14400,
+    "route_elapsed_seconds": 15547.36331340007,
+    "route_last_reported_unrouted_nets": 41362,
+    "route_db_available": false,
+    "route_timing_closed": false,
+    "route_note": "PDS route command timed out; receipt status FAIL. No complete routed STA or bitstream acceptance."
   },
   "followup": {
     "kind": "heartbeat",
     "id": "automation-5",
-    "name": "\u4eba\u8138\u6846\u5de5\u7a0b\u65f6\u5e8f\u6536\u655b\u8ddf\u8fdb",
+    "name": "人脸框工程时序收敛跟进",
     "status": "ACTIVE",
-    "interval_minutes": 5,
+    "interval_minutes": 30,
     "scope": "Current thread: monitor existing route, audit physical result, continue authorized critical-path work; silent without actionable change",
-    "active_run": "build/video/pds/stage_split_route_20261101",
-    "unified_exec_session": 37156,
-    "board_deferred": true
+    "board_deferred": true,
+    "route_status": "No route active; see top-level active_runs and their receipt stage.",
+    "last_check_utc": "2026-11-02T12:57:06.013105+00:00",
+    "active_run_source": "active_runs"
+  },
+  "interface_split_register_candidate": {
+    "adopted": false,
+    "status": "REJECTED_AFTER_ROUTE_TIMEOUT",
+    "functional": {
+      "trusted": "build/npu/interface_split_register_green_20261101",
+      "non_trusted": "build/npu/interface_split_register_green_20261101",
+      "system": "build/soc/face_system-20261101T151649_696560Z",
+      "system_status": "PASS",
+      "system_cycles": 26452206,
+      "note": "The isolated interface candidate route timed out; the system PASS used its candidate-specific regression and is retained as functional evidence."
+    },
+    "synthesis": {
+      "directory": "build/video/pds/interface_split_register_probe_20261101",
+      "status": "SYNTHESIS_PASS",
+      "lut": 43318,
+      "registers": 45555,
+      "drm": 77.5,
+      "apm": 59,
+      "inputs_unchanged": true
+    },
+    "placement": {
+      "directory": "build/video/pds/interface_split_register_place_20261101",
+      "setup_slow_wns_ns": -0.403,
+      "setup_slow_tns_ns": -18.35,
+      "setup_slow_failing_endpoints": 162,
+      "setup_fast_wns_ns": 0.655,
+      "recovery_removal_pulse_width": "PASS",
+      "cross_ddr_hold_worst_ns": -0.348,
+      "gate_sites_verified": true,
+      "inputs_unchanged": true
+    },
+    "route": {
+      "directory": "build/video/pds/interface_split_register_route_20261101",
+      "status": "FAIL_TIMEOUT",
+      "timeout_seconds": 14400,
+      "last_reported_unrouted_nets": 47215,
+      "timing_closed": false,
+      "route_db_available": false
+    },
+    "reason": "No complete route DB or routed STA signoff; candidate not adopted."
+  },
+  "phase_decode_local_candidate": {
+    "adopted": false,
+    "status": "REJECTED_AFTER_PLACEMENT",
+    "change": "Local phase decode wires for quantizer dense/depthwise/vector enables; no state, cycle, CPU, clock or constraint change.",
+    "source": {
+      "candidate": "build/npu/phase_decode_local_candidate_20261101/b03_layer_exec_payload.v",
+      "candidate_sha256": "88c19ddc5a12ea5ee1356ce86b7152d03942feccec4f0ab3ba25f13d86bebf0f",
+      "negative": "build/npu/phase_decode_local_red_20261101/b03_layer_exec_payload.v",
+      "negative_sha256": "cd420ec4fb7898659e73aba7d9c906c698c4c3687d1d2384cfc93bf5136a67e4"
+    },
+    "component_tests": {
+      "negative_control": "build/npu/phase_decode_local_red_result_20261101/result.json",
+      "negative_result": "FAIL as intended: quantizer valid mismatch",
+      "positive_control": "build/npu/phase_decode_local_green_20261101/result.json",
+      "positive_status": "PASS"
+    },
+    "functional": {
+      "directory": "build/soc/face_system-20261101T213238_895014Z",
+      "status": "PASS",
+      "fixture": "build/npu/face_fixture_20261101",
+      "fixture_sha256": "834e7fefa2bc33a8cc40d04483a62dff27e9aacb42440b1a443b8b8518f2748c",
+      "pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858",
+      "simulator_errors": 0,
+      "simulator_warnings": 0,
+      "inputs_unchanged": true,
+      "candidate_override_sha256": "88c19ddc5a12ea5ee1356ce86b7152d03942feccec4f0ab3ba25f13d86bebf0f"
+    },
+    "synthesis": {
+      "directory": "build/video/pds/phase_decode_local_probe_20261101",
+      "status": "SYNTHESIS_PASS",
+      "lut": 43593,
+      "registers": 45554,
+      "drm": 77.5,
+      "apm": 59,
+      "elapsed_seconds": 355.78963439993095,
+      "inputs_unchanged": true,
+      "receipt_sha256": "be81d2499e318bc9cd0498066fe32700d92ca8de26a2c7ad5c891cebe65f1c30"
+    },
+    "placement": {
+      "directory": "build/video/pds/phase_decode_local_place_20261101",
+      "analysis": "build/video/pds/phase_decode_local_place_20261101/placement_analysis/result.json",
+      "analysis_sha256": "8df4d2db822d7d3a434cebd695ce7517c07073237bb92125a75a8ba78617ed73",
+      "seed": 4,
+      "gate_sites_verified": true,
+      "inputs_unchanged": true,
+      "setup_slow_wns_ns": -0.674,
+      "setup_slow_tns_ns": -85.601,
+      "setup_slow_failing_endpoints": 313,
+      "setup_fast_wns_ns": 0.534,
+      "hold_slow_wns_ns": -0.22,
+      "hold_fast_wns_ns": -0.264,
+      "recovery_slow_wns_ns": 1.73,
+      "removal_slow_wns_ns": 0.443,
+      "minimum_pulse_width_slow_wns_ns": 0.035,
+      "minimum_pulse_width_fast_wns_ns": 0.035,
+      "max_skew": "reported in placement timing analysis; no route signoff",
+      "worst_path": "g_full.impl/face/u_video/g_compact.u_display/u_raw/N6_m1/gopapm/CLK -> g_full.impl/face/u_video/g_compact.u_display/u_link/state_reg[0]/opit_0_inv_L5Q/CE, ddrphy_sysclk, -0.674 ns"
+    },
+    "route_started": false,
+    "timing_closed": false,
+    "reason": "Placement is worse than production control_decode (-0.603 ns / 69 / -12.379 ns); no route started and no adoption."
+  },
+  "gather_control_split_candidate": {
+    "adopted": false,
+    "status": "SYSTEM_PASS_AUDIT_BLOCKED",
+    "change": "Precompute fixed tile base_x=(x<<stride)-pad_left at gather admission; active loop uses base_x+kx, no state or cycle change.",
+    "source": "build/npu/gather_control_split_candidate_20261102/b03_gather_lean.v",
+    "candidate_sha256": "0721c912658e3fd2581c80aecc9873acdab8423092ab5cd4c3d1059bd081bc06",
+    "negative_control": "build/npu/gather_control_split_candidate_20261102/b03_gather_lean_negative.v",
+    "negative_sha256": "ad1ec543ffa76e3a820e125184dc593239c3266a77fdf049142b6eaabea65093",
+    "negative_result": "build/npu/gather_control_split_red_20261102c/result.json",
+    "negative_status": "FAIL as intended: INPUT A read mismatch case=0 row=3",
+    "component_nontrusted": "build/npu/gather_control_split_green_20261102",
+    "component_nontrusted_status": "PASS_INPUT_SCOREBOARD_AND_LOCKSTEP",
+    "component_nontrusted_cycles": 702002,
+    "component_trusted": "build/npu/gather_control_split_green_trusted_20261102",
+    "component_trusted_status": "PASS_TRUSTED_INPUT_SCOREBOARD",
+    "component_trusted_cycles": 694490,
+    "system_run": "build/soc/face_system-20261102T023518_344174Z",
+    "system_status": "PASS",
+    "system_fixture": "build/npu/face_fixture_20261101",
+    "system_candidate_override_sha256": "0721c912658e3fd2581c80aecc9873acdab8423092ab5cd4c3d1059bd081bc06",
+    "synthesis": null,
+    "placement": null,
+    "route_started": false,
+    "timing_closed": false,
+    "adoption_gate": "System PASS is recorded, but CPU-post top64/tie semantics require resolution before synthesis/physical admission.",
+    "system_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 cpu_reads=4296 nativeAW=91476 nativeAR=366156 cycles=51716858"
+  },
+  "execution_strategy": {
+    "updated_utc": "2026-11-02T02:50:00Z",
+    "reason": "Previous stage_split route consumed 14400 seconds despite negative placement WNS; full-system candidate simulation also precedes synthesis.",
+    "gates": [
+      "negative control and component lockstep",
+      "compile-only or bounded SoC sanity check",
+      "candidate synthesis/resource/path evidence",
+      "full natural-face boot/display regression only for synthesis-qualified candidates",
+      "one seed-4 placement with all-corner timing, gate-site, input and constraint audits",
+      "route only after placement setup/hold/recovery/removal/pulse-width and skew gates justify it"
+    ],
+    "production_baseline": {
+      "profile": "control_decode",
+      "setup_slow_wns_ns": -0.603,
+      "setup_slow_failing_endpoints": 69,
+      "setup_slow_tns_ns": -12.379,
+      "clock_period_ns": 8.0,
+      "extra_setup_margin_ns": 0.2
+    },
+    "route_policy": "Require positive setup/recovery/removal/pulse and verified gates/CDC constraints. One fixed-placement route may repair specifically audited DDR-PHY hold when affected clock-pair setup reserve exceeds the fast hold deficit; no uncertainty/false-path changes. No timing acceptance until all routed corners, zero unrouted, skew and gates pass."
+  },
+  "architecture_audit_20261102": {
+    "status": "BLOCKING_FUNCTIONAL_AUDIT",
+    "production_unchanged": true,
+    "graph_schedule_and_model_validation": {
+      "status": "FPGA_RESIDENT",
+      "evidence": [
+        "rtl/npu/upstream/b03/rtl/platform/b03_frame_exec_payload.v:175,209",
+        "rtl/npu/upstream/b03/rtl/platform/b03_model_input_payload.v",
+        "rtl/npu/upstream/b03/rtl/platform/b03_graph_engine_cap.v"
+      ],
+      "meaning": "Graph/layer dispatch and task/model validation remain in the FPGA B03 service; CPU submits the task and consumes heads."
+    },
+    "cpu_post_semantics": {
+      "status": "IMPLEMENTED_BUT_GAPS_CONFIRMED",
+      "top64_truncation": {
+        "status": "CONFIRMED",
+        "evidence": "sw/drivers/npu_frame.c:88,104,118",
+        "risk": "CPU keeps only 64 candidates before NMS, while the hardware post path scans up to 2100 eligible heads."
+      },
+      "same_score_order": {
+        "status": "CONTRACT_MISMATCH_CONFIRMED",
+        "cpu_key": "raw 16x16 class*object product, insertion order by ascending candidate id for equal raw products",
+        "hardware_key": "rounded FP32 score then ascending candidate id via {~score,out_id}",
+        "evidence": [
+          "sw/drivers/npu_frame.c:121,127",
+          "rtl/npu/upstream/b03/rtl/platform/b03_score_root.v:18",
+          "rtl/npu/upstream/b03/rtl/platform/b03_key_sort_mem2.v:27"
+        ],
+        "risk": "Different products can round to the same FP32 score, so CPU and hardware order can diverge even when candidate ids are stable."
+      },
+      "required_before_physical_timing": [
+        "Choose and implement a full-head CPU selection contract or explicitly freeze a 64-head contract.",
+        "Use the same rounded-score/candidate-id key as the selected contract.",
+        "Add adversarial regressions for >64 eligible heads, late strong heads, and rounded-score ties."
+      ]
+    },
+    "board_clock_and_array": {
+      "status": "IMPLEMENTATION_MISMATCH_CORRECTED_IN_WORKSPACE_PENDING_VALIDATION",
+      "board_core_hz": 125000000,
+      "board_compute_hz": 100000000,
+      "board_m_lanes": 2,
+      "board_quantizer_lanes": 1,
+      "fixed_accumulator_abi": "16 rows x 16 output channels; only 2 active rows are generated and the remaining rows are tied low",
+      "evidence": [
+        "fpga/pg2l100h/project/triha_face_board.json:160-162",
+        "fpga/pg2l100h/rtl/triha_face_board_top.sv:34-35,199,206",
+        "rtl/npu/upstream/b03/rtl/platform/b03_array_apmacc_rowctrl.v:92,137-140"
+      ],
+      "interpretation": "User contract is CPU/NPU 100 MHz and DDR UI/video 125 MHz. Earlier 125 MHz compute wiring and BOARD_PROFILE simulation were integration errors; old results are evidence for that old implementation only. Array lanes are independent of the frequency contract.",
+      "observed_pre_fix_compute_hz": 125000000
+    },
+    "display": {
+      "status": "BOX_ONLY",
+      "avatar_connected": false,
+      "evidence": [
+        "fpga/pg2l100h/rtl/triha_face_board_top.sv:206 (ENABLE_AVATAR(0))",
+        "fpga/pg2l100h/project/triha_face_board.json:157 (RAW+BOX scope)",
+        "sw/include/face_avatar.h:30-32"
+      ],
+      "meaning": "Avatar helper/assets exist in the tree, but the production face board does not connect a real avatar replacement path."
+    },
+    "timing_gate": "CPU full-head/rounded-score semantics repaired; 56 component tests and three prior-source negative controls verified. Gate physical candidate work on new system and full-size capture results recorded in active_runs."
+  },
+  "clock_contract_correction_20261102": {
+    "status": "FUNCTIONAL_AND_SYNTHESIS_PASS_PHYSICAL_TIMING_OPEN",
+    "updated_utc": "2026-11-02T07:50:57.736136+00:00",
+    "requested_clocks_hz": {
+      "cpu_npu": 100000000,
+      "ddr_ui_video": 125000000,
+      "pixel": 40000000
+    },
+    "extra_setup_margin_ns": 0.2,
+    "npu_profile": "control_decode",
+    "board_boundary_regression": "build/soc/face_clock_boundary_20261102/result.json",
+    "axil_cdc_regression": "build/soc/axil_clock_split_20261102/result.json",
+    "unit_checks": "12 passed, 7 subtests passed",
+    "identity": {
+      "fpga/pg2l100h/rtl/triha_face_board_top.sv": {
+        "new_sha256": "1a983aac17023d0fc69ee65628147d2507e609e1ae010283a911d0e59d98ee55",
+        "old_sha256": "5f707319a065b76bfa97e33884f293607b25dfe5232c4639635817f53fbd3a56",
+        "backup": "build/soc/face_clock_split_20261102/before/fpga/pg2l100h/rtl/triha_face_board_top.sv"
+      },
+      "fpga/pg2l100h/project/triha_face_board.json": {
+        "new_sha256": "69af530424ffecbf10e99778cfb0d2764813fba35cf7b7aabb79fe7ca1405211",
+        "old_sha256": "d57bde8a2886649b122dadc7338d02f455fc8698fd83995c6bbbe1fb601c70b3",
+        "backup": "build/soc/face_clock_split_20261102/before/fpga/pg2l100h/project/triha_face_board.json"
+      },
+      "fpga/pg2l100h/constraints/triha_face_board.fdc": {
+        "new_sha256": "8219fe2afc7dae86327ba198050147c1242bb595d35fb90957c0850494d4270a",
+        "old_sha256": "64c23215d2f76462b935405ece6784de10e7f052e6ec82ac52e4b992b830b49b",
+        "backup": "build/soc/face_clock_split_20261102/before/fpga/pg2l100h/constraints/triha_face_board.fdc"
+      },
+      "fpga/pg2l100h/constraints/triha_face_cdc.fdc": {
+        "new_sha256": "27f9fe8f7ab8d8b389f7f3355e2d14b0ea9c6ae0b16be37ef82a5ffb9ef27d3f",
+        "old_sha256": "e8eb347055b69a4ad5f1c917ff3034cb641aeacee8341272c740023726e3c3e6",
+        "backup": "build/soc/face_clock_split_20261102/before/fpga/pg2l100h/constraints/triha_face_cdc.fdc"
+      },
+      "scripts/video/build_pds.py": {
+        "new_sha256": "f45455f9526c567bc63538cdaa017a84f452223e702136fb547fa1413b259d7c",
+        "old_sha256": "9e4ea3d5a2331f72ddffafe2efa39188024f065f50ca0c89b54cacb7c66348c5",
+        "backup": "build/soc/face_clock_split_20261102/before/scripts/video/build_pds.py"
+      },
+      "tb/soc/tb_face_system.sv": {
+        "new_sha256": "45811c0f0c5a04f7a0799c52fb31487a82b475ee708af8e98615b46564454586",
+        "old_sha256": "acb5e1b04d829ba516bf58cce54f0dd0e5c4ccec652160eabb05e559569df6bd",
+        "backup": "build/soc/face_clock_split_20261102/before/tb/soc/tb_face_system.sv"
+      },
+      "scripts/video/gen_compute_pll.py": {
+        "new_sha256": "b3f54c9d03cb7ce72b839a69a77c75c24984e52198c7ce0c4ec7acd7394b8840"
+      },
+      "fpga/pg2l100h/ip/triha_compute_pll.json": {
+        "new_sha256": "6df0adcfa2234e84791ff4e6f8cfedecbfa439c04b9823f56870f76433f4d5d9"
+      },
+      "scripts/soc/run_face_board_clocks.py": {
+        "new_sha256": "a054f83e3601a9ab1060644811085a9b6b1f33222d1f3b28ecb801376a34442f"
+      },
+      "scripts/soc/test_face_clock_contract.py": {
+        "new_sha256": "3ef854d5842b4f49c4ebf9a2019e3141b3a8bc49035e0ff8ec70cd633176b358"
+      },
+      "tb/soc/tb_face_board_clocks.sv": {
+        "new_sha256": "54c4cde929ddd6d259e637b5e62adfaf8e3bc6763b38a86cfecde50ca15ce35d"
+      }
+    },
+    "rejected_initial_diagnostic": "build/video/pds/20261102T051230_933197Z/result.json",
+    "initial_diagnostic_reason": "Missing core_release constraint endpoint; initial UART/ingress misdomain and whole-clock asynchronous cut corrected before new run. Initial run is not acceptance evidence.",
+    "limitations": [
+      "No placement or route for split clocks yet",
+      "CPU top64 and score ties unresolved",
+      "Graph scheduling/model validation still FPGA-resident",
+      "BOX-only; avatar not connected",
+      "Board/HDMI AC deferred"
+    ],
+    "pll_simulation_synthesis_identical": true,
+    "pll_sha256": "bd054d02a0ccd18547c14be7568ff97ea03b07b92e26020326d323c119fc6c95",
+    "compile_cdc_constraint_matches": 82,
+    "compile_constraint_report_sha256": "0b4966577f22016b4e0c9a4f6e13f3fe890450974e84014f2b439a3c65d72052",
+    "constraint_validation_scope": "Compile endpoint matching only; mapped/routed timing and bus skew not yet validated",
+    "completed_runs": {
+      "functional": {
+        "directory": "build/soc/face_system-20261102T053407_618939Z",
+        "status": "PASS"
+      },
+      "synthesis": {
+        "directory": "build/video/pds/20261102T053407_671522Z",
+        "status": "PASS",
+        "firmware": "build/soc/face_system-20261102T023518_344174Z/firmware.elf",
+        "seed": 4
+      }
+    },
+    "active_runs": {},
+    "functional_result": {
+      "result": "build/soc/face_system-20261102T053407_618939Z/result.json",
+      "cycles": 48005166,
+      "frames": 2,
+      "errors": 0,
+      "warnings": 0,
+      "clock_hz": 100000000,
+      "performance_comparison_to_old_125mhz": "not directly comparable"
+    },
+    "synthesis_result": {
+      "result": "build/video/pds/20261102T053407_671522Z/result.json",
+      "resources": {
+        "lut": 43331.0,
+        "registers": 45519.0,
+        "drm": 77.5
+      },
+      "inputs_verified": true
+    },
+    "cross_run_identity": {
+      "shared_frozen_files": 127,
+      "shared_file_mismatches": [],
+      "elf_files_identical": false,
+      "elf_load_memory_identical": true,
+      "sim_hex_words_equal_synth": true,
+      "memory_sha256": {
+        "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+        "sram.hex": "201c708587a2dd5ab9c0faa0912a9005de361f900d92dc047100c8ce0406c180"
+      },
+      "note": "ELF container hashes differ; extracted ROM/SRAM contents are identical. Simulation hex whitespace differs."
+    },
+    "synthesis_timing_diagnostic": {
+      "report": "build/video/pds/20261102T053407_671522Z/synthesize/triha_face_board_top.snr",
+      "scope": "Slow-corner synthesis estimate only; no physical signoff",
+      "compute_setup_ns": 0.095,
+      "ddr_video_setup_ns": -1.352,
+      "ddr_video_failing_endpoints": 1423,
+      "ddr_video_tns_ns": -748.539,
+      "worst_setup_start": "face/u_compute_cdc/ddr_release_q[1]",
+      "worst_setup_end": "face/u_video/u_capture/fault_stage_code_reg[0:2]/CE",
+      "sys_to_compute_removal_ns": -0.404,
+      "ddr_phy_hold_min_ns": -1.564
+    },
+    "next_actions": [
+      "CPU post full-head and rounded-score tie adversarial regressions and repair",
+      "Audit reset-release fanout and duplicate control at capture fault path",
+      "Then single seed placement with actual CDC/gate-site audit; route only if justified"
+    ],
+    "automation_status": "PAUSED; no active PDS/Python/simulator process at this check"
+  },
+  "active_runs": {},
+  "cpu_post_and_capture_control_20261102": {
+    "status": "PLACEMENT_REVIEWED_STATUS_RESET_REPAIR_IN_PROGRESS",
+    "identity": {
+      "sw/drivers/npu_frame.c": {
+        "old_sha256": "2091bccc6e0801c738bbc853b21a9553ade126ea74b8ca0f4aebc75166a17809",
+        "new_sha256": "8eb1876ed6b0fb2dd8d11cde65e8d4b9b1bc99da4685dfd8f86cafe42531d77b",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/sw/drivers/npu_frame.c"
+      },
+      "sw/include/npu_frame.h": {
+        "old_sha256": "514f41bb74879b7278a9a4b8a9993b729b2a76be856466ba2ca73247d21532eb",
+        "new_sha256": "d9bb11a8abb667eb60a7f475523c0efca9294a38029f885de27cc313f65d0d20",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/sw/include/npu_frame.h"
+      },
+      "scripts/npu/run_cpu_post.py": {
+        "old_sha256": "5ce9ea5cca0550c059518ceb480deb8ab046a758dc91f167dd584cfe0d25eda7",
+        "new_sha256": "554f79be4ebd39ea7b6f4e4029fb2848cba03e132a4848a1e4e8dbb18fa410a2",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/scripts/npu/run_cpu_post.py"
+      },
+      "rtl/video/video_three_branch_capture.sv": {
+        "old_sha256": "b3ed67842e1e997bfe2c8d6975242f55285b1a77bf10fc1819599971d0856b52",
+        "new_sha256": "e065908fee865402478a968912c555e627f271675fc6d9cfc06ee836e91e9983",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/rtl/video/video_three_branch_capture.sv"
+      },
+      "tb/video/tb_video_capture_rearm.sv": {
+        "old_sha256": "a160c3fad203bb22d8c7dc19a70bb9328bc64325544db93b9a9f1648f2dbd8bc",
+        "new_sha256": "1ba6ac3d47b3d2b8fd3e5934863555616d29d171cfca440b4aa483d9cf854a77",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/tb/video/tb_video_capture_rearm.sv"
+      },
+      "scripts/video/run.py": {
+        "old_sha256": "f58931054cde750786355704bba8f98ef4ff6b69f5c79be133b150dfc5661454",
+        "new_sha256": "09d7ff4ba8fbb804a92253d78ca60783541084638763c89d9074e34b928f5dda",
+        "backup": "build/soc/cpu_post_full_heads_20261102/before/scripts/video/run.py"
+      },
+      "firmware": {
+        "sha256": "7022dbeaf527db16e8b1ad2cb4c181b8d2fd8b36a3276e2412b96c876cc3b05b",
+        "sim_synth_elf_bytes_equal": true,
+        "actual_rom_sram_words_equal": true
+      }
+    },
+    "cpu_post_regression": "build/soc/cpu_post_full_heads_final_20261102/result.json",
+    "cpu_post_cases": 56,
+    "cpu_negative_controls": [
+      "build/soc/cpu_post_red2_suppressed_prefix_65_20261102/result.json",
+      "build/soc/cpu_post_red2_rounded_tie_order_20261102/result.json",
+      "build/soc/cpu_post_red2_rounded_tie_nms_20261102/result.json"
+    ],
+    "capture_negative_control": "build/video/capture_idle_prepare_red_20261102/result.json",
+    "host_application": "build/soc/face_avatar/20261102T080140_459674Z/result.json",
+    "host_checks": 3903,
+    "stack_usage_bytes": {
+      "main": 16,
+      "face_avatar_step": 176,
+      "npu_frame_collect": 352,
+      "cpu_post_heads": 2656,
+      "table_q16": 32,
+      "read_shared": 0,
+      "reviewed_post_call_chain_sum": 3232,
+      "reserved": 4096
+    },
+    "algorithm": "All 2100 heads, sorted pages of 64 using rounded FP32 score descending / candidate id ascending; greedy NMS retains 16 across pages; at most 33 full head scans, usually one. No heap or full-head box array.",
+    "capture_change": "Local preprocessing pipelines clear throughout drained IDLE; job identity/counters still clear on accepted request. Removes AXI-B/READY dependency from pixel READY. No extra pipeline latency/state or timing exception.",
+    "limitations": [
+      "Placement setup positive but hold/recovery/removal not closed",
+      "Standalone MaxSkew summary absent; focused CDC audit pending",
+      "FPGA graph scheduling/model checks and BOX-only/avatar remain open",
+      "No route, bitstream, external HDMI AC or board acceptance"
+    ],
+    "automation": "automation-5 ACTIVE, 30 minutes",
+    "updated_utc": "2026-11-02T09:15:22.348245+00:00",
+    "three_capture": {
+      "directory": "build/video/regression/20261102T080040_364035Z",
+      "status": "pass"
+    },
+    "capture_rearm": {
+      "directory": "build/video/regression/20261102T080040_375190Z",
+      "status": "pass",
+      "full_frames": 3,
+      "checked_bytes": 6321600
+    },
+    "next_action": "Read existing idle_prepare_placed_cdc_v2_20261102 result/log/process first. Inspect exported primitive sites and reset synchronizer stage paths and IRQ reset fanout, verify all 60 Gray endpoints and 6ns bounds. If structure/connection needs repair, use component negative controls before resynthesis. Do not hide data/CE/locally released resets with broad false paths. Resolve route admission before routing; no seed changes.",
+    "completed_runs": {
+      "functional": {
+        "directory": "build/soc/face_system-20261102T080716_077928Z",
+        "status": "PASS",
+        "purpose": "All-head rounded-score CPU post + capture idle prepare, 100/125 MHz, real model boot/two frames"
+      },
+      "synthesis": {
+        "directory": "build/video/pds/20261102T080926_876364Z",
+        "status": "PASS",
+        "firmware": "build/soc/face_system-20261102T080716_077928Z/firmware.elf",
+        "seed": 4,
+        "seed_count": 1
+      },
+      "placement": {
+        "directory": "build/video/pds/idle_prepare_100m_place_20261102",
+        "status": "PLACEMENT_COMPLETE",
+        "seed": 4,
+        "source": "build/video/pds/20261102T080926_876364Z",
+        "route_started": false
+      },
+      "cdc_reset_audit": {
+        "directory": "build/video/idle_prepare_placed_cdc_v2_20261102",
+        "status": "REVIEWED",
+        "review": "build/video/idle_prepare_placed_cdc_v2_20261102/review.json"
+      }
+    },
+    "completion_verification": "build/soc/cpu_post_full_heads_20261102/completion_verification.json",
+    "synthesis_analysis": "build/soc/cpu_post_full_heads_20261102/synthesis_analysis.json",
+    "resources": {
+      "lut": 43258,
+      "registers": 45519,
+      "drm": 77.5
+    },
+    "synthesis_comparison": {
+      "old_ddr_setup_ns": -1.352,
+      "new_ddr_setup_ns": -0.782,
+      "old_failing_endpoints": 1423,
+      "new_failing_endpoints": 299,
+      "old_tns_ns": -748.539,
+      "new_tns_ns": -131.005,
+      "lut_delta": -73,
+      "ff_delta": 0,
+      "compute_setup_ns": 0.045,
+      "sys_to_compute_removal_ns": -0.404,
+      "phy_hold_min_ns": -1.564,
+      "new_worst_path": "display/u_raw/N6_m1 -> record_reject_valid"
+    },
+    "system_result": {
+      "cycles": 48005166,
+      "pixel_frames": 2,
+      "errors": 0,
+      "warnings": 0,
+      "input_hashes_unchanged": true
+    },
+    "active_runs": {},
+    "placement_analysis": {
+      "result": "build/video/pds/idle_prepare_100m_place_20261102/placement_analysis/result.json",
+      "summary": {
+        "setup_slow": {
+          "worst_slack_ns": 0.465,
+          "failing_endpoints": 0
+        },
+        "setup_fast": {
+          "worst_slack_ns": 1.341,
+          "failing_endpoints": 0
+        },
+        "hold_slow": {
+          "worst_slack_ns": -0.322,
+          "failing_endpoints": 17
+        },
+        "hold_fast": {
+          "worst_slack_ns": -0.358,
+          "failing_endpoints": 26
+        },
+        "recovery_slow": {
+          "worst_slack_ns": -0.471,
+          "failing_endpoints": 1
+        },
+        "recovery_fast": {
+          "worst_slack_ns": -0.219,
+          "failing_endpoints": 1
+        },
+        "removal_slow": {
+          "worst_slack_ns": -1.226,
+          "failing_endpoints": 4
+        },
+        "removal_fast": {
+          "worst_slack_ns": -1.219,
+          "failing_endpoints": 4
+        },
+        "minimum pulse width_slow": {
+          "worst_slack_ns": 0.035,
+          "failing_endpoints": 0
+        },
+        "minimum pulse width_fast": {
+          "worst_slack_ns": 0.035,
+          "failing_endpoints": 0
+        }
+      },
+      "gate_sites_verified": true,
+      "inputs_unchanged": true,
+      "route_admission": "BLOCKED_PENDING_RESET_AND_PHY_CDC_AUDIT",
+      "max_skew": "All 60 bit endpoints checked in both corners: max data arrival 0.925 ns, min 6ns-bound slack 4.976 ns, max derived bus spread 0.435 ns. No standalone PDS MaxSkew or routed signoff.",
+      "reset_findings": "Unrelated sys-clock startup reset reaches compute release synchronizers and video_irq_sync asynchronous RS pins. Need mapped structure verification, including opit_0_srl mapping; do not infer metastability safety from RTL attributes alone."
+    },
+    "audit_attempts": [
+      {
+        "result": "build/video/idle_prepare_placed_cdc_20261102/result.json",
+        "status": "FAIL",
+        "reason": "gen_netlist requires routed PNR phase; placed input rejected without changing original DB",
+        "inputs_unchanged": true
+      }
+    ]
+  },
+  "face_status_reset_fix_20261102": {
+    "status": "SYSTEM_AND_SYNTHESIS_PASS_RESET_CONSTRAINT_AUDIT",
+    "updated_utc": "2026-11-02T10:10:46.072707+00:00",
+    "change": "video_irq_sync now uses compute_reset_n; compute_fault_sync uses video_reset_n, reusing local release chains. No clock/constraint/NPU upstream changes.",
+    "identity": {
+      "rtl/soc/triha_face_system.v": {
+        "old_sha256": "f9e15035bb98d2cb4761002a72e5800b36caab92a67a092eb621e5191a769325",
+        "new_sha256": "b65525781c32f074d46e1cda7eb86c48f387375a0a310902dc0178ae5c175130",
+        "backup": "build/soc/face_status_reset_fix_20261102/before/rtl/soc/triha_face_system.v"
+      }
+    },
+    "negative_controls": "build/soc/face_status_reset_red_20261102/result.json",
+    "component_regression": "build/soc/face_status_reset_green_20261102/result.json",
+    "component_scope": "Actual face-system status always blocks; unrelated datapaths blackboxed, reset outputs/status sources driven. 3 phases x 3 reset epochs and both prior-connection mutations. Not full CDC or metastability proof.",
+    "firmware_sha256": "804c9a08ba7e6f996ce4a2be84fb624abb141ee4725d9f833d4d67a00aafe201",
+    "sim_synth_actual_firmware_equal": true,
+    "next_action": "System/synthesis verified; follow face_reset_constraint_fix_20261102 for current constraint-only synthesis and physical next steps.",
+    "limitations": [
+      "New status-reset RTL passes full system and synthesis; physical timing remains open",
+      "Release-chain asynchronous input recovery/removal needs correct structural/constraint audit",
+      "Vendor PHY hold unresolved; no route or bitstream signoff",
+      "BOX-only and graph/model migration still open"
+    ],
+    "completed_runs": {
+      "functional": {
+        "directory": "build/soc/face_system-20261102T094505_126681Z",
+        "status": "PASS",
+        "session_id": 56517,
+        "python_pid": 46932,
+        "simulator_pid": 43604
+      },
+      "synthesis": {
+        "directory": "build/video/pds/20261102T094524_634464Z",
+        "status": "PASS",
+        "session_id": 75227,
+        "python_pid": 38588,
+        "pds_pid": 19688,
+        "seed": 4,
+        "seed_count": 1
+      }
+    },
+    "active_runs": {},
+    "completion_verification": "build\\soc\\face_status_reset_fix_20261102\\completion_verification.json",
+    "resources": {
+      "lut": 43070.0,
+      "registers": 45519.0,
+      "drm": 77.5
+    }
+  },
+  "face_reset_constraint_fix_20261102": {
+    "status": "PLACEMENT_ANALYZED_SETUP_AND_PHY_HOLD_OPEN",
+    "updated_utc": "2026-11-02T11:04:28.769148+00:00",
+    "identity": {
+      "fpga\\pg2l100h\\constraints\\triha_face_board.fdc": {
+        "old_sha256": "8219fe2afc7dae86327ba198050147c1242bb595d35fb90957c0850494d4270a",
+        "new_sha256": "db40af5e1c5dc17f48d07bda0e3b98d064709791ebaeae88c8c834838cc562bf",
+        "backup": "build\\soc\\face_reset_constraint_fix_20261102\\before\\triha_face_board.fdc"
+      }
+    },
+    "change": "Only sys_clk to four anchored reset synchronizer async C inputs excluded; numeric timing budgets, inter-stage data, local release fanout, functional/status and PHY checks unchanged.",
+    "negative_controls": "build/soc/face_reset_constraint_red_20261102/result.json",
+    "guard_regression": "build/soc/face_reset_literal_green_20261102/result.json",
+    "axil_regression": "build/soc/face_reset_constraint_axil_20261102/result.json",
+    "board_clocks_regression": "build/soc/face_reset_constraint_board_clocks_20261102/result.json",
+    "functional_reused": "build/soc/face_system-20261102T094505_126681Z/result.json",
+    "prior_synthesis": "build/video/pds/20261102T094524_634464Z/result.json",
+    "scope": "PDS compiled DB query confirms exact literal C bus pins; all production FDC imports before deliberate diagnostic stop. Full synthesis and post-map physical review pending.",
+    "next_action": "No running implementation remains. Nine DDR setup endpoints share display descriptor extent calculation -> mailbox CE (-0.106ns); one compute endpoint is graph check_j -> state (-0.016ns). Prioritize component-level simplification of these checks, inspect required fixed-avatar integration and combine functional changes before the next full system/synth/place. Do not launch long BOX-only route now. Keep domain clocks/margins and necessary admission/transfer checks. Graph scheduling wholesale migration is not presumed necessary to this immediate timing repair.",
+    "limitations": [
+      "No routed timing or bitstream acceptance",
+      "Physical FFAPP packed reset-chain topology and inter-stage timing still to audit",
+      "Standalone max-skew and all-bit routed CDC pending",
+      "BOX-only/avatar and FPGA graph/model migration remain open"
+    ],
+    "failed_runs": {
+      "synthesis": {
+        "directory": "build/video/pds/20261102T101304_076125Z",
+        "status": "FAIL",
+        "session_id": 79345,
+        "python_pid": 33668,
+        "pds_pid": 26876,
+        "seed": 4,
+        "seed_count": 1,
+        "purpose": "Four exact async reset synchronizer C-input constraints; unchanged functional RTL and firmware",
+        "reason": "FDC import sees [1:0] bus before bit splitting; bit-only regex matched nothing"
+      },
+      "synthesis_bus_regex": {
+        "directory": "build/video/pds/20261102T101558_115107Z",
+        "status": "FAIL",
+        "session_id": 73411,
+        "python_pid": 46368,
+        "pds_pid": 16040,
+        "seed": 4,
+        "seed_count": 1,
+        "purpose": "Precise reset C-pin exception including PDS pre-split [1:0] names",
+        "reason": "PDS get_pins regexp still matched zero objects; inspect compiled endpoint names before another synthesis"
+      }
+    },
+    "bus_match_negative": "build/soc/face_reset_constraint_bus_red_20261102/result.json",
+    "literal_negative": "build/soc/face_reset_literal_red_20261102/result.json",
+    "pds_import_audit": "build/video/face_reset_pin_query_20261102/review.json",
+    "completed_runs": {
+      "implementation": {
+        "directory": "build/video/face_reset_literal_impl_20261102",
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "receipt": "build/video/face_reset_literal_impl_20261102/receipt.json",
+        "session_id": 56121,
+        "python_pid": 45820,
+        "synthesis_directory": "build/video/pds/20261102T104632_695568Z",
+        "synthesis_python_pid": 43984,
+        "pds_pid": 32268,
+        "placement_directory": "build/video/pds/face_reset_literal_place_20261102",
+        "purpose": "Guarded one synthesis -> verified exact input/clock/reset coverage -> one seed4 placement -> all-corner analysis; never automatic route"
+      }
+    },
+    "active_runs": {},
+    "placement_analysis": "build/video/pds/face_reset_literal_place_20261102/placement_analysis/result.json",
+    "placement_summary": {
+      "setup_slow": {
+        "worst_slack_ns": -0.106,
+        "failing_endpoints": 10
+      },
+      "setup_fast": {
+        "worst_slack_ns": 1.259,
+        "failing_endpoints": 0
+      },
+      "hold_slow": {
+        "worst_slack_ns": -0.259,
+        "failing_endpoints": 34
+      },
+      "hold_fast": {
+        "worst_slack_ns": -0.303,
+        "failing_endpoints": 38
+      },
+      "recovery_slow": {
+        "worst_slack_ns": 1.159,
+        "failing_endpoints": 0
+      },
+      "recovery_fast": {
+        "worst_slack_ns": 1.353,
+        "failing_endpoints": 0
+      },
+      "removal_slow": {
+        "worst_slack_ns": 0.443,
+        "failing_endpoints": 0
+      },
+      "removal_fast": {
+        "worst_slack_ns": 0.367,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_slow": {
+        "worst_slack_ns": 0.035,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_fast": {
+        "worst_slack_ns": 0.035,
+        "failing_endpoints": 0
+      }
+    }
+  },
+  "updated_utc": "2026-11-03T02:08:07.569549+00:00",
+  "raw_descriptor_range_fix_20261102": {
+    "status": "COMPONENT_REGRESSION_AND_SYNTHESIS_PASS",
+    "updated_utc": "2026-11-02T11:35:43.610303+00:00",
+    "identity": {
+      "rtl\\video\\raw_display.sv": {
+        "old_sha256": "8c26c66e1f118055b2d3a9f078a37da956e37da4e32242140e9545593a7ac628",
+        "new_sha256": "e770e928d005c1e66c8c2a9de4aefe082a94564066eeb5d86035e1c457595325",
+        "backup": "build\\video\\raw_descriptor_range_fix_20261102\\before\\raw_display.sv"
+      }
+    },
+    "change": "Use existing 16-byte alignment and 128MiB DDR window to bound stride, then calculate descriptor end in beats: 24-bit row product, 25-bit sum. Height1 retains all aligned legal strides. No extra state/latency; no skipped bounds or protocol changes.",
+    "baseline_oracle": "build/video/raw_descriptor_oracle_baseline_20261102/result.json",
+    "oracle": "build/video/raw_descriptor_oracle_green2_20261102/result.json",
+    "oracle_cases": 124692,
+    "geometries": 12,
+    "negative_controls": [
+      "old 32-bit extent truncation",
+      "missing minimum pitch",
+      "exclusive upper bound",
+      "missing large stride guard"
+    ],
+    "failed_runs": [
+      {
+        "directory": "build/video/regression/20261102T111124_635311Z",
+        "status": "FAIL",
+        "reason": "All simulation cases including 1440000 full pixels passed, but final global script hash check failed: test_raw_descriptor_range.py was expanded during run. Do not admit as a passing regression."
+      }
+    ],
+    "next_action": "Read existing validation receipt/log/process. On completed regression/synth record actual status immediately; inspect standalone netlist/resources for bounded descriptor multiplication (no board timing claim). Keep frozen RTL/scripts while active. Then prepare required fixed-avatar integration and remaining graph check_j control simplification with component negatives; consolidate before another full-system/board synthesis/place. No long BOX-only route.",
+    "limitations": [
+      "Component pass; board timing impact still pending",
+      "One compute check_j/state setup endpoint remains in previous placement",
+      "DDR PHY hold and routed CDC/skew remain open",
+      "Avatar, graph/model responsibility review, final bitstream and board boundaries remain open"
+    ],
+    "completed_runs": {
+      "raw_descriptor_validation": {
+        "directory": "build/video/raw_descriptor_validation_20261102",
+        "status": "COMPONENT_PASS_REVIEW_REQUIRED",
+        "receipt": "build/video/raw_descriptor_validation_20261102/receipt.json",
+        "session_id": 10707,
+        "python_pid": 24668,
+        "regression_python_pid": 11968,
+        "simulator_pid": 45252,
+        "regression_directory": "build/video/regression/20261102T111408_635407Z",
+        "purpose": "Frozen RAW display regression then standalone raw_display synthesis; no full board PDS"
+      }
+    },
+    "active_runs": {},
+    "resources": {
+      "lut": 1308.0,
+      "registers": 1954.0,
+      "drm": 4.0
+    },
+    "regression": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\regression\\20261102T111408_635407Z",
+    "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T111538_426628Z"
+  },
+  "avatar_integration_20261102": {
+    "status": "STOPPED_REVIEW_REQUIRED",
+    "updated_utc": "2026-11-02T14:18:24.716722+00:00",
+    "identity": {
+      "sw/apps/face_avatar/face_avatar.c": {
+        "old_sha256": "0fa589da773ede3bb10a0c444eeaeed3076fb37e5e86a2529ce2a212525f5eab",
+        "new_sha256": "6bd95dbf027b05793147f6028322199e4119bfcde32f290d667df2d47b5a8992",
+        "backup": "build/soc/face_avatar_integration_20261102/before/face_avatar.c"
+      },
+      "rtl/soc/triha_model_loader.v": {
+        "old_sha256": "8eab11f640344a16332ffb022b68736744bb2cc142606d9c5573753dccc7a4ec",
+        "new_sha256": "bfd5fb9270291b30a88dbd6e02073c42af813f04191b75b068d8c2c6a59ac3b1",
+        "backup": "build/soc/face_avatar_integration_20261102/before/triha_model_loader.v"
+      },
+      "scripts/soc/upload_face_model.py": {
+        "old_sha256": "af01b0baaed3265b34e5d9b05679c2021ff860ba9338b1a19dd97e7bab40e216",
+        "new_sha256": "a93a5528b356f2bd5f4c815fd6ba2e1bd312a7affd6041ef953d9e12b367d939",
+        "backup": "build/soc/face_avatar_integration_20261102/before/upload_face_model.py"
+      },
+      "rtl/soc/triha_face_system.v": {
+        "old_sha256": "b65525781c32f074d46e1cda7eb86c48f387375a0a310902dc0178ae5c175130",
+        "new_sha256": "ebc6850440ad8d4366dc7109715cae818dda9324befc7525bb78bc2f5b8977c1",
+        "backup": "build/soc/face_avatar_integration_20261102/before/triha_face_system.v"
+      },
+      "sw/apps/face_avatar/main.c": {
+        "old_sha256": "d33c590a05374da7356a91b693f00342ee389e7bdc8f742354d0a05ef5247469",
+        "new_sha256": "36b8ffad06d2a2868e2fc55788283b60ce18d0eb8fd05383ec1ee387a3666c47",
+        "backup": "build/soc/face_avatar_integration_20261102/before/main.c"
+      },
+      "sw/include/face_avatar.h": {
+        "old_sha256": "d765c7d9619d6a75aa8353f6d9576bbf380c342439aea14b27d41fe8dbeb6c3b",
+        "new_sha256": "21a1606c51cf42cc469928f41d6e2213c5fa54ef1df78fbe72044f6c4b0b91e6",
+        "backup": "build/soc/face_avatar_integration_20261102/before/face_avatar.h"
+      }
+    },
+    "primary_negative": "build/soc/face_avatar/20261102T114645_396284Z/result.json",
+    "cpu": "build/soc/face_avatar/20261102T120939_836557Z/result.json",
+    "cpu_checks": 4007,
+    "loader_negative": "build/soc/boot_uart-20261102T114822_598105Z/result.json",
+    "loader": "build/soc/boot_uart-20261102T115133_989142Z/result.json",
+    "full_avatar_bytes": 262144,
+    "host_transport_tests": 8,
+    "limits": [
+      "Synthesis fast-corner table empty; all corners require physical analysis",
+      "DDR PHY hold unresolved; cannot route without placement review",
+      "DRM occupancy 91.29%; actual mapping and routing feasibility unproven",
+      "Graph/model CPU responsibility migration and external HDMI AC/board boundaries open"
+    ],
+    "next_action": "Monitor unique fixed-placement route receipt/log/PDS tree. No source edits or duplicate route. After completion verify zero unrouted, exact bytes, all clocks/corners including max skew and routed gate sites; report completion alone is not timing closure.",
+    "negative_controls": "build/soc/face_avatar_integration_20261102/mutations2/result.json",
+    "preset": {
+      "manifest": "assets/avatars/triha/manifest.json",
+      "sha256": "c4897906fe809c679acea3b92ba8b4ac3ce25b62b48a67fcd863fc12536c485b",
+      "crc32": 1628634172,
+      "status": "PASS_ACTUAL_CACHE_COMPONENT",
+      "crc32_hex": "6112fc3c"
+    },
+    "active_runs": {},
+    "completed_runs": {
+      "avatar_preset_cache": {
+        "directory": "build/video/avatar_ddr/20261102T120436_276365Z",
+        "result": "build/video/avatar_ddr/20261102T120436_276365Z/result.json",
+        "python_pid": 39200,
+        "purpose": "Actual preset: full cache texel readback, two pixel clock ratios and incorrect CRC rejection",
+        "status": "PASS"
+      },
+      "avatar_system_boot": {
+        "status": "FAIL",
+        "directory": "build/soc/face_system-20261102T121350_305980Z",
+        "result": "build/soc/face_system-20261102T121350_305980Z/result.json",
+        "python_pid": 3320,
+        "simulator_pid": 20872,
+        "purpose": "Actual CPU, all admitted model segments plus fixed avatar through boot DDR write/readback, automatic checked cache load and pixel-domain seal. Boot-only; no completed inference or display proof."
+      },
+      "avatar_system_boot3": {
+        "status": "PASS_BOOT_ONLY",
+        "directory": "build/soc/face_system-20261102T121616_403404Z",
+        "result": "build/soc/face_system-20261102T121616_403404Z/result.json",
+        "python_pid": 31548,
+        "simulator_pid": 24236,
+        "purpose": "Actual CPU, all model+avatar packets through verified DDR writes, boot-seal to checked full cache. Boot-only, no full inference/display or physical claim."
+      },
+      "avatar_three_mode_validation": {
+        "status": "SYNTHESIS_PASS_RESOURCE_AND_TIMING_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_avatar_validation_20261102",
+        "receipt": "build/video/face_avatar_validation_20261102/receipt.json",
+        "python_pid": 42028,
+        "child_pid": null,
+        "component_python_pid": null,
+        "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T125839_514465Z",
+        "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T131939_550869Z"
+      },
+      "avatar_seed4_placement": {
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_avatar_place_flow_20261102",
+        "receipt": "build/video/face_avatar_place_flow_20261102/receipt.json",
+        "python_pid": 18500,
+        "child_pid": null,
+        "placement": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_avatar_place_20261102",
+        "seed": 4,
+        "route_started": false
+      },
+      "avatar_fixed_placement_route": {
+        "status": "STOPPED_REVIEW_REQUIRED",
+        "stage": "ROUTING",
+        "directory": "build/video/pds/face_avatar_route_20261102",
+        "receipt": "build/video/pds/face_avatar_route_20261102/receipt.json",
+        "python_pid": 20848,
+        "pds_pid": null,
+        "seed": 4,
+        "route_started": true,
+        "hard_timeout_seconds": 5400
+      }
+    },
+    "reset_regression": "build/soc/face_avatar_status_reset_20261102/result.json",
+    "failed_runs": [
+      {
+        "directory": "build/soc/face_system-20261102T121244_958310Z",
+        "status": "FAIL",
+        "reason": "Time-zero testbench uploads-count assertion still required six after seventh segment added. Corrected expected 7 only for AVATAR_BOOT; compile had zero errors/warnings. No long inference was run."
+      },
+      {
+        "directory": "build/soc/face_system-20261102T121350_305980Z",
+        "status": "FAIL",
+        "reason": "Testbench capture-gap guard excluded new fixed avatar range; stopped on first avatar byte after all six model segments passed. Added exact avatar window only while boot owns writes and is unsealed, with duplicate-byte detection and total-byte count. Existing capture gaps remain forbidden."
+      },
+      {
+        "directory": "build/soc/resource_probe_video_compact_20261102T125015_828979Z",
+        "status": "FAIL",
+        "reason": "19 MMIO/held-CDC/pixel cases PASS; display composition elaboration found stale dut.u_mmio test hierarchy. Corrected runner transformation to dut.g_full_mmio.u_mmio; rerun only three affected display cases, verify unchanged input hashes for reused cases."
+      }
+    ],
+    "boot_verified_sources": 158,
+    "mode_board_identity": "build/soc/face_mode_integration_20261102/after_hashes.json",
+    "mode_board_checks": {
+      "cpu": "build/soc/face_avatar/20261102T122750_318935Z/result.json",
+      "mode_key": "build/soc/face_mode_key-20261102T122623_604578Z/result.json",
+      "board_clocks": "build/soc/face_avatar_board_clocks_20261102/result.json",
+      "status_reset": "build/soc/face_mode_status_reset_20261102/result.json",
+      "host_asset_audit": "build/soc/model_upload-20261102T123549_945197Z/result.json",
+      "system_compile": "build/soc/face_system-20261102T123549_864318Z/result.json",
+      "cdc_endpoints": "build/video/face_avatar_cdc_query_20261102/review.json"
+    },
+    "mode_control": {
+      "default": "RAW",
+      "sequence": [
+        "RAW",
+        "BOX",
+        "AVATAR"
+      ],
+      "cpu_owner": true,
+      "key": "KEY1/C23",
+      "debounce_clock_hz": 125000000,
+      "debounce_ms": 20,
+      "preview_enabled": false,
+      "avatar_full_cache": true,
+      "row_cache": false,
+      "capabilities_bit": 16,
+      "mode_request_offset": "0x84",
+      "abi_record_unchanged": true
+    },
+    "cdc": {
+      "ready_first_stage_only": true,
+      "held_identity_max_delay_ns": 6.0,
+      "second_stage_timed": true,
+      "review": "build/video/face_avatar_cdc_query_20261102/review.json",
+      "clock_margins_unchanged": true
+    },
+    "compact_compatibility": {
+      "status": "PASS",
+      "result": "build/soc/face_compact_compat_20261102/result.json",
+      "cases": 22,
+      "reused_unchanged": 19,
+      "newly_executed": 3
+    },
+    "evidence_sha256": {
+      "build/soc/face_compact_compat_20261102/result.json": "b065ab4845b8a63e2c47f7d8706c5b37b07aeba559999eb7f3c88fa72118c346"
+    },
+    "active_runs_source": "top-level active_runs; coordinator updates this authoritative list on each stage and removes completed entries",
+    "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T125839_514465Z",
+    "system_status": "PASS",
+    "system_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=92506 nativeAR=380481 cycles=49663086",
+    "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T131939_550869Z",
+    "synthesis_status": "PASS",
+    "resources": {
+      "lut": 51262.0,
+      "registers": 55283.0,
+      "drm": 141.5
+    },
+    "shared_source_count": 130,
+    "firmware_and_memory_equal": true,
+    "synthesis_admission": "build/video/face_avatar_synthesis_review_20261102/result.json",
+    "placement": "build/video/pds/face_avatar_place_20261102",
+    "placement_summary": {
+      "setup_slow": {
+        "worst_ns": 0.379,
+        "failing_endpoints": 0
+      },
+      "setup_fast": {
+        "worst_ns": 1.223,
+        "failing_endpoints": 0
+      },
+      "hold_slow": {
+        "worst_ns": -0.349,
+        "failing_endpoints": 115
+      },
+      "hold_fast": {
+        "worst_ns": -0.416,
+        "failing_endpoints": 200
+      },
+      "recovery_slow": {
+        "worst_ns": 1.021,
+        "failing_endpoints": 0
+      },
+      "recovery_fast": {
+        "worst_ns": 1.215,
+        "failing_endpoints": 0
+      },
+      "removal_slow": {
+        "worst_ns": 0.433,
+        "failing_endpoints": 0
+      },
+      "removal_fast": {
+        "worst_ns": 0.358,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_slow": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_fast": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0
+      }
+    },
+    "placement_gate_sites_verified": true,
+    "route_admission": "build/video/face_avatar_route_review_20261102/result.json",
+    "route_failure": {
+      "status": "TIMEOUT_NO_ROUTED_STA",
+      "receipt": "build/video/pds/face_avatar_route_20261102/receipt.json",
+      "last_unrouted_nets": 63168,
+      "last_iteration": 15,
+      "elapsed_seconds": 5400.883463899954,
+      "inputs_unchanged": true,
+      "processes_remaining": false,
+      "retry_same_candidate": false
+    }
+  },
+  "held_context_candidate_20261103": {
+    "status": "REJECTED_BEFORE_PLACEMENT",
+    "adopted": false,
+    "directory": "build/video/face_held_context_20261103",
+    "design": "Use existing held-record CDC in compact renderer; owner keeps record through combined feedback. Preserve 13-cycle overlay, all modes, same ABI, coordinated resets. Bound record Q to pixel domain at 6 ns; no new false paths.",
+    "alternatives": "Full row cache needs variable-latency prefetch redesign; model validation migration needs separate admission equivalence. Both deferred while testing proven duplicate-copy removal.",
+    "stage": "DONE",
+    "receipt": "build/video/face_held_validation_resource_20261103/receipt.json",
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_CDC_RESET_RESOURCE_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 41980,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261102T162256_315033Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T171030_980602Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T173040_811236Z",
+      "directory": "build/video/face_held_validation_resource_20261103",
+      "receipt": "build/video/face_held_validation_resource_20261103/receipt.json"
+    },
+    "prior_stopped_runs": [
+      {
+        "status": "STOPPED_REVIEW_REQUIRED",
+        "stage": "COMPONENTS",
+        "pid": 6980,
+        "child_pid": null,
+        "component": null,
+        "system": null,
+        "synthesis": null,
+        "directory": "build/video/face_held_validation_20261103",
+        "receipt": "build/video/face_held_validation_20261103/receipt.json"
+      },
+      {
+        "status": "STOPPED_REVIEW_REQUIRED",
+        "stage": "COMPONENT_RESOURCE_COMPARISON",
+        "receipt": "build/video/face_held_validation_resume_20261103/receipt.json",
+        "error": "resource exit 1"
+      }
+    ],
+    "component": "build/soc/resource_probe_video_compact_20261102T162256_315033Z/result.json",
+    "component_status": "PASS",
+    "component_cases": 23,
+    "resume_admission": "build/video/face_held_context_20261103/resume_admission.json",
+    "cpu_admission_note": "Shared CPU review updated admission metadata during component run. Actual component inputs unchanged. Fresh full-system/synthesis required; old board evidence does not cover current CSR/LSU sources.",
+    "resource_parser_fix": "build/video/face_held_context_20261103/resource_parse_review.json",
+    "component_resources": {
+      "status": "PASS",
+      "result": "build/video/face_held_validation_resource_20261103/resource_comparison/result.json",
+      "result_sha256": "79ec1747ba4190293fed43ee6663275121539fba895e2f1af13fc1acfdddff54",
+      "baseline": {
+        "path": "u_pixels",
+        "line": 93,
+        "lut": 8763.0,
+        "ff": 15475.0,
+        "lutram_included_in_lut": 0.0,
+        "apm": 6.0,
+        "drm": 0.0
+      },
+      "candidate": {
+        "path": "u_pixels",
+        "line": 93,
+        "lut": 8853.0,
+        "ff": 7777.0,
+        "lutram_included_in_lut": 0.0,
+        "apm": 6.0,
+        "drm": 0.0
+      },
+      "delta": {
+        "lut": 90.0,
+        "ff": -7698.0,
+        "drm": 0.0,
+        "apm": 0.0
+      },
+      "scope": "Identical scan boundary, component synthesis only; no physical timing acceptance"
+    },
+    "system_running": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T171030_980602Z",
+    "system": "build/soc/face_system-20261102T171030_980602Z",
+    "system_status": "PASS",
+    "system_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=92506 nativeAR=380481 cycles=49663086",
+    "system_review": "build/video/face_held_context_20261103/system_review.json",
+    "synthesis": "build/video/pds/20261102T173040_811236Z",
+    "synthesis_status": "PASS_WITH_CDC_AND_RESET_VIOLATIONS",
+    "synthesis_review": "build/video/face_held_retime_20261103/previous_synthesis_review.json"
+  },
+  "held_retime_candidate_20261103": {
+    "status": "PLACEMENT_SETUP_FAIL_NOT_ROUTED",
+    "adopted": false,
+    "directory": "build/video/face_held_retime_20261103",
+    "focused_review": "build/video/face_held_retime_20261103/focused_review.json",
+    "design": "Move final output register to RAW input, keep overall pixel latency; capture held record before overlay; request latency 9->10, retire proof waits for first registered pixel/fault. Local async-assert sync-release in both domains.",
+    "next": "Preserve held-context reduction, remove FIFO ready-dependent carry and validator wide select before comparison; negative component tests before integration.",
+    "stage": "REVIEW_COMPLETE",
+    "receipt": "build/video/face_held_retime_validation_20261103/receipt.json",
+    "component_review": {
+      "status": "PASS",
+      "case_count": 25,
+      "result": "build/soc/resource_probe_video_compact_20261102T182146_254012Z/result.json",
+      "result_sha256": "a64d450914768c00414d38ffd1d3a80ee413e7a7dc32e6994be6c8406be57ad8",
+      "includes": [
+        "two_stage_reset_release",
+        "no_porch_pixel_oracle",
+        "first_sample_fault",
+        "held_source_negative_controls"
+      ],
+      "frozen_inputs_unchanged_at_check": true,
+      "checked_at": "2026-11-02T18:41:05.172025+00:00"
+    },
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_CDC_RESET_RESOURCE_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 24828,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261102T182146_254012Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T182652_956679Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T184655_932606Z",
+      "directory": "build/video/face_held_retime_validation_20261103",
+      "receipt": "build/video/face_held_retime_validation_20261103/receipt.json"
+    },
+    "synthesis_review": "build/video/face_held_retime_synthesis_review_20261103/result.json",
+    "resources": {
+      "lut": 49056.0,
+      "registers": 47680.0,
+      "drm": 141.5
+    },
+    "system_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=92506 nativeAR=380481 cycles=49663086",
+    "shared_source_count": 132,
+    "firmware_and_memory_equal": true,
+    "timing_closed": false,
+    "route_started": false,
+    "completed_runs": {
+      "held_retime_seed4_placement": {
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_held_retime_place_flow_20261103",
+        "receipt": "build/video/face_held_retime_place_flow_20261103/receipt.json",
+        "python_pid": 35192,
+        "child_pid": null,
+        "placement": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_held_retime_place_20261103",
+        "seed": 4,
+        "route_started": false
+      }
+    },
+    "placement_review": "build/video/face_pointer_guard_20261103/previous_placement_review.json"
+  },
+  "pointer_guard_candidate_20261103": {
+    "status": "DIAGNOSTIC_INCOMPLETE_REVIEW_REQUIRED",
+    "directory": "build/video/face_pointer_guard_20261103",
+    "adopted": false,
+    "design": "Precompute FIFO read increment/Gray and empty alternatives, select only after arithmetic. Evaluate each box at a constant slice, select 1-bit result by lane; preserve validation order and cycle count.",
+    "next": "Inspect exported conflict nets and SRB hotspots; do not reroute or edit RTL without a specific evidence-supported hypothesis.",
+    "focused_review": "build/video/face_pointer_guard_20261103/focused_review.json",
+    "component_checks": {
+      "fifo_ingress_cases": 9,
+      "guard_cases": 246,
+      "baseline_and_candidate_negatives": "PASS_EXPECTED_REJECTION"
+    },
+    "stage": "DONE",
+    "receipt": "build/video/face_pointer_guard_validation_20261103/receipt.json",
+    "component_review": {
+      "status": "PASS",
+      "case_count": 26,
+      "guard_subcases": 246,
+      "result": "build/soc/resource_probe_video_compact_20261102T194848_417793Z/result.json",
+      "result_sha256": "71228a461362924622eacf2db2be468595f1c788d148e21b6a8a0b770edc3c28",
+      "frozen_inputs_unchanged": true,
+      "checked_at": "2026-11-02T20:07:48.971251+00:00"
+    },
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_CDC_RESET_RESOURCE_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 36412,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261102T194848_417793Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261102T195356_684319Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261102T201358_344221Z",
+      "directory": "build/video/face_pointer_guard_validation_20261103",
+      "receipt": "build/video/face_pointer_guard_validation_20261103/receipt.json"
+    },
+    "synthesis_review": "build/video/face_pointer_guard_synthesis_review_20261103/result.json",
+    "system_review": {
+      "status": "PASS",
+      "result": "build/soc/face_system-20261102T195356_684319Z/result.json",
+      "modes": "RAW/BOX/AVATAR",
+      "complete_seven_segment_model_avatar_load": true,
+      "actual_cpu_npu": true,
+      "cycles": 49663086,
+      "errors": 0,
+      "warnings": 0,
+      "shared_source_count": 132,
+      "same_elf_and_memory_words": true,
+      "frozen_validation_inputs_verified": 457
+    },
+    "resources": {
+      "lut": 49087,
+      "registers": 47678,
+      "drm": 141.5
+    },
+    "completed_runs": {
+      "pointer_guard_seed4_placement": {
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_pointer_guard_place_flow_20261103",
+        "receipt": "build/video/face_pointer_guard_place_flow_20261103/receipt.json",
+        "python_pid": 28072,
+        "child_pid": null,
+        "placement": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_pointer_guard_place_20261103",
+        "seed": 4,
+        "route_started": false
+      },
+      "pointer_guard_fixed_placement_route": {
+        "status": "FAILED_ROUTE_TIMEOUT",
+        "stage": "STOPPED",
+        "directory": "build/video/pds/face_pointer_guard_route_20261103",
+        "receipt": "build/video/pds/face_pointer_guard_route_20261103/receipt.json",
+        "python_pid": 472,
+        "pds_pid": null,
+        "seed": 4,
+        "route_started": true,
+        "hard_timeout_seconds": 5400,
+        "error": "90-minute route ceiling reached; recorded PDS process tree stopped; no automatic retry",
+        "last_unrouted_nets": 34720
+      },
+      "pointer_guard_congestion_diagnostic": {
+        "status": "DIAGNOSTIC_INCOMPLETE_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "python_pid": 40636,
+        "pds_pid": null,
+        "directory": "build/video/pds/face_pointer_guard_congestion_20261103",
+        "receipt": "build/video/pds/face_pointer_guard_congestion_20261103/receipt.json",
+        "hard_timeout_seconds": 600,
+        "acceptance_route": false
+      }
+    },
+    "placement_review": {
+      "status": "PLACEMENT_SETUP_RECOVERY_REMOVAL_PULSE_PASS_DDR_HOLD_OPEN",
+      "analysis": "build/video/pds/face_pointer_guard_place_20261103/placement_analysis/result.json",
+      "route_admission": "build/video/face_pointer_guard_route_review_20261103/result.json",
+      "setup_slow_ns": 0.827,
+      "setup_fast_ns": 1.302,
+      "hold_slow_ns": -0.354,
+      "hold_fast_ns": -0.413,
+      "hold_slow_failing_endpoints": 140,
+      "hold_fast_failing_endpoints": 225,
+      "gate_sites_verified": true,
+      "gray_bounds_matched": 23,
+      "timing_closed": false
+    },
+    "route_failure_review": "build/video/face_pointer_guard_route_failure_20261103/result.json"
   }
 }

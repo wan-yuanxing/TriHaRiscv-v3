@@ -1,13 +1,15 @@
 `timescale 1ns/1ps
 `default_nettype none
 `include "test_config.vh"
+`include "avatar_preset.vh"
 // Production application and actual capture/B03/display. Only the camera input
 // stimulus and the final native DDR byte store are simulation models.
-module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=0);
+module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=0,AVATAR_BOOT=0);
     reg compute_clk_i=0;
     reg video_clk_i=0;
     reg pixel_clk=0;
     reg rst_ni=0;
+    reg mode_button_n=1;
     reg pixel_reset_n=0;
     reg init_done_i=0;
     reg model_sealed_i=0;
@@ -139,19 +141,21 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
     wire raw_error;
     wire [7:0] link_code;
     wire [7:0] raw_code;
-    always #(BOARD_PROFILE?4:5) compute_clk_i=~compute_clk_i;
+    always #5 compute_clk_i=~compute_clk_i;
     always #4 video_clk_i=~video_clk_i;
     always #12.5 pixel_clk=~pixel_clk;
     reg grs_n=0;GTP_GRS GRS_INST(.GRS_N(grs_n));
-    triha_face_system #(.ENABLE_AVATAR(0),.ENABLE_MODEL_LOADER(BOOT_LOAD),
+    triha_face_system #(.ENABLE_AVATAR(AVATAR_BOOT),.BOOT_AVATAR(AVATAR_BOOT),.ENABLE_MODEL_LOADER(BOOT_LOAD),
+        .ENABLE_MODE_KEY(AVATAR_BOOT),.MODE_KEY_CLOCK_HZ(1000),.ENABLE_CAPTURE_PREVIEW(!BOARD_PROFILE),
         .CACHE_ENABLE(BOARD_PROFILE?0:1),.MINIMAL_CONTROL_CPU(BOARD_PROFILE),
-        .ENABLE_ROW_CACHE(BOARD_PROFILE?0:1),.ENABLE_MINIMAL_BOX(BOARD_PROFILE),
+        .ENABLE_ROW_CACHE(BOARD_PROFILE?0:1),.ENABLE_MINIMAL_BOX(BOARD_PROFILE&&!AVATAR_BOOT),
         .ENABLE_HARDWARE_POST(BOARD_PROFILE?0:1),.TRUSTED_MODEL(BOARD_PROFILE),
         .M_LANES(BOARD_PROFILE?2:16),.QUANTIZER_LANES(BOARD_PROFILE?1:2)) u_dut(
         .compute_clk_i(compute_clk_i),
         .video_clk_i(video_clk_i),
         .pixel_clk(pixel_clk),
         .rst_ni(rst_ni),
+        .mode_button_n(mode_button_n),
         .pixel_reset_n(pixel_reset_n),
         .init_done_i(init_done_i),
         .model_sealed_i(model_sealed_i),
@@ -317,7 +321,7 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             end
         end
     endfunction
-    integer written[0:2],slot_frame[0:2],write_slot,offset;reg [2:0] display_lease=0,captured=0;
+    integer written[0:2],slot_frame[0:2],write_slot,offset,avatar_written=0;reg [2:0] display_lease=0,captured=0;
     always @(posedge ddr_clk)begin
         if(!ddr_rst)begin writing<=0;reading<=0;h_rvalid<=0;wi<=0;ri<=0;ticks<=0;end
         else begin
@@ -335,6 +339,11 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
                         offset=(wa+lane-MEMORY_BASE)/32;
                         if(covered[offset][lane])$fatal(1,"FACE_SYSTEM duplicate capture byte %h",wa+lane);
                         covered[offset][lane]=1;written[write_slot]=written[write_slot]+1;
+                    end else if(AVATAR_BOOT&&wa+lane>=`TRIHA_AVATAR_BASE&&wa+lane<`TRIHA_AVATAR_BASE+`TRIHA_AVATAR_BYTES)begin
+                        if(!u_dut.boot_owner||model_sealed_o)$fatal(1,"FACE_BOOT sealed avatar write");
+                        offset=(wa+lane-MEMORY_BASE)/32;
+                        if(covered[offset][lane])$fatal(1,"FACE_BOOT duplicate avatar byte");
+                        covered[offset][lane]=1;avatar_written=avatar_written+1;
                     end else if(wa+lane<32'h82900000)$fatal(1,"FACE_SYSTEM write in capture guard gap %h",wa+lane);
                 end
                 wa<=wa+32;wi<=wi+1;w_count<=w_count+1;if(wi==wn-1)writing<=0;
@@ -386,7 +395,7 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
         for(index=0;index<294912;index=index+1)begin memory[index]={32{8'ha5}};covered[index]=0;end
         for(index=0;index<3;index=index+1)begin written[index]=0;slot_frame[index]=0;end
         fd=$fopen("uploads.txt","r");if(!fd)$fatal(1,"FACE_SYSTEM uploads missing");
-        count=$fscanf(fd,"%d\n",uploads);if(count!=1||uploads!=6)$fatal(1,"FACE_SYSTEM uploads count");
+        count=$fscanf(fd,"%d\n",uploads);if(count!=1||uploads!=(AVATAR_BOOT?7:6))$fatal(1,"FACE_SYSTEM uploads count");
         for(index=0;index<uploads;index=index+1)begin
             count=$fscanf(fd,"%h %d %s\n",load_address,preload_words,leaf);
             if(count!=3||load_address<MEMORY_BASE||load_address+preload_words>MEMORY_END||load_address%32||preload_words%32)$fatal(1,"FACE_SYSTEM preload geometry");
@@ -423,7 +432,9 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
                 $display("FACE_BOOT_SEGMENT segment=%0d bytes=%0d packets=%0d",index,preload_words,boot_packets);
             end
             $fclose(fd);
-            if(!model_sealed_o||writing||reading||h_rvalid)$fatal(1,"FACE_BOOT seal/debt");
+            // With avatar boot, the checked cache reader may already own reads
+            // after final boot B retirement. Those are not boot write debt.
+            if(!model_sealed_o||writing||(!AVATAR_BOOT&&(reading||h_rvalid)))$fatal(1,"FACE_BOOT seal/debt");
             boot_done=1;
         end
     end
@@ -445,6 +456,7 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
     `define D u_dut.u_video.g_compact.u_display
     `define F u_dut.u_compute.u_npu.u_service.u_frame
     integer requests=0,completions=0,records=0,retires=0,feedbacks=0,reuses=0,j,s,addr;
+    reg [31:0] submitted_frame[0:31];reg [1:0] submitted_mode[0:31],submitted_slot[0:31];reg [31:0] submitted_seen=0;
     always @(posedge video_clk_i)if(u_dut.video_reset_n)begin
         if(BOOT_LOAD&&!model_sealed_o&&(`V.capture_req_valid_o||u_dut.u_compute.u_npu.start_valid))
             $fatal(1,"FACE_BOOT application admitted before model seal");
@@ -470,11 +482,24 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             for(j=0;j<307200;j=j+1)if(byte_at(32'h82800000+s*32'h50000+j)!==source_input[j])$fatal(1,"FACE_SYSTEM input byte slot=%0d index=%0d",s,j);
             captured[s]=1;completions=completions+1;$display("FACE_SYSTEM_CAPTURE_DONE slot=%0d frame=%0d bytes=%0d",s,slot_frame[s],written[s]);
         end
+        if(`D.cmd_valid&&`D.cmd_ready)begin
+            if(`D.cmd_seq==0||`D.cmd_seq>=32||submitted_seen[`D.cmd_seq])$fatal(1,"FACE_SYSTEM unique submission seq");
+            submitted_seen[`D.cmd_seq]=1;submitted_frame[`D.cmd_seq]=`D.cmd_frame;
+            submitted_slot[`D.cmd_seq]=`D.cmd_slot;submitted_mode[`D.cmd_seq]=`D.cmd_mode;
+            if(`D.cmd_mode_only&&!display_lease[`D.cmd_slot])$fatal(1,"FACE_SYSTEM mode-only without active lease");
+        end
         if(`D.record_valid&&`D.record_ready)begin
             s=`D.record_slot;
             if(display_lease[s]||!captured[s]||slot_frame[s]!=`D.record_frame)$fatal(1,"FACE_SYSTEM present identity");
-            if(`D.cmd_mode!=1||`D.cmd_data[9*32+:32]!=(`EXPECTED_FACES?17:3)||`D.cmd_data[12*32+:32]!=`EXPECTED_FACES||`D.cmd_data[13*32+:32]!=0)
-                $fatal(1,"FACE_SYSTEM BOX flags/mask/primary");
+            if(`D.cmd_mode>2||`D.cmd_data[9*32+:32]!=(`EXPECTED_FACES?(AVATAR_BOOT?25:17):3)||`D.cmd_data[12*32+:32]!=`EXPECTED_FACES||`D.cmd_data[13*32+:32]!=0)
+                $fatal(1,"FACE_SYSTEM flags/mask/primary");
+            if(AVATAR_BOOT&&`EXPECTED_FACES)begin
+                if(`D.cmd_data[14*32+:32]!=`TRIHA_AVATAR_ID||`D.cmd_data[15*32+:32]!=`TRIHA_AVATAR_GENERATION||
+                   `D.cmd_data[16*32+:32]!=`TRIHA_AVATAR_BASE||`D.cmd_data[17*32+:32]!=262144||
+                   `D.cmd_data[18*32+:32]!=256||`D.cmd_data[19*32+:32]!=256||`D.cmd_data[20*32+:32]!=1024||
+                   `D.cmd_data[21*32+:32]!=`EXPECTED_AVATAR_XY0||`D.cmd_data[22*32+:32]!=`EXPECTED_AVATAR_XY1)
+                    $fatal(1,"FACE_SYSTEM avatar descriptor differs from independent fixture");
+            end else if(`D.cmd_data[14*32+:288]!=0)$fatal(1,"FACE_SYSTEM unexpected asset metadata");
             if(`EXPECTED_FACES)begin
                 if(`D.cmd_data[32*32+:32]!=(`EXPECTED_X|(`EXPECTED_Y<<16))||
                     `D.cmd_data[33*32+:32]!=((`EXPECTED_X+`EXPECTED_W)|((`EXPECTED_Y+`EXPECTED_H)<<16))||
@@ -488,23 +513,35 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             display_lease[s]=0;retires=retires+1;$display("FACE_SYSTEM_RELEASE frame=%0d slot=%0d",`D.retire_frame,s);
         end
     end
-    integer pixels[0:2];reg [2:0] full_pixels=0;reg [2:0] pixel_open=0;integer f;
-    reg expected_edge;reg [23:0] expected_rgb;
-    initial begin pixels[0]=0;pixels[1]=0;pixels[2]=0;end
+    integer pixels[0:2];reg [2:0] full_pixels=0,full_modes=0;reg [2:0] pixel_open=0;integer f;
+    reg [31:0] scan_seq[0:2];reg [1:0] scan_mode[0:2];
+    reg expected_edge,expected_avatar;reg [23:0] expected_rgb;reg [24:0] avatar_golden[0:479999];
+    initial begin pixels[0]=0;pixels[1]=0;pixels[2]=0;if(AVATAR_BOOT)$readmemh("avatar_golden.hex",avatar_golden);end
+    initial if(AVATAR_BOOT&&!BOOT_ONLY)begin
+        wait(full_modes[0]);@(negedge video_clk_i);mode_button_n=0;repeat(32)@(negedge video_clk_i);
+        mode_button_n=1;repeat(32)@(negedge video_clk_i);
+        wait(full_modes[1]);@(negedge video_clk_i);mode_button_n=0;repeat(32)@(negedge video_clk_i);
+        mode_button_n=1;
+    end
     always @(posedge pixel_clk)if(pixel_reset_n)begin
         #1;
-        if(out_de&&out_mode==1&&out_frame>=1&&out_frame<=2)begin
+        if(out_de&&out_seq!=0&&out_frame>=1&&out_frame<=2)begin
             f=out_frame;
-            expected_edge=`EXPECTED_FACES&&out_x>=`EXPECTED_X&&out_x<`EXPECTED_X+`EXPECTED_W&&
+            expected_edge=out_mode==1&&`EXPECTED_FACES&&out_x>=`EXPECTED_X&&out_x<`EXPECTED_X+`EXPECTED_W&&
                 out_y>=`EXPECTED_Y&&out_y<`EXPECTED_Y+`EXPECTED_H&&
                 (out_x<`EXPECTED_X+2||out_x>=`EXPECTED_X+`EXPECTED_W-2||out_y<`EXPECTED_Y+2||out_y>=`EXPECTED_Y+`EXPECTED_H-2);
             expected_rgb=expected_edge?24'hff0000:source_rgb[out_y*800+out_x];
-            if(out_rgb!==expected_rgb||out_box!==expected_edge||out_point||out_avatar||out_fault||out_generation!=7||out_slot!=f-1||out_seq!=f)$fatal(1,"FACE_SYSTEM pixel data/identity frame=%0d xy=%0d,%0d actual=%h expected=%h",f,out_x,out_y,out_rgb,expected_rgb);
-            if(out_sof)begin pixels[f]=0;pixel_open[f]=1;end
+            expected_avatar=0;
+            if(out_mode==2&&AVATAR_BOOT)begin expected_rgb=avatar_golden[out_y*800+out_x][23:0];expected_avatar=avatar_golden[out_y*800+out_x][24];end
+            if(out_rgb!==expected_rgb||out_box!==expected_edge||out_point||out_avatar!==expected_avatar||out_fault||out_generation!=7||out_slot!=f-1||
+               out_seq>=32||!submitted_seen[out_seq]||submitted_frame[out_seq]!=out_frame||submitted_slot[out_seq]!=out_slot||submitted_mode[out_seq]!=out_mode)
+                $fatal(1,"FACE_SYSTEM pixel data/identity frame=%0d mode=%0d seq=%0d xy=%0d,%0d actual=%h expected=%h",f,out_mode,out_seq,out_x,out_y,out_rgb,expected_rgb);
+            if(out_sof)begin pixels[f]=0;pixel_open[f]=1;scan_seq[f]=out_seq;scan_mode[f]=out_mode;end
             if(pixel_open[f])begin
+                if(scan_seq[f]!=out_seq||scan_mode[f]!=out_mode)$fatal(1,"FACE_SYSTEM mode changed inside active frame");
                 if(out_x!=pixels[f]%800||out_y!=pixels[f]/800)$fatal(1,"FACE_SYSTEM pixel coordinate sequence");
                 pixels[f]=pixels[f]+1;
-                if(pixels[f]==480000)begin full_pixels[f]=1;pixel_open[f]=0;end
+                if(pixels[f]==480000)begin full_pixels[f]=1;full_modes[out_mode]=1;pixel_open[f]=0;$display("FACE_SYSTEM_FULL_PIXELS frame=%0d mode=%0d seq=%0d",f,out_mode,out_seq);end
             end
         end
     end
@@ -545,16 +582,19 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             end
             if(u_dut.u_compute.cpu_arvalid&&u_dut.u_compute.cpu_arready)cpu_reads=cpu_reads+1;
             software_results=cpu_word(`APP_BASE+`OFF_RESULTS);
-            if(BOOT_ONLY&&boot_done&&requests>=1)begin
+            if(BOOT_ONLY&&boot_done&&requests>=1&&(!AVATAR_BOOT||(asset_ready&&pixel_material_ready)))begin
                 if(cpu_word(`FACE_AVATAR_RUN_STATUS)!==1||fault_o)$fatal(1,"FACE_BOOT CPU did not enter application");
-                $display("FACE_BOOT_PASS segments=6 packets=%0d application_admitted=1 cycles=%0d",boot_packets,cycles);$finish;
+                if(AVATAR_BOOT&&(asset_id!==`TRIHA_AVATAR_ID||asset_generation!==`TRIHA_AVATAR_GENERATION||
+                    checked_bytes!==`TRIHA_AVATAR_BYTES||crc!==`TRIHA_AVATAR_CRC32||!result_success||
+                    !u_dut.material_load_sent||u_dut.boot_owner||avatar_written!=`TRIHA_AVATAR_BYTES))$fatal(1,"FACE_BOOT avatar cache identity/seal");
+                $display("FACE_BOOT_PASS segments=%0d packets=%0d application_admitted=1 avatar_cache=%0d cycles=%0d",AVATAR_BOOT?7:6,boot_packets,AVATAR_BOOT,cycles);$finish;
             end
             if(verified<2&&software_results>verified)verify_result(verified);
             if(cycles%1000000==0)$display("FACE_SYSTEM_PROGRESS cycles=%0d captures=%0d results=%0d records=%0d commits=%0d releases=%0d",cycles,completions,verified,records,cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS),cpu_word(`APP_BASE+`OFF_RELEASES));
-            if(verified==2&&full_pixels[1]&&full_pixels[2]&&retires>=1&&reuses>=1&&
+            if(verified==2&&full_pixels[1]&&full_pixels[2]&&(!AVATAR_BOOT||(full_modes==7&&cpu_word(`APP_BASE+`OFF_MODE_COMMITS)>=1))&&retires>=1&&reuses>=1&&
                 cpu_word(`APP_BASE+`OFF_RELEASES)>=1&&cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS)>=2)begin
                 if(requests<4||completions<3||cpu_reads<64||cpu_word(`APP_BASE+`OFF_NO_FREE)==0)$fatal(1,"FACE_SYSTEM missing long-inference/three-slot coverage");
-                $display("FACE_SYSTEM_PASS captures=%0d requests=%0d results=%0d records=%0d commits=%0d releases=%0d reuses=%0d full_pixel_frames=2 cpu_reads=%0d nativeAW=%0d nativeAR=%0d cycles=%0d",completions,requests,verified,records,cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS),retires,reuses,cpu_reads,aw_count,ar_count,cycles);
+                $display("FACE_SYSTEM_PASS captures=%0d requests=%0d results=%0d records=%0d commits=%0d releases=%0d reuses=%0d full_pixel_frames=2 modes=%b cpu_reads=%0d nativeAW=%0d nativeAR=%0d cycles=%0d",completions,requests,verified,records,cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS),retires,reuses,full_modes,cpu_reads,aw_count,ar_count,cycles);
                 $finish;
             end
         end

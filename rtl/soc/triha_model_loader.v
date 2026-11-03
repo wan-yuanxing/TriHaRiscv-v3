@@ -3,7 +3,9 @@
 // Boot-only, fixed-range loader. Packet: "THB1", segment LE32, offset LE32,
 // payload CRC32 LE32, 256 payload bytes. Reply: "THA1", status, next segment,
 // two zero bytes, next offset LE32. Only the last committed packet may retry.
-// Segment order: program, parameter image, POST table, HEAD A/B/C. The shared
+// Segment order: program, parameter image, POST table, HEAD A/B/C, optional
+// fixed avatar at SOC_AVATAR_BASE. AVATAR_BYTES=0 preserves model-only boot.
+// Avatar-enabled boot seals only after its CRC and final B also retire. The shared
 // AXI/HMIC bridge must verify writes before returning B. A model is sealed only
 // after every complete segment CRC and every B retire; faults require a common
 // system reset. No address from the serial wire reaches DDR without validation.
@@ -12,6 +14,7 @@ module triha_model_loader #(
  parameter TABLE_BYTES=`B03_POST_TABLE_BYTES,HEADS_BYTES=`B03_HEADS_BYTES,
  parameter PROGRAM_CRC=`B03_PROGRAM_CRC32,PARAMETER_CRC=`B03_PARAMETER_CRC32,
  parameter TABLE_CRC=`B03_POST_TABLE_CRC32,HEADS_CRC=32'hed5ca9c5,
+ parameter AVATAR_BYTES=0,AVATAR_CRC=32'd0,
  parameter RX_TIMEOUT_CYCLES=125000000
 )(input wire clk_i,rst_ni,healthy_i,rx_valid_i,input wire[7:0] rx_data_i,input wire rx_error_i,
  output wire rx_ready_o,tx_valid_o,input wire tx_ready_i,output wire[7:0] tx_data_o,
@@ -42,10 +45,12 @@ module triha_model_loader #(
    2:base=`B03_POST_TABLE_BASE;
    3:base=`B03_OUTPUT_BASES_0+`B03_HEADS_OFFSET;
    4:base=`B03_OUTPUT_BASES_1+`B03_HEADS_OFFSET;
-   default:base=`B03_OUTPUT_BASES_2+`B03_HEADS_OFFSET;
+   5:base=`B03_OUTPUT_BASES_2+`B03_HEADS_OFFSET;
+   default:base=`SOC_AVATAR_BASE;
  endcase end endfunction
- wire[31:0] segment_bytes=segment==0?PROGRAM_BYTES:segment==1?PARAMETER_BYTES:segment==2?TABLE_BYTES:HEADS_BYTES;
- wire[31:0] segment_expected=segment==0?PROGRAM_CRC:segment==1?PARAMETER_CRC:segment==2?TABLE_CRC:HEADS_CRC;
+ localparam [2:0] FINAL_SEGMENT=AVATAR_BYTES!=0?3'd6:3'd5;
+ wire[31:0] segment_bytes=segment==0?PROGRAM_BYTES:segment==1?PARAMETER_BYTES:segment==2?TABLE_BYTES:segment==6?AVATAR_BYTES:HEADS_BYTES;
+ wire[31:0] segment_expected=segment==0?PROGRAM_CRC:segment==1?PARAMETER_CRC:segment==2?TABLE_CRC:segment==6?AVATAR_CRC:HEADS_CRC;
  wire last_block=offset+32'd256==segment_bytes;
  wire duplicate=last_valid&&packet_segment==last_segment&&packet_offset==last_offset&&packet_expected==last_crc;
  assign rx_ready_o=(state==SEARCH||state==HEADER||state==PAYLOAD)&&healthy_i;
@@ -113,7 +118,7 @@ module triha_model_loader #(
            last_valid<=1;last_segment<=packet_segment;last_offset<=packet_offset;last_crc<=packet_expected;
            if(last_block)begin
              offset<=0;segment<=segment+1'b1;segment_crc<=32'hffffffff;
-             if(segment==5)model_sealed_o<=1;
+             if(segment==FINAL_SEGMENT)model_sealed_o<=1;
            end else begin offset<=offset+32'd256;segment_crc<=pending_crc;end
            answer(0);
          end

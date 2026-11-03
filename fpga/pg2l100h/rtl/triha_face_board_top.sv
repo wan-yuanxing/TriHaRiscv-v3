@@ -4,8 +4,8 @@
 //
 // HDMI capture, the TriHa application CPU, the B03 frame service and HDMI
 // scanout share the single native DDR owner. The DDR IP supplies the 125 MHz
-// core clock; compute and video use that clock in this board target. The
-// reusable system keeps the frame ABI and reset/epoch rules in one place.
+// video/DDR-user clock. CPU and B03 run from the separate 100 MHz compute PLL;
+// triha_face_system contains the AXI CDC at that boundary.
 module triha_face_full_top #(
     parameter integer CLOCK_HZ=27_000_000,
     parameter integer STARTUP_CYCLES=CLOCK_HZ/1000,
@@ -21,10 +21,11 @@ module triha_face_full_top #(
     // private instruction/data caches so the complete B03 graph and BOX
     // renderer fit the PG2L100H device.
     parameter integer CACHE_ENABLE=0,
-    parameter integer ENABLE_MINIMAL_BOX=1,
+    parameter integer ENABLE_MINIMAL_BOX=0,
+    parameter integer ENABLE_AVATAR=1,
     // Full CPU control remains selectable; the board default uses the
-    // resource/timing-bounded control profile after synthesis showed a
-    // -2.318 ns full-CPU setup WNS.
+    // resource/timing-bounded control profile. CPU/B03 run at 100 MHz;
+    // capture, UART/model-loader and DDR/video use the 125 MHz user clock.
     parameter integer MINIMAL_CONTROL_CPU=1,
     parameter integer ENABLE_HARDWARE_POST=0,
     parameter integer TRUSTED_MODEL=1,
@@ -34,7 +35,7 @@ module triha_face_full_top #(
     parameter integer M_LANES=2,
     parameter integer QUANTIZER_LANES=1
 )(
-    input wire sys_clk,rst_in,ref_clk_p,ref_clk_n,uart_rx,
+    input wire sys_clk,rst_in,ref_clk_p,ref_clk_n,uart_rx,mode_button_n,
     input wire pixclk_in,hs_in,vs_in,de_in,
     input wire [7:0] r_in,g_in,b_in,
     output wire rstn_out,hd_scl,pix_clk,
@@ -50,7 +51,7 @@ module triha_face_full_top #(
     inout wire [31:0] mem_dq,
     output wire [3:0] mem_dm
 );
-    wire free_clk,ref_clk,core_clk,core_reset_n,controller_reset_n;
+    wire free_clk,ref_clk,ddr_clk,compute_clk,video_reset_n,controller_reset_n;
     wire cfg_clk,locked,pixel_reset_n,cfg_reset_n;
     video_preview_clock_reset clocks(
         .sys_clk(sys_clk),.reset_n(rst_in),.pixel_clk(pix_clk),.cfg_clk(cfg_clk),
@@ -89,17 +90,23 @@ module triha_face_full_top #(
         end
     end
     assign controller_reset_n=free_reset_n&&startup_done;
+    wire compute_pll_lock;
+    triha_compute_pll compute_clock_gen(
+        .clkin1(ref_clk),.clkout0(compute_clk),.lock(compute_pll_lock));
+    // PLL loss starts one coordinated application reset epoch. DDR PHY reset
+    // remains controlled by the independent board startup sequence.
+    wire application_reset_n=controller_reset_n&&compute_pll_lock;
     (* syn_preserve=1 *) reg [1:0] core_release,display_release,ingress_release;
-    always @(posedge core_clk or negedge controller_reset_n)
-        if(!controller_reset_n) core_release<=0;
+    always @(posedge ddr_clk or negedge application_reset_n)
+        if(!application_reset_n) core_release<=0;
         else core_release<={core_release[0],1'b1};
-    assign core_reset_n=core_release[1];
-    always @(posedge pix_clk or negedge controller_reset_n)
-        if(!controller_reset_n) display_release<=0;
+    assign video_reset_n=core_release[1];
+    always @(posedge pix_clk or negedge application_reset_n)
+        if(!application_reset_n) display_release<=0;
         else display_release<={display_release[0],1'b1};
     wire display_reset_n=display_release[1];
-    always @(posedge pixclk_in or negedge controller_reset_n)
-        if(!controller_reset_n) ingress_release<=0;
+    always @(posedge pixclk_in or negedge application_reset_n)
+        if(!application_reset_n) ingress_release<=0;
         else ingress_release<={ingress_release[0],1'b1};
     wire ingress_reset_n=ingress_release[1];
 
@@ -146,7 +153,7 @@ module triha_face_full_top #(
     wire fifo_valid,fifo_ready,source_fault,source_overflow,arm_toggle,cancel;
     wire [47:0] fifo_data;
     video_capture_ingress #(.FRAME_WIDTH(FRAME_WIDTH),.FRAME_HEIGHT(FRAME_HEIGHT),.ENABLE_REARM(1)) ingress(
-        .pixel_clk(pixclk_in),.pixel_reset_n(ingress_reset_n),.core_clk(core_clk),.core_reset_n(core_reset_n),
+        .pixel_clk(pixclk_in),.pixel_reset_n(ingress_reset_n),.core_clk(ddr_clk),.core_reset_n(video_reset_n),
         .pixel_valid(candidate),.pixel_rgb(candidate_rgb),.pixel_x(candidate_x),.pixel_y(candidate_y),
         .frame_start(frame_begin),.frame_end(frame_end),.frame_good(frame_good),
         .mode_good(capture_ready),.rx_ready(rx_enable_sync[1]),.arm_toggle(arm_toggle),.cancel(cancel),
@@ -154,7 +161,7 @@ module triha_face_full_top #(
         .source_fault(source_fault),.overflow(source_overflow));
     wire capture_stream_valid,capture_stream_ready;
     wire [47:0] capture_stream_data;
-    video_stream_register #(.DATA_WIDTH(48)) capture_register(.clk(core_clk),.reset_n(core_reset_n),
+    video_stream_register #(.DATA_WIDTH(48)) capture_register(.clk(ddr_clk),.reset_n(video_reset_n),
         .s_valid(fifo_valid),.s_ready(fifo_ready),.s_data(fifo_data),.m_valid(capture_stream_valid),
         .m_ready(capture_stream_ready),.m_data(capture_stream_data));
 
@@ -169,7 +176,7 @@ module triha_face_full_top #(
     wire [3:0] h_wid,h_rid;
     ddr3_test #(.MEM_ROW_WIDTH(15),.MEM_COLUMN_WIDTH(10),.MEM_BANK_WIDTH(3),
         .MEM_DQ_WIDTH(32),.MEM_DM_WIDTH(4),.CTRL_ADDR_WIDTH(28)) I_ips_ddr_top(
-        .ref_clk(ref_clk),.resetn(controller_reset_n),.core_clk(core_clk),
+        .ref_clk(ref_clk),.resetn(controller_reset_n),.core_clk(ddr_clk),
         .pll_lock(pll_lock),.phy_pll_lock(phy_pll_lock),.gpll_lock(gpll_lock),
         .rst_gpll_lock(rst_gpll_lock),.ddrphy_cpd_lock(ddrphy_cpd_lock),.ddr_init_done(ip_init_done),
         .axi_awaddr(h_awaddr),.axi_awuser_ap(1'b0),.axi_awuser_id(h_awid),.axi_awlen(h_awlen),
@@ -198,13 +205,14 @@ module triha_face_full_top #(
     wire [7:0] boot_rx_data,boot_tx_data;
     localparam integer BOOT_UART_DIVISOR=(125_000_000+UART_BAUD/2)/UART_BAUD;
     triha_uart_rx #(.DIVISOR(BOOT_UART_DIVISOR)) boot_uart_rx(
-        .clk_i(core_clk),.rst_ni(core_reset_n),.rx_i(uart_rx),.ready_i(boot_rx_ready),
+        .clk_i(ddr_clk),.rst_ni(video_reset_n),.rx_i(uart_rx),.ready_i(boot_rx_ready),
         .valid_o(boot_rx_valid),.data_o(boot_rx_data),.error_o(boot_rx_error));
     triha_uart_tx #(.DIVISOR(BOOT_UART_DIVISOR)) boot_uart_tx(
-        .clk_i(core_clk),.rst_ni(core_reset_n),.valid_i(boot_tx_valid),.data_i(boot_tx_data),
+        .clk_i(ddr_clk),.rst_ni(video_reset_n),.valid_i(boot_tx_valid),.data_i(boot_tx_data),
         .ready_o(boot_tx_ready),.tx_o(uart_tx));
-    triha_face_system #(.CACHE_ENABLE(CACHE_ENABLE),.ENABLE_AVATAR(0),.ENABLE_MODEL_LOADER(1),.ENABLE_ROW_CACHE(0),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) face(
-        .compute_clk_i(core_clk),.video_clk_i(core_clk),.pixel_clk(pix_clk),.rst_ni(controller_reset_n),
+    triha_face_system #(.CACHE_ENABLE(CACHE_ENABLE),.ENABLE_AVATAR(ENABLE_AVATAR),.BOOT_AVATAR(ENABLE_AVATAR),.ENABLE_MODE_KEY(ENABLE_AVATAR),.ENABLE_CAPTURE_PREVIEW(0),.ENABLE_MODEL_LOADER(1),.ENABLE_ROW_CACHE(0),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) face(
+        .compute_clk_i(compute_clk),.video_clk_i(ddr_clk),.pixel_clk(pix_clk),.rst_ni(application_reset_n),
+        .mode_button_n(mode_button_n),
         .pixel_reset_n(display_reset_n),.init_done_i(native_ready),.model_sealed_i(1'b0),
         .boot_rx_valid_i(boot_rx_valid),.boot_rx_data_i(boot_rx_data),.boot_rx_error_i(boot_rx_error),
         .boot_rx_ready_o(boot_rx_ready),.boot_tx_ready_i(boot_tx_ready),.boot_tx_valid_o(boot_tx_valid),
@@ -252,7 +260,8 @@ module triha_face_board_top #(
     parameter integer PAD_BOTTOM=40,
     parameter integer RX_WARMUP_FRAMES=128,
     parameter integer CACHE_ENABLE=0,
-    parameter integer ENABLE_MINIMAL_BOX=1,
+    parameter integer ENABLE_MINIMAL_BOX=0,
+    parameter integer ENABLE_AVATAR=1,
     parameter integer DEMO_BOX_ONLY=0,
     parameter integer MINIMAL_CONTROL_CPU=1,
     parameter integer ENABLE_HARDWARE_POST=0,
@@ -260,7 +269,7 @@ module triha_face_board_top #(
     parameter integer M_LANES=2,
     parameter integer QUANTIZER_LANES=1
 )(
-    input wire sys_clk,rst_in,ref_clk_p,ref_clk_n,uart_rx,
+    input wire sys_clk,rst_in,ref_clk_p,ref_clk_n,uart_rx,mode_button_n,
     input wire pixclk_in,hs_in,vs_in,de_in,
     input wire [7:0] r_in,g_in,b_in,
     output wire rstn_out,hd_scl,pix_clk,
@@ -311,8 +320,9 @@ module triha_face_board_top #(
                 .UART_INTERVAL_CYCLES(UART_INTERVAL_CYCLES),.FRAME_WIDTH(FRAME_WIDTH),
                 .FRAME_HEIGHT(FRAME_HEIGHT),.PAD_TOP(PAD_TOP),.PAD_BOTTOM(PAD_BOTTOM),
                 .RX_WARMUP_FRAMES(RX_WARMUP_FRAMES),.CACHE_ENABLE(CACHE_ENABLE),
-                .ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) impl(
+                .ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_AVATAR(ENABLE_AVATAR),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) impl(
                 .sys_clk(sys_clk),.rst_in(rst_in),.ref_clk_p(ref_clk_p),.ref_clk_n(ref_clk_n),.uart_rx(uart_rx),
+                .mode_button_n(mode_button_n),
                 .pixclk_in(pixclk_in),.hs_in(hs_in),.vs_in(vs_in),.de_in(de_in),
                 .r_in(r_in),.g_in(g_in),.b_in(b_in),.rstn_out(rstn_out),.hd_scl(hd_scl),
                 .pix_clk(pix_clk),.hd_sda(hd_sda),.hs_out(hs_out),.vs_out(vs_out),.de_out(de_out),

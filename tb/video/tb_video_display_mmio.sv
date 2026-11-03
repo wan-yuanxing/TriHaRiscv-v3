@@ -3,6 +3,7 @@
 // Literal software addresses and independent event identities are the oracle.
 module tb_video_display_mmio;
     reg clk_i=0,rst_ni=0;always #4 clk_i=~clk_i;
+    reg [1:0] mode_request_i=0; // disabled optional input when testing compact ABI compatibility
     reg [31:0] s_axi_awaddr_i=0,s_axi_wdata_i=0,s_axi_araddr_i=0;
     reg [2:0] s_axi_awprot_i=0,s_axi_arprot_i=0;
     reg [3:0] s_axi_wstrb_i=0;

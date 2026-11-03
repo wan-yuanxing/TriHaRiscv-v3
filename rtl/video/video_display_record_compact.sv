@@ -1,9 +1,10 @@
 `timescale 1ns/1ps
 `default_nettype none
 // Frozen software ABI, sole MMIO owner, actual RAW/material consumers.
-module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,TIMEOUT_CYCLES=125000000)(
+module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,TIMEOUT_CYCLES=125000000)(
  input wire  core_clk,
  input wire  core_reset_n,
+ input wire [1:0] mode_request_i,
  input wire  pixel_clk,
  input wire  pixel_reset_n,
  input wire  online,
@@ -287,9 +288,10 @@ module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HE
   .fault_code_o(owner_code)
  );
  end else begin : g_full_mmio
- video_display_mmio_compact #(.EXTERNAL_HEALTH(1),.SKIP_GUARD(ENABLE_MINIMAL_BOX)) u_mmio(
+ video_display_mmio_compact #(.EXTERNAL_HEALTH(1),.SKIP_GUARD(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY)) u_mmio(
   .clk_i(core_clk),
   .rst_ni(core_reset_n),
+  .mode_request_i(mode_request_i),
   .s_axi_awaddr_i(s_axi_awaddr_i),
   .s_axi_awprot_i(s_axi_awprot_i),
   .s_axi_awvalid_i(s_axi_awvalid_i),

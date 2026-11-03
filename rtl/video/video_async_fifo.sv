@@ -31,7 +31,9 @@ module video_async_fifo #(
     // register is one additional word of capacity and holds while stalled.
     wire prefetch = rd_run && (!rd_valid || rd_ready) && !rd_empty;
     wire [ADDR_WIDTH:0] wr_binary_next = wr_binary + {{ADDR_WIDTH{1'b0}},write_fire};
-    wire [ADDR_WIDTH:0] rd_binary_next = rd_binary + {{ADDR_WIDTH{1'b0}},prefetch};
+    // Form the increment and Gray conversion before the late consumer READY.
+    // Prefetch selects the already computed state, rather than entering carry.
+    wire [ADDR_WIDTH:0] rd_binary_next = rd_binary + {{ADDR_WIDTH{1'b0}},1'b1};
     wire [ADDR_WIDTH:0] wr_gray_next = (wr_binary_next >> 1) ^ wr_binary_next;
     wire [ADDR_WIDTH:0] rd_gray_next = (rd_binary_next >> 1) ^ rd_binary_next;
     function automatic [ADDR_WIDTH:0] gray_to_binary(input [ADDR_WIDTH:0] gray);
@@ -96,9 +98,12 @@ module video_async_fifo #(
         if (!rd_reset_n) begin
             rd_binary <= 0; rd_gray <= 0; rd_empty <= 1; rd_valid <= 0;
         end else begin
-            rd_binary <= rd_binary_next;
-            rd_gray <= rd_gray_next;
-            rd_empty <= (rd_gray_next == wr_gray_rd_sync2);
+            if (prefetch) begin
+                rd_binary <= rd_binary_next;
+                rd_gray <= rd_gray_next;
+            end
+            rd_empty <= prefetch ? (rd_gray_next == wr_gray_rd_sync2) :
+                                   (rd_gray == wr_gray_rd_sync2);
             if (!rd_valid || rd_ready) rd_valid <= prefetch;
         end
     end

@@ -14,7 +14,7 @@ from frozen_inputs import FrozenInputs
 from run_b03_frame import ROOT, DEFAULT_ASSETS, DEFAULT_MANIFEST, common, checked_asset, load_manifest, need
 
 
-def run(out):
+def run(out,only_case=None):
     out=out.resolve();out.mkdir(parents=True,exist_ok=False)
     row={'status':'RUNNING','board_verified':False,'tests':[]}
     common.write_json(out/'result.json',row)
@@ -73,14 +73,14 @@ def run(out):
                 struct.pack_into('<4h',raw,slots[f'bbox_{stride}']+index*8,*codes)
                 expected=box(scale,index,codes)
                 tests.append((f'fraction_s{stride}_{codes[0]}',raw,[expected] if expected else []))
-        # A strong late candidate must survive the bounded 64-candidate store.
+        # Full-head oracle: no pre-NMS top-k truncation.
         raw=bytearray(26368);ranked=[]
         for index in [*range(400,464),1200]:
             prob=65535 if index==1200 else 40000
             for leaf in ('cls','obj'):struct.pack_into('<H',raw,slots[f'{leaf}_8']+index*2,prob)
             ranked.append((prob*prob,box(0,index,(0,0,0,0))))
         ranked.sort(key=lambda v:(-v[0],v[1][0]));kept=[]
-        for _,candidate in ranked[:64]:
+        for _,candidate in ranked:
             _,x,y,w,h=candidate
             def overlap(other):
                 _,ox,oy,ow,oh=other
@@ -89,6 +89,47 @@ def run(out):
             if not any(overlap(k) for k in kept):kept.append(candidate)
             if len(kept)==16:break
         tests.append(('late_strong_candidate',raw,kept))
+        # Dense large boxes suppress to fewer than 16 survivors; the lower-score
+        # small box must still be considered after the entire high-score prefix.
+        def full_nms(ranked_boxes):
+            kept=[]
+            for candidate in ranked_boxes:
+                if candidate is None:continue
+                _,x,y,w,h=candidate
+                def suppressed(other):
+                    _,ox,oy,ow,oh=other
+                    inter=max(0,min(x+w,ox+ow)-max(x,ox))*max(0,min(y+h,oy+oh)-max(y,oy))
+                    return Fraction(inter,w*h+ow*oh-inter)>Fraction(3,10)
+                if not any(suppressed(other) for other in kept):kept.append(candidate)
+                if len(kept)==16:break
+            return kept
+        for count in (64,65,128,129,2099):
+            raw=bytearray(26368)
+            ranked=[]
+            for candidate in range(count):
+                scale=0 if candidate<1600 else 1 if candidate<2000 else 2
+                index=candidate-(0,1600,2000)[scale];stride=(8,16,32)[scale]
+                for leaf in ('cls','obj'):
+                    struct.pack_into('<H',raw,slots[f'{leaf}_{stride}']+index*2,65535)
+                struct.pack_into('<4h',raw,slots[f'bbox_{stride}']+index*8,0,0,32767,32767)
+                ranked.append(box(scale,index,(0,0,32767,32767)))
+            # Last head is a visible small box in stride 32, outside top 64.
+            for leaf in ('cls','obj'):struct.pack_into('<H',raw,slots[f'{leaf}_32']+99*2,50000)
+            want=full_nms(ranked+[box(2,99,(0,0,0,0))])
+            if count<2099:
+                need(any(b[0]==2099 for b in want),'adversarial late box must survive oracle')
+            tests.append((f'suppressed_prefix_{count}',raw,want))
+        # 49999*50001 < 50000**2, but both round to the same FP32 score.
+        # Candidate id, not the raw product, breaks the tie, including NMS.
+        for overlap_tie in (False,True):
+            raw=bytearray(26368);codes=(0,0,12000,12000) if overlap_tie else (0,0,0,0)
+            ids=(410,411) if overlap_tie else (410,414)
+            for index,cls,obj in ((ids[0],49999,50001),(ids[1],50000,50000)):
+                struct.pack_into('<H',raw,slots['cls_8']+index*2,cls)
+                struct.pack_into('<H',raw,slots['obj_8']+index*2,obj)
+                struct.pack_into('<4h',raw,slots['bbox_8']+index*8,*codes)
+            tests.append(('rounded_tie_nms' if overlap_tie else 'rounded_tie_order',raw,
+                          [box(0,index,codes) for index in (ids[:1] if overlap_tie else ids)]))
         raw=bytearray(26368)
         for index,prob in ((410,55000),(411,65535),(414,60000)):
             for leaf in ('cls','obj'):struct.pack_into('<H',raw,slots[f'{leaf}_8']+index*2,prob)
@@ -101,6 +142,9 @@ def run(out):
             struct.pack_into('<H',raw,slots['obj_8']+index*2,obj)
             want=[box(0,index,(0,0,0,0))] if cls*obj>=1546188224 else []
             tests.append((f'score_{cls}_{obj}',raw,want))
+        if only_case:
+            tests=[case for case in tests if case[0]==only_case]
+            need(tests,'unknown case '+only_case)
         for name,raw,want in tests:
             path=out/(name+'.bin');path.write_bytes(raw);frozen.track(path)
             text=execute([out/'test.exe',out/'table.bin',path],name)
@@ -124,4 +168,5 @@ def run(out):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',required=True,type=Path)
-    sys.exit(run(p.parse_args().output))
+    p.add_argument('--case',help='Run one named regression (also useful for negative controls)')
+    args=p.parse_args();sys.exit(run(args.output,args.case))

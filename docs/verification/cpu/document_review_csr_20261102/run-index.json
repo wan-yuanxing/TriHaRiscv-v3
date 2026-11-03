@@ -1,0 +1,1488 @@
+{
+  "generated_local": "2026-11-03 Asia/Shanghai",
+  "scope": "P0-1/P0-2 only; excerpts are not replacements for raw build evidence",
+  "runs": [
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-red-20261102T160647459537Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160647459537Z\\result.json",
+      "result_sha256": "ffd4424ec512e48d2f15b8777e7abc442fe5d5e86037c110955b8ad2a59f5d95",
+      "phase": "red",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": []
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": []
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": []
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": []
+        }
+      ],
+      "log_refs": []
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-red-20261102T160723956699Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160723956699Z\\result.json",
+      "result_sha256": "827dd68538077604dea19a1a9507b1c5ff5890734d564f71b93148ff11b6b058",
+      "phase": "red",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=183"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=129"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=177"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=123"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160723956699Z\\sim0-super0.log",
+          "sha256": "e79cd1330725e3a4060bf76cb8659983c536131465469cd8798d0a170ed93d07"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160723956699Z\\sim0-super1.log",
+          "sha256": "5c8f82574fa0238fbcd89cfe4525ac9fcaad9decee0f8337315a7ec8a17ff761"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160723956699Z\\sim1-super0.log",
+          "sha256": "b95d9c23ceb4666e9b73dfd58c48c132cabdfe3f2a1b35ebad7c7ab87cb2be88"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-red-20261102T160723956699Z\\sim1-super1.log",
+          "sha256": "120cb836c31fb41ff9ca7206c7abaa406d6db14ed1c437686a8205da8f1416ce"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-green-20261102T160955266511Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T160955266511Z\\result.json",
+      "result_sha256": "c03d6b0a292d0b760e8b0f5280dbbd2e835c6c6028d696c8561f05439f203ac2",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T160955266511Z\\sim0-super0.log",
+          "sha256": "44b249166e3c815e48c6e0556595dbb415222646953e45c0003f126fc9db0af6"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T160955266511Z\\sim0-super1.log",
+          "sha256": "68b7674e2968c799f7730c866ad96159b967553c47d6cf204fd34dd3c17743d4"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T160955266511Z\\sim1-super0.log",
+          "sha256": "c15b9102aa17eaee3dfffd4d09aa64a1958da8d349610e531517c1926d1d7b42"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T160955266511Z\\sim1-super1.log",
+          "sha256": "51ff954ef9f84cb7690ececc99078d1354d7ca2ae08e14580b48c36ec5b8370c"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-green-20261102T161807640098Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\result.json",
+      "result_sha256": "4e12eafce5267e236ba02a143647233e3fe13b31563a787c6ca7b83144d6cc02",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=563 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=559 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=559 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim0-super0.log",
+          "sha256": "97c97d43d9b9d2e74d04bde527908fbb0db070d4da71bdd419813ece3fb78082"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim0-super1.log",
+          "sha256": "a41ba73c12dd3c7de93c6a5eae98b278b42238bc054e48bbfd2eb2324a0ef3cf"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim1-super0.log",
+          "sha256": "45d7db5638eed4d8362270eea7159a65eaabdfd6f532f3cc7a740de55441f0f5"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim1-super1.log",
+          "sha256": "2119396fa57243f48751291ba65e00d6e1561bf66c8ca1786ca2aff10f5cf5c1"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim2-super0.log",
+          "sha256": "1507c8cee18f686dccae2b9cb53c2b4988e4303bb3d63b524a605046c779d458"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T161807640098Z\\sim2-super1.log",
+          "sha256": "411c0fbe7993c96f1243996625e24bbf7ccd78170b8982b892b63ffedb144d5a"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-green-20261102T162606470413Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\result.json",
+      "result_sha256": "d2feac6eebb09ff4f3c31435a607d80e79970390511d06364948931640ed0bb5",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=662 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=658 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=658 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim0-super0.log",
+          "sha256": "69c3d82296e8bec7f95c31ec30117cb67d7129cc849f45e0c899522edfc21466"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim0-super1.log",
+          "sha256": "0f881e859a9f699b382c5c9c8e4f4d0ed8567b2b94f5435ed664ef637e9e11ca"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim1-super0.log",
+          "sha256": "e1d5b26a0a08a419cb352275b301864bb0b00d40aade328a71408bfff0e71ca4"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim1-super1.log",
+          "sha256": "247bf08de40fcde32fb4bb7dacd9a5ceca0c39132b3ae6260b6dd0f3ec5cccfa"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim2-super0.log",
+          "sha256": "565d56dc9d0e04d55ea76f2f28c9609d03ca36a36a1f2a25105aaa9b1d39f549"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-green-20261102T162606470413Z\\sim2-super1.log",
+          "sha256": "1bff8e5a86828674853eaba6309b5c3af45f0c6f1439f0a7787bdbaf582263f2"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "csr-20261102T161154793666Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T161154793666Z\\result.json",
+      "result_sha256": "d0e781f83b1514bc071c5e0f42b4751400c0e2b8204620ec1d3f47920bad94f0",
+      "broken": false,
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Native ModelSim CSR unit test; no timing or board acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T161154793666Z\\4-vsim.log",
+          "sha256": "f79ac33fa1244301de8226eaf53ee57510a5836b211923d6b890e65d0a125c7c"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "csr-20261102T162141156293Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T162141156293Z\\result.json",
+      "result_sha256": "dfc1467e1a781e2f2cc3196f1d1ab94ef9f4acbef895feaccd429666c94af58d",
+      "broken": true,
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "negative_rejected": true,
+      "scope": "Native ModelSim CSR unit test; no timing or board acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T162141156293Z\\4-vsim.log",
+          "sha256": "b365380996aa333d293deedad917cd8beaddf5bafc55cf7501b47396c99bea28"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "csr-20261102T162618445255Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T162618445255Z\\result.json",
+      "result_sha256": "1c448923b5069eafbc7c0fcd544c87ee657e80a558458658a12a9610a0a57e99",
+      "broken": false,
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Native ModelSim CSR unit test; no timing or board acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\csr-20261102T162618445255Z\\4-vsim.log",
+          "sha256": "1887f289539ab93b2f94119aef181444cb2910433349b32a117dc48ca0588380"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "isa-20261102T161156903592Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\isa-20261102T161156903592Z\\result.json",
+      "result_sha256": "74287e6ed51d3039d4cfc38c96c8a7039fd8c1353ea7a64d94072c83ec6ea637",
+      "counts": {
+        "PASS": 102,
+        "FAIL": 1
+      },
+      "source_unchanged": true,
+      "rtl_hashes": {
+        "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+        "rtl/cpu/triha_csr_regfile.v": "7326de098bbdaab6ae4eb5b72088d6a4cc4d5735fdb755bbbfdf6ae52d9e0f80",
+        "rtl/cpu/triha_csr.v": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+        "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+        "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+        "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+        "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+        "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+        "rtl/cpu/triha_frontend.v": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+        "rtl/cpu/triha_issue.v": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+        "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+        "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+        "rtl/cpu/triha_lsu.v": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+        "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+        "rtl/cpu/triha_multiplier.v": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+        "rtl/cpu/triha_npc.v": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+        "rtl/cpu/triha_btb.v": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+        "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+        "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+        "rtl/cpu/triha_cpu.v": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+        "rtl/cpu/triha_core.v": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "rtl/cpu/ADAPTATIONS.json": "58ef797bf8a1faee2ff6c38a5ea49f7710f6e6d05dd5a6a01ddf199a3efad68c",
+        "rtl/cpu/vendor/LICENSE": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+        "rtl/cpu/vendor/UPSTREAM.json": "0ec4b9a2d06cbe37eb8de7b607e4e363c1f2addbddf3ecbb737b2565ec651d04"
+      },
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\isa-20261102T161156903592Z\\riscv-tests\\rv32mi-p-mcsr\\simulation.log",
+          "sha256": "39964d2ceb6a9e43a0ef93bfffe54baa2e06f7a419b6250b1370f60717129cf8"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "isa-20261102T161819241208Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\isa-20261102T161819241208Z\\result.json",
+      "result_sha256": "a7d86cd962e13a36d2189bb112ba489dbd941404691247678fb19cc9e1758fc8",
+      "counts": {
+        "PASS": 103
+      },
+      "source_unchanged": true,
+      "rtl_hashes": {
+        "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+        "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+        "rtl/cpu/triha_csr.v": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+        "rtl/cpu/triha_decode.v": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+        "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+        "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+        "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+        "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+        "rtl/cpu/triha_frontend.v": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+        "rtl/cpu/triha_issue.v": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+        "rtl/cpu/triha_regfile.v": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+        "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+        "rtl/cpu/triha_lsu.v": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+        "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+        "rtl/cpu/triha_multiplier.v": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+        "rtl/cpu/triha_npc.v": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+        "rtl/cpu/triha_btb.v": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+        "rtl/cpu/triha_pipe_ctrl.v": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+        "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+        "rtl/cpu/triha_cpu.v": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+        "rtl/cpu/triha_core.v": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a",
+        "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+        "rtl/cpu/ADAPTATIONS.json": "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25",
+        "rtl/cpu/vendor/LICENSE": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+        "rtl/cpu/vendor/UPSTREAM.json": "0ec4b9a2d06cbe37eb8de7b607e4e363c1f2addbddf3ecbb737b2565ec651d04"
+      },
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\isa-20261102T161819241208Z\\riscv-tests\\rv32mi-p-mcsr\\simulation.log",
+          "sha256": "b5cabcc8cf61d5465d197365cdde16cee105a4905ba937039c3c6a3962d7cb10"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "cache-soc-runtime-20261102T161859720964Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\cache-soc-runtime-20261102T161859720964Z\\result.json",
+      "result_sha256": "29fcac33dee9f1a1b5c1cadaa05b2cf7d06fe0a4994eeb3ff96f31cfc72bdf30",
+      "test": "runtime",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Local ROM/SRAM/MMIO and modeled AXI DDR RTL simulation; no real DDR, CDC, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\cache-soc-runtime-20261102T161859720964Z\\simulation.log",
+          "sha256": "64583ecdbbf5f5ccc411fa215bab8d2ceb4b5676e5d5f62295b17e323dcce21a"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "cache-soc-irq-20261102T161902579373Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\cache-soc-irq-20261102T161902579373Z\\result.json",
+      "result_sha256": "c47b42eb501f7c6f797c3efc5d49f8179e7a49f743c5b4b38f81de79706621ba",
+      "test": "irq",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Local ROM/SRAM/MMIO and modeled AXI DDR RTL simulation; no real DDR, CDC, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\cache-soc-irq-20261102T161902579373Z\\simulation.log",
+          "sha256": "bd3ce55afaac2cf811305c100929a18ff22df085e3aa179fcebea71fe329dae9"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-zifencei-20261102T161858914012Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-zifencei-20261102T161858914012Z\\result.json",
+      "result_sha256": "8d3cf67dc03cd512cf80d048525f2b497dad50b49a09afdb5cdce3d6ffcbd6a7",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-zifencei-20261102T161858914012Z\\attributes.log",
+          "sha256": "de341d3d09769d24aa395054b1bf501a2262e0ff000a56312fc95238a777395a"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-zifencei-20261102T161858914012Z\\rv32im_zicsr.log",
+          "sha256": "c1347603c19ef4e14b40e7432b037ae98fee420db915926039da19eb60e31ce6"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-final-check-20261102T163213416614Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-check-20261102T163213416614Z\\result.json",
+      "result_sha256": "5708bfaee56072ff773939f9ade05fe6d46afaa419d799d911cce5e7904c57a6",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-check-20261102T163213416614Z\\admission-negative-unit.log",
+          "sha256": "127fb999854c96dc96dff063cfd695940743a212266bcc74188e5f0315f2feac"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-check-20261102T163213416614Z\\historical-release-binding.log",
+          "sha256": "29bcede28e6d6c2de281a27cd7bc0882a0193527fd45099420dc4f36d7657ab5"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-red-20261102T160653847361Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T160653847361Z\\result.json",
+      "result_sha256": "fa01e7ad8c9ce74550241cd50dd1ed24b058c7211c47550d22341e8a39e5ceba",
+      "phase": "red",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=183"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=129"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=177"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=123"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T160653847361Z\\sim0-super0.log",
+          "sha256": "6beaca4db688da39bb73bdc1372df763cd1913da6ee0e88bb944dfe4ab462215"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T160653847361Z\\sim0-super1.log",
+          "sha256": "c2f35204cfb4b34642cccbd7ab61818fc7c8e94b2e75579bfbf3109154beb966"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T160653847361Z\\sim1-super0.log",
+          "sha256": "a3d608418dd192cba3881746b160d89d3cbdf4afa54386edfa951ef07624c028"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T160653847361Z\\sim1-super1.log",
+          "sha256": "0517c196d53edd85eace431fae914d215d4f5cb0b28bd614900eeba809929e9e"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-green-20261102T160955264677Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T160955264677Z\\result.json",
+      "result_sha256": "e387d0b17cd9a2b013f91b6783ce7d518bf5b57b4547c4e0fcee5c6171ef41de",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=201"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=197"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=197"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=193"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T160955264677Z\\sim0-super0.log",
+          "sha256": "5845a48d7f7d41859f7004481d7c6532c99dc197b7618d533514f83da2237526"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T160955264677Z\\sim0-super1.log",
+          "sha256": "ff0e43c1b036ce7f2472a3129682f51d9681b03f364c868cd8155c8015b65445"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T160955264677Z\\sim1-super0.log",
+          "sha256": "80561b11063ee4bbac77f4d0bf5f46ea0ea82d9d24624357e1fca35894fa2f7e"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T160955264677Z\\sim1-super1.log",
+          "sha256": "07bd96372aee477eb3bd005d129dc85a7436f053207571ec390e1a7e835593ec"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-green-20261102T161154789171Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161154789171Z\\result.json",
+      "result_sha256": "3714de2cf86c1f47b8ff75aa51f21e7fd1403838cc11a1b22ed79e4d6757cac6",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161154789171Z\\sim0-super0.log",
+          "sha256": "8d7dad0c3bc44cbe66f4d7095d4149ec9825894e857ae14d87541dc6c13e5852"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161154789171Z\\sim0-super1.log",
+          "sha256": "06a950a252ce77308679266fe90d83f742bbcc2f060e478929db24c7c25affeb"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161154789171Z\\sim1-super0.log",
+          "sha256": "b633937212effe7c045295307ef7c436a00c6a0674407574b700683955a5fa6e"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161154789171Z\\sim1-super1.log",
+          "sha256": "14aa096571c21d1c728296d5debc9c3795c633ed8659e494f93436ac91ededc9"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-red-20261102T161329130552Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\result.json",
+      "result_sha256": "1a7276cdc9d95a3c7f002166152f277512659b45dec777170ba6428c66670655",
+      "phase": "red",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=456 failures=4"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=454 failures=4"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim0-super0.log",
+          "sha256": "1fa1a6266a52cae34fe3601bb5f14f642a14e329682b6b6aaa1a4935f7df989f"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim0-super1.log",
+          "sha256": "d1740f3cbdc4751963fbd89d94d9fbb7d2f7fff0c8770cb845c6bb20b9c0b2f6"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim1-super0.log",
+          "sha256": "d8117b174ff84e27cc3bf4ef686717b98a73b92183730c37ed29800ccb91df60"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim1-super1.log",
+          "sha256": "28ee86524c8ee6e93f0f176172509e5d4e74c9c21b836aa2fe4339e9d3749b65"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim2-super0.log",
+          "sha256": "fb20e52154b21ff22bcb601519153f337c457d5502fccee7644ebb9cb74d40d6"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161329130552Z\\sim2-super1.log",
+          "sha256": "6e6686a27770013d7bb4473450e70e5b6a4e7eeadb6056db303ff24961ab767a"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-green-20261102T161505321466Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\result.json",
+      "result_sha256": "682376227ce4db00ff8b8922c005079c190f86ec326925f8ab82e5f6a8754420",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=458 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=454 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=456 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=454 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim0-super0.log",
+          "sha256": "b732261ab2d9643f1fe9c1ea24f8bf901e817447d6fea1755dd7f6b6a0fe4abd"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim0-super1.log",
+          "sha256": "33ed52a58aa08588469b9d465c2141417c511765e3dfef8120fd367e0614f0c4"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim1-super0.log",
+          "sha256": "d2680fe04087d7af22a1896a0e77415cb549de1353551a49f64a8946cfbeaba5"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim1-super1.log",
+          "sha256": "b32c99438d695add096b04f0f5a21772fec013b1aec887b8fcbab6e6fbe1fe19"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim2-super0.log",
+          "sha256": "e26a0dd79e2cef99fe3cab6c3af9fab1211dea9fbda1f2dd9e0c8bb558532d45"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161505321466Z\\sim2-super1.log",
+          "sha256": "a3f7247da10f4f81cea55e7d88f313d061c138235342acb044b9915fd2248c90"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-red-20261102T161539656267Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\result.json",
+      "result_sha256": "3c15874ab247b8e50d1115ef7aa67f48c02e645a77de5bd909260a8f72a9a256",
+      "phase": "red",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=563 failures=30"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=561 failures=30"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=561 failures=30"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=559 failures=30"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=561 failures=30"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "FAIL",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=559 failures=30"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim0-super0.log",
+          "sha256": "691a4dc615dd90a5a27f414c749a2690e86e7fe38874b08c5a475c1e0fccb5b7"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim0-super1.log",
+          "sha256": "c55a19085599c70b81657e7a91a23b31be06cde23f8f2655f3ad9de7dc376aa1"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim1-super0.log",
+          "sha256": "5cd7d2ef58051d33fd257bb2dd47c7f9e5b4792bbf79ecd40d298950779abd09"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim1-super1.log",
+          "sha256": "d23b38b3ad8225723b1d4e8c0b49b3189bcbb5faecc5643d4ba394f70abd2b81"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim2-super0.log",
+          "sha256": "0796f8ae57a8fd9113f73c0907a5f735963b16eeb10fe0cf0fb0c223c9cb1300"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-red-20261102T161539656267Z\\sim2-super1.log",
+          "sha256": "772643f039d529a3faaf6c1ad7c9f63786f79acac3c1e80024013621661bab3b"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-green-20261102T161807640212Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\result.json",
+      "result_sha256": "f37057a37e322eeb5fb8b59f033e6cdd6877340ab87a6d6b13e2c414fae45f6c",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=563 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=559 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=561 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=559 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim0-super0.log",
+          "sha256": "7d94be51a78febe3d1395753fbeaa845f7509125b7c0a64d6f73251e77545d41"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim0-super1.log",
+          "sha256": "4d7512716dc4a661a4de5e01ed7ccc8536b09035fac70ddea8ed4395ef680a20"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim1-super0.log",
+          "sha256": "110fa1766361409f9b3225320846e90da453299a419cf696cec74e075d25f89f"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim1-super1.log",
+          "sha256": "6af5a65479be4fe6c8510712ec2236910a1127978b55ec96f016fda8093c6c72"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim2-super0.log",
+          "sha256": "7a9de04053fd9372902efd1568bc54de5a065d1b8d671bcaa015ed4dd89c30f4"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T161807640212Z\\sim2-super1.log",
+          "sha256": "3b0de327b1d66a0e076b5cb731dbd620ce70681a1daf9a48961ff6e84403fc78"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-green-20261102T162606473788Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\result.json",
+      "result_sha256": "0ed12ed70205f2a37d7928bd420dcab25bc2487ca1f4b8e5e4db5f68e9357c7e",
+      "phase": "green",
+      "source_unchanged": true,
+      "scope": "Public CSR and LSU ports; no PDS/timing/board acceptance",
+      "cases": [
+        {
+          "sim_control": 0,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=0 checks=662 failures=0"
+          ]
+        },
+        {
+          "sim_control": 0,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=0 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=1 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 1,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=1 checks=658 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 0,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=0 sim=2 checks=660 failures=0"
+          ]
+        },
+        {
+          "sim_control": 2,
+          "support_super": 1,
+          "status": "PASS",
+          "summary": [
+            "# DOC_CSR_SUMMARY super=1 sim=2 checks=658 failures=0"
+          ]
+        }
+      ],
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim0-super0.log",
+          "sha256": "520bcca3de39e3405796f858e9109fa8a0168ed2d68cf1c00ac71fb9bb584712"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim0-super1.log",
+          "sha256": "782066f701e521eb5a6675fb96e85cb5552b36bd1a5757c48be5d1189a138234"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim1-super0.log",
+          "sha256": "e991ded6313390978e85161383aba3832403770446286d59586de03a3b55e43c"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim1-super1.log",
+          "sha256": "32920a99c8f268ad258db53ffb84bb9b4517720d69d029f925fad1f49b3f5b03"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim2-super0.log",
+          "sha256": "b901a52ea279e49a43aef928e67a8d6dad3b8f7fdeeff00f4892eec6a04e4bee"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-green-20261102T162606473788Z\\sim2-super1.log",
+          "sha256": "292403627366463b4520a0b13579f9633dfc3fd9d03df17caa100643a9666c83"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T161202328261Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161202328261Z\\result.json",
+      "result_sha256": "fd34452be237436af3851b5fc3f503d8fca080ea10fd36a30db97fd236a4a397",
+      "test": "cpu",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "error": "Paired-cache self-check failed",
+      "scope": "Real six-stage single-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161202328261Z\\simulation.log",
+          "sha256": "e430805e64a572b46272fc222b914ddc1abf289ee228f45e2d511d7ee8404038"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T161819239319Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161819239319Z\\result.json",
+      "result_sha256": "7e57b69fa76049a5e41767e7a195562344237092ecdb7e47709b046da8a9c0b1",
+      "test": "cpu",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Real six-stage single-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161819239319Z\\simulation.log",
+          "sha256": "3068d92d341c561dc5edb638c019efb864c4d61167783b1febb09c478c566dc0"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T161902056375Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161902056375Z\\result.json",
+      "result_sha256": "95bdb776a5cb6922f3a2b5914e559921754fc255dfab22966ef7679237ed8590",
+      "test": "cpu",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Real six-stage dual-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T161902056375Z\\simulation.log",
+          "sha256": "26203c3dbe84950308124480a8e9cccfbd177ca020f66813e197dabd0f963c56"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T162141165158Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162141165158Z\\result.json",
+      "result_sha256": "ce627fe5203238781ff69d59ae970f42a5ebeac5672b27d43a50c7ce842afe27",
+      "test": "cpu",
+      "issue_mode": "single",
+      "cache_enable": false,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Real six-stage single-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162141165158Z\\simulation.log",
+          "sha256": "82a24f69bddaf874d3b5b05fb6d97141df093e16066ed4a16ae238154c507737"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T162143953469Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162143953469Z\\result.json",
+      "result_sha256": "0ca0d376789c49d87b4314e5893b3f02996b09c7a66050a0f6f6a5aebc1eb629",
+      "test": "cpu",
+      "issue_mode": "dual",
+      "cache_enable": false,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Real six-stage dual-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162143953469Z\\simulation.log",
+          "sha256": "22ad0259a83f240b862e556b5bc18f2bdc12fab6986c728d54741b532531d616"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-cpu-20261102T162146496118Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162146496118Z\\result.json",
+      "result_sha256": "cc5947f643c1c72a85c939c990cd8d895395ce0868550c8c47a6b0cafdd195ba",
+      "test": "cpu",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "fault": "data",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "error": "Paired-cache self-check failed",
+      "scope": "Real six-stage dual-issue CPU with paired-cache or uncached DDR model; no physical DDR, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-cpu-20261102T162146496118Z\\simulation.log",
+          "sha256": "136c812b43be0b4767b0a6e92ad317046dd9365afdaa34360d3aacdbf8a7d337"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-writeback-20261102T161859727202Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-writeback-20261102T161859727202Z\\result.json",
+      "result_sha256": "cee1d5ca0914d3f35b39b64cf8adbc36369e376f7d4b519d2eda571cc0f663fb",
+      "test": "writeback",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Paired-cache RTL components; no full CPU, DDR hardware or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-writeback-20261102T161859727202Z\\simulation.log",
+          "sha256": "1fd1eac2093037af0c8729f99767a70d5d6ee90053309ce5ce4282ad7d1d2497"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-soc-runtime-20261102T161859738264Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-soc-runtime-20261102T161859738264Z\\result.json",
+      "result_sha256": "71f37900e0131e2b6fa5e8e8554f457a1ef76f7b3145e5d357f48b7792548432",
+      "test": "runtime",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Local ROM/SRAM/MMIO and modeled AXI DDR RTL simulation; no real DDR, CDC, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-soc-runtime-20261102T161859738264Z\\simulation.log",
+          "sha256": "12514c5861490b8214c7d7cabafb03e28d46c708691c27d23f07368a11839141"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "cache-soc-runtime-20261102T161902831416Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-soc-runtime-20261102T161902831416Z\\result.json",
+      "result_sha256": "d633dd2da8aca44a23447437d12d9d6e498988447b163cd8af2aa5fc1754a820",
+      "test": "runtime",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "fault": "none",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "scope": "Local ROM/SRAM/MMIO and modeled AXI DDR RTL simulation; no real DDR, CDC, board or timing acceptance",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\cache-soc-runtime-20261102T161902831416Z\\simulation.log",
+          "sha256": "6e1f970569146bdc9753642e1a4bb7c9ef36dac46482ccec4896afeb3c49c722"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "single-20261102T1621414422777Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\single-20261102T1621414422777Z\\result.json",
+      "result_sha256": "ff0fee2ab7c3c520a0f8f136e36141948bbc3b510563814968960d76d65e9ee6",
+      "case": "single",
+      "source_unchanged": true,
+      "error": null,
+      "scope": "pinned ELF smoke and issue observations",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\single-20261102T1621414422777Z\\simulation.stdout.log",
+          "sha256": "c261fb05db46f2b92da43c9205b89fe8334eb83fd3d6be40babae21d220d682e"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "dual-20261102T1621447589440Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-20261102T1621447589440Z\\result.json",
+      "result_sha256": "552859d083c25c2f7807576847b37c14d78612bbe1917bc19e38a92f933a15a8",
+      "case": "dual",
+      "source_unchanged": true,
+      "error": null,
+      "scope": "pinned ELF smoke and issue observations",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-20261102T1621447589440Z\\simulation.stdout.log",
+          "sha256": "63da403b2fe23781a0250111b9e00c0e062e0f8cf3b24d3fea9e8f53f6ddb531"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "firmware-runtime-20261102T1621479504883Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\firmware-runtime-20261102T1621479504883Z\\result.json",
+      "result_sha256": "43e29bdd988eea392b64693b8e8d8497ea4a0b3022cce4ef0731cf0730fc0992",
+      "fault": "none",
+      "source_unchanged": true,
+      "error": null,
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\firmware-runtime-20261102T1621479504883Z\\simulation-dual.stdout.log",
+          "sha256": "13019aeb6c5b4786c7ee23b9e8b447c5ef020079422b6647559ca0463c2e741b"
+        },
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\firmware-runtime-20261102T1621479504883Z\\simulation-single.stdout.log",
+          "sha256": "e436950384c09e4483d9e7b2c1c787f9119f6beb7cc8ffee684af1aad138c129"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "equivalence-20261102T1626187278336Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\equivalence-20261102T1626187278336Z\\result.json",
+      "result_sha256": "12da63a24e2b76a07aad07d643f52b4e3008e4b64c1a7804213931be5438af78",
+      "source_unchanged": true,
+      "error": "Differential test reported failure.",
+      "scope": "legacy redirect request/control and active/stalled payload cycle differential simulation; registered redirect uses run_redirect.ps1; not complete ISA/formal proof",
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\equivalence-20261102T1626187278336Z\\simulation-single.stdout.log",
+          "sha256": "4399c8e77b9f4085373cae0d43f7e4f5377acdae87157e7f5005da186d0e7158"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "document-csr-equivalence-baseline-20261102T162926845610Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-equivalence-baseline-20261102T162926845610Z\\result.json",
+      "result_sha256": "484267a45116fe035068ec3a1526025f5a93bd68e07454d790254edc5c24ae7d",
+      "scope": "Repeat legacy miter with pre-CSR-edit CSR/LSU; all other CPU sources identical to failing current run",
+      "same_failure_reproduced": true,
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-csr-equivalence-baseline-20261102T162926845610Z\\5-vsim.log",
+          "sha256": "6b1d25df38e46b57a3c0ae3c7609c0fc69a1362e69059e0f3378c93217cb22f8"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "redirect-csrdata-20261102T1630554925108Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\redirect-csrdata-20261102T1630554925108Z\\result.json",
+      "result_sha256": "3ae0fd8dc5d0cbd73d4b57f92855b2b31a1e52e3e97aa41ee13bcba07159a677",
+      "test": "csrdata",
+      "broken": false,
+      "source_unchanged": true,
+      "error": null,
+      "scope": "directed ordered WB/store/synchronous exception comparison; not full ISA/formal proof",
+      "log_refs": []
+    },
+    {
+      "tree": "TriHaRiscv-main",
+      "run": "document-csr-final-binding-20261102T164122572456Z",
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-binding-20261102T164122572456Z\\result.json",
+      "result_sha256": "04c360846afba4621b4b211e52b7108a2d729a997df559b5a05731493838fa28",
+      "scope": "Final binding after recording actual simulation results in cpu_admission; code hashes unchanged."
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "dual-diagnostic-20261102T164616610377Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164616610377Z\\result.json",
+      "result_sha256": "c589241328481fb1c6da83dd5943fd93c6f137e73f122ee41f4264637e5eea46",
+      "scope": "Existing generic runner, static issue/LSU fixture; firmware argument only satisfies runner precondition; not a CoreMark execution.",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164616610377Z\\simulation.log",
+          "sha256": "31d643868847a435f363cdf79f60ca9c8bde86330f4b3addb654cc3c41e663f5"
+        }
+      ]
+    },
+    {
+      "tree": "TriHaRiscv-cpu-dualissue-windows",
+      "run": "dual-diagnostic-20261102T164654548188Z",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164654548188Z\\result.json",
+      "result_sha256": "641eec80875e68180dc038e6fbe5f72a99dc6d8bc790dc9795d6094d63bca939",
+      "scope": "Existing generic runner, static issue/LSU fixture; firmware argument only satisfies runner precondition; not a CoreMark execution.",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "log_refs": [
+        {
+          "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164654548188Z\\simulation.log",
+          "sha256": "c206232f6d3a836dba3402b6811358f0b8327607d20487639e6b3ab8ebc6de38"
+        }
+      ]
+    }
+  ]
+}

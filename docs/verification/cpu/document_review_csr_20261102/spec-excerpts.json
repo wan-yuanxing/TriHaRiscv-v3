@@ -1,0 +1,60 @@
+[
+  {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\document-review-20261102-235523\\official\\csrs.adoc",
+    "sha256": "a5630d827b0da2450cda38df00ca812f9773482c5e1adf898b7ade95a0e49679",
+    "excerpts": [
+      {
+        "line": 30,
+        "text": "CSRs according to privilege level as shown in <<csrrwpriv>>. [#norm:Zicsr_rw]#The top two bits (csr[11:10]) indicate whether the register is read/write (`00`,`01`, or `10`) or read-only (`11`).#\n[#norm:Zicsr_access]#The next two bits (csr[9:8]) encode the lowest privilege level that can access the CSR, with the pattern `10` representing hypervisor CSRs.#\n"
+      },
+      {
+        "line": 49,
+        "text": "[#norm:Zicsr_illegal_acc]#Attempts to write a read-only CSR address raise illegal-instruction exceptions.#\n[#norm:Zicsr_write_ro]#A read/write register might also contain some bits that are\nread-only, in which case writes to the read-only bits are ignored.#"
+      },
+      {
+        "line": 53,
+        "text": "[#norm:Zicsr_nonexistent_rsv]#Instructions that access a non-existent CSR address are reserved.#\n\n<<csrrwpriv>> also indicates the convention to"
+      },
+      {
+        "line": 120,
+        "text": "|`01` |`11` |`11XX` 2+|`0x7C0`{endash}``0x7FF`` 3+|Custom read/write\n|`10` |`11` |`0XXX` 2+|`0xB00`{endash}``0xB7F`` 3+|Standard read/write\n|`10` |`11` |`10XX` 2+|`0xB80`{endash}``0xBBF`` 3+|Standard read/write"
+      }
+    ]
+  },
+  {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\document-review-20261102-235523\\official\\machine.adoc",
+    "sha256": "56676b144ae58bef8041a560f0049e65039709afd4f935d2c5cf866a71eb9efb",
+    "excerpts": [
+      {
+        "line": 217,
+        "text": "[#norm:mvendorid_always_rd]#This register must be readable in any implementation, but a value of 0 can be returned to\nindicate the field is not implemented or that this is a non-commercial implementation.#\n"
+      },
+      {
+        "line": 250,
+        "text": "[#norm:marchid_always_rd]#This register must be readable in any\nimplementation, but a value of 0 can be returned to indicate the field is not implemented.#\nThe combination of csr:mvendorid[] and csr:marchid[] should uniquely identify the type of hart microarchitecture that is implemented."
+      },
+      {
+        "line": 288,
+        "text": "[#norm:mimpid_always_rd]#This register must be readable in any\nimplementation, but a value of 0 can be returned to indicate that the field is not implemented.#\nThe Implementation value should reflect the design of the RISC-V processor itself and not any surrounding system."
+      },
+      {
+        "line": 1482,
+        "text": "following decreasing priority order: MEI, MSI, MTI, SEI, SSI, STI, LCOFI.#\n\n[NOTE]"
+      }
+    ]
+  },
+  {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\document-review-20261102-235523\\official\\zifencei.adoc",
+    "sha256": "875db4456fe783b6c7f4eb62abbf54adc181386236ab9cf0e9197482afc658b4",
+    "excerpts": [
+      {
+        "line": 30,
+        "text": "insn:fence.i[] was previously part of the base ext:i[] instruction set. Two main\nissues are driving moving this out of the mandatory base, although at time of\nwriting it is still the only standard method for maintaining instruction-fetch"
+      },
+      {
+        "line": 31,
+        "text": "issues are driving moving this out of the mandatory base, although at time of\nwriting it is still the only standard method for maintaining instruction-fetch\ncoherence."
+      }
+    ]
+  }
+]

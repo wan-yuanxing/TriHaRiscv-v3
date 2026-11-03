@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "instance": "triha_compute_pll",
+  "reference_hz": 125000000,
+  "compute_hz": 100000000,
+  "input_divider": 1,
+  "feedback_multiplier": 4,
+  "feedback_divider": 2,
+  "output_divider": 10,
+  "vco_hz": 1000000000,
+  "source": "build/video/vendor/hdmi/ipcore/pll/pll.idf"
+}

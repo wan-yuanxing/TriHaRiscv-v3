@@ -86,48 +86,61 @@ static int box_iou_gt(const struct npu_frame_box *a,const struct npu_frame_box *
 static int cpu_post_heads(const struct npu_frame_io *io,const struct npu_frame_ticket *t,struct npu_frame_result *out) {
     uint32_t cls_words[32],obj_words[32],bbox_words[2],i,scale,base,chunk,j,n;
     struct npu_frame_box candidates[64],kept[16]; uint32_t nc=0,nk=0;
+    uint32_t cursor_score=UINT32_MAX,cursor_id=0;
     const uint32_t product_threshold=1546188224u; /* B03 sqrt(product/2^32) >= FP32(0.6). */
-    for (scale=0;scale<3;scale++) {
-        uint32_t count=scale==0?1600u:scale==1?400u:100u,grid=scale==0?40u:scale==1?20u:10u,stride=8u<<scale;
-        base=scale==0?0u:scale==1?1600u:2000u;
-        for(chunk=0;chunk<count;chunk+=64u) {
-            n=(count-chunk)>64u?64u:(count-chunk);
-            uint32_t cls_base=scale==0?0u:scale==1?1664u:2176u;
-            uint32_t obj_base=scale==0?2304u:scale==1?3968u:4480u;
-            uint32_t bb_base=scale==0?4608u:scale==1?11008u:12672u;
-            if(io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(cls_base+chunk),cls_words,(n+1u)/2u)||
-               io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(obj_base+chunk),obj_words,(n+1u)/2u))return NPU_FRAME_IO;
-            for(j=0;j<n;j++) {
-                i=chunk+j;
-                uint32_t shift=(j&1u)*16u;
-                uint32_t product=((cls_words[j/2u]>>shift)&65535u)*((obj_words[j/2u]>>shift)&65535u);
-                if (product<product_threshold || (nc==64u&&product<=candidates[63].score_bits))continue;
-                int32_t dx,dy,w,h;int64_t cx,cy;uint32_t x,y,x2,y2; uint16_t code;
-                if(io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(bb_base+4u*i),bbox_words,2))return NPU_FRAME_IO;
-                code=(uint16_t)bbox_words[0]; if(table_q16(io,scale,code,0,&dx))return NPU_FRAME_IO;
-                code=(uint16_t)(bbox_words[0]>>16); if(table_q16(io,scale,code,1,&dy))return NPU_FRAME_IO;
-                code=(uint16_t)bbox_words[1]; if(table_q16(io,scale,code,2,&w))return NPU_FRAME_IO;
-                code=(uint16_t)(bbox_words[1]>>16); if(table_q16(io,scale,code,3,&h))return NPU_FRAME_IO;
-                /* Table extent is exp(raw*scale)*stride, already in model pixels. */
-                cx=(((int64_t)(i%grid)<<16)+dx)*stride;
-                cy=(((int64_t)(i/grid)<<16)+dy)*stride;
-                if(w<=0||h<=0)continue;
-                x=roi_endpoint(cx-w/2,0,320,0);x2=roi_endpoint(cx+(w+1LL)/2,0,320,1);
-                y=roi_endpoint(cy-h/2,40,240,0);y2=roi_endpoint(cy+(h+1LL)/2,40,240,1);
-                if(x2<=x||y2<=y)continue;
-                /* Keep the strongest 64, including candidates from later heads.
-                 * Equal products retain ascending candidate order. */
-                uint32_t pos=nc<64u?nc++:63u;
-                while(pos&&candidates[pos-1].score_bits<product){candidates[pos]=candidates[pos-1];--pos;}
-                candidates[pos].x=x;candidates[pos].y=y;candidates[pos].width=x2-x;candidates[pos].height=y2-y;
-                candidates[pos].score_bits=product;candidates[pos].candidate=base+i;candidates[pos].stride=stride;
+    /* A bounded buffer is a sorted page, never a top-k semantic limit. Heads
+     * remain immutable while the frame is HELD. Resume below the last key
+     * until NMS has 16 survivors or all eligible candidates are exhausted. */
+    do {
+        nc=0;
+        for (scale=0;scale<3;scale++) {
+            uint32_t count=scale==0?1600u:scale==1?400u:100u,grid=scale==0?40u:scale==1?20u:10u,stride=8u<<scale;
+            base=scale==0?0u:scale==1?1600u:2000u;
+            for(chunk=0;chunk<count;chunk+=64u) {
+                n=(count-chunk)>64u?64u:(count-chunk);
+                uint32_t cls_base=scale==0?0u:scale==1?1664u:2176u;
+                uint32_t obj_base=scale==0?2304u:scale==1?3968u:4480u;
+                uint32_t bb_base=scale==0?4608u:scale==1?11008u:12672u;
+                if(io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(cls_base+chunk),cls_words,(n+1u)/2u)||
+                   io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(obj_base+chunk),obj_words,(n+1u)/2u))return NPU_FRAME_IO;
+                for(j=0;j<n;j++) {
+                    i=chunk+j;
+                    uint32_t shift=(j&1u)*16u;
+                    uint32_t product=((cls_words[j/2u]>>shift)&65535u)*((obj_words[j/2u]>>shift)&65535u);
+                    uint32_t score;
+                    if(product<product_threshold)continue;
+                    score=product_score_bits(product);
+                    if(score>cursor_score||(score==cursor_score&&base+i<=cursor_id))continue;
+                    /* Ascending head traversal already breaks equal-score ties
+                     * by candidate id, matching the hardware key sort. */
+                    if(nc==64u&&score<=candidates[63].score_bits)continue;
+                    int32_t dx,dy,w,h;int64_t cx,cy;uint32_t x,y,x2,y2; uint16_t code;
+                    if(io->read_shared(io->context,output_base(t->slot)+B03_HEADS_OFFSET+2u*(bb_base+4u*i),bbox_words,2))return NPU_FRAME_IO;
+                    code=(uint16_t)bbox_words[0]; if(table_q16(io,scale,code,0,&dx))return NPU_FRAME_IO;
+                    code=(uint16_t)(bbox_words[0]>>16); if(table_q16(io,scale,code,1,&dy))return NPU_FRAME_IO;
+                    code=(uint16_t)bbox_words[1]; if(table_q16(io,scale,code,2,&w))return NPU_FRAME_IO;
+                    code=(uint16_t)(bbox_words[1]>>16); if(table_q16(io,scale,code,3,&h))return NPU_FRAME_IO;
+                    /* Table extent is exp(raw*scale)*stride, already in model pixels. */
+                    cx=(((int64_t)(i%grid)<<16)+dx)*stride;
+                    cy=(((int64_t)(i/grid)<<16)+dy)*stride;
+                    if(w<=0||h<=0)continue;
+                    x=roi_endpoint(cx-w/2,0,320,0);x2=roi_endpoint(cx+(w+1LL)/2,0,320,1);
+                    y=roi_endpoint(cy-h/2,40,240,0);y2=roi_endpoint(cy+(h+1LL)/2,40,240,1);
+                    if(x2<=x||y2<=y)continue;
+                    /* Keep the next 64 rounded-score keys, including later heads. */
+                    uint32_t pos=nc<64u?nc++:63u;
+                    while(pos&&candidates[pos-1].score_bits<score){candidates[pos]=candidates[pos-1];--pos;}
+                    candidates[pos].x=x;candidates[pos].y=y;candidates[pos].width=x2-x;candidates[pos].height=y2-y;
+                    candidates[pos].score_bits=score;candidates[pos].candidate=base+i;candidates[pos].stride=stride;
+                }
             }
         }
-    }
-    /* Candidates are already stably ordered by full probability product. */
-    for(i=0;i<nc&&nk<16u;i++){uint32_t j;int suppressed=0;for(j=0;j<nk;j++)if(box_iou_gt(&candidates[i],&kept[j])){suppressed=1;break;}if(!suppressed)kept[nk++]=candidates[i];}
+        /* Greedy NMS keeps its survivors across consecutive sorted pages. */
+        for(i=0;i<nc&&nk<16u;i++){uint32_t j;int suppressed=0;for(j=0;j<nk;j++)if(box_iou_gt(&candidates[i],&kept[j])){suppressed=1;break;}if(!suppressed)kept[nk++]=candidates[i];}
+        if(nc){cursor_score=candidates[nc-1].score_bits;cursor_id=candidates[nc-1].candidate;}
+    } while(nc==64u&&nk<16u);
     out->face_count=nk;out->display_count=nk;out->crc=0;
-    for(i=0;i<nk;i++){out->boxes[i]=kept[i];out->boxes[i].score_bits=product_score_bits(kept[i].score_bits);}
+    for(i=0;i<nk;i++)out->boxes[i]=kept[i];
     out->valid=1;return NPU_FRAME_OK;
 }
 

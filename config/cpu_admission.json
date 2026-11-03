@@ -31,7 +31,7 @@
     "scope": "CPU-only standalone synthesis; no TCM/cache/SoC/DDR/NPU/Video; I/O timing unvalidated",
     "sources": [
       "rtl/cpu/vendor/src/core/biriscv_alu.v",
-      "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+      "rtl/cpu/triha_csr_regfile.v",
       "rtl/cpu/triha_csr.v",
       "rtl/cpu/triha_decode.v",
       "rtl/cpu/vendor/src/core/biriscv_decoder.v",
@@ -83,16 +83,24 @@
     },
     {
       "destination": "tb/cpu/fixtures/fpga/pg2l100h/project/cpu_core.json",
-      "sha256": "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441",
+      "sha256": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96",
       "source": "fpga/pg2l100h/project/cpu_core.json",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
     },
     {
       "base_sha256": "2325a576e02f36a1768ca2b9b5d2fb191cb9c660d6d96d75aaed6a6bd0533cdc",
       "destination": "rtl/cpu/ADAPTATIONS.json",
-      "sha256": "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4",
+      "sha256": "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25",
       "source": "rtl/cpu/ADAPTATIONS.json",
-      "source_kind": "reviewed_working_tree"
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
     },
     {
       "destination": "rtl/cpu/CACHE_ADAPTATIONS.json",
@@ -134,9 +142,13 @@
     {
       "base_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
       "destination": "rtl/cpu/triha_csr.v",
-      "sha256": "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49",
+      "sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
       "source": "rtl/cpu/triha_csr.v",
-      "source_kind": "reviewed_working_tree"
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
     },
     {
       "destination": "rtl/cpu/triha_dcache.v",
@@ -206,9 +218,13 @@
     },
     {
       "destination": "rtl/cpu/triha_lsu.v",
-      "sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+      "sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
       "source": "rtl/cpu/triha_lsu.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
     },
     {
       "destination": "rtl/cpu/triha_multiplier.v",
@@ -601,6 +617,27 @@
       "sha256": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
       "source": "scripts/cpu/run_modelsim.do",
       "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_csr_regfile.v",
+      "source": "rtl/cpu/triha_csr_regfile.v",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93"
+    },
+    {
+      "destination": "tb/cpu/tb_document_csr.v",
+      "source": "tb/cpu/tb_document_csr.v",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "7ead647055828e7d62f49f6852a23f9e97dc4b44c60e9d63a6a4b1d5c206856e",
+      "base_sha256": null
+    },
+    {
+      "destination": "scripts/cpu/run_document_csr.py",
+      "source": "scripts/cpu/run_document_csr.py",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "1b69e8a61aef2f0781e1cdb02fee6312a67f942fcdeb47a4d32059e51ed159ba",
+      "base_sha256": null
     }
   ],
   "fixture_include": "tb/cpu/fixtures/rtl/soc/include",
@@ -738,5 +775,43 @@
       "path": "D:\\miniconda3\\python.exe",
       "sha256": "f3c05e11e9fc3fc0941fda221b1dfb0aac39d6ef298078054a5d949d620f3d6c"
     }
-  ]
+  ],
+  "csr_review_20261103": {
+    "scope": "Current source changes only; earlier route/board results remain bound to original packages.",
+    "evidence": "docs/verification/cpu/document_review_csr_20261102/",
+    "physical_revalidated": false,
+    "board_revalidated": false,
+    "verified_simulations": [
+      {
+        "result": "build/cpu/document-csr-green-20261102T162606470413Z/result.json",
+        "sha256": "d2feac6eebb09ff4f3c31435a607d80e79970390511d06364948931640ed0bb5",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/isa-20261102T161819241208Z/result.json",
+        "sha256": "a7d86cd962e13a36d2189bb112ba489dbd941404691247678fb19cc9e1758fc8",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/cache-soc-runtime-20261102T161859720964Z/result.json",
+        "sha256": "29fcac33dee9f1a1b5c1cadaa05b2cf7d06fe0a4994eeb3ff96f31cfc72bdf30",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/cache-soc-irq-20261102T161902579373Z/result.json",
+        "sha256": "c47b42eb501f7c6f797c3efc5d49f8179e7a49f743c5b4b38f81de79706621ba",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/csr-20261102T162618445255Z/result.json",
+        "sha256": "1c448923b5069eafbc7c0fcd544c87ee657e80a558458658a12a9610a0a57e99",
+        "status": "PASS"
+      }
+    ],
+    "verified_rtl_sha256": {
+      "rtl/cpu/triha_csr.v": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+      "rtl/cpu/triha_lsu.v": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+    }
+  }
 }

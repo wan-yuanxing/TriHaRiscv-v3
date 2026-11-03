@@ -147,7 +147,8 @@ module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE
   assign asset_ready=0;assign asset_id=0;assign asset_generation=0;assign words_written=0;
   assign sample_valid=0;assign sample_error=0;assign sample_rgba=0;
  end endgenerate
- display_record_pixels #(.BOX_ONLY(ENABLE_MINIMAL_BOX)) u_pixels(.fault(pixels_fault),.fault_code(pixels_code),.asset_ready(pixel_material_ready),.asset_id(pixel_id),.asset_generation(pixel_generation),.core_clk(core_clk),
+ // The compact MMIO/link retains cmd_data through combined scanner/pixel feedback.
+ display_record_pixels_compact #(.BOX_ONLY(ENABLE_MINIMAL_BOX)) u_pixels(.fault(pixels_fault),.fault_code(pixels_code),.asset_ready(pixel_material_ready),.asset_id(pixel_id),.asset_generation(pixel_generation),.core_clk(core_clk),
   .core_reset_n(core_reset_n),
   .pixel_clk(pixel_clk),
   .pixel_reset_n(pixel_reset_n),

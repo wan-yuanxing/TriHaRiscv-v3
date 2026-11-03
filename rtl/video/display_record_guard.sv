@@ -18,8 +18,29 @@ module display_record_guard(
     wire [31:0] flags=word(record_i,`VDISP_FIELD_FLAGS),mask=word(record_i,`VDISP_FIELD_BOX_MASK);
     wire asset_wait=mode_i==2&&!flags[1]&&flags[3]&&flags[4]&&asset_ready_i===1'b0;
     wire [63:0] asset_end={32'd0,word(record_i,`VDISP_FIELD_ASSET_BASE)}+{32'd0,word(record_i,`VDISP_FIELD_ASSET_BYTES)};
-    reg [7:0] head_code,lane_code;
-    integer h,b;reg [255:0] box_data;
+    // Check fixed record slices before selecting a lane. Selecting the entire
+    // 256-bit box first puts the lane mux in front of every geometry comparison.
+    function automatic invalid_box(input [255:0] data,input present);
+        integer point;
+        begin
+            invalid_box=0;
+            if(!present)begin
+                if(data!=0)invalid_box=1;
+            end else begin
+                if(!positive_rect(data[31:0],data[63:32])||data[95:69]!=0)invalid_box=1;
+                for(point=0;point<5;point=point+1)
+                    if(!data[64+point]&&data[(3+point)*32+:32]!=0)invalid_box=1;
+            end
+        end
+    endfunction
+    wire [15:0] invalid_lanes;
+    genvar lane_index;
+    generate for(lane_index=0;lane_index<16;lane_index=lane_index+1)begin:g_lane_check
+        assign invalid_lanes[lane_index]=invalid_box(record_i[(32+lane_index*8)*32+:256],mask[lane_index]);
+    end endgenerate
+    wire [7:0] lane_code=invalid_lanes[lane]?8'h12:8'h00;
+    reg [7:0] head_code;
+    integer h;
     always @* begin
         head_code=0;
         if((^{record_i,mode_i})===1'bx)head_code=1;
@@ -52,13 +73,6 @@ module display_record_guard(
                   (asset_ready_i!==1'b0&&(asset_ready_i!==1'b1||
                    asset_id_i!==word(record_i,`VDISP_FIELD_ASSET_ID)||asset_generation_i!==word(record_i,`VDISP_FIELD_ASSET_GENERATION)))))))
                 head_code=8'h14;
-        end
-        lane_code=0;box_data=record_i[(32+lane*8)*32+:256];
-        if(!mask[lane])begin if(box_data!=0)lane_code=8'h12;end
-        else begin
-            if(!positive_rect(box_data[31:0],box_data[63:32])||box_data[95:69]!=0)lane_code=8'h12;
-            for(b=0;b<5;b=b+1)
-                if(!box_data[64+b]&&box_data[(3+b)*32+:32]!=0)lane_code=8'h12;
         end
     end
     assign start_ready_o=rst_ni&&!busy&&!result_valid_o;

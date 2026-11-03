@@ -42,7 +42,11 @@
     "COMMITS": 116,
     "RELEASES": 120,
     "REJECTED": 124,
-    "MODES": 128
+    "MODES": 128,
+    "MODE_REQUEST": 132
+  },
+  "capability_bits": {
+    "MODE_KEY": 16
   },
   "fields": {
     "VERSION": 0,

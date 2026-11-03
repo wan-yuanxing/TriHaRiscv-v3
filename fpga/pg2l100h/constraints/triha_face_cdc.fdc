@@ -1,5 +1,11 @@
 # CDC protocol constraints: checked against RTL and PDS compile endpoints.
 # Bounded mailbox/Gray data paths remain timed; only opposite-domain synchronizer inputs are cut.
+# Full avatar cache: identity latches before the 65536-word load and remains
+# immutable until coordinated reset. Readiness crosses two pixel-clock flops;
+# the cache and renderer then capture the held identity. Only ready_meta is cut.
+# Generate-scope spellings and both identity destinations verified in PDS compile DB.
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/ready_meta}]
+set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/asset_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/asset_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/pixel_asset_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/pixel_generation* g_full.impl/face/u_video/g_compact.u_display/u_renderer/pixel_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/pixel_generation*}]
 set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/record_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/done_sync1* g_full.impl/face/u_video/g_compact.u_display/u_raw/commit_ack_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/release_ack_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/fault_sync1}]
 set_false_path -from [get_clocks {pixel_clk}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/request_sync1* g_full.impl/face/u_video/g_compact.u_display/u_raw/commit_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/release_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/scan_sync1 g_full.impl/face/u_video/g_compact.u_display/u_raw/underflow_sync1}]
 set_max_delay 6.0 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_base* g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_stride* g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_frame* g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_slot*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_base* g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_stride* g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_frame* g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_slot*}]
@@ -14,6 +20,15 @@ set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/mailbox_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/pending_generation*}]
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/active_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/commit_generation*}]
 set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/release_pixel_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_raw/release_generation*}]
+# Compact owner holds the complete record before request synchronization until
+# combined scanner/pixel feedback. Bound every pixel-domain data/control sink
+# fed by this exact source bank: active_data capture and asset admission.
+# Overlay uses only pixel-local active_data; no payload false path or clock-group cut.
+set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/g_full_mmio.u_mmio/record_data*}] -to [get_clocks {pixel_clk}]
+# Either domain can assert the lease reset. Deassertion is synchronized locally;
+# only the two async clear pins of the opposite-domain release chain are cut.
+set_false_path -from [get_clocks {pixel_clk}] -to [get_pins {g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/u_context/core_release[1:0]/C}]
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_pins {g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/u_context/pixel_release[1:0]/C}]
 # Ingress Gray buses stay bounded below their source periods; no clock-group cuts.
 set_max_delay 20.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/ingress/fifo/wr_gray_rd_sync1*}]
 set_max_skew 20.0 -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/ingress/fifo/wr_gray_rd_sync1*}]
@@ -28,3 +43,51 @@ set_max_delay 150.0 -datapath_only -from [get_cells {g_full.impl/rx_telemetry/st
 set_false_path -from [get_clocks {cfg_clk}] -to [get_cells {g_full.impl/rx_telemetry/req_sync* g_full.impl/rx_enable_sync* g_full.impl/rx_health_sync*}]
 set_false_path -from [get_clocks {rx_pixel_clk}] -to [get_cells {g_full.impl/rx_telemetry/ack_sync*}]
 set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/u_context/request_meta g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/core_fault_meta}]
+
+# CPU/NPU 100 MHz <-> DDR/video 125 MHz. No clock-group false paths:
+# Gray-pointer flight time AND bus skew are bounded below both periods.
+# RAM payload remains timed; synchronizer stage 1 -> 2 remains timed.
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/rd_gray_wr_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/wr_gray_rd_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/wr_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/wr_gray_rd_sync1*}]
+set_max_delay 6.0 -datapath_only -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/rd_gray_wr_sync1*}]
+set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/rd_gray\[[0-9:]+\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/rd_gray_wr_sync1*}]
+# Status observations: only paths launched in the opposite clock domain
+# enter these two-flop synchronizers. No FIFO payload/Gray paths are cut.
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {g_full.impl/face/model_seal_sync* g_full.impl/face/video_irq_sync* g_full.impl/face/u_compute_cdc/ready_meta_q g_full.impl/face/u_compute_cdc/fault_meta_q}]
+set_false_path -from [get_clocks {compute_clk}] -to [get_cells {g_full.impl/face/compute_fault_sync*}]

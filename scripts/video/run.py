@@ -546,7 +546,7 @@ def main():
                 run_logged([executable,'-V'],log);artifacts.append(log)
             scenarios=[('normal',(),()),('minimum',(('W',10),('H',10),('PT',0),('PB',0),('JOBS',10)),()),
                 ('ratio',(('PIXEL_HALF',8.5),('CORE_HALF',5.5),('PIXEL_GAP',12)),())]
-            scenarios += [(f'case_{case}',(),(f'+CASE={case}',)) for case in (1,2,3,4,10,11,12,13,14,15,20,21,22,23,24,25)]
+            scenarios += [(f'case_{case}',(),(f'+CASE={case}',)) for case in (1,2,3,4,10,11,12,13,14,15,20,21,22,23,24,25,30)]
             scenarios += [('full',(('W',800),('H',600),('PT',40),('PB',40),('JOBS',3),('PIXEL_GAP',1),('FIFO_AW',11)),())]
             for name,parameters,options in scenarios:
                 stem='capture_rearm_'+name

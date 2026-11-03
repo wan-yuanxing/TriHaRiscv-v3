@@ -80,28 +80,36 @@
       "base": "rtl/cpu/vendor/src/core/biriscv_csr.v",
       "base_sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
       "derived": "rtl/cpu/triha_csr.v",
-      "derived_sha256": "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49",
+      "derived_sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
       "changes": [
         "Rename integration module to triha_csr.",
         "Separate wide CSR data registers from late opcode valid, retaining original valid, exception, read-side-effect and commit-write controls.",
         "Decode payload set/clear/immediate independently of valid; valid instructions produce identical data.",
-        "For fixed IALIGN=32, mask EPC reads, committed writes and xRET targets to four-byte alignment at the maintained CSR boundary; vendor source and all valid/exception controls remain unchanged. Official regression and physical timing evidence have separate source hashes."
+        "For fixed IALIGN=32, mask EPC reads, committed writes and xRET targets to four-byte alignment at the maintained CSR boundary; vendor source and all valid/exception controls remain unchanged. Official regression and physical timing evidence have separate source hashes.",
+        "2026-11-03 P0-1/P0-2: custom maintenance CSR 0x7c1..0x7c3; machine-only illegal CSR checks and maintained regfile. See docs/verification/cpu/document_review_csr_20261102 in main tree; no new physical acceptance."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
+      "previous_derived_sha256": [
+        "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49"
+      ]
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
       "base_sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
       "derived": "rtl/cpu/triha_lsu.v",
-      "derived_sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+      "derived_sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
       "changes": [
         "Rename integration/helper modules to triha_lsu/triha_lsu_fifo.",
         "Export pure load payload for bypass without response ack/error selection; preserve the original completion/fault address bus and all request/exception controls.",
         "Decode address format and store data without late issue valid; retain final request/unaligned strobe qualification.",
         "Keep address/data/cacheability payload in separate registers with response-wait and unaccepted-request holds, excluding late fault cancellation from wide data.",
-        "For the existing depth-two request FIFO, rotate the original two storage banks into registered head/tail coordinates; preserve accept/pop/count and all stale output data with no extra latency or payload state. Other depths retain the original implementation."
+        "For the existing depth-two request FIFO, rotate the original two storage banks into registered head/tail coordinates; preserve accept/pop/count and all stale output data with no extra latency or payload state. Other depths retain the original implementation.",
+        "2026-11-03 P0-1/P0-2: custom maintenance CSR 0x7c1..0x7c3; machine-only illegal CSR checks and maintained regfile. See docs/verification/cpu/document_review_csr_20261102 in main tree; no new physical acceptance."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
+      "previous_derived_sha256": [
+        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
+      ]
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
@@ -188,6 +196,20 @@
         }
       ],
       "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
+    },
+    {
+      "base": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "derived": "rtl/cpu/triha_csr_regfile.v",
+      "derived_sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+      "changes": [
+        "Expose implemented-address decode, excluding disabled supervisor CSRs; preserve fixed MISA writes.",
+        "MEI > MSI > MTI machine interrupt priority.",
+        "Read-zero custom cache maintenance at 0x7c1..0x7c3. 0x7c0 timer unchanged; no old PMP-overlap aliases.",
+        "Legacy 0x7b2/0x8b2 simulation control only under verilog_sim/verilator or TRIHA_SIM_CTRL_EXTERNAL (external testbench owns print/exit).",
+        "Explicit read-only-zero mvendorid/marchid/mimpid (0xf11..0xf13); unknown CSR addresses still fault."
+      ],
+      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
     }
   ],
   "wrapper_configuration": {

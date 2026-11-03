@@ -6,7 +6,7 @@
 // The source must supply the actual pixel-domain RAW identity. All resets are
 // coordinated. pixel retirement is only one contribution to global retirement;
 // scanner reads, owner events and software ACK must also finish independently.
-module display_record_pixels_compact(
+module display_record_pixels_compact #(parameter integer BOX_ONLY=0)(
     input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,
     input wire cmd_valid,output wire cmd_ready,
     input wire [1:0] cmd_mode,cmd_slot,
@@ -26,9 +26,9 @@ module display_record_pixels_compact(
     output wire avatar_req_valid,output wire [17:0] avatar_req_addr,
     output wire [31:0] avatar_req_asset_id,avatar_req_generation,
     input wire sample_valid,sample_error,input wire [31:0] sample_rgba,
-    output reg [23:0] out_rgb,output reg [10:0] out_x,out_y,
-    output reg [31:0] out_frame,out_generation,out_seq,output reg [1:0] out_slot,out_mode,
-    output reg out_de,out_hs,out_vs,out_sof,out_box,out_point,out_avatar,out_fault,
+    output wire [23:0] out_rgb,output wire [10:0] out_x,out_y,
+    output wire [31:0] out_frame,out_generation,out_seq,output wire [1:0] out_slot,out_mode,
+    output wire out_de,out_hs,out_vs,out_sof,out_box,out_point,out_avatar,out_fault,
     output wire pixel_pending,output wire [1:0] pending_mode,pending_slot,
     output wire [31:0] pending_frame,pending_generation,
     output reg fault,output reg [7:0] fault_code
@@ -125,12 +125,35 @@ module display_record_pixels_compact(
     assign pixel_accept=pixel_reset_n&&pixel_pending&&!pixel_waiting&&raw_sof&&pending_matches&&
         (!pending_asset||asset_matches)&&!pixel_fault&&!overlay_error&&!pixel_cdc_error&&!core_fault_sync;
     wire apply_now=pixel_pending&&pixel_accept;
-    wire [5119:0] selected=apply_now?pending_data:active_data;
-    wire [1:0] selected_mode=apply_now?pending_mode:active_mode;
-    wire [31:0] selected_seq=apply_now?pending_seq:active_seq;
-    wire qualified_context=apply_now||(pixel_active&&active_matches);
-    reg [12:0] retire_marker;
-    assign pixel_commit=retire_marker[12]&&!pixel_fault&&!overlay_error&&!overlay_pixel_fault&&!pixel_cdc_error&&!core_fault_sync;
+    // Capture the held record at SOF, before it enters pixel combinational
+    // logic. Move the former final output register to the RAW input so total
+    // RGB/metadata latency stays unchanged and no wide CDC bypass is needed.
+    reg d_context_valid;
+    reg [1:0] d_slot;
+    reg [31:0] d_frame,d_generation;
+    reg [10:0] d_x,d_y;
+    reg [23:0] d_rgb;
+    reg d_de,d_hs,d_vs,d_sof;
+    always @(posedge pixel_clk or negedge pixel_reset_n)begin
+        if(!pixel_reset_n)begin
+            d_context_valid<=0;d_slot<=0;d_frame<=0;d_generation<=0;
+            d_x<=0;d_y<=0;d_rgb<=0;d_de<=0;d_hs<=0;d_vs<=0;d_sof<=0;
+        end else begin
+            d_context_valid<=raw_context_valid===1'b1&&source_known;
+            d_slot<=raw_slot;d_frame<=raw_frame;d_generation<=raw_generation;
+            d_x<=raw_x;d_y<=raw_y;d_rgb<=raw_rgb;
+            d_de<=raw_de;d_hs<=raw_hs;d_vs<=raw_vs;d_sof<=raw_sof;
+        end
+    end
+    wire [5119:0] selected=active_data;
+    wire [1:0] selected_mode=active_mode;
+    wire [31:0] selected_seq=active_seq;
+    wire qualified_context=pixel_active&&d_context_valid&&d_slot==active_slot&&
+        d_frame==active_frame&&d_generation==active_generation;
+    reg [13:0] retire_marker;
+    // Material requests now occur one cycle later. Wait for the registered
+    // output/fault of the first selected pixel before acknowledging the lease.
+    assign pixel_commit=retire_marker[13]&&!pixel_fault&&!overlay_error&&!overlay_pixel_fault&&!pixel_cdc_error&&!core_fault_sync;
     always @(posedge pixel_clk or negedge pixel_reset_n)begin
         if(!pixel_reset_n)begin core_fault_meta<=0;core_fault_sync<=0;end
         else begin core_fault_meta<=fault;core_fault_sync<=core_fault_meta;end
@@ -140,7 +163,7 @@ module display_record_pixels_compact(
             pixel_active<=0;active_data<=0;active_mode<=0;active_slot<=0;active_frame<=0;active_generation<=0;
             active_seq<=0;retire_marker<=0;pixel_fault<=0;
         end else begin
-            retire_marker<={retire_marker[11:0],apply_now};
+            retire_marker<={retire_marker[12:0],apply_now};
             if(apply_now)begin
                 pixel_active<=1;active_data<=pending_data;active_mode<=pending_mode;active_slot<=pending_slot;
                 active_frame<=pending_frame;active_generation<=pending_generation;active_seq<=pending_seq;
@@ -177,16 +200,17 @@ module display_record_pixels_compact(
         end else begin
             asset_tags[0]<={word(selected,`VDISP_FIELD_ASSET_ID),word(selected,`VDISP_FIELD_ASSET_GENERATION)};
             for(delay_index=1;delay_index<9;delay_index=delay_index+1)asset_tags[delay_index]<=asset_tags[delay_index-1];
-            pixel_tags[0]<={raw_generation,selected_seq,raw_slot,selected_mode};
+            pixel_tags[0]<={d_generation,selected_seq,d_slot,selected_mode};
             for(delay_index=1;delay_index<13;delay_index=delay_index+1)pixel_tags[delay_index]<=pixel_tags[delay_index-1];
         end
     end
     assign {avatar_req_asset_id,avatar_req_generation}=asset_tags[8];
     wire [23:0] overlay_rgb;wire [10:0] overlay_x,overlay_y;wire [31:0] overlay_frame;
     wire overlay_de,overlay_hs,overlay_vs,overlay_sof,overlay_box,overlay_point,overlay_avatar;
+    generate if(!BOX_ONLY) begin:g_full_overlay
     display_overlay u_overlay(
-        .clk(pixel_clk),.rst(!pixel_reset_n),.pixel_frame_id(raw_frame),.pixel_x(raw_x),.pixel_y(raw_y),
-        .pixel_rgb(raw_rgb),.pixel_de(raw_de),.pixel_hs(raw_hs),.pixel_vs(raw_vs),.pixel_sof(raw_sof),
+        .clk(pixel_clk),.rst(!pixel_reset_n),.pixel_frame_id(d_frame),.pixel_x(d_x),.pixel_y(d_y),
+        .pixel_rgb(d_rgb),.pixel_de(d_de),.pixel_hs(d_hs),.pixel_vs(d_vs),.pixel_sof(d_sof),
         .mode(selected_mode),.result_valid(qualified_context&&selected_flags[0]),.result_has_face(!selected_flags[1]),
         .result_frame_id(word(selected,`VDISP_FIELD_RESULT_FRAME)),.primary_valid(selected_flags[4]),
         .primary_index(selected[13*32+:4]),.points_enable(selected_flags[2]),.box_valid(selected[12*32+:16]),
@@ -197,16 +221,26 @@ module display_record_pixels_compact(
         .out_rgb(overlay_rgb),.out_x(overlay_x),.out_y(overlay_y),.out_frame_id(overlay_frame),
         .out_de(overlay_de),.out_hs(overlay_hs),.out_vs(overlay_vs),.out_sof(overlay_sof),
         .out_box(overlay_box),.out_point(overlay_point),.out_avatar(overlay_avatar),.out_fault(overlay_pixel_fault),.overlay_fault(overlay_error));
-    always @(posedge pixel_clk or negedge pixel_reset_n)begin
-        if(!pixel_reset_n)begin
-            out_rgb<=0;out_x<=0;out_y<=0;out_frame<=0;out_generation<=0;out_seq<=0;out_slot<=0;out_mode<=0;
-            out_de<=0;out_hs<=0;out_vs<=0;out_sof<=0;out_box<=0;out_point<=0;out_avatar<=0;out_fault<=0;
-        end else begin
-            out_rgb<=overlay_rgb;out_x<=overlay_x;out_y<=overlay_y;out_frame<=overlay_frame;
-            {out_generation,out_seq,out_slot,out_mode}<=pixel_tags[12];
-            out_de<=overlay_de;out_hs<=overlay_hs;out_vs<=overlay_vs;out_sof<=overlay_sof;
-            out_box<=overlay_box;out_point<=overlay_point;out_avatar<=overlay_avatar;out_fault<=overlay_pixel_fault;
-        end
-    end
+    end else begin:g_box_only
+    display_box_only #(.SINGLE_PRIMARY(BOX_ONLY)) u_overlay(
+            .clk(pixel_clk),.rst(!pixel_reset_n),.pixel_frame_id(d_frame),.pixel_x(d_x),.pixel_y(d_y),
+            .pixel_rgb(d_rgb),.pixel_de(d_de),.pixel_hs(d_hs),.pixel_vs(d_vs),.pixel_sof(d_sof),
+            .mode(selected_mode),.result_valid(qualified_context&&selected_flags[0]),.result_has_face(!selected_flags[1]),
+            .result_frame_id(word(selected,`VDISP_FIELD_RESULT_FRAME)),.primary_valid(selected_flags[4]),
+            .primary_index(selected[13*32+:4]),.box_valid(selected[12*32+:16]),.box_x0(box_x0),.box_y0(box_y0),
+            .box_x1(box_x1),.box_y1(box_y1),.out_rgb(overlay_rgb),.out_x(overlay_x),.out_y(overlay_y),
+            .out_frame_id(overlay_frame),.out_de(overlay_de),.out_hs(overlay_hs),.out_vs(overlay_vs),
+            .out_sof(overlay_sof),.out_box(overlay_box),.out_point(overlay_point),.out_avatar(overlay_avatar),
+            .out_fault(overlay_pixel_fault),.overlay_fault(overlay_error));
+        assign avatar_req_valid=1'b0;
+        assign avatar_req_addr=18'd0;
+    end endgenerate
+    // Overlay and tag outputs already end in pixel-clock registers.
+    assign out_rgb=overlay_rgb;assign out_x=overlay_x;assign out_y=overlay_y;
+    assign out_frame=overlay_frame;
+    assign {out_generation,out_seq,out_slot,out_mode}=pixel_tags[12];
+    assign out_de=overlay_de;assign out_hs=overlay_hs;assign out_vs=overlay_vs;assign out_sof=overlay_sof;
+    assign out_box=overlay_box;assign out_point=overlay_point;assign out_avatar=overlay_avatar;
+    assign out_fault=overlay_pixel_fault;
 endmodule
 `default_nettype wire

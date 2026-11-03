@@ -10,6 +10,7 @@ module tb_video_application_engine #(parameter integer H=600,CASE_ID=0,GAPS=1,QU
  localparam integer N=800*H,HT=1056,VT=H+28;
  reg  clk_i=0;
  reg  rst_ni=0;
+ reg [1:0] mode_request_i=0;
  reg  pixel_clk=0;
  reg  pixel_reset_n=0;
  reg  online=0;

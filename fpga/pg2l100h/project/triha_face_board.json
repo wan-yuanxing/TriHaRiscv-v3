@@ -15,7 +15,7 @@
     "rtl/video/video_capture_ingress.sv",
     "rtl/video/video_stream_register.sv",
     "rtl/cpu/vendor/src/core/biriscv_alu.v",
-    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+    "rtl/cpu/triha_csr_regfile.v",
     "rtl/cpu/triha_csr.v",
     "rtl/cpu/triha_decode.v",
     "rtl/cpu/vendor/src/core/biriscv_decoder.v",
@@ -103,6 +103,8 @@
     "rtl/video/display_slot_owner.sv",
     "rtl/video/display_record_guard.sv",
     "rtl/video/video_display_mmio.sv",
+    "rtl/video/display_mode_cdc_held.sv",
+    "rtl/video/display_record_pixels_compact.sv",
     "rtl/video/display_mode_cdc.sv",
     "rtl/video/video_read_arbiter.sv",
     "rtl/video/avatar_texture_cache.sv",
@@ -127,6 +129,8 @@
     "rtl/video/video_application_engine.sv",
     "rtl/soc/triha_compute_system.v",
     "rtl/soc/triha_face_system.v",
+    "rtl/soc/triha_face_mode_key.v",
+    "rtl/video/video_button_debounce.sv",
     "rtl/soc/triha_model_loader.v",
     "rtl/soc/triha_boot_buffer.v",
     "rtl/soc/triha_uart_rx.v",
@@ -154,14 +158,17 @@
     "fpga/pg2l100h/constraints/triha_face_cdc.fdc",
     "fpga/pg2l100h/constraints/triha_face_phy.rcf"
   ],
-  "scope": "Final face application: CPU-managed B03 frame execution, HDMI capture and RAW+BOX display. DEMO_BOX_ONLY=1 remains an optional TX-only bring-up override.",
+  "scope": "Face application: CPU-managed B03 frame execution, HDMI RAW+BOX+fixed AVATAR, seven-segment checked boot, immutable full texture cache, KEY1 mode requests through CPU, RAW/NCHW capture without unused preview. Pending full pixel and physical acceptance; DEMO_BOX_ONLY remains TX-only bring-up.",
+  "pin_reference": "fpga/pg2l100h/ip/video_mode_key_manifest.json",
   "clock_contract": {
     "pixel_hz": 40000000,
     "core_hz": 125000000,
     "physical_status": "PDS/board verification required",
-    "compute_hz": 125000000,
+    "compute_hz": 100000000,
+    "compute_clock_source": "ref_clk -> triha_compute_pll -> compute_clk",
+    "video_clock_source": "DDR user core_clk (ddrphy_sysclk)",
     "free_hz": 27000000,
-    "model_loader": "THB1 UART RX B24 / TX C24 at 115200 8N1; fixed-range verified writes and complete image CRC before seal"
+    "model_loader": "THB1 UART RX B24 / TX C24 at 115200 8N1; six model segments plus fixed avatar at 0x82600000; verified writes and complete image CRC before seal"
   },
   "post_map_constraints": [
     "fpga/pg2l100h/constraints/triha_face_phy.pcf"

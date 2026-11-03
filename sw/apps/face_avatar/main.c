@@ -1,4 +1,5 @@
 #include "face_avatar.h"
+#include "avatar_preset.h"
 #include <stddef.h>
 
 /* Telemetry only. Hardware IDLE is gated by health, model seal and ownership. */
@@ -27,7 +28,7 @@ static const struct face_avatar_io platform_io={
     {(void *)(uintptr_t)NF_BASE,read_mmio,write_mmio,read_shared,io_fence}
 };
 int main(void) {
-    uint32_t epoch,status,live_epoch,confirmed_status;
+    uint32_t epoch,status,live_epoch,confirmed_status,mode_key;
     /* Polling avoids the admitted core's separately latched external mip bit. */
     for (;;) {
         read_mmio((void *)(uintptr_t)NF_BASE,NF_REG_STATUS,&status);
@@ -42,8 +43,28 @@ int main(void) {
     if (face_avatar_init(&face_avatar_application,&platform_io,epoch)) {
         face_avatar_run_status=2;for (;;) {}
     }
+    /* The platform advertises AVATAR only when its material loader/cache is
+     * present. Video independently checks the sealed identity before commit. */
+    read_mmio((void *)(uintptr_t)VDISP_BASE,VDISP_REG_MODES,&status);
+    if (status&4u) {
+        const struct face_avatar_asset preset={TRIHA_AVATAR_ID,TRIHA_AVATAR_GENERATION,TRIHA_AVATAR_BASE,
+            TRIHA_AVATAR_ANCHOR_X,TRIHA_AVATAR_ANCHOR_Y,TRIHA_AVATAR_COVERAGE_Q8};
+        if (face_avatar_configure_asset(&face_avatar_application,&preset)) {
+            face_avatar_run_status=2;for (;;) {}
+        }
+    }
+    read_mmio((void *)(uintptr_t)VDISP_BASE,VDISP_REG_CAPABILITIES,&mode_key);
+    mode_key&=VDISP_CAP_MODE_KEY;
     face_avatar_run_status=1;
-    for (;;)if (face_avatar_step(&face_avatar_application)!=FACE_AVATAR_OK) {
-        face_avatar_run_status=2;for (;;) {}
+    for (;;) {
+        if (mode_key) {
+            read_mmio((void *)(uintptr_t)VDISP_BASE,VDISP_REG_MODE_REQUEST,&status);
+            if (face_avatar_select_mode(&face_avatar_application,status)!=FACE_AVATAR_OK) {
+                face_avatar_run_status=2;for (;;) {}
+            }
+        }
+        if (face_avatar_step(&face_avatar_application)!=FACE_AVATAR_OK) {
+            face_avatar_run_status=2;for (;;) {}
+        }
     }
 }

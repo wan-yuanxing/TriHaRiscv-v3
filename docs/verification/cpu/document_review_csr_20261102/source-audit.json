@@ -1,0 +1,574 @@
+{
+  "status": "PASS",
+  "trees": {
+    "TriHaRiscv-main": {
+      "adaptations": 12,
+      "adaptations_valid": true,
+      "vendor_files": [
+        {
+          "path": "LICENSE",
+          "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+          "matches": true
+        },
+        {
+          "path": "README.md",
+          "sha256": "133b19df1165963753b52ed65d823664f222d7fcf0b7ab4cc74eeebc6dfccfd2",
+          "matches": true
+        },
+        {
+          "path": "docs/configuration.md",
+          "sha256": "60ea5fac0ef03803afa65ca6f585b35a96fd8fcbbadd437e07d92a3b823a8785",
+          "matches": true
+        },
+        {
+          "path": "docs/integration.md",
+          "sha256": "c8d37c77de855afdca52a86287a2598f41306a27afef29d73622c82233d25674",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_alu.v",
+          "sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_csr.v",
+          "sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_csr_regfile.v",
+          "sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_decode.v",
+          "sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_decoder.v",
+          "sha256": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_defs.v",
+          "sha256": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_divider.v",
+          "sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_exec.v",
+          "sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_fetch.v",
+          "sha256": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_frontend.v",
+          "sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_issue.v",
+          "sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_lsu.v",
+          "sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_mmu.v",
+          "sha256": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_multiplier.v",
+          "sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_npc.v",
+          "sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_pipe_ctrl.v",
+          "sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_regfile.v",
+          "sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_trace_sim.v",
+          "sha256": "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_xilinx_2r1w.v",
+          "sha256": "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1",
+          "matches": true
+        },
+        {
+          "path": "src/core/riscv_core.v",
+          "sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tb_top.v",
+          "sha256": "a3681633bcf5ce38c69ed3f4891f0e434833dc590480f5966ea94d6648e8d71e",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tcm_mem.v",
+          "sha256": "308c14bd6c97b0971472188edf584c8f2ed26fe55e59bee88766c1b7eca6b801",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tcm_mem_ram.v",
+          "sha256": "f260e88fcf41d1983a117b53810173ea8ddaef8cd125c1aaa9ea5f22d5cd6ebe",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/test.elf",
+          "sha256": "6f97ed791e339f8b3c6a8a96496f5a5eacf1e55f1fcc8a3aa824cd711bf8f11e",
+          "matches": true
+        },
+        {
+          "path": "cache/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core.v",
+          "sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core_data_ram.v",
+          "sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core_tag_ram.v",
+          "sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache.v",
+          "sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache_data_ram.v",
+          "sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache_tag_ram.v",
+          "sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389",
+          "matches": true
+        }
+      ],
+      "vendor_valid": true,
+      "changed_paths": [
+        {
+          "path": "config/cpu_admission.json",
+          "before_sha256": "78557d9473fcf316ac7b80d62cb219b4d3303c3fe437d4a9ef2e6c51b863f823",
+          "sha256": "61da2eb683be59f57874c28078d2f89bff584e3c44f8b74f0aeb12db19b1f2f8"
+        },
+        {
+          "path": "config/cpu_sources.f",
+          "before_sha256": "373fd413c77b7ec18c7fd1d604c43c289a7dc62bf098f1597ad5214d3668ebf5",
+          "sha256": "671ba183efe8678c28e51c53760f8290d79b4005310748ff5ff63efcd354ea24"
+        },
+        {
+          "path": "config/soc_face_sources.f",
+          "before_sha256": "98dc1d4db8ed39aa0f1ccba1df03dfebbbf0771833f6a1d67426510a13cf2b69",
+          "sha256": "768a034f098528cb7724afb032694c2bf334a83ff0e57b1d9977fe14158d6e82"
+        },
+        {
+          "path": "tb/cpu/fixtures/fpga/pg2l100h/project/cpu_core.json",
+          "before_sha256": "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441",
+          "sha256": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96"
+        },
+        {
+          "path": "scripts/cpu/run_csr.py",
+          "before_sha256": "621b113fd222eadf709497b65052407c511152a05fe8bcd65636a47b6076b1ae",
+          "sha256": "dc690cf3943317e9ae141b9db018220ee8c5a9b8600e1fd1dc985bc05e320777"
+        },
+        {
+          "path": "rtl/cpu/ADAPTATIONS.json",
+          "before_sha256": "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4",
+          "sha256": "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25"
+        },
+        {
+          "path": "rtl/cpu/triha_csr.v",
+          "before_sha256": "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49",
+          "sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee"
+        },
+        {
+          "path": "rtl/cpu/triha_lsu.v",
+          "before_sha256": "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+          "sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc"
+        },
+        {
+          "path": "fpga/pg2l100h/project/triha_face_board.json",
+          "before_sha256": "d623a5af311dfba74356da10229f24b5e51578eec565783a033a7cfaeebff296",
+          "sha256": "4e3d3b796bf9a1039be7bc00ff6eda697241aa4e884b9dab130d0da2205fc337"
+        },
+        {
+          "path": "rtl/cpu/triha_csr_regfile.v",
+          "before_sha256": null,
+          "sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+        },
+        {
+          "path": "scripts/cpu/run_document_csr.py",
+          "before_sha256": null,
+          "sha256": "1b69e8a61aef2f0781e1cdb02fee6312a67f942fcdeb47a4d32059e51ed159ba"
+        },
+        {
+          "path": "tb/cpu/tb_document_csr.v",
+          "before_sha256": null,
+          "sha256": "7ead647055828e7d62f49f6852a23f9e97dc4b44c60e9d63a6a4b1d5c206856e"
+        }
+      ],
+      "diff_check_return_code": 0,
+      "admission_valid": true,
+      "admitted_files": 92,
+      "production_filelists_valid": true
+    },
+    "TriHaRiscv-cpu-dualissue-windows": {
+      "adaptations": 12,
+      "adaptations_valid": true,
+      "vendor_files": [
+        {
+          "path": "LICENSE",
+          "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+          "matches": true
+        },
+        {
+          "path": "README.md",
+          "sha256": "133b19df1165963753b52ed65d823664f222d7fcf0b7ab4cc74eeebc6dfccfd2",
+          "matches": true
+        },
+        {
+          "path": "docs/configuration.md",
+          "sha256": "60ea5fac0ef03803afa65ca6f585b35a96fd8fcbbadd437e07d92a3b823a8785",
+          "matches": true
+        },
+        {
+          "path": "docs/integration.md",
+          "sha256": "c8d37c77de855afdca52a86287a2598f41306a27afef29d73622c82233d25674",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_alu.v",
+          "sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_csr.v",
+          "sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_csr_regfile.v",
+          "sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_decode.v",
+          "sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_decoder.v",
+          "sha256": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_defs.v",
+          "sha256": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_divider.v",
+          "sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_exec.v",
+          "sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_fetch.v",
+          "sha256": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_frontend.v",
+          "sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_issue.v",
+          "sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_lsu.v",
+          "sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_mmu.v",
+          "sha256": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_multiplier.v",
+          "sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_npc.v",
+          "sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_pipe_ctrl.v",
+          "sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_regfile.v",
+          "sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_trace_sim.v",
+          "sha256": "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb",
+          "matches": true
+        },
+        {
+          "path": "src/core/biriscv_xilinx_2r1w.v",
+          "sha256": "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1",
+          "matches": true
+        },
+        {
+          "path": "src/core/riscv_core.v",
+          "sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tb_top.v",
+          "sha256": "a3681633bcf5ce38c69ed3f4891f0e434833dc590480f5966ea94d6648e8d71e",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tcm_mem.v",
+          "sha256": "308c14bd6c97b0971472188edf584c8f2ed26fe55e59bee88766c1b7eca6b801",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/tcm_mem_ram.v",
+          "sha256": "f260e88fcf41d1983a117b53810173ea8ddaef8cd125c1aaa9ea5f22d5cd6ebe",
+          "matches": true
+        },
+        {
+          "path": "tb/tb_core_icarus/test.elf",
+          "sha256": "6f97ed791e339f8b3c6a8a96496f5a5eacf1e55f1fcc8a3aa824cd711bf8f11e",
+          "matches": true
+        },
+        {
+          "path": "cache/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core.v",
+          "sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core_data_ram.v",
+          "sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+          "matches": true
+        },
+        {
+          "path": "src/dcache/dcache_core_tag_ram.v",
+          "sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache.v",
+          "sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache_data_ram.v",
+          "sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+          "matches": true
+        },
+        {
+          "path": "src/icache/icache_tag_ram.v",
+          "sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389",
+          "matches": true
+        }
+      ],
+      "vendor_valid": true,
+      "changed_paths": [
+        {
+          "path": "config/cpu_sources.f",
+          "before_sha256": "364ccf4abcd28834c653852607196831141a046e4d9809926a5882b8b0087fe1",
+          "sha256": "87b9443f4366cfdd3b5dd38b12b6fb33138e1690731c938b938a1fe0dfa10927"
+        },
+        {
+          "path": "sw/tests/cache_runtime.S",
+          "before_sha256": "b3dfbb2867878d0d27b5320033bf0337fc4aa128771fb5e98a2d646f54bd088e",
+          "sha256": "406c98a35a0cdaf7de5de85ca681f59c93d4dbc089d1a0a22e06b34f602ca329"
+        },
+        {
+          "path": "scripts/cpu/run.ps1",
+          "before_sha256": "bd8597b22b7212aee3a7e52d5817870deda9ee1e30cba35338aa868126c46f29",
+          "sha256": "ae0fa9a025490079e724906cdc6778ba5cba51f5be8d76f68f50835549f7c8f3"
+        },
+        {
+          "path": "scripts/cpu/run_cache.py",
+          "before_sha256": "5d8469ccd1197bd82b452d71bf18bd81eeb87d795ce8c97b6fe4eefd2a3baf45",
+          "sha256": "16008e449949addbcd6dac03924bca06360e07c42688efb71f142300dccc49d8"
+        },
+        {
+          "path": "scripts/cpu/run_dual_diagnostic.py",
+          "before_sha256": "7d9064fcb95f4c5ea54d1b58130a4ce90f3e3d11222f7941a6e6d906ed3a4498",
+          "sha256": "a4f1782e996e61e856c3465c98eee97a15bda498fda68adc994389580585378e"
+        },
+        {
+          "path": "scripts/cpu/run_equivalence.ps1",
+          "before_sha256": "a52b26faec2793e81ed77955fd73085c88662a217340735dbe56acefbec08d4c",
+          "sha256": "30c7b671c4112d2499233da89bb79d3ee359ba3c8f639f30a7a530931a8cc285"
+        },
+        {
+          "path": "scripts/cpu/run_firmware.ps1",
+          "before_sha256": "79024312038fb4db33400b88775bdf6fe4d529e54c18bfaf5a993c09e74298bd",
+          "sha256": "76ae85aabc6f81d8c39de07d7783deca4079f51d53400c8b421e4de2fb0cc959"
+        },
+        {
+          "path": "scripts/cpu/run_redirect.ps1",
+          "before_sha256": "dfd52cb07738e34cb23b47f4d64c0b23312fc8f1a347e35bf84625b7d90cb758",
+          "sha256": "88fe21d5e6fc49a9111360bb2eff5f57852e2a132185594e0d4131074deb6577"
+        },
+        {
+          "path": "scripts/cpu/run_tcm_profile.py",
+          "before_sha256": "2c12bb94e10c112e3068fda048ea429abb477ae7c3b6787caa52daceb50761e1",
+          "sha256": "79bd932e299a85a6d6e68f64e81ca7607f2236a1bc158ef3f0ed794044074723"
+        },
+        {
+          "path": "rtl/cpu/ADAPTATIONS.json",
+          "before_sha256": "5f167929b5e0b5be84171b85e3db1be26e31c3210501f0059a7931547c041045",
+          "sha256": "1bd3489d96fc57b7994bf950c28f3e3809951167e47dc1c003e4dd3428760aa6"
+        },
+        {
+          "path": "rtl/cpu/triha_csr.v",
+          "before_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+          "sha256": "1c67c2fe6b9a37beea1959dfdb290d2340b0d3f2223348d23c9bc97252532012"
+        },
+        {
+          "path": "rtl/cpu/triha_lsu.v",
+          "before_sha256": "3d614d5f62f8e96184cade9cb0af4c18d070b8d6ea22fa1f2bdc9003acb4debd",
+          "sha256": "9900f6842cc0698bd519f86c64034df81b85e3a2c98ac65b2a4aaae10b16f2e9"
+        },
+        {
+          "path": "fpga/pg2l100h/project/cpu_cached_core.json",
+          "before_sha256": "2b2a62f92ed317d414f76bcba8404d2fe7c4a0122a06190a186b5b2096699336",
+          "sha256": "d84bf16a2e366796b139534471f29ebe6d630bb4825b1064ea243d591c329412"
+        },
+        {
+          "path": "fpga/pg2l100h/project/cpu_cached_soc.json",
+          "before_sha256": "1225e412989e1369ffc742a0759f53056004028b27c74227be3a397fae2d9539",
+          "sha256": "8c3e55d1be38f2f6df8a212cda1d779d54416f175a680bdacc6bc548457fc4fa"
+        },
+        {
+          "path": "fpga/pg2l100h/project/cpu_cached_soc_map.json",
+          "before_sha256": "561b887c54db3cc30ca66e94700b88863435344de5c8124e7bc72d9e41e576ff",
+          "sha256": "b76f9becba9304002f2d3c648e5b0af5a17d0018219f2d7fdb4f986f7df08b09"
+        },
+        {
+          "path": "fpga/pg2l100h/project/cpu_core.json",
+          "before_sha256": "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441",
+          "sha256": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96"
+        },
+        {
+          "path": "fpga/pg2l100h/project/cpu_ddr_map.json",
+          "before_sha256": "8954daa940a0b26c4bfbb62582e5b9f14c78ef0c327e5d2211a9030b250fc329",
+          "sha256": "ce49742207170fc257f52655f7ec89d4dd8e66f0d4ad18934fe72ba6664174e3"
+        },
+        {
+          "path": "rtl/cpu/triha_csr_regfile.v",
+          "before_sha256": null,
+          "sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+        },
+        {
+          "path": "scripts/cpu/run_document_csr.py",
+          "before_sha256": null,
+          "sha256": "1b69e8a61aef2f0781e1cdb02fee6312a67f942fcdeb47a4d32059e51ed159ba"
+        },
+        {
+          "path": "tb/cpu/tb_document_csr.v",
+          "before_sha256": null,
+          "sha256": "7ead647055828e7d62f49f6852a23f9e97dc4b44c60e9d63a6a4b1d5c206856e"
+        }
+      ],
+      "diff_check_return_code": 0,
+      "production_filelists_valid": true
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/cpu",
+        "-p",
+        "test_admission_support.py"
+      ],
+      "cwd": "D:\\FPGA\\TriHaRiscv-main",
+      "return_code": 0,
+      "log": "admission-negative-unit.log",
+      "expected": "PASS"
+    },
+    {
+      "command": [
+        "D:\\miniconda3\\python.exe",
+        "scripts/cpu/check_cpu_release.py"
+      ],
+      "cwd": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows",
+      "return_code": 1,
+      "log": "historical-release-binding.log",
+      "expected": "FAIL: source changed from archived physical release"
+    }
+  ],
+  "previous_static_audit": {
+    "path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-check-20261102T163213416614Z\\result.json",
+    "sha256": "5708bfaee56072ff773939f9ade05fe6d46afaa419d799d911cce5e7904c57a6"
+  },
+  "admission_manifest_sha256": "61da2eb683be59f57874c28078d2f89bff584e3c44f8b74f0aeb12db19b1f2f8",
+  "final_manifest_validated": true,
+  "source_audit_path": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-final-binding-20261102T164122572456Z\\result.json"
+}

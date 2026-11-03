@@ -166,6 +166,14 @@ module tb_video_capture_rearm #(
             n=0;
             while(!req_ready&&n<64)begin @(negedge clk);n=n+1;end
             if(!req_ready)$fatal(1,"REARM_SECOND_REQUEST_BLOCKED job=%0d state=%0d healthy=%b empty=%b writers=%b accepted=%b consumed=%b completion=%b success=%b m=%b error=%h",job,dut.state,dut.rearm_healthy,dut.rearm_empty,dut.req_ready_vec,accepted_valid,dut.accepted_consumed,completion_valid,completion_success,m_valid,error_code);
+            if(case_id==30)begin
+                // Prepare the drained preprocessing pipeline while idle,
+                // before any new request/AXI response can drive its clear.
+                repeat(3)@(negedge clk);
+                if(dut.u_input_scale.complete||dut.g_preview.u_preview_scale.complete||
+                   dut.u_raw_packer.ending||dut.g_preview.u_preview_packer.ending)
+                    $fatal(1,"REARM_PIPELINE_NOT_PREPARED job=%0d",job);
+            end
             for(i=0;i<SPAN;i=i+1)hit[i]=0;
             for(i=1;i<=3;i=i+1)begin count[i]=0;acks[i]=0;end
             req_slot=2'(job%3);req_frame_id=32'(job+1);req_preprocess_version=1;

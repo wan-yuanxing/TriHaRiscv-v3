@@ -24,8 +24,10 @@ enum { NPU_FRAME_OK=0,NPU_FRAME_PENDING=1,NPU_FRAME_UNPUBLISHED=2,
        NPU_FRAME_PROTOCOL=-4,NPU_FRAME_FAULT=-5,NPU_FRAME_VERSION=-6 };
 int npu_frame_submit(const struct npu_frame_io *,const struct npu_frame_ticket *);
 /* Collects either the legacy hardware records or CPU-post heads.  The CPU-post
- * path applies the B03 threshold/decode/NMS contract and retains up to 16
- * display boxes; it never fabricates landmarks. */
+ * path considers all 2100 heads in bounded sorted pages, with rounded FP32
+ * score descending / candidate id ascending, then greedy NMS. It retains up
+ * to 16 display boxes and never fabricates landmarks. Heads remain immutable
+ * under the HELD frame ownership until this call completes. */
 int npu_frame_collect(const struct npu_frame_io *,const struct npu_frame_ticket *,struct npu_frame_result *);
 int npu_frame_ack(const struct npu_frame_io *,const struct npu_frame_ticket *);
 #endif

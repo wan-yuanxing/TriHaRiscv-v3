@@ -119,6 +119,10 @@ module video_three_branch_capture #(
     // An opted-in source must stop after EOF and use matching rearm semantics.
     // No request may hide stale input, outstanding events or writer ownership.
     wire job_clear=ENABLE_REARM && req_valid && req_ready;
+    // IDLE follows successful drain/record consumption. Prepare local pixel
+    // pipelines throughout IDLE, before the next request is accepted. Their
+    // READY paths must not depend on AXI B -> req_ready -> job_clear.
+    wire pipeline_clear=ENABLE_REARM && state==IDLE;
     assign cancel=error||fault_pending;
     assign busy=state!=IDLE&&state!=DONE;
     assign port_drained=reset_n&&((requested&~retired)==0)&&arb_idle;
@@ -164,18 +168,18 @@ module video_three_branch_capture #(
         end
     end
     rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_raw_packer(
-        .clk(clk),.reset_n(reset_n),.flush(job_clear),
+        .clk(clk),.reset_n(reset_n),.flush(pipeline_clear),
         .pixel_valid(pixel_offer&&preview_input_ready&&input_input_ready),.pixel_ready(raw_pixel_ready),
         .pixel_rgb(m_data[23:0]),.pixel_last(m_data[45]),.s_valid(stream_valid[0]),.s_ready(stream_ready[0]),
         .s_data(stream_data[0+:128]),.s_keep(stream_keep[0+:16]),.s_row_last(stream_last[0]));
     generate
     if (ENABLE_PREVIEW) begin : g_preview
         preview_downscale #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_preview_scale(
-            .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
+            .clk(clk),.reset_n(reset_n),.clear(pipeline_clear),.s_valid(pixel_offer&&raw_pixel_ready&&input_input_ready),
             .s_ready(preview_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
             .m_valid(preview_valid),.m_ready(preview_ready),.m_rgb(preview_rgb),.m_row_last(preview_last),.fault(preview_fault));
         rgb888_packer #(.ALLOW_SIMULTANEOUS_TRANSFER(0)) u_preview_packer(
-            .clk(clk),.reset_n(reset_n),.flush(job_clear),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
+            .clk(clk),.reset_n(reset_n),.flush(pipeline_clear),.pixel_valid(preview_valid&&!stopping),.pixel_ready(preview_pixel_ready),
             .pixel_rgb(preview_rgb),.pixel_last(preview_last),.s_valid(stream_valid[1]),.s_ready(stream_ready[1]),
             .s_data(stream_data[128+:128]),.s_keep(stream_keep[16+:16]),.s_row_last(stream_last[1]));
     end else begin : g_no_preview
@@ -192,7 +196,7 @@ module video_three_branch_capture #(
     end
     endgenerate
     detect_bilinear #(.FRAME_WIDTH(SW),.FRAME_HEIGHT(SH)) u_input_scale(
-        .clk(clk),.reset_n(reset_n),.clear(job_clear),.s_valid(pixel_offer&&raw_pixel_ready&&preview_input_ready),
+        .clk(clk),.reset_n(reset_n),.clear(pipeline_clear),.s_valid(pixel_offer&&raw_pixel_ready&&preview_input_ready),
         .s_ready(input_input_ready),.s_rgb(m_data[23:0]),.s_row_last(m_data[45]),
         .m_valid(input_valid),.m_ready(input_ready),.m_rgb(input_rgb),.m_row_last(input_last),.fault(input_fault));
     genvar g;

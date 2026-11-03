@@ -2,6 +2,7 @@
 module tb_video_display_record #(parameter integer W=80,H=64,CASE_ID=0,parameter real PIXEL_HALF=12.5);
  reg  core_clk=0;
  reg  core_reset_n=0;
+ reg [1:0] mode_request_i=0;
  reg  pixel_clk=0;
  reg  pixel_reset_n=0;
  reg  online=0;

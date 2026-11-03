@@ -240,9 +240,13 @@ begin
 
 end
 
-wire dcache_flush_w      = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DFLUSH);
-wire dcache_writeback_w  = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DWRITEBACK);
-wire dcache_invalidate_w = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DINVALIDATE);
+// Maintained machine-custom CSR ABI. Do not reuse vendor PMP-overlap defines.
+localparam [11:0] TRIHA_CSR_DFLUSH = 12'h7c1;
+localparam [11:0] TRIHA_CSR_DWRITEBACK = 12'h7c2;
+localparam [11:0] TRIHA_CSR_DINVALIDATE = 12'h7c3;
+wire dcache_flush_w      = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DFLUSH);
+wire dcache_writeback_w  = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DWRITEBACK);
+wire dcache_invalidate_w = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DINVALIDATE);
 
 //-----------------------------------------------------------------
 // Sequential

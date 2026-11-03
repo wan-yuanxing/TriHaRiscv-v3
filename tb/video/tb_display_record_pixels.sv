@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `default_nettype none
-module tb_display_record_pixels #(parameter integer W=40,H=24,CASE_ID=0,FULL=0,TIGHT=0,BOX_ONLY=0,parameter real PIXEL_HALF=12.5);
+module tb_display_record_pixels #(parameter integer W=40,H=24,CASE_ID=0,FULL=0,TIGHT=0,BOX_ONLY=0,REQUEST_LATENCY=9,parameter real PIXEL_HALF=12.5);
     reg core_clk=0,core_reset_n=0,pixel_clk=0,pixel_reset_n=0;
     always #4 core_clk=~core_clk;
     initial begin #3;forever #(PIXEL_HALF)pixel_clk=~pixel_clk;end
@@ -48,13 +48,13 @@ module tb_display_record_pixels #(parameter integer W=40,H=24,CASE_ID=0,FULL=0,T
     integer pixel_fd,checked=0,commits=0,retires=0,applies=0,requests=0;
     reg [31:0] ref_seq=0;integer ref_id;
     wire [1:0] provider_behavior=CASE_ID==3&&active_id==3?2'd2:2'd0;
-    reg [1:0] behavior_pipe[0:8];
+    reg [1:0] behavior_pipe[0:REQUEST_LATENCY-1];
     always @(posedge pixel_clk)begin
         if(!pixel_reset_n)begin
             raw_x<=0;raw_y<=0;source_frame<=0;source_generation<=0;source_slot<=0;
             valid_pipe<=0;active_id=0;ref_seq=0;
             sample_valid<=0;sample_error<=0;sample_rgba<=0;
-            for(k=0;k<9;k=k+1)behavior_pipe[k]<=0;
+            for(k=0;k<REQUEST_LATENCY;k=k+1)behavior_pipe[k]<=0;
         end else begin
             pixel_ticks=pixel_ticks+1;
             if(raw_x==HT-1)begin raw_x<=0;if(raw_y==VT-1)raw_y<=0;else raw_y<=raw_y+1'b1;end
@@ -74,12 +74,12 @@ module tb_display_record_pixels #(parameter integer W=40,H=24,CASE_ID=0,FULL=0,T
                 raw_x,raw_y,raw_rgb,raw_de,raw_hs,raw_vs,raw_sof,((CASE_ID==3&&ref_id==3)||late_error?2:0));
             for(k=13;k>0;k=k-1)ids[k]=ids[k-1];ids[0]=next_id;next_id=next_id+1;
             valid_pipe<={valid_pipe[12:0],1'b1};
-            behavior_pipe[0]<=((CASE_ID==3&&ref_id==3)||late_error?2:0);for(k=1;k<9;k=k+1)behavior_pipe[k]<=behavior_pipe[k-1];
-            if(valid_pipe[8])begin
-                $fdisplay(pixel_fd,"Q %h %h %h %h %h",ids[9],avatar_req_valid,avatar_req_addr,avatar_req_asset_id,avatar_req_generation);
+            behavior_pipe[0]<=((CASE_ID==3&&ref_id==3)||late_error?2:0);for(k=1;k<REQUEST_LATENCY;k=k+1)behavior_pipe[k]<=behavior_pipe[k-1];
+            if(valid_pipe[REQUEST_LATENCY-1])begin
+                $fdisplay(pixel_fd,"Q %h %h %h %h %h",ids[REQUEST_LATENCY],avatar_req_valid,avatar_req_addr,avatar_req_asset_id,avatar_req_generation);
                 if(avatar_req_valid)requests=requests+1;
             end
-            sample_valid<=avatar_req_valid;sample_error<=avatar_req_valid&&behavior_pipe[8]==2;
+            sample_valid<=avatar_req_valid;sample_error<=avatar_req_valid&&behavior_pipe[REQUEST_LATENCY-1]==2;
             sample_rgba<=avatar_req_valid?material(int'(avatar_req_addr[9:2]),int'(avatar_req_addr[17:10]),int'(avatar_req_asset_id)):32'hxxxxxxxx;
             #1;
             if(valid_pipe[13])begin

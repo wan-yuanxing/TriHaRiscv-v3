@@ -14,6 +14,7 @@ from common import tool, write_json
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--loader',action='store_true')
+    parser.add_argument('--avatar',action='store_true',help='Also check the seventh fixed avatar segment')
     parser.add_argument('--buffer',action='store_true')
     args=parser.parse_args()
     out=ROOT/'build/soc'/('boot_uart-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ'))
@@ -38,6 +39,9 @@ def main():
         jobs=[('compile',['-do','compile.do']),('uart',['-onfinish','exit','work.tb_uart_rx','-do','run -all'])]
         if args.loader:
             jobs += [('loader'+str(n),['-onfinish','exit','work.tb_model_loader','-gSERIAL='+str(n),'-do','run -all']) for n in [0,1]]
+            if args.avatar:
+                jobs += [('avatar'+str(n),['-onfinish','exit','work.tb_model_loader','-gSERIAL='+str(n),'-gAVATAR=1','-do','run -all']) for n in [0,1]]
+                jobs += [('avatar_full',['-onfinish','exit','work.tb_model_loader','-gAVATAR=1','-gAVATAR_BLOCKS=1024','-do','run -all'])]
         if args.buffer:jobs += [('buffer',['-onfinish','exit','work.tb_boot_buffer','-do','run -all'])]
         with (out/'simulation.log').open('wb') as stream:
             for label,arguments in jobs:
@@ -48,7 +52,7 @@ def main():
         log=(out/'simulation.log').read_text(encoding='utf-8',errors='replace')
         if proc.returncode or '** Error' in log or '** Fatal' in log or 'PASS UART_RX' not in log:
             raise RuntimeError(log[-3000:])
-        if args.loader and log.count('PASS MODEL_LOADER')!=2:raise RuntimeError('missing loader PASS')
+        if args.loader and log.count('PASS MODEL_LOADER')!=(5 if args.avatar else 2):raise RuntimeError('missing loader PASS')
         if args.buffer and 'PASS BOOT_BUFFER' not in log:raise RuntimeError('missing buffer PASS')
         frozen.verify();result.update(status='PASS',passes=[x for x in log.splitlines() if 'PASS ' in x])
     except Exception as exc:result.update(status='FAIL',error=str(exc))

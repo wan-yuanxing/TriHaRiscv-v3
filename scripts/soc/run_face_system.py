@@ -20,10 +20,15 @@ def need(value,message):
     if not value:raise RuntimeError(message)
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--timeout',type=int,default=7200);parser.add_argument('--compile-only',action='store_true');parser.add_argument('--board-profile',action='store_true');parser.add_argument('--boot-load',action='store_true');parser.add_argument('--boot-only',action='store_true');parser.add_argument('--fixture',type=Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--timeout',type=int,default=7200);parser.add_argument('--compile-only',action='store_true');parser.add_argument('--board-profile',action='store_true');parser.add_argument('--boot-load',action='store_true');parser.add_argument('--boot-only',action='store_true');parser.add_argument('--fixture',type=Path)
+    parser.add_argument('--avatar-boot',action='store_true',help='Seven-segment preset boot, full cache, real CPU key control and three display modes')
+    args=parser.parse_args()
+    if args.avatar_boot:
+        if not args.board_profile:parser.error('--avatar-boot requires --board-profile')
+        args.boot_load=True
     if args.boot_only:args.boot_load=True
     out=ROOT/'build/soc'/('face_system-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ'));out.mkdir(parents=True)
-    row={'status':'RUNNING','scope':__doc__,'board_verified':False,'model_loader_verified':False,'board_profile':args.board_profile,'boot_load':args.boot_load,'boot_only':args.boot_only,'commands':[]};save(out/'result.json',row)
+    row={'status':'RUNNING','scope':__doc__,'board_verified':False,'model_loader_verified':False,'board_profile':args.board_profile,'boot_load':args.boot_load,'boot_only':args.boot_only,'avatar_boot':args.avatar_boot,'commands':[]};save(out/'result.json',row)
     print('FACE_SYSTEM_RUN',out,flush=True);frozen=None
     def run(command,label,timeout=120):
         command=list(map(str,command));frozen.track(Path(command[0]));start=time.monotonic()
@@ -44,9 +49,9 @@ def main():
         c_sources=['sw/apps/face_avatar/main.c','sw/apps/face_avatar/memory.c','sw/apps/face_avatar/face_avatar.c',
             'sw/drivers/npu_frame.c','sw/drivers/video_capture.c','sw/drivers/video_display.c','sw/drivers/video_frame_pool.c']
         support=c_sources+['tb/soc/tb_face_system.sv','sw/apps/face_avatar/start.S','sw/apps/face_avatar/link.ld']
-        support+=['sw/include/'+x for x in ['face_avatar.h','video_capture.h','video_capture_v2.h','video_display.h','video_display_abi.h',
+        support+=['sw/include/'+x for x in ['face_avatar.h','avatar_preset.h','video_capture.h','video_capture_v2.h','video_display.h','video_display_abi.h',
             'video_frame_pool.h','video_cfg.h','npu_frame.h','frame_config.h']]
-        support+=['rtl/soc/include/frame_config.vh','rtl/video/include/video_cfg.vh','rtl/video/include/video_capture_v2.vh','rtl/video/include/video_display.vh',
+        support+=['rtl/soc/include/frame_config.vh','rtl/soc/include/avatar_preset.vh','rtl/video/include/video_cfg.vh','rtl/video/include/video_capture_v2.vh','rtl/video/include/video_display.vh',
             source_manifest,'config/soc_memory.json','config/cpu_admission.json','config/cpu_toolchain.json','config/npu_b03_sources.f',
             'scripts/soc/run_face_system.py','scripts/npu/frozen_inputs.py','scripts/npu/run_b03_frame.py','scripts/npu/audit_b03_assets.py',
             'scripts/npu/import_b03.py','scripts/cpu/admission_common.py','scripts/video/common.py']+admitted['core']['headers']
@@ -75,7 +80,41 @@ def main():
         cfg=json.loads((out/'inputs/config/soc_memory.json').read_text())['b03']
         uploads=[(cfg['program_base'],'program.bin'),(cfg['workspace_base']+cfg['parameter_origin'],'parameter_image.bin'),(cfg['post_table_base'],'post_table.bin')]
         uploads += [(base,'heads_init.bin') for base in cfg['output_bases']]
+        if args.avatar_boot:
+            preset_dir=ROOT/'assets/avatars/triha'
+            for name in ['avatar.rgba','manifest.json']:frozen.external(preset_dir/name,out/'assets'/name)
+            meta=json.loads((out/'assets/manifest.json').read_text(encoding='utf-8'))
+            raw['avatar.rgba']=(out/'assets/avatar.rgba').read_bytes()
+            need(len(raw['avatar.rgba'])==262144 and sha(out/'assets/avatar.rgba')==meta['sha256'] and
+                 zlib.crc32(raw['avatar.rgba'])==meta['crc32'] and meta['base']==0x82600000,'preset admission')
+            vh=(out/'inputs/rtl/soc/include/avatar_preset.vh').read_text(encoding='ascii')
+            ch=(out/'inputs/sw/include/avatar_preset.h').read_text(encoding='ascii')
+            for key,value in [('ID',meta['asset_id']),('GENERATION',meta['generation']),('BASE',meta['base']),('BYTES',meta['bytes']),
+                              ('CRC32',meta['crc32']),('ANCHOR_X',meta['anchor_x']),('ANCHOR_Y',meta['anchor_y']),('COVERAGE_Q8',meta['coverage_q8'])]:
+                need(f"`define TRIHA_AVATAR_{key} 32'h{value:08x}" in vh and f'#define TRIHA_AVATAR_{key} 0x{value:08x}u' in ch,'preset C/RTL identity '+key)
+            uploads.append((meta['base'],'avatar.rgba'));row['avatar_sha256']=meta['sha256']
         lines=[]
+        avatar_xy0=avatar_xy1=0
+        if args.avatar_boot:
+            # Independent source-space oracle: mathematical floor/ceil, original
+            # uncropped target, and R/G/B/A bytes. No RTL/C output feeds this image.
+            x,y,w,h=expected_roi;side=(max(w,h)*meta['coverage_q8']+255)//256 if expected_faces else 1
+            x0=x+w//2-side*meta['anchor_x']//256;y0=y+h//2-side*meta['anchor_y']//256
+            avatar_xy0=(x0&65535)|((y0&65535)<<16);avatar_xy1=((x0+side)&65535)|(((y0+side)&65535)<<16)
+            gold=[];changed=covered=0;texture=raw['avatar.rgba']
+            for py in range(600):
+                for px in range(800):
+                    rgb=source_rgb[(py*800+px)*3:(py*800+px+1)*3]
+                    hit=bool(expected_faces and x0<=px<x0+side and y0<=py<y0+side)
+                    if hit:
+                        u=(px-x0)*256//side;v=(py-y0)*256//side
+                        rr,gg,bb,alpha=texture[(v*256+u)*4:(v*256+u+1)*4]
+                        blended=bytes((alpha*fg+(255-alpha)*bg+127)//255 for fg,bg in zip((rr,gg,bb),rgb))
+                        changed+=blended!=rgb;covered+=1;rgb=blended
+                    gold.append(f'{(int(hit)<<24)|int.from_bytes(rgb,"big"):07x}\n')
+            need(not expected_faces or (covered>0 and changed>0),'avatar oracle must change visible pixels')
+            (out/'avatar_golden.hex').write_text(''.join(gold),encoding='ascii')
+            row['avatar_oracle']={'covered_pixels':covered,'changed_pixels':changed,'xy0':avatar_xy0,'xy1':avatar_xy1}
         for i,(address,name) in enumerate(uploads):
             data=raw[name];need(address%32==0 and len(data)%32==0,'unaligned preload');leaf=f'upload_{i}.hex'
             (out/leaf).write_text(''.join(data[n:n+32][::-1].hex()+'\n' for n in range(0,len(data),32)),encoding='ascii')
@@ -84,7 +123,7 @@ def main():
         (out/'heads_golden.hex').write_text(''.join(f'{v:02x}\n' for v in expected_heads),encoding='ascii')
         (out/'preload_verified.txt').write_text('54524948\n',encoding='ascii')
         gcc=Path(json.loads((out/'inputs/config/cpu_toolchain.json').read_text())['compiler']);app=out/'inputs/sw/apps/face_avatar'
-        offsets={name:'offsetof(struct face_avatar,pool.stats.'+name+')' for name in ['allocated','captured','graph_starts','results','display_submits','display_commits','releases','no_free','faults']}
+        offsets={name:'offsetof(struct face_avatar,pool.stats.'+name+')' for name in ['allocated','captured','graph_starts','results','display_submits','display_commits','mode_commits','releases','no_free','faults']}
         offsets.update(slots='offsetof(struct face_avatar,pool.slots)',slot_bytes='sizeof(struct video_frame_slot)',slot_state='offsetof(struct video_frame_slot,state)',slot_frame='offsetof(struct video_frame_slot,id.frame)')
         offsets.update(result_valid='offsetof(struct face_avatar,result.valid)',result_faces='offsetof(struct face_avatar,result.face_count)',result_display='offsetof(struct face_avatar,result.display_count)')
         layout='#include <stddef.h>\n#include "face_avatar.h"\nconst unsigned face_test_layout[]={'+','.join(offsets.values())+'};\n'
@@ -107,6 +146,7 @@ def main():
             defines+='`define '+name.upper()+" 32'h%08x\n"%symbols[name]
         for name,value in zip(offsets,values):defines+='`define OFF_'+name.upper()+" 32'd"+str(value)+'\n'
         defines+='`define SOURCE_CRC 32\'h%08x\n'%zlib.crc32(source_rgb)
+        defines+='`define EXPECTED_AVATAR_XY0 32\'h%08x\n`define EXPECTED_AVATAR_XY1 32\'h%08x\n'%(avatar_xy0,avatar_xy1)
         for name,value in zip(['EXPECTED_FACES','EXPECTED_X','EXPECTED_Y','EXPECTED_W','EXPECTED_H'],[expected_faces,*expected_roi]):
             defines+='`define '+name+" 32'd"+str(value)+'\n'
         (out/'test_config.vh').write_text(defines,encoding='ascii');frozen.track(out/'test_config.vh')
@@ -116,7 +156,7 @@ def main():
         sources=[out/'vendor'/leaf for leaf in vendor]+[out/'inputs'/p for p in prod]+[out/'inputs/tb/soc/tb_face_system.sv']
         (out/'sources.f').write_text(''.join('"'+p.as_posix()+'"\n' for p in sources),encoding='ascii')
         inc=[out,out/'inputs/rtl/cpu/vendor/src/core',out/'inputs/rtl/soc/include',out/'inputs/rtl/video/include']
-        do='onerror {quit -code 1 -force}\nonbreak {quit -code 1 -force}\nvlib work\nvlog -sv -mfcu -f sources.f '+' '.join('{+incdir+'+p.as_posix()+'}' for p in inc)+'\nvsim -t 1ps work.tb_face_system -gBOARD_PROFILE='+str(int(args.board_profile))+' -gBOOT_LOAD='+str(int(args.boot_load))+' -gBOOT_ONLY='+str(int(args.boot_only))+'\n'+('run 1ns\n' if args.compile_only else 'run -all\n')+'quit -code 0 -force\n'
+        do='onerror {quit -code 1 -force}\nonbreak {quit -code 1 -force}\nvlib work\nvlog -sv -mfcu -f sources.f '+' '.join('{+incdir+'+p.as_posix()+'}' for p in inc)+'\nvsim -t 1ps work.tb_face_system -gBOARD_PROFILE='+str(int(args.board_profile))+' -gBOOT_LOAD='+str(int(args.boot_load))+' -gBOOT_ONLY='+str(int(args.boot_only))+' -gAVATAR_BOOT='+str(int(args.avatar_boot))+'\n'+('run 1ns\n' if args.compile_only else 'run -all\n')+'quit -code 0 -force\n'
         (out/'run.do').write_text(do,encoding='ascii')
         for p in [out/'sources.f',out/'run.do',SIM/'vlog.exe',SIM/'vopt.exe',SIM/'vlib.exe']:frozen.track(p)
         frozen.verify();save(out/'result.json',{**row,'source_sha256':frozen.inputs})
@@ -124,11 +164,13 @@ def main():
         need(not re.search(r'\*\* (?:Error|Fatal)',text),'simulator failure '+text[-3000:])
         if args.compile_only:row.update(status='PASS_COMPILE_ONLY')
         elif args.boot_only:
-            need('FACE_BOOT_PASS segments=6 ' in text,'missing actual loader/CPU admission PASS '+text[-3000:])
+            need(f'FACE_BOOT_PASS segments={7 if args.avatar_boot else 6} ' in text,'missing actual loader/CPU admission PASS '+text[-3000:])
             row.update(status='PASS_BOOT_ONLY',real_cpu=True,model_loader_verified=True,model_preloaded=False,
-                scope='All six admitted assets through actual loader and DDR write/readback bridge; exact memory bytes and CPU admission; no completed inference/display or serial wire/board proof')
+                avatar_cache_verified=args.avatar_boot,
+                scope='All admitted segments through actual loader and DDR write/readback bridge; exact memory bytes, CPU admission and optional preset cache CRC/seal; no completed inference/display or serial wire/board proof')
         else:
             need('FACE_SYSTEM_PASS' in text,'missing actual application PASS '+text[-3000:])
+            if args.avatar_boot:need('modes=111' in text,'missing all three full-pixel modes')
             for i in range(2):
                 heads=read_hex_bytes(out/f'heads_actual_{i}.hex');result=read_hex_bytes(out/f'result_actual_{i}.hex');h=struct.unpack('<32I',result)
                 need(heads==expected_heads,'independent HEAD bytes')

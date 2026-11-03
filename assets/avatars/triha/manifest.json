@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "name": "TriHa cartoon preset",
+  "asset_id": 1,
+  "generation": 1,
+  "base": 2187329536,
+  "width": 256,
+  "height": 256,
+  "stride": 1024,
+  "bytes": 262144,
+  "format": "RGBA8888",
+  "byte_order": "R G B A",
+  "premultiplied": false,
+  "anchor_x": 128,
+  "anchor_y": 128,
+  "coverage_q8": 320,
+  "crc32": 1628634172,
+  "sha256": "c4897906fe809c679acea3b92ba8b4ac3ce25b62b48a67fcd863fc12536c485b",
+  "source": "scripts/video/gen_fixed_avatar.py",
+  "origin": "Original geometric drawing authored for TriHaRiscv; no third-party artwork",
+  "limitations": "Fixed 2D square overlay; not segmentation, tracking, or a guarantee of full profile-face coverage"
+}

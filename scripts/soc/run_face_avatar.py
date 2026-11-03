@@ -12,7 +12,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = ['sw/apps/face_avatar/face_avatar.c', 'sw/drivers/video_frame_pool.c',
            'sw/drivers/video_capture.c', 'sw/drivers/video_display.c', 'sw/drivers/npu_frame.c']
-HEADERS = ['face_avatar.h','video_frame_pool.h','video_capture.h','video_capture_v2.h',
+HEADERS = ['face_avatar.h','avatar_preset.h','video_frame_pool.h','video_capture.h','video_capture_v2.h',
            'video_display.h','video_display_abi.h','video_cfg.h','npu_frame.h','frame_config.h']
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def main():

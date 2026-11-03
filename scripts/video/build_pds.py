@@ -8,6 +8,7 @@ import sys
 
 from common import BUILD, ROOT, fresh_run, input_hashes, run_logged, sha256, tool, write_json
 from gen_pll import generate as generate_pll
+from gen_compute_pll import generate as generate_compute_pll
 from gen_ddr import generate as generate_ddr
 from pds_timing import synthesis_command, parse_synthesis_timing
 from record_probe_timing import parse_record_probe_timing
@@ -174,8 +175,10 @@ def main():
             # The final application source list has two non-recursive include
             # roots outside rtl/video/include. Freeze the exact generated SoC
             # ABI and CPU vendor macro file and pass both roots to PDS.
-            names += ['rtl/soc/include/frame_config.vh',
-                      'rtl/cpu/vendor/src/core/biriscv_defs.v']
+            names += ['rtl/soc/include/frame_config.vh','rtl/soc/include/avatar_preset.vh',
+                      'rtl/cpu/vendor/src/core/biriscv_defs.v',
+                      'fpga/pg2l100h/ip/triha_compute_pll.json',
+                      'scripts/video/gen_compute_pll.py']
         if args.target=='video_display_mmio':
             run_logged([sys.executable,ROOT/'scripts/video/gen_display_abi.py','--check'],work/'display_abi_check.log')
             names += ['config/video_display.json','rtl/video/include/video_display.vh',
@@ -183,7 +186,7 @@ def main():
         if args.target in ("video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_live_board", "video_live_mode_board", "video_mode_board", "triha_face_board"):
             run_logged([sys.executable, ROOT / "scripts/video/gen_edid.py", "--check"], work/"edid_check.log")
             names += ["rtl/video/include/video_edid.vh", "config/video_edid.hex", "scripts/video/gen_edid.py"]
-        if args.target in ('video_mode_board','video_live_mode_board'):
+        if args.target in ('video_mode_board','video_live_mode_board','triha_face_board'):
             names += [manifest['pin_reference']]
         if ddr:
             names += [manifest['ddr_ip'], 'scripts/video/gen_ddr.py',
@@ -225,6 +228,10 @@ def main():
             vendor_sources.append(idf)
             result['ddr_ip_provenance'] = provenance
             result.setdefault('vendor_inputs',{}).update({str(idf.relative_to(work)): sha256(idf)})
+        if args.target == 'triha_face_board':
+            _, compute_wrapper = generate_compute_pll(work / 'ip/compute_pll')
+            vendor_sources.append(compute_wrapper)
+            result.setdefault('vendor_inputs', {})[str(compute_wrapper.relative_to(work))] = sha256(compute_wrapper)
         lines = ["set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676"]
         lines += ["add_design " + tcl_path(work / "src" / name)
                   for name in manifest["sources"]]
@@ -322,7 +329,7 @@ def main():
                 # board constraint file. Treat both sets as reviewed share
                 # pin notices during message filtering.
                 reference_fdc += '\n' + (ROOT / 'fpga/pg2l100h/constraints/triha_face_board.fdc').read_text(encoding='utf-8')
-        if args.target in ('video_mode_board','video_live_mode_board'):
+        if args.target in ('video_mode_board','video_live_mode_board','triha_face_board'):
             key = json.loads((work/'src'/manifest['pin_reference']).read_text(encoding='utf-8'))
             for field in ('manual', 'vendor_example_fdc'):
                 if sha256(key[field]['path']) != key[field]['sha256']:

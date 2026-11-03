@@ -1,0 +1,142 @@
+{
+  "scope": "Explicit parent authorization: three CSR ABI literals in existing CPU-tree fixture only; assertions unchanged.",
+  "changed_file": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_issue_lsu_prepare.v",
+  "before_sha256": "b4b2dbdf65d9f942799bb638bacfdccf80615558ddd79bf3bec70f8be0bc4774",
+  "after_sha256": "880ee87b62bf1995a1a2baba55fa531f08aa756d72dda83cc27150a9e33d3faf",
+  "only_three_literal_substitutions": true,
+  "assertions_unchanged": true,
+  "runs": [
+    {
+      "phase": "before_address_migration",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164616610377Z\\result.json",
+      "result_sha256": "c589241328481fb1c6da83dd5943fd93c6f137e73f122ee41f4264637e5eea46",
+      "log": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164616610377Z\\simulation.log",
+      "log_sha256": "31d643868847a435f363cdf79f60ca9c8bde86330f4b3addb654cc3c41e663f5",
+      "testbench_sha256": "b4b2dbdf65d9f942799bb638bacfdccf80615558ddd79bf3bec70f8be0bc4774",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "failure": "LSU_PREPARE_FAIL unauthorized_or_missing_store expected=1 valid=0 wr=0",
+      "time_ns": 52,
+      "maintenance_assertions_reached": false
+    },
+    {
+      "phase": "after_address_migration",
+      "status": "FAIL",
+      "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164654548188Z\\result.json",
+      "result_sha256": "641eec80875e68180dc038e6fbe5f72a99dc6d8bc790dc9795d6094d63bca939",
+      "log": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-diagnostic-20261102T164654548188Z\\simulation.log",
+      "log_sha256": "c206232f6d3a836dba3402b6811358f0b8327607d20487639e6b3ab8ebc6de38",
+      "testbench_sha256": "880ee87b62bf1995a1a2baba55fa531f08aa756d72dda83cc27150a9e33d3faf",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "failure": "LSU_PREPARE_FAIL unauthorized_or_missing_store expected=1 valid=0 wr=0",
+      "time_ns": 52,
+      "maintenance_assertions_reached": false
+    }
+  ],
+  "command": "python scripts/cpu/run_dual_diagnostic.py --firmware-run build/cpu/firmware-coremark-20261023T1103533439788Z --cpu-dir rtl/cpu --testbench tb/cpu/tb_issue_lsu_prepare.v --top tb_issue_lsu_prepare --marker LSU_PREPARE_PASS",
+  "runner_note": "This static TB never reads the supplied firmware image. The accepted historical firmware satisfies the generic runner precondition only.",
+  "maintenance_error_boundary": "Public CSR/LSU tests check LSU writeback_exception_o=EXCEPTION_FAULT_STORE (6h17) and request-address payload only; they do not prove architectural mcause/mepc/mtval or a precise CPU trap. CSRRW is CSR-class, and the pipeline samples LSU exceptions only for LOAD/STORE-class completion.",
+  "rtl_evidence": [
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\rtl\\cpu\\triha_pipe_ctrl.v",
+      "sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "locations": [
+        {
+          "line": 173,
+          "text": "    ctrl_e1_q[`PCINFO_LOAD]     <= issue_lsu_i &  issue_rd_valid_i & ~take_interrupt_i; // TODO: Check"
+        },
+        {
+          "line": 174,
+          "text": "    ctrl_e1_q[`PCINFO_STORE]    <= issue_lsu_i & ~issue_rd_valid_i & ~take_interrupt_i;"
+        },
+        {
+          "line": 175,
+          "text": "    ctrl_e1_q[`PCINFO_CSR]      <= issue_csr_i & ~take_interrupt_i;"
+        },
+        {
+          "line": 205,
+          "text": "assign load_e1_o       = ctrl_e1_q[`PCINFO_LOAD];"
+        },
+        {
+          "line": 206,
+          "text": "assign store_e1_o      = ctrl_e1_q[`PCINFO_STORE];"
+        },
+        {
+          "line": 207,
+          "text": "wire   csr_e1_w        = ctrl_e1_q[`PCINFO_CSR];"
+        },
+        {
+          "line": 292,
+          "text": "    else if (ctrl_e1_q[`PCINFO_CSR])"
+        },
+        {
+          "line": 327,
+          "text": "    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i)"
+        }
+      ]
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-main\\rtl\\cpu\\triha_lsu.v",
+      "sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "locations": [
+        {
+          "line": 440,
+          "text": "assign writeback_exception_o         = fault_load_align_w  ? `EXCEPTION_MISALIGNED_LOAD:"
+        }
+      ]
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_pipe_ctrl.v",
+      "sha256": "b789427ee8861cac6b29830903997e29b385e44ee36c1e61dd119acc0ba19c54",
+      "locations": [
+        {
+          "line": 195,
+          "text": "    ctrl_e1_q[`PCINFO_LOAD]     <= issue_lsu_i &  issue_rd_valid_i & ~take_interrupt_i; // TODO: Check"
+        },
+        {
+          "line": 196,
+          "text": "    ctrl_e1_q[`PCINFO_STORE]    <= issue_lsu_i & ~issue_rd_valid_i & ~take_interrupt_i;"
+        },
+        {
+          "line": 197,
+          "text": "    ctrl_e1_q[`PCINFO_CSR]      <= issue_csr_i & ~take_interrupt_i;"
+        },
+        {
+          "line": 231,
+          "text": "assign load_e1_o       = ctrl_e1_q[`PCINFO_LOAD];"
+        },
+        {
+          "line": 232,
+          "text": "assign store_e1_o      = ctrl_e1_q[`PCINFO_STORE];"
+        },
+        {
+          "line": 233,
+          "text": "wire   csr_e1_w        = ctrl_e1_q[`PCINFO_CSR];"
+        },
+        {
+          "line": 326,
+          "text": "    else if (ctrl_e1_q[`PCINFO_CSR])"
+        },
+        {
+          "line": 376,
+          "text": "    if (valid_e2_q && (ctrl_e2_q[`PCINFO_LOAD] || ctrl_e2_q[`PCINFO_STORE]) && mem_complete_i) begin"
+        }
+      ]
+    },
+    {
+      "path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_lsu.v",
+      "sha256": "9900f6842cc0698bd519f86c64034df81b85e3a2c98ac65b2a4aaae10b16f2e9",
+      "locations": [
+        {
+          "line": 466,
+          "text": "assign writeback_exception_o         = fault_load_align_w  ? `EXCEPTION_MISALIGNED_LOAD:"
+        }
+      ]
+    }
+  ],
+  "vendor_unchanged": true,
+  "followup_record": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu\\document-csr-lsu-prepare-followup-20261102T164929002143Z\\result.json",
+  "followup_record_sha256": "4e41947293b8de20ad1b7cd1d17047c1b045798096ba5717455ab512eb70df19"
+}

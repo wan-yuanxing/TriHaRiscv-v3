@@ -111,6 +111,7 @@ reg         csr_write_r;
 reg         set_r;
 reg         clr_r;
 reg         csr_fault_r;
+wire        csr_exists_w;
 
 reg [31:0]  data_r;
 
@@ -129,7 +130,11 @@ begin
                             {27'b0, opcode_ra_idx_i} : opcode_ra_operand_i;
 
     // Detect access fault on CSR access
-    csr_fault_r     = SUPPORT_SUPER ? (opcode_valid_i && (set_r | clr_r) && ((csr_write_r && csr_readonly_r) || (current_priv_w < csr_priv_r))) : 1'b0;
+    // Address existence and read-only encoding apply in machine-only builds too.
+    // Fixed fields in a read/write CSR (e.g. MISA) remain legal to write.
+    csr_fault_r     = opcode_valid_i && (set_r | clr_r) &&
+                      (!csr_exists_w || (csr_write_r && csr_readonly_r) ||
+                       (current_priv_w < csr_priv_r));
 end
 
 wire satp_update_w = (opcode_valid_i && (set_r || clr_r) && csr_write_r && (opcode_opcode_i[31:20] == `CSR_SATP));
@@ -165,7 +170,7 @@ wire [31:0] interrupt_w;
 wire [31:0] status_reg_w;
 wire [31:0] satp_reg_w;
 
-biriscv_csr_regfile
+triha_csr_regfile
 #( .SUPPORT_MTIMECMP(1)
   ,.SUPPORT_SUPER(SUPPORT_SUPER) )
 u_csrfile
@@ -182,6 +187,7 @@ u_csrfile
     ,.csr_ren_i(opcode_valid_i)
     ,.csr_raddr_i(opcode_opcode_i[31:20])
     ,.csr_rdata_o(csr_rdata_raw_w)
+    ,.csr_exists_o(csr_exists_w)
 
     // Exception (WB)
     ,.exception_i(csr_writeback_exception_i)

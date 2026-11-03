@@ -9,7 +9,7 @@
   "modes": {"single": 0, "dual": 1},
   "sources": [
     "rtl/cpu/vendor/src/core/biriscv_alu.v",
-    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+    "rtl/cpu/triha_csr_regfile.v",
     "rtl/cpu/triha_csr.v",
     "rtl/cpu/triha_decode.v",
     "rtl/cpu/vendor/src/core/biriscv_decoder.v",

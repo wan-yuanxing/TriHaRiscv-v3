@@ -1,6 +1,6 @@
 +incdir+rtl/cpu/vendor/src/core
 rtl/cpu/vendor/src/core/biriscv_alu.v
-rtl/cpu/vendor/src/core/biriscv_csr_regfile.v
+rtl/cpu/triha_csr_regfile.v
 rtl/cpu/triha_csr.v
 rtl/cpu/triha_decode.v
 rtl/cpu/vendor/src/core/biriscv_decoder.v
@@ -90,6 +90,8 @@ rtl/video/axi128_hmic256.sv
 rtl/video/display_slot_owner.sv
 rtl/video/display_record_guard.sv
 rtl/video/video_display_mmio.sv
+rtl/video/display_mode_cdc_held.sv
+rtl/video/display_record_pixels_compact.sv
 rtl/video/display_mode_cdc.sv
 rtl/video/video_read_arbiter.sv
 rtl/video/avatar_texture_cache.sv
@@ -114,6 +116,8 @@ rtl/soc/video_axil_decode.v
 rtl/video/video_application_engine.sv
 rtl/soc/triha_compute_system.v
 rtl/soc/triha_face_system.v
+rtl/soc/triha_face_mode_key.v
+rtl/video/video_button_debounce.sv
 rtl/soc/triha_model_loader.v
 rtl/soc/triha_boot_buffer.v
 rtl/video/video_display_mmio_compact.sv

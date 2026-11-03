@@ -1,5 +1,6 @@
 `timescale 1ns/1ps
 `default_nettype none
+`include "avatar_preset.vh"
 // Shared application system: CPU/B03 100 MHz, Video/DDR 125 MHz, pixel 40 MHz.
 // Exactly one native DDR bridge lives in u_memory. Board logic supplies clocks,
 // coordinated resets, calibrated HMIC, verified model sealing and video ingress.
@@ -7,12 +8,15 @@
 module triha_face_system #(
     parameter ROM_FILE="rom.hex", SRAM_FILE="sram.hex",
     parameter integer CACHE_ENABLE=1, ENABLE_AVATAR=0, ENABLE_MODEL_LOADER=0, ENABLE_ROW_CACHE=1, ENABLE_MINIMAL_BOX=0, MINIMAL_CONTROL_CPU=0,
+    parameter integer BOOT_AVATAR=0, ENABLE_MODE_KEY=0, MODE_KEY_CLOCK_HZ=125000000,
+    parameter integer ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,
     parameter integer ENABLE_HARDWARE_POST=1, TRUSTED_MODEL=0, M_LANES=16, QUANTIZER_LANES=2
 ) (
     input wire compute_clk_i,
     input wire video_clk_i,
     input wire pixel_clk,
     input wire rst_ni,
+    input wire mode_button_n,
     input wire pixel_reset_n,
     input wire init_done_i,
     input wire model_sealed_i,
@@ -331,7 +335,7 @@ module triha_face_system #(
     always @(posedge compute_clk_i or negedge compute_reset_n)
         if(!compute_reset_n)model_seal_sync<=0;else model_seal_sync<={model_seal_sync[0],model_sealed_o};
     generate if(ENABLE_MODEL_LOADER)begin:g_loader
-        triha_model_loader u_loader(
+        triha_model_loader #(.AVATAR_BYTES(BOOT_AVATAR?`TRIHA_AVATAR_BYTES:0),.AVATAR_CRC(`TRIHA_AVATAR_CRC32)) u_loader(
             .clk_i(video_clk_i),.rst_ni(video_reset_n),.healthy_i(init_done_i&&!fabric_fault&&!compute_fault_sync[1]),
             .rx_valid_i(boot_rx_valid_i),.rx_ready_o(boot_rx_ready_o),.rx_data_i(boot_rx_data_i),.rx_error_i(boot_rx_error_i),
             .tx_valid_o(boot_tx_valid_o),.tx_ready_i(boot_tx_ready_i),.tx_data_o(boot_tx_data_o),
@@ -343,6 +347,14 @@ module triha_face_system #(
         assign boot_rx_ready_o=0;assign boot_tx_valid_o=0;assign boot_tx_data_o=0;
         assign boot_awvalid=0;assign boot_awaddr=0;assign boot_wvalid=0;assign boot_wdata=0;assign boot_wlast=0;assign boot_bready=1;
     end endgenerate
+    wire material_load_ready;
+    reg material_load_sent;
+    // The shared boot writer has retired its verified final B before the seal.
+    // Hand the immutable preset to the existing checked DDR reader exactly once.
+    always @(posedge video_clk_i or negedge video_reset_n)
+        if(!video_reset_n)material_load_sent<=0;
+        else if(BOOT_AVATAR&&loader_sealed&&material_load_ready)material_load_sent<=1;
+    assign load_ready=BOOT_AVATAR?1'b0:material_load_ready;
     assign boot_awready=boot_owner&&lane_awready;
     assign boot_wready=boot_owner&&lane_wready;
     assign boot_bvalid=boot_owner&&lane_bvalid;
@@ -351,10 +363,13 @@ module triha_face_system #(
     assign video_c_wready=!boot_owner&&lane_wready;
     assign video_c_bvalid=!boot_owner&&lane_bvalid;
     assign video_c_bid=lane_bid;assign video_c_bresp=lane_bresp;
-    always @(posedge compute_clk_i or negedge rst_ni)
-        if(!rst_ni)video_irq_sync<=0;else video_irq_sync<={video_irq_sync[0],capture_irq||display_irq};
-    always @(posedge video_clk_i or negedge rst_ni)
-        if(!rst_ni)compute_fault_sync<=0;else compute_fault_sync<={compute_fault_sync[0],compute_fault};
+    // Observations stay reset until their receiving domain has been released.
+    // Reuse the CDC's local release chains instead of bypassing them with the
+    // board's asynchronous startup reset.
+    always @(posedge compute_clk_i or negedge compute_reset_n)
+        if(!compute_reset_n)video_irq_sync<=0;else video_irq_sync<={video_irq_sync[0],capture_irq||display_irq};
+    always @(posedge video_clk_i or negedge video_reset_n)
+        if(!video_reset_n)compute_fault_sync<=0;else compute_fault_sync<={compute_fault_sync[0],compute_fault};
     assign fault_o=compute_fault||compute_ddr_fault||loader_fault;
     assign recovery_request_o=fault_o;
     triha_compute_system #(.ROM_FILE(ROM_FILE),.SRAM_FILE(SRAM_FILE),.CACHE_ENABLE(CACHE_ENABLE),.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU),.ENABLE_HARDWARE_POST(ENABLE_HARDWARE_POST),.TRUSTED_MODEL(TRUSTED_MODEL),.M_LANES(M_LANES),.QUANTIZER_LANES(QUANTIZER_LANES)) u_compute (
@@ -575,7 +590,15 @@ module triha_face_system #(
         .s_axi_rready_i(ctrl125_rready),
         .m_axi_rready_o(endpoints_rready)
     );
-    video_application_engine #(.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_COMPACT(1),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX)) u_video (
+    wire [1:0] requested_mode;
+    generate if(ENABLE_MODE_KEY)begin:g_mode_key
+        triha_face_mode_key #(.CLOCK_HZ(MODE_KEY_CLOCK_HZ)) u_key(
+            .clk_i(video_clk_i),.rst_ni(video_reset_n),.button_ni(mode_button_n),.mode_o(requested_mode));
+    end else begin:g_no_mode_key
+        assign requested_mode=0;
+    end endgenerate
+    video_application_engine #(.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_COMPACT(1),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.ENABLE_CAPTURE_PREVIEW(ENABLE_CAPTURE_PREVIEW)) u_video (
+        .mode_request_i(requested_mode),
         .clk_i(video_clk_i),
         .rst_ni(video_reset_n),
         .pixel_clk(pixel_clk),
@@ -678,13 +701,13 @@ module triha_face_system #(
         .d_rlast(video_d_rlast),
         .d_rvalid(video_d_rvalid),
         .d_rready(video_d_rready),
-        .load_valid(load_valid),
-        .load_ready(load_ready),
-        .load_base(load_base),
-        .load_bytes(load_bytes),
-        .load_asset_id(load_asset_id),
-        .load_generation(load_generation),
-        .expected_crc(expected_crc),
+        .load_valid(BOOT_AVATAR?(loader_sealed&&!material_load_sent):load_valid),
+        .load_ready(material_load_ready),
+        .load_base(BOOT_AVATAR?`TRIHA_AVATAR_BASE:load_base),
+        .load_bytes(BOOT_AVATAR?`TRIHA_AVATAR_BYTES:load_bytes),
+        .load_asset_id(BOOT_AVATAR?`TRIHA_AVATAR_ID:load_asset_id),
+        .load_generation(BOOT_AVATAR?`TRIHA_AVATAR_GENERATION:load_generation),
+        .expected_crc(BOOT_AVATAR?`TRIHA_AVATAR_CRC32:expected_crc),
         .result_valid(result_valid),
         .result_ready(result_ready),
         .result_success(result_success),

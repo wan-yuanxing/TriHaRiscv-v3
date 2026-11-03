@@ -44,6 +44,12 @@ module tb_video_record_compact #(parameter integer CASE_ID=0,parameter real PIXE
  endtask
  initial begin
   repeat(6)@(negedge core_clk);core_reset_n=1;repeat(4)@(negedge pixel_clk);pixel_reset_n=1;
+  if(CASE_ID==3)begin
+   // A reset released by the other domain must traverse both local stages.
+   #1;if(cmd_ready)$fatal(1,"HELD_RESET_RELEASE_UNSYNCHRONIZED");
+   @(posedge core_clk);#1;if(cmd_ready)$fatal(1,"HELD_RESET_RELEASE_SINGLE_STAGE");
+   @(posedge core_clk);#1;if(!cmd_ready)$fatal(1,"HELD_RESET_RELEASE_STUCK");
+  end
   offer(1);
   if(CASE_ID==1)begin
    wait(pixel_cmd_valid);@(negedge core_clk);cmd_data[5119]=~cmd_data[5119];

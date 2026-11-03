@@ -18,6 +18,30 @@ COMPACT = ['rtl/video/display_mode_cdc_held.sv', 'rtl/video/display_record_pixel
            'rtl/video/video_display_mmio_compact.sv']
 
 
+def display_source_negative(work, display_tb, display_sources, iv, vvp):
+    """Prove the actual composition detects a broken upstream record lease."""
+    directory = work / 'display_source_violation'
+    fixtures(directory, 80, 64)
+    injection = '''
+ initial begin
+  do @(posedge core_clk);while(!(dut.r_cmd_valid && dut.r_cmd_ready));
+  @(negedge core_clk);
+  dut.g_full_mmio.u_mmio.record_data[5119]=~dut.g_full_mmio.u_mmio.record_data[5119];
+  repeat(10) @(negedge core_clk);
+  $fatal(1,"COMPOSED_SOURCE_VIOLATION_NOT_DETECTED");
+ end
+'''
+    assert display_tb.count('endmodule') == 1
+    tb_path = directory / 'tb_negative.sv'
+    tb_path.write_text(display_tb.replace('endmodule', injection + 'endmodule'), encoding='utf-8')
+    binary = directory / 'sim.vvp'
+    run([iv, '-g2012', '-Wall', '-I', ROOT / 'rtl/video/include', '-s', 'tb_video_display_record',
+         '-o', binary] + [ROOT / n for n in display_sources] + [tb_path], directory / 'compile.log')
+    run([vvp, binary, '+DIR=' + directory.as_posix()], directory / 'simulation.log',
+        expected_error='HELD_RECORD_SOURCE_CHANGED')
+    return 'PASS_EXPECTED_REJECTION'
+
+
 def run(command, log, *, timeout=300, expected_error=None, cwd=ROOT):
     done = subprocess.run(list(map(str, command)), cwd=cwd, capture_output=True, timeout=timeout)
     log.write_bytes(done.stdout + done.stderr)
@@ -103,7 +127,7 @@ def main():
     work = ROOT / 'build/soc' / ('resource_probe_video_compact_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ'))
     work.mkdir(parents=True, exist_ok=False)
     result = dict(status='RUNNING', directory=str(work), cases={},
-                  application_selection='RAM MMIO with original general record CDC; held CDC tested separately, not selected')
+                  application_selection='RAM MMIO with held record CDC through renderer feedback')
     write_json(work / 'result.json', result)
     try:
         mp = ROOT / 'fpga/pg2l100h/project/video_record_pixels.json'
@@ -111,6 +135,7 @@ def main():
         display_manifest = json.loads((ROOT / 'fpga/pg2l100h/project/video_display_record.json').read_text())
         pixel_sources = manifest['sources'] + ['rtl/video/display_record_guard.sv']
         names = pixel_sources + COMPACT + ['tb/video/tb_video_record_compact.sv',
+                 'tb/video/tb_display_record_guard.sv',
                  'tb/video/tb_display_record_pixels.sv', 'tb/video/check_record_pixels.py',
                  'tb/video/overlay_reference.py', 'scripts/soc/run_video_compact.py',
                  'tb/video/tb_video_display_mmio.sv', 'rtl/video/display_slot_owner.sv',
@@ -120,6 +145,14 @@ def main():
         result['inputs'] = input_hashes(ROOT / n for n in names)
         iv, vvp = tool('iverilog'), tool('vvp')
         result['tools'] = {str(t): sha256(t) for t in (iv, vvp)}
+        guard_binary = work / 'guard.vvp'
+        run([iv, '-g2012', '-Wall', '-I', ROOT / 'rtl/video/include', '-s', 'tb_display_record_guard',
+             '-o', guard_binary, ROOT / 'rtl/video/display_record_guard.sv',
+             ROOT / 'tb/video/tb_display_record_guard.sv'], work / 'guard_compile.log')
+        guard_log = run([vvp, guard_binary], work / 'guard_simulation.log')
+        if 'DISPLAY_RECORD_GUARD_PASS cases=246' not in guard_log:
+            raise RuntimeError('missing record guard boundary/latency pass')
+        result['cases']['guard'] = {'status': 'PASS', 'cases': 246}
         mmio_tb = (ROOT / 'tb/video/tb_video_display_mmio.sv').read_text()
         mmio_tb = mmio_tb.replace('video_display_mmio dut', 'video_display_mmio_compact dut')
         mmio_tb = mmio_tb.replace('waited<80', 'waited<1000')
@@ -134,7 +167,8 @@ def main():
             if 'DISPLAY_MMIO_PASS' not in log:
                 raise RuntimeError('missing MMIO pass')
             result['cases'][f'mmio_{case}'] = 'PASS'
-        for label, case, half in [('held', 0, 12.5), ('ratio', 0, 17), ('reset', 2, 12.5), ('source_violation', 1, 12.5)]:
+        for label, case, half in [('held', 0, 12.5), ('ratio', 0, 17), ('reset', 2, 12.5),
+                                  ('reset_release', 3, 12.5), ('source_violation', 1, 12.5)]:
             binary = work / (label + '.vvp')
             run([iv, '-g2012', '-Wall', '-s', 'tb_video_record_compact',
                  f'-Ptb_video_record_compact.CASE_ID={case}', f'-Ptb_video_record_compact.PIXEL_HALF={half}',
@@ -150,7 +184,7 @@ def main():
             raise ValueError('test source hold boundary changed')
         tb = tb.replace(poison, 'cmd_valid=0; // Application owner holds data through feedback.')
         tb_path = work / 'tb_pixels_held.sv'; tb_path.write_text(tb, encoding='utf-8')
-        for label, case, half in [('pixels', 0, 12.5), ('pixels_ratio', 0, 17), ('pending_reset', 4, 12.5),
+        for label, case, half in [('pixels', 0, 12.5), ('pixels_ratio', 0, 17), ('pixels_tight', 0, 12.5), ('pending_reset', 4, 12.5),
                                   ('sample_fault', 3, 12.5), ('generation', 7, 12.5), ('new_source_asset', 8, 12.5)]:
             directory = work / label
             run([sys.executable, ROOT / manifest['reference'], 'generate', '--directory', directory,
@@ -158,6 +192,7 @@ def main():
             binary = directory / 'sim.vvp'
             run([iv, '-g2012', '-Wall', '-I', ROOT / 'rtl/video/include', '-s', 'tb_display_record_pixels',
                  '-Ptb_display_record_pixels.W=80', '-Ptb_display_record_pixels.H=64',
+                 '-Ptb_display_record_pixels.REQUEST_LATENCY=10', f'-Ptb_display_record_pixels.TIGHT={int(label == "pixels_tight")}',
                  f'-Ptb_display_record_pixels.CASE_ID={case}', f'-Ptb_display_record_pixels.PIXEL_HALF={half}',
                  '-o', binary] + [ROOT / n for n in pixel_sources] + [ROOT / COMPACT[0], ROOT / COMPACT[1], tb_path],
                 work / (label + '_compile.log'))
@@ -169,6 +204,15 @@ def main():
         display_tb = (ROOT / 'tb/video/tb_video_display_record.sv').read_text()
         display_tb = display_tb.replace(' video_display_record #', ' video_display_record_compact #')
         display_tb = display_tb.replace('dut.u_mmio.phase!=1', '!dut.u_mmio.locked')
+        display_tb = display_tb.replace('dut.u_mmio.', 'dut.g_full_mmio.u_mmio.')
+        # Shadow writes may proceed during a lease, but a new submission must
+        # not reload/shift the held record before actual output feedback.
+        first = 'submit(0,1,10,0,1,0,1);consume_commit();'
+        assert display_tb.count(first) == 1
+        display_tb = display_tb.replace(first, '''submit(0,1,10,0,1,0,1);
+  wait(dut.r_cmd_valid&&dut.r_cmd_ready);@(negedge core_clk);
+  wr('h100,32'hdeadbeef,0);wr('h20,1,2);
+  consume_commit();''')
         display_path = work / 'tb_display.sv'; display_path.write_text(display_tb, encoding='utf-8')
         display_sources = display_manifest['sources'] + [n for n in display_manifest['tests']
                            if not n.endswith('tb_video_display_record.sv')] + COMPACT
@@ -183,6 +227,8 @@ def main():
             if 'VIDEO_DISPLAY_RECORD_PASS' not in log:
                 raise RuntimeError('missing integrated display pass ' + label)
             result['cases'][label] = log
+        result['cases']['display_source_violation'] = display_source_negative(
+            work, display_tb, display_sources, iv, vvp)
         if args.map:
             map_engine(work, result)
         if result['inputs'] != input_hashes(ROOT / n for n in names):

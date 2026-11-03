@@ -1,10 +1,12 @@
 """DDR-to-sealed-material tests, independent zlib fixtures and immutable inputs."""
-import json,re,sys,zlib
+import argparse,json,re,sys,zlib
+from pathlib import Path
 from common import ROOT,fresh_run,input_hashes,run_logged,tool,sha256,write_json
 
-def fixtures(directory,texels):
+def fixtures(directory,texels,asset=None):
     directory.mkdir(parents=True,exist_ok=True)
-    data=bytes(((i*73+(i>>8)*19+(i>>16)*137)^0xa6)&255 for i in range(texels*4))
+    data=asset if asset is not None else bytes(((i*73+(i>>8)*19+(i>>16)*137)^0xa6)&255 for i in range(texels*4))
+    if len(data)!=texels*4:raise ValueError('RGBA fixture length')
     (directory/'rgba.bin').write_bytes(data)
     for name,order in [('bus_words','little'),('expected_words','big')]:
         (directory/(name+'.hex')).write_text(''.join(f'{int.from_bytes(data[i:i+4],order):08x}\n' for i in range(0,len(data),4)),encoding='ascii')
@@ -12,17 +14,27 @@ def fixtures(directory,texels):
     write_json(directory/'fixture.json',dict(bytes=len(data),crc32=zlib.crc32(data),sha256=sha256(directory/'rgba.bin'),format='R G B A ascending byte addresses'))
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--asset',type=Path,help='Test actual 256x256 RGBA bytes at two pixel ratios and with bad CRC')
+    args=parser.parse_args()
     work=fresh_run('avatar_ddr');latest=ROOT/'build/video/latest_avatar_ddr_component.json'
     result=dict(status='running',directory=work.relative_to(ROOT).as_posix());write_json(latest,result)
     try:
         manifest_path=ROOT/'fpga/pg2l100h/project/video_avatar_ddr.json';m=json.loads(manifest_path.read_text(encoding='utf-8'))
         paths=[ROOT/p for p in m['sources']+m['tests']+m['constraints']]+[manifest_path,ROOT/'scripts/video/test_avatar_ddr.py',ROOT/'scripts/video/common.py']
+        asset=None
+        if args.asset:
+            asset_path=args.asset.resolve();asset=asset_path.read_bytes()
+            if len(asset)!=262144:raise ValueError('preset must contain 262144 RGBA bytes')
+            paths.append(asset_path);result.update(asset=str(asset_path),asset_sha256=sha256(asset_path))
         result.update(inputs=input_hashes(paths),tools={str(tool(t)):sha256(tool(t)) for t in ('iverilog','vvp')},cases={})
         for t in ('iverilog','vvp'):run_logged([tool(t),'-V'],work/(t+'_version.log'))
         cases=[('tail',68,0,0,12.5),('full_page',65536,0,1,12.5),('ratio',68,0,1,17),('upper_edge',68,0,2,12.5),('minimum',4,0,2,12.5)]
         cases += [(name,68,i,0,12.5) for i,name in enumerate(['lower','upper','unaligned','length','unknown','crc','resp','rid','early_last','missing_last','unknown_data','offline_ar','timeout_r','reset','offline_r','pre_ar_response','offline_after_seal','stray_after_seal','stray_after_failure'],1)]
+        if asset is not None:
+            cases=[('preset',65536,0,1,12.5),('preset_ratio',65536,0,1,17),('preset_bad_crc',65536,6,1,12.5)]
         for name,n,case,page,half in cases:
-            cw=work/name;fixtures(cw,n);binary=cw/'simulation.vvp'
+            cw=work/name;fixtures(cw,n,asset);binary=cw/'simulation.vvp'
             run_logged([tool('iverilog'),'-g2012','-Wall','-s',m['test_top'],'-o',binary,
                         f'-P{m["test_top"]}.TEXELS={n}',f'-P{m["test_top"]}.CASE_ID={case}',f'-P{m["test_top"]}.PAGE={page}',f'-P{m["test_top"]}.PIXEL_HALF={half}',
                         *[ROOT/p for p in m['sources']+m['tests']]],cw/'compile.log')
