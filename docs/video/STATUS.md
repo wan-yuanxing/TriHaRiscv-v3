@@ -1,5 +1,31 @@
 # Video 工作台账
 
+## 当前进度：2026-11-04 01:42，指定照片头像定向重新布线
+
+已验收 BOX 发布保留在 `face-box-20261103`。当前用户照片的无损行区间缓存与写流水版本
+为 `2c9e0e9`；正脸/无脸整机七段加载、RAW/BOX/AVATAR 逐像素检查及综合/映射均通过。
+performance seed-5 已完成布线，但独立报告最差 setup −1.716ns、hold −0.758ns，
+DDR 域仍有违例，未生成位流。旧缓存 RAM 写使能长路径已不在报告的负 setup 路径中；
+23组/116位 Gray 数据路径界检查通过，但未进行完整 Gray 时钟验收。
+normal seed-4 新布局在520轮详细布线后仍剩973条网络，主动中止并保存拥塞记录；
+这是代理切换方案，不能当作原生工具失败或最终时序结果。当前复用 performance 轮次已经布通的
+冻结布局，对29条实测关键原始网络设置路由优先级，使用normal模式重新布线；50/125/40MHz约束保持。
+详细证据见 `docs/verification/npu/2026-11-03-face-avatar-bringup.json`。
+
+用户重接后的历史 JTAG 扫描曾识别 PG2L100H，但 00:25 的 1MHz/500KHz 两次新服务器扫描
+均只能看到下载器，COM12 仍在；已请求用户确认当前电源/JTAG。当前仅只读扫描，
+未对照片版执行 Program/Verify 或七段上传。继续完成离线时序验收和可复现交付，再进行上板验证。
+下方按批次保留历史记录，旧板卡状态及旧时钟规格不代表本条当前进度。
+
+本次失败证据：`build/video/face_photo_pipe_50_review_20261103/result.json`；新流程：
+`build/video/face_photo_pipe_priority2_verified_flow_20261104/receipt.json`。首次优先级约束含5条
+布线后临时ntR网络，被原生约束检查拒绝；修订后的29条原始网络均已被工具接受。
+
+验收脚本新增复用布局时的阶段区分：合并PNR日志必须有唯一且有序的“Finished placement.”/
+“Routing started.”边界，布局部分继续检查全部错误，后续未复用的旧路由诊断单独保留。
+当前新路由始终检查完整日志；同文件不能裁切。7项单元测试先红后绿，11项原生审计反例及
+真实旧/新日志诊断检查通过；两组既有完整整机仿真重新核对与映射源码一致。RTL和位流门槛不变。
+
 ## 2026-11-03 本机恢复与人脸检测优先（11:58，在运行）
 
 用户当前明确：板卡暂未连接；先完成功能仿真、构建及布线后时序收敛，得到位流后再连接设备。第一里程碑为真实人脸检测与同帧主框显示，帧率记录但不设硬门槛，头像/五点不阻塞。当前工程是用户指定的 `D:/FPGA/TriHaRiscv-v3`、分支 `soc/face-box-integration`；下方旧条目的工程位置、板卡状态和125MHz计算域描述不代表当前状态。
@@ -2563,3 +2589,15 @@ CPU50MHz最差setup +0.150ns，像素40MHz +1.224ns。主要慢路径布线占�
 
 - `build/video/pds/20261103T155625_876936Z/result.json` is **pass**: 48,902 LUT, 47,797 FF, 112.5/155 DRM. Relative to the prior compact cache: +19 LUT, +52 FF, no extra DRM. Physical write enable/address/data are registered; the final seal follows the committed write, while pixel latency remains unchanged.
 - The exact-source full-system simulations are still running. Coordinator now proceeds through mapping and performance-mode seed-5 implementation. No claim of routed timing closure or physical image acceptance yet; all earlier failed routes remain intact.
+
+### 2026-11-04 00:11 — registered-write placement estimate improves
+
+- Local source checkpoint `2c9e0e9` freezes the write-pipeline/bounds change and continuous-stream regression.
+- Performance-mode seed-5 placement in `build/video/pds/face_photo_pipe_50_route_20261103/route.log` reports estimated **+0.415 ns**, TNS 0 before global route (previous compact version −0.884 ns). Routing has started. This is not final routed timing or qualification; both full-system simulations continue.
+
+### 2026-11-04 00:17 — registered-write exact-source full-system PASS
+
+- Positive `build/soc/face_system-20261103T155600_633574Z` and negative `...655389Z` are **PASS**, zero errors/warnings. Each has 41,410,743 compute cycles, 4 captures/requests, 2 results/records/commits, 1 release/reuse, and full RAW/BOX/AVATAR pixel checks (`modes=111`). The write pipeline preserves the visible frame contract.
+- `build/video/face_photo_pipe_50_sim_alignment_20261103.json` verifies **136 shared source files**, all functional evidence hashes, ROM/SRAM contents and the positive ELF against `face_photo_pipe_50_map_20261103`. No old simulation is substituted for this revised source.
+- `build/video/face_photo_pipe_performance_20261103.json` records unchanged simulated intervals: 18,079,060 / 18,060,318 cycles (2.76563 / 2.76850 results/s). These are simulation-only, not board FPS.
+- Performance-mode seed-5 routing continues; no final STA or downloadable photo bitstream yet.

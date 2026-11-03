@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_PIPELINED_CACHE_SYNTHESIS_PASS_PHYSICAL_IMPLEMENTATION_RUNNING",
-  "updated_at": "2026-11-04T00:06:22.062032+08:00",
+  "status": "USER_PHOTO_PIPELINED_FUNCTIONAL_PASS_FROZEN_PLACEMENT_PRIORITY_ROUTE_RUNNING",
+  "updated_at": "2026-11-04T01:39:48.478172+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Repeat exact-source full-system simulation and synthesis; map and performance-mode seed-5 route, then full STA/CDC. No photo programming until qualified.",
+  "next_step": "Complete route-only normal-mode implementation of the previously completed performance placement with 29 measured original-net priorities; final STA/CDC and current-route diagnostics remain mandatory. Board power/JTAG reconfirmation is pending.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -42,8 +42,13 @@
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261103T132743_664738Z",
-  "board_scan_status": "identified PG2L100H 0x00602899 after user reconnected power/JTAG",
+  "board_scan": "build/video/jtag_scan/20261103T162537_568188Z",
+  "board_scan_status": "Latest fresh-server 1MHz and 500KHz read-only scans see cable but no FPGA; COM12 remains present. User asked to verify current power/JTAG; earlier successful identification is historical only.",
+  "board_scan_history": [
+    "build/video/jtag_scan/20261103T132743_664738Z",
+    "build/video/jtag_scan/20261103T162500_414047Z",
+    "build/video/jtag_scan/20261103T162537_568188Z"
+  ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
   "first_route_timing": {
@@ -52,8 +57,7 @@
     "ddr_system_setup_ns": -0.832,
     "ddr_system_failing_setup_endpoints": 249
   },
-  "placement": "build/video/pds/face_photo_50_route_20261103",
-  "route_priority": "build/video/face_photo_50_priority_20261103.rcf",
+  "placement": "build/video/pds/face_photo_pipe_50_route_20261103",
   "previous_full_cache_photo": {
     "positive": "build/soc/face_system-20261103T131024_940165Z",
     "negative": "build/soc/face_system-20261103T131024_940464Z",
@@ -102,7 +106,6 @@
     "build/video/pds/20261103T145127_860103Z",
     "build/video/pds/20261103T145530_412154Z"
   ],
-  "synthesis_error": "PDS signal 11 / Flow-0189; first during compile DB creation, second during synthesis architecture building. No resource or timing acceptance.",
   "compact_component_synthesis": {
     "path": "build/video/avatar_span_synth_probe_ddr_20261103",
     "drm": 35,
@@ -156,12 +159,76 @@
   "negative": "build/soc/face_system-20261103T155600_655389Z",
   "synthesis": "build/video/pds/20261103T155625_876936Z",
   "mapping": "build/video/pds/face_photo_pipe_50_map_20261103",
-  "route": "build/video/pds/face_photo_pipe_50_route_20261103",
-  "offline_pipeline": "build/video/face_photo_pipe_50_pipeline_admitted_20261103/receipt.json",
+  "route": "build/video/pds/face_photo_pipe_priority2_50_route_20261104",
+  "offline_pipeline": "build/video/face_photo_pipe_priority2_verified_flow_20261104/receipt.json",
   "resources": {
     "lut": 48902,
     "registers": 47797,
     "drm": 112.5
   },
-  "previous_source_checkpoint": "1a36b55"
+  "previous_source_checkpoint": "1a36b55",
+  "source_commit": "2c9e0e9",
+  "simulation_alignment": "build/video/face_photo_pipe_50_sim_alignment_20261103.json",
+  "simulation_performance": "build/video/face_photo_pipe_performance_20261103.json",
+  "positive_result_sha256": "d6729dafc5281a4cada57132215eb9cf884242768772084e15eb2866ec19f94d",
+  "negative_result_sha256": "53838a549042582c3d62dd9d117ac427dfe3dfb547d84b1d26b0345243e36ab6",
+  "firmware_sha256": "09b964f9a837c2e07bb0fae48ef1b744902413a4ad530ddbc17481e0187aa7d2",
+  "pipelined_performance_attempt": {
+    "route": "build/video/pds/face_photo_pipe_50_route_20261103",
+    "review": "build/video/face_photo_pipe_50_review_20261103/result.json",
+    "pipeline": "build/video/face_photo_pipe_50_pipeline_admitted_20261103/receipt.json",
+    "setup_min_ns": -1.716,
+    "hold_min_ns": -0.758,
+    "ddr_system_setup_ns": -0.954,
+    "compute_setup_ns": 1.034,
+    "pixel_setup_ns": 7.366,
+    "failed_paths": "build/video/face_photo_pipe_50_failed_paths_20261104.txt",
+    "cache_write_path": "Previous cache RAM-WE violation absent from reported negative setup paths.",
+    "result": "TIMING_FAILED_NO_BITSTREAM",
+    "placement_estimated_worst_slack_ns": 0.415,
+    "placement_estimated_tns_ns": 0.0,
+    "review_status": "TIMING_FAILED",
+    "report_sha256": "a0fb648e609ee0363e02545d1d06f6a530044458e6fdd751c3a42231bd6f41d9",
+    "gray_datapath_bound_groups": 23,
+    "gray_datapath_bound_bits": 116,
+    "full_gray_clock_review_performed": false
+  },
+  "normal_reroute_plan": {
+    "mode": "normal",
+    "seed": 4,
+    "map": "build/video/pds/face_photo_pipe_50_map_20261103",
+    "route": "build/video/pds/face_photo_pipe_normal_50_route_20261104",
+    "pipeline": "build/video/face_photo_pipe_normal_50_pipeline_20261104/receipt.json",
+    "reason": "Previous normal placement had all hold tables nonnegative, unlike performance seed 5. Apply normal mode to the same corrected pipeline map; repeat all physical qualification.",
+    "result": "AGENT_SUPERSEDED_CONGESTED_PLACEMENT",
+    "supersession": "build/video/pds/face_photo_pipe_normal_50_route_20261104/supersession.json",
+    "last_unrouted": 973,
+    "last_iteration": 520,
+    "placement_estimated_worst_slack_ns": 0.512,
+    "scope": "Intentional cancellation after congestion plateau, not native tool failure or completed timing result."
+  },
+  "historical_full_cache_route_priority": "build/video/face_photo_50_priority_20261103.rcf",
+  "historical_synthesis_error": "PDS signal 11 / Flow-0189; first during compile DB creation, second during synthesis architecture building. No resource or timing acceptance.",
+  "priority_route": {
+    "initial_native_rejection": "build/video/pds/face_photo_pipe_priority_50_route_20261104/receipt.json",
+    "reason": "Five post-route ntR temporary nets were not available in the frozen placement; the native RCF guard rejected them before accepting a route.",
+    "constraints": "build/video/face_photo_pipe_priority2_20261104.rcf",
+    "provenance": "build/video/face_photo_pipe_priority2_20261104.json",
+    "accepted_priority_nets": 29,
+    "mode": "normal",
+    "new_placement": false,
+    "same_source_map_and_functional_results": true
+  },
+  "placement_message_scope_fix": {
+    "source": "scripts/video/qualify_face_bitstream.py",
+    "tests": "scripts/video/test_face_message_scopes.py",
+    "unit_tests": 7,
+    "red": "build/video/face_message_scopes_red_20261104.log",
+    "green": "build/video/face_message_scopes_green_20261104.log",
+    "native_controls": "build/video/face_message_scopes_native_20261104.json",
+    "route_audit_controls": "build/video/face_photo_pipe_performance_controls_reaudited_20261104.json",
+    "simulation_reaudit": "build/video/face_photo_pipe_50_sim_reaudit_20261104.json",
+    "auditor_sha256": "87ad16c23c24a0e7b47ac28f0881a5f67d7069da9bcb46424494cce7db09fca5",
+    "scope": "When only a completed placement is reused, bind and retain the full combined native log but review only its unambiguously delimited placement prefix. Record prior unused route diagnostics separately. Always review all current-route errors/critical warnings. No timing constraints or thresholds change."
+  }
 }

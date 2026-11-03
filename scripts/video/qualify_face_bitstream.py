@@ -77,6 +77,40 @@ def check_sites(source, actual, profile='box'):
     return dict(physical_ports=len(observed),disabled_box_key='mode_button_n' if profile=='box' else None,ddr_gate_sites=gates)
 
 
+def collect_messages(log_paths, placement_log, route_log, reference_fdc, profile, reused_placement):
+    """Review native diagnostics; never waive errors from the accepted route."""
+    messages={'reviewed_reference_pin_notices':[],'reviewed_disabled_box_key':[],'rejected':[],
+              'unused_historical_route_messages':[]}
+    for p in dict.fromkeys(log_paths):
+        text=p.read_text(encoding='utf-8',errors='replace')
+        # Combined PNR keeps placement and routing in one native log. When
+        # reusing only its placed DB, the old routing is not part of the new
+        # implementation. Keep the complete raw log bound in provenance and
+        # record its unused route diagnostics explicitly. The current route
+        # always receives the unfiltered message review below.
+        if (reused_placement and p.resolve()==placement_log.resolve()
+                and p.resolve()!=route_log.resolve()):
+            starts=list(re.finditer(r'^Routing started\.[ \t]*\r?$',text,re.M))
+            if starts:
+                finishes=list(re.finditer(r'^Finished placement\.[ \t]*\r?$',text,re.M))
+                if len(starts)!=1 or len(finishes)!=1 or finishes[0].end()>starts[0].start():
+                    raise ValueError('Ambiguous or incomplete native placement/routing phases')
+                boundary=starts[0].start()
+                _,unused=review_messages(text[boundary:],reference_fdc)
+                messages['unused_historical_route_messages'].append(dict(
+                    path=str(p.resolve()),source_log_sha256=sha256(p),
+                    scope='Only the prior placed database is reused; its later routing is superseded.',
+                    messages=unused))
+                text=text[:boundary]
+        accepted,rejected=review_messages(text,reference_fdc)
+        messages['reviewed_reference_pin_notices']+=accepted
+        for line in rejected:
+            if profile=='box' and re.fullmatch(r"C: ConstraintEditor-2001: \[.*physical\.pcf\(line number: \d+\)\] Object 'mode_button_n' is dangling, which has no connection\. it will be ignored\.",line):
+                messages['reviewed_disabled_box_key'].append(line)
+            else:messages['rejected'].append(line)
+    return messages
+
+
 def qualify(args):
     base=args.base.resolve();route=args.route.resolve();review=args.review.resolve();clocks=args.clock_review.resolve()
     br=read(base/'result.json');rr=route_record(route);tr=read(review/'result.json');cr=read(clocks/'result.json')
@@ -129,14 +163,8 @@ def qualify(args):
     log_paths=list(dict.fromkeys(log_paths))
     if (clocks/'console.log').exists():log_paths.append(clocks/'console.log')
     if 'gray_netlist' in tr:log_paths.append(review/'netlist/console.log')
-    messages={'reviewed_reference_pin_notices':[],'reviewed_disabled_box_key':[],'rejected':[]}
-    for p in log_paths:
-        accepted,rejected=review_messages(p.read_text(encoding='utf-8',errors='replace'),reference_fdc)
-        messages['reviewed_reference_pin_notices']+=accepted
-        for line in rejected:
-            if profile=='box' and re.fullmatch(r"C: ConstraintEditor-2001: \[.*physical\.pcf\(line number: \d+\)\] Object 'mode_button_n' is dangling, which has no connection\. it will be ignored\.",line):
-                messages['reviewed_disabled_box_key'].append(line)
-            else:messages['rejected'].append(line)
+    messages=collect_messages(log_paths,Path(pr['log_path']),Path(rr['log_path']),
+                              reference_fdc,profile,placement!=route)
     if messages['rejected']: raise ValueError('Unreviewed PDS error/critical warning: '+messages['rejected'][0])
     synthesis=base/'synthesize/triha_face_board_top.snr'
     resources={}
