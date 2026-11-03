@@ -39,6 +39,7 @@ module raw_display #(
     // RGB888 rows are padded to AXI beats; padding is never shown.
     localparam integer ROW_BYTES = FRAME_WIDTH*3;
     localparam integer ROW_WORDS = (ROW_BYTES+15)/16;
+    localparam integer ROW_WORD_COUNT_BITS = ROW_WORDS>1 ? $clog2(ROW_WORDS+1) : 1;
     localparam [2:0] P_IDLE=0,P_CLEAN=1,P_PREFETCH=2,P_SCAN=3,P_FAULT=4;
     localparam [2:0] D_IDLE=0,D_AR=1,D_R=2,D_MULT=3,D_ADDR=4;
     reg [127:0] row_ram0 [0:ROW_WORDS-1];
@@ -127,7 +128,11 @@ module raw_display #(
     reg [31:0] dma_base_latched,dma_stride_latched;
     reg [10:0] dma_row_latched;
     reg [63:0] dma_row_product;
-    integer dma_words_left,dma_word_offset,dma_burst_beats,dma_beat,watchdog;
+    // This counter starts at ROW_WORDS and subtracts only completed bursts
+    // bounded by its remaining count. A 32-bit signed counter unnecessarily
+    // extended the burst-length comparison across the routed critical path.
+    reg [ROW_WORD_COUNT_BITS-1:0] dma_words_left;
+    integer dma_word_offset,dma_burst_beats,dma_beat,watchdog;
     integer chosen_words,boundary_words;
     wire r_transfer=(dma_state==D_R && m_axi_rvalid && m_axi_rready);
     wire response_ok=(m_axi_rid===4'd0 && m_axi_rresp===2'b00 &&

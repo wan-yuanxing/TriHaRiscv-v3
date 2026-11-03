@@ -38,7 +38,11 @@ module display_record_guard(
     generate for(lane_index=0;lane_index<16;lane_index=lane_index+1)begin:g_lane_check
         assign invalid_lanes[lane_index]=invalid_box(record_i[(32+lane_index*8)*32+:256],mask[lane_index]);
     end endgenerate
-    wire [7:0] lane_code=invalid_lanes[lane]?8'h12:8'h00;
+    // The record is leased unchanged until the result is accepted. Capture
+    // all lane checks at start; the existing header cycle separates their
+    // geometry/reduction logic from the lane mux without adding latency.
+    reg [15:0] invalid_lanes_q;
+    wire [7:0] lane_code=invalid_lanes_q[lane]?8'h12:8'h00;
     reg [7:0] head_code;
     integer h;
     always @* begin
@@ -77,10 +81,12 @@ module display_record_guard(
     end
     assign start_ready_o=rst_ni&&!busy&&!result_valid_o;
     always @(posedge clk_i or negedge rst_ni)begin
-        if(!rst_ni)begin busy<=0;header<=0;lane<=0;result_valid_o<=0;result_code_o<=0;end
+        if(!rst_ni)begin busy<=0;header<=0;lane<=0;result_valid_o<=0;result_code_o<=0;invalid_lanes_q<=0;end
         else begin
             if(result_valid_o&&result_ready_i)result_valid_o<=0;
-            if(start_valid_i&&start_ready_o)begin busy<=1;header<=1;lane<=0;end
+            if(start_valid_i&&start_ready_o)begin
+                busy<=1;header<=1;lane<=0;invalid_lanes_q<=invalid_lanes;
+            end
             if(busy)begin
                 if(header)begin
                     if(!asset_wait)header<=0;
