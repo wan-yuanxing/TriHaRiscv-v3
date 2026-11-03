@@ -6,6 +6,17 @@
     "TriHaRiscv-v3/targets/pango676/ddr/hmic_contract.json": "6434483eb0ae28ebe033ff12648ea28a8a9cb5f7e88308da84c925c92dfbcf9c"
   },
   "references": {
+    "key": {
+      "archive": "2_Demo/2_7_key_led_test.rar",
+      "sha256": "5bfe2d18021e87767abf8c6afc57efa888b51a3f40b0882a1116ce7e3f7b62c6",
+      "files": [
+        {
+          "path": "key_led_test.fdc",
+          "member": "2_7_key_led_test/2_7_key_led_test/source/key_led_test.fdc",
+          "sha256": "9017debebe3dc3ea7dc076572b36324f901da40ead062f42ef40dbf18bce76ac"
+        }
+      ]
+    },
     "hdmi": {
       "archive": "2_Demo/4_12_HDMI_IN_DDR3_HDMI_OUT.rar",
       "sha256": "ff55b502f52a8467bae6ec6dcc025f1e04b0c316b1cda6af28cf54cf3512a05b",

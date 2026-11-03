@@ -2,6 +2,7 @@
 import argparse
 from datetime import datetime,timezone
 import json
+import os
 from pathlib import Path
 import re
 import struct
@@ -52,10 +53,14 @@ def main():
         support+=['sw/include/'+x for x in ['face_avatar.h','avatar_preset.h','video_capture.h','video_capture_v2.h','video_display.h','video_display_abi.h',
             'video_frame_pool.h','video_cfg.h','npu_frame.h','frame_config.h']]
         support+=['rtl/soc/include/frame_config.vh','rtl/soc/include/avatar_preset.vh','rtl/video/include/video_cfg.vh','rtl/video/include/video_capture_v2.vh','rtl/video/include/video_display.vh',
+            'fpga/pg2l100h/ip/triha_compute_pll.json','fpga/pg2l100h/project/triha_face_board.json',
             source_manifest,'config/soc_memory.json','config/cpu_admission.json','config/cpu_toolchain.json','config/npu_b03_sources.f',
             'scripts/soc/run_face_system.py','scripts/npu/frozen_inputs.py','scripts/npu/run_b03_frame.py','scripts/npu/audit_b03_assets.py',
             'scripts/npu/import_b03.py','scripts/cpu/admission_common.py','scripts/video/common.py']+admitted['core']['headers']
         frozen=FrozenInputs(ROOT,out/'inputs',list(dict.fromkeys(prod+support)))
+        clock_recipe=json.loads((out/'inputs/fpga/pg2l100h/ip/triha_compute_pll.json').read_text(encoding='utf-8'))
+        need(clock_recipe['compute_hz']==50_000_000,'full-system bench requires physical 50 MHz compute profile')
+        row['clock_contract']={'compute_hz':50_000_000,'video_hz':125_000_000,'pixel_hz':40_000_000}
         vendor={Path(x['path']).name:Path(x['path']) for x in admitted['simulation_models']};vendor.update({leaf:VENDOR/leaf for leaf in VENDOR_FILES})
         for leaf,path in vendor.items():frozen.external(path,out/'vendor'/leaf)
         manifest=load_manifest(DEFAULT_MANIFEST);frozen.track(DEFAULT_MANIFEST);raw={}
@@ -122,10 +127,11 @@ def main():
         (out/'uploads.txt').write_text(str(len(lines))+'\n'+''.join(lines),encoding='ascii')
         (out/'heads_golden.hex').write_text(''.join(f'{v:02x}\n' for v in expected_heads),encoding='ascii')
         (out/'preload_verified.txt').write_text('54524948\n',encoding='ascii')
-        gcc=Path(json.loads((out/'inputs/config/cpu_toolchain.json').read_text())['compiler']);app=out/'inputs/sw/apps/face_avatar'
+        gcc=Path(os.environ.get('TRIHA_RISCV_GCC') or json.loads((out/'inputs/config/cpu_toolchain.json').read_text())['compiler']);app=out/'inputs/sw/apps/face_avatar'
         offsets={name:'offsetof(struct face_avatar,pool.stats.'+name+')' for name in ['allocated','captured','graph_starts','results','display_submits','display_commits','mode_commits','releases','no_free','faults']}
         offsets.update(slots='offsetof(struct face_avatar,pool.slots)',slot_bytes='sizeof(struct video_frame_slot)',slot_state='offsetof(struct video_frame_slot,state)',slot_frame='offsetof(struct video_frame_slot,id.frame)')
         offsets.update(result_valid='offsetof(struct face_avatar,result.valid)',result_faces='offsetof(struct face_avatar,result.face_count)',result_display='offsetof(struct face_avatar,result.display_count)')
+        offsets.update(mode='offsetof(struct face_avatar,mode)')
         layout='#include <stddef.h>\n#include "face_avatar.h"\nconst unsigned face_test_layout[]={'+','.join(offsets.values())+'};\n'
         (out/'layout.c').write_text(layout,encoding='ascii');frozen.track(out/'layout.c')
         run([gcc,'--version'],'compiler_version');run([SIM/'vsim.exe','-version'],'simulator_version')
@@ -171,6 +177,7 @@ def main():
         else:
             need('FACE_SYSTEM_PASS' in text,'missing actual application PASS '+text[-3000:])
             if args.avatar_boot:need('modes=111' in text,'missing all three full-pixel modes')
+            elif args.board_profile:need('modes=010' in text,'missing full-pixel BOX mode')
             for i in range(2):
                 heads=read_hex_bytes(out/f'heads_actual_{i}.hex');result=read_hex_bytes(out/f'result_actual_{i}.hex');h=struct.unpack('<32I',result)
                 need(heads==expected_heads,'independent HEAD bytes')

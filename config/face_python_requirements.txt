@@ -1,0 +1,6 @@
+# Install with --target build/python-deps; use PYTHONPATH for these tools only.
+numpy==2.2.6
+opencv-python-headless==4.11.0.86
+onnx==1.19.1
+onnxruntime==1.23.2
+threadpoolctl==3.6.0

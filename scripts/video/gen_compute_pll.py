@@ -1,4 +1,4 @@
-"""Generate the face-board 125 -> 100 MHz compute PLL from pinned vendor IDF."""
+"""Generate the face-board 125 -> 50 MHz compute PLL from pinned vendor IDF."""
 import argparse
 from fractions import Fraction
 import json
@@ -11,7 +11,7 @@ from common import ROOT, run_logged, sha256, tool, write_json
 
 def create_idf(config, output):
     if (config['schema_version'], config['instance'], config['reference_hz'],
-            config['compute_hz']) != (1, 'triha_compute_pll', 125_000_000, 100_000_000):
+            config['compute_hz']) != (1, 'triha_compute_pll', 125_000_000, 50_000_000):
         raise ValueError('unsupported compute clock contract')
     for key in ('input_divider', 'feedback_multiplier', 'feedback_divider', 'output_divider'):
         if type(config[key]) is not int or not 1 <= config[key] <= 128:
@@ -36,7 +36,7 @@ def create_idf(config, output):
                'STATIC_DUTY7': config['feedback_divider'],
                'STATIC_RATIO0': config['output_divider'],
                'STATIC_DUTY0': config['output_divider'],
-               'CLKOUT0_REQ_FREQ_basicPage': '100.00000000'}
+               'CLKOUT0_REQ_FREQ_basicPage': f"{config['compute_hz']/1_000_000:.8f}"}
     for suffix in ('', '_basicPage', '_advancedPage'):
         updates['CLKIN_FREQ' + suffix] = '125.00000000'
         updates['CLKOUT0_EN' + suffix] = 'true'

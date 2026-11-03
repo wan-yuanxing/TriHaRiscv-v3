@@ -1,7 +1,7 @@
 """Guard the physical face-board clock contract.
 
 The DDR user interface and video fabric are 125 MHz.  The CPU/B03 compute
-fabric is a separate 100 MHz domain; the reusable SoC already contains CDC
+fabric is a separate 50 MHz domain; the reusable SoC already contains CDC
 bridges for that boundary.  This test keeps the board wrapper and metadata
 from silently collapsing the two domains back onto one clock.
 """
@@ -21,7 +21,7 @@ def test_face_board_declares_split_clock_contract():
     )
     contract = manifest["clock_contract"]
     assert contract["core_hz"] == 125_000_000
-    assert contract["compute_hz"] == 100_000_000
+    assert contract["compute_hz"] == 50_000_000
     assert contract["pixel_hz"] == 40_000_000
 
 
@@ -55,5 +55,15 @@ def test_clock_separation_does_not_hide_all_cross_domain_paths():
 
 def test_board_profile_simulates_the_actual_compute_frequency():
     bench = (ROOT / "tb/soc/tb_face_system.sv").read_text()
-    assert "always #5 compute_clk_i=~compute_clk_i;" in bench
+    assert "always #10 compute_clk_i=~compute_clk_i;" in bench
+
+
+def test_pll_recipe_and_sta_describe_the_same_physical_50_mhz():
+    recipe = json.loads((ROOT/'fpga/pg2l100h/ip/triha_compute_pll.json').read_text(encoding='utf-8'))
+    actual = recipe['reference_hz'] * recipe['feedback_multiplier'] * recipe['feedback_divider']
+    actual /= recipe['input_divider'] * recipe['output_divider']
+    assert actual == recipe['compute_hz'] == 50_000_000
+    fdc = (ROOT/'fpga/pg2l100h/constraints/triha_face_board.fdc').read_text(encoding='utf-8')
+    command = next(line for line in fdc.splitlines() if line.startswith('create_generated_clock -name {compute_clk}'))
+    assert '-multiply_by {2} -divide_by {5}' in command
 

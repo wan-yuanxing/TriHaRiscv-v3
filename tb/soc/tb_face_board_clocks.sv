@@ -18,8 +18,8 @@ module tb_face_board_clocks;
         previous_edge=$realtime;
         for(i=0;i<50;i=i+1)begin
             @(posedge dut.face.compute_clk_i);
-            if($realtime-previous_edge<9.99 || $realtime-previous_edge>10.01)
-                $fatal(1,"compute period must be 10 ns");
+            if($realtime-previous_edge<19.99 || $realtime-previous_edge>20.01)
+                $fatal(1,"compute period must be 20 ns");
             previous_edge=$realtime;
         end
         @(posedge dut.face.video_clk_i);previous_edge=$realtime;
@@ -41,7 +41,7 @@ module tb_face_board_clocks;
         #50;release dut.compute_pll_lock;
         wait(dut.application_reset_n && dut.video_reset_n);
         repeat(5)@(posedge dut.face.compute_clk_i);
-        $display("FACE_BOARD_CLOCK_PASS compute_ns=10 video_ns=8 samples=50 reset_loss=1");
+        $display("FACE_BOARD_CLOCK_PASS compute_ns=20 video_ns=8 samples=50 reset_loss=1");
         $finish;
     end
     // Direct interfaces belong to one domain; this also catches reassigning

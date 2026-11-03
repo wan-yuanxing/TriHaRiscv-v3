@@ -55,6 +55,11 @@ int main(void) {
     }
     read_mmio((void *)(uintptr_t)VDISP_BASE,VDISP_REG_CAPABILITIES,&mode_key);
     mode_key&=VDISP_CAP_MODE_KEY;
+    /* A detection-only platform has no mode key to leave the initial RAW
+     * state. Select BOX before allocating the first captured frame. */
+    if (!mode_key && face_avatar_select_mode(&face_avatar_application,1u)!=FACE_AVATAR_OK) {
+        face_avatar_run_status=2;for (;;) {}
+    }
     face_avatar_run_status=1;
     for (;;) {
         if (mode_key) {

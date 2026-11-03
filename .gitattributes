@@ -38,3 +38,20 @@ sw/tests/cache_irq_runtime.S -text whitespace=cr-at-eol
 
 # Keep the pending timing candidate identical to its frozen simulation inputs.
 experiments/npu/stage_split_20261101/*.v -text whitespace=cr-at-eol
+
+# Byte-exact qualified 2026-11-03 face BOX sources and simulation evidence.
+fpga/pg2l100h/constraints/triha_face_board.fdc -text whitespace=cr-at-eol
+fpga/pg2l100h/constraints/triha_face_cdc.fdc -text whitespace=cr-at-eol
+fpga/pg2l100h/ip/triha_compute_pll.json -text whitespace=cr-at-eol
+fpga/pg2l100h/project/triha_face_board.json -text whitespace=cr-at-eol
+fpga/pg2l100h/rtl/triha_face_board_top.sv -text whitespace=cr-at-eol
+scripts/video/gen_compute_pll.py -text whitespace=cr-at-eol
+scripts/video/qualify_face_bitstream.py -text whitespace=cr-at-eol
+scripts/video/face_timing.py -text whitespace=cr-at-eol
+scripts/video/check_face_gray_clocks.py -text whitespace=cr-at-eol
+tb/soc/tb_face_system.sv -text whitespace=cr-at-eol
+scripts/soc/run_face_system.py -text whitespace=cr-at-eol
+
+releases/**/*.sbit binary
+releases/**/*.smsk binary
+releases/**/*.zip binary

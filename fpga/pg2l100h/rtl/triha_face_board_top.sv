@@ -4,7 +4,7 @@
 //
 // HDMI capture, the TriHa application CPU, the B03 frame service and HDMI
 // scanout share the single native DDR owner. The DDR IP supplies the 125 MHz
-// video/DDR-user clock. CPU and B03 run from the separate 100 MHz compute PLL;
+// video/DDR-user clock. CPU and B03 run from the separate 50 MHz compute PLL;
 // triha_face_system contains the AXI CDC at that boundary.
 module triha_face_full_top #(
     parameter integer CLOCK_HZ=27_000_000,
@@ -24,7 +24,7 @@ module triha_face_full_top #(
     parameter integer ENABLE_MINIMAL_BOX=0,
     parameter integer ENABLE_AVATAR=1,
     // Full CPU control remains selectable; the board default uses the
-    // resource/timing-bounded control profile. CPU/B03 run at 100 MHz;
+    // resource/timing-bounded control profile. CPU/B03 run at 50 MHz;
     // capture, UART/model-loader and DDR/video use the 125 MHz user clock.
     parameter integer MINIMAL_CONTROL_CPU=1,
     parameter integer ENABLE_HARDWARE_POST=0,

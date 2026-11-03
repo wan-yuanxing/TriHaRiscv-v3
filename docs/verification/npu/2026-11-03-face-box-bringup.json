@@ -1,0 +1,473 @@
+{
+  "status": "PASS_FIRST_PRIORITY_FACE_DETECTION_BOARD_ACCEPTANCE",
+  "scope": "Real B03 face detection and primary BOX display; function-first milestone, no FPS threshold",
+  "functional": {
+    "status": "PASS",
+    "path": "build/soc/face_system-20261103T070341_048946Z",
+    "compute_hz": 50000000,
+    "shared_physical_sources": 134,
+    "inputs_outputs_verified": true,
+    "cycles": 40581783,
+    "full_pixel_frames": 2,
+    "modes": "010",
+    "source_alignment": "build/video/face_box_50_sim_alignment_20261103.json"
+  },
+  "synthesis": {
+    "run": "build/video/pds/20261103T070558_933114Z",
+    "lut": 42531,
+    "registers": 43408,
+    "drm": 77.5,
+    "apm": 58
+  },
+  "physical": {
+    "status": "50MHZ_OFFLINE_BITSTREAM_READY",
+    "compute_hz": 50000000,
+    "video_hz": 125000000,
+    "pixel_hz": 40000000,
+    "timing_closed": false,
+    "accepted_bitstream": true,
+    "external_io_timing_verified": false,
+    "clock_regression": "build/video/face_board_clocks_50_20261103",
+    "clock_red_control": "build/video/face_board_clocks_50_red_20261103",
+    "mmio_red_control": "build/soc/resource_probe_video_compact_20261103T070053_149196Z",
+    "video_components": "build/soc/resource_probe_video_compact_20261103T070209_315891Z",
+    "base": "build/video/pds/20261103T070558_933114Z",
+    "first_review": "build/video/face_box_50_review_20261103",
+    "first_route": {
+      "status": "TIMING_FAILED",
+      "setup_slow_wns_ns": -0.059,
+      "setup_failing_endpoints": 3,
+      "compute_setup_slow_wns_ns": 1.145,
+      "hold_slow_wns_ns": 0.068,
+      "hold_fast_wns_ns": 0.053,
+      "unrouted_nets": 0,
+      "route_iterations": 463
+    },
+    "new_route": "build/video/pds/face_box_50_bridge_priority_20261103",
+    "strategy": {
+      "same_mapped_design": true,
+      "same_placement": true,
+      "priority_nets": 8,
+      "priority_evidence": "build/video/face_box_50_bridge_priority_20261103.json",
+      "timing_constraints_unchanged": true,
+      "hold_repair_iterations": 30,
+      "hold_repair_margin_ps": 200,
+      "hold_repair_in_route": true,
+      "hold_clock_tree_threshold_ps": 200,
+      "preserved_ddr_phy_priority_nets": 2,
+      "application_priority_nets": 8,
+      "rcf_files": 1,
+      "fixed_branch_used": false,
+      "stop_on_rcf_replacement_or_rejection": true
+    },
+    "audit_negative_controls": "build/video/face_box_50_failed_route_controls_20261103.json",
+    "audit_negative_controls_passed": 10,
+    "capture_priority_review": "build/video/face_box_50_capture_priority_review_20261103",
+    "capture_priority_result": {
+      "status": "TIMING_FAILED",
+      "route_iterations": 398,
+      "setup_slow_wns_ns": 0.002,
+      "setup_failing_endpoints": 0,
+      "hold_slow_wns_ns": -0.026,
+      "hold_fast_wns_ns": -0.014,
+      "hold_failing_endpoints": 1,
+      "hold_net": "g_full.impl/I_ips_ddr_top/u_ips_ddrc_top/dcd_wr_addr [26]"
+    },
+    "hold100_route": "build/video/pds/face_box_50_capture_hold100_20261103",
+    "hold100_native_repair": "FAILED: native post-route hold optimizer reports -26 ps slow / -14 ps fast after one iteration despite the 30-iteration maximum",
+    "hold100_review": "build/video/face_box_50_capture_hold100_review_20261103",
+    "hold100_final_result": {
+      "status": "TIMING_FAILED",
+      "setup_slow_wns_ns": 0.002,
+      "hold_slow_wns_ns": -0.026,
+      "hold_fast_wns_ns": -0.014,
+      "hold_failing_endpoints": 1
+    },
+    "bvalid_priority_result": {
+      "review": "build/video/face_box_50_bvalid_priority_review_20261103",
+      "status": "TIMING_FAILED",
+      "setup_slow_wns_ns": 0.051,
+      "hold_slow_wns_ns": -0.028,
+      "hold_fast_wns_ns": -0.015
+    },
+    "fixed_route_rejected": {
+      "run": "build/video/pds/face_box_50_ddr26_fixed_20261103",
+      "review": "build/video/face_box_50_ddr26_fixed_review_20261103",
+      "setup_slow_wns_ns": -0.059,
+      "hold_slow_wns_ns": -0.028,
+      "reason": "PDS replaced earlier RCFs; explicit route rejected because endpoints were not constrained in imported placed DB"
+    },
+    "fixed_route_fail_fast": {
+      "run": "build/video/pds/face_box_50_ddr26_merged_20261103",
+      "status": "FAIL",
+      "reason": "Endpoints still unconstrained in imported placement; terminated at constraint admission"
+    },
+    "preserved_phy_result": {
+      "run": "build/video/pds/face_box_50_preserved_phy_20261103",
+      "review": "build/video/face_box_50_preserved_phy_review_20261103",
+      "status": "FAIL",
+      "route_iterations": 297,
+      "unrouted_nets": 0,
+      "setup_slow_wns_ns": -0.203,
+      "setup_slow_tns_ns": -0.387,
+      "setup_failing_endpoints": 7,
+      "compute_setup_slow_wns_ns": 1.85,
+      "hold_slow_wns_ns": 0.068,
+      "hold_fast_wns_ns": 0.052,
+      "hold_failing_endpoints": 0,
+      "gray_audit_error": "Expected direct, datapath-only registered Gray bit",
+      "unreviewed_route_element": "CLKROUTE_107/CR on ingress/fifo/wr_gray[8]",
+      "gray_audit_not_relaxed": true
+    },
+    "route_observation": "build/video/face_box_50_ddr26_route_observation_20261103.txt",
+    "route_admission_regression": {
+      "script": "scripts/video/test_face_reroute_constraints.py",
+      "tests": 4,
+      "status": "PASS"
+    },
+    "gray_identity_review": {
+      "export": "build/video/face_gray_route_netlist_20261103",
+      "native_identity_buffer": "CLMS_75_1081/ntM3 V_BUF",
+      "source_bit": "g_full.impl/ingress/fifo/wr_gray[8]",
+      "same_bit_connectivity_proven": true,
+      "delay_constraints_unchanged": true,
+      "native_all_bit_datapath_check": "PASS",
+      "unit_regression_script": "scripts/video/test_face_gray_netlist.py",
+      "unit_regression_tests": 10,
+      "unit_regression_status": "PASS",
+      "new_full_review": "build/video/face_box_50_preserved_phy_identity_review_20261103",
+      "new_full_review_status": "TIMING_FAILED",
+      "new_full_review_gray_status": "PASS_CONSERVATIVE_DATAPATH_BOUND",
+      "native_negative_controls": "build/video/face_box_50_identity_review_controls_20261103.json",
+      "native_negative_controls_passed": 10
+    },
+    "balanced_priority_result": {
+      "run": "build/video/pds/face_box_50_balanced_priority_20261103",
+      "review": "build/video/face_box_50_balanced_priority_review_20261103",
+      "status": "TIMING_FAILED",
+      "route_iterations": 490,
+      "unrouted_nets": 0,
+      "setup_slow_wns_ns": -0.135,
+      "setup_failing_endpoints": 1,
+      "setup_endpoint": "g_full.impl/face/u_memory/u_bridge/span_q[2]/opit_0_inv_L5Q_perm/CE",
+      "hold_slow_wns_ns": 0.137,
+      "hold_fast_wns_ns": 0.1,
+      "hold_failing_endpoints": 0,
+      "gray_datapath_status": "PASS_CONSERVATIVE_DATAPATH_BOUND",
+      "hold_optimization_notice": {
+        "endpoint": "g_full.impl/face/u_video/g_compact.u_display/u_renderer/u_pixels/g_box_only.u_overlay/rgb_pipe[7][7]/opit_0_inv_srl/D",
+        "corner": "fast",
+        "slack_ps": 149,
+        "optimization_target_ps": 200,
+        "messages": [
+          "STA-3017",
+          "Timing-4105"
+        ],
+        "reviewed_as_accepted": false
+      },
+      "accepted_bitstream": false
+    },
+    "routed_internal_timing_closed": true,
+    "bridge_priority_result": {
+      "run": "build/video/pds/face_box_50_bridge_priority_20261103",
+      "review": "build/video/face_box_50_bridge_priority_review_20261103",
+      "status": "REPORTS_READY",
+      "route_iterations": 464,
+      "unrouted_nets": 0,
+      "timing": {
+        "setup": {
+          "slow": {
+            "wns_ns": 0.183,
+            "failing_endpoints": 0
+          },
+          "fast": {
+            "wns_ns": 2.961,
+            "failing_endpoints": 0
+          }
+        },
+        "hold": {
+          "slow": {
+            "wns_ns": 0.143,
+            "failing_endpoints": 0
+          },
+          "fast": {
+            "wns_ns": 0.108,
+            "failing_endpoints": 0
+          }
+        },
+        "recovery": {
+          "slow": {
+            "wns_ns": 2.373,
+            "failing_endpoints": 0
+          },
+          "fast": {
+            "wns_ns": 4.241,
+            "failing_endpoints": 0
+          }
+        },
+        "removal": {
+          "slow": {
+            "wns_ns": 0.335,
+            "failing_endpoints": 0
+          },
+          "fast": {
+            "wns_ns": 0.23,
+            "failing_endpoints": 0
+          }
+        },
+        "pulse_width": {
+          "slow": {
+            "wns_ns": 0.035,
+            "failing_endpoints": 0
+          },
+          "fast": {
+            "wns_ns": 0.035,
+            "failing_endpoints": 0
+          }
+        }
+      },
+      "gray_datapath_status": "PASS_CONSERVATIVE_DATAPATH_BOUND",
+      "gray_bits": 116,
+      "clock_cross_srb_margin_notices": 0,
+      "accepted_bitstream": true
+    },
+    "cdc_timing_met": true,
+    "clock_review": {
+      "path": "build/video/face_box_50_bridge_priority_clocks_20261103",
+      "status": "PASS",
+      "groups": 23,
+      "bits": 116,
+      "observations": 928,
+      "maximum_conservative_bound_ns": 4.233
+    },
+    "final_audit_controls": {
+      "path": "build/video/face_box_50_bridge_priority_controls_20261103.json",
+      "status": "PASS",
+      "controls": 14
+    },
+    "qualified_result": "build/video/face_box_50_bridge_priority_qualified_20261103/result.json",
+    "release": {
+      "directory": "build/video/releases/triha_face_board_3939c52f4d94",
+      "bitstream": "triha_face_board_top.sbit",
+      "bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+      "mask": "triha_face_board_top.smsk",
+      "mask_sha256": "d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd",
+      "bytes_each": 3791112,
+      "package_audit": "build/video/face_box_50_release_audit_20261103.json",
+      "physical_ports": 140,
+      "ddr_gate_sites_verified": true,
+      "unreviewed_critical_messages": 0
+    }
+  },
+  "board_verified": true,
+  "negative_scene": {
+    "status": "PASS",
+    "path": "build/soc/face_system-20261103T070341_033768Z",
+    "compute_hz": 50000000,
+    "shared_physical_sources": 134,
+    "inputs_outputs_verified": true,
+    "cycles": 40581783,
+    "full_pixel_frames": 2,
+    "modes": "010",
+    "source_alignment": "build/video/face_box_50_sim_alignment_20261103.json"
+  },
+  "uart_loader": {
+    "run": "build/soc/boot_uart-20261103T041416_677529Z",
+    "status": "PASS",
+    "uart_checks": 265,
+    "parallel_loader_checks": 2072,
+    "serial_loader_checks": 2072,
+    "buffer_checks": 1213
+  },
+  "display_components": {
+    "status": "PASS",
+    "path": "build/soc/resource_probe_video_compact_20261103T070209_315891Z",
+    "cases": 27,
+    "guard_cases": 246,
+    "queued_read_checks": 1653
+  },
+  "historical_100mhz_functional": {
+    "run": "build\\soc\\face_system-20261103T034939_772163Z",
+    "result_sha256": "8a63eb4dd34d2a000dd44db02f1690a84d30678a86d7387720284777b725342f",
+    "marker": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4296 nativeAW=91016 nativeAR=376746 cycles=48005166",
+    "hash_checks": 197,
+    "shared_pds_source_files": 132,
+    "compute_hz": 100000000
+  },
+  "historical_100mhz_negative_scene": {
+    "run": "build\\soc\\face_system-20261103T035952_325404Z",
+    "result_sha256": "6de0e0fe67531229f04f74ac2a8bade7360c26018e3db6aa97ea6d4b90b7b525",
+    "marker": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4200 nativeAW=91016 nativeAR=376714 cycles=48005166",
+    "hash_checks": 197,
+    "expected_faces": 0,
+    "same_loaded_firmware_images": true,
+    "elf_metadata_identical": false,
+    "compute_hz": 100000000
+  },
+  "historical_100mhz_physical": {
+    "status": "HISTORICAL_100MHZ_TIMING_FAILED",
+    "timing_closed": false,
+    "accepted_bitstream": false,
+    "runs": {
+      "base": "build/video/pds/20261103T035439_337985Z",
+      "spread3": "build/video/pds/face_box_spread3_route_20261103"
+    },
+    "placement_review": "build/video/face_box_placement_review_20261103",
+    "placement_sites": "build/video/face_box_place_sites_20261103",
+    "placement_only_setup_wns_ns": {
+      "base": {
+        "slow": 0.771,
+        "fast": 1.346
+      },
+      "spread3": {
+        "slow": 0.903,
+        "fast": 1.542
+      }
+    },
+    "remaining_checks": [
+      "completed route DB and zero unrouted nets",
+      "dual-corner routed setup/hold/recovery/removal/pulse",
+      "numeric Gray CDC skew",
+      "routed DDR PHY sites",
+      "immutable inputs and reviewed messages"
+    ],
+    "completed_route": "build/video/pds/face_box_spread3_route_20261103",
+    "routed_review": "build/video/face_box_routed_review_20261103",
+    "routed_setup_wns_ns": {
+      "slow": -0.306,
+      "fast": 2.709
+    },
+    "routed_setup_failing_endpoints": 67,
+    "routed_hold_wns_ns": {
+      "slow": 0.103,
+      "fast": 0.072
+    },
+    "gray_clock_review": "build/video/face_box_gray_clocks_review_20261103",
+    "gray_clock_observations": 928,
+    "gray_conservative_bound_max_ns": 4.145,
+    "priority_cpu_nets": 17,
+    "second_100mhz_route": {
+      "path": "build/video/pds/face_box_cpu_priority_route_20261103",
+      "setup_slow_wns_ns": -0.859,
+      "failing_endpoints": 126
+    },
+    "new_compute_hz": 80000000,
+    "new_positive": "build/soc/face_system-20261103T055313_986442Z",
+    "new_negative": "build/soc/face_system-20261103T055314_011073Z"
+  },
+  "historical_80mhz_functional": {
+    "run": "build\\soc\\face_system-20261103T055313_986442Z",
+    "result_sha256": "f0f4859fa96598c56bda563d66bfc1a14970e32df42a3da11e71df6a69125d23",
+    "compute_hz": 80000000,
+    "marker": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4296 nativeAW=90504 nativeAR=387257 cycles=45035813",
+    "shared_pds_source_files": 134,
+    "loaded_memory_images_match": true,
+    "expected_faces": 1
+  },
+  "historical_80mhz_negative_scene": {
+    "run": "build\\soc\\face_system-20261103T055314_011073Z",
+    "result_sha256": "29bef0b6ec2ff93dca301e27c979fc8bfc1363178c4c849e0925328fb3d218f9",
+    "compute_hz": 80000000,
+    "marker": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4200 nativeAW=90504 nativeAR=387209 cycles=45035813",
+    "shared_pds_source_files": 134,
+    "loaded_memory_images_match": true,
+    "expected_faces": 0
+  },
+  "historical_80mhz_physical": {
+    "status": "TIMING_FAILED",
+    "timing_closed": false,
+    "accepted_bitstream": false,
+    "compute_hz": 80000000,
+    "video_hz": 125000000,
+    "pixel_hz": 40000000,
+    "base": "build/video/pds/20261103T055401_228008Z",
+    "first_80mhz_review": "build/video/face_box_80_review_20261103",
+    "first_80mhz_result": {
+      "status": "TIMING_FAILED",
+      "setup_slow_wns_ns": {
+        "compute_clk": -0.785,
+        "ddrphy_sysclk": -0.23
+      },
+      "setup_failing_endpoints": 63,
+      "hold_slow_wns_ns": 0.024,
+      "hold_fast_wns_ns": 0.017,
+      "unrouted_nets": 0
+    },
+    "strategy": {
+      "mode": "performance",
+      "seed": 5,
+      "plc_decongestion": 3,
+      "mapped_design_unchanged": true,
+      "timing_constraints_unchanged": true
+    },
+    "remaining_checks": [
+      "completed new route",
+      "dual-corner routed setup/hold/recovery/removal/pulse",
+      "new-route all-bit Gray data/clock bound",
+      "actual pins and DDR PHY gate sites",
+      "source/model/firmware hashes and PDS message review",
+      "qualified bitstream generation"
+    ],
+    "external_io_timing_verified": false,
+    "audit_negative_controls": "build/video/face_audit_80_failed_route_controls_v2_20261103.json",
+    "external_io_requirements_review": "build/video/hdmi_ac_20261103/result.json",
+    "performance5_review": "build/video/face_box_80_performance5_review_20261103",
+    "performance5_final_setup_slow_wns_ns": -1.899,
+    "performance5_final_setup_failing_endpoints": 309,
+    "performance6": "STOPPED_FOR_50MHZ_AND_MMIO_PIPELINE_CHANGE"
+  },
+  "historical_80mhz_display_components": {
+    "run": "build/soc/resource_probe_video_compact_20261103T035840_841488Z",
+    "status": "PASS",
+    "cases": 26,
+    "guard_subcases": 246
+  },
+  "historical_100mhz_synthesis": {
+    "run": "build\\video\\pds\\20261103T035439_337985Z",
+    "lut": 43018,
+    "registers": 43377,
+    "drm": 77.5,
+    "apm": 58
+  },
+  "next_step": "First-priority functional milestone complete. Future optional work: throughput measurement/optimization, external I/O AC signoff, and later avatar/landmark support.",
+  "hardware": {
+    "user_connected_confirmed": true,
+    "scan": "build\\video\\jtag_scan\\20261103T112627_147954Z",
+    "device": "PG2L100H",
+    "idcode": "00602899",
+    "program": "build\\video\\board_program\\20261103T112808_536586Z",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false,
+    "bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+    "serial_driver": "User installed CP210x driver after Windows problem code 28",
+    "serial_port": "COM12",
+    "serial_hardware_id": "USB VID:PID=10C4:EA60 SER=0001",
+    "model_upload_status": "PASS_UART_LOADER_ACK",
+    "picture_observed": true,
+    "functional_board_acceptance": true,
+    "model_upload": "build/soc/model_upload-20261103T113330_193913Z",
+    "model_upload_result_sha256": "e9690f398fd3bae3c387e0af3d828bfc72bdd54c0849ca14e26ba7e090e29acb",
+    "model_transfer": {
+      "bytes": 1770496,
+      "packets": 6916,
+      "retries": 0,
+      "ack_segment": 6,
+      "ack_offset": 0
+    },
+    "model_seal_acknowledged": true,
+    "picture_observation_source": "User confirmation",
+    "manual_visual_acceptance": {
+      "source": "User confirmations in this chat after programming and model load; no automated video capture claimed",
+      "positive_face": "画面正常，且人脸上出现检测框",
+      "changed_face_and_negative_scene": "都正常：框更新、无脸消失、画面继续更新",
+      "positive_face_box": true,
+      "box_tracks_changed_position": true,
+      "no_face_clears_box": true,
+      "later_frames_continue_updating": true
+    },
+    "acceptance_record": "build/video/face_box_board_acceptance_20261103.json",
+    "acceptance_record_sha256": "d39f350fd2b74b739ee63585c68d256d8b66d7716c86f8ffaf365e3c7e7c0e5e",
+    "fps_measured": false
+  }
+}

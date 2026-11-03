@@ -141,7 +141,7 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
     wire raw_error;
     wire [7:0] link_code;
     wire [7:0] raw_code;
-    always #5 compute_clk_i=~compute_clk_i;
+    always #10 compute_clk_i=~compute_clk_i;
     always #4 video_clk_i=~video_clk_i;
     always #12.5 pixel_clk=~pixel_clk;
     reg grs_n=0;GTP_GRS GRS_INST(.GRS_N(grs_n));
@@ -514,9 +514,10 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
         end
     end
     integer pixels[0:2];reg [2:0] full_pixels=0,full_modes=0;reg [2:0] pixel_open=0;integer f;
+    integer box_pixels[0:2];
     reg [31:0] scan_seq[0:2];reg [1:0] scan_mode[0:2];
     reg expected_edge,expected_avatar;reg [23:0] expected_rgb;reg [24:0] avatar_golden[0:479999];
-    initial begin pixels[0]=0;pixels[1]=0;pixels[2]=0;if(AVATAR_BOOT)$readmemh("avatar_golden.hex",avatar_golden);end
+    initial begin pixels[0]=0;pixels[1]=0;pixels[2]=0;box_pixels[0]=0;box_pixels[1]=0;box_pixels[2]=0;if(AVATAR_BOOT)$readmemh("avatar_golden.hex",avatar_golden);end
     initial if(AVATAR_BOOT&&!BOOT_ONLY)begin
         wait(full_modes[0]);@(negedge video_clk_i);mode_button_n=0;repeat(32)@(negedge video_clk_i);
         mode_button_n=1;repeat(32)@(negedge video_clk_i);
@@ -536,11 +537,15 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             if(out_rgb!==expected_rgb||out_box!==expected_edge||out_point||out_avatar!==expected_avatar||out_fault||out_generation!=7||out_slot!=f-1||
                out_seq>=32||!submitted_seen[out_seq]||submitted_frame[out_seq]!=out_frame||submitted_slot[out_seq]!=out_slot||submitted_mode[out_seq]!=out_mode)
                 $fatal(1,"FACE_SYSTEM pixel data/identity frame=%0d mode=%0d seq=%0d xy=%0d,%0d actual=%h expected=%h",f,out_mode,out_seq,out_x,out_y,out_rgb,expected_rgb);
-            if(out_sof)begin pixels[f]=0;pixel_open[f]=1;scan_seq[f]=out_seq;scan_mode[f]=out_mode;end
+            if(out_sof)begin pixels[f]=0;box_pixels[f]=0;pixel_open[f]=1;scan_seq[f]=out_seq;scan_mode[f]=out_mode;end
             if(pixel_open[f])begin
                 if(scan_seq[f]!=out_seq||scan_mode[f]!=out_mode)$fatal(1,"FACE_SYSTEM mode changed inside active frame");
                 if(out_x!=pixels[f]%800||out_y!=pixels[f]/800)$fatal(1,"FACE_SYSTEM pixel coordinate sequence");
                 pixels[f]=pixels[f]+1;
+                if(expected_edge)box_pixels[f]=box_pixels[f]+1;
+                if(pixels[f]==480000&&BOARD_PROFILE&&!AVATAR_BOOT&&
+                   (out_mode!=1||(`EXPECTED_FACES&&box_pixels[f]!=4*(`EXPECTED_W+`EXPECTED_H)-16)))
+                    $fatal(1,"FACE_SYSTEM BOX frame missing visible rectangle mode=%0d pixels=%0d",out_mode,box_pixels[f]);
                 if(pixels[f]==480000)begin full_pixels[f]=1;full_modes[out_mode]=1;pixel_open[f]=0;$display("FACE_SYSTEM_FULL_PIXELS frame=%0d mode=%0d seq=%0d",f,out_mode,out_seq);end
             end
         end
@@ -571,6 +576,8 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
         cycles<=cycles+1;
         if(cycles>100000000)$fatal(1,"FACE_SYSTEM watchdog stage=%0d op=%0d",npu_stage_o,npu_op_o);
         if(u_dut.compute_reset_n)begin
+            if(BOARD_PROFILE&&!AVATAR_BOOT&&requests>=1&&cpu_word(`APP_BASE+`OFF_MODE)!==1)
+                $fatal(1,"FACE_SYSTEM BOX profile must select BOX before capture");
             if(BOARD_PROFILE&&`F.select_post)$fatal(1,"board profile enabled hardware POST");
             if(fault_o||out_fault||underflows)$fatal(1,"FACE_SYSTEM hardware fault cap=%h display=%h read=%h raw=%h link=%h stage=%0d op=%0d",capture_code,display_code,read_code,raw_code,link_code,npu_stage_o,npu_op_o);
             if(cpu_word(`FACE_AVATAR_RUN_STATUS)>1)$fatal(1,"FACE_SYSTEM firmware stopped status=%h cause=%h pc=%h val=%h",cpu_word(`FACE_AVATAR_RUN_STATUS),cpu_word(`FACE_AVATAR_TRAP_CAUSE),cpu_word(`FACE_AVATAR_TRAP_PC),cpu_word(`FACE_AVATAR_TRAP_VALUE));

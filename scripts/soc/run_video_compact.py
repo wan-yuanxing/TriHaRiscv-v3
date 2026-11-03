@@ -162,7 +162,7 @@ def main():
         run([iv, '-g2012', '-Wall', '-I', ROOT / 'rtl/video/include', '-s', 'tb_video_display_mmio', '-o', mmio_binary,
              ROOT / COMPACT[4], ROOT / 'rtl/video/display_record_guard.sv', ROOT / 'rtl/video/display_slot_owner.sv', mmio_path],
             work / 'mmio_compile.log')
-        for case in range(9):
+        for case in [*range(9), 10]:
             log = run([vvp, mmio_binary, f'+CASE={case}'], work / f'mmio_{case}.log')
             if 'DISPLAY_MMIO_PASS' not in log:
                 raise RuntimeError('missing MMIO pass')

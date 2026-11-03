@@ -160,11 +160,17 @@
   ],
   "scope": "Face application: CPU-managed B03 frame execution, HDMI RAW+BOX+fixed AVATAR, seven-segment checked boot, immutable full texture cache, KEY1 mode requests through CPU, RAW/NCHW capture without unused preview. Pending full pixel and physical acceptance; DEMO_BOX_ONLY remains TX-only bring-up.",
   "pin_reference": "fpga/pg2l100h/ip/video_mode_key_manifest.json",
+  "profile_constraints": {
+    "avatar": [
+      "fpga/pg2l100h/constraints/triha_face_avatar.fdc"
+    ],
+    "box": []
+  },
   "clock_contract": {
     "pixel_hz": 40000000,
     "core_hz": 125000000,
     "physical_status": "PDS/board verification required",
-    "compute_hz": 100000000,
+    "compute_hz": 50000000,
     "compute_clock_source": "ref_clk -> triha_compute_pll -> compute_clk",
     "video_clock_source": "DDR user core_clk (ddrphy_sysclk)",
     "free_hz": 27000000,

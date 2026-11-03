@@ -108,11 +108,14 @@ def main():
     parser.add_argument('--seed-start', type=int, default=4)
     parser.add_argument('--seed-count', type=int, default=6)
     parser.add_argument('--pnr-mode', choices=('normal', 'performance'))
+    parser.add_argument('--plc-decongestion',type=int,choices=range(10),help='PDS placement spreading factor, 0..9')
     parser.add_argument('--firmware-elf',type=Path,help='RV32 face application ELF for ROM/SRAM initialization')
+    parser.add_argument('--face-profile',choices=('box','avatar'),help='Face board: detection-only BOX or full avatar application (default)')
     parser.add_argument("--synth-timing", choices=("pads", "component"),
                         help="Explicit component timing diagnostic; never routed timing closure")
     args = parser.parse_args()
     if args.firmware_elf and args.target!='triha_face_board':parser.error('--firmware-elf requires triha_face_board')
+    if args.face_profile and args.target!='triha_face_board':parser.error('--face-profile requires triha_face_board')
     if args.target=='triha_face_board' and args.stage=='bitstream' and not args.firmware_elf:
         parser.error('triha_face_board bitstream requires --firmware-elf; zero images are diagnostic only')
     try:
@@ -121,6 +124,8 @@ def main():
         parser.error(str(error))
     try:
         placement_options = combined_route_options(args.seed_start, args.seed_count, args.pnr_mode)
+        if args.plc_decongestion is not None:
+            placement_options += ' -plc_decongestion '+str(args.plc_decongestion)
     except ValueError as error:
         parser.error(str(error))
     hdmi = args.target in ("video_board_smoke", "video_rx_board", "video_hdmi_capture", "video_preview_board", "video_three_board", "video_raw_board", "video_live_board", "video_live_mode_board", "video_mode_board", "triha_face_board")
@@ -152,7 +157,9 @@ def main():
         if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", top):
             raise ValueError("Invalid top module")
         post_map_constraints = manifest.get('post_map_constraints', [])
-        names = manifest["sources"] + manifest["constraints"] + post_map_constraints + [
+        constraints = manifest["constraints"] + manifest.get('profile_constraints', {}).get(args.face_profile or 'avatar', [])
+        result['constraints'] = constraints
+        names = manifest["sources"] + constraints + post_map_constraints + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
             manifest_path.relative_to(ROOT).as_posix()]
         if args.target == "video_record_probe":
@@ -237,13 +244,25 @@ def main():
                   for name in manifest["sources"]]
         lines += ["add_design " + tcl_path(path) for path in vendor_sources]
         lines += ["add_constraint " + tcl_path(work / "src" / name)
-                  for name in manifest["constraints"]]
+                  for name in constraints]
         include_dirs = [work / "src/rtl/video/include"]
         if args.target == 'triha_face_board':
             include_dirs += [work / "src/rtl/soc/include",
                              work / "src/rtl/cpu/vendor/src/core"]
         include_arg = "-include_path {" + " ".join(tcl_path(path) for path in include_dirs) + "}"
-        lines += [f"compile -system_verilog -top_module {top} {include_arg}", synth_command]
+        parameters = ''
+        if args.target == 'triha_face_board':
+            profile = args.face_profile or 'avatar'
+            values = {'ENABLE_AVATAR': int(profile == 'avatar'),
+                      'ENABLE_MINIMAL_BOX': int(profile == 'box'), 'DEMO_BOX_ONLY': 0}
+            # PDS takes alternating name/value words, not NAME=VALUE (which
+            # silently leaves the Verilog default unchanged in SP6.4).
+            parameters = ' -defined_parameters {' + ' '.join(f'{k} {v}' for k,v in values.items()) + '}'
+            result['face_profile'] = profile
+            result['top_parameters'] = values
+            if profile == 'box':
+                result['scope'] = 'Real CPU/B03 face detection, six-segment checked model boot, same-frame primary BOX display; no avatar cache or mode key; board acceptance pending'
+        lines += [f"compile -system_verilog -top_module {top} {include_arg}{parameters}", synth_command]
         physical_lines = None
         if args.stage in ("route", "bitstream"):
             route="pnr -optimize_multi_corner_timing -fix_hold_violation"
@@ -255,7 +274,8 @@ def main():
                 # report still has to meet every constraint before packaging.
                 route += placement_options
                 result['pnr_configuration'] = {'seed_start': args.seed_start, 'seed_count': args.seed_count,
-                                               'mode': args.pnr_mode or 'normal'}
+                                               'mode': args.pnr_mode or 'normal',
+                                               'plc_decongestion': args.plc_decongestion}
             if args.target == "video_record_probe":
                 route += placement_options
                 result["pnr_configuration"] = {"seed_start": args.seed_start,
@@ -268,7 +288,7 @@ def main():
                 physical_lines = [lines[0],
                     'add_constraint ' + tcl_path(work / 'physical.pcf')]
                 physical_lines += ['add_constraint ' + tcl_path(work / 'src' / name)
-                                   for name in manifest['constraints'] if name.endswith('.rcf')]
+                                   for name in constraints if name.endswith('.rcf')]
                 physical_lines += [route + ' -force_to_run -input_db_file ' + tcl_path(mapped),
                                    'report_timing']
             else:
@@ -332,13 +352,21 @@ def main():
         if args.target in ('video_mode_board','video_live_mode_board','triha_face_board'):
             key = json.loads((work/'src'/manifest['pin_reference']).read_text(encoding='utf-8'))
             for field in ('manual', 'vendor_example_fdc'):
-                if sha256(key[field]['path']) != key[field]['sha256']:
+                if sha256(ROOT / key[field]['path']) != key[field]['sha256']:
                     raise ValueError('MODE key official source hash mismatch: '+field)
             fdc = (work/f'src/fpga/pg2l100h/constraints/{args.target}.fdc').read_text(encoding='utf-8')
             reference_fdc += '\n'+verify_mode_key_reference(key, fdc)
             result['mode_key_official_sources_verified'] = True
         reviewed, rejected = review_messages(log, reference_fdc)
+        disabled_key_notices=[]
+        if result.get('face_profile')=='box' and result.get('top_parameters')=={
+                'ENABLE_AVATAR':0,'ENABLE_MINIMAL_BOX':1,'DEMO_BOX_ONLY':0}:
+            pattern=(r"C: ConstraintEditor-2001: \["+re.escape((work/'physical.pcf').as_posix())
+                     +r"\(line number: \d+\)\] Object 'mode_button_n' is dangling, which has no connection\. it will be ignored\.")
+            disabled_key_notices=[line for line in rejected if re.fullmatch(pattern,line)]
+            rejected=[line for line in rejected if line not in disabled_key_notices]
         write_json(work / "message_review.json", {"reviewed_reference_pin_notices": reviewed,
+                                                  "reviewed_disabled_box_key": disabled_key_notices,
                                                   "rejected": rejected})
         if rejected:
             raise RuntimeError("PDS reported an error/critical warning; inspect synth.log")

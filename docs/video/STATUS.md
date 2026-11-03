@@ -1,5 +1,20 @@
 # Video 工作台账
 
+## 2026-11-03 本机恢复与人脸检测优先（11:58，在运行）
+
+用户当前明确：板卡暂未连接；先完成功能仿真、构建及布线后时序收敛，得到位流后再连接设备。第一里程碑为真实人脸检测与同帧主框显示，帧率记录但不设硬门槛，头像/五点不阻塞。当前工程是用户指定的 `D:/FPGA/TriHaRiscv-v3`、分支 `soc/face-box-integration`；下方旧条目的工程位置、板卡状态和125MHz计算域描述不代表当前状态。
+
+本机工具恢复为现有 GCC 15.2.0、ModelSim 10.5、PDS 2022.2-SP6.4。仅用进程环境变量覆盖旧绝对路径。Python数值依赖放入忽略目录 `build/python-deps`。固定上游提交 `558280b30219acdcf9f962acd6e907e0f680ab52`；241项参数数组独立比较后恢复format1 program/parameters，两者SHA与冻结清单完全一致。新增可复现入口 `scripts/npu/recover_format1_assets.py`；复跑结果在 `build/npu/recovered_format1_repro/result.json`。
+
+B03恢复：38/68历史文件匹配，`core_ready=true`，zero/full255/pattern三例237个算子输出比较通过；其余历史场景/记录未恢复，整体audit保持PARTIAL。自然人脸新参考在 `build/npu/face_fixture_20261103`，ROI为(349,215,166,257)，不作为准确率指标。
+
+发现并修复无模式键时固件停留RAW的问题。新增整机断言已先得到预期失败：`build/soc/face_system-20261103T034810_639716Z`，报BOX未在捕获前选择。修复后完整六段加载/真实CPU+NPU/两帧逐像素回归正在 `build/soc/face_system-20261103T034939_772163Z` 运行；需完成后才可记PASS。固件组件4007检查、13项时钟/上传器测试、真实PLL连接及复位变异测试已PASS。
+
+新增显式 `--face-profile box`，保留avatar默认配置。BOX使用现有精简主框renderer、关闭头像cache和KEY1，CPU/NPU=100MHz、Video/DDR=125MHz、pixel=40MHz，DEMO_BOX_ONLY=0。第一次PDS构建因三个已裁除节点的约束而失败；将这三条原命令原样移入头像profile专用FDC，独立Counter比较证明原约束全体一条不漏、无重复。第二次构建 `build/video/pds/20261103T035439_337985Z` 正在运行；尚未获得布线后时序或位流结论。KEY1参考FDC已通过原厂RAR提取与SHA核验恢复（`prepare_reference.py --reference key`）。
+
+构建/上传指引见 [FINAL_APPLICATION.md](FINAL_APPLICATION.md)。BOX上传必须带 `--model-only`，六段；avatar为七段。没有扫描、下载或Flash操作。当前待完成：整机回归、综合资源、完整布线、慢快角全部检查、Gray max-skew、PHY sites、位流/校验掩码与证据打包；HDMI外部AC及实板验收另列。
+
+
 ## 2026-10-30 CPU流水冲刷副作用隔离验证
 
 完成既有CPU工作树的七个分支重定向/加载访问异常场景。32/64周期加载返回延迟正例分别为750周期/2199项检查、1102周期/3031项检查，各162条退休序列独立比较一致；四个软件或端口错误输入负例均被副作用检查拒绝。原始VCD复核四次精确异常、四次MRET及同目的寄存器恢复加载，禁止指令零退休。当前LSU为阻塞式，未将尚未接纳的年轻加载描述为跨重定向迟到返回。
@@ -2043,3 +2058,378 @@ receipt: build/video/pds/face_pointer_guard_congestion_20261103/receipt.json。
 拥塞诊断已结束，active_runs为空，485个冻结输入未变，但未得到预期冲突导出，状态为
 DIAGNOSTIC_INCOMPLETE_REVIEW_REQUIRED。receipt记录实际1174.6秒，超过设定600秒，计时及停止路径
 需要单独核查，不能声称10分钟硬上限已经验证。该问题与具体拥塞根因均继续待查。
+
+### 2026-11-03 12:10 BOX真实人脸两帧整机PASS，详细布线继续
+
+`build/soc/face_system-20261103T034939_772163Z` 已PASS：48005166计算周期、2次真实结果、2个完整800×600 BOX输出、4次捕获/请求、2次提交、1次释放/复用，模式010，0 errors/0 warnings。首帧与第二帧26368字节HEAD均独立比较；固件在首次捕获前进入BOX，正样本每完整帧的1676个边框像素通过检查。197个当前源码/输出哈希、与PDS共用132个源码文件均核验一致；ELF逐字一致，ROM/SRAM解码内容一致（文本仅CRLF/LF差异）。无脸六段整机回归仍在运行，不能提前计PASS。
+
+26项显示组件/246 guard子项PASS。计算域两条复位链综合审计和5项负对照PASS，原有跨域约束保持。BOX综合43018 LUT、43377 FF、77.5 DRM、58 APM；相对历史头像版减少6069 LUT、4301 FF、64 DRM。最终资源以映射/路由报告为准。PDS已进入详细布线；全局布线零未连不等于详细布线完成或时序闭合。当前没有验收位流。
+
+摘要：[face-box-bringup](../verification/npu/2026-11-03-face-box-bringup.json)。实板仍按用户要求延后，未扫描或下载。
+
+### 2026-11-03 12:19 无脸整机及UART加载组件PASS
+
+无脸场景 `build/soc/face_system-20261103T035952_325404Z` 已PASS：2帧HEAD独立比较、完整BOX模式像素无误框、槽位释放/复用，48005166周期、0 errors/0 warnings；与有脸/PDS的ROM/SRAM初始化内容完全一致（ELF非加载元数据不要求字节一致）。当前源码和输出哈希再次核验通过。UART RX 265检查、并行/串行model-loader各2072检查、boot buffer 1213检查PASS，路径 `build/soc/boot_uart-20261103T041416_677529Z`。这些是数字仿真，未打开实体串口。
+
+主线功能仿真已完成，继续等待本次详细布线及全角时序报告；尚未产生验收位流。不因全局布线完成或综合/布局setup估算为正而提前标记时序闭合。
+
+### 2026-11-03 13:09 BOX布局对比与布线拥塞取证
+
+基线 BOX 的 seed4 继续详细布线；复用同一 mapped DB、固件、管脚和时序约束，增加一组
+`-plc_decongestion 3` 放置对比。候选放置完成，随后从该放置 DB 开始固定布局布线，开启
+厂商拥塞明细导出，90 分钟超时会终止自身进程树。未重复综合或已通过的整机仿真。
+候选运行 `build/video/pds/face_box_spread3_route_20261103`；基线运行路径不变。
+截至本条，基线第354轮3975条未布线，候选第72轮4608条未布线；两者均未完成物理验收。
+
+用 `report_place_timing` 对两组放置分别检查：基线慢/快 setup 最差 +0.771/+1.346ns，
+候选 +0.903/+1.542ns；hold 基线 -0.336/-0.372ns，候选 -0.379/-0.418ns，失败时钟对
+均在 DDR PHY。其余 recovery/removal/pulse 全角零失败。该报告是放置估算；普通
+`report_timing` 读取 placement DB 会缺失预计布线/时钟延迟，其先前诊断结果已明确作废。
+正确原始文本报告已独立保存于 `build/video/face_box_placement_review_20261103`，
+两个 DDR gate 的实际放置位置也已核验，证据 `build/video/face_box_place_sites_20261103`。
+
+最终仍需 routed DB、详细布线零未连、全角五类时序、Gray 偏斜数值、实际 PHY sites 和
+输入哈希一致性验收。`-report_max_skew` 尚未在放置文本报告中输出独立偏斜表，正在核查；
+不能把约束成功匹配视为偏斜数值验收。BOX 不连接的 KEY1 会产生一条精确的 dangling
+提示，须按真实 BOX 参数单独审查，其他错误/关键警告不放宽。未连接、扫描或下载实板。
+
+### 2026-11-03 13:35 BOX首次布通，CPU setup 定向优化继续
+
+spread3 候选已完成 367 轮详细布线，末轮未布通为 0；物理 hold 修复完成并保存
+`triha_face_board_top_pnr.adf`。基线在约4000条未布通附近反复，已在确认具体 PID 后
+终止其自身 PDS 树，失败/停止记录保留；未修改该构建的输入。spread3 完整运行约20分钟。
+
+独立 routed STA 显示：只有 compute_clk 慢角 setup 未通过，WNS -0.306ns、67个端点、
+TNS -8.598ns；快角 setup +2.709ns。hold慢/快 +0.103/+0.072ns，recovery
++1.875/+3.945ns，removal +0.352/+0.249ns，pulse +0.035/+0.035ns，均零失败。
+源文件中计算/视频0.2ns margin保留，报告总setup uncertainty为0.35ns（含工具自身项）。
+140个实际I/O及电气属性与冻结PCF一致，唯一移除端口是BOX禁用的KEY1；两个DDR gate实际
+位置正确。证据 `build/video/face_box_routed_review_20261103`，状态 `TIMING_FAILED`，
+没有生成或交付此版位流。
+
+本机PDS独立小例子中，0.001ns的max-skew约束未反映到全局PASS和文本表，而两位延迟
+已相差0.068ns。因此新增独立验收：核对23组116位Gray全部慢/快角数据路径，并通过定向
+STA收集源/目的时钟的早/晚延迟，共928条观测。以源时钟范围+非负数据延迟上界+目的时钟
+范围保守界定跨位相对到达时间差；最差上界4.145ns，各组均满足各自6/20ns约束。
+证据 `build/video/face_box_gray_clocks_review_20261103`。脚本严格要求全位/全角覆盖；
+8项时序/Gray负对照及6项时钟/管脚负对照PASS。完整资格入口也准确拒绝本次setup失败。
+
+保持逻辑、固件、布局、时钟和全部时序约束不变，从实际67条违例路径选出17条延迟≥0.65ns
+的CPU网络，加入优先布线RCF，PDS全部接受。新运行
+`build/video/pds/face_box_cpu_priority_route_20261103` 正在进行，仍有90分钟硬上限。
+完成后重新生成全部物理证据，旧版Gray/时序结果不能代替新routed DB的验收。实板继续延后。
+
+### 2026-11-03 13:54 计算域改为实际80MHz，重新构建与整机回归
+
+100MHz CPU网络优先布线仍未满足setup：慢角 -0.859ns/126端点，原始结果保留在
+`build/video/face_box_cpu_priority_review_20261103`。按用户功能优先、帧率放宽的指示，
+当前计算域改为实际80MHz；Video/DDR125MHz及像素40MHz不变。GPLL采用125MHz输入、
+I=5/M=16/F=2/O=10、VCO800MHz，STA比值16/25，保持0.2ns应用域margin及所有CDC界限。
+这不是仅放宽SDC来接受100MHz位流；原100MHz两次route均未生成交付位流。
+
+先修改时钟测试，旧PLL在12.5ns周期断言处准确失败；修改PLL后，厂商实际GPLL模型正例及
+3项连接/复位负对照PASS，6项时钟契约检查PASS。15项构建/管脚/打包检查通过后启动新构建，
+使用显式 `--plc-decongestion 3`；源码、固件和模型再次冻结。
+新有脸整机 `build/soc/face_system-20261103T055313_986442Z`、无脸整机
+`build/soc/face_system-20261103T055314_011073Z` 正在执行，不能沿用100MHz的PASS作为80MHz结果。
+新构建绑定前者生成的ELF；首次时钟/功能/时序全通过之后再生成位流。未扫描或下载实板。
+
+### 2026-11-03 14:14 80MHz有脸/无脸完整整机均PASS
+
+两组均完成45035813个计算周期、4次捕获/请求、2次结果/记录/提交、1次释放/复用、
+2个完整800×600 BOX画面，模式010，0 errors/0 warnings。有脸场景HEAD逐字节符合独立
+参考，框像素校验通过；无脸场景无误框。两组当前输入/输出哈希再次核验通过，与新PDS
+快照共用134个文件一致；ROM/SRAM解码逐字一致，有脸ELF与构建ELF完全一致。
+路径沿用13:54记录，当前摘要已将100MHz历史记录与80MHz结果分开。
+
+新物理构建 `build/video/pds/20261103T055401_228008Z` 已完成映射/布局，布局末次setup
+估算+1.010ns，正在详细布线。布局估算不作为最终时序验收，目前仍无交付位流。
+
+### 2026-11-03 14:33 80MHz首次route完成，setup尚未收敛
+
+`build/video/pds/20261103T055401_228008Z` 完成307轮布线，未布通为0，hold修复完成。
+独立全量routed STA及实际位置导出保存在 `build/video/face_box_80_review_20261103`，
+状态 `TIMING_FAILED`：慢角compute setup -0.785ns/54端点、DDR/video -0.230ns/9端点；
+hold慢/快最差 +0.024/+0.017ns，其他类别均无违例。数据Gray 23组116位双角覆盖完整。
+NPU地址计算路径中布线占76%，视频MMIO读响应路径布线占82%，不能沿用布局正slack宣称收敛。
+
+新增 `scripts/video/reroute_face.py`，直接读取冻结mapped DB，不重复综合或改变已验证RTL/时钟。
+当前performance模式、seed5、decongestion3新实现位于
+`build/video/pds/face_box_80_performance5_20261103`；输入前后校验、独立目录、超时失败返回，
+后续仍须独立全量STA及CDC/管脚验收，不能将ROUTE_REVIEW_READY等同timing通过。
+有脸/无脸80MHz整机PASS继续有效；本批无可交付位流，实板未连接/扫描/下载。
+
+### 2026-11-03 15:06 实际50MHz与视频MMIO读请求寄存级
+
+80MHz performance seed5已完成335轮详细布线及hold修复，最终独立STA仍失败：
+`build/video/face_box_80_performance5_review_20261103` 慢角setup -1.899ns/309端点，
+hold慢/快 +0.137/+0.099ns，recovery/removal/pulse均通过。多条NPU输入/量化控制长路径
+仍失败。seed6在确认自身PDS PID7824及命令行后停止，以转入逻辑和实际时钟调整；
+其未完成结果保留为FAIL，停止理由见该目录stop_review.json，没有冒充时序结果。
+
+按功能优先、推理FPS不设门槛，将实际compute PLL改为50MHz：I5/M16/F2/O16，VCO800MHz，
+STA比值2/5；DDR/video125MHz、pixel40MHz及原有uncertainty/CDC界限保持。旧80MHz PLL
+在20ns新周期断言处准确失败，证据 `build/video/face_board_clocks_50_red_20261103`；
+修改后的实际厂商PLL模型正例、3项连接/复位负对照PASS，6项静态时钟契约PASS，
+证据 `build/video/face_board_clocks_50_20261103`。
+
+视频DDR域关键路径从共享AR地址总线到MMIO响应控制，增加一项AR请求寄存器隔离。
+接受后固定地址，若记录拷贝占用RAM则等待，背压时保持响应，复位丢弃未完成请求。
+新CASE10先在旧RTL准确失败（拷贝占RAM时不能接收请求），证据
+`build/soc/resource_probe_video_compact_20261103T070053_149196Z`；修改后1653检查PASS。
+初次测试编号与既有driver trace CASE9冲突的失败也保留，修正编号后才建立有效红灯。
+完整组件回归 `build/soc/resource_probe_video_compact_20261103T070209_315891Z` 正在执行，
+正常显示组合已PASS；15项时钟/物理管脚/构建选项/打包检查PASS。
+
+新有脸整机 `build/soc/face_system-20261103T070341_048946Z`、无脸整机
+`build/soc/face_system-20261103T070341_033768Z` 均已进入真实NPU；新PDS构建
+`build/video/pds/20261103T070558_933114Z` 绑定有脸ELF，normal/seed4/decongestion3。
+源码冻结，不用80MHz旧功能PASS替代本轮。当前仍无可交付位流，实板未扫描/下载。
+
+另核对配套MS7210/MS7200 V1.0手册，电气章节只有极限/DC参数，没有视频接口setup/hold
+或clock-to-data AC表；本地来源哈希见 `build/video/hdmi_ac_20261103/result.json`。
+当前HDMI模式固定800x600/约60Hz，与推理FPS无关，已补入应用和打包说明。
+
+15:09 补记：上述完整视频组件回归已PASS，共27项组合用例及246项record guard边界；新排队读CASE10含1653检查。50MHz整机与PDS继续运行，未更改冻结输入。
+
+### 2026-11-03 15:24 50MHz两组整机回归及源码对齐PASS
+
+有脸 `build/soc/face_system-20261103T070341_048946Z`、无脸
+`build/soc/face_system-20261103T070341_033768Z` 均完成40581783计算周期、4次捕获/请求、
+2次真实推理/记录/提交、1次释放/复用、2个完整800x600画面，modes=010，0 errors/0 warnings。
+有脸HEAD逐字节符合独立参考且框像素正确，无脸无误框。输入/输出哈希均重新核验；
+与当前PDS快照共用134个源文件完全一致，ROM/SRAM逐字一致，有脸ELF字节完全一致。
+审计 `build/video/face_box_50_sim_alignment_20261103.json`。
+
+新PDS已完成综合/映射/布局：42531 LUT、43408寄存器、77.5 DRM、58 APM；布局估算
+setup +1.092ns，正在详细布线。仍须最终routed STA、全位Gray时钟/数据界限及位流生成，
+当前不能宣称时序收敛或已交付。实板保持未连接/未扫描/未下载。
+
+### 2026-11-03 15:47 50MHz首次route仅余捕获控制路径，定向重布线
+
+`build/video/pds/20261103T070558_933114Z` 完成463轮详细布线、0未布通及hold修复。
+独立审计 `build/video/face_box_50_review_20261103` 仍为TIMING_FAILED：计算域setup
++1.145ns，DDR/video慢角仅3端点失败，WNS -0.059ns、TNS -0.176ns；其余所有双角类别通过，
+hold最差慢/快 +0.068/+0.053ns。三条路径共用video_reset_n经B响应、DMA ready、rearm_empty
+到capture状态机CE；延迟约88%来自布线。不能将59ps违例视为通过。
+
+新增reroute入口可复用已审查布局，并仅接受def_route -prior_net形式的RCF；同一mapped/
+placed DB及约束保持哈希绑定。正在运行 `build/video/pds/face_box_50_capture_priority_20261103`，
+normal模式，仅优先原报告实际7条网络。其来源报告/RCF哈希见
+`build/video/face_box_50_capture_priority_20261103.json`。不降低125MHz视频时钟，不放宽margin、
+不扩大false path。此轮没有RTL/固件变更，50MHz有脸/无脸整机证据仍匹配同一网表源输入。
+新route完成后重新执行全部STA、Gray时钟/数据、物理位置及输入一致性检查，成功后才生成位流。
+当前没有交付位流；板卡保持未连接、未扫描、未下载。
+
+补记：本轮50MHz失败报告的10项审计负对照均PASS，证据 `build/video/face_box_50_failed_route_controls_20261103.json`；baseline_timing_met仍为false，负对照通过不等于物理时序通过。
+
+### 2026-11-03 16:13 定向布线消除setup违例，继续修复DDR内部单条hold
+
+`build/video/pds/face_box_50_capture_priority_20261103` 完成398轮详细布线、0未布通。
+独立审计 `build/video/face_box_50_capture_priority_review_20261103` 确认所有setup通过，
+最差慢角+0.002ns；但DDR内部dcd_wr_addr[26]到fifo_rdata_b[31]/DIH短连线仍有一个hold
+端点失败，慢角-0.026ns、快角-0.014ns。其余类别通过。原生hold-fix阶段初步数字
+与独立STA略有区别，以后者为准。该route继续记为TIMING_FAILED，未生成位流。
+
+根据已安装PDS用户手册第108–109页及help pnr，新增显式hold修复选项：迭代上限30、
+正余量目标100ps、布线时hold修复开启、clock-tree修复阈值100ps。这些参数让工具修复
+slack低于目标值的物理路径，不改变SDC/uncertainty，不改厂商RTL。4项非法数值边界拒绝检查PASS。
+新run `build/video/pds/face_box_50_capture_hold100_20261103` 复用同一mapped/placed DB及7条
+关键网络优先级；源码和固件仍为已通过50MHz整机仿真的版本。完成后重新审查所有时序类别。
+板卡仍未连接/扫描/下载，暂无合格位流。
+
+### 2026-11-03 16:36 hold余量优化未改变违例，缩小布线优先范围
+
+`build/video/pds/face_box_50_capture_hold100_20261103` 已完成398轮布线和hold修复。
+原生日志仍报告DDR地址短路径-26ps/-14ps，后续明确写有`Hold violation fix failed`；
+工具先写“fixed successfully”却仍列负slack，不能据该措辞验收。后布线修复实际执行一次，
+30次是上限，未解决该路径；独立review继续保留最终证据。
+
+新run `build/video/pds/face_box_50_bvalid_priority_20261103` 保持同一网表、布局、时钟和
+时序约束，将优先网络从7条缩到原始失败报告中延迟最大的低扇出段video_c_bvalid
+（1.536ns），目标是改善捕获setup路径并减小其他布线扰动。仍开启30次/100ps hold优化。
+实测来源与RCF哈希见 `build/video/face_box_50_bvalid_priority_20261103.json`；必须重新
+全量审查，不能借用前轮正slack。当前无合格位流，未操作板卡。
+
+### 2026-11-03 18:07 修复PDS单RCF覆盖问题并重新保留DDR时钟优先级
+
+单BVALID优先级试验最终STA为setup最差+0.051ns，仍有DDR地址短线hold -0.028/-0.015ns。
+使用computer-use技能只读打开原始50MHz主构建的PDS Design Editor，查询dcd_wr_addr[26]：
+其hold通过的原始路线经14个引脚绕行至CLMS_327_163/AD。保存完整窗口/命令/输出至
+`build/video/face_box_50_ddr26_route_observation_20261103.txt`，源DB与报告哈希均绑定。
+未保存或修改原始DB，也未执行硬件操作。
+
+固定该分支的 `face_box_50_ddr26_fixed_20261103` 最终仍失败：setup -0.059ns/3端点、
+hold -0.028/-0.015ns/1端点。检查原生日志发现两个构建问题：PDS只允许一个RCF，后添加
+文件会以RouteConstraintEditor-4001覆盖前者；固定路由还因两个端点在已导入的plc DB中
+未标成显式约束而被2004/2006拒绝。因此旧多RCF试验没有保留原来的两条DDR时钟优先级。
+原始50MHz主构建仅一个RCF，未受覆盖问题影响；所有这些试验均未生成合格位流。
+
+修复reroute入口：将原始DDR两条及应用优先级合成单一routing.rcf；读取日志发现任一
+RouteConstraintEditor警告/错误立即终止自身PDS进程并返回FAIL。新增4项回归PASS，涵盖
+合并保留全部约束、覆盖警告拒绝、端点拒绝、成功消息。补上源报告中的端点PCF后，
+`face_box_50_ddr26_merged_20261103` 仍被导入布局的端点检查拒绝，现已提前FAIL，没有再空跑。
+固定分支方案尚未获工具接纳，不作为已完成修复。
+
+当前 `build/video/pds/face_box_50_preserved_phy_20261103` 复用同一50MHz网表和布局，单RCF
+确实包含原始2条DDR时钟优先级和1条BVALID优先级，未使用被拒绝的固定分支。三条命令均被
+PDS接受，已进入全局布线。保留30次/100ps hold优化；源码、固件、FDC时钟/uncertainty不变。
+之后仍须全量STA及Gray/物理/仿真输入核验才能生成位流；板卡保持未连接、未扫描、未下载。
+
+### 2026-11-03 18:30 保留DDR约束后hold通过，继续处理7个setup端点
+
+`face_box_50_preserved_phy_20261103` 完成297轮详细布线、0未布通，独立STA确认双角hold
+全部通过，最差慢/快 +0.068/+0.052ns；recovery、removal、pulse width也均通过。
+100ps是额外hold优化目标，原生日志“fix failed”对应未达到该目标，不能替代最终STA判断。
+慢角setup仍有7个端点失败，最差-0.203ns、TNS -0.387ns；计算域+1.850ns。失败分为
+模型加载器地址CE、内存桥span CE、显示mailbox CE及MMIO request_seq CE四类。
+
+独立审查 `build/video/face_box_50_preserved_phy_review_20261103` 最终状态为FAIL：除上述
+setup外，Gray审查还拒绝 ingress/fifo/wr_gray[8] 路径中新增的 CLKROUTE_107/CR 单元。
+该路径最大延迟0.741ns、约束20ns，但尚未证明该物理单元的功能，不能仅凭正slack验收。
+审查器继续严格拒绝，未生成位流；原始失败证据保留。
+
+新run `build/video/pds/face_box_50_balanced_priority_20261103` 复用同一网表和布局，在单RCF
+中保留原厂2条DDR优先级、原BVALID优先级，并按实际报告加入上述四类的最长连线，共7条。
+来源报告与RCF哈希见 `build/video/face_box_50_balanced_priority_20261103.json`。不改逻辑、
+固件或时序例外；同时核实新增路由单元的实际功能。仍需全量审查才能生成合格位流。
+
+18:39 补记：已只读导出上述FAIL route的实际后布线功能网表，源DB前后哈希不变，
+证据 `build/video/face_gray_route_netlist_20261103`。CLKROUTE_107/CR对应
+CLMS_75_1081/ntM3 的V_BUF，从wr_gray[8]/Q到同位sync1/D；原厂V_BUF模型为恒等赋值，
+模型哈希固定校验。新增审查只允许这种可追踪的同位恒等缓冲链，要求物理位置/级数匹配STA，
+仍计入整个路径延迟，不放宽20/6ns约束。原生全116位数据界限检查PASS；10项单元回归PASS，
+覆盖反相、错误位、额外逻辑、重复端点、环、位置/级数不符及网表/模型/route证据不符。
+旧审查脚本与哈希备份至该导出目录的prior_auditor，旧FAIL结果保持不变。
+当前以新审查重新导出独立STA/位置/网表至 `face_box_50_preserved_phy_identity_review_20261103`，
+用于验证完整流程；该历史route仍有已知setup违例，不能生成位流。balanced_priority主run继续布线。
+
+18:43 补记：上述完整identity review已结束，116位Gray数据审查PASS；仍因7个setup端点返回TIMING_FAILED。新流程的10项原生报告/位置负对照全部PASS，证据 `build/video/face_box_50_identity_review_controls_20261103.json`，baseline_timing_met=false。
+
+### 2026-11-03 18:55 setup缩减到单端点，定向优化内存桥及hold余量
+
+`face_box_50_balanced_priority_20261103` 完成490轮布线、0未布通。独立review为TIMING_FAILED：
+慢角setup仅1个端点，WNS -0.135ns，位于u_memory/u_arbiter/length_q[4]到u_bridge/span_q[2]/CE；
+所有其他双角类别通过，hold最差慢/快+0.137/+0.100ns，116位Gray数据界限PASS。
+原生另有STA-3017/Timing-4105：一条rgb_pipe像素路径fast hold为149ps，低于额外200ps优化目标。
+已核对PDS User Guide第110–111页：此提示针对用户设定的修复余量，并非自动等同于负slack；
+本轮仍保留未验收，未放宽检查或生成位流。
+
+新run `build/video/pds/face_box_50_bridge_priority_20261103` 保留前5条应用优先级及原厂2条DDR
+优先级，补入剩余路径的m_arlen[4]、共享末级_N447056_1及N1805三条实际网络，共10条单RCF。
+将post-route和clock-tree hold修复目标提高至200ps（原100ps），让上述149ps路径也进入后布线
+修复范围；cross-SRB默认200ps保持不变。STA时钟/uncertainty/例外、网表和布局均不变。
+证据 `build/video/face_box_50_bridge_priority_20261103.json`；自动审查链重新等待新DB，全部通过
+才生成位流。实板保持未连接、未扫描、未下载。
+
+19:05 备选分析（未改RTL）：针对内存桥剩余路径，证明在128MiB页对齐窗口和现有4KiB边界检查成立时，起始地址上下界检查可替代33位exclusive_end上界/溢出比较。8个代表性边界页×4096偏移×256长度编码，共8388608组合一致，证据 `build/video/face_bridge_window_proof_20261103.json`。仅为后续可能的逻辑优化依据，不是新硬件仿真或时序通过。当前仍等待冻结的bridge_priority route。
+
+### 2026-11-03 19:19 首次50MHz完整内部STA通过
+
+`face_box_50_bridge_priority_20261103` 完成464轮详细布线、0未布通。独立review
+`build/video/face_box_50_bridge_priority_review_20261103` 返回REPORTS_READY：setup慢/快
++0.183/+2.961ns，hold +0.143/+0.108ns，recovery +2.373/+4.241ns，removal +0.335/+0.230ns，
+pulse width +0.035/+0.035ns，全部0违例。原生后布线修复消除了本轮DDR hold负值；原来的
+STA-3017/Timing-4105跨SRB余量提示未再出现。部分非SRB路径未达额外200ps优化目标的日志
+不等于STA负值，以独立双角表为准。116位Gray数据界限也PASS。
+
+当前正在运行 `face_box_50_bridge_priority_clocks_20261103`，仍需928个早/晚时钟观察、
+最终管脚/DDR站点/来源一致性及消息核验后才能生成位流。尚未宣称外部HDMI AC或板测通过。
+
+### 2026-11-03 19:23 离线BOX交付包完成，等待设备连接
+
+全位Gray时钟审查PASS：23组、116位、928个双角早/晚观察，最大保守界限4.233ns；
+14项最终审查负对照PASS。qualify返回FACE_QUALIFY_PASS，核验140个实际管脚、两个DDR
+门控固定位置、134个仿真/实现共有源文件、ROM/SRAM/ELF及模型来源，消息审查0拒绝。
+位流生成前后输入/证据哈希均一致，没有放宽时钟、uncertainty或CDC例外。
+
+交付目录：`build/video/releases/triha_face_board_3939c52f4d94`。
+包含triha_face_board_top.sbit、同名.smsk、manifest.json、timing.rtr、message_review.json、README.txt。
+位流和掩码均3791112字节；位流SHA256
+`3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65`，掩码SHA256
+`d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd`。
+独立包字节/哈希复核PASS：`build/video/face_box_50_release_audit_20261103.json`。
+最终资格记录 `build/video/face_box_50_bridge_priority_qualified_20261103/result.json`。
+
+内部后布线时序与CDC通过；外部HDMI I/O AC和实板功能仍未验收，manifest明确保留false。
+未扫描JTAG、未编程、未访问串口。已告知用户可连接设备，等待连接状态回复，再继续易失JTAG
+Program/Verify、六段--model-only上传及800x600输入的人脸/无人脸实测。模型加载后自动BOX，
+主脸检测框；帧率只记录。备选内存桥布尔化简未实施，交付RTL仍是通过两组整机仿真的原冻结版本。
+
+### 2026-11-03 19:36 用户接板后JTAG下载/校验通过，模型上传中
+
+用户明确回复“已连接，可以开始上板验收”。只读扫描识别USB Cable II、PG2L100H、
+ID 00602899，证据 `build/video/jtag_scan/20261103T112627_147954Z`。
+program_board入口补入triha_face_board目标，继续执行原有包/来源/器件ID检查；本文件不在
+位流冻结输入中。已成功执行易失Program及Verify，证据
+`build/video/board_program/20261103T112808_536586Z`，对应位流SHA3939c52f4d94…，未写Flash。
+
+CP2102实际已接入，但最初Windows报告代码28、未装驱动；未向其他COM端口发送模型。
+用户随后自行安装驱动，重新枚举确认CP210x状态OK、COM12、VID10C4/PIDEA60、序列0001。
+正在运行 `upload_face_model.py --model-only --port COM12`，前两段已获硬件ACK，累计118528字节。
+六段共1770496字节；后处理表为最大段，当前正在传输。下载/ACK不等于整机功能板测通过，
+接下来仍需模型seal及HDMI有脸/无脸与同帧框观察。
+
+19:38 补记：六段模型已全部上传并封存，`build/soc/model_upload-20261103T113330_193913Z`
+为PASS_UART_LOADER_ACK：1770496字节、6916包、0重试、最终ACK游标(6,0)，model_seal_acknowledged=true。
+已请求用户在800x600@60Hz输入上显示清晰正脸并观察实际输出；尚未收到画面结果，不能据ACK
+宣称人脸检测实板闭环已通过。当前保持设备运行，不重置或改写已封存模型。
+
+### 2026-11-03 19:41 第一优先级真实人脸检测实板功能验收通过
+
+模型封存后，用户首次观察确认“画面正常，且人脸上出现检测框”；随后按要求移动/更换人脸位置
+并切换无人脸场景，确认“都正常：框更新、无脸消失、画面继续更新”。这些为用户人工画面确认，
+不冒称自动视频采集或板上性能计数。结合已下载的DEMO_BOX_ONLY=0真实B03位流、精确模型CRC/
+ACK和两场景整机仿真，首优先级的HDMI输入→真实推理→同帧主脸框输出闭环完成。
+
+完整交付关联记录 `build/video/face_box_board_acceptance_20261103.json` 将最终资格、包、JTAG
+扫描/Program/Verify、模型加载及两组仿真结果按SHA256绑定，保留两次人工确认原文。
+内部双角时序及CDC均通过；外部I/O AC未正式签核、FPS未测，不混同于本轮功能验收。
+头像/五点仍不在本轮范围。当前保持开发板运行；易失配置断电后需重新JTAG下载及六段模型上传。
+未写Flash，未实施前述备选内存桥布尔化简。用户的第一优先级功能目标已完成。
+
+### 2026-11-03 19:56 按用户要求重新烧录并加载模型
+
+再次使用已验收的 `triha_face_board_3939c52f4d94` 交付包，来源与位流/掩码哈希检查通过。
+PG2L100H / 00602899 的易失 JTAG Program/Verify 均成功，记录为
+`build/video/board_program/20261103T115107_784037Z/result.json`。
+随后在确认身份的 CP210x COM12 上重新上传六段模型：1770496 字节、6916 包、0 重试，
+最终 ACK 为 (6,0)，模型封存通过，记录为
+`build/soc/model_upload-20261103T115137_079011Z/result.json`。
+关联哈希收据位于上述 board_program 目录的 `reprogram_and_model_load.json`。
+当前保持开发板运行，未写 Flash；本次未重复要求人工画面验收，也不把此前的人工确认记作本次新观测。
+
+### 2026-11-03 当前性能数据提取（仿真参考，非实板测速）
+
+用户询问当前帧率。已从最终资格绑定的两组50MHz整机仿真中提取连续CPU后处理结果完成标记，
+逐一验证结果文件与simulation.log的SHA256。正脸的完成周期为21491404与39578629，
+间隔18087225周期，即361.7445ms／2.764382结果帧每秒；无脸为21466225与39528043，
+间隔18061818周期，即361.23636ms／2.768271结果帧每秒。每个场景仅有一个间隔样本，
+不能称作长期平均或实板测量；该口径排除了启动/加载时间，包含CPU后处理及帧间调度。
+采集源与native DDR端点为仿真模型，不能用结果间隔代替纯NPU耗时或采集至显示的端到端延迟。
+
+绑定配置的HDMI输出为800x600，40MHz/(1056x628)=60.316541Hz，扫描周期16.5792ms；
+重复扫描同一已提交帧不代表产生新的检测结果。当前UART仅连接boot ACK，未提供运行时性能
+读出，因此本次未访问/重置开发板，实板FPS仍未测。后续实测应导出统一时基、推理/结果/显示
+提交计数与同帧起止时间戳，排除预热后记录足够时长，并保留现有已验收交付包。
+派生数据、来源哈希与限制见 `build/video/face_box_performance_20261103.json`。
+
+### 2026-11-03 已验收版本的GitHub交付与干净目录复现
+
+按用户要求，将当前BOX版本及位流纳入 `releases/face-box-20261103/`，使用Git保存原始
+`.sbit`/`.smsk`和四个小于50MiB的压缩包，不依赖Git LFS或外部临时下载地址。
+包内有当前模型、自然人脸fixture、原固件、生成IP、冻结物理数据库与原始验收证据；
+厂商工具/许可证仍由安装环境提供。历史失败路由保持原状态，不改写为通过。
+
+新增restore_face_release入口，校验209项源码及996项归档成员，恢复998个文件至build；
+冲突内容拒绝覆盖，默认只校验，不访问开发板。Git属性固定11项此前可能被换行转换的
+已冻结输入。已从Git索引导出到独立新目录，完成恢复和模型审计、固件/RTL编译。
+编译出的ROM/SRAM逐字节相同；ELF仅GCC随机临时对象名有6字节差异。
+从冻结路由数据库运行PDS重新生成位流及掩码，除文件头日期/时间外其余每字节完全一致，
+通过PASS_CONFIGURATION_IDENTICAL。原发布位流不修改；比较器拒绝器件/数据/格式变化。
+8项恢复负向检查、6项位流比较测试、10项Gray证明测试、4项路由约束测试通过。
+没有重新进行实板操作或完整整机仿真，原正负场景回归继续由源码哈希绑定。
+
+发布README给出安装、下载、模型上传、冻结数据库回放及从源码重建完整命令。
+从源码重建仍需固定工具环境和官方板卡手册，并对新物理实现重新验收；不承诺跨工具版本
+的布局布线字节确定性。发布目录的 `verification.json` 保存本次复现结果。

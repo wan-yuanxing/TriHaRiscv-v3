@@ -21,7 +21,7 @@ def classify_log(log,exit_code):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_live_mode_board','video_mode_board'),required=True)
+    parser.add_argument('--target',choices=('video_board_smoke','video_rx_board','video_ddr_bist','video_axi_capture','video_hdmi_capture','video_preview_board','video_three_board','video_raw_board','video_live_board','video_live_mode_board','video_mode_board','triha_face_board'),required=True)
     parser.add_argument('--start-server',action='store_true')
     args=parser.parse_args()
     work=fresh_run('board_program')

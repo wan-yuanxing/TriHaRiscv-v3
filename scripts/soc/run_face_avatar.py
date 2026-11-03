@@ -33,7 +33,7 @@ def main():
             src=ROOT/name;dst=out/'inputs'/name;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst);inputs[name]=sha(src)
         cc=Path(os.environ.get('TRIHA_HOST_CC','D:/Xilinx/Vivado/2018.3/msys64/mingw64/bin/gcc.exe'))
         env['PATH']=str(cc.parent)+os.pathsep+str(cc.parents[2]/'usr/bin')+os.pathsep+env['PATH']
-        rv=Path(json.loads((ROOT/'config/cpu_toolchain.json').read_text())['compiler'])
+        rv=Path(os.environ.get('TRIHA_RISCV_GCC') or json.loads((ROOT/'config/cpu_toolchain.json').read_text())['compiler'])
         frozen=out/'inputs';includes=['-I'+str(frozen/'sw/include')];sources=[frozen/x for x in SOURCES]
         run([cc,'--version'],'host_version');run([rv,'--version'],'rv_version')
         run([cc,'-static','-std=c99','-O2','-Wall','-Wextra','-Werror',*includes,*(['-DFACE_AVATAR_BROKEN'] if args.broken else []),

@@ -1,0 +1,10 @@
+# Present only with ENABLE_AVATAR=1 (also enables KEY1).
+# Asynchronous human input to its first synchronizer only. Meta-to-sync and
+# debounce/mode logic remain timed in the 125 MHz video domain.
+set_false_path -from [get_ports {mode_button_n}] -to [get_cells {g_full.impl/face/g_mode_key.u_key/u_button/button_meta}]
+# Full avatar cache: identity latches before the 65536-word load and remains
+# immutable until coordinated reset. Readiness crosses two pixel-clock flops;
+# the cache and renderer then capture the held identity. Only ready_meta is cut.
+# Generate-scope spellings and both identity destinations verified in PDS compile DB.
+set_false_path -from [get_clocks {ddrphy_sysclk}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/ready_meta}]
+set_max_delay 6.000 -datapath_only -from [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/asset_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/asset_generation*}] -to [get_cells {g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/pixel_asset_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/g_avatar.g_full_cache.u_asset/u_cache/pixel_generation* g_full.impl/face/u_video/g_compact.u_display/u_renderer/pixel_id* g_full.impl/face/u_video/g_compact.u_display/u_renderer/pixel_generation*}]

@@ -264,6 +264,34 @@ module tb_video_display_mmio;
             $fclose(trace_file);check(n==163,"exact driver write count");
             await_command(1,123,0);accept_and_commit;expect_read('h1c,3,0);
         end
+        10:begin
+            // Compact endpoint: accept one read independently of the busy
+            // record-copy RAM, then retain its address until that port is free.
+            make_record(0,1,10);face_record;load_record;submit(1,1,0);
+            check(dut.phase==1||dut.phase==2,"read queue test requires active record copy");
+            @(negedge clk_i);s_axi_araddr_i=32'h2001111c;s_axi_arvalid_i=1;
+            #1;check(s_axi_arready_o,"queued shadow read must be admitted while record copy owns RAM");
+            cycle;
+            @(negedge clk_i);s_axi_arvalid_i=0;s_axi_araddr_i=32'hdeadbeef;
+            n=0;
+            while(!s_axi_rvalid_o)begin
+                check(!s_axi_arready_o,"only one queued read may be outstanding");
+                cycle;n++;check(n<1000,"queued shadow read must complete after copy");
+            end
+            check(s_axi_rresp_o==0&&s_axi_rdata_o===record[7],"queued read retains accepted address");
+            @(negedge clk_i);s_axi_arvalid_i=1;s_axi_araddr_i=32'h20011000;
+            repeat(5)begin cycle;check(!s_axi_arready_o&&s_axi_rvalid_o&&s_axi_rdata_o===record[7],"queued response stable under backpressure");end
+            @(negedge clk_i);s_axi_rready_i=1;cycle;
+            @(negedge clk_i);s_axi_rready_i=0;s_axi_arvalid_i=0;
+            expect_read(0,32'h10000,0);
+            reset_all;expect_read(0,32'h10000,0);
+            make_record(0,2,11);load_record;submit(1,2,0);
+            @(negedge clk_i);s_axi_araddr_i=32'h2001111c;s_axi_arvalid_i=1;
+            #1;check(s_axi_arready_o,"second pending read admission");cycle;
+            reset_all;repeat(170)cycle;
+            check(!s_axi_rvalid_o,"reset discards queued read without ghost response");
+            expect_read(0,32'h10000,0);
+        end
         default:$fatal(1,"unknown case");
         endcase
         $display("DISPLAY_MMIO_PASS case=%0d checks=%0d",test_case,checks);$finish;

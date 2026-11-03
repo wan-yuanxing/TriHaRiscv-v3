@@ -69,12 +69,16 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
     wire [31:0] status_word={24'd0,active_valid,protocol_error,reject_pending,release_valid,
         commit_valid,(!owner_ready||!consumer_healthy),phase==OFFER,(phase==CHECK||phase==FETCH||phase==LOAD||deferred_submit)};
     reg aw_full,w_full;reg [31:0] awaddr,wdata;reg [3:0] wstrb;
+    // Queue AR before decoding it. The shared upstream address bus must not
+    // drive this endpoint's ready/response control in the same cycle.
+    reg read_pending;
+    reg [31:0] read_addr;
     assign s_axi_awready_o=rst_ni&&phase!=INIT&&!aw_full&&!s_axi_bvalid_o;
     assign s_axi_wready_o=rst_ni&&phase!=INIT&&!w_full&&!s_axi_bvalid_o;
-    wire shadow_read_address=s_axi_araddr_i>=`VDISP_BASE+`VDISP_SHADOW_OFFSET&&
-        s_axi_araddr_i<`VDISP_BASE+`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES&&s_axi_araddr_i[1:0]==0;
-    assign s_axi_arready_o=rst_ni&&phase!=INIT&&!s_axi_rvalid_o&&!shadow_read_pending&&
-        (!(phase==FETCH||phase==LOAD)||!shadow_read_address);
+    wire shadow_read_address=read_addr>=`VDISP_BASE+`VDISP_SHADOW_OFFSET&&
+        read_addr<`VDISP_BASE+`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES&&read_addr[1:0]==0;
+    assign s_axi_arready_o=rst_ni&&phase!=INIT&&!s_axi_rvalid_o&&!shadow_read_pending&&!read_pending;
+    wire execute_read=read_pending&&(!(phase==FETCH||phase==LOAD)||!shadow_read_address);
     function automatic valid_address(input [31:0] address);
         valid_address=(^address)!==1'bx&&address>=`VDISP_BASE&&
             {32'd0,address}<(64'd0+`VDISP_BASE+`VDISP_REGION_BYTES)&&address[1:0]===0;
@@ -83,7 +87,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
         mask_word={{8{strobe[3]}},{8{strobe[2]}},{8{strobe[1]}},{8{strobe[0]}}};
     endfunction
     wire [31:0] write_offset=awaddr-`VDISP_BASE;
-    wire [31:0] read_offset=s_axi_araddr_i-`VDISP_BASE;
+    wire [31:0] read_offset=read_addr-`VDISP_BASE;
     wire execute_write=aw_full&&w_full&&!s_axi_bvalid_o;
     reg [1:0] write_response,read_response;
     reg do_shadow,do_mode,do_seq,do_mask,do_submit,do_ack;
@@ -163,7 +167,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
         .submits_o(submits),.commits_o(commits),.releases_o(releases),.rejected_o(owner_rejected));
     always @* begin
         read_data=0;read_response=0;
-        if(!valid_address(s_axi_araddr_i))read_response=3;
+        if(!valid_address(read_addr))read_response=3;
         else if(read_offset>=`VDISP_SHADOW_OFFSET&&read_offset<`VDISP_SHADOW_OFFSET+`VDISP_RECORD_BYTES)
             read_data=0; // The synchronous shadow port completes separately.
         else case(read_offset)
@@ -208,6 +212,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
     always @(posedge clk_i or negedge rst_ni)begin
         if(!rst_ni)begin
             aw_full<=0;w_full<=0;awaddr<=0;wdata<=0;wstrb<=0;
+            read_pending<=0;read_addr<=0;
             s_axi_bvalid_o<=0;s_axi_bresp_o<=0;s_axi_rvalid_o<=0;s_axi_rresp_o<=0;s_axi_rdata_o<=0;
             request_mode<=0;request_seq<=0;mode_only<=0;phase<=INIT;guard_start<=0;
             word_index<=0;record_data<=0;compare_changed<=0;shadow_read_pending<=0;deferred_submit<=0;lease_inflight<=0;
@@ -217,12 +222,14 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             guard_start<=0;
             if(s_axi_awvalid_i&&s_axi_awready_o)begin aw_full<=1;awaddr<=s_axi_awaddr_i;end
             if(s_axi_wvalid_i&&s_axi_wready_o)begin w_full<=1;wdata<=s_axi_wdata_i;wstrb<=s_axi_wstrb_i;end
+            if(s_axi_arvalid_i&&s_axi_arready_o)begin read_pending<=1;read_addr<=s_axi_araddr_i;end
             if(s_axi_bvalid_o&&s_axi_bready_i)s_axi_bvalid_o<=0;
             if(s_axi_rvalid_o&&s_axi_rready_i)s_axi_rvalid_o<=0;
             if(shadow_read_pending)begin
                 shadow_read_pending<=0;s_axi_rvalid_o<=1;s_axi_rdata_o<=shadow_q;s_axi_rresp_o<=0;
             end
-            if(s_axi_arvalid_i&&s_axi_arready_o)begin
+            if(execute_read)begin
+                read_pending<=0;
                 if(shadow_read_address&&read_response==0)shadow_read_pending<=1;
                 else begin s_axi_rvalid_o<=1;s_axi_rdata_o<=read_data;s_axi_rresp_o<=read_response;end
             end
@@ -289,7 +296,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
         for(byte_lane=0;byte_lane<4;byte_lane=byte_lane+1)
             if(ram_write_enable[byte_lane])shadow[ram_write_index][8*byte_lane+:8]<=ram_write_data[8*byte_lane+:8];
         if(phase==FETCH)begin shadow_q<=shadow[word_index];active_q<=active_words[word_index];end
-        else if(s_axi_arvalid_i&&s_axi_arready_o&&shadow_read_address)shadow_q<=shadow[shadow_read_index];
+        else if(execute_read&&shadow_read_address)shadow_q<=shadow[shadow_read_index];
         if(phase==ARCHIVE)active_words[word_index]<=record_data[31:0];
     end
 endmodule

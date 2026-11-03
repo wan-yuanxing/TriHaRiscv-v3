@@ -1,14 +1,16 @@
-# TriHaRiscv-main
+# TriHaRiscv
 
-TriHaRiscv 的总工程目录，按 CPU、NPU、Video 三条路线并行开发，由 CPU 路线牵头系统集成。目标平台为 PG2L100H-6IFBG676，当前应用为 YuNet 全画面人脸检测与预设动漫头像叠加。2026-10-19 正式显示设计改为一路 800×600 原分辨率全屏，功能键切换原图/检测框/头像；现有双窗 RTL 与已验收位流仍是诊断基线，全屏实现按新设计推进。
+TriHaRiscv 的 CPU、NPU、Video 总工程，目标平台为 PG2L100H-6IFBG676。当前分支 `soc/face-box-integration` 集成 HDMI 800×600 采集、B03 YuNet 整图推理、CPU 解码/NMS及同帧显示。
 
-CPU 目标为 RV32IMC_Zicsr 六级单发射、顺序执行、顺序提交。先完成真实推理与稳定显示，再争取有效输出帧率 ≥24 fps；30 fps 不是强制门槛或限速上限。
+2026-11-03 用户确定第一优先级为真实人脸检测功能跑通，先完成构建、仿真和布线后时序，再连接板卡验收。帧率只记录，不作为本轮门槛。首版显式使用 `--face-profile box`，自动显示主脸检测框；保留头像配置供后续推进，五点关键点不阻塞首版。CPU/NPU 为50MHz，Video/DDR为125MHz，像素为40MHz。
 
 ## 当前状态与文档入口
 
-截至 2026-10-16，Video 路线已完成 Windows 原生工程基础、时序/彩条、40/10 MHz PLL、独立 HDMI TX 初始化、板级目标和输入帧几何监测；彩条位流已通过内部时序检查、JTAG Program/Verify，用户确认显示器出现稳定彩条。DDR/物理 RX 完整链路与外部 I/O AC 时序继续验收。CPU/NPU 以各自交付为准，实际进度见 [Video 工作台账](docs/video/STATUS.md)。
+已验收版本的位流、模型、固件、冻结数据库与恢复说明随仓库保存于 [2026-11-03 BOX 发布包](releases/face-box-20261103/README.md)。新克隆先运行 `python scripts/video/restore_face_release.py --install`，即可恢复上板与复现所需的生成文件。
 
-项目唯一远端仓库为 [wan-yuanxing/TriHaRiscv-v3](https://github.com/wan-yuanxing/TriHaRiscv-v3)，本地 remote 名称为 `origin`。`TriHaRiscv-main` 是本地总工程目录名，不另建同名远端仓库。
+当前50MHz版本已通过有脸／无脸整机回归、双角内部后布线时序及全部Gray跨域检查，并生成BOX交付包 `build/video/releases/triha_face_board_3939c52f4d94`（`.sbit`/`.smsk`及证据）。setup最差+0.183ns，hold最差+0.108ns。实板Program/Verify和六段模型封存通过；用户确认正脸出框、位置变化后框更新、无脸清框及后续画面继续更新，第一优先级功能验收完成。FPS未测，外部I/O AC尚未正式签核。构建、模型恢复、六段上传命令见 [应用入口](docs/video/FINAL_APPLICATION.md)，逐项证据和后续事项见 [Video 工作台账](docs/video/STATUS.md)。实板关联记录为 `build/video/face_box_board_acceptance_20261103.json`。
+
+项目远端仓库为 [wan-yuanxing/TriHaRiscv-v3](https://github.com/wan-yuanxing/TriHaRiscv-v3)，本地 remote 为 `origin`。当前用户指定工作目录为 `D:/FPGA/TriHaRiscv-v3`；旧文档中的 `TriHaRiscv-main` 是历史目录名。
 
 - [v0.6 设计规格](docs/TriHaRiscv_SoC_Design_Spec_v0.6.md)：功能、接口、地址、时序与验收依据，目录和分工对应第 12.3、15 节。
 - [全屏显示设计](docs/superpowers/specs/2026-10-19-fullscreen-display-design.md)：原分辨率显示、功能键、帧边界提交/释放、带宽和分阶段验收。
@@ -20,7 +22,7 @@ README 负责工程导航与职责划分，技术细节以当前规格为准。�
 
 ## 文件树安排
 
-以下是目标文件树。标注 `[规划]` 的目录目前尚未创建，按实际任务建立，不要求提前补齐空目录。现有实现目录也不代表已有可用模块。
+以下保留历史目标文件树。标注 `[规划]` 表示最初规划状态，当前已有的应用/驱动及验证入口见上方应用文档；目录存在不代表已通过实板验收。
 
 ```text
 TriHaRiscv-main/

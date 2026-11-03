@@ -6,9 +6,7 @@ define_attribute {p:mode_button_n} {PAP_IO_LOC} {C23}
 define_attribute {p:mode_button_n} {PAP_IO_VCCIO} {3.3}
 define_attribute {p:mode_button_n} {PAP_IO_STANDARD} {LVCMOS33}
 define_attribute {p:mode_button_n} {PAP_IO_NONE} {TRUE}
-# Asynchronous human input to its first synchronizer only. Meta-to-sync and
-# debounce/mode logic remain timed in the 125 MHz video domain.
-set_false_path -from [get_ports {mode_button_n}] -to [get_cells {g_full.impl/face/g_mode_key.u_key/u_button/button_meta}]
+# KEY1 synchronizer timing is in the optional triha_face_avatar.fdc profile.
 define_attribute {p:b_out[7]} {PAP_IO_DIRECTION} {OUTPUT}
 define_attribute {p:b_out[7]} {PAP_IO_LOC} {T22}
 define_attribute {p:b_out[7]} {PAP_IO_VCCIO} {3.3}
@@ -276,10 +274,10 @@ create_clock -name ref_clk -period 8.000 -waveform {0 4.000} [get_ports {ref_clk
 # Generated DDR IP timing contract, re-rooted only; generic IO pins are excluded.
 create_generated_clock -name {rst_clk} -source [get_ports {ref_clk_p}] [get_pins {g_full.impl/I_ips_ddr_top.u_ddrphy_top.rst_clk_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {16}
 create_generated_clock -name {ddrphy_sysclk} -source [get_ports {ref_clk_p}] [get_pins {g_full.impl/I_ips_ddr_top.u_ddrphy_top.ddrphy_gpll/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {16}
-# CPU/B03 uses a separate 100 MHz PLL derived from the same 125 MHz DDR
+# CPU/B03 uses a separate 50 MHz PLL derived from the same 125 MHz DDR
 # reference.  The reusable SoC crosses this boundary through its AXI CDCs;
 # constrain its synchronizers and Gray buses individually in triha_face_cdc.fdc.
-create_generated_clock -name {compute_clk} -source [get_ports {ref_clk_p}] [get_pins {g_full.impl/compute_clock_gen/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {4} -divide_by {5}
+create_generated_clock -name {compute_clk} -source [get_ports {ref_clk_p}] [get_pins {g_full.impl/compute_clock_gen/clkout0}] -master_clock [get_clocks {ref_clk}] -multiply_by {2} -divide_by {5}
 create_generated_clock -name {phy_dq_clk_0} -source [get_ports {ref_clk_p}] [get_pins {g_full.impl/I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] -master_clock [get_clocks {ref_clk}] -multiply_by {16} -divide_by {2}
 create_generated_clock -name {phy_dq_sysclk_0} -source [get_pins {g_full.impl/I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].ddrphy_ppll/clkoutphy}] [get_pins {g_full.impl/I_ips_ddr_top.u_ddrphy_top.ddrphy_slice_top.i_dqs_bank[0].u_ddrphy_ioclkdiv/CLKDIVOUT}] -master_clock [get_clocks {phy_dq_clk_0}] -edges {5 13 21} -edge_shift {0 0 0}
 set_multicycle_path 2 -from [get_clocks ddrphy_sysclk] -to [get_clocks phy_dq_sysclk_0]

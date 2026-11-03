@@ -56,7 +56,7 @@ def run(output):
             if name=='positive':
                 ok = cp.returncode==0 and 'FACE_BOARD_CLOCK_PASS' in log and 'error:' not in log.lower()
             else:
-                expected = {'negative_compute_125':'compute period must be 10 ns',
+                expected = {'negative_compute_125':'compute period must be 20 ns',
                             'negative_uart_domain':'video-side direct interface clock mismatch',
                             'negative_reset_split':'application reset not coordinated'}[name]
                 ok = cp.returncode!=0 and expected in log

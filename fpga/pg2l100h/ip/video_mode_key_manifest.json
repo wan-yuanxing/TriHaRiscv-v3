@@ -20,7 +20,7 @@
     "section": "2.1.3.4.1"
   },
   "vendor_example_fdc": {
-    "path": "D:/FPGA/2_7_key_led_test/2_7_key_led_test/2_7_key_led_test/source/key_led_test.fdc",
+    "path": "build/video/vendor/key/key_led_test.fdc",
     "sha256": "9017debebe3dc3ea7dc076572b36324f901da40ead062f42ef40dbf18bce76ac"
   },
   "reviewed_mapping": "Vendor key -> mode_button_n; keep C23/LVCMOS33/3.3V unchanged"

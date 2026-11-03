@@ -74,7 +74,14 @@ def package_current(target='video_board_smoke'):
          "Raw/preview/input writes retire before CRC/checksum readback and two preview windows. Input checksum is not an independent arbitrary-scene numerical proof.\n" if target=='video_three_board' else
          "One captured HDMI frame appears in two shared-preview windows after both CRCs pass.\n" if target=='video_preview_board' else
          "Local HDMI color bars remain active during single-frame input capture.\n" if target=='video_hdmi_capture'
-         else "After reset and DDR calibration, upload the audited B03 assets with python scripts/soc/upload_face_model.py --port COMx from the matching source tree. CPU/NPU capture and RAW+BOX display start only after loader seal. TX carries boot ACKs; periodic TRV1 telemetry is omitted. The separate DEMO_BOX_ONLY override draws an artificial box and is not inference proof.\n" if target=='triha_face_board'
+         else ("After reset and DDR calibration, upload the audited B03 assets with python scripts/soc/upload_face_model.py " +
+               ("--model-only " if result.get('face_profile')=='box' else "") +
+               "--port COMx from the matching source tree. " +
+               ("BOX profile: six segments; starts in BOX automatically and draws the primary face rectangle; no mode key or avatar cache. "
+                if result.get('face_profile')=='box' else
+                "Avatar profile: seven segments; KEY1 cycles RAW/BOX/AVATAR after loader seal. ") +
+               "HDMI input must be 800x600 at nominal 60 Hz; output uses the configured 40 MHz pixel clock. Inference FPS is measured separately. " +
+               "CPU/NPU capture starts only after loader seal. TX carries boot ACKs; periodic TRV1 telemetry is omitted. The separate DEMO_BOX_ONLY override draws an artificial box and is not inference proof.\n") if target=='triha_face_board'
          else "Standalone DDR targets interrupt HDMI output.\n")+
         "Power board and connect PDS JTAG; scan target before programming.\n"
         "PDS Configuration: Scan Device, assign this .sbit to PG2L100H, Program, Verify.\n"

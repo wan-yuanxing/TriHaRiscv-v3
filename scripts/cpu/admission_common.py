@@ -3,11 +3,14 @@ import csv
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
+import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-SIM = Path('D:/modeltech64_2020.4/win64')
+SIM = Path(os.environ.get('TRIHA_VSIM') or shutil.which('vsim') or
+           'D:/modeltech64_2020.4/win64/vsim.exe').resolve().parent
 
 
 def sha(path):
