@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_GUARD_FULL_SYSTEM_PASS_PHY_ROUTING",
-  "updated_at": "2026-11-04T03:50:12.629063+08:00",
+  "status": "USER_PHOTO_GUARD_SETUP_FAILED_PRIORITY_REROUTE",
+  "updated_at": "2026-11-04T04:20:53.087963+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete performance routing of the new map, then independent dual-corner STA, 552-location retention, all Gray-clock checks and native-diagnostic qualification before generating a bitstream.",
+  "next_step": "Complete eight-net priority routing from the frozen guard/row placement; require all original routed timing, native diagnostics, retained PHY locations and Gray clock checks before any bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -46,13 +46,15 @@
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261103T185217_344946Z",
-  "board_scan_status": "Fresh-server 1MHz scan at 02:52 again saw USB Cable II but no FPGA; no programming/upload. Earlier successful identification remains historical.",
+  "board_scan": "build/video/jtag_scan/20261103T201338_456442Z",
+  "board_scan_status": "After user reported power/JTAG reconnected, fresh-server read-only 1MHz and 100KHz scans at 04:12/04:13 saw USB Cable II but no FPGA. No photo programming or upload.",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
     "build/video/jtag_scan/20261103T162537_568188Z",
-    "build/video/jtag_scan/20261103T185217_344946Z"
+    "build/video/jtag_scan/20261103T185217_344946Z",
+    "build/video/jtag_scan/20261103T201230_540501Z",
+    "build/video/jtag_scan/20261103T201338_456442Z"
   ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
@@ -375,5 +377,45 @@
   "firmware_sha256": "61e01b57face364f49b22ab1330bd16b936336dadf9059b1aea40a15a2fd3e82",
   "map_result_sha256": "09665f7664cd798cde9a6219ca8686b99778a0e2c6f3b736ab14b7f84a124b91",
   "simulation_alignment": "build/video/face_photo_guard_50_sim_alignment_20261104.json",
-  "simulation_performance": "build/video/face_photo_guard_performance_20261104.json"
+  "simulation_performance": "build/video/face_photo_guard_performance_20261104.json",
+  "guard_route_failure": {
+    "review": "build/video/face_photo_guard_50_review_20261104/result.json",
+    "review_sha256": "1c0a60cd57b16e32548e9e7ce3a8b9a068192918d01659e8076c91e52842a1d3",
+    "report_sha256": "5c74ebc3240e20675463a9837bc15d6456c929e95aded6137969414eb11a80fb",
+    "status": "TIMING_FAILED",
+    "worst_setup_ns": -0.533,
+    "ddr_same_clock_failing_endpoints": 258,
+    "ddr_to_phy1_setup_ns": -0.168,
+    "ddr_to_phy1_failing_endpoints": 2,
+    "worst_hold_ns": 0.0,
+    "native_sta3017_messages": 1,
+    "cross_srb_paths_below_200ps_target": 3,
+    "retention": "build/video/face_photo_guard_50_retention_20261104.json",
+    "retained_phy_locations": 552,
+    "failed_paths": "build/video/face_photo_guard_50_failed_paths_20261104.txt",
+    "bitstream_generated": false
+  },
+  "guard_priority_reroute": {
+    "pipeline": "build/video/face_photo_guard_priority_50_pipeline_20261104/receipt.json",
+    "route": "build/video/pds/face_photo_guard_priority_50_route_20261104",
+    "placement": "build/video/pds/face_photo_guard_phy_place_20261104",
+    "rcf": "build/video/face_photo_guard_priority_20261104.rcf",
+    "measured_nets": 8,
+    "mode": "performance",
+    "hold_repair_target_ps": 200,
+    "timing_constraints_unchanged": true,
+    "status": "RUNNING"
+  },
+  "isolated_control_path_experiment": {
+    "result": "build/video/face_control_paths_probe_20261104/result.json",
+    "sha256": "477f8c780567d813920efc74839ce015c3343ca9e52b29428c9106337f93eb4f",
+    "status": "PASS_COMPONENT_EXPERIMENT_ONLY",
+    "production_rtl_changed": false,
+    "changes": [
+      "Narrow valid-region MMIO offsets to clog2(REGION_BYTES) bits",
+      "Split 100-bit pixel-commit identity comparison into six 16-bit and one 4-bit equality with documented syn_keep"
+    ],
+    "cases": 19,
+    "checks": "Every output compared each cycle; complete 4096-address page plus invalid aliases; 2723 byte writes / 2883 reads; every 100-bit commit identity mismatch rejected."
+  }
 }
