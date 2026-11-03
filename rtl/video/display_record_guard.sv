@@ -4,7 +4,10 @@
 `include "video_display.vh"
 // Leased record validator: caller holds record_i and mode_i unchanged from
 // start acceptance through result acceptance. No buffer or external DMA here.
-module display_record_guard(
+// Face-board profiles can omit landmarks. In that profile reject both the
+// drawing flag and all point payloads; rectangle/primary/avatar fields retain
+// their full ABI and all sixteen rectangle lanes remain available.
+module display_record_guard #(parameter integer ENABLE_LANDMARKS=1)(
     input wire clk_i,rst_ni,input wire start_valid_i,output wire start_ready_o,
     input wire [`VDISP_RECORD_BITS-1:0] record_i,input wire [1:0] mode_i,
     input wire [2:0] modes_i,input wire asset_ready_i,input wire [31:0] asset_id_i,asset_generation_i,
@@ -28,6 +31,7 @@ module display_record_guard(
                 if(data!=0)invalid_box=1;
             end else begin
                 if(!positive_rect(data[31:0],data[63:32])||data[95:69]!=0)invalid_box=1;
+                if(!ENABLE_LANDMARKS&&data[255:64]!=0)invalid_box=1;
                 for(point=0;point<5;point=point+1)
                     if(!data[64+point]&&data[(3+point)*32+:32]!=0)invalid_box=1;
             end
@@ -54,7 +58,7 @@ module display_record_guard(
             word(record_i,`VDISP_FIELD_RAW_STRIDE)!=`VIDEO_FRAME_RAW_STRIDE||
             word(record_i,`VDISP_FIELD_RAW_BASE)!=(word(record_i,`VDISP_FIELD_SLOT)==0?`VIDEO_FRAME_SLOT_A:
                 word(record_i,`VDISP_FIELD_SLOT)==1?`VIDEO_FRAME_SLOT_B:`VIDEO_FRAME_SLOT_C))head_code=8'h10;
-        else if(flags[31:5]!=0||!flags[0]||word(record_i,`VDISP_FIELD_RESULT_FRAME)!=word(record_i,`VDISP_FIELD_FRAME)||
+        else if(flags[31:5]!=0||(!ENABLE_LANDMARKS&&flags[2])||!flags[0]||word(record_i,`VDISP_FIELD_RESULT_FRAME)!=word(record_i,`VDISP_FIELD_FRAME)||
             word(record_i,`VDISP_FIELD_RESULT_GENERATION)!=word(record_i,`VDISP_FIELD_GENERATION)||mask[31:16]!=0||
             (flags[1]!=(mask==0))||(flags[1]&&flags[4:2]!=0)||
             word(record_i,`VDISP_FIELD_PRIMARY_INDEX)>15||(!flags[4]&&word(record_i,`VDISP_FIELD_PRIMARY_INDEX)!=0)||

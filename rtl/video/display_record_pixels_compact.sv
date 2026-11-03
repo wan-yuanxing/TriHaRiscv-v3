@@ -6,7 +6,7 @@
 // The source must supply the actual pixel-domain RAW identity. All resets are
 // coordinated. pixel retirement is only one contribution to global retirement;
 // scanner reads, owner events and software ACK must also finish independently.
-module display_record_pixels_compact #(parameter integer BOX_ONLY=0)(
+module display_record_pixels_compact #(parameter integer BOX_ONLY=0,ENABLE_LANDMARKS=1)(
     input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,
     input wire cmd_valid,output wire cmd_ready,
     input wire [1:0] cmd_mode,cmd_slot,
@@ -178,6 +178,8 @@ module display_record_pixels_compact #(parameter integer BOX_ONLY=0)(
         end
     end
     wire [31:0] selected_flags=word(selected,`VDISP_FIELD_FLAGS);
+    // The matching guard rejects point payloads when this capability is off.
+    // Constants remove unused point storage/comparators from the pixel domain.
     wire [255:0] box_x0,box_y0,box_x1,box_y1;
     wire [79:0] point_valid;wire [1279:0] point_x,point_y;
     genvar lane,point_index;
@@ -187,9 +189,9 @@ module display_record_pixels_compact #(parameter integer BOX_ONLY=0)(
         assign box_x1[lane*16+:16]=selected[(33+lane*8)*32+:16];
         assign box_y1[lane*16+:16]=selected[(33+lane*8)*32+16+:16];
         for(point_index=0;point_index<5;point_index=point_index+1)begin:g_point
-            assign point_valid[lane*5+point_index]=selected[(34+lane*8)*32+point_index];
-            assign point_x[(lane*5+point_index)*16+:16]=selected[(35+lane*8+point_index)*32+:16];
-            assign point_y[(lane*5+point_index)*16+:16]=selected[(35+lane*8+point_index)*32+16+:16];
+            assign point_valid[lane*5+point_index]=ENABLE_LANDMARKS?selected[(34+lane*8)*32+point_index]:1'b0;
+            assign point_x[(lane*5+point_index)*16+:16]=ENABLE_LANDMARKS?selected[(35+lane*8+point_index)*32+:16]:16'd0;
+            assign point_y[(lane*5+point_index)*16+:16]=ENABLE_LANDMARKS?selected[(35+lane*8+point_index)*32+16+:16]:16'd0;
         end
     end endgenerate
     reg [63:0] asset_tags[0:8];reg [67:0] pixel_tags[0:12];integer delay_index;
@@ -213,7 +215,7 @@ module display_record_pixels_compact #(parameter integer BOX_ONLY=0)(
         .pixel_rgb(d_rgb),.pixel_de(d_de),.pixel_hs(d_hs),.pixel_vs(d_vs),.pixel_sof(d_sof),
         .mode(selected_mode),.result_valid(qualified_context&&selected_flags[0]),.result_has_face(!selected_flags[1]),
         .result_frame_id(word(selected,`VDISP_FIELD_RESULT_FRAME)),.primary_valid(selected_flags[4]),
-        .primary_index(selected[13*32+:4]),.points_enable(selected_flags[2]),.box_valid(selected[12*32+:16]),
+        .primary_index(selected[13*32+:4]),.points_enable(ENABLE_LANDMARKS&&selected_flags[2]),.box_valid(selected[12*32+:16]),
         .box_x0(box_x0),.box_y0(box_y0),.box_x1(box_x1),.box_y1(box_y1),.point_valid(point_valid),.point_x(point_x),.point_y(point_y),
         .avatar_enable(selected_flags[3]),.avatar_x0(selected[21*32+:16]),.avatar_y0(selected[21*32+16+:16]),
         .avatar_x1(selected[22*32+:16]),.avatar_y1(selected[22*32+16+:16]),

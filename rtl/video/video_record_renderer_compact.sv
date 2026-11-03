@@ -2,7 +2,7 @@
 `default_nettype none
 // Composition only. Caller supplies actual RAW pixels/identity and retains
 // global ownership; faults are separate platform inputs for coordinated reset.
-module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,TIMEOUT_CYCLES=125000000)(
+module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,ENABLE_LANDMARKS=1,TIMEOUT_CYCLES=125000000)(
  input wire core_clk,core_reset_n,pixel_clk,pixel_reset_n,online,memory_fault,display_urgent,
  input wire load_valid,output wire load_ready,input wire [31:0] load_base,load_bytes,load_asset_id,load_generation,expected_crc,
  output wire result_valid,input wire result_ready,output wire result_success,output wire [7:0] result_code,
@@ -148,7 +148,7 @@ module video_record_renderer_compact #(parameter integer MAX_RAW_BURSTS=4,ENABLE
   assign sample_valid=0;assign sample_error=0;assign sample_rgba=0;
  end endgenerate
  // The compact MMIO/link retains cmd_data through combined scanner/pixel feedback.
- display_record_pixels_compact #(.BOX_ONLY(ENABLE_MINIMAL_BOX)) u_pixels(.fault(pixels_fault),.fault_code(pixels_code),.asset_ready(pixel_material_ready),.asset_id(pixel_id),.asset_generation(pixel_generation),.core_clk(core_clk),
+ display_record_pixels_compact #(.BOX_ONLY(ENABLE_MINIMAL_BOX),.ENABLE_LANDMARKS(ENABLE_LANDMARKS)) u_pixels(.fault(pixels_fault),.fault_code(pixels_code),.asset_ready(pixel_material_ready),.asset_id(pixel_id),.asset_generation(pixel_generation),.core_clk(core_clk),
   .core_reset_n(core_reset_n),
   .pixel_clk(pixel_clk),
   .pixel_reset_n(pixel_reset_n),

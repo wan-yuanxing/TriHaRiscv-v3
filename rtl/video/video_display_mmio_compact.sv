@@ -8,7 +8,7 @@
 // copy. Mode-only content equality is exact over all 160 words, not a hash.
 // RAM is cleared after reset before MMIO accepts traffic.
 // Actual commit and full retirement are supplied by external consumers.
-module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUARD=0,ENABLE_MODE_KEY=0)(
+module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUARD=0,ENABLE_MODE_KEY=0,ENABLE_LANDMARKS=1)(
     input wire clk_i,rst_ni,
     input wire [1:0] mode_request_i,
     input wire [31:0] s_axi_awaddr_i,input wire [2:0] s_axi_awprot_i,
@@ -142,7 +142,7 @@ module video_display_mmio_compact #(parameter integer EXTERNAL_HEALTH=0,SKIP_GUA
             assign guard_valid=guard_start;
             assign guard_code=8'd0;
         end else begin : g_record_guard
-            display_record_guard u_guard(.clk_i(clk_i),.rst_ni(rst_ni),.start_valid_i(guard_start),.start_ready_o(guard_ready),
+            display_record_guard #(.ENABLE_LANDMARKS(ENABLE_LANDMARKS)) u_guard(.clk_i(clk_i),.rst_ni(rst_ni),.start_valid_i(guard_start),.start_ready_o(guard_ready),
                 .record_i(record_data),.mode_i(request_mode[1:0]),.modes_i(modes_i),.asset_ready_i(asset_ready_i),
                 .asset_id_i(asset_id_i),.asset_generation_i(asset_generation_i),.result_valid_o(guard_valid),
                 .result_ready_i(phase==CHECK&&!reject_pending),.result_code_o(guard_code));
