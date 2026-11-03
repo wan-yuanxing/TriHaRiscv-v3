@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_GUARD_ROW_COUNTER_COMPONENT_PASS_FULL_REBUILD_RUNNING",
-  "updated_at": "2026-11-04T03:32:15.634120+08:00",
+  "status": "USER_PHOTO_GUARD_FULL_SYSTEM_PASS_PHY_ROUTING",
+  "updated_at": "2026-11-04T03:50:12.629063+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete new positive/negative full-system simulation and synthesis; map, reuse reviewed PHY site constraints, route performance mode, and repeat all physical qualification. No new bitstream or board acceptance yet.",
+  "next_step": "Complete performance routing of the new map, then independent dual-corner STA, 552-location retention, all Gray-clock checks and native-diagnostic qualification before generating a bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T125815_653946Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -354,6 +354,26 @@
     "guard_behavior": "Latch 16 per-lane checks on record acceptance; existing header cycle separates check from select. Exact result latency/backpressure preserved.",
     "raw_behavior": "Remaining row beats bounded to clog2(ROW_WORDS+1); 150 max at width 800, 8 bits. Only completed bounded bursts subtract.",
     "timing_reference": "build/video/face_photo_phy_sites_priority_50_review_20261104/result.json",
-    "new_physical_result_available": false
-  }
+    "new_physical_result_available": false,
+    "positive_full_system": "PASS",
+    "negative_full_system": "PASS",
+    "shared_simulated_and_mapped_sources": 136,
+    "placement": "build/video/pds/face_photo_guard_phy_place_20261104",
+    "placement_estimated_worst_slack_ns": 0.635,
+    "placement_estimated_tns_ns": 0,
+    "route_mode": "performance",
+    "reference_preview": "build/video/face_photo_guard_reference_20261104.json",
+    "preview_scope": "Independent simulation oracle, not a board screenshot."
+  },
+  "resources": {
+    "lut": 48833.0,
+    "registers": 47759.0,
+    "drm": 112.5
+  },
+  "positive_result_sha256": "bd77f632e2d63916f1ccc9b523123d91ce4521bcdc7d6db033173f67805f888d",
+  "negative_result_sha256": "4d87eac134809da8fc5f84aef093df559ab2d4befde333258037cf822056115f",
+  "firmware_sha256": "61e01b57face364f49b22ab1330bd16b936336dadf9059b1aea40a15a2fd3e82",
+  "map_result_sha256": "09665f7664cd798cde9a6219ca8686b99778a0e2c6f3b736ab14b7f84a124b91",
+  "simulation_alignment": "build/video/face_photo_guard_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_guard_performance_20261104.json"
 }
