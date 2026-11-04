@@ -94,6 +94,28 @@ python scripts/video/package_board.py --target triha_face_board
 官方管脚/KEY1 手册来源约束见 `fpga/pg2l100h/ip/video_mode_key_manifest.json`；换机时核对
 其实际路径与 SHA256。仅恢复已验收包或回放冻结布线数据库，无需重新执行完整源码构建。
 
+## 实板画面与更新率验收
+
+在照片位流通过 Program/Verify、七段数据均收到 ACK 后，可用整机仿真的正脸输入复测：
+
+```powershell
+python scripts/video/make_face_hdmi_source.py --fixture "$positive/fixture"
+```
+
+在 HDMI 输入源的浏览器中打开生成的 `build/video/face-hdmi-source.html`，把对应显示输出设为
+800×600、60 Hz，进入全屏。检查 KEY1 的 RAW → BOX → AVATAR；页面每 8 秒切换原图、
+左移缩小、右移放大和黑场，观察板卡的 HDMI OUT，检查位置、大小、透明边缘和无脸清除。
+空格切至无帧号的仿真原图：对应正脸参考框 `(349,215,166,257)`。
+在浏览器源帧号 1987 的四个场景上，冻结的整数模型分别得到框
+`(349,216,166,255)`、`(182,293,117,160)`、`(446,220,171,251)`、无框。
+这些是主机参考值，录制设备或其他源帧号可以改变个别像素。
+
+要测可见画面更新率，用独立采集设备按已知恒定采样率记录 **板卡输出**，保留左上角编号条，
+导出连续、未缩放的数字序号 PNG（不要补帧或删帧）；取正常显示之后至少 30 秒，保持同一模式。
+运行 `python scripts/video/measure_face_scanout.py --frames <目录> --capture-hz <实际录制频率>`。
+脚本校验编号及其反码，排除首尾不完整间隔，统计每秒出现多少个不同的源帧。
+此数描述显示更新率：不等于 HDMI 刷新率，也不是 NPU 内部吞吐量。没有采集记录时不要报实测值。
+
 ## SD 卡后备方案
 
 用户允许在收敛困难时把头像放在 SD 卡。当前方案把头像从 UART 加载到 DDR，
