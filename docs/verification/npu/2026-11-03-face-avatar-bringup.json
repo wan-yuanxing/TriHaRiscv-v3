@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_CAPTURE_ADMISSION_FIXED_SYNTH_AND_SYSTEM_RUNNING",
-  "updated_at": "2026-11-04T08:19:09.119568+08:00",
+  "status": "USER_PHOTO_ADMISSION_FULL_SYSTEM_PASS_ROUTING",
+  "updated_at": "2026-11-04T08:36:52.174981+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete fresh full-system/synthesis for buffered ingress with same-edge upstream admission guard, then native-check all location candidates, route and qualify at unchanged clocks/constraints.",
+  "next_step": "Finish routing at unchanged clocks, inspect actual dual-corner timing and all 558 retained sites, then qualify before generating or loading a photo bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -57,10 +57,10 @@
     "reason": "User replaced asset before route completion; route stopped intentionally, no final timing result"
   },
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
-  "asset_audit": "build/soc/model_upload-20261103T131003_563919Z",
+  "asset_audit": "build/soc/model_upload-20261104T002736_210842Z",
   "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261103T234117_115674Z",
-  "board_scan_status": "07:41 fresh-server read-only 100KHz scan still finds USB Cable II but no FPGA. Prior power LED/pin-1 clarification remains pending; no photo programming/upload.",
+  "board_scan": "build/video/jtag_scan/20261104T003406_316770Z",
+  "board_scan_status": "USB Cable II present; 100 kHz read-only scan did not identify the target FPGA",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
@@ -69,7 +69,8 @@
     "build/video/jtag_scan/20261103T201230_540501Z",
     "build/video/jtag_scan/20261103T201338_456442Z",
     "build/video/jtag_scan/20261103T215645_584462Z",
-    "build/video/jtag_scan/20261103T234117_115674Z"
+    "build/video/jtag_scan/20261103T234117_115674Z",
+    "build/video/jtag_scan/20261104T003406_316770Z"
   ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
@@ -920,5 +921,43 @@
   "placement": "build/video/pds/face_photo_admission_phy_place_20261104",
   "route": "build/video/pds/face_photo_admission_50_route_20261104",
   "offline_pipeline": "build/video/face_photo_admission_50_pipeline_20261104/receipt.json",
-  "firmware_sha256": "671686a1e5756e41c08b6a565c7855d5710a21ae50d86c8bacf99102d839698e"
+  "firmware_sha256": "671686a1e5756e41c08b6a565c7855d5710a21ae50d86c8bacf99102d839698e",
+  "positive_result_sha256": "ebf5bd9b0ca6c4bf87bd95517a32525819bdc6b1d65c0e6683393e612f6ee595",
+  "negative_result_sha256": "5cd8ab170849d190c6730819c239db73deef7b57d46cc4ef86ed9fce40c1aafc",
+  "resources": {
+    "lut": 45745.0,
+    "registers": 42083.0,
+    "drm": 112.5
+  },
+  "synthesis_result_sha256": "440ad43c1eb80855b8c43030875c5501805e2f714a82f56bb81ffb98ed4274b9",
+  "map_result_sha256": "da58bd98c858ecef1eb4e144d0459f9ae4b561427f74f5cea0ad54e72ae37e60",
+  "simulation_alignment": "build/video/face_photo_admission_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_admission_performance_20261104.json",
+  "current_capture_scoreboard": {
+    "positive": [
+      1920004,
+      1920004,
+      0
+    ],
+    "negative": [
+      1920004,
+      1920004,
+      0
+    ]
+  },
+  "current_photo_reference": {
+    "scope": "Independent simulation reference raster, not a physical board screenshot or sampled FPGA video. Streaming testbench compares actual output pixels against this golden raster.",
+    "image": "build/video/face_photo_guard_reference_20261104.png",
+    "image_sha256": "4edf4754e0a6bcca52bf63b90f7e5b72d71271232fc3dc6b19fd2653caa6e4ca",
+    "golden_sha256": "4451ea42ede333352952c14fab8fad32a66320d1bf168bbb04e124602df13340"
+  },
+  "current_placement_pass": {
+    "directory": "build/video/pds/face_photo_admission_phy_place_20261104",
+    "phy_locations": 552,
+    "pixel_hold_candidates": 6,
+    "native_locations_accepted": 558,
+    "final_estimated_setup_ns": 0.638,
+    "placed_db_sha256": "f110049f14fd64bb34d69eb0e7579b1d8d1397dd71ddae82a63363163137f931",
+    "actual_routed_retention_pending": true
+  }
 }
