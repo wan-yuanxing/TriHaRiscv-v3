@@ -47,6 +47,9 @@ fpga/pg2l100h/project/triha_face_board.json -text whitespace=cr-at-eol
 fpga/pg2l100h/rtl/triha_face_board_top.sv -text whitespace=cr-at-eol
 scripts/video/gen_compute_pll.py -text whitespace=cr-at-eol
 scripts/video/qualify_face_bitstream.py -text whitespace=cr-at-eol
+# Native timing qualification records the Windows checkout bytes of these tools.
+scripts/video/review_face_route.py text eol=crlf
+scripts/video/test_face_route_audit.py text eol=crlf
 scripts/video/face_timing.py -text whitespace=cr-at-eol
 scripts/video/check_face_gray_clocks.py -text whitespace=cr-at-eol
 tb/soc/tb_face_system.sv -text whitespace=cr-at-eol

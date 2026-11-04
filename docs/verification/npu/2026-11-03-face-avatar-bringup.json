@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_SIM_PASS_TARGETED_ROUTING_JTAG_IDENTIFIED",
-  "updated_at": "2026-11-04T09:12:26.910663+08:00",
+  "status": "USER_PHOTO_RING_SIM_PASS_SYNTHESIS_STARTED",
+  "updated_at": "2026-11-04T09:48:01.247575+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish the normal-mode reroute from the same placement with four measured data-net priorities. Offline functional and timing qualification required before any photo bitstream.",
+  "next_step": "Complete current map/place/route and independently qualify dual-corner internal timing, CDC, pins and seven-segment boot before programming.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -1032,5 +1032,37 @@
     "cases": 19,
     "mutations": 6,
     "physical_timing_verified": false
+  },
+  "targeted_route_final": {
+    "status": "PDS_SIGNAL_11_NO_ROUTED_DB",
+    "mode": "normal",
+    "priority_nets": 4,
+    "detail_routing_iterations": 565,
+    "hold_repair_iterations": 6,
+    "independent_sta_available": false
+  },
+  "ring_candidate": {
+    "source_commit": "dee8d854985ad8759584556250c6bcce75dc8344",
+    "source_photo": "assets/avatars/triha/source.png",
+    "physical_candidate": "build/video/pds/20261104T014338_596772Z",
+    "pipeline": "build/video/face_photo_ring_50_pipeline_20261104",
+    "sites_candidates": 556,
+    "positive": "build/soc/face_system-20261104T011551_456009Z",
+    "negative": "build/soc/face_system-20261104T011551_453685Z",
+    "completed_cycles_per_case": 41410743,
+    "component_suites": 14,
+    "component_unique_sources": 204,
+    "component_bindings": 1100,
+    "arbiter_bounds_cases": 459362,
+    "source_and_evidence_sha256": {
+      "build/video/pds/face_photo_admission_targeted_50_route_20261104/flow.log": "96b3717b64153c3e67d121ee611d08b9f37d93ac7da7370e0d6c7af8f5213edd",
+      "build/video/pds/face_photo_admission_targeted_50_route_20261104/receipt.json": "431597f92358871ac146609991a045a4fc3930816001e59cb99a26bf3c27a819",
+      "build/video/pds/face_photo_admission_targeted_50_route_20261104/place_route/triha_face_board_top_timing_summary_after_hold_fix.txt": "336e1442af44f7d8589f192dee8aac1423de70c45f1f3c872c47bcf0902f8e05",
+      "build/video/face_photo_admission_targeted_50_pipeline_20261104/receipt.json": "bc768b98f0e6c9bb87ec9aa996a78e80a0021e6c329f11e41aef4c2004861f25",
+      "build/video/face_photo_ring_staged_20261104.json": "3cc389e5fdb67e401969b100b0d5d66268d1fe8eb6a0f284cbc9a1920f10e3d8",
+      "build/video/face_photo_ring_release_components_20261104.json": "573477d7bf6d32e1b3deefa9d8d7b6b5e63c7e4c7653dafa6989773840b9c2d7",
+      "build/soc/face_system-20261104T011551_456009Z/result.json": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00",
+      "build/soc/face_system-20261104T011551_453685Z/result.json": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44"
+    }
   }
 }
