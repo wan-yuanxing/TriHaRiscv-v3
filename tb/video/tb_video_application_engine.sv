@@ -1,10 +1,13 @@
 `timescale 1ns/1ps
 `ifdef BASELINE
 `define VAPP_DISPLAY dut.u_display
+`define VAPP_MMIO dut.u_display.u_mmio
 `elsif COMPACT_APPLICATION
 `define VAPP_DISPLAY dut.g_compact.u_display
+`define VAPP_MMIO dut.g_compact.u_display.g_full_mmio.u_mmio
 `else
 `define VAPP_DISPLAY dut.g_standard.u_display
+`define VAPP_MMIO dut.g_standard.u_display.u_mmio
 `endif
 module tb_video_application_engine #(parameter integer H=600,CASE_ID=0,GAPS=1,QUOTA=4,ENABLE_AVATAR=0,ENABLE_COMPACT=0,parameter real PIXEL_HALF=12.5);
  localparam integer N=800*H,HT=1056,VT=H+28;
@@ -293,7 +296,7 @@ module tb_video_application_engine #(parameter integer H=600,CASE_ID=0,GAPS=1,QU
         if(old_arm!=arm_toggle)begin enabled<=1;sent<=0;end old_arm<=arm_toggle;
         if(src_valid&&src_ready)begin sent<=sent+1;if(sent==N)enabled<=0;end
         if(dut.capture_req_valid_o&&dut.capture_req_ready_i)begin
-            if(display_lease[dut.capture_req_slot_o]||!`VAPP_DISPLAY.u_mmio.slot_free[dut.capture_req_slot_o])$fatal(1,"PIPELINE_REQUEST_REUSED_REFERENCE");
+            if(display_lease[dut.capture_req_slot_o]||!`VAPP_MMIO.slot_free[dut.capture_req_slot_o])$fatal(1,"PIPELINE_REQUEST_REUSED_REFERENCE");
             slot_tags[dut.capture_req_slot_o*32+:32]=dut.capture_req_frame_id_o;
             slot_frames[dut.capture_req_slot_o]=dut.capture_req_frame_id_o;completed_slot[dut.capture_req_slot_o]=0;
             capture_requests=capture_requests+1;
@@ -304,7 +307,7 @@ module tb_video_application_engine #(parameter integer H=600,CASE_ID=0,GAPS=1,QU
                 completed_slot[dut.capture_slot_i]=1;completions=completions+1;
             end
         end
-        if(dut.c_awvalid&&dut.c_awready&&(!`VAPP_DISPLAY.u_mmio.slot_free[dut.capture_slot_i]||display_lease[dut.capture_slot_i]))
+        if(dut.c_awvalid&&dut.c_awready&&(!`VAPP_MMIO.slot_free[dut.capture_slot_i]||display_lease[dut.capture_slot_i]))
             $fatal(1,"PIPELINE_CAPTURE_OVERWROTE_DISPLAY");
         if(`VAPP_DISPLAY.record_valid&&`VAPP_DISPLAY.record_ready)begin
             if(display_lease[`VAPP_DISPLAY.record_slot]||!completed_slot[`VAPP_DISPLAY.record_slot]||
@@ -327,9 +330,9 @@ module tb_video_application_engine #(parameter integer H=600,CASE_ID=0,GAPS=1,QU
         end
         if(`VAPP_DISPLAY.d_rvalid&&`VAPP_DISPLAY.d_rready)outstanding_reads=outstanding_reads-1;
         if(capture_busy&&raw_frame!=0)overlap=overlap+1;
-        if(capture_busy&&`VAPP_DISPLAY.u_mmio.release_valid)held_release_capture=held_release_capture+1;
+        if(capture_busy&&`VAPP_MMIO.release_valid)held_release_capture=held_release_capture+1;
         if(dut.c_awvalid&&`VAPP_DISPLAY.d_arvalid)contested=contested+1;
-        if(`VAPP_DISPLAY.u_mmio.commit_valid&&`VAPP_DISPLAY.u_mmio.commit_seq!==proven_seq)$fatal(1,"RECORD_PIPELINE_UNPROVEN_COMMIT");
+        if(`VAPP_MMIO.commit_valid&&`VAPP_MMIO.commit_seq!==proven_seq)$fatal(1,"RECORD_PIPELINE_UNPROVEN_COMMIT");
         if(ticks%1000000==0)begin $display("PIPELINE_PROGRESS ticks=%0d requests=%0d completed=%0d records=%0d scans=%0d pixels=%0d",ticks,capture_requests,completions,records,raw_scans,checked_pixels);$fflush();end
     end
     always @(posedge pixel_clk)begin

@@ -455,6 +455,26 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
     `define V u_dut.u_video
     `define D u_dut.u_video.g_compact.u_display
     `define F u_dut.u_compute.u_npu.u_service.u_frame
+    // Independent one-word ownership scoreboard at the actual capture boundary.
+    // Every accepted source packet must remain unchanged until capture takes it.
+    reg capture_pending=0;
+    reg [47:0] capture_owned_word;
+    integer capture_source_words=0,capture_consumed_words=0;
+    always @(posedge video_clk_i)begin
+        if(!u_dut.video_reset_n)begin
+            capture_pending<=0;capture_source_words<=0;capture_consumed_words<=0;
+        end else begin
+            if(`V.u_capture.m_valid!==capture_pending)$fatal(1,"CAPTURE_STREAM_BYPASS_OR_LOSS");
+            if(capture_pending&&`V.u_capture.m_data!==capture_owned_word)$fatal(1,"CAPTURE_STREAM_OWNED_WORD_CHANGED");
+            if(capture_pending&&!`V.u_capture.m_ready&&src_ready)$fatal(1,"CAPTURE_STREAM_OVERWRITE_WHILE_STALLED");
+            if(`V.u_capture.m_valid&&`V.u_capture.m_ready)begin
+                capture_pending<=0;capture_consumed_words<=capture_consumed_words+1;
+            end
+            if(src_valid&&src_ready)begin
+                capture_pending<=1;capture_owned_word<=src_data;capture_source_words<=capture_source_words+1;
+            end
+        end
+    end
     integer requests=0,completions=0,records=0,retires=0,feedbacks=0,reuses=0,j,s,addr;
     reg [31:0] submitted_frame[0:31];reg [1:0] submitted_mode[0:31],submitted_slot[0:31];reg [31:0] submitted_seen=0;
     always @(posedge video_clk_i)if(u_dut.video_reset_n)begin
@@ -601,6 +621,9 @@ module tb_face_system #(parameter integer BOARD_PROFILE=0,BOOT_LOAD=0,BOOT_ONLY=
             if(verified==2&&full_pixels[1]&&full_pixels[2]&&(!AVATAR_BOOT||(full_modes==7&&cpu_word(`APP_BASE+`OFF_MODE_COMMITS)>=1))&&retires>=1&&reuses>=1&&
                 cpu_word(`APP_BASE+`OFF_RELEASES)>=1&&cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS)>=2)begin
                 if(requests<4||completions<3||cpu_reads<64||cpu_word(`APP_BASE+`OFF_NO_FREE)==0)$fatal(1,"FACE_SYSTEM missing long-inference/three-slot coverage");
+                if(capture_consumed_words<3*480001||capture_source_words-capture_consumed_words!=capture_pending)
+                    $fatal(1,"CAPTURE_STREAM_WORD_ACCOUNTING");
+                $display("FACE_CAPTURE_STREAM_PASS accepted=%0d consumed=%0d pending=%0d",capture_source_words,capture_consumed_words,capture_pending);
                 $display("FACE_SYSTEM_PASS captures=%0d requests=%0d results=%0d records=%0d commits=%0d releases=%0d reuses=%0d full_pixel_frames=2 modes=%b cpu_reads=%0d nativeAW=%0d nativeAR=%0d cycles=%0d",completions,requests,verified,records,cpu_word(`APP_BASE+`OFF_DISPLAY_COMMITS),retires,reuses,full_modes,cpu_reads,aw_count,ar_count,cycles);
                 $finish;
             end

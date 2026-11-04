@@ -5,6 +5,7 @@
   "test_top": "tb_video_record_pipeline",
   "sources": [
     "rtl/video/video_capture_mmio_v2.sv",
+    "rtl/video/video_stream_register.sv",
     "rtl/video/video_three_branch_capture.sv",
     "rtl/video/axi_write_arbiter3.sv",
     "rtl/video/video_write_dma.sv",

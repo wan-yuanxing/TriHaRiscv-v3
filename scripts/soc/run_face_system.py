@@ -176,6 +176,7 @@ def main():
                 scope='All admitted segments through actual loader and DDR write/readback bridge; exact memory bytes, CPU admission and optional preset cache CRC/seal; no completed inference/display or serial wire/board proof')
         else:
             need('FACE_SYSTEM_PASS' in text,'missing actual application PASS '+text[-3000:])
+            need('FACE_CAPTURE_STREAM_PASS' in text,'missing lossless capture boundary PASS')
             if args.avatar_boot:need('modes=111' in text,'missing all three full-pixel modes')
             elif args.board_profile:need('modes=010' in text,'missing full-pixel BOX mode')
             for i in range(2):

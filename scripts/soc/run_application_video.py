@@ -152,7 +152,8 @@ def main():
         if not args.baseline:
             manifest['sources'] += ['rtl/video/video_application_engine.sv',
                 'rtl/video/video_display_mmio_compact.sv', 'rtl/video/video_display_record_compact.sv',
-                'rtl/video/video_record_renderer_compact.sv']
+                'rtl/video/video_record_renderer_compact.sv', 'rtl/video/display_record_pixels_compact.sv',
+                'rtl/video/display_mode_cdc_held.sv', 'rtl/video/avatar_row_cache.sv']
         cc = Path(os.environ.get('TRIHA_HOST_CC', 'D:/Xilinx/Vivado/2018.3/msys64/mingw64/bin/gcc.exe'))
         iv, vvp = tool('iverilog'), tool('vvp')
         names = manifest['sources'] + manifest['tests'] + manifest['constraints'] + [
@@ -165,6 +166,7 @@ def main():
             'sw/include/video_frame_pool.h', 'sw/include/video_cfg.h',
             'rtl/video/include/video_cfg.vh', 'rtl/video/include/video_capture_v2.vh',
             'rtl/video/include/video_display.vh']
+        names += ['rtl/video/include/avatar_span_table.vh','rtl/video/include/avatar_span_identity.vh']
         source_root = work / 'inputs'
         names = list(dict.fromkeys(names))
         for name in names:

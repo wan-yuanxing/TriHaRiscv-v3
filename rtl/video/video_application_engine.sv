@@ -265,6 +265,14 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .capture_port_drained_i(capture_port_drained_i),
         .capture_abort_o(capture_abort_o),
         .irq_o(irq_capture));
+    // Retain one owned packet between the ingress BRAM and capture validation.
+    // No combinational payload bypass; EOF and malformed packets are preserved.
+    // Only coordinated reset drops this ownership, including across job rearm.
+    wire capture_src_valid,capture_src_ready;
+    wire [47:0] capture_src_data;
+    video_stream_register #(.DATA_WIDTH(48)) u_capture_stream(
+        .clk(clk_i),.reset_n(rst_ni),.s_valid(src_valid),.s_ready(src_ready),.s_data(src_data),
+        .m_valid(capture_src_valid),.m_ready(capture_src_ready),.m_data(capture_src_data));
     video_three_branch_capture #(.FRAME_HEIGHT(FRAME_HEIGHT),.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.ENABLE_REARM(1),.ENABLE_PREVIEW(ENABLE_CAPTURE_PREVIEW)) u_capture(
         .clk(clk_i),
         .reset_n(rst_ni),
@@ -275,9 +283,9 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .req_slot(capture_req_slot_o),
         .req_frame_id(capture_req_frame_id_o),
         .req_preprocess_version(capture_req_version_o),
-        .m_valid(src_valid),
-        .m_data(src_data),
-        .m_ready(src_ready),
+        .m_valid(capture_src_valid),
+        .m_data(capture_src_data),
+        .m_ready(capture_src_ready),
         .source_fault(source_fault),
         .overflow(overflow),
         .arm_toggle(arm_toggle),
