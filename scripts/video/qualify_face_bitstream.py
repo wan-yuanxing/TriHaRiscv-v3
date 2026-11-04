@@ -16,6 +16,7 @@ from build_pds import verify_build_inputs, review_messages, verify_mode_key_refe
 from face_timing import parse_tables, require_routed_report, audit_paths, gray_bounds
 from face_route_evidence import route_record, placement_record
 from face_gray_netlist import load_evidence
+from face_profiles import require_profile, require_simulation_profile
 
 
 def read(path): return json.loads(path.read_text(encoding='utf-8-sig'))
@@ -28,10 +29,18 @@ def hashes(items, relative=ROOT):
 
 def check_simulation(directory, base, br, expected_faces):
     r=read(directory/'result.json')
+    profile=require_profile(br)
     if r.get('clock_contract')!={'compute_hz':50_000_000,'video_hz':125_000_000,'pixel_hz':40_000_000}:
         raise ValueError('Simulation did not run the physical 50/125/40 MHz clock profile')
-    if r['status']!='PASS' or r['expected_faces']!=expected_faces or r['avatar_boot'] or r['model_preloaded']:
-        raise ValueError('Not a passing true BOX model-load simulation')
+    if r['status']!='PASS' or r['expected_faces']!=expected_faces:
+        raise ValueError('Not a passing true face model-load simulation')
+    require_simulation_profile(r,profile,(directory/'simulation.log').read_text(encoding='utf-8'))
+    if profile=='avatar':
+        preset=read(ROOT/'assets/avatars/triha/manifest.json')
+        if r.get('avatar_sha256')!=preset['sha256'] or sha256(ROOT/'assets/avatars/triha/avatar.rgba')!=preset['sha256']:
+            raise ValueError('Simulated avatar differs from admitted preset')
+        if sha256(ROOT/preset['source'])!=preset['source_sha256']:
+            raise ValueError('Original user avatar differs from admitted source')
     for key in ('real_cpu','actual_capture','actual_npu','actual_display','model_loader_verified','board_profile','inputs_unchanged'):
         if r[key] is not True: raise ValueError('Incomplete functional evidence: '+key)
     for key in ('source_sha256','external_sha256','tracked_sha256'): hashes(r[key])
@@ -47,12 +56,14 @@ def check_simulation(directory, base, br, expected_faces):
     return dict(directory=str(directory),result_sha256=sha256(directory/'result.json'),shared_sources=len(shared),expected_faces=expected_faces)
 
 
-def check_sites(source, actual):
+def check_sites(source, actual, profile='box'):
     def ports(text):
         return {name:dict(item.split('=',1) for item in values.split() if '=' in item)
                 for name,values in re.findall(r'^def_port \{([^}]+)\} ([^\n]+)',text,re.M)}
     requested,observed=ports(source),ports(actual)
-    if set(requested)-set(observed)!={'mode_button_n'} or set(observed)-set(requested):
+    if profile not in ('box','avatar'): raise ValueError('Unknown physical profile')
+    removed={'mode_button_n'} if profile=='box' else set()
+    if set(requested)-set(observed)!=removed or set(observed)-set(requested):
         raise ValueError('Unexpected physical port removal/addition')
     for name,attrs in observed.items():
         for key,value in requested[name].items():
@@ -63,15 +74,48 @@ def check_sites(source, actual):
         matches=re.findall(r'^def_inst_site \{'+re.escape(cell)+r'\} (\S+) (\S+)(?: -no_check)?\s*$',actual,re.M)
         if matches!=[(site,'FF3')]: raise ValueError('DDR gate site changed: '+cell)
         gates[cell]=site+' FF3'
-    return dict(physical_ports=len(observed),disabled_box_key='mode_button_n',ddr_gate_sites=gates)
+    return dict(physical_ports=len(observed),disabled_box_key='mode_button_n' if profile=='box' else None,ddr_gate_sites=gates)
+
+
+def collect_messages(log_paths, placement_log, route_log, reference_fdc, profile, reused_placement):
+    """Review native diagnostics; never waive errors from the accepted route."""
+    messages={'reviewed_reference_pin_notices':[],'reviewed_disabled_box_key':[],'rejected':[],
+              'unused_historical_route_messages':[]}
+    for p in dict.fromkeys(log_paths):
+        text=p.read_text(encoding='utf-8',errors='replace')
+        # Combined PNR keeps placement and routing in one native log. When
+        # reusing only its placed DB, the old routing is not part of the new
+        # implementation. Keep the complete raw log bound in provenance and
+        # record its unused route diagnostics explicitly. The current route
+        # always receives the unfiltered message review below.
+        if (reused_placement and p.resolve()==placement_log.resolve()
+                and p.resolve()!=route_log.resolve()):
+            starts=list(re.finditer(r'^Routing started\.[ \t]*\r?$',text,re.M))
+            if starts:
+                finishes=list(re.finditer(r'^Finished placement\.[ \t]*\r?$',text,re.M))
+                if len(starts)!=1 or len(finishes)!=1 or finishes[0].end()>starts[0].start():
+                    raise ValueError('Ambiguous or incomplete native placement/routing phases')
+                boundary=starts[0].start()
+                _,unused=review_messages(text[boundary:],reference_fdc)
+                messages['unused_historical_route_messages'].append(dict(
+                    path=str(p.resolve()),source_log_sha256=sha256(p),
+                    scope='Only the prior placed database is reused; its later routing is superseded.',
+                    messages=unused))
+                text=text[:boundary]
+        accepted,rejected=review_messages(text,reference_fdc)
+        messages['reviewed_reference_pin_notices']+=accepted
+        for line in rejected:
+            if profile=='box' and re.fullmatch(r"C: ConstraintEditor-2001: \[.*physical\.pcf\(line number: \d+\)\] Object 'mode_button_n' is dangling, which has no connection\. it will be ignored\.",line):
+                messages['reviewed_disabled_box_key'].append(line)
+            else:messages['rejected'].append(line)
+    return messages
 
 
 def qualify(args):
     base=args.base.resolve();route=args.route.resolve();review=args.review.resolve();clocks=args.clock_review.resolve()
     br=read(base/'result.json');rr=route_record(route);tr=read(review/'result.json');cr=read(clocks/'result.json')
     placement=args.placement.resolve();pr=placement_record(placement)
-    if br['face_profile']!='box' or br['top_parameters']!={'ENABLE_AVATAR':0,'ENABLE_MINIMAL_BOX':1,'DEMO_BOX_ONLY':0}:
-        raise ValueError('Not the real detection BOX profile')
+    profile=require_profile(br)
     if rr['status']!='ROUTE_REVIEW_READY' or tr['status']!='REPORTS_READY' or not tr['timing']['all_tables_met']:
         raise ValueError('Completed route has not passed full internal timing')
     if cr['status']!='PASS' or cr['analysis']['status']!='PASS_CONSERVATIVE_CLOCK_AND_DATA_BOUND':
@@ -103,7 +147,7 @@ def qualify(args):
     netlist=load_evidence(tr['gray_netlist'],rr['routed_db_sha256']) if 'gray_netlist' in tr else None
     cdc=gray_bounds(text,(base/'src/fpga/pg2l100h/constraints/triha_face_cdc.fdc').read_text(encoding='utf-8'),sites.read_text(encoding='utf-8'),netlist)
     if cdc!=tr['gray']: raise ValueError('Gray audit cannot be reproduced')
-    physical=check_sites((base/'physical.pcf').read_text(encoding='utf-8'),sites.read_text(encoding='utf-8'))
+    physical=check_sites((base/'physical.pcf').read_text(encoding='utf-8'),sites.read_text(encoding='utf-8'),profile)
     functional=[check_simulation(args.positive.resolve(),base,br,1),check_simulation(args.negative.resolve(),base,br,0)]
     reference=ROOT/'build/video/vendor/hdmi/HDMI_IN_DDR3_HDMI_OUT_top.fdc'
     manifest=read(base/'src/fpga/pg2l100h/ip/video_reference_manifest.json')
@@ -119,14 +163,8 @@ def qualify(args):
     log_paths=list(dict.fromkeys(log_paths))
     if (clocks/'console.log').exists():log_paths.append(clocks/'console.log')
     if 'gray_netlist' in tr:log_paths.append(review/'netlist/console.log')
-    messages={'reviewed_reference_pin_notices':[],'reviewed_disabled_box_key':[],'rejected':[]}
-    for p in log_paths:
-        accepted,rejected=review_messages(p.read_text(encoding='utf-8',errors='replace'),reference_fdc)
-        messages['reviewed_reference_pin_notices']+=accepted
-        for line in rejected:
-            if re.fullmatch(r"C: ConstraintEditor-2001: \[.*physical\.pcf\(line number: \d+\)\] Object 'mode_button_n' is dangling, which has no connection\. it will be ignored\.",line):
-                messages['reviewed_disabled_box_key'].append(line)
-            else:messages['rejected'].append(line)
+    messages=collect_messages(log_paths,Path(pr['log_path']),Path(rr['log_path']),
+                              reference_fdc,profile,placement!=route)
     if messages['rejected']: raise ValueError('Unreviewed PDS error/critical warning: '+messages['rejected'][0])
     synthesis=base/'synthesize/triha_face_board_top.snr'
     resources={}
@@ -160,11 +198,16 @@ def main():
         result.update(internal_timing_met=True,routed_internal_timing_closed=True,cdc_timing_met=True,status='review_pass',
             source_build_directory=str(args.base.resolve()),source_build_status=br['status'],
             source_snapshot_directory=str(args.base.resolve()/'src'),directory=str(out.relative_to(ROOT)),
-            scope=br['scope'],face_profile='box',top_parameters=br['top_parameters'],firmware=br['firmware'],
+            scope=br['scope'],face_profile=br['face_profile'],top_parameters=br['top_parameters'],firmware=br['firmware'],
             timing_report=str(Path(read(args.review/'result.json')['report']['path']).relative_to(ROOT)),
             inputs=dict(br['inputs']))
-        for path in [Path(__file__),Path(__file__).with_name('face_timing.py'),Path(__file__).with_name('check_face_gray_clocks.py'),Path(__file__).with_name('face_route_evidence.py'),Path(__file__).with_name('face_gray_netlist.py')]:
+        for path in [Path(__file__),Path(__file__).with_name('face_timing.py'),Path(__file__).with_name('check_face_gray_clocks.py'),Path(__file__).with_name('face_route_evidence.py'),Path(__file__).with_name('face_gray_netlist.py'),Path(__file__).with_name('face_profiles.py')]:
             result['inputs'][path.relative_to(ROOT).as_posix()]=sha256(path)
+        if br['face_profile']=='avatar':
+            for name in ('assets/avatars/triha/manifest.json','assets/avatars/triha/avatar.rgba',
+                         'assets/avatars/triha/source.png','assets/avatars/triha/source.json',
+                         'scripts/video/gen_fixed_avatar.py'):
+                result['inputs'][name]=sha256(ROOT/name)
         write_json(out/'message_review.json',evidence['message_review'])
         write_json(out/'result.json',result)
         if args.generate:

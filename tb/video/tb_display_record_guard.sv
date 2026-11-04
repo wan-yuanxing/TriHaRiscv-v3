@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `include "video_cfg.vh"
 `include "video_display.vh"
-module tb_display_record_guard;
+module tb_display_record_guard #(parameter integer ENABLE_LANDMARKS=1);
     reg clk_i=0,rst_ni=0,start_valid_i=0,result_ready_i=0;
     always #4 clk_i=~clk_i;
     reg [5119:0] record_i=0;
@@ -11,7 +11,7 @@ module tb_display_record_guard;
     reg [31:0] asset_id_i=0,asset_generation_i=0;
     wire start_ready_o,result_valid_o;
     wire [7:0] result_code_o;
-    display_record_guard dut(.*);
+    display_record_guard #(.ENABLE_LANDMARKS(ENABLE_LANDMARKS)) dut(.*);
     integer cases=0,lane_index,point_index,base;
 
     task automatic set_word(input integer index,input [31:0] value);
@@ -72,7 +72,8 @@ module tb_display_record_guard;
             for(point_index=0;point_index<5;point_index=point_index+1)begin
                 record_base(16'b1<<lane_index);valid_box(lane_index);
                 set_word(base+3+point_index,32'hfffe0003);check_result(8'h12,2+lane_index);
-                set_word(base+2,32'b1<<point_index);check_result(0,17);
+                set_word(base+2,32'b1<<point_index);
+                check_result(ENABLE_LANDMARKS?0:8'h12,ENABLE_LANDMARKS?17:2+lane_index);
             end
         end
         record_base(16'hffff);
@@ -83,6 +84,42 @@ module tb_display_record_guard;
         set_word(0,0);check_result(8'h10,1); // header error has priority
         record_base(0);mode_i=3;check_result(8'h14,1);
         record_base(0);record_i[5119]=1'bx;check_result(1,1);
+        // A record may wait for its avatar after the lease starts.
+        record_base(1);valid_box(0);mode_i=2;asset_ready_i=0;
+        asset_id_i=7;asset_generation_i=9;
+        set_word(9,25);set_word(14,7);set_word(15,9);
+        set_word(16,32'h82600000);set_word(17,262144);
+        set_word(18,256);set_word(19,256);set_word(20,1024);
+        set_word(21,0);set_word(22,32'h01000100);
+        @(negedge clk_i);start_valid_i=1;
+        @(negedge clk_i);start_valid_i=0;
+        repeat(9)begin
+            @(posedge clk_i);#1;
+            if(result_valid_o||start_ready_o)$fatal(1,"GUARD_ASSET_WAIT");
+        end
+        @(negedge clk_i);asset_ready_i=1;
+        base=0;
+        while(!result_valid_o&&base<25)begin @(posedge clk_i);#1;base=base+1;end
+        if(!result_valid_o||result_code_o!==0||base!=17)$fatal(1,"GUARD_AFTER_ASSET_WAIT");
+        repeat(3)begin
+            @(posedge clk_i);#1;
+            if(!result_valid_o||result_code_o!==0||start_ready_o)$fatal(1,"GUARD_WAIT_RESPONSE_HOLD");
+        end
+        @(negedge clk_i);result_ready_i=1;
+        @(negedge clk_i);result_ready_i=0;cases=cases+1;
+        // Abort a pending invalid final lane, then accept a fresh clean record.
+        record_base(0);set_word(32+15*8,1);
+        @(negedge clk_i);start_valid_i=1;
+        @(negedge clk_i);start_valid_i=0;
+        repeat(5)@(negedge clk_i);
+        rst_ni=0;#1;
+        if(result_valid_o||start_ready_o)$fatal(1,"GUARD_RESET_PENDING");
+        repeat(3)@(negedge clk_i);rst_ni=1;
+        record_base(0);check_result(0,17);
+        if(!ENABLE_LANDMARKS)begin
+            record_base(1);valid_box(0);set_word(9,5);
+            check_result(8'h11,1); // Unsupported drawing flag fails at the header.
+        end
         $display("DISPLAY_RECORD_GUARD_PASS cases=%0d",cases);$finish;
     end
     initial begin #1000000;$fatal(1,"GUARD_WATCHDOG");end

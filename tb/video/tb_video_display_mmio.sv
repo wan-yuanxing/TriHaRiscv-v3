@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `default_nettype none
 // Literal software addresses and independent event identities are the oracle.
-module tb_video_display_mmio;
+module tb_video_display_mmio #(parameter integer LANDMARK_PROFILE=1);
     reg clk_i=0,rst_ni=0;always #4 clk_i=~clk_i;
     reg [1:0] mode_request_i=0; // disabled optional input when testing compact ABI compatibility
     reg [31:0] s_axi_awaddr_i=0,s_axi_wdata_i=0,s_axi_araddr_i=0;
@@ -23,6 +23,7 @@ module tb_video_display_mmio;
     wire irq_o;
     reg [31:0] record[0:159];reg [5119:0] expected_record;
     reg [1:0] sent_slot,sent_mode;reg [31:0] sent_frame,sent_gen,sent_seq;
+    reg [99:0] expected_feedback;
     reg [31:0] rd;integer checks=0,test_case=0,j,k,n;
     string trace_path;integer trace_file,trace_status;reg [31:0] trace_off,trace_value;
     reg held=0;reg [5284:0] held_cmd;
@@ -97,12 +98,15 @@ module tb_video_display_mmio;
     endtask
     task automatic face_record;
         begin
-            record[9]=29;record[12]=1;record[13]=0;
+            record[9]=LANDMARK_PROFILE?29:25;record[12]=1;record[13]=0;
             record[14]=1;record[15]=7;record[16]=32'h82600000;record[17]=262144;
             record[18]=256;record[19]=256;record[20]=1024;
             record[21]={16'd150,16'd200};record[22]={16'd450,16'd600};
-            record[32]={16'd150,16'd200};record[33]={16'd450,16'd600};record[34]=31;
-            for(integer x=0;x<5;x++)record[35+x]={(16'(200+x*20)),(16'(250+x*25))};
+            record[32]={16'd150,16'd200};record[33]={16'd450,16'd600};
+            if(LANDMARK_PROFILE)begin
+                record[34]=31;
+                for(integer x=0;x<5;x++)record[35+x]={(16'(200+x*20)),(16'(250+x*25))};
+            end
         end
     endtask
     task automatic load_record;
@@ -137,13 +141,16 @@ module tb_video_display_mmio;
             expect_read('h44,sent_frame,0);expect_read('h48,sent_gen,0);expect_read('h50,{30'd0,sent_mode},0);
         end
     endtask
-    task automatic reject_record(input integer mode,input [7:0] reason);
+    task automatic reject_loaded(input integer mode,input [7:0] reason);
         begin
-            load_record;submit(mode,41,0);repeat(25)cycle;
+            submit(mode,41,0);repeat(25)cycle;
             check(!cmd_valid_o,"rejected record must not reserve or publish");
             expect_read('h14,4,0);expect_read('h68,41,0);expect_read('h6c,{24'd0,reason},0);
             expect_read('h1c,7,0);write_word('h18,4,15,0,0);
         end
+    endtask
+    task automatic reject_record(input integer mode,input [7:0] reason);
+        begin load_record;reject_loaded(mode,reason);end
     endtask
     initial begin
         if(!$value$plusargs("CASE=%d",test_case))test_case=0;
@@ -291,6 +298,98 @@ module tb_video_display_mmio;
             reset_all;repeat(170)cycle;
             check(!s_axi_rvalid_o,"reset discards queued read without ghost response");
             expect_read(0,32'h10000,0);
+        end
+        11:begin
+            // Exhaust the complete 4 KiB ABI page, including every unaligned
+            // address, plus high-address aliases of readable registers.
+            for(j=0;j<4096;j=j+1)begin
+                if(j%4!=0)expect_read(j,0,3);
+                else if(j=='h18||j=='h20)expect_read(j,0,2);
+                else if(j==0)expect_read(j,32'h10000,0);
+                else if(j==4)expect_read(j,15,0);
+                else if(j=='h1c||j=='h80)expect_read(j,7,0);
+                else if(j=='h2c)expect_read(j,640,0);
+                else if(j<='h80||(j>='h100&&j<'h380))expect_read(j,0,0);
+                else expect_read(j,0,3);
+            end
+            for(j=12;j<32;j=j+1)begin
+                expect_read(32'd1<<j,0,3);
+                expect_read((32'd1<<j)+'h100,0,3);
+                write_word((32'd1<<j)+'h100,32'hbad01234,15,3,0);
+                expect_read('h100,0,0);
+            end
+            expect_read(32'hfffff000,0,3);
+            expect_read(32'hfffff100,0,3);
+            expect_read(32'hxxxx0100,0,3);
+        end
+        12:begin
+            check(!LANDMARK_PROFILE,"point-payload rejection requires rectangle profile");
+            make_record(0,1,10);face_record;record[12]=65535;
+            for(j=0;j<16;j++)begin
+                record[32+j*8]={(16'(j+2)),(16'(j+1))};
+                record[33+j*8]={(16'(j+102)),(16'(j+101))};
+            end
+            load_record;
+            // Every discarded word and every bit must still cause rejection.
+            // Use the public MMIO interface; no DUT representation is assumed.
+            for(j=0;j<16;j++)for(k=2;k<8;k++)for(n=0;n<32;n++)begin
+                write_word('h100+(32+j*8+k)*4,32'd1<<n,15,0,0);
+                reject_loaded(2,8'h12);
+                write_word('h100+(32+j*8+k)*4,0,15,0,0);
+            end
+            // Header error precedence must remain ahead of invalid payloads.
+            write_word('h100+159*4,1,15,0,0);
+            write_word('h100+6*4,1,15,0,0);reject_loaded(2,8'h10);
+            write_word('h100+6*4,2400,15,0,0);
+            write_word('h100+9*4,29,15,0,0);reject_loaded(2,8'h11);
+            write_word('h100+9*4,25,15,0,0);
+            write_word('h100+17*4,1,15,0,0);reject_loaded(2,8'h13);
+            write_word('h100+17*4,262144,15,0,0);
+            write_word('h100+159*4,0,15,0,0);
+            submit(2,77,0);await_command(2,77,0);accept_and_commit;
+            write_word('h18,1,15,0,0);
+            submit(1,78,1);await_command(1,78,1);accept_and_commit;
+        end
+        13:begin
+            check(!LANDMARK_PROFILE,"unknown payload requires rectangle profile");
+            make_record(0,1,10);face_record;load_record;
+            // Fault injection at the RAM output: AXI itself rejects X/Z writes.
+            // Unknowns must dominate known one bits, even across payload words.
+            for(j=0;j<16;j++)for(k=0;k<2;k++)begin
+                write_word('h100+(34+j*8)*4,1,15,0,0);
+                write_word('h100+(39+j*8)*4,1,15,0,0);
+                submit(0,41,0);
+                while(!(dut.phase==2&&dut.word_index==(k?39:34)+j*8))@(negedge clk_i);
+                if(k)force dut.shadow_q=32'h8000000z;
+                else force dut.shadow_q=32'h8000000x;
+                cycle;@(negedge clk_i);release dut.shadow_q;
+                repeat(400)cycle;
+                check(!cmd_valid_o,"unknown payload cannot publish");
+                expect_read('h14,4,0);expect_read('h6c,1,0);expect_read('h1c,7,0);
+                write_word('h18,4,15,0,0);
+                write_word('h100+(34+j*8)*4,0,15,0,0);
+                write_word('h100+(39+j*8)*4,0,15,0,0);
+            end
+            submit(1,88,0);await_command(1,88,0);accept_and_commit;
+        end
+        14:begin
+            // Flip every identity bit independently. A stale feedback must
+            // neither commit the owner nor begin overwriting the leased record.
+            for(n=0;n<100;n++)begin
+                reset_all;make_record(0,32'h81a5f00d,32'h78123456);face_record;load_record;
+                submit(2,32'h1234abcd,0);await_command(2,32'h1234abcd,0);
+                expected_feedback={sent_slot,sent_mode,sent_frame,sent_gen,sent_seq};
+                @(negedge clk_i);cmd_ready_i=1;cycle;@(negedge clk_i);cmd_ready_i=0;
+                {feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i}=
+                    expected_feedback^(100'd1<<n);
+                feedback_valid_i=1;cycle;@(negedge clk_i);feedback_valid_i=0;
+                expect_read('h14,8,0);expect_read('hc,32'he2,0);expect_read('h30,0,0);
+                repeat(5)cycle;check(cmd_data_o===expected_record,"wrong feedback changed leased data");
+                @(negedge clk_i);
+                {feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i}=expected_feedback;
+                feedback_valid_i=1;cycle;@(negedge clk_i);feedback_valid_i=0;
+                expect_read('h14,9,0);expect_read('h30,sent_frame,0);expect_read('h74,1,0);
+            end
         end
         default:$fatal(1,"unknown case");
         endcase

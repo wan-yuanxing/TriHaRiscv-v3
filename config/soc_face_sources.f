@@ -113,6 +113,7 @@ rtl/soc/soc_ddr_fabric.v
 rtl/soc/triha_axi128_cdc.v
 rtl/soc/soc_axil_cdc.v
 rtl/soc/video_axil_decode.v
+rtl/video/video_stream_register.sv
 rtl/video/video_application_engine.sv
 rtl/soc/triha_compute_system.v
 rtl/soc/triha_face_system.v

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>人脸叠加 · HDMI 输入源</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#10151a;color:#fafafa;font:16px/1.6 system-ui}
+canvas{display:none;width:100vw;height:100vh}body.play canvas{display:block}
+body.play main{display:none}main{margin:8vh auto;padding:0 24px;max-width:620px}
+button{font:inherit;padding:.45em 1.2em}#error{color:#ffd391}
+</style>
+<main><h1>HDMI 验收输入源</h1>
+<p>把此窗口移到连接开发板 HDMI IN 的输出，设置为 800×600、60 Hz。点开始后进入全屏。
+屏幕每 8 秒切换：原位置、左侧小脸、右侧大脸、无脸，再循环。</p>
+<p>左上角是源帧编号，黑白条用于拍摄或采集后的识读。按空格可切到没有标记的整机仿真原图，再按一次返回。Esc 退出全屏。</p>
+<button id="start" disabled>开始全屏输出</button><p id="error" role="status"></p></main>
+<canvas width="800" height="600" aria-label="板卡输入帧"></canvas>
+<script>
+'use strict';
+const canvas=document.querySelector('canvas'), ctx=canvas.getContext('2d',{alpha:false});
+const start=document.querySelector('#start'), message=document.querySelector('#error'), fixture=new Image();
+let base=0, seq=0, clean=false, raf=0;
+function nativeSize(){
+  return Math.round(innerWidth*devicePixelRatio)===800 && Math.round(innerHeight*devicePixelRatio)===600;
+}
+function render(t){
+  if(!document.fullscreenElement)return;
+  if(!nativeSize()){
+    message.textContent='当前全屏像素尺寸不是 800×600，请在系统显示设置中更改该 HDMI 输出。';
+    document.exitFullscreen();return;
+  }
+  const scene=clean?0:Math.floor((t-base)/8000)%4;
+  ctx.fillStyle='black';ctx.fillRect(0,0,800,600);
+  if(scene===0)ctx.drawImage(fixture,0,0);
+  if(scene===1)ctx.drawImage(fixture,100,0,600,600,16,145,400,400);
+  if(scene===2)ctx.drawImage(fixture,100,0,600,600,200,0,600,600);
+  if(!clean){
+    ctx.fillStyle='black';ctx.fillRect(0,0,275,27);
+    // 4-bit sync 1010, then uint16 MSB first and its bitwise complement.
+    for(let i=0;i<36;i++){
+      const bit=i<4?(1-(i%2)):(((seq>>(15-((i-4)%16)))&1)^(i>=20?1:0));
+      ctx.fillStyle=bit?'white':'black';ctx.fillRect(4+5*i,4,5,16);
+    }
+    ctx.fillStyle='white';ctx.font='16px monospace';ctx.fillText(String(seq).padStart(5,'0'),193,18);
+  }
+  seq=(seq+1)&65535;raf=requestAnimationFrame(render);
+}
+fixture.onload=()=>{start.disabled=false}; fixture.onerror=()=>{message.textContent='测试帧没有载入。'};
+fixture.src='data:image/png;base64,@@FRAME_PNG@@';
+start.onclick=async()=>{try{message.textContent='';await document.documentElement.requestFullscreen();}
+ catch(e){message.textContent='无法进入全屏：'+e.message}};
+document.addEventListener('fullscreenchange',()=>{
+ cancelAnimationFrame(raf);document.body.classList.toggle('play',!!document.fullscreenElement);
+ if(document.fullscreenElement){seq=0;clean=false;base=performance.now();raf=requestAnimationFrame(render);}
+});
+addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&document.fullscreenElement){
+ e.preventDefault();clean=!clean;base=performance.now();}});
+</script></html>

@@ -39,6 +39,7 @@ module raw_display #(
     // RGB888 rows are padded to AXI beats; padding is never shown.
     localparam integer ROW_BYTES = FRAME_WIDTH*3;
     localparam integer ROW_WORDS = (ROW_BYTES+15)/16;
+    localparam integer ROW_WORD_COUNT_BITS = ROW_WORDS>1 ? $clog2(ROW_WORDS+1) : 1;
     localparam [2:0] P_IDLE=0,P_CLEAN=1,P_PREFETCH=2,P_SCAN=3,P_FAULT=4;
     localparam [2:0] D_IDLE=0,D_AR=1,D_R=2,D_MULT=3,D_ADDR=4;
     reg [127:0] row_ram0 [0:ROW_WORDS-1];
@@ -127,11 +128,20 @@ module raw_display #(
     reg [31:0] dma_base_latched,dma_stride_latched;
     reg [10:0] dma_row_latched;
     reg [63:0] dma_row_product;
-    integer dma_words_left,dma_word_offset,dma_burst_beats,dma_beat,watchdog;
+    // This counter starts at ROW_WORDS and subtracts only completed bursts
+    // bounded by its remaining count. A 32-bit signed counter unnecessarily
+    // extended the burst-length comparison across the routed critical path.
+    reg [ROW_WORD_COUNT_BITS-1:0] dma_words_left;
+    reg [ROW_WORD_COUNT_BITS-1:0] dma_word_offset;
+    // Bursts contain 1..16 beats; the response counter ends at 0..15,
+    // including malformed responses drained by the advertised beat count.
+    reg [4:0] dma_burst_beats;
+    reg [3:0] dma_beat;
+    integer watchdog;
     integer chosen_words,boundary_words;
     wire r_transfer=(dma_state==D_R && m_axi_rvalid && m_axi_rready);
     wire response_ok=(m_axi_rid===4'd0 && m_axi_rresp===2'b00 &&
-                     m_axi_rlast===(dma_beat==dma_burst_beats-1) && (^m_axi_rdata!==1'bx));
+                     m_axi_rlast===({1'b0,dma_beat}==dma_burst_beats-5'd1) && (^m_axi_rdata!==1'bx));
     assign m_axi_rready=core_run && dma_state==D_R;
     wire ram_write=core_run && r_transfer && !dma_bad && !error && response_ok && ddr_ready;
     // RAM contents and read data have no asynchronous-reset data/CE cone.
@@ -240,7 +250,7 @@ module raw_display #(
                         dma_bad<=1;
                         if(!error) begin error<=1;error_code<=(!ddr_ready ? 8'd5 : 8'd2);end
                     end
-                    if(dma_beat==dma_burst_beats-1) begin
+                    if({1'b0,dma_beat}==dma_burst_beats-5'd1) begin
                         if(dma_bad || error || !response_ok || !ddr_ready) begin
                             bank_success[dma_bank]<=0;done_toggle[dma_bank]<=request_sync2[dma_bank];dma_state<=D_IDLE;
                         end else if(dma_words_left==dma_burst_beats) begin
@@ -248,7 +258,7 @@ module raw_display #(
                             read_lines<=read_lines+1'b1;dma_state<=D_IDLE;
                         end else begin
                             dma_words_left<=dma_words_left-dma_burst_beats;dma_word_offset<=dma_word_offset+dma_burst_beats;
-                            dma_address<=dma_address+{dma_burst_beats[27:0],4'd0};dma_state<=D_AR;
+                            dma_address<=dma_address+{23'd0,dma_burst_beats,4'd0};dma_state<=D_AR;
                         end
                     end else dma_beat<=dma_beat+1;
                 end else if(watchdog<TIMEOUT_CYCLES) watchdog<=watchdog+1;

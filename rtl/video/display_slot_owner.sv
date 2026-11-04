@@ -63,6 +63,14 @@ module display_slot_owner #(parameter integer CONTEXT_WIDTH=128)(
         assign context_difference[g]=(submit_data_i[g*32+:BITS]!=active_data_o[g*32+:BITS]);
     end endgenerate
     wire context_changed=|context_difference;
+    // Bound the native carry depth of identity comparisons without adding a
+    // cycle to submit, feedback or retirement handshakes.
+    wire [127:0] submitted_identity={submit_frame_i,submit_generation_i,submit_base_i,submit_stride_i};
+    wire [127:0] active_identity={active_frame_o,active_generation_o,active_base_o,active_stride_o};
+    (* syn_keep=1 *) wire [7:0] mode_identity_difference;
+    generate for(genvar part=0;part<8;part=part+1)begin:g_mode_identity
+        assign mode_identity_difference[part]=(submitted_identity[part*16+:16]!=active_identity[part*16+:16]);
+    end endgenerate
     reg [7:0] submission_error;
     always @* begin
         submission_error=0;
@@ -73,9 +81,7 @@ module display_slot_owner #(parameter integer CONTEXT_WIDTH=128)(
             submission_error=3;
         else if(submit_mode_i==3)submission_error=4;
         else if(submit_mode_only_i)begin
-            if(!active_valid_o||submit_slot_i!=active_slot_o||submit_frame_i!=active_frame_o||
-                submit_generation_i!=active_generation_o||submit_base_i!=active_base_o||
-                submit_stride_i!=active_stride_o||context_changed)submission_error=6;
+            if(!active_valid_o||submit_slot_i!=active_slot_o||(|mode_identity_difference)||context_changed)submission_error=6;
         end else if(slot_state[submit_slot_i]!=FREE)submission_error=5;
     end
     // Offers/feedback never share an acceptance edge. This also makes incoming
@@ -85,9 +91,14 @@ module display_slot_owner #(parameter integer CONTEXT_WIDTH=128)(
     assign feedback_ready_o=rst_ni&&!commit_valid_o;
     assign retire_ready_o=rst_ni&&!release_valid_o;
     wire feedback_taken=feedback_valid_i&&feedback_ready_o;
-    wire feedback_matches=awaiting_commit&&
-        ({feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i}===
-         {cmd_slot_o,cmd_mode_o,cmd_frame_o,cmd_generation_o,cmd_seq_o});
+    wire [99:0] feedback_identity={feedback_slot_i,feedback_mode_i,feedback_frame_i,feedback_generation_i,feedback_seq_i};
+    wire [99:0] command_identity={cmd_slot_o,cmd_mode_o,cmd_frame_o,cmd_generation_o,cmd_seq_o};
+    (* syn_keep=1 *) wire [6:0] feedback_identity_matches;
+    generate for(genvar part=0;part<7;part=part+1)begin:g_feedback_identity
+        localparam integer BITS=part==6?4:16;
+        assign feedback_identity_matches[part]=(feedback_identity[part*16+:BITS]===command_identity[part*16+:BITS]);
+    end endgenerate
+    wire feedback_matches=awaiting_commit&&(&feedback_identity_matches);
     wire new_frame_committed=feedback_taken&&feedback_matches&&!cmd_mode_only_o;
     reg retirement_matches;
     always @* begin

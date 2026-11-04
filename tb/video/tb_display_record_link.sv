@@ -40,6 +40,20 @@ module tb_display_record_link #(parameter integer CASE_ID=0);
  initial begin
   repeat(5)@(negedge clk);reset_n=1;
   cmd_data[9*32+:32]=29;cmd_data[14*32+:32]=7;cmd_data[15*32+:32]=71;
+  if(CASE_ID==6)begin
+   // Every identity bit independently rejects the proof before any feedback.
+   for(integer bitno=0;bitno<100;bitno=bitno+1)begin
+    @(negedge clk);reset_n=0;raw_commit_valid=0;p_commit_valid=0;
+    repeat(3)@(negedge clk);reset_n=1;
+    offer(0,1,10,1,2,0);raw_commit(0,1,10);
+    @(negedge clk);
+    {p_commit_slot,p_commit_mode,p_commit_frame,p_commit_generation,p_commit_seq}=
+      {2'd0,2'd2,32'd1,32'd10,32'd1}^(100'd1<<bitno);
+    p_commit_valid=1;@(negedge clk);p_commit_valid=0;
+    if(!fault||fault_code!=4||feedback_valid||retire_valid)$fatal(1,"IDENTITY_BIT_REJECTION %0d",bitno);
+   end
+   $display("DISPLAY_RECORD_LINK_PASS case=6 identity_bits=100");$finish;
+  end
   offer(0,1,10,1,2,0);
   if(CASE_ID==1)begin raw_commit(0,1,11);wait(fault);if(feedback_valid)$fatal(1,"LINK_WRONG_COMMIT_PUBLISHED");end
   else begin

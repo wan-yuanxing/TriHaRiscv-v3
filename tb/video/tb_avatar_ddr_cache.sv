@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parameter real PIXEL_HALF=12.5);
+`include "avatar_preset.vh"
+module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,COMPACT_PRESET=0,parameter real PIXEL_HALF=12.5);
+    localparam [31:0] MATERIAL_ID=COMPACT_PRESET?`TRIHA_AVATAR_ID:7;
     reg core_clk=0,pixel_clk=0,core_reset_n=0,pixel_reset_n=0;
     always #4 core_clk=~core_clk;always #(PIXEL_HALF) pixel_clk=~pixel_clk;
     localparam [31:0] BASE=PAGE==2?32'h82800000-TEXELS*4:PAGE==1?32'h82600ff0:32'h82600000;
@@ -15,9 +17,9 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
     wire [3:0] arid;wire [31:0] araddr;wire [7:0] arlen;wire [2:0] arsize;wire [1:0] arburst;
     wire arvalid;reg arready=0;reg [3:0] rid=0;reg [127:0] rdata=0;reg [1:0] rresp=0;
     reg rlast=0,rvalid=0;wire rready;
-    avatar_ddr_cache #(.TEXELS(TEXELS),.TIMEOUT_CYCLES(128)) dut(.*);
+    avatar_ddr_cache #(.TEXELS(TEXELS),.TIMEOUT_CYCLES(128),.COMPACT_PRESET(COMPACT_PRESET)) dut(.*);
     reg [31:0] memory[0:TEXELS-1],wanted[0:TEXELS-1],crc_file[0:0];
-    integer cycles=0,bursts=0,beats=0,compared=0,gen=11;
+    integer cycles=0,bursts=0,beats=0,compared=0,gen=COMPACT_PRESET?`TRIHA_AVATAR_GENERATION:11;
     integer model_left=0,model_address=0,model_index=0;
     reg active=0;reg [31:0] next_address=BASE;
     reg [44:0] held_ar;reg was_ar=0;reg [127:0] held_r;reg held_last;reg [5:0] held_response;
@@ -82,7 +84,7 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
     endtask
     task automatic start;
         begin
-            @(negedge core_clk);load_base=BASE;load_bytes=TEXELS*4;load_asset_id=7;load_generation=gen;expected_crc=crc_file[0];
+            @(negedge core_clk);load_base=BASE;load_bytes=TEXELS*4;load_asset_id=MATERIAL_ID;load_generation=gen;expected_crc=crc_file[0];
             case(CASE_ID)
                 1:load_base=32'h825ffff0;
                 2:load_base=32'h82800010-TEXELS*4;
@@ -90,6 +92,8 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
                 4:load_bytes=TEXELS*4-4;
                 5:load_asset_id='x;
                 6:expected_crc=crc_file[0]^32'h80000000;
+                20:load_asset_id=MATERIAL_ID+1;
+                21:load_generation=gen+1;
             endcase
             load_valid=1;do @(posedge core_clk);while(!load_ready);
             @(negedge core_clk);load_valid=0;load_base='x;load_bytes='x;load_asset_id='x;load_generation='x;expected_crc='x;
@@ -97,7 +101,7 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
     endtask
     task automatic request(input integer index,input bit bad);
         begin
-            @(negedge pixel_clk);pixel_req_valid=1;pixel_req_addr=index*4;pixel_req_asset_id=bad?8:7;pixel_req_generation=gen;
+            @(negedge pixel_clk);pixel_req_valid=1;pixel_req_addr=index*4;pixel_req_asset_id=bad?MATERIAL_ID+1:MATERIAL_ID;pixel_req_generation=gen;
             @(posedge pixel_clk);#1;
             if(sample_valid!==1||sample_error!==bad||(!bad&&sample_rgba!==wanted[index]))
                 $fatal(1,"AVATAR_DDR_PIXEL %0d got=%h expected=%h err=%b",index,sample_rgba,wanted[index],sample_error);
@@ -109,12 +113,12 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
         if(!$value$plusargs("DIR=%s",directory))$fatal(1,"AVATAR_DDR_DIR");
         $readmemh({directory,"/bus_words.hex"},memory);$readmemh({directory,"/expected_words.hex"},wanted);$readmemh({directory,"/crc.hex"},crc_file);
         reset_both();start();
-        if(CASE_ID==14)begin wait(words_written>12);reset_both();gen=12;
+        if(CASE_ID==14)begin wait(words_written>12);reset_both();gen=COMPACT_PRESET?`TRIHA_AVATAR_GENERATION:12;
             if(asset_ready||pixel_asset_ready||fault)$fatal(1,"AVATAR_DDR_RESET_READY");start();end
         wait(result_valid);#1;
         if((CASE_ID==0||CASE_ID==14||CASE_ID==17||CASE_ID==18))begin
             if(!result_success||result_code||(CASE_ID==18?(fault!==1||fault_code!=6||port_drained):(fault||!port_drained))||!asset_ready||checked_bytes!=TEXELS*4||crc!==crc_file[0]||
-               result_asset_id!=7||result_generation!=gen||asset_id!=7||asset_generation!=gen||beats!=TEXELS/4||next_address!=BASE+TEXELS*4)
+               result_asset_id!=MATERIAL_ID||result_generation!=gen||asset_id!=MATERIAL_ID||asset_generation!=gen||beats!=TEXELS/4||next_address!=BASE+TEXELS*4)
                 $fatal(1,"AVATAR_DDR_RESULT code=%0d bytes=%0d crc=%h expected=%h",result_code,checked_bytes,crc,crc_file[0]);
             saved_result={result_success,result_code,result_asset_id,result_generation,checked_bytes,crc};
             repeat(20)begin @(negedge core_clk);if(!result_valid||{result_success,result_code,result_asset_id,result_generation,checked_bytes,crc}!==saved_result)$fatal(1,"AVATAR_DDR_RESULT_HOLD");end
@@ -122,7 +126,7 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
             for(i=0;i<TEXELS;i=i+1)request(i,0);request(0,1);
             @(negedge pixel_clk);pixel_req_valid=0;
             @(negedge core_clk);result_ready=1;load_valid=1;load_asset_id=99;load_generation=200;
-            repeat(20)begin @(negedge core_clk);if(load_ready||asset_id!=7||asset_generation!=gen)$fatal(1,"AVATAR_DDR_SEALED_REPLACED");end
+            repeat(20)begin @(negedge core_clk);if(load_ready||asset_id!=MATERIAL_ID||asset_generation!=gen)$fatal(1,"AVATAR_DDR_SEALED_REPLACED");end
             load_valid=0;request(TEXELS-1,0);
         end else begin
             if(CASE_ID==19)begin
@@ -132,10 +136,11 @@ module tb_avatar_ddr_cache #(parameter integer TEXELS=68,CASE_ID=0,PAGE=0,parame
                 if(port_drained||fault_code!=2||result_code!=2)$fatal(1,"AVATAR_DDR_LATE_STRAY_DRAIN");
             end
             if(result_success||!result_code||!fault||asset_ready||pixel_asset_ready||load_ready)$fatal(1,"AVATAR_DDR_FAILURE_NOT_ISOLATED");
-            if(CASE_ID<=5&&bursts!=0)$fatal(1,"AVATAR_DDR_BAD_DESCRIPTOR_AR");
-            if(CASE_ID>=7&&CASE_ID!=14&&bursts!=1)$fatal(1,"AVATAR_DDR_DRAIN_NEW_BURST");
+            if((CASE_ID<=5||(COMPACT_PRESET&&(CASE_ID==6||CASE_ID==20||CASE_ID==21)))&&bursts!=0)$fatal(1,"AVATAR_DDR_BAD_DESCRIPTOR_AR");
+            if(CASE_ID>=7&&CASE_ID<=19&&CASE_ID!=14&&bursts!=1)$fatal(1,"AVATAR_DDR_DRAIN_NEW_BURST");
             if((CASE_ID==8||CASE_ID==9||CASE_ID==10||CASE_ID==11||CASE_ID==16)&&port_drained)$fatal(1,"AVATAR_DDR_UNCERTAIN_DRAIN");
-            if(CASE_ID==6&&(words_written!=TEXELS-1||checked_bytes!=TEXELS*4||crc!==crc_file[0]))$fatal(1,"AVATAR_DDR_CRC_SEALED");
+            if(CASE_ID==6&&!COMPACT_PRESET&&(words_written!=TEXELS-1||checked_bytes!=TEXELS*4||crc!==crc_file[0]))$fatal(1,"AVATAR_DDR_CRC_SEALED");
+            if(CASE_ID==22&&(words_written!=TEXELS-1||checked_bytes!=TEXELS*4||crc===crc_file[0]))$fatal(1,"AVATAR_DDR_CORRUPT_PAYLOAD_SEALED");
             saved_result={result_success,result_code,result_asset_id,result_generation,checked_bytes,crc};
             repeat(20)begin @(negedge core_clk);if(!result_valid||{result_success,result_code,result_asset_id,result_generation,checked_bytes,crc}!==saved_result)$fatal(1,"AVATAR_DDR_FAILURE_HOLD");end
             repeat(6)@(negedge pixel_clk);request(0,1);

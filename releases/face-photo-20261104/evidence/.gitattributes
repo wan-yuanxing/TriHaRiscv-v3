@@ -1,0 +1,3 @@
+# Preserve tool output bytes referenced by acceptance.json.
+*.json -text whitespace=cr-at-eol
+*.txt binary

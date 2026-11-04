@@ -6,7 +6,7 @@
 // automatic slot allocator or diagnostic boxes are instantiated here.
 // memory_fault comes from the shared fabric; accepted traffic must drain before
 // coordinated reset. ENABLE_AVATAR=0 advertises RAW/BOX only and rejects mode 2.
-module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVATAR=0,ENABLE_COMPACT=0,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,TIMEOUT_CYCLES=125000000)(
+module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVATAR=0,ENABLE_COMPACT=0,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,ENABLE_CAPTURE_PREVIEW=!ENABLE_MINIMAL_BOX,ENABLE_LANDMARKS=1,TIMEOUT_CYCLES=125000000)(
  input wire  clk_i,
  input wire  rst_ni,
  input wire [1:0] mode_request_i,
@@ -265,19 +265,31 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .capture_port_drained_i(capture_port_drained_i),
         .capture_abort_o(capture_abort_o),
         .irq_o(irq_capture));
+    // Retain one owned packet between the ingress BRAM and capture validation.
+    // No combinational payload bypass; EOF and malformed packets are preserved.
+    // Only coordinated reset drops this ownership, including across job rearm.
+    wire capture_src_valid,capture_src_ready;
+    wire capture_request_ready;
+    wire [47:0] capture_src_data;
+    // The capture core checks the held packet. Also check upstream VALID on
+    // this admission edge, before a newly arriving stale word enters the hold.
+    assign capture_req_ready_i=capture_request_ready&&!src_valid;
+    video_stream_register #(.DATA_WIDTH(48)) u_capture_stream(
+        .clk(clk_i),.reset_n(rst_ni),.s_valid(src_valid),.s_ready(src_ready),.s_data(src_data),
+        .m_valid(capture_src_valid),.m_ready(capture_src_ready),.m_data(capture_src_data));
     video_three_branch_capture #(.FRAME_HEIGHT(FRAME_HEIGHT),.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.ENABLE_REARM(1),.ENABLE_PREVIEW(ENABLE_CAPTURE_PREVIEW)) u_capture(
         .clk(clk_i),
         .reset_n(rst_ni),
         .init_done(online),
         .abort(capture_abort_o),
-        .req_valid(capture_req_valid_o),
-        .req_ready(capture_req_ready_i),
+        .req_valid(capture_req_valid_o&&!src_valid),
+        .req_ready(capture_request_ready),
         .req_slot(capture_req_slot_o),
         .req_frame_id(capture_req_frame_id_o),
         .req_preprocess_version(capture_req_version_o),
-        .m_valid(src_valid),
-        .m_data(src_data),
-        .m_ready(src_ready),
+        .m_valid(capture_src_valid),
+        .m_data(capture_src_data),
+        .m_ready(capture_src_ready),
         .source_fault(source_fault),
         .overflow(overflow),
         .arm_toggle(arm_toggle),
@@ -324,7 +336,7 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .bvalid(c_bvalid),
         .bready(c_bready));
  generate if(ENABLE_COMPACT)begin:g_compact
- video_display_record_compact #(.FRAME_HEIGHT(FRAME_HEIGHT),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_display(
+ video_display_record_compact #(.FRAME_HEIGHT(FRAME_HEIGHT),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.COMPACT_AVATAR(COMPACT_AVATAR),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.ENABLE_LANDMARKS(ENABLE_LANDMARKS),.TIMEOUT_CYCLES(TIMEOUT_CYCLES)) u_display(
   .core_clk(clk_i),
   .core_reset_n(rst_ni),
   .mode_request_i(mode_request_i),

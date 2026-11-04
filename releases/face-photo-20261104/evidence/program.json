@@ -1,0 +1,15 @@
+{
+  "operation": "volatile_program_and_verify",
+  "target": "triha_face_board",
+  "status": "pass",
+  "directory": "build\\video\\board_program\\20261104T025002_563715Z",
+  "programmed": true,
+  "verified": true,
+  "picture_observed": false,
+  "flash_written": false,
+  "bitstream": "build\\video\\releases\\triha_face_board_c7875faa3256\\triha_face_board_top.sbit",
+  "bitstream_sha256": "c7875faa32568d9b8e1d16d4b450c78e4cec6586dff94e411d4c875d1d61c0fd",
+  "verify_mask_sha256": "057fe58b112658bbf9994782b306c5e245a8f1daeed07cc6a36c84d4d35e86d2",
+  "device_found": true,
+  "log_sha256": "005fedd839f1964dc7f540c60fd5536efd6417adbed7f69b50e916124e48dc39"
+}

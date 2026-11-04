@@ -150,9 +150,9 @@ def main():
              '-o', guard_binary, ROOT / 'rtl/video/display_record_guard.sv',
              ROOT / 'tb/video/tb_display_record_guard.sv'], work / 'guard_compile.log')
         guard_log = run([vvp, guard_binary], work / 'guard_simulation.log')
-        if 'DISPLAY_RECORD_GUARD_PASS cases=246' not in guard_log:
+        if 'DISPLAY_RECORD_GUARD_PASS cases=248' not in guard_log:
             raise RuntimeError('missing record guard boundary/latency pass')
-        result['cases']['guard'] = {'status': 'PASS', 'cases': 246}
+        result['cases']['guard'] = {'status': 'PASS', 'cases': 248}
         mmio_tb = (ROOT / 'tb/video/tb_video_display_mmio.sv').read_text()
         mmio_tb = mmio_tb.replace('video_display_mmio dut', 'video_display_mmio_compact dut')
         mmio_tb = mmio_tb.replace('waited<80', 'waited<1000')
@@ -162,7 +162,7 @@ def main():
         run([iv, '-g2012', '-Wall', '-I', ROOT / 'rtl/video/include', '-s', 'tb_video_display_mmio', '-o', mmio_binary,
              ROOT / COMPACT[4], ROOT / 'rtl/video/display_record_guard.sv', ROOT / 'rtl/video/display_slot_owner.sv', mmio_path],
             work / 'mmio_compile.log')
-        for case in [*range(9), 10]:
+        for case in [*range(9), 10, 11]:
             log = run([vvp, mmio_binary, f'+CASE={case}'], work / f'mmio_{case}.log')
             if 'DISPLAY_MMIO_PASS' not in log:
                 raise RuntimeError('missing MMIO pass')

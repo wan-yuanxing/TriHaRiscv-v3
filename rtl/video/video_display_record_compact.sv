@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `default_nettype none
 // Frozen software ABI, sole MMIO owner, actual RAW/material consumers.
-module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,TIMEOUT_CYCLES=125000000)(
+module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HEIGHT=600,ENABLE_AVATAR=1,ENABLE_ROW_CACHE=0,COMPACT_AVATAR=0,ENABLE_MINIMAL_BOX=0,ENABLE_MODE_KEY=0,ENABLE_LANDMARKS=1,TIMEOUT_CYCLES=125000000)(
  input wire  core_clk,
  input wire  core_reset_n,
  input wire [1:0] mode_request_i,
@@ -288,7 +288,7 @@ module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HE
   .fault_code_o(owner_code)
  );
  end else begin : g_full_mmio
- video_display_mmio_compact #(.EXTERNAL_HEALTH(1),.SKIP_GUARD(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY)) u_mmio(
+ video_display_mmio_compact #(.EXTERNAL_HEALTH(1),.SKIP_GUARD(ENABLE_MINIMAL_BOX),.ENABLE_MODE_KEY(ENABLE_MODE_KEY),.ENABLE_LANDMARKS(ENABLE_LANDMARKS)) u_mmio(
   .clk_i(core_clk),
   .rst_ni(core_reset_n),
   .mode_request_i(mode_request_i),
@@ -492,7 +492,7 @@ module video_display_record_compact #(parameter integer FRAME_WIDTH=800,FRAME_HE
   .out_y(raw_y),
   .out_sof(raw_sof)
  );
- video_record_renderer_compact #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX)) u_renderer(
+ video_record_renderer_compact #(.TIMEOUT_CYCLES(TIMEOUT_CYCLES),.ENABLE_AVATAR(ENABLE_AVATAR),.ENABLE_ROW_CACHE(ENABLE_ROW_CACHE),.COMPACT_AVATAR(COMPACT_AVATAR),.ENABLE_MINIMAL_BOX(ENABLE_MINIMAL_BOX),.ENABLE_LANDMARKS(ENABLE_LANDMARKS)) u_renderer(
   .core_clk(core_clk),
   .core_reset_n(core_reset_n),
   .pixel_clk(pixel_clk),

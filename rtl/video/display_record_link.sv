@@ -50,8 +50,15 @@ module display_record_link(
  assign p_retire_ready=reset_n&&!fault&&!asset_retire_valid;
  wire raw_match=state==WAIT_PROOFS&&!mode_only&&!raw_seen&&
    {raw_commit_slot,raw_commit_frame,raw_commit_generation}==={slot,frame,generation};
- wire pixel_match=state==WAIT_PROOFS&&!pixel_seen&&
-   {p_commit_slot,p_commit_mode,p_commit_frame,p_commit_generation,p_commit_seq}==={slot,mode,frame,generation,seq};
+ wire [99:0] pixel_identity_in={p_commit_slot,p_commit_mode,p_commit_frame,p_commit_generation,p_commit_seq};
+ wire [99:0] pixel_identity_expected={slot,mode,frame,generation,seq};
+ wire [6:0] pixel_identity_equal /* synthesis syn_keep=1 */;
+ genvar identity_lane;
+ generate for(identity_lane=0;identity_lane<6;identity_lane=identity_lane+1)begin : g_pixel_identity
+  assign pixel_identity_equal[identity_lane]=pixel_identity_in[identity_lane*16+:16]===pixel_identity_expected[identity_lane*16+:16];
+ end endgenerate
+ assign pixel_identity_equal[6]=pixel_identity_in[99:96]===pixel_identity_expected[99:96];
+ wire pixel_match=state==WAIT_PROOFS&&!pixel_seen&&(&pixel_identity_equal);
  reg release_match,pixels_match;reg [7:0] fault_now;integer k;
  always @* begin
   release_match=0;pixels_match=0;

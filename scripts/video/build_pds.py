@@ -162,6 +162,8 @@ def main():
         names = manifest["sources"] + constraints + post_map_constraints + [
             "rtl/video/include/video_cfg.vh", "config/video_cfg.json",
             manifest_path.relative_to(ROOT).as_posix()]
+        if 'rtl/video/avatar_texture_cache.sv' in manifest['sources']:
+            names += ['rtl/video/include/avatar_span_table.vh','rtl/video/include/avatar_span_identity.vh']
         if args.target == "video_record_probe":
             names += ["scripts/video/gen_record_probe.py",
                       "fpga/pg2l100h/project/video_record_pipeline.json",

@@ -1,0 +1,14 @@
+{
+  "status": "PASS_PROGRAM_VERIFY_AND_UART_ACK",
+  "qualified": "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\ringbit6d\\result.json",
+  "qualified_sha256": "004f50053d737ac28694048d6c9f4070c601113dbe06bd1a9d796141c92386d5",
+  "bit_sha256": "c7875faa32568d9b8e1d16d4b450c78e4cec6586dff94e411d4c875d1d61c0fd",
+  "mask_sha256": "057fe58b112658bbf9994782b306c5e245a8f1daeed07cc6a36c84d4d35e86d2",
+  "photo_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+  "port": "COM12",
+  "visual_confirmed": false,
+  "flash_written": false,
+  "scan": "build\\video\\jtag_scan\\20261104T024955_244738Z",
+  "verified_program": "build\\video\\board_program\\20261104T025002_563715Z",
+  "upload": "build/soc/model_upload-20261104T025023_440188Z"
+}
