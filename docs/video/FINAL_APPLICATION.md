@@ -1,5 +1,7 @@
 # TriHa face application
 
+For the board-accepted RAW, BOX and photo AVATAR modes, use the [2026-11-04 photo release and seven-segment loading instructions](../../releases/face-photo-20261104/README.md). The rest of this page describes the 2026-11-03 BOX-only milestone.
+
 For a clean checkout, use the versioned [2026-11-03 release](../../releases/face-box-20261103/README.md).
 It includes the accepted bitstream/mask, model, firmware, simulation fixtures,
 physical databases and evidence. Run `python scripts/video/restore_face_release.py --install`

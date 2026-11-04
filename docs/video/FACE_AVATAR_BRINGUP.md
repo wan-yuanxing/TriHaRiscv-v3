@@ -38,18 +38,16 @@
 `config/avatar_python_requirements.txt`。PNG 压缩字节可不同，解码像素必须相同；
 硬件加载的 RGBA、元数据和常量要求逐字节一致。
 
-## 当前验收与后续执行
+## 已验收版本与上板
 
-实时状态见 `docs/verification/npu/2026-11-03-face-avatar-bringup.json` 和 `STATUS.md`。
-照片替换之前的卡通仿真记录保留为历史，不能代替当前素材的验收。
-必须先完成新的正脸/无脸七段加载与三模式整帧像素仿真，然后完成布线、双角 STA、
-全部 Gray 路径和物理管脚验收，才生成下载包。
+2026-11-04 的照片版已完成正脸及无脸整机仿真、布线后双角时序和跨域检查。实板通过 JTAG 下载和掩码校验，七段串口加载共 7,940 包，重试 0 次。用户在 HDMI 输出上确认了 RAW、BOX、AVATAR、头像跟随、透明背景及消失恢复。独立克隆从冻结数据库重放，得到相同的配置内容。[发布包及操作说明](../../releases/face-photo-20261104/README.md) · [验收证据](../../releases/face-photo-20261104/acceptance.json)
 
-正式下载命令在新包通过验收后使用：
+在干净克隆的仓库根目录运行以下命令，将 COM12 替换为本机串口。
 
 ```powershell
+git checkout face-photo-20261104
+python scripts/video/restore_face_release.py --release releases/face-photo-20261104 --install
 python scripts/video/program_board.py --target triha_face_board --start-server
-# Program/Verify 通过并完成 DDR 初始化后；COM12 是本验收机 CP210x 的端口。
 python scripts/soc/upload_face_model.py --port COM12
 ```
 
@@ -75,17 +73,21 @@ python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot 
 python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot
 ```
 
-两组运行必须分别为 PASS。将各次实际输出目录记为 `$positive`、`$negative`，不要混用旧卡通
-或 BOX 结果。下面每个输出目录必须是新目录；`$synthesis` 是综合命令报告的实际目录：
+两组运行必须分别为 PASS。将实际输出目录记为 `$positive`、`$negative`，使用正脸运行的固件综合。下面的 `$synthesis` 是综合输出目录，`$mapped` 是新的映射目录。
 
 ```powershell
 python scripts/video/build_pds.py --target triha_face_board --face-profile avatar --stage synth --firmware-elf "$positive/firmware.elf"
 python scripts/video/map_face_synthesis.py --synthesis $synthesis --output $mapped
-python scripts/video/reroute_face.py --base $mapped --output $route --seed 4 --mode normal --decongestion 3 --hold-iterations 30 --hold-margin-ps 200
+```
+
+发布版本采用 seed 6 和 performance 模式布局。恢复包内 `build/video/pds/ringp6/place.tcl`、`physical.pcf` 记录了原生布局命令及全部 554 个位置，`build/video/pds/ringr6d/route.tcl`、`routing.rcf` 记录了最终布线命令与采集 DMA 网络优先级。原生日志中的绝对路径指向原构建机。复现发布配置可直接使用发布页的 `--replay-bitstream` 命令。重新实现时，先对新映射和布局核对位置并生成匹配的布局记录，以下命令的 `$placement` 为其目录，`$route`、`$review`、`$clocks` 和 `$qualified` 均为新目录。
+
+```powershell
+python scripts/video/reroute_face.py --base $mapped --placement $placement --output $route --seed 6 --mode performance --decongestion 3 --priority-constraints build/video/ringdma.rcf --hold-iterations 30 --hold-margin-ps 200
 python scripts/video/review_face_route.py --base $mapped --route $route --output $review
 python scripts/video/check_face_gray_clocks.py --review "$review/result.json" --output $clocks
 python scripts/video/test_face_route_audit.py --base $mapped --review $review --clock-review $clocks --output build/video/new_photo_controls.json
-python scripts/video/qualify_face_bitstream.py --base $mapped --placement $route --route $route --review $review --clock-review $clocks --positive $positive --negative $negative --output $qualified --generate
+python scripts/video/qualify_face_bitstream.py --base $mapped --placement $placement --route $route --review $review --clock-review $clocks --positive $positive --negative $negative --output $qualified --generate
 python scripts/video/package_board.py --target triha_face_board
 ```
 
@@ -118,9 +120,6 @@ python scripts/video/make_face_hdmi_source.py --fixture "$positive/fixture"
 
 ## SD 卡后备方案
 
-用户允许在收敛困难时把头像放在 SD 卡。当前方案把头像从 UART 加载到 DDR，
-再装入无损压缩的片上缓存，显示期间不变。SD 可以替换加载来源，但只有缓存结构改变
-才能减少显示所占片上 RAM。当前优先验证不改变照片像素的行区间压缩；
-没有将未经验证的 SD 控制器接入正式构建。
+已发布的实现通过 UART 将指定照片装入 DDR，再以无损行区间格式存入片上缓存供逐像素显示。该方案在 50/125/40 MHz 时钟下完成时序收敛，上板时无需 SD 卡。
 
 已验收 BOX 版本始终保留在 Git 标签 `face-box-20261103`。

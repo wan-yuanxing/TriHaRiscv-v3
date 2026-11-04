@@ -2,13 +2,13 @@
 
 TriHaRiscv 的 CPU、NPU、Video 总工程，目标平台为 PG2L100H-6IFBG676。当前分支 `soc/face-box-integration` 集成 HDMI 800×600 采集、B03 YuNet 整图推理、CPU 解码/NMS及同帧显示。
 
-2026-11-03 用户确定第一优先级为真实人脸检测功能跑通，先完成构建、仿真和布线后时序，再连接板卡验收。帧率只记录，不作为本轮门槛。首版显式使用 `--face-profile box`，自动显示主脸检测框；保留头像配置供后续推进，五点关键点不阻塞首版。CPU/NPU 为50MHz，Video/DDR为125MHz，像素为40MHz。
+当前发布版用真实主脸检测框定位并缩放用户提供的透明头像。开机显示原画，按 KEY1 一次显示检测框，再按一次显示照片。CPU/NPU 为 50 MHz，Video/DDR 为 125 MHz，像素时钟为 40 MHz。
 
 ## 当前状态与文档入口
 
-已验收版本的位流、模型、固件、冻结数据库与恢复说明随仓库保存于 [2026-11-03 BOX 发布包](releases/face-box-20261103/README.md)。新克隆先运行 `python scripts/video/restore_face_release.py --install`，即可恢复上板与复现所需的生成文件。
+2026-11-04 照片版已通过实板验收。用户在 HDMI 输出上确认了三种模式、头像跟随、透明区域保留背景、无脸消失及有脸恢复。双角内部布线后最差建立余量为 +0.100 ns，最差保持余量为 +0.131 ns。正脸和无脸整机仿真的相邻结果间隔均约 361 ms，实板检测帧率尚未测量。[照片版位流、恢复及上板命令](releases/face-photo-20261104/README.md) · [验收记录](releases/face-photo-20261104/acceptance.json)
 
-当前50MHz版本已通过有脸／无脸整机回归、双角内部后布线时序及全部Gray跨域检查，并生成BOX交付包 `build/video/releases/triha_face_board_3939c52f4d94`（`.sbit`/`.smsk`及证据）。setup最差+0.183ns，hold最差+0.108ns。实板Program/Verify和六段模型封存通过；用户确认正脸出框、位置变化后框更新、无脸清框及后续画面继续更新，第一优先级功能验收完成。FPS未测，外部I/O AC尚未正式签核。构建、模型恢复、六段上传命令见 [应用入口](docs/video/FINAL_APPLICATION.md)，逐项证据和后续事项见 [Video 工作台账](docs/video/STATUS.md)。实板关联记录为 `build/video/face_box_board_acceptance_20261103.json`。
+干净克隆检出标签 `face-photo-20261104` 后，在仓库根目录执行 `python scripts/video/restore_face_release.py --release releases/face-photo-20261104 --install`。连接板卡后按发布说明下载位流，再通过串口加载七段模型和素材。仅使用检测框的已验收版本保存在标签 `face-box-20261103`。[原 BOX 发布包](releases/face-box-20261103/README.md)
 
 项目远端仓库为 [wan-yuanxing/TriHaRiscv-v3](https://github.com/wan-yuanxing/TriHaRiscv-v3)，本地 remote 为 `origin`。当前用户指定工作目录为 `D:/FPGA/TriHaRiscv-v3`；旧文档中的 `TriHaRiscv-main` 是历史目录名。
 

@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RING_DMA_PRIORITY_ROUTING",
-  "updated_at": "2026-11-04T10:35:29.841127+08:00",
+  "status": "PASS_HARDWARE_VISUAL_AND_CONFIGURATION_REPLAY",
+  "updated_at": "2026-11-04T10:59:12.690932+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -17,30 +17,33 @@
   "scope": "Fixed transparent 2D preset positioned/scaled from real primary face rectangle; KEY1 RAW/BOX/AVATAR; no five-point alignment or head rotation",
   "avatar_sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
   "board_access_performed_this_goal": true,
-  "internal_routed_timing_closed": false,
+  "internal_routed_timing_closed": true,
   "external_io_ac_verified": false,
-  "next_step": "Review the one-priority reroute, or use exact-width DMA bounds on the dual-row NPU if physical qualification still fails.",
+  "next_step": "Functional acceptance complete. Physical frame-rate measurement requires continuous captured board output.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
   "source_png": "assets/avatars/triha/source.png",
   "source_sha256": {
+    "assets/avatars/triha/avatar.rgba": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+    "assets/avatars/triha/source.png": "c2904a1831374d73c1b1b83d58de6f7cfd54f14b9dbc029a585179f71094b3b1",
+    "fpga/pg2l100h/constraints/triha_face_cdc.fdc": "c959d15f6621d73ee21f3713e273efb9742ec3507faa0b3261031085e97fe767",
     "fpga/pg2l100h/rtl/triha_face_board_top.sv": "dd829b2ce7d5e39d11a9dc7d161da4ce3efb6aec5473ef05ce5b82644761d762",
     "rtl/soc/triha_face_system.v": "6e144dc1fd0211491adcc9f58de1588660425b71059ab20b556903f79ae0f011",
+    "rtl/video/avatar_texture_cache.sv": "64047d7d16a3e2afa3acddfc0c97fee5eead350b8ae4ee8f91c311dc5be1a175",
     "rtl/video/display_record_guard.sv": "3e5d01b75523764c843cd6d197e7b18143eaad5eb23f0c7cf7196b2a00adcf95",
     "rtl/video/display_record_pixels_compact.sv": "046c60deddea1b532a4e98d29ff78b13977beaad48d2d01db1743beed97c5496",
+    "rtl/video/display_slot_owner.sv": "12ed11227aea3c385dd783ecb68f5128e2dd425d1d40ac8c91630c2ddd138981",
     "rtl/video/raw_display.sv": "747a124021ce526d2ee0a24ac7b1be71846afa9baab3ce4918136c70dfa8cb4a",
-    "rtl/video/video_application_engine.sv": "650cfaedfd4b6fea68a2231dd56410f66cd732f2e9b8c45c8385f825a05b3e26",
+    "rtl/video/video_application_engine.sv": "c7ef73e16f22a9178a4c30fd46637e5d90422ac94b7233ab958072a8dae8962f",
     "rtl/video/video_display_mmio_compact.sv": "3d8ff79473fff2bb9757bdf5bacd0bd467261ce2d6a6605b50fd9d6ed1355f50",
     "rtl/video/video_display_record_compact.sv": "4ffb7ca80c6e6946015b968d985adb0208b2cb3b2d20062878e12d029e107372",
     "rtl/video/video_record_renderer_compact.sv": "f4a1136ed764187936571ddcdc4552a90502e77513c27c449430f4084f54eff8",
+    "scripts/video/test_display_control_paths.py": "871e14e40ccb030b582f201990cd036b3e767dd2cb57217918659b72a4ce849d",
     "scripts/video/test_face_rect_profile.py": "659ec8159cd6b77ec56bc6a3532ed9c10f633b57b519a2480b581712c0a8b3ee",
-    "tb/soc/tb_face_system.sv": "3e990868b9305d3c3550bfbaf980f4852098fc5ffd9b3dd6c95aaf14b15011fe",
+    "tb/soc/tb_face_system.sv": "36892f868d9264829927d009946b35cde093edd171df1e0dfb34222b5c4929b6",
     "tb/video/tb_display_record_guard.sv": "824a391ea747e58d1ad111aa4e06d7902267a8cb40934ec491be6f146d9d59f3",
-    "rtl/video/display_slot_owner.sv": "12ed11227aea3c385dd783ecb68f5128e2dd425d1d40ac8c91630c2ddd138981",
-    "fpga/pg2l100h/constraints/triha_face_cdc.fdc": "c959d15f6621d73ee21f3713e273efb9742ec3507faa0b3261031085e97fe767",
-    "tb/video/tb_video_display_mmio.sv": "6b06520598f465bd7f92cd8dccc7676a8a8374864bdec591896c538e20627efd",
-    "scripts/video/test_display_control_paths.py": "871e14e40ccb030b582f201990cd036b3e767dd2cb57217918659b72a4ce849d"
+    "tb/video/tb_video_display_mmio.sv": "6b06520598f465bd7f92cd8dccc7676a8a8374864bdec591896c538e20627efd"
   },
   "alignment": {
     "anchor_x": 128,
@@ -57,10 +60,10 @@
     "reason": "User replaced asset before route completion; route stopped intentionally, no final timing result"
   },
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
-  "asset_audit": "build/soc/model_upload-20261104T002736_210842Z",
-  "board_access_scope": "Read-only JTAG scans, including successful device identification after user checked power, pin 1 and cable seating.",
-  "board_scan": "build/video/jtag_scan/20261104T010814_312494Z",
-  "board_scan_status": "PG2L100H ID 00602899, DONE=1; read only; photo not programmed.",
+  "asset_audit": "build/soc/model_upload-20261104T025023_440188Z/result.json",
+  "board_access_scope": "Qualified volatile JTAG program, masked verify, seven-segment UART load and human observation of HDMI OUT",
+  "board_scan": "build/video/jtag_scan/20261104T024955_244738Z",
+  "board_scan_status": "PG2L100H ID 00602899",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
@@ -71,9 +74,10 @@
     "build/video/jtag_scan/20261103T215645_584462Z",
     "build/video/jtag_scan/20261103T234117_115674Z",
     "build/video/jtag_scan/20261104T003406_316770Z",
-    "build/video/jtag_scan/20261104T010814_312494Z"
+    "build/video/jtag_scan/20261104T010814_312494Z",
+    "build/video/jtag_scan/20261104T024955_244738Z"
   ],
-  "board_programmed_this_goal": false,
+  "board_programmed_this_goal": true,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
   "first_route_timing": {
     "worst_setup_ns": -1.331,
@@ -914,26 +918,27 @@
     "placement_status": "FAIL_BEFORE_NATIVE_RUN",
     "placement_error": "Helper used default GBK to read UTF-8 constraint comments; no native location rejection or placement occurred."
   },
-  "source_commit": "ad550087b49288db3908f38c99eb1ea565252f89",
-  "positive": "build/soc/face_system-20261104T001638_028639Z",
-  "negative": "build/soc/face_system-20261104T001637_999720Z",
-  "synthesis": "build/video/pds/20261104T001658_597958Z",
-  "mapping": "build/video/pds/face_photo_admission_50_map_20261104",
-  "placement": "build/video/pds/face_photo_admission_phy_place_20261104",
-  "route": "build/video/pds/face_photo_admission_50_route_20261104",
-  "offline_pipeline": "build/video/face_photo_admission_50_pipeline_20261104/receipt.json",
-  "firmware_sha256": "671686a1e5756e41c08b6a565c7855d5710a21ae50d86c8bacf99102d839698e",
-  "positive_result_sha256": "ebf5bd9b0ca6c4bf87bd95517a32525819bdc6b1d65c0e6683393e612f6ee595",
-  "negative_result_sha256": "5cd8ab170849d190c6730819c239db73deef7b57d46cc4ef86ed9fce40c1aafc",
+  "source_commit": "dee8d854985ad8759584556250c6bcce75dc8344",
+  "positive": "build/soc/face_system-20261104T011551_456009Z",
+  "negative": "build/soc/face_system-20261104T011551_453685Z",
+  "synthesis": "build/video/pds/20261104T014338_596772Z",
+  "mapping": "build/video/pds/face_photo_ring_50_map_20261104",
+  "placement": "build/video/pds/ringp6",
+  "route": "build/video/pds/ringr6d",
+  "offline_pipeline": "build/video/ringpipe6d/receipt.json",
+  "firmware_sha256": "ea1be2bc6f539aeaca9c3d12c6e8a364bc043e53a45524e8cfcebe426a75e0a5",
+  "positive_result_sha256": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00",
+  "negative_result_sha256": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44",
   "resources": {
-    "lut": 45745.0,
-    "registers": 42083.0,
-    "drm": 112.5
+    "lut": 45716.0,
+    "registers": 41848.0,
+    "drm": 113.5,
+    "apm": 64.0
   },
-  "synthesis_result_sha256": "440ad43c1eb80855b8c43030875c5501805e2f714a82f56bb81ffb98ed4274b9",
-  "map_result_sha256": "da58bd98c858ecef1eb4e144d0459f9ae4b561427f74f5cea0ad54e72ae37e60",
-  "simulation_alignment": "build/video/face_photo_admission_50_sim_alignment_20261104.json",
-  "simulation_performance": "build/video/face_photo_admission_performance_20261104.json",
+  "synthesis_result_sha256": "ebc7802dc47b203d6d9a4b8e2f624a55f70986d4b912fee5b9ee61a3a8b15871",
+  "map_result_sha256": "591f5fb82bccc61ed6d9a2bdb23eec310bb573adea63cc34a8dc21f5ace67f71",
+  "simulation_alignment": "build/video/face_photo_ring_50_sim_alignment_20261104.json",
+  "simulation_performance": "build/video/face_photo_ring_performance_20261104.json",
   "current_capture_scoreboard": {
     "positive": [
       1920004,
@@ -951,16 +956,6 @@
     "image": "build/video/face_photo_guard_reference_20261104.png",
     "image_sha256": "4edf4754e0a6bcca52bf63b90f7e5b72d71271232fc3dc6b19fd2653caa6e4ca",
     "golden_sha256": "4451ea42ede333352952c14fab8fad32a66320d1bf168bbb04e124602df13340"
-  },
-  "current_placement_pass": {
-    "directory": "build/video/pds/face_photo_admission_phy_place_20261104",
-    "phy_locations": 552,
-    "pixel_hold_candidates": 6,
-    "native_locations_accepted": 558,
-    "final_estimated_setup_ns": 0.638,
-    "placed_db_sha256": "f110049f14fd64bb34d69eb0e7579b1d8d1397dd71ddae82a63363163137f931",
-    "actual_routed_retention_pending": false,
-    "retention_evidence": "build/video/face_photo_admission_50_retention_20261104.json"
   },
   "admission_route_failure": {
     "review": "build/video/face_photo_admission_50_review_20261104/result.json",
@@ -1115,6 +1110,50 @@
         "build/video/face_photo_area1_sim_intervals_20261104.json": "9d116bc04d2ba4256836054b97bcd4342962a22740fbe86205561b7d949590a6",
         "build/rowdma/build/video/dma_row_bounds/20261104T023112_321914Z/result.json": "2faf1867fa75693a585d8b2872d03754e0636542474ad5e13e46f4276955c892"
       }
+    },
+    "qualified_route": {
+      "directory": "build/video/pds/ringr6d",
+      "pipeline": "build/video/ringpipe6d/receipt.json",
+      "path": "build/video/ringbit6d/result.json",
+      "sha256": "004f50053d737ac28694048d6c9f4070c601113dbe06bd1a9d796141c92386d5",
+      "routed_db": "build/video/pds/ringr6d/place_route/triha_face_board_top_pnr.adf",
+      "routed_db_sha256": "9e35e6e6fe6a2064a13e649516709d8918cbd2f8dc58499049ada619a8f101a6",
+      "slack_ns": {
+        "setup": {
+          "slow": 0.1,
+          "fast": 2.891
+        },
+        "hold": {
+          "slow": 0.187,
+          "fast": 0.131
+        }
+      },
+      "violating_endpoints": 0,
+      "verified_sites": 554,
+      "physical_ports": 141,
+      "gray_groups": 23,
+      "gray_bits": 116,
+      "gray_clock_observations": 928,
+      "external_io_ac_verified": false
     }
+  },
+  "board_acceptance": "releases/face-photo-20261104/acceptance.json",
+  "visual_confirmed": true,
+  "previous_admission_placement": {
+    "directory": "build/video/pds/face_photo_admission_phy_place_20261104",
+    "phy_locations": 552,
+    "pixel_hold_candidates": 6,
+    "native_locations_accepted": 558,
+    "final_estimated_setup_ns": 0.638,
+    "placed_db_sha256": "f110049f14fd64bb34d69eb0e7579b1d8d1397dd71ddae82a63363163137f931",
+    "actual_routed_retention_pending": false,
+    "retention_evidence": "build/video/face_photo_admission_50_retention_20261104.json"
+  },
+  "current_placement_pass": {
+    "directory": "build/video/pds/ringp6",
+    "accepted_locations": 554,
+    "retained_locations": 554,
+    "placed_db_sha256": "037b368329f41f6b6bda2db4384c5bd774f183e7f7a45ea5d84e2f04cc39419d",
+    "retention_evidence": "build/video/ringloc6d.json"
   }
 }
