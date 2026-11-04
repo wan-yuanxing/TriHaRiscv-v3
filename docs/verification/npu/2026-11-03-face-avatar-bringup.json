@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RING_PLACED_ROUTING",
-  "updated_at": "2026-11-04T10:09:32.209360+08:00",
+  "status": "USER_PHOTO_RING_DMA_PRIORITY_ROUTING",
+  "updated_at": "2026-11-04T10:35:29.841127+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish the seed 6 routed database. Review internal timing, CDC and physical sites, qualify and package before volatile Program/Verify and seven-segment upload.",
+  "next_step": "Review the one-priority reroute, or use exact-width DMA bounds on the dual-row NPU if physical qualification still fails.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -1087,6 +1087,34 @@
     "previous_placement_outcomes": [
       "556 hints, two optional DDR cell names unresolved",
       "554 hints, seed 5 PDS signal 11 before placement DB"
-    ]
+    ],
+    "first_route": {
+      "routed_db_sha256": "c69988760647daf48940c7a98a6181a576442e28b39895e110e64d09507af97d",
+      "retained_sites": 554,
+      "failed_setup": [
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": -0.052,
+          "total_negative_slack_ns": -0.167,
+          "failing_endpoints": 6,
+          "endpoints": 47357
+        }
+      ],
+      "hold_min_ns": {
+        "slow": 0.0,
+        "fast": 0.001
+      },
+      "priority_net": "g_full.impl/face/u_video/u_capture/u_input_dma/dma_base_reg [17]",
+      "priority_reroute": "build/video/ringpipe6d",
+      "evidence_sha256": {
+        "build/video/pds/ringr6/receipt.json": "f5653d0331c3e5c5c272d76a1ab2fe268cfbacfa107af25b4ed59bb808e5daa4",
+        "build/video/ringrev6/result.json": "a235e98d174c04588e08017a60cbdb76a5679afdc909f8187168639bd74d3d9a",
+        "build/video/ringloc6.json": "d8b4c78991ba3d2e62ca82ddd6f7cb7603b275197b0d667f4f9dd84d1ecb865e",
+        "build/video/ringdma.json": "d7e4f75f652213dfa8c865e140a5c0dd6e9a2e18a455dae4cbbc1fb814789690",
+        "build/video/face_photo_area1_sim_intervals_20261104.json": "9d116bc04d2ba4256836054b97bcd4342962a22740fbe86205561b7d949590a6",
+        "build/rowdma/build/video/dma_row_bounds/20261104T023112_321914Z/result.json": "2faf1867fa75693a585d8b2872d03754e0636542474ad5e13e46f4276955c892"
+      }
+    }
   }
 }
