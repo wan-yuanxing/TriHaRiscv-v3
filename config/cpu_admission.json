@@ -129,80 +129,162 @@
     {
       "base_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
       "destination": "rtl/cpu/triha_core.v",
-      "sha256": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a",
+      "sha256": "ef3b92835d360432be77bd927f2953b79794bd591d11c27376329e70cfea0cca",
       "source": "rtl/cpu/triha_core.v",
-      "source_kind": "reviewed_working_tree"
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a"
+      }
     },
     {
       "destination": "rtl/cpu/triha_cpu.v",
-      "sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+      "sha256": "e60ddf8e9d73f3f203b21d9958beda956609e3159d4bd80eceb7afd936ac8569",
       "source": "rtl/cpu/triha_cpu.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5"
+      }
     },
     {
       "base_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
       "destination": "rtl/cpu/triha_csr.v",
-      "sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+      "sha256": "c324c4d446b88bbd245324225afac71bf5f1273f4aa25a9d38272267c0d5c502",
       "source": "rtl/cpu/triha_csr.v",
       "source_kind": "reviewed_working_tree",
       "previous_admitted_sha256": [
-        "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49"
+        "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49",
+        "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee"
       ],
-      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately.",
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee"
+      }
     },
     {
       "destination": "rtl/cpu/triha_dcache.v",
-      "sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+      "sha256": "55c1bef2f572a76faacbbacf9a7b95b9cf973d771c0f0187651ecc226c0b11a2",
       "source": "rtl/cpu/triha_dcache.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03"
+      }
     },
     {
       "destination": "rtl/cpu/triha_dcache_data_ram.v",
-      "sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+      "sha256": "a165c46d9b2a8536e999a1a25650912fbfbdd1647e2ed62f1e0f509e08d775ff",
       "source": "rtl/cpu/triha_dcache_data_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01"
+      }
     },
     {
       "destination": "rtl/cpu/triha_dcache_tag_ram.v",
-      "sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+      "sha256": "1faeb4c71b51395e52cc2fb47bcda96a1e4844eecdd20cc1caf4a7383c18990f",
       "source": "rtl/cpu/triha_dcache_tag_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b"
+      }
     },
     {
       "destination": "rtl/cpu/triha_decode.v",
-      "sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "sha256": "17de66970beb7dfcf69c45e1ae76ce8aff0fe7785c4b82a461243e509220b44e",
       "source": "rtl/cpu/triha_decode.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f"
+      }
     },
     {
       "destination": "rtl/cpu/triha_divider.v",
-      "sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "sha256": "63f5106e941e2e490abcee50321e49c7826df8e5daf35722902234be6109d732",
       "source": "rtl/cpu/triha_divider.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55"
+      }
     },
     {
       "destination": "rtl/cpu/triha_frontend.v",
-      "sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+      "sha256": "9c2ca630e715785fccb39bc35b6583c3cc964c6dbf680d1d31c48a6a4f81194e",
       "source": "rtl/cpu/triha_frontend.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76"
+      }
     },
     {
       "destination": "rtl/cpu/triha_icache.v",
-      "sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+      "sha256": "9854a5026723d76cfb0a67862abfadb25db8172bdf65c15c17ee3137378ef70f",
       "source": "rtl/cpu/triha_icache.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9"
+      }
     },
     {
       "destination": "rtl/cpu/triha_icache_data_ram.v",
-      "sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+      "sha256": "2a5a5ed60c4996ab05c50ec4ebbf199eeb11a22220fb94a550ce3ad8032e9349",
       "source": "rtl/cpu/triha_icache_data_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d"
+      }
     },
     {
       "destination": "rtl/cpu/triha_icache_tag_ram.v",
-      "sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+      "sha256": "87fbf39f7e7a14bcbe51f4463e81663d91fb636c309302da8b00689a6b1292c1",
       "source": "rtl/cpu/triha_icache_tag_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a"
+      }
     },
     {
       "destination": "rtl/cpu/triha_ifetch_uncached.v",
@@ -212,43 +294,83 @@
     },
     {
       "destination": "rtl/cpu/triha_issue.v",
-      "sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+      "sha256": "de0fe3eb23257ec66eefe1401f31cb5d68aaea6536265df6691c8cc1f6bd7375",
       "source": "rtl/cpu/triha_issue.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7"
+      }
     },
     {
       "destination": "rtl/cpu/triha_lsu.v",
-      "sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "sha256": "1debf99c7df81ebe1d4ec47cf9d566794d26bbb6790a93d76ba1815125cdfaa3",
       "source": "rtl/cpu/triha_lsu.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
+        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
+        "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc"
       ],
-      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately.",
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc"
+      }
     },
     {
       "destination": "rtl/cpu/triha_multiplier.v",
-      "sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+      "sha256": "7700190da3ac38cda8b8d2bc781a4519841de1eed7553161a5a6a8f78167a718",
       "source": "rtl/cpu/triha_multiplier.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510"
+      }
     },
     {
       "destination": "rtl/cpu/triha_npc.v",
-      "sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+      "sha256": "fff13ae91902edc1e4a6c1b1b668256aca8dcf2d52df7a13e76a469552fef023",
       "source": "rtl/cpu/triha_npc.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4"
+      }
     },
     {
       "destination": "rtl/cpu/triha_pipe_ctrl.v",
-      "sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "sha256": "d1342f52b6ff9b92ae322ea3d2bece076c080b3e0df28e8358dbbe0a80597299",
       "source": "rtl/cpu/triha_pipe_ctrl.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5"
+      }
     },
     {
       "destination": "rtl/cpu/triha_regfile.v",
-      "sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+      "sha256": "3feaad4519f6b841d2c49774c60a8674a674246225afab7b6718276ccce44014",
       "source": "rtl/cpu/triha_regfile.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/CACHE_UPSTREAM.json",
@@ -294,159 +416,341 @@
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_alu.v",
-      "sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+      "sha256": "9636343741cafe32a16764b7c83ef13a22e9b372ba672b2e4e6f41c1d9b37d16",
       "source": "rtl/cpu/vendor/src/core/biriscv_alu.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_csr.v",
-      "sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+      "sha256": "a7ee2178975e45e57c20b6d7bee404061d3603513e22abb028b6088b9e5e8024",
       "source": "rtl/cpu/vendor/src/core/biriscv_csr.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
-      "sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "sha256": "394df7d3c1851c8e5878f7cc4f875ff31e93b9b9d562139e3c71be5a9763ad0b",
       "source": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_decode.v",
-      "sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+      "sha256": "fc5f7bb94d9a6c13e5f3f06538c7b633c401d5048d79dff0f2f7042b637aa084",
       "source": "rtl/cpu/vendor/src/core/biriscv_decode.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_decoder.v",
-      "sha256": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+      "sha256": "e7c519648f60149f0771afdb7f721ed1163f94dc05bef87c1b411bcb5a08d279",
       "source": "rtl/cpu/vendor/src/core/biriscv_decoder.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_defs.v",
-      "sha256": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+      "sha256": "39b73d3627ec14852b3c2412b8af682a476d7733cada39966d6f4570c2c0dd1f",
       "source": "rtl/cpu/vendor/src/core/biriscv_defs.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_divider.v",
-      "sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+      "sha256": "0207952c9924cdaee4ff44495dcffdcfd25657f0aaa56b49715691e757f5c129",
       "source": "rtl/cpu/vendor/src/core/biriscv_divider.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_exec.v",
-      "sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+      "sha256": "1e611ef73eb823daf7976c793fe7b6314eaa8157a360612ecc426fc201c67774",
       "source": "rtl/cpu/vendor/src/core/biriscv_exec.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_fetch.v",
-      "sha256": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+      "sha256": "e9411b29b5fb5fe5f85dfe52c1baea970e770e99a13e7006f784fdb7d4d23eb1",
       "source": "rtl/cpu/vendor/src/core/biriscv_fetch.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
-      "sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+      "sha256": "bcc0e94cbcb601b9d987e3e04ce9d537a3b7dd6eb29851b7608c4d7dbd5498a6",
       "source": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_issue.v",
-      "sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+      "sha256": "6f0c72e2d2311fede9b1753041786c1d2ca56417418bf946c96b13633ef746d0",
       "source": "rtl/cpu/vendor/src/core/biriscv_issue.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
-      "sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+      "sha256": "cb6f4e168eb3387563a4375759b51a3f2461b83336cd64905c7012efc2ac4823",
       "source": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_mmu.v",
-      "sha256": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+      "sha256": "076c4c643dee9249fd3dd0112e3502203df2e8a9c59a8d4f9db1db7cd4476733",
       "source": "rtl/cpu/vendor/src/core/biriscv_mmu.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
-      "sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+      "sha256": "ea6dc169d0c00568b8eeae7b808e3ba9d7649b776070ed5e50acf7894fc226f5",
       "source": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_npc.v",
-      "sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+      "sha256": "b96728ff69f413fccaad11888d39a3523da2b2354c8b9e8696c52c89ee837b51",
       "source": "rtl/cpu/vendor/src/core/biriscv_npc.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
-      "sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+      "sha256": "e5cac80054bf99c43baac7beb2ebc047af74589edc3970aea9449d14fb808809",
       "source": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
-      "sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+      "sha256": "d404e16a36fd9e481e3fd4d97eec20bafe65d928c0ad45ca3d6a0d062b0c1587",
       "source": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_trace_sim.v",
-      "sha256": "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb",
+      "sha256": "ba5185c0e528217e867e05cddad7d263b09d362448895ae07ca68f71a0244646",
       "source": "rtl/cpu/vendor/src/core/biriscv_trace_sim.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
-      "sha256": "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1",
+      "sha256": "2cc984f4d298f940701157243c76e97866812696027f62931670c77b13760d5e",
       "source": "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/core/riscv_core.v",
-      "sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+      "sha256": "e5ae6eb3c90bdbef0588afacf84d8db5915ab74dca32442be4e20e0aa9760784",
       "source": "rtl/cpu/vendor/src/core/riscv_core.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/dcache/dcache_core.v",
-      "sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+      "sha256": "14ecc8b1b78996f0387b1c0caa37918e30e8720102ecb70f477bf043abe38567",
       "source": "rtl/cpu/vendor/src/dcache/dcache_core.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/dcache/dcache_core_data_ram.v",
-      "sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+      "sha256": "ab25143be39bb9c3807fc1e909f37da4074a5dcd875f91819c4b6fd7ed0140e5",
       "source": "rtl/cpu/vendor/src/dcache/dcache_core_data_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
-      "sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+      "sha256": "c8ddfb3e8787f1cb5220ea733b74ba0099632a84b9e16aabfd92792b9d0c144d",
       "source": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/icache/icache.v",
-      "sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+      "sha256": "b6d99a3c1027c14ada4726882d32c532ef0aa34e072e98c5cf9459da3f2e37c9",
       "source": "rtl/cpu/vendor/src/icache/icache.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/icache/icache_data_ram.v",
-      "sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+      "sha256": "4f90b763aab19d41ef8dd79514cb9bd440c8dc8330098f45ae792ca962811086",
       "source": "rtl/cpu/vendor/src/icache/icache_data_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/src/icache/icache_tag_ram.v",
-      "sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389",
+      "sha256": "47825dc9a235bc4ccd8d7983043050aa128cffd7d24af590fdb6f2a165b1e5b0",
       "source": "rtl/cpu/vendor/src/icache/icache_tag_ram.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389"
+      }
     },
     {
       "destination": "rtl/cpu/vendor/tb/tb_core_icarus/tb_top.v",
@@ -622,8 +926,15 @@
       "destination": "rtl/cpu/triha_csr_regfile.v",
       "source": "rtl/cpu/triha_csr_regfile.v",
       "source_kind": "reviewed_working_tree",
-      "sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
-      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93"
+      "sha256": "ed515df4e1f6b2c0001b2cc5678269f174a9062f571742221fe97152a81581db",
+      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "previous_admitted_sha256": [
+        "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+      ],
+      "header_comment_cleanup": {
+        "algorithm": "leading-notice-v1",
+        "source_sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+      }
     },
     {
       "destination": "tb/cpu/tb_document_csr.v",
@@ -813,5 +1124,15 @@
       "rtl/cpu/triha_lsu.v": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
       "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
     }
+  },
+  "header_comment_cleanup_review": {
+    "algorithm": "leading-notice-v1",
+    "files": 45,
+    "notices": "rtl/cpu/HEADER_NOTICES.json",
+    "notices_sha256": "16c1a2bc844c87da90207049507341882581ff375d8e8f1b76f1f0b956fe83f2",
+    "original_provenance": "UPSTREAM and ADAPTATIONS manifests retain the original pre-cleanup bytes and historical statements; current admitted hashes are the files rows above.",
+    "physical_revalidated": false,
+    "board_revalidated": false,
+    "release_packages": "Unmodified; their exact-source checks remain bound to original source bytes, not this cleaned working tree."
   }
 }

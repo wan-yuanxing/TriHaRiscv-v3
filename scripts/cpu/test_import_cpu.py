@@ -130,6 +130,62 @@ class AdmissionTests(unittest.TestCase):
                                         source_kind='reviewed_working_tree')
         self.rejected('unapproved production delta')
 
+    def header_fixture(self, original, cleaned):
+        name = 'rtl/cpu/vendor/test.v'
+        (self.source / name).write_bytes(original)
+        self.git('add', '--', name)
+        self.git('commit', '-qm', 'header fixture')
+        self.manifest['source_commit'] = self.git('rev-parse', 'HEAD').strip()
+        self.manifest['files'] = [self.entry(name, cleaned, header_comment_cleanup={
+            'algorithm': 'leading-notice-v1',
+            'source_sha256': hashlib.sha256(original).hexdigest()})]
+        return name
+
+    def test_header_cleanup_replays_from_exact_original_git_bytes(self):
+        original = (b'//-----\r\n// Copyright 2000 fixture\r\n'
+                    b'// Licensed under the Apache License, Version 2.0\r\n//-----\r\n'
+                    b'\r\n// Keep this functional description.\r\nmodule test; endmodule\r\n')
+        cleaned = b'\r\n// Keep this functional description.\r\nmodule test; endmodule\r\n'
+        name = self.header_fixture(original, cleaned)
+        for _ in range(2):
+            result = self.run_import(True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual((self.destination / name).read_bytes(), cleaned)
+
+    def test_mixed_header_preserves_function_description_and_encoding(self):
+        original = (b'/*\r\n * @brief Keep byte \xff and the module description.\r\n'
+                    b' * SPDX-License-Identifier: Apache-2.0\r\n'
+                    b' * Copyright 2000 fixture\r\n */\r\nmodule test; endmodule\r\n')
+        cleaned = (b'/*\r\n * @brief Keep byte \xff and the module description.\r\n'
+                   b' */\r\nmodule test; endmodule\r\n')
+        name = self.header_fixture(original, cleaned)
+        result = self.run_import(True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.destination / name).read_bytes(), cleaned)
+
+    def test_header_cleanup_rejects_wrong_original_hash_before_writing(self):
+        self.header_fixture(b'// Copyright 2000 fixture\nmodule test; endmodule\n', b'module test; endmodule\n')
+        self.manifest['files'][0]['header_comment_cleanup']['source_sha256'] = '0' * 64
+        self.rejected('cleanup base hash mismatch')
+        self.assertEqual(list(self.destination.iterdir()), [])
+
+    def test_header_cleanup_does_not_strip_strings_or_interior_comments(self):
+        original = b'module test; initial $display("// Copyright fixture"); /* Copyright fixture */ endmodule\n'
+        self.header_fixture(original, b'module test; endmodule\n')
+        self.rejected('no supported leading notice')
+        self.assertEqual(list(self.destination.iterdir()), [])
+
+    def test_secondary_module_header_notice_is_relocated(self):
+        original = (b'module a;\nendmodule\n\n// Copyright 2000 fixture\n'
+                    b'// Licensed under the Apache License, Version 2.0\n'
+                    b'// SPDX-License-Identifier: Apache-2.0\n'
+                    b'// Keep the mux description.\nmodule b; endmodule\n')
+        cleaned = b'module a;\nendmodule\n\n// Keep the mux description.\nmodule b; endmodule\n'
+        name = self.header_fixture(original, cleaned)
+        result = self.run_import(True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.destination / name).read_bytes(), cleaned)
+
 
 if __name__ == '__main__':
     unittest.main()

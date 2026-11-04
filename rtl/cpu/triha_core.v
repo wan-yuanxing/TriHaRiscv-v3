@@ -7,7 +7,6 @@
  * - 单发射为默认，双发射用于同边界评估
  * - 预译码结果随指令入 FIFO，缩短 FIFO 读出到发射的组合路径
  * - 保留完整取指、数据、缓存维护和分支预测配置
- * - 内核来源与许可由 vendor/UPSTREAM.json 和 LICENSE 记录
  */
 
 `timescale 1ns / 1ps

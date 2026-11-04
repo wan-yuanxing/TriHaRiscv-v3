@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+from source_header_cleanup import replay_cleanup
 
 ROOT = Path(__file__).resolve().parents[2]
 PRODUCTION_DELTAS = {'rtl/cpu/triha_csr.v', 'rtl/cpu/ADAPTATIONS.json', 'rtl/cpu/triha_core.v'}
@@ -73,6 +74,8 @@ def import_sources(source, destination, manifest, apply=False):
             data = original.read_bytes()
         else:
             raise ValueError('unknown source kind: ' + str(kind))
+        if 'header_comment_cleanup' in row:
+            data = replay_cleanup(data, row['header_comment_cleanup'], row['sha256'])
         if digest(data) != row['sha256']:
             raise ValueError('source hash mismatch: ' + row['source'])
         if target.exists() and (not target.is_file() or target.read_bytes() != data):

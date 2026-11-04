@@ -1,27 +1,3 @@
-//-----------------------------------------------------------------
-//                         biRISC-V CPU
-//                            V0.8.1
-//                     Ultra-Embedded.com
-//                     Copyright 2019-2020
-//
-//                   admin@ultra-embedded.com
-//
-//                     License: Apache 2.0
-//-----------------------------------------------------------------
-// Copyright 2020 Ultra-Embedded.com
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//-----------------------------------------------------------------
 
 module triha_npc
 //-----------------------------------------------------------------
@@ -576,9 +552,6 @@ assign alloc_entry_o = lfsr_q[ADDR_W-1:0];
 
 endmodule
 
-// Copyright lowRISC contributors (OpenTitan project).
-// Licensed under the Apache License, Version 2.0; see vendor/LICENSE.
-// SPDX-License-Identifier: Apache-2.0
 // Adapted from prim_onehot_mux: flat Verilog ports and direct bitwise AND/OR.
 // The caller supplies highest-priority one-hot-or-zero select vectors.
 module triha_npc_select #(

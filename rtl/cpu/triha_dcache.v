@@ -7,8 +7,6 @@
  *             response-checked DDR bridge remains authoritative.
  *             Load data retains the registered response boundary required by
  *             the accepted 100MHz implementation.
- * SPDX-License-Identifier: Apache-2.0
- * Derived storage/lookup organization: Copyright 2020 Ultra-Embedded.com.
  * Derived from the fixed source recorded in CACHE_ADAPTATIONS.json.
  */
 module triha_dcache #(
