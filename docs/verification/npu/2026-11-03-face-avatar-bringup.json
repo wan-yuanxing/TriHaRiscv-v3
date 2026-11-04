@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_RING_SIM_PASS_SYNTHESIS_STARTED",
-  "updated_at": "2026-11-04T09:48:01.247575+08:00",
+  "status": "USER_PHOTO_RING_PLACED_ROUTING",
+  "updated_at": "2026-11-04T10:09:32.209360+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Complete current map/place/route and independently qualify dual-corner internal timing, CDC, pins and seven-segment boot before programming.",
+  "next_step": "Finish the seed 6 routed database. Review internal timing, CDC and physical sites, qualify and package before volatile Program/Verify and seven-segment upload.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -1045,7 +1045,7 @@
     "source_commit": "dee8d854985ad8759584556250c6bcce75dc8344",
     "source_photo": "assets/avatars/triha/source.png",
     "physical_candidate": "build/video/pds/20261104T014338_596772Z",
-    "pipeline": "build/video/face_photo_ring_50_pipeline_20261104",
+    "pipeline": "build/video/ringpipe6",
     "sites_candidates": 556,
     "positive": "build/soc/face_system-20261104T011551_456009Z",
     "negative": "build/soc/face_system-20261104T011551_453685Z",
@@ -1062,7 +1062,31 @@
       "build/video/face_photo_ring_staged_20261104.json": "3cc389e5fdb67e401969b100b0d5d66268d1fe8eb6a0f284cbc9a1920f10e3d8",
       "build/video/face_photo_ring_release_components_20261104.json": "573477d7bf6d32e1b3deefa9d8d7b6b5e63c7e4c7653dafa6989773840b9c2d7",
       "build/soc/face_system-20261104T011551_456009Z/result.json": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00",
-      "build/soc/face_system-20261104T011551_453685Z/result.json": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44"
-    }
+      "build/soc/face_system-20261104T011551_453685Z/result.json": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44",
+      "build/video/pds/20261104T014338_596772Z/result.json": "ebc7802dc47b203d6d9a4b8e2f624a55f70986d4b912fee5b9ee61a3a8b15871",
+      "build/video/pds/face_photo_ring_50_map_20261104/result.json": "591f5fb82bccc61ed6d9a2bdb23eec310bb573adea63cc34a8dc21f5ace67f71",
+      "build/video/pds/ringp6/receipt.json": "da85a9d2e8d1fabe0346987a4aa4067348bbbee401e3fabc4128a82dd37c6191",
+      "build/video/face_photo_ring_50_sim_alignment_20261104.json": "7f78e28da3dbe8987edbd679cc08006bef26d96241e4c778790a6522f2f4958b",
+      "build/video/face_photo_ring_performance_20261104.json": "054aae1ca4fa174d594db2851cf0815052233211533247b1b4a1462816595776",
+      "build/video/face_photo_ring_admitted_site_candidates_20261104.json": "3246553fa003ed316bce0dce9a7bb177ed3b954df49a45a632baa88ea4df0146",
+      "build/video/face_photo_ring_admitted_50_pipeline_20261104/receipt.json": "e1abb2f67abb1343875dfd48ae8e11d45d390159d5bd99c0f5f3706bb50c3a2d"
+    },
+    "synthesis_resources": {
+      "lut": 45716.0,
+      "registers": 41848.0,
+      "drm": 113.5
+    },
+    "map": "build\\video\\pds\\face_photo_ring_50_map_20261104\\result.json",
+    "frozen_simulation_alignment": "build\\video\\face_photo_ring_50_sim_alignment_20261104.json",
+    "performance": "build\\video\\face_photo_ring_performance_20261104.json",
+    "placed_db_sha256": "037b368329f41f6b6bda2db4384c5bd774f183e7f7a45ea5d84e2f04cc39419d",
+    "placement": "build\\video\\pds\\ringp6\\receipt.json",
+    "locations_admitted": 554,
+    "placement_estimate_ns": 1.047,
+    "route_directory": "build/video/pds/ringr6",
+    "previous_placement_outcomes": [
+      "556 hints, two optional DDR cell names unresolved",
+      "554 hints, seed 5 PDS signal 11 before placement DB"
+    ]
   }
 }
