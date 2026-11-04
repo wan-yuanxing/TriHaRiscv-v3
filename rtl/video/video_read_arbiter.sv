@@ -19,10 +19,13 @@ module video_read_arbiter #(parameter integer MAX_RAW_BURSTS=4)(
  reg [4:0] streak,remaining;
  initial if(MAX_RAW_BURSTS<1||MAX_RAW_BURSTS>16)$fatal(1,"read arbiter quota requires 1..16");
  function automatic legal(input [3:0] id,input [31:0] addr,input [7:0] len,input [2:0] size,input [1:0] burst);
-  reg [32:0] end_addr;reg [12:0] page_end;
-  begin end_addr={1'b0,addr}+({25'd0,len}+33'd1)*16;page_end={1'b0,addr[11:0]}+({5'd0,len}+13'd1)*16;
+  // 16-byte aligned INCR bursts, at most 16 beats. Both ends of the
+  // aperture are 4 KiB aligned, so an admitted start page and a last beat
+  // on that same page also prove the exclusive end stays inside DDR.
+  // Only the last 16 beats of a page can wrap: then beat_low + len <= 15.
+  begin
    legal=(^{id,addr,len,size,burst})!==1'bx&&addr[3:0]==0&&len<16&&size==4&&burst==1&&
-       addr>=32'h80000000&&end_addr<=33'h088000000&&page_end<=4096;
+       addr[31:27]==5'b10000&&(addr[11:8]!=4'hf||addr[7:4]<=~len[3:0]);
   end
  endfunction
  wire d_wants=d_arvalid===1'b1,a_wants=a_arvalid===1'b1;

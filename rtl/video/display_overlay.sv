@@ -105,23 +105,31 @@ module display_overlay #(
 
     // Stage0..9: preserve every pixel, including blanking. The cache response
     // registered from request stage8 is available with context stage9.
-    reg [83:0] context_pipe [0:9];
-    reg hit_d;
-    integer delay_index;
-    always @(posedge clk) begin
-        if (rst) begin
-            for (delay_index=0;delay_index<10;delay_index=delay_index+1) context_pipe[delay_index]<=0;
-            hit_d<=0;
-        end else begin
-            context_pipe[0]<={pixel_frame_id,pixel_x,pixel_y,pixel_de,pixel_hs,pixel_vs,pixel_sof,
-                             selected_rgb,selected_box,selected_point};
-            for (delay_index=1;delay_index<10;delay_index=delay_index+1)
-                context_pipe[delay_index]<=context_pipe[delay_index-1];
+    // An input sampled at edge n is available to the blend stage at edge
+    // n+10. RAM read occurs at n+9; the fill counter masks every stale word
+    // after reset. Separate read/write addresses never alias on the same edge.
+    (* syn_ramstyle="block_ram" *) reg [83:0] context_mem[0:15];
+    reg [3:0] context_write,context_fill;
+    reg context_valid,hit_d;
+    reg [83:0] context_read;
+    wire [3:0] context_address=context_write-4'd9;
+    always @(posedge clk)begin
+        context_mem[context_write]<={pixel_frame_id,pixel_x,pixel_y,pixel_de,pixel_hs,pixel_vs,pixel_sof,
+                                     selected_rgb,selected_box,selected_point};
+        context_read<=context_mem[context_address];
+    end
+    always @(posedge clk)begin
+        if(rst)begin context_write<=0;context_fill<=0;context_valid<=0;hit_d<=0;end
+        else begin
+            context_write<=context_write+1'b1;
+            if(context_fill!=4'd9)context_fill<=context_fill+1'b1;
+            context_valid<=context_fill==4'd9;
             hit_d<=avatar_req_valid;
         end
     end
-    wire [57:0] metadata = context_pipe[9][83:26];
-    wire [23:0] background = context_pipe[9][25:2];
+    wire [83:0] delayed_context=context_valid?context_read:84'd0;
+    wire [57:0] metadata=delayed_context[83:26];
+    wire [23:0] background=delayed_context[25:2];
     wire use_avatar = hit_d && sample_valid && !sample_error;
     wire pixel_fault = hit_d && (!sample_valid || sample_error);
     wire [7:0] alpha = use_avatar ? sample_rgba[7:0] : 8'd0;
@@ -154,7 +162,7 @@ module display_overlay #(
             sum_g<=weighted(foreground[15:8],background[15:8],alpha);
             sum_b<=weighted(foreground[7:0],background[7:0],alpha);
             metadata_a<=metadata;
-            flags_a<={context_pipe[9][1:0],use_avatar,pixel_fault};
+            flags_a<={delayed_context[1:0],use_avatar,pixel_fault};
             // Stage11. For 0<=s<=65152, floor(s/255)=(s+1+(s>>8))>>8.
             round_r<=sum_r+16'd1+{8'd0,sum_r[15:8]};
             round_g<=sum_g+16'd1+{8'd0,sum_g[15:8]};
