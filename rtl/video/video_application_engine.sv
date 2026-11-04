@@ -269,7 +269,11 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
     // No combinational payload bypass; EOF and malformed packets are preserved.
     // Only coordinated reset drops this ownership, including across job rearm.
     wire capture_src_valid,capture_src_ready;
+    wire capture_request_ready;
     wire [47:0] capture_src_data;
+    // The capture core checks the held packet. Also check upstream VALID on
+    // this admission edge, before a newly arriving stale word enters the hold.
+    assign capture_req_ready_i=capture_request_ready&&!src_valid;
     video_stream_register #(.DATA_WIDTH(48)) u_capture_stream(
         .clk(clk_i),.reset_n(rst_ni),.s_valid(src_valid),.s_ready(src_ready),.s_data(src_data),
         .m_valid(capture_src_valid),.m_ready(capture_src_ready),.m_data(capture_src_data));
@@ -278,8 +282,8 @@ module video_application_engine #(parameter integer FRAME_HEIGHT=600,ENABLE_AVAT
         .reset_n(rst_ni),
         .init_done(online),
         .abort(capture_abort_o),
-        .req_valid(capture_req_valid_o),
-        .req_ready(capture_req_ready_i),
+        .req_valid(capture_req_valid_o&&!src_valid),
+        .req_ready(capture_request_ready),
         .req_slot(capture_req_slot_o),
         .req_frame_id(capture_req_frame_id_o),
         .req_preprocess_version(capture_req_version_o),
