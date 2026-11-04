@@ -27,10 +27,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--suite', choices=['router', 'cpu', 'all'], default='all')
     parser.add_argument('--broken', action='store_true', help='Corrupt Video model readback; expect host return 1')
+    parser.add_argument('--minimal-control', type=int, choices=[0,1], default=0)
     args = parser.parse_args()
     work = ROOT / 'build/soc' / ('application_cpu-' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     work.mkdir(parents=True)
     row = dict(status='RUNNING', suite=args.suite, broken=args.broken, input_hashes={},
+               minimal_control_cpu=args.minimal_control, dual_issue=0,
                external_hashes={}, commands=[], runs=[], runner_return_code=1,
                scope='Production CPU/router/cache/local memories and two native AXI-Lite adapters; fake NPU/Video control endpoints and fake DDR only; no actual operator/video/shared fabric/CDC/physical timing acceptance')
     save(work/'result.json', row)
@@ -97,6 +99,7 @@ def main():
         for mode in (['router','cpu'] if args.suite=='all' else [args.suite]):
             record,text = invoke(SIM/'vsim.exe',['-c','-onfinish','exit','-voptargs=+acc',
                 '-gCPU_MODE='+str(int(mode=='cpu')),'-gBROKEN='+str(int(args.broken)),
+                '-gMINIMAL_CONTROL_CPU='+str(args.minimal_control),
                 'work.tb_application_cpu','-do',work/'src/scripts/cpu/run_modelsim.do'],mode)
             marker = 'APPLICATION_'+('CPU' if mode=='cpu' else 'ROUTER')+'_PASS'
             negative_marker = 'APPLICATION_FAIL '+('firmware completion' if mode=='cpu' else 'data readback')

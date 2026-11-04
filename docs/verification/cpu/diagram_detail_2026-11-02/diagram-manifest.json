@@ -1,0 +1,30 @@
+{
+  "before_sha256": "b2cf52a5134ace270e63405ab356f8cea5644e8fb1f310338b10d86b9abc5fe6",
+  "after_sha256": "064ef3582f353ded3a2949e55c1555baf8802fbb47484c6334058a2ea74f0616",
+  "changed_pages": [
+    5,
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "body_pages": [
+    5,
+    6,
+    9,
+    10,
+    12,
+    14,
+    8
+  ],
+  "supporting_pages": [
+    7,
+    11
+  ],
+  "appendix_page": 13,
+  "min_font_size": 22
+}

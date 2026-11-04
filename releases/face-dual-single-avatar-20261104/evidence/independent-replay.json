@@ -1,0 +1,49 @@
+{
+  "status": "PASS_CONFIGURATION_IDENTICAL",
+  "started": 1793788068.008002,
+  "physical_board": false,
+  "restored_root": "D:\\FPGA\\TriHaRiscv-main\\build\\replay_cpu_20261104",
+  "manifest_sha256": "78c404bccc080f1059bb8f59e33931e6836e08b0d9c4c7f1757e279ea8b0e50d",
+  "verified_sources": 222,
+  "installed_files": 1283,
+  "native": {
+    "bitstream_sha256": "e7bc366190c796fcebeaf10c3cbb297801f96606f9bcffebeb17d944ec702ba9",
+    "verify_mask_sha256": "16d0480840a3eb44d6d8cf246e51ea74ff648fdc4ddb9e5c14294e0ad88f0130",
+    "reference_bitstream_sha256": "86d7a14ce44324d02cc043d27bd5f881f996a630eb2c116a94b0bf03eeed276d",
+    "reference_verify_mask_sha256": "e3c18e62ac3001390686069abd77e8beca68c4a6ac88965d4fa3433101b34d6f",
+    "bitstream_comparison": {
+      "byte_identical": false,
+      "configuration_identical": true,
+      "timestamp_fields": {
+        "c": {
+          "reference": "11/04/26",
+          "regenerated": "11/04/26"
+        },
+        "d": {
+          "reference": "18:24:49",
+          "regenerated": "18:28:46"
+        }
+      },
+      "comparison_sha256": "86d7a14ce44324d02cc043d27bd5f881f996a630eb2c116a94b0bf03eeed276d"
+    },
+    "mask_comparison": {
+      "byte_identical": false,
+      "configuration_identical": true,
+      "timestamp_fields": {
+        "c": {
+          "reference": "11/04/26",
+          "regenerated": "11/04/26"
+        },
+        "d": {
+          "reference": "18:24:49",
+          "regenerated": "18:28:46"
+        }
+      },
+      "comparison_sha256": "e3c18e62ac3001390686069abd77e8beca68c4a6ac88965d4fa3433101b34d6f"
+    },
+    "status": "PASS_CONFIGURATION_IDENTICAL"
+  },
+  "native_receipt": "D:\\FPGA\\TriHaRiscv-main\\build\\replay_cpu_20261104\\build\\video\\release_replay_20261104T102752_681201Z\\result.json",
+  "native_receipt_sha256": "26f635a60eacdc71c44d12eb1eef3bf402483558b156c0accccb3f743936c629",
+  "elapsed": 62.09385013580322
+}

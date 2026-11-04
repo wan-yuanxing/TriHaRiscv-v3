@@ -2,7 +2,7 @@
 `default_nettype none
 // Only the CPU/router/memories/cache/adapters are production RTL. The two
 // AXI-Lite endpoints and AXI memory below are control-path test models.
-module tb_application_cpu #(parameter integer CPU_MODE=0, BROKEN=0);
+module tb_application_cpu #(parameter integer CPU_MODE=0, BROKEN=0, MINIMAL_CONTROL_CPU=0);
     reg clk=0, rst_n=0, ddr_ready=0, ddr_fault=0, ddr_hold=0;
     always #5 clk=~clk;
     wire fault, protocol_fault;
@@ -91,6 +91,8 @@ module tb_application_cpu #(parameter integer CPU_MODE=0, BROKEN=0);
     wire axi_rready_o;
     generate if(CPU_MODE) begin:g_cpu
         integer trace_count=0;
+        always @(posedge clk) if(rst_n && u_dut.u_core.u_cpu.u_issue.opcode_b_issue_r !== 1'b0)
+            $fatal(1,"APPLICATION_FAIL second issue enabled in production application");
         always @(posedge clk) if(rst_n && u_dut.u_core.u_cpu.u_csr.csr_writeback_exception_i!=0 && trace_count<12)begin
             trace_count<=trace_count+1;
             $display("APPLICATION_TRAP exception=%h pc=%h mepc=%h cause=%h",u_dut.u_core.u_cpu.u_csr.csr_writeback_exception_i,
@@ -103,7 +105,7 @@ module tb_application_cpu #(parameter integer CPU_MODE=0, BROKEN=0);
                 u_dut.data_addr,u_dut.data_re,u_dut.data_wstrb,u_dut.data_accept,u_dut.data_ack,
                 irqs,mmio_writes[0],mmio_writes[1],ddr_reads,ddr_writes);
         end
-        triha_application_cpu u_dut (.clk_i(clk),.rst_ni(rst_n),.external_irq_i(|irqs),
+        triha_application_cpu #(.MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU)) u_dut (.clk_i(clk),.rst_ni(rst_n),.external_irq_i(|irqs),
             .ddr_ready_i(ddr_ready),.ddr_fault_i(ddr_fault),.ddr_fault_o(fault),.protocol_fault_o(protocol_fault),
             .npu_axi_awaddr_o(npu_axi_awaddr_o),
             .npu_axi_awprot_o(npu_axi_awprot_o),

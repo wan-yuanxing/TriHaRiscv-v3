@@ -1,0 +1,997 @@
+{
+  "status": "PASS",
+  "all_tables_met": true,
+  "summaries": {
+    "setup": {
+      "slow": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 33.382,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 60
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 9.782,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 7460
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 0.895,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2658
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 89.76,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1776
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 18.723,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 33
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 5.103,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2345
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 3.892,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 3.001,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 422
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.168,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 47413
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 2.472,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 260
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 3.408,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 4.732,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 30
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 3.114,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 207
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 19.021,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 1.338,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 82365
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 4.88,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 30
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 0.911,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 196
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 0.331,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 420
+        }
+      ],
+      "fast": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 34.869,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 60
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 14.48,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 7460
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 2.838,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2658
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 93.431,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1776
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 19.297,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 33
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 7.912,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2345
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 4.708,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 5.033,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 422
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 2.818,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 47413
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 4.117,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 260
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 4.735,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 5.237,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 30
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 4.245,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 207
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 19.431,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 7.845,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 82365
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 5.377,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 30
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 3.327,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 196
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 2.834,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 420
+        }
+      ]
+    },
+    "hold": {
+      "slow": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 0.334,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 60
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 0.303,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 7460
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 0.289,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1776
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 0.293,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2345
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 0.293,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 422
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.186,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 47413
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.765,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 260
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 1.287,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 0.158,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 82365
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 0.612,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 196
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 0.763,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 420
+        }
+      ],
+      "fast": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 0.229,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 60
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 0.2,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 7460
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 0.201,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1776
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 0.204,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2345
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 0.201,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 422
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.133,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 47413
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.218,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 260
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.556,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 1
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 0.117,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 82365
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 0.23,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 196
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 0.294,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 420
+        }
+      ]
+    },
+    "recovery": {
+      "slow": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 33.858,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 20.739,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2650
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 96.771,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 203
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 9.35,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 7.903,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 472
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 3.761,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 2.167,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 11494
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 8.745,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13486
+        }
+      ],
+      "fast": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 35.077,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 22.227,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2650
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 98.057,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 203
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 10.58,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 9.647,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 472
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 5.24,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 4.152,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 11494
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 12.653,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13486
+        }
+      ]
+    },
+    "removal": {
+      "slow": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 1.084,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 0.404,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2650
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 1.013,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 203
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 0.814,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 1.39,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 472
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 0.499,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.337,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 11494
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 0.373,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13486
+        }
+      ],
+      "fast": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 0.755,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 0.275,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 2650
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 0.72,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 203
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 0.559,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 651
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 0.941,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 472
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 0.348,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 97
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 0.225,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 11494
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 0.255,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 13486
+        }
+      ]
+    },
+    "pulse_width": {
+      "slow": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 18.318,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 11.539,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3129
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 49.038,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 401
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 11.54,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 662
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 3.8,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 98
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 3.04,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12742
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 8.655,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 18691
+        },
+        {
+          "launch_clock": "phy_dq_clk_0",
+          "capture_clock": "phy_dq_clk_0",
+          "wns_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 1.85,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "launch_clock": "phy_dq_clk_1",
+          "capture_clock": "phy_dq_clk_1",
+          "wns_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 2.4,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        }
+      ],
+      "fast": [
+        {
+          "launch_clock": "sys_clk",
+          "capture_clock": "sys_clk",
+          "wns_ns": 18.318,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 15
+        },
+        {
+          "launch_clock": "pixel_clk",
+          "capture_clock": "pixel_clk",
+          "wns_ns": 11.844,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 3129
+        },
+        {
+          "launch_clock": "cfg_clk",
+          "capture_clock": "cfg_clk",
+          "wns_ns": 49.428,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 401
+        },
+        {
+          "launch_clock": "rx_pixel_clk",
+          "capture_clock": "rx_pixel_clk",
+          "wns_ns": 11.93,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 662
+        },
+        {
+          "launch_clock": "rst_clk",
+          "capture_clock": "rst_clk",
+          "wns_ns": 3.8,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 98
+        },
+        {
+          "launch_clock": "ddrphy_sysclk",
+          "capture_clock": "ddrphy_sysclk",
+          "wns_ns": 3.345,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 12742
+        },
+        {
+          "launch_clock": "compute_clk",
+          "capture_clock": "compute_clk",
+          "wns_ns": 9.202,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 18691
+        },
+        {
+          "launch_clock": "phy_dq_clk_0",
+          "capture_clock": "phy_dq_clk_0",
+          "wns_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_0",
+          "capture_clock": "phy_dq_sysclk_0",
+          "wns_ns": 1.85,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 35
+        },
+        {
+          "launch_clock": "phy_dq_clk_1",
+          "capture_clock": "phy_dq_clk_1",
+          "wns_ns": 0.035,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        },
+        {
+          "launch_clock": "phy_dq_sysclk_1",
+          "capture_clock": "phy_dq_sysclk_1",
+          "wns_ns": 2.4,
+          "total_negative_slack_ns": 0.0,
+          "failing_endpoints": 0,
+          "endpoints": 84
+        }
+      ]
+    }
+  },
+  "clocks": {
+    "sys_clk": {
+      "period_ns": 37.037,
+      "loads": 15,
+      "source": "sys_clk"
+    },
+    "pixel_clk": {
+      "period_ns": 25.0,
+      "loads": 3129,
+      "source": "g_full.impl/clocks/pll/obuf0/gopclkbufg/CLKOUT"
+    },
+    "cfg_clk": {
+      "period_ns": 99.9999,
+      "loads": 401,
+      "source": "g_full.impl/clocks/pll/obuf1/gopclkbufg/CLKOUT"
+    },
+    "rx_pixel_clk": {
+      "period_ns": 25.0,
+      "loads": 662,
+      "source": "pixclk_in"
+    },
+    "ref_clk": {
+      "period_ns": 8.0,
+      "loads": 0,
+      "source": "ref_clk_p"
+    },
+    "rst_clk": {
+      "period_ns": 8.0,
+      "loads": 99,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/rst_clk_gpll/u_gpll/gpll_inst/CLKOUT0"
+    },
+    "ddrphy_sysclk": {
+      "period_ns": 8.0,
+      "loads": 12743,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_gpll/u_gpll/gpll_inst/CLKOUT0"
+    },
+    "compute_clk": {
+      "period_ns": 20.0,
+      "loads": 18691,
+      "source": "g_full.impl/compute_clock_gen/obuf0/gopclkbufg/CLKOUT"
+    },
+    "phy_dq_clk_0": {
+      "period_ns": 1.0,
+      "loads": 35,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0].ddrphy_ppll/u_ppll/ppll_inst/CLKOUTPHY"
+    },
+    "phy_dq_sysclk_0": {
+      "period_ns": 8.0,
+      "loads": 35,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0].u_ddrphy_ioclkdiv/ddrphy_ioclk_div_inst/CLKOUT"
+    },
+    "phy_dq_clk_1": {
+      "period_ns": 1.0,
+      "loads": 84,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[1].ddrphy_ppll/u_ppll/ppll_inst/CLKOUTPHY"
+    },
+    "phy_dq_sysclk_1": {
+      "period_ns": 8.0,
+      "loads": 84,
+      "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[1].u_ddrphy_ioclkdiv/ddrphy_ioclk_div_inst/CLKOUT"
+    }
+  },
+  "original_report_sha256": "b021e65767e45b14810e813fffaedb1a034bac53d9e3d47c19d901dc4d301855",
+  "native_max_skew_report": false,
+  "gray_proof": "All-bit conservative numerical clock+data arrival spread, both corners and early/late clock models."
+}

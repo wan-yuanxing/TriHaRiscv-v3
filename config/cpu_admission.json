@@ -1,5 +1,5 @@
 {
-  "accepted_implementation_commit": "febadb38f7bc36ad878a619ecfa9439edbd0d483",
+  "accepted_implementation_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
   "cache_sources": [
     "rtl/cpu/triha_icache_tag_ram.v",
     "rtl/cpu/triha_icache_data_ram.v",
@@ -11,7 +11,7 @@
     "rtl/cpu/triha_cache_subsystem.v",
     "rtl/soc/triha_cpu_cache_axi.v"
   ],
-  "constraints": "100MHz physical timing must be rerun after CSR correction and main integration; no board action in admission.",
+  "constraints": "New main CPU integration requires new synthesis, physical timing and board acceptance. Existing release bitstreams are unchanged.",
   "core": {
     "constraints": [
       "fpga/pg2l100h/constraints/cpu_core.fdc"
@@ -94,13 +94,14 @@
     {
       "base_sha256": "2325a576e02f36a1768ca2b9b5d2fb191cb9c660d6d96d75aaed6a6bd0533cdc",
       "destination": "rtl/cpu/ADAPTATIONS.json",
-      "sha256": "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25",
+      "sha256": "6a71140792b4c942ad1fe06642835c1557bfa8478f7ca36d737278c85be59e5c",
       "source": "rtl/cpu/ADAPTATIONS.json",
       "source_kind": "reviewed_working_tree",
       "previous_admitted_sha256": [
-        "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4"
+        "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4",
+        "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25"
       ],
-      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+      "current_change": "2026-11-04 pinned dual-core source integration and preserved main CSR fixes."
     },
     {
       "destination": "rtl/cpu/CACHE_ADAPTATIONS.json",
@@ -110,9 +111,14 @@
     },
     {
       "destination": "rtl/cpu/triha_btb.v",
-      "sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+      "sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
       "source": "rtl/cpu/triha_btb.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572"
+      ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_cache_subsystem.v",
@@ -122,36 +128,44 @@
     },
     {
       "destination": "rtl/cpu/triha_cached_core.v",
-      "sha256": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
+      "sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
       "source": "rtl/cpu/triha_cached_core.v",
-      "source_kind": "git"
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1"
+      ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
-      "base_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
       "destination": "rtl/cpu/triha_core.v",
-      "sha256": "ef3b92835d360432be77bd927f2953b79794bd591d11c27376329e70cfea0cca",
+      "sha256": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3",
       "source": "rtl/cpu/triha_core.v",
       "source_kind": "reviewed_working_tree",
       "previous_admitted_sha256": [
-        "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a"
+        "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a",
+        "ef3b92835d360432be77bd927f2953b79794bd591d11c27376329e70cfea0cca"
       ],
-      "header_comment_cleanup": {
-        "algorithm": "leading-notice-v1",
-        "source_sha256": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a"
-      }
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+      "base_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_cpu.v",
-      "sha256": "e60ddf8e9d73f3f203b21d9958beda956609e3159d4bd80eceb7afd936ac8569",
+      "sha256": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112",
       "source": "rtl/cpu/triha_cpu.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5"
+        "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+        "e60ddf8e9d73f3f203b21d9958beda956609e3159d4bd80eceb7afd936ac8569",
+        "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
-        "algorithm": "leading-notice-v1",
-        "source_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5"
-      }
+        "algorithm": "module-notice-v2",
+        "source_sha256": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "base_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
@@ -210,16 +224,19 @@
     },
     {
       "destination": "rtl/cpu/triha_decode.v",
-      "sha256": "17de66970beb7dfcf69c45e1ae76ce8aff0fe7785c4b82a461243e509220b44e",
+      "sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
       "source": "rtl/cpu/triha_decode.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f"
+        "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+        "17de66970beb7dfcf69c45e1ae76ce8aff0fe7785c4b82a461243e509220b44e"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f"
-      }
+        "source_sha256": "1d89e0899fb31c64d64f61af39016d2f7f081ea35bc9abd06dc0e31cf497314a"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_divider.v",
@@ -236,16 +253,20 @@
     },
     {
       "destination": "rtl/cpu/triha_frontend.v",
-      "sha256": "9c2ca630e715785fccb39bc35b6583c3cc964c6dbf680d1d31c48a6a4f81194e",
+      "sha256": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23",
       "source": "rtl/cpu/triha_frontend.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76"
+        "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+        "9c2ca630e715785fccb39bc35b6583c3cc964c6dbf680d1d31c48a6a4f81194e",
+        "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
-        "algorithm": "leading-notice-v1",
-        "source_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76"
-      }
+        "algorithm": "module-notice-v2",
+        "source_sha256": "92bf85932ebe747f9606b0e080f6f74cf14beb11987c7456e5b8e1a72aa83b58"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_icache.v",
@@ -294,83 +315,97 @@
     },
     {
       "destination": "rtl/cpu/triha_issue.v",
-      "sha256": "de0fe3eb23257ec66eefe1401f31cb5d68aaea6536265df6691c8cc1f6bd7375",
+      "sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
       "source": "rtl/cpu/triha_issue.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7"
+        "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+        "de0fe3eb23257ec66eefe1401f31cb5d68aaea6536265df6691c8cc1f6bd7375"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7"
-      }
+        "source_sha256": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_lsu.v",
-      "sha256": "1debf99c7df81ebe1d4ec47cf9d566794d26bbb6790a93d76ba1815125cdfaa3",
+      "sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
       "source": "rtl/cpu/triha_lsu.v",
-      "source_kind": "git",
+      "source_kind": "reviewed_working_tree",
       "previous_admitted_sha256": [
         "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4",
-        "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc"
+        "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+        "1debf99c7df81ebe1d4ec47cf9d566794d26bbb6790a93d76ba1815125cdfaa3"
       ],
-      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately.",
-      "header_comment_cleanup": {
-        "algorithm": "leading-notice-v1",
-        "source_sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc"
-      }
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+      "base_sha256": "3d614d5f62f8e96184cade9cb0af4c18d070b8d6ea22fa1f2bdc9003acb4debd"
     },
     {
       "destination": "rtl/cpu/triha_multiplier.v",
-      "sha256": "7700190da3ac38cda8b8d2bc781a4519841de1eed7553161a5a6a8f78167a718",
+      "sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
       "source": "rtl/cpu/triha_multiplier.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510"
+        "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+        "7700190da3ac38cda8b8d2bc781a4519841de1eed7553161a5a6a8f78167a718"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510"
-      }
+        "source_sha256": "cf73e46a04b6f0f78efa57d0a221047e9ef9cea54e9d6e0e68a6a141c8a6c903"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_npc.v",
-      "sha256": "fff13ae91902edc1e4a6c1b1b668256aca8dcf2d52df7a13e76a469552fef023",
+      "sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
       "source": "rtl/cpu/triha_npc.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4"
+        "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+        "fff13ae91902edc1e4a6c1b1b668256aca8dcf2d52df7a13e76a469552fef023"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4"
-      }
+        "source_sha256": "fb10fa1ea24289a0a11d387e1d8917624d3d851ab7d499bdbc97e40908f3115f"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_pipe_ctrl.v",
-      "sha256": "d1342f52b6ff9b92ae322ea3d2bece076c080b3e0df28e8358dbbe0a80597299",
+      "sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
       "source": "rtl/cpu/triha_pipe_ctrl.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5"
+        "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+        "d1342f52b6ff9b92ae322ea3d2bece076c080b3e0df28e8358dbbe0a80597299"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5"
-      }
+        "source_sha256": "b789427ee8861cac6b29830903997e29b385e44ee36c1e61dd119acc0ba19c54"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/triha_regfile.v",
-      "sha256": "3feaad4519f6b841d2c49774c60a8674a674246225afab7b6718276ccce44014",
+      "sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
       "source": "rtl/cpu/triha_regfile.v",
       "source_kind": "git",
       "previous_admitted_sha256": [
-        "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779"
+        "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+        "3feaad4519f6b841d2c49774c60a8674a674246225afab7b6718276ccce44014"
       ],
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
       "header_comment_cleanup": {
         "algorithm": "leading-notice-v1",
-        "source_sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779"
-      }
+        "source_sha256": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929"
+      },
+      "current_change": "2026-11-04 pinned dual-core migration, application single issue; main integration deltas preserved."
     },
     {
       "destination": "rtl/cpu/vendor/CACHE_UPSTREAM.json",
@@ -892,9 +927,13 @@
     {
       "base_sha256": null,
       "destination": "tb/cpu/tb_triha_isa_official.v",
-      "sha256": "ed72aa4e7b9796a7fbd8eb0eaf07c0eb143ef4220b12f2ae46d28583bb75e204",
+      "sha256": "25bf35040030d5258cfc3a2b62e3b64c4bc531856a20f5c66da6834ccb93456f",
       "source": "tb/cpu/tb_triha_isa_official.v",
-      "source_kind": "reviewed_working_tree"
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "ed72aa4e7b9796a7fbd8eb0eaf07c0eb143ef4220b12f2ae46d28583bb75e204"
+      ],
+      "current_change": "2026-11-04 parameterized mode coverage and cycle-by-cycle single-issue assertion; official ISA oracle unchanged."
     },
     {
       "base_sha256": null,
@@ -1134,5 +1173,19 @@
     "physical_revalidated": false,
     "board_revalidated": false,
     "release_packages": "Unmodified; their exact-source checks remain bound to original source bytes, not this cleaned working tree."
-  }
+  },
+  "dual_core_single_issue_20261104": {
+    "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+    "application_dual_issue": 0,
+    "extra_decode_stage": 0,
+    "preserved": [
+      "MINIMAL_CONTROL_CPU profile",
+      "machine CSR access and IALIGN=32 fixes",
+      "main SoC cache ABI",
+      "50/125/40 MHz board clocks"
+    ],
+    "evidence": "docs/verification/cpu/dual-single-migration-20261104.json",
+    "new_physical_acceptance": false
+  },
+  "previous_accepted_implementation_commit": "febadb38f7bc36ad878a619ecfa9439edbd0d483"
 }

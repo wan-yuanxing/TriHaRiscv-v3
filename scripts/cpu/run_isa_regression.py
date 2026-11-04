@@ -99,6 +99,8 @@ def main():
     ap.add_argument('--suite',choices=['all','riscv-tests','act4'],default='all')
     ap.add_argument('--filter',default='')
     ap.add_argument('--self-test',action='store_true')
+    ap.add_argument('--dual-issue',type=int,choices=[0,1],default=0)
+    ap.add_argument('--minimal-control',type=int,choices=[0,1],default=0)
     ap.add_argument('--max-cycles',type=int,default=2000000)
     ap.add_argument('--timeout',type=int,default=120)
     ap.add_argument('--input-root',type=Path,default=None)
@@ -111,7 +113,8 @@ def main():
     frozen = run/'frozen'
     frozen.mkdir(parents=True)
     result = {'status':'RUNNING','started_utc':stamp,'run_directory':str(run),'cpu_root':str(ROOT),
-              'configuration':'rv32im_zicsr','dual_issue':0,'btb_entries':512,'bht_entries':512,'ras_entries':4,'gshare':0,
+              'configuration':'rv32im_zicsr','dual_issue':args.dual_issue,'minimal_control_cpu':args.minimal_control,
+              'btb_entries':2 if args.minimal_control else 512,'bht_entries':2 if args.minimal_control else 512,'ras_entries':4,'gshare':0,
               'memory':'256 KiB test RAM at 0x80000000, no cache/DDR; not production SoC memory map',
               'suite':args.suite,'filter':args.filter,'self_test':args.self_test,'max_cycles':args.max_cycles,
               'wall_timeout_seconds':args.timeout,'rtl_hashes':{},'input_hashes':{},'tools':{},'commands':[],'cases':[],
@@ -261,6 +264,7 @@ def main():
             opts = ['-c','-onfinish','exit','-t','1ps','-voptargs=+acc',
                     "-gTOHOST_ADDR=32'h"+format(detail['tohost'],'08x'),
                     '-gMAX_CYCLES='+str(500 if args.self_test else args.max_cycles),
+                    '-gDUAL_ISSUE='+str(args.dual_issue),'-gMINIMAL_CONTROL_CPU='+str(args.minimal_control),
                     'work.tb_triha_isa_official','+MEM_IMAGE='+imagefile.as_posix(),
                     '-l',str(case/'transcript.log'),'-do',str(frozen/'scripts/cpu/run_modelsim.do')]
             rec,text = native(tools/'vsim.exe',opts,run,case/'simulation.log',args.timeout)

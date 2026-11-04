@@ -1,0 +1,82 @@
+[
+  {
+    "page": 5,
+    "width_pt": 834,
+    "height_pt": 702.95996,
+    "minimum_equivalent_font_pt_at_157mm": 8.294,
+    "sha256": "a21d4e23a865a84956b272b5205314a936c88539ec83809790988cdba1442738",
+    "text": "Six-Stage Dual-Issue CPU — Module View\nIF1 IF2 ID E1 E2 WB\nPair / hazard\nResponse /\nPC / BPU control Lane 0\nskid\n4R / 2W register Result / Result WB0\nfile state\nOperand\nforwarding\nI-Cache /\nPredecode ALU0 / AGU\nLane 1\nTCM\n6-word FIFO\nResult / Result WB1\nstate\nALU1\nShared LSU / MUL E1 branch resolve\nD-Cache / TCM\nA-only DIV / CSR Age / exception control\nRedirect / flush\nE1 / E2 / WB return and forwarding"
+  },
+  {
+    "page": 6,
+    "width_pt": 834,
+    "height_pt": 864,
+    "minimum_equivalent_font_pt_at_157mm": 8.294,
+    "sha256": "9b8b2d2bc51fb52164bb08406ae6d0b071a74afeae9acc4c3b6b87ad9543fbe0",
+    "text": "Fetch Front End — Request and Response Control\nI-Cache / TCM\nRequest gate\nPC Fetch PC rd / address Request /\nReady / not busy\nresponse\nBusy\nAccept\nPredicted PC\nOutstanding bit\nAccepted context\nBTB / BHT / RAS\nSet: accept\nPC / target / flags\nClear: response\nBranch training register\nData / fault\nResponse / skid\nLive response bundle Predecode\nSelect valid\nData / PC / prediction Instruction FIFO\nAND not drop\nReady Drop\nDrop window\nCapture on Skid data + valid\nbranch_q OR branch_d_q\nvalid & not ready 132-bit payload\nRedirect PC / valid Delay bit\nBackend redirect\nbranch_q branch_d_q\nRaw flush"
+  },
+  {
+    "page": 7,
+    "width_pt": 810,
+    "height_pt": 563.03998,
+    "minimum_equivalent_font_pt_at_157mm": 9.31,
+    "sha256": "f7b3340e40969a8d4f496b18a06aa47b237d6a6934361b538b74c3b021ea8097",
+    "text": "CPU Memory Interfaces — Module View\nInstruction route I-Cache / bypass\n64-bit return 16 KiB / 2-way\nCPU core\nDual issue / single\nissue\nD-Cache / bypass\nData route\n16 KiB / 2-way\n32-bit + byte enables\nWrite-back / allocate\nBoot ROM / SRAM / MMIO Memory adapters / AXI128 / DDR"
+  },
+  {
+    "page": 8,
+    "width_pt": 832.07996,
+    "height_pt": 671.03998,
+    "minimum_equivalent_font_pt_at_157mm": 8.307,
+    "sha256": "10ccba2a1d778a8812d02c729c1ac961ee5d665fe8ea59876f6cce77b200a3c5",
+    "text": "Video Capture and Frame-Synchronous Display\nRAW writer RAW read DMA\nHDMI RX\n800 × 600\nVideo DMA\nscheduler\nPreview writer Preview\n400 × 300 diagnostics\nDDR frame slots\nRAW / Preview\nPixels\nNCHW / Assets\nScale / pad / BGR\n320 × 320 NCHW\nFull-screen\nRAW / BOX /\nAVATAR\nRelease retired slot\nNCHW\nPixel + sync × 13\nReady display record NPU + CPU\nFrame + results Postprocessing\nRGB / HS / VS / DE\nSafe SOF Overlay context\nActive record HDMI TX\nRepeat until replaced 800 × 600"
+  },
+  {
+    "page": 9,
+    "width_pt": 834,
+    "height_pt": 916.07996,
+    "minimum_equivalent_font_pt_at_157mm": 8.294,
+    "sha256": "2399ebda858df30fb75145dc99cbc7fb7614a4dec928863d5cdfb2c97be3e313",
+    "text": "Branch Predictor — Query, Selection and Update\nIndex PC[10:3]\nFetch PC / accept\nWord PC[2] / tag\nLower BTB bank Upper BTB bank\n256 tags / targets / 256 tags / targets /\ntypes types\nSelected BTB\nWord entry\nTarget / type / hit\nTag match / valid Tag match / valid\nHit / type\nHit / start-word priority\nalign8(PC) + 8\nBHT 512 × 2 Prediction control\nWord Taken\nLower / upper counters Hit / taken / type\nSelect\nCall / return\nTarget\nRAS update control Return-address\nIndex\nSpeculative index\nPredicted call / return stack\nReference index\nAccepted PC 4 × 32 bit\nCall / return repair\nBranch event register\nNext PC / taken word\nPC / target / direction / type"
+  },
+  {
+    "page": 10,
+    "width_pt": 816.95996,
+    "height_pt": 836.88,
+    "minimum_equivalent_font_pt_at_157mm": 8.463,
+    "sha256": "aa3c37e27a5a05f6318797b58bcc3687b7c8a2a2a996c0c8c6739fa459aa324b",
+    "text": "Instruction FIFO — Head Refill and Queue Control\nFetch packet Entry-word selection\n64-bit + metadata PC[2] / predicted taken\nInput bypass\nEnqueue payload\nRetained / shifted Head0\nNext0 A\nBackend ring heads 119 bit\n6 × 119 bit Head0 / Head1\nRefill\nThird / fourth word\nWrite: wr / wr+1\nRead: rd+2 / rd+3\nHead1\nNext1 B\n119 bit\nAddress\nShift / bypass select\nState update\nrd / wr / count Candidate validity\nPush 1/2 − pop 0/1/2\nModulo-6 pointers count / PC continuity\nFlush priority\nCount\nEligible A / B\nInput ready CPU consumption\ncount ≤ 4 pop1 implies pop0"
+  },
+  {
+    "page": 11,
+    "width_pt": 829.91998,
+    "height_pt": 815.03998,
+    "minimum_equivalent_font_pt_at_157mm": 8.335,
+    "sha256": "3e16cf4f1029566a15f233a78f8b640c8e5b36401faba27d9980d636031d0b85",
+    "text": "Decode and Issue — Operands, Hazards and Final Enables\nHead0 / candidate A A operands\nA\nPC / class / roles Data / zero flags\nrs1 / rs2\nRegister file\n32 × 32\n4 read / 2 write\nHead1 / candidate B B operands\nB\nPC / class / roles Data / zero flags\nSelect\nProducer matching ID zero-branch check\nE1 / E2 / WB\nAge priority BEQ/BNE with x0\nValues / rd / ready\nUnavailable sources Ready + not taken\nBranch-pair permit\nPair capability\nOlder producers Same-pair check A first\nClass / shared units\nRAW / WAW wait A→B RAW / WAW B with A\nPC continuity\nLate cancellation: stall / IRQ / recovery / fault A / B fire"
+  },
+  {
+    "page": 12,
+    "width_pt": 834,
+    "height_pt": 985.91998,
+    "minimum_equivalent_font_pt_at_157mm": 8.294,
+    "sha256": "528239b11a0fa7e1027613ff0c7dbdaf521ec58320c9f1518769a7c3c21453f5",
+    "text": "Dual-Issue Execution — State, Shared Units and Recovery\nID E1 E2 WB\nA instruction ALU0 ALU result WB0\nForwarded Full integer PC / operands Result0 rd / value /\noperands ALU Type / valid / rd valid\nB instruction ALU1 ALU result WB1\nForwarded Simple integer PC / operands Result1 rd / value /\noperands ALU Type / valid / rd valid\nA\nAge / recovery\nE1 branch resolution\nB\nOlder fault first\nCompare / target / fault\nCancel younger\nA-only dispatch\nA/B A/B\nDIV / CSR\nLSU\nMUL DIV CSR\nRequest /\nE1 input / E2 result Iterative / busy Result / trap control\ncompletion\nLSU / MUL result DIV / CSR result\nSelected by lane owner / type A only"
+  },
+  {
+    "page": 13,
+    "width_pt": 821.03998,
+    "height_pt": 822,
+    "minimum_equivalent_font_pt_at_157mm": 8.423,
+    "sha256": "fca34efee9222ea5b2f9e8d029132135e5cfc6f6d6cfc9e8c1516d4ae11b7c33",
+    "text": "Integer ALU — Operand Selection and Result Capture\nPass A\nForwarded rs1 ADD / SUB\nA\nPC / U-immediate\nSLT / SLTU\nSign / subtract\nForwarded rs2 compare\nB\nI-immediate / 4\nresult_q\nResult 32 bit\nID/E1\nAND / OR / XOR\nCombinational shifter\nHold enable\n1 2 4 8 16\nLeft / right / sign fill\nEX0: B[4:0]\nEX1: imm[4:0]\nInstruction / ALU decode\nOperation\nOperand select / operation"
+  },
+  {
+    "page": 14,
+    "width_pt": 836.88,
+    "height_pt": 948,
+    "minimum_equivalent_font_pt_at_157mm": 8.266,
+    "sha256": "a30b6d6f6765273b913bda59133b3c8f0e44a89cc50b4622fac88c5632e20f04",
+    "text": "LSU — Request, Pending State and Response Formatting\nAddress\nBase rs1\nWidth / align\nRequest\ncheck\nregisters\n+\nByte / half / Access D-Cache\nAddress / data Request\nword or TCM\nStrobes /\nattributes\nI / S immediate\nWrite data\nStore alignment\nStore rs2\nAck / error\nByte enables[3:0]\nAddress / flags\nAccept\nHold / gate\nPending bit\nAccess decode\nRequest & accept Accept sets / ack\nLoad / store / cache op\nclears\nAccept OR\nunaligned E1 & !delay\nUnaligned E1 → E2\npending & !ack_ok\nMetadata FIFO\nSynthetic Stall / hold\nDelay next request\n2 × 36 bit\ncompletion\nAddress + access flags\nRead data\nLow address / format\nWriteback\nByte / half / word Sign / zero\nValue Valid /\nSelection Extension\nfault\nFault address\nPop Completion decode: ack / error / unaligned"
+  }
+]

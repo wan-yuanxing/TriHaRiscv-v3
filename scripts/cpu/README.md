@@ -1,11 +1,13 @@
 # CPU source admission and native regression
 
 The maintained source is in this main project. `config/cpu_admission.json`
-binds the exact source bytes, original source/destination mapping, accepted
-implementation `febadb3`, and evidence commit `340bcc2`. The only admitted
-production changes after that commit are the reviewed IALIGN=32 EPC/xRET fix
-in `triha_csr.v` and its `ADAPTATIONS.json` record. Original vendor files and
-licenses retain their bytes.
+binds exact source bytes and original source/destination mappings. The CPU
+implementation was migrated from dual-issue source commit `12733df` on
+2026-11-04; the application keeps `DUAL_ISSUE=0`. Each migrated file records
+its full immutable `source_commit`; retained helpers/tests keep their older
+provenance (`340bcc2` / `febadb3`). Main CSR legality, IALIGN=32 EPC/xRET,
+custom cache-maintenance addresses and the minimal control profile remain.
+Source-header notices are stored separately in `rtl/cpu/HEADER_NOTICES.json`.
 
 Explicit acquisition, when needed, uses `import_cpu.py --source-root <checkout>`.
 It validates every source and destination before writing; `--apply` enables
@@ -14,6 +16,11 @@ never authorizes overwriting a user edit. Simulation uses local admitted files
 and the main-tree ISA evidence archive; it does not invoke Git or another
 checkout, install tools, or run WSL.
 
+For reviewed integration deltas the importer checks both the immutable base
+hash and the reviewed working-tree hash. Header transforms have separate
+versioned algorithms; old V1 records keep their original byte output. The
+migration record is `docs/cpu/2026-11-04-dual-core-single-issue.md`.
+
 Run from the main project with the installed Python, ModelSim2020.4 and GCC15.2:
 
 ```powershell
@@ -21,7 +28,10 @@ python scripts/cpu/test_import_cpu.py
 python scripts/cpu/test_admission_support.py
 python scripts/cpu/run_isa_regression.py --self-test
 python scripts/cpu/run_isa_regression.py --suite all
+python scripts/cpu/run_isa_regression.py --suite all --minimal-control 1
+python scripts/cpu/run_isa_regression.py --suite riscv-tests --filter 'rv32ui-p-add$' --dual-issue 1
 python scripts/cpu/run_csr.py
+python scripts/cpu/run_document_csr.py --phase green
 python scripts/cpu/run_squash.py --delay 32
 python scripts/cpu/run_squash.py --delay 64
 python scripts/cpu/run_cache_soc.py --test router
@@ -62,10 +72,17 @@ authority. The five admitted `rtl/soc/triha_*` helpers do not replace existing
 `cpu_native_axil.v`, Video modules, shared DDR bridge, arbitration or ownership
 logic. `triha_cached_core.v` is an optional DDR-only wrapper, not the final SoC.
 
+The ISA bench checks every cycle that the second issue channel is inactive
+in single-issue mode. `--dual-issue 1` affects only that isolated testbench.
+The squash runner enables `TRIHA_SIM_CTRL_EXTERNAL` because its bench observes
+the simulation-only exit CSR. Normal production builds still reject that CSR.
+
 The focused import excludes historical PDS/board build drivers, debug capture
 scripts, CoreMark sources and old SoC generators. `CACHE_ADAPTATIONS.json`
 retains its original historical mapping-fixture entry; that unused FPGA scan
 fixture is not an admitted production dependency. Current shared-fabric/CDC,
-DMA visibility, reset-epoch integration, final CoreMark and physical100MHz
-timing still require verification in the assembled main target. No board or
+DMA visibility, reset-epoch integration, final CoreMark and physical timing
+still require verification in the assembled main target after CPU changes.
+The current face board clock contract is 50 MHz compute, 125 MHz DDR/video,
+and 40 MHz pixels; standalone CPU targets are separate. No board or
 COM operation is part of these regression commands.

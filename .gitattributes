@@ -28,6 +28,7 @@ rtl/soc/triha_uart_tx.v -text whitespace=cr-at-eol
 tb/cpu/** -text whitespace=cr-at-eol
 tb/soc/tb_cpu_cache_*.v -text whitespace=cr-at-eol
 config/cpu_toolchain.json -text whitespace=cr-at-eol
+config/cpu_admission.json -text whitespace=cr-at-eol
 scripts/cpu/run_modelsim.do -text whitespace=cr-at-eol
 sw/runtime/triha_tcm.ld -text whitespace=cr-at-eol
 sw/runtime/triha_sram.ld -text whitespace=cr-at-eol
@@ -58,9 +59,11 @@ releases/**/*.zip binary
 
 # Preserve the verified CoreMark delivery and report evidence byte for byte.
 releases/coremark-four-20261104/** -text whitespace=cr-at-eol
+releases/face-dual-single-avatar-20261104/** -text whitespace=cr-at-eol
 docs/verification/cpu/diagram_review2_2026-11-02/** -text whitespace=cr-at-eol
 docs/verification/cpu/document_review_zero_pair_20261102/** -text whitespace=cr-at-eol
 docs/verification/cpu/report_configurable_issue_2026-11-02/** -text whitespace=cr-at-eol
 docs/verification/npu/report_waveforms_3523d03/** -text whitespace=cr-at-eol
 docs/verification/soc/face_box_report_20261103/** -text whitespace=cr-at-eol
 docs/verification/soc/face_photo_report_20261104/** -text whitespace=cr-at-eol
+docs/verification/cpu/dual-single-migration-20261104-system.txt -text whitespace=cr-at-eol

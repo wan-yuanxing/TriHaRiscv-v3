@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "scope": "Audit controls only; no timing or board acceptance",
+  "controls": {
+    "wrong_database": "Timing report is not bound to the completed route DB",
+    "missing_corner": "Missing or duplicate synthesis heading: Hold Summary(Fast Corner):",
+    "wrong_compute_period": "Clock contract differs from 50/125/40 MHz BOX board",
+    "contradictory_summary": "Design summary disagrees with tables",
+    "missing_gray_bit": "Missing Gray bit/corner report coverage",
+    "swapped_gray_bit": "Gray bit crosses to a different index",
+    "relaxed_gray_delay": "Gray flight-time constraint changed",
+    "numeric_gray_violation": "Gray delay/skew conservative bound violates limit",
+    "wrong_pin": "Physical pin/electrical mismatch: uart_rx LOC",
+    "wrong_ddr_gate": "DDR gate site changed: g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_reset_ctrl/ddrphy_ioclk_gate[0]/opit_0_inv",
+    "missing_avatar_mode_key": "Unexpected physical port removal/addition",
+    "missing_clock_observation": "Missing clock bit/corner/early-late coverage: [('source', 'g_full.impl/face/u_compute_cdc/u_aw_fifo/wr_gray[0]/opit_0_inv', 'slow', 'min')], total 1",
+    "duplicate_clock_observation": "Duplicate clock observation",
+    "excessive_clock_spread": "Clock-inclusive Gray skew bound exceeds constraint",
+    "clock_group_mismatch": "Clock query must use a local synchronous data path"
+  },
+  "baseline_timing_met": true,
+  "inputs": {
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\video\\test_face_route_audit.py": "5ebea24efdf7d247a9dcd3c8410eb69921e30d6d4b9fcc342ac94e3f4d2ed9f9",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\result.json": "9f12d53b3ed02669679205347660909e53187344d0fb6d2bd5dbfa95cd969a56",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\physical.pcf": "29586e35dedea8dd930e94c7ed63846d1e94ed03a21db0e4fcdf997ef5647e2d",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\src\\fpga\\pg2l100h\\constraints\\triha_face_cdc.fdc": "c959d15f6621d73ee21f3713e273efb9742ec3507faa0b3261031085e97fe767",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\video\\face_timing.py": "69e7e51757bdc61dbf0a39d1868208d9fc25f66f0ae37bc8f38c829243a13070",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\video\\check_face_gray_clocks.py": "7f98d6b13ef1fcb5a3415d0265cb1330539967175eab9fecd8f8aba20aaed216",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\video\\qualify_face_bitstream.py": "87ad16c23c24a0e7b47ac28f0881a5f67d7069da9bcb46424494cce7db09fca5",
+    "D:\\FPGA\\TriHaRiscv-main\\scripts\\video\\face_gray_netlist.py": "af436da293c34f5f02abe2e7e85e457203d8357bbf5df0ee30703632a0637bba",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\timing\\report_timing\\triha_face_board_top.rtr": "b021e65767e45b14810e813fffaedb1a034bac53d9e3d47c19d901dc4d301855",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\sites\\sites.pcf": "438fd7435f5808fae61f27c479596887bcce6be6d92618cf112901f33f047717",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\clocks4_measured\\result.json": "92625241d1a5a7ce0013baae3bf6b10aff4c2b5cef062a4b228becceb7e1eb57",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\clocks4_measured\\report_timing\\triha_face_board_top.rtr": "aaff13074c7b7833e1db622f5e8393d4195f9007c8205b156c6e2ab23d0d14c3"
+  }
+}

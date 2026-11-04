@@ -25,7 +25,7 @@ class ExportTests(unittest.TestCase):
         for name in ('program_board.py','restore_face_release.py','export_face_release.py'):
             self.write('scripts/video/'+name,('// fixture '+name+'\n').encode())
         self.write('scripts/soc/upload_face_model.py',b'# fixture uploader\n')
-        for directory in ('build/video/vendor','build/npu/b03_assets_20261030','build/npu/face_fixture_20261103'):
+        for directory in ('build/video/vendor','build/npu/b03_assets_20261030'):
             self.write(directory+'/fixture.bin',directory.encode())
         old_report=self.write('build/old-placement/report.txt',b'original measured placement provenance\n')
         placed=self.write('build/placement/placed.adf',b'fixture placed database\n')
@@ -94,6 +94,29 @@ class ExportTests(unittest.TestCase):
     def test_changed_native_evidence_rejected(self):
         self.routed.write_bytes(b'tampered route')
         with self.assertRaisesRegex(ValueError,'Qualified evidence changed'):self.export()
+        self.assertFalse(self.output.exists())
+
+    def external_fixture(self):
+        fixture=self.write('build/npu/current-scene/input.bin',b'current independent scene')
+        result=self.root/'build/positive/result.json'
+        record=json.loads(result.read_text(encoding='utf-8'))
+        record['external_sha256']={str(fixture):digest(fixture)}
+        result.write_text(json.dumps(record),encoding='utf-8')
+        self.q['functional'][0]['result_sha256']=digest(result)
+        self.save_qualification()
+        return fixture
+
+    def test_current_simulation_fixture_without_historical_directory(self):
+        fixture=self.external_fixture()
+        self.export()
+        manifest=verify(self.output,self.root)
+        self.assertEqual(manifest['archive_members']['build/npu/current-scene/input.bin']['sha256'],digest(fixture))
+        self.assertFalse(any('face_fixture_20261103' in n for n in manifest['archive_members']))
+
+    def test_changed_external_simulation_input_rejected(self):
+        fixture=self.external_fixture();fixture.write_bytes(b'tampered input')
+        with self.assertRaisesRegex(ValueError,'Simulation external input changed'):
+            self.export()
         self.assertFalse(self.output.exists())
 
     def test_changed_source_rejected(self):

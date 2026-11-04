@@ -3,7 +3,7 @@
  * @brief      TriHa 顺序 CPU 核心封装
  * @module     triha_core
  * @details
- * - 固定 RV32、通用寄存器堆，启用现有前端译码流水级
+ * - 固定 RV32、通用寄存器堆，使用新版双发射核的前端预译码
  * - 单发射为默认，双发射用于同边界评估
  * - 预译码结果随指令入 FIFO，缩短 FIFO 读出到发射的组合路径
  * - 保留完整取指、数据、缓存维护和分支预测配置
@@ -54,7 +54,7 @@ module triha_core #(
         .SUPPORT_MUL_BYPASS(MINIMAL_CONTROL_CPU ? 0 : 1),
         .EARLY_MUL_BYPASS(MINIMAL_CONTROL_CPU ? 0 : 1),
         .SUPPORT_REGFILE_XILINX(0),
-        .EXTRA_DECODE_STAGE(1),
+        .EXTRA_DECODE_STAGE(0),
         .NUM_BTB_ENTRIES(MINIMAL_CONTROL_CPU ? 2 : 512),
         .NUM_BTB_ENTRIES_W(MINIMAL_CONTROL_CPU ? 1 : 9),
         .BTB_DIRECT_MAPPED(MINIMAL_CONTROL_CPU ? 0 : 1),

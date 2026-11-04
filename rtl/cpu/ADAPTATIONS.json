@@ -3,9 +3,9 @@
   "adaptations": [
     {
       "base": "rtl/cpu/vendor/src/core/riscv_core.v",
-      "base_sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+      "base_sha256": "e5ae6eb3c90bdbef0588afacf84d8db5915ab74dca32442be4e20e0aa9760784",
       "derived": "rtl/cpu/triha_cpu.v",
-      "derived_sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+      "derived_sha256": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112",
       "changes": [
         "Rename integration module to triha_cpu.",
         "Conditionally instantiate EX1 only when SUPPORT_DUAL_ISSUE is true; otherwise tie its outputs to zero.",
@@ -17,30 +17,34 @@
         "Connect independent load bypass payload from maintained LSU to both pipeline controllers.",
         "Connect the existing divider through an optional full-tuple input register; default adds one cycle only to divider completion, while legacy cycle miter disables it.",
         "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
-        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only."
+        "Connect existing multiplier E1 qualified unsigned16-bit partial-product tap to the maintained issue bypass; EARLY_MUL_BYPASS default1, single issue only.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
-      "base_sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+      "base_sha256": "bcc0e94cbcb601b9d987e3e04ce9d537a3b7dd6eb29851b7608c4d7dbd5498a6",
       "derived": "rtl/cpu/triha_frontend.v",
-      "derived_sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+      "derived_sha256": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23",
       "changes": [
         "Rename integration module to triha_frontend.",
         "Select existing fetch registered-redirect branch when REGISTER_REDIRECT is enabled; outer MMU remains controlled only by SUPPORT_MMU.",
         "Register complete 70-bit training event one cycle before predictor update, including taken/not-taken events without a miss request.",
         "Connect the maintained decode/FIFO derivative with free-slot wide payload capture and preserved raw CSR history.",
         "Connect the equivalent parallel-priority prediction-table derivative; prediction/training cycles and table sizes remain unchanged.",
-        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available."
+        "Propagate optional indexed native-RAM BTB backend selection; legacy associative backend remains available.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_issue.v",
-      "base_sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+      "base_sha256": "6f0c72e2d2311fede9b1753041786c1d2ca56417418bf946c96b13633ef746d0",
       "derived": "rtl/cpu/triha_issue.v",
-      "derived_sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+      "derived_sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
       "changes": [
         "Select raw payload/class lane from registered expected-PC bit 2 using the existing aligned fetch-FIFO contract; retain full PC/valid matching on issue and accept.",
         "Rename integration module to triha_issue.",
@@ -53,34 +57,38 @@
         "Compute PC+4 before late redirect selection using ADS-documented syn_keep; generate kept PC+8 only for dual issue, avoiding unused single-issue hardware; identical PC priority, arithmetic and cycle behavior.",
         "For native single issue, reuse a second existing 2-read single-write register file to pre-read both raw fetch slots and forward each before the original PC lane choice; same write/reset/x0/forward priority, issue eligibility and cycle.",
         "Resolve six parallel operand bypass tag matches into an exclusive highest-priority case before selecting payload; preserve procedural unknown-tag comparisons, selected X/Z data, x0 and all states/cycles.",
-        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates."
+        "Single-issue MUL can forward the qualified unsigned16-bit E1 partial product to the next instruction; high multiply/load/dual issue preserve existing dependency policy and all cancellation/hold/ordering gates.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
-      "base_sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+      "base_sha256": "ea6dc169d0c00568b8eeae7b808e3ba9d7649b776070ed5e50acf7894fc226f5",
       "derived": "rtl/cpu/triha_multiplier.v",
-      "derived_sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+      "derived_sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
       "changes": [
         "Rename integration module to triha_multiplier.",
         "Sample multiplier operand data whenever not held, matching existing execution-unit data registers; pipeline validity still controls result use.",
         "Remove now-unused mult_inst_w decode.",
-        "Expose a shared 16x16 low partial product from four signed17-bit products, with equivalent full33-bit arithmetic, state or architectural writeback latency."
+        "Expose a shared 16x16 low partial product from four signed17-bit products, with equivalent full33-bit arithmetic, state or architectural writeback latency.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
       "external_reference": {
         "url": "https://github.com/lowRISC/ibex/blob/246849ed1063828355cae8a22c6f1aa95250c3b6/rtl/ibex_multdiv_fast.sv",
         "sha256": "c86ca819b58b8ce2fc4ff5db887346bcd622b868fb7815fa07dd77119c68c04a",
         "license": "Apache-2.0",
         "scope": "Signed17-bit low/high partial-product pattern; independent combinational Verilog reconstruction, no external FSM/divider imported."
-      }
+      },
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_csr.v",
-      "base_sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+      "base_sha256": "a7ee2178975e45e57c20b6d7bee404061d3603513e22abb028b6088b9e5e8024",
       "derived": "rtl/cpu/triha_csr.v",
-      "derived_sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+      "derived_sha256": "c324c4d446b88bbd245324225afac71bf5f1273f4aa25a9d38272267c0d5c502",
       "changes": [
         "Rename integration module to triha_csr.",
         "Separate wide CSR data registers from late opcode valid, retaining original valid, exception, read-side-effect and commit-write controls.",
@@ -88,88 +96,93 @@
         "For fixed IALIGN=32, mask EPC reads, committed writes and xRET targets to four-byte alignment at the maintained CSR boundary; vendor source and all valid/exception controls remain unchanged. Official regression and physical timing evidence have separate source hashes.",
         "2026-11-03 P0-1/P0-2: custom maintenance CSR 0x7c1..0x7c3; machine-only illegal CSR checks and maintained regfile. See docs/verification/cpu/document_review_csr_20261102 in main tree; no new physical acceptance."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
       "previous_derived_sha256": [
         "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49"
       ]
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
-      "base_sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+      "base_sha256": "cb6f4e168eb3387563a4375759b51a3f2461b83336cd64905c7012efc2ac4823",
       "derived": "rtl/cpu/triha_lsu.v",
-      "derived_sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "derived_sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
       "changes": [
         "Rename integration/helper modules to triha_lsu/triha_lsu_fifo.",
         "Export pure load payload for bypass without response ack/error selection; preserve the original completion/fault address bus and all request/exception controls.",
         "Decode address format and store data without late issue valid; retain final request/unaligned strobe qualification.",
         "Keep address/data/cacheability payload in separate registers with response-wait and unaccepted-request holds, excluding late fault cancellation from wide data.",
         "For the existing depth-two request FIFO, rotate the original two storage banks into registered head/tail coordinates; preserve accept/pop/count and all stale output data with no extra latency or payload state. Other depths retain the original implementation.",
-        "2026-11-03 P0-1/P0-2: custom maintenance CSR 0x7c1..0x7c3; machine-only illegal CSR checks and maintained regfile. See docs/verification/cpu/document_review_csr_20261102 in main tree; no new physical acceptance."
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained.",
+        "Preserve main custom maintenance CSRs 0x7c1..0x7c3; do not interpret PMP addresses as maintenance."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged.",
-      "previous_derived_sha256": [
-        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
-      ]
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
-      "base_sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+      "base_sha256": "e5cac80054bf99c43baac7beb2ebc047af74589edc3970aea9449d14fb808809",
       "derived": "rtl/cpu/triha_pipe_ctrl.v",
-      "derived_sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "derived_sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
       "changes": [
         "Rename module to triha_pipe_ctrl.",
         "Use a separate load-data input for E2 forwarding only; all WB capture, exception, valid and fault-address paths remain unchanged.",
         "Forwarding payload selection uses registered E2 valid rather than stall-gated valid; destination tag and all commit/stall enables retain original gating.",
-        "Export separate E2/WB data-bypass destination tags using registered valid/rd-valid/opcode only; original stall-qualified commit/hazard tags remain unchanged."
+        "Export separate E2/WB data-bypass destination tags using registered valid/rd-valid/opcode only; original stall-qualified commit/hazard tags remain unchanged.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
-      "base_sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+      "base_sha256": "d404e16a36fd9e481e3fd4d97eec20bafe65d928c0ad45ca3d6a0d062b0c1587",
       "derived": "rtl/cpu/triha_regfile.v",
-      "derived_sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+      "derived_sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
       "changes": [
         "Reuse the existing FPGA two-copy asynchronous-read register-file structure with native GTP_RAM32X2DP primitives for single issue.",
         "Preserve synchronous zero-on-reset visibility with 31 written flags; x0 stays zero; no read register or added latency.",
         "Single-issue secondary write must be zero and is checked by simulation; dual issue retains original register-file behavior.",
-        "Use native valid-address/reset data gates for RAM write hold delay; enabled write values and write/read cycles unchanged. Verify actual mapped retention and final multicorner hold."
+        "Use native valid-address/reset data gates for RAM write hold delay; enabled write values and write/read cycles unchanged. Verify actual mapped retention and final multicorner hold.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
       "reference_files": [
         "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
         "config/cpu_primitives.json"
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged; installed tool models referenced without copying."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_divider.v",
-      "base_sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+      "base_sha256": "0207952c9924cdaee4ff44495dcffdcfd25657f0aaa56b49715691e757f5c129",
       "derived": "rtl/cpu/triha_divider.v",
-      "derived_sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "derived_sha256": "63f5106e941e2e490abcee50321e49c7826df8e5daf35722902234be6109d732",
       "changes": [
         "Register the complete 144-bit divider input tuple and one valid bit, sampling payload independently of validity.",
         "Instantiate the original divider unchanged, including its iterative algorithm, cache and restart behavior; output stream is exactly one cycle later when enabled.",
         "Provide REGISTER_INPUT=0 only for explicit legacy timing comparison."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files."
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_decode.v",
-      "base_sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+      "base_sha256": "fc5f7bb94d9a6c13e5f3f06538c7b633c401d5048d79dff0f2f7042b637aa084",
       "derived": "rtl/cpu/triha_decode.v",
-      "derived_sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "derived_sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
       "changes": [
         "Rename integration decode/FIFO modules without changing original vendor bytes.",
         "Sample wide PC/instruction data only into the free write slot whenever not full, independently of push/flush; original count/pointers/valid/fault metadata control unchanged.",
-        "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder."
+        "Preserve original invalid-slot CSR classification using one historical static CSR bit per word/entry, captured only on original non-flushed pushes and derived by the original decoder.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_npc.v",
-      "base_sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+      "base_sha256": "b96728ff69f413fccaad11888d39a3523da2b2354c8b9e8696c52c89ee837b51",
       "derived": "rtl/cpu/triha_npc.v",
-      "derived_sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+      "derived_sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
       "changes": [
         "Rename integration predictor and its unchanged local LFSR helper.",
         "Select exact-PC and upper-word matches with highest-index one-hot masks; parallel bitwise AND/OR data selection preserves duplicate tags and original if/X comparison behavior.",
@@ -183,7 +196,8 @@
         "Implement unchanged highest-entry priority with six-entry local/global lookahead in installed Pango LUT6 primitives; OR6 INIT fffffffffffffffe and own-match/no-higher INIT 2, same bitwise four-state function and no state. Larger optional tables retain original expression.",
         "Reuse native group hit reductions for PC/upper/write hits; choose valid directly with original procedural priority. Read even/odd BHT word banks in parallel before the late index LSB, preserving >=2 comparison and explicit X for unknown low address; no state or cycle change.",
         "Keep a shared sequential PC+8 sum before both late prediction selections, preventing late control from entering the increment carry; same arithmetic and cycles.",
-        "Select independently checked512-entry direct-mapped native-RAM BTB backend without adding prediction latency; retain shared BHT/RAS and legacy associative backend."
+        "Select independently checked512-entry direct-mapped native-RAM BTB backend without adding prediction latency; retain shared BHT/RAS and legacy associative backend.",
+        "Frozen v83 dual-board build overlay; exact accepted CPU source manifest binding retained."
       ],
       "references": [
         {
@@ -195,13 +209,14 @@
           "copyright": "lowRISC contributors (OpenTitan project)"
         }
       ],
-      "license": "Original Apache-2.0 notice and adapted lowRISC notice retained; vendor/LICENSE contains Apache-2.0; original vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files.",
+      "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c"
     },
     {
       "base": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
-      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "base_sha256": "394df7d3c1851c8e5878f7cc4f875ff31e93b9b9d562139e3c71be5a9763ad0b",
       "derived": "rtl/cpu/triha_csr_regfile.v",
-      "derived_sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+      "derived_sha256": "ed515df4e1f6b2c0001b2cc5678269f174a9062f571742221fe97152a81581db",
       "changes": [
         "Expose implemented-address decode, excluding disabled supervisor CSRs; preserve fixed MISA writes.",
         "MEI > MSI > MTI machine interrupt priority.",
@@ -209,7 +224,7 @@
         "Legacy 0x7b2/0x8b2 simulation control only under verilog_sim/verilator or TRIHA_SIM_CTRL_EXTERNAL (external testbench owns print/exit).",
         "Explicit read-only-zero mvendorid/marchid/mimpid (0xf11..0xf13); unknown CSR addresses still fault."
       ],
-      "license": "Original Apache-2.0 notice retained; vendor bytes unchanged."
+      "license": "Notices retained in HEADER_NOTICES.json and standalone license files."
     }
   ],
   "wrapper_configuration": {
@@ -218,5 +233,18 @@
     "extra_decode_stage": 1,
     "reason": "Existing predecode/FIFO option removes the measured FIFO-to-decode-to-CSR critical path. Cache, predictor, multiply/divide, bypass, issue width and operating clock are retained.",
     "evidence": "build/cpu/decode_stage_eval_20261101; isolated 103 ISA cases, wrong-path squash and cache IRQ pass; production regression and routed timing are separate gates."
+  },
+  "dual_core_single_issue_20261104": {
+    "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+    "application_dual_issue": 0,
+    "extra_decode_stage": 0,
+    "preserved": [
+      "MINIMAL_CONTROL_CPU profile",
+      "machine CSR access and IALIGN=32 fixes",
+      "main SoC cache ABI",
+      "50/125/40 MHz board clocks"
+    ],
+    "evidence": "docs/verification/cpu/dual-single-migration-20261104.json",
+    "new_physical_acceptance": false
   }
 }

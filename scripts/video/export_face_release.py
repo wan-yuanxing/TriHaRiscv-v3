@@ -77,6 +77,18 @@ def export(qualified, output, additional, components=()):
             sources[name]=expected
         for name,expected in r['output_sha256'].items():
             check_bound(directory/name,expected,'Simulation output changed: ')
+        # Preserve the scene actually exercised by this simulation. Historical
+        # fixture directory names are not dependencies of a new release.
+        for name,expected in r.get('external_sha256',{}).items():
+            path=(ROOT/Path(name)).resolve()
+            check_bound(path,expected,'Simulation external input changed: ')
+            if path.is_relative_to(ROOT/'build'):
+                add(path)
+            elif path.is_relative_to(ROOT):
+                relative=path.relative_to(ROOT).as_posix()
+                if relative in sources and sources[relative]!=expected:
+                    raise ValueError('Conflicting source identities: '+relative)
+                sources[relative]=expected
         tree(directory)
     for name in ('scripts/video/program_board.py','scripts/video/restore_face_release.py',
                  'scripts/video/export_face_release.py','scripts/soc/upload_face_model.py'):
@@ -114,7 +126,7 @@ def export(qualified, output, additional, components=()):
                 add(path)
     for name,expected in sources.items():
         check_bound(ROOT/name,expected,'Qualified source changed: ')
-    for name in ('build/video/vendor','build/npu/b03_assets_20261030','build/npu/face_fixture_20261103'):
+    for name in ('build/video/vendor','build/npu/b03_assets_20261030'):
         tree(name)
     for path in additional:
         tree(path) if path.is_dir() else add(path)

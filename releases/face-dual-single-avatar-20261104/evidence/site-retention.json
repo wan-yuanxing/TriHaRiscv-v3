@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checked": 561,
+  "differences": [],
+  "inputs": {
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\place4_measured\\receipt.json": "0b9dc15ca6bb092fd84f4f33514b56e7cf31865ac1c7724496d4b59a939a41e4",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\sites\\sites.pcf": "438fd7435f5808fae61f27c479596887bcce6be6d92618cf112901f33f047717"
+  },
+  "scope": "Actual site retention only; internal timing separately qualified."
+}

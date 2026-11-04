@@ -1,0 +1,79 @@
+--- a/rtl/cpu/triha_core.v
++++ b/rtl/cpu/triha_core.v
+@@ -1,18 +1,20 @@
+ /*
+  * @file       triha_core.v
+- * @brief      TriHa 六级顺序 CPU 核心封装
++ * @brief      TriHa 顺序 CPU 核心封装
+  * @module     triha_core
+  * @details
+- * - 固定 RV32、六级主流水和通用寄存器堆
++ * - 固定 RV32、通用寄存器堆，使用新版双发射核的前端预译码
+  * - 单发射为默认，双发射用于同边界评估
+- * - 导出完整取指、数据及缓存维护协议；不增加流水级
++ * - 预译码结果随指令入 FIFO，缩短 FIFO 读出到发射的组合路径
++ * - 保留完整取指、数据、缓存维护和分支预测配置
+  */
+ 
+ `timescale 1ns / 1ps
+ 
+ module triha_core #(
+     parameter [31:0] RESET_VECTOR = 32'h8000_0000,
+-    parameter integer DUAL_ISSUE = 0
++    parameter integer DUAL_ISSUE = 0,
++    parameter integer MINIMAL_CONTROL_CPU = 0
+ ) (
+     input  wire        clk_i,
+     input  wire        rst_ni,
+@@ -43,21 +45,23 @@
+     input  wire [10:0] data_resp_tag_i
+ );
+     triha_cpu #(
+-        .SUPPORT_BRANCH_PREDICTION(1),
++        .SUPPORT_BRANCH_PREDICTION(MINIMAL_CONTROL_CPU ? 0 : 1),
+         .SUPPORT_MULDIV(1),
+         .SUPPORT_SUPER(0),
+         .SUPPORT_MMU(0),
+         .SUPPORT_DUAL_ISSUE(DUAL_ISSUE),
+-        .SUPPORT_LOAD_BYPASS(1),
+-        .SUPPORT_MUL_BYPASS(1),
+-        .EARLY_MUL_BYPASS(1),
++        .SUPPORT_LOAD_BYPASS(MINIMAL_CONTROL_CPU ? 0 : 1),
++        .SUPPORT_MUL_BYPASS(MINIMAL_CONTROL_CPU ? 0 : 1),
++        .EARLY_MUL_BYPASS(MINIMAL_CONTROL_CPU ? 0 : 1),
+         .SUPPORT_REGFILE_XILINX(0),
+         .EXTRA_DECODE_STAGE(0),
+-        .NUM_BTB_ENTRIES(512),
+-        .NUM_BTB_ENTRIES_W(9),
+-        .BTB_DIRECT_MAPPED(1),
+-        .NUM_BHT_ENTRIES(512),
+-        .NUM_BHT_ENTRIES_W(9),
++        .NUM_BTB_ENTRIES(MINIMAL_CONTROL_CPU ? 2 : 512),
++        .NUM_BTB_ENTRIES_W(MINIMAL_CONTROL_CPU ? 1 : 9),
++        .BTB_DIRECT_MAPPED(MINIMAL_CONTROL_CPU ? 0 : 1),
++        .NUM_BHT_ENTRIES(MINIMAL_CONTROL_CPU ? 2 : 512),
++        .NUM_BHT_ENTRIES_W(MINIMAL_CONTROL_CPU ? 1 : 9),
++        .BHT_ENABLE(MINIMAL_CONTROL_CPU ? 0 : 1),
++        .RAS_ENABLE(MINIMAL_CONTROL_CPU ? 0 : 1),
+         .NUM_RAS_ENTRIES(4),
+         .NUM_RAS_ENTRIES_W(2),
+         .GSHARE_ENABLE(0)
+--- a/rtl/cpu/triha_lsu.v
++++ b/rtl/cpu/triha_lsu.v
+@@ -217,9 +217,13 @@
+ 
+ end
+ 
+-wire dcache_flush_w      = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DFLUSH);
+-wire dcache_writeback_w  = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DWRITEBACK);
+-wire dcache_invalidate_w = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == `CSR_DINVALIDATE);
++// Main SoC custom maintenance ABI; PMP CSR addresses must not flush caches.
++localparam [11:0] TRIHA_CSR_DFLUSH = 12'h7c1;
++localparam [11:0] TRIHA_CSR_DWRITEBACK = 12'h7c2;
++localparam [11:0] TRIHA_CSR_DINVALIDATE = 12'h7c3;
++wire dcache_flush_w      = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DFLUSH);
++wire dcache_writeback_w  = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DWRITEBACK);
++wire dcache_invalidate_w = ((opcode_opcode_i & `INST_CSRRW_MASK) == `INST_CSRRW) && (opcode_opcode_i[31:20] == TRIHA_CSR_DINVALIDATE);
+ 
+ //-----------------------------------------------------------------
+ // Sequential

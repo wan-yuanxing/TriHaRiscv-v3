@@ -1,0 +1,2392 @@
+{
+  "status": "pass",
+  "target": "triha_face_board",
+  "stage": "bitstream",
+  "physical_board": false,
+  "timing_closed": false,
+  "internal_timing_met": true,
+  "external_io_timing_verified": false,
+  "started": 1793787819.9121933,
+  "timing": {
+    "clocks": {
+      "sys_clk": {
+        "period_ns": 37.037,
+        "loads": 15,
+        "source": "sys_clk"
+      },
+      "pixel_clk": {
+        "period_ns": 25.0,
+        "loads": 3129,
+        "source": "g_full.impl/clocks/pll/obuf0/gopclkbufg/CLKOUT"
+      },
+      "cfg_clk": {
+        "period_ns": 99.9999,
+        "loads": 401,
+        "source": "g_full.impl/clocks/pll/obuf1/gopclkbufg/CLKOUT"
+      },
+      "rx_pixel_clk": {
+        "period_ns": 25.0,
+        "loads": 662,
+        "source": "pixclk_in"
+      },
+      "ref_clk": {
+        "period_ns": 8.0,
+        "loads": 0,
+        "source": "ref_clk_p"
+      },
+      "rst_clk": {
+        "period_ns": 8.0,
+        "loads": 99,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/rst_clk_gpll/u_gpll/gpll_inst/CLKOUT0"
+      },
+      "ddrphy_sysclk": {
+        "period_ns": 8.0,
+        "loads": 12743,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_gpll/u_gpll/gpll_inst/CLKOUT0"
+      },
+      "compute_clk": {
+        "period_ns": 20.0,
+        "loads": 18691,
+        "source": "g_full.impl/compute_clock_gen/obuf0/gopclkbufg/CLKOUT"
+      },
+      "phy_dq_clk_0": {
+        "period_ns": 1.0,
+        "loads": 35,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0].ddrphy_ppll/u_ppll/ppll_inst/CLKOUTPHY"
+      },
+      "phy_dq_sysclk_0": {
+        "period_ns": 8.0,
+        "loads": 35,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[0].u_ddrphy_ioclkdiv/ddrphy_ioclk_div_inst/CLKOUT"
+      },
+      "phy_dq_clk_1": {
+        "period_ns": 1.0,
+        "loads": 84,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[1].ddrphy_ppll/u_ppll/ppll_inst/CLKOUTPHY"
+      },
+      "phy_dq_sysclk_1": {
+        "period_ns": 8.0,
+        "loads": 84,
+        "source": "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_slice_top/i_dqs_bank[1].u_ddrphy_ioclkdiv/ddrphy_ioclk_div_inst/CLKOUT"
+      }
+    },
+    "summaries": {
+      "setup": {
+        "slow": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 33.382,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 60
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 9.782,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 7460
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.895,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2658
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 89.76,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1776
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 18.723,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 33
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 5.103,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2345
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 3.892,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 3.001,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 422
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.168,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 47413
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 2.472,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 260
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 3.408,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 4.732,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 30
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 3.114,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 19.021,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 1.338,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 82365
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 4.88,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 30
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 0.911,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 196
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 0.331,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 420
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 34.869,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 60
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 14.48,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 7460
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 2.838,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2658
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 93.431,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1776
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 19.297,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 33
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 7.912,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2345
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 4.708,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 5.033,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 422
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 2.818,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 47413
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 4.117,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 260
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 4.735,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 5.237,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 30
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 4.245,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 207
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 19.431,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 7.845,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 82365
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 5.377,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 30
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 3.327,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 196
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 2.834,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 420
+          }
+        ]
+      },
+      "hold": {
+        "slow": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 0.334,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 60
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.303,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 7460
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 0.289,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1776
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 0.293,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2345
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 0.293,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 422
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.186,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 47413
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.765,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 260
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 1.287,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 0.158,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 82365
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 0.612,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 196
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 0.763,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 420
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 0.229,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 60
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.2,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 7460
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 0.201,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1776
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 0.204,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2345
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 0.201,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 422
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.133,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 47413
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.218,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 260
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.556,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 1
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 0.117,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 82365
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 0.23,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 196
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 0.294,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 420
+          }
+        ]
+      },
+      "recovery": {
+        "slow": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 33.858,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 20.739,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2650
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 96.771,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 203
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 9.35,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 651
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 7.903,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 472
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 3.761,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 97
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 2.167,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 11494
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 8.745,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13486
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 35.077,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 22.227,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2650
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 98.057,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 203
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 10.58,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 651
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 9.647,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 472
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 5.24,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 97
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 4.152,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 11494
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 12.653,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13486
+          }
+        ]
+      },
+      "removal": {
+        "slow": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 1.084,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.404,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2650
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 1.013,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 203
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 0.814,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 651
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 1.39,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 472
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 0.499,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 97
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.337,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 11494
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 0.373,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13486
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 0.755,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 0.275,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 2650
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 0.72,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 203
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 0.559,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 651
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 0.941,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 472
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 0.348,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 97
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 0.225,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 11494
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 0.255,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 13486
+          }
+        ]
+      },
+      "pulse_width": {
+        "slow": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 18.318,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 15
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 11.539,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 3129
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 49.038,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 401
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 11.54,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 662
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 3.8,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 98
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 3.04,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12742
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 8.655,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 18691
+          },
+          {
+            "launch_clock": "phy_dq_clk_0",
+            "capture_clock": "phy_dq_clk_0",
+            "wns_ns": 0.035,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 35
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 1.85,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 35
+          },
+          {
+            "launch_clock": "phy_dq_clk_1",
+            "capture_clock": "phy_dq_clk_1",
+            "wns_ns": 0.035,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 84
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 2.4,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 84
+          }
+        ],
+        "fast": [
+          {
+            "launch_clock": "sys_clk",
+            "capture_clock": "sys_clk",
+            "wns_ns": 18.318,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 15
+          },
+          {
+            "launch_clock": "pixel_clk",
+            "capture_clock": "pixel_clk",
+            "wns_ns": 11.844,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 3129
+          },
+          {
+            "launch_clock": "cfg_clk",
+            "capture_clock": "cfg_clk",
+            "wns_ns": 49.428,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 401
+          },
+          {
+            "launch_clock": "rx_pixel_clk",
+            "capture_clock": "rx_pixel_clk",
+            "wns_ns": 11.93,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 662
+          },
+          {
+            "launch_clock": "rst_clk",
+            "capture_clock": "rst_clk",
+            "wns_ns": 3.8,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 98
+          },
+          {
+            "launch_clock": "ddrphy_sysclk",
+            "capture_clock": "ddrphy_sysclk",
+            "wns_ns": 3.345,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 12742
+          },
+          {
+            "launch_clock": "compute_clk",
+            "capture_clock": "compute_clk",
+            "wns_ns": 9.202,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 18691
+          },
+          {
+            "launch_clock": "phy_dq_clk_0",
+            "capture_clock": "phy_dq_clk_0",
+            "wns_ns": 0.035,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 35
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_0",
+            "capture_clock": "phy_dq_sysclk_0",
+            "wns_ns": 1.85,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 35
+          },
+          {
+            "launch_clock": "phy_dq_clk_1",
+            "capture_clock": "phy_dq_clk_1",
+            "wns_ns": 0.035,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 84
+          },
+          {
+            "launch_clock": "phy_dq_sysclk_1",
+            "capture_clock": "phy_dq_sysclk_1",
+            "wns_ns": 2.4,
+            "total_negative_slack_ns": 0.0,
+            "failing_endpoints": 0,
+            "endpoints": 84
+          }
+        ]
+      }
+    },
+    "all_tables_met": true
+  },
+  "paths": {
+    "count": 9110,
+    "worst_slack_ns": 0.117,
+    "reported_setup_uncertainty_ns": {
+      "compute_clk": [
+        0.35
+      ],
+      "ddrphy_sysclk": [
+        0.35
+      ]
+    },
+    "external_unconstrained_paths": 488,
+    "external_io_timing_verified": false
+  },
+  "physical": {
+    "physical_ports": 141,
+    "disabled_box_key": null,
+    "ddr_gate_sites": {
+      "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_reset_ctrl/ddrphy_ioclk_gate[0]/opit_0_inv": "CLMA_357_354 FF3",
+      "g_full.impl/I_ips_ddr_top/u_ddrphy_top/ddrphy_reset_ctrl/ddrphy_ioclk_gate[1]/opit_0_inv": "CLMA_357_660 FF3"
+    }
+  },
+  "functional": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261104T090317_445051Z",
+      "result_sha256": "e5eed5b03633f4dbae6b8cca501838c02eb85084ebc54e3c7f9605765ba4b1a8",
+      "shared_sources": 137,
+      "expected_faces": 1
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261104T090317_444929Z",
+      "result_sha256": "08f351b65b19ca13e2d60cf72a127731b6c667b25f1424a86111d4304beb2c03",
+      "shared_sources": 137,
+      "expected_faces": 0
+    }
+  ],
+  "resources": {
+    "lut": 46840.0,
+    "registers": 42653.0,
+    "drm": 113.5,
+    "apm": 64.0
+  },
+  "gray_clock_data": {
+    "status": "PASS_CONSERVATIVE_CLOCK_AND_DATA_BOUND",
+    "bits": 116,
+    "clock_observations": 928,
+    "groups": [
+      {
+        "constraint": "set_max_skew 20.0 -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/ingress/fifo/wr_gray_rd_sync1*}]",
+        "bits": 12,
+        "limit_ns": 20.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.97,
+                "max_ns": 3.475,
+                "spread_bound_ns": 0.5069999999999999
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.171,
+                "max_ns": 5.576,
+                "spread_bound_ns": 1.4069999999999994
+              }
+            },
+            "datapath_bound_ns": 0.9809999999999992,
+            "relative_arrival_spread_bound_ns": 2.8949999999999987
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.003,
+                "max_ns": 2.361,
+                "spread_bound_ns": 0.3600000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.34,
+                "max_ns": 4.427,
+                "spread_bound_ns": 1.0889999999999997
+              }
+            },
+            "datapath_bound_ns": 0.5709999999999991,
+            "relative_arrival_spread_bound_ns": 2.0199999999999987
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/ingress/fifo/rd_gray_wr_sync1*}]",
+        "bits": 12,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.147,
+                "max_ns": 5.552,
+                "spread_bound_ns": 1.4069999999999994
+              },
+              "destination": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.973,
+                "max_ns": 3.475,
+                "spread_bound_ns": 0.5040000000000002
+              }
+            },
+            "datapath_bound_ns": 2.11,
+            "relative_arrival_spread_bound_ns": 4.020999999999999
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.315,
+                "max_ns": 4.402,
+                "spread_bound_ns": 1.0890000000000002
+              },
+              "destination": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.007,
+                "max_ns": 2.361,
+                "spread_bound_ns": 0.3560000000000001
+              }
+            },
+            "datapath_bound_ns": 1.2939999999999998,
+            "relative_arrival_spread_bound_ns": 2.739
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 20.0 -from [get_cells -regexp {^g_full[.]impl/rx_telemetry/gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/rx_telemetry/gray_meta*}]",
+        "bits": 32,
+        "limit_ns": 20.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.956,
+                "max_ns": 3.467,
+                "spread_bound_ns": 0.5130000000000001
+              },
+              "destination": {
+                "clock": "cfg_clk",
+                "min_ns": 3.684,
+                "max_ns": 4.353,
+                "spread_bound_ns": 0.6709999999999996
+              }
+            },
+            "datapath_bound_ns": 1.279000000000001,
+            "relative_arrival_spread_bound_ns": 2.463000000000001
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 1.996,
+                "max_ns": 2.362,
+                "spread_bound_ns": 0.3680000000000001
+              },
+              "destination": {
+                "clock": "cfg_clk",
+                "min_ns": 2.497,
+                "max_ns": 2.996,
+                "spread_bound_ns": 0.5010000000000001
+              }
+            },
+            "datapath_bound_ns": 0.7049999999999994,
+            "relative_arrival_spread_bound_ns": 1.5739999999999996
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 5.047,
+                "spread_bound_ns": 0.8240000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.173,
+                "max_ns": 5.573,
+                "spread_bound_ns": 1.4020000000000004
+              }
+            },
+            "datapath_bound_ns": 0.9570000000000001,
+            "relative_arrival_spread_bound_ns": 3.1830000000000007
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.429,
+                "spread_bound_ns": 0.6169999999999998
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.342,
+                "max_ns": 4.424,
+                "spread_bound_ns": 1.0840000000000003
+              }
+            },
+            "datapath_bound_ns": 0.5770000000000002,
+            "relative_arrival_spread_bound_ns": 2.2780000000000005
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 5.047,
+                "spread_bound_ns": 0.8240000000000001
+              }
+            },
+            "datapath_bound_ns": 0.9790000000000003,
+            "relative_arrival_spread_bound_ns": 3.199
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.429,
+                "spread_bound_ns": 0.6169999999999998
+              }
+            },
+            "datapath_bound_ns": 0.5830000000000004,
+            "relative_arrival_spread_bound_ns": 2.279
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.242,
+                "max_ns": 5.007,
+                "spread_bound_ns": 0.7669999999999997
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.138,
+                "max_ns": 5.531,
+                "spread_bound_ns": 1.3949999999999998
+              }
+            },
+            "datapath_bound_ns": 0.9360000000000002,
+            "relative_arrival_spread_bound_ns": 3.098
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.831,
+                "max_ns": 3.397,
+                "spread_bound_ns": 0.5679999999999998
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0799999999999998
+              }
+            },
+            "datapath_bound_ns": 0.5450000000000002,
+            "relative_arrival_spread_bound_ns": 2.1929999999999996
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.135,
+                "max_ns": 5.528,
+                "spread_bound_ns": 1.3949999999999998
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.235,
+                "max_ns": 5.003,
+                "spread_bound_ns": 0.7699999999999998
+              }
+            },
+            "datapath_bound_ns": 0.8300000000000003,
+            "relative_arrival_spread_bound_ns": 2.995
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.309,
+                "max_ns": 4.386,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.825,
+                "max_ns": 3.392,
+                "spread_bound_ns": 0.5689999999999997
+              }
+            },
+            "datapath_bound_ns": 0.4909999999999999,
+            "relative_arrival_spread_bound_ns": 2.1389999999999993
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              }
+            },
+            "datapath_bound_ns": 1.1739999999999997,
+            "relative_arrival_spread_bound_ns": 3.337999999999999
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              }
+            },
+            "datapath_bound_ns": 0.7390000000000001,
+            "relative_arrival_spread_bound_ns": 2.385
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              }
+            },
+            "datapath_bound_ns": 0.9639999999999997,
+            "relative_arrival_spread_bound_ns": 3.1279999999999992
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              }
+            },
+            "datapath_bound_ns": 0.5469999999999999,
+            "relative_arrival_spread_bound_ns": 2.1929999999999996
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.156,
+                "max_ns": 5.555,
+                "spread_bound_ns": 1.401
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.259,
+                "max_ns": 5.031,
+                "spread_bound_ns": 0.7739999999999994
+              }
+            },
+            "datapath_bound_ns": 0.9420000000000004,
+            "relative_arrival_spread_bound_ns": 3.117
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.323,
+                "max_ns": 4.405,
+                "spread_bound_ns": 1.0840000000000003
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.841,
+                "max_ns": 3.412,
+                "spread_bound_ns": 0.5729999999999997
+              }
+            },
+            "datapath_bound_ns": 0.5450000000000002,
+            "relative_arrival_spread_bound_ns": 2.202
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.264,
+                "max_ns": 5.033,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.155,
+                "max_ns": 5.553,
+                "spread_bound_ns": 1.3999999999999997
+              }
+            },
+            "datapath_bound_ns": 1.2699999999999998,
+            "relative_arrival_spread_bound_ns": 3.441
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.847,
+                "max_ns": 3.414,
+                "spread_bound_ns": 0.5690000000000002
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.322,
+                "max_ns": 4.403,
+                "spread_bound_ns": 1.0829999999999995
+              }
+            },
+            "datapath_bound_ns": 0.7649999999999999,
+            "relative_arrival_spread_bound_ns": 2.417
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.138,
+                "max_ns": 5.534,
+                "spread_bound_ns": 1.398
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.24,
+                "max_ns": 5.011,
+                "spread_bound_ns": 0.7729999999999999
+              }
+            },
+            "datapath_bound_ns": 1.122,
+            "relative_arrival_spread_bound_ns": 3.293
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.392,
+                "spread_bound_ns": 1.0820000000000005
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.829,
+                "max_ns": 3.4,
+                "spread_bound_ns": 0.5729999999999997
+              }
+            },
+            "datapath_bound_ns": 0.6250000000000002,
+            "relative_arrival_spread_bound_ns": 2.2800000000000002
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.241,
+                "max_ns": 5.01,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.138,
+                "max_ns": 5.531,
+                "spread_bound_ns": 1.3949999999999998
+              }
+            },
+            "datapath_bound_ns": 0.8110000000000002,
+            "relative_arrival_spread_bound_ns": 2.9770000000000003
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.83,
+                "max_ns": 3.399,
+                "spread_bound_ns": 0.571
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0799999999999998
+              }
+            },
+            "datapath_bound_ns": 0.4680000000000002,
+            "relative_arrival_spread_bound_ns": 2.1189999999999998
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.259,
+                "max_ns": 5.031,
+                "spread_bound_ns": 0.7739999999999994
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.155,
+                "max_ns": 5.554,
+                "spread_bound_ns": 1.401
+              }
+            },
+            "datapath_bound_ns": 0.9390000000000003,
+            "relative_arrival_spread_bound_ns": 3.114
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.841,
+                "max_ns": 3.412,
+                "spread_bound_ns": 0.5729999999999997
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.322,
+                "max_ns": 4.404,
+                "spread_bound_ns": 1.0839999999999999
+              }
+            },
+            "datapath_bound_ns": 0.5450000000000002,
+            "relative_arrival_spread_bound_ns": 2.202
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.153,
+                "max_ns": 5.555,
+                "spread_bound_ns": 1.4040000000000001
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.254,
+                "max_ns": 5.03,
+                "spread_bound_ns": 0.7780000000000007
+              }
+            },
+            "datapath_bound_ns": 0.7829999999999997,
+            "relative_arrival_spread_bound_ns": 2.9650000000000007
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.32,
+                "max_ns": 4.405,
+                "spread_bound_ns": 1.0870000000000004
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.836,
+                "max_ns": 3.411,
+                "spread_bound_ns": 0.5770000000000002
+              }
+            },
+            "datapath_bound_ns": 0.4529999999999996,
+            "relative_arrival_spread_bound_ns": 2.117
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.249,
+                "max_ns": 5.018,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.143,
+                "max_ns": 5.54,
+                "spread_bound_ns": 1.3990000000000002
+              }
+            },
+            "datapath_bound_ns": 1.0240000000000002,
+            "relative_arrival_spread_bound_ns": 3.194000000000001
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.832,
+                "max_ns": 3.399,
+                "spread_bound_ns": 0.5690000000000002
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.311,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0809999999999997
+              }
+            },
+            "datapath_bound_ns": 0.6399999999999999,
+            "relative_arrival_spread_bound_ns": 2.29
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.145,
+                "max_ns": 5.542,
+                "spread_bound_ns": 1.3990000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.252,
+                "max_ns": 5.021,
+                "spread_bound_ns": 0.7710000000000001
+              }
+            },
+            "datapath_bound_ns": 0.792,
+            "relative_arrival_spread_bound_ns": 2.9620000000000006
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.313,
+                "max_ns": 4.392,
+                "spread_bound_ns": 1.0810000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.835,
+                "max_ns": 3.402,
+                "spread_bound_ns": 0.5690000000000002
+              }
+            },
+            "datapath_bound_ns": 0.45899999999999985,
+            "relative_arrival_spread_bound_ns": 2.109
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.259,
+                "max_ns": 5.03,
+                "spread_bound_ns": 0.7729999999999999
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.154,
+                "max_ns": 5.556,
+                "spread_bound_ns": 1.4040000000000001
+              }
+            },
+            "datapath_bound_ns": 0.9630000000000003,
+            "relative_arrival_spread_bound_ns": 3.1400000000000006
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.841,
+                "max_ns": 3.411,
+                "spread_bound_ns": 0.5719999999999998
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.321,
+                "max_ns": 4.406,
+                "spread_bound_ns": 1.0869999999999995
+              }
+            },
+            "datapath_bound_ns": 0.5599999999999998,
+            "relative_arrival_spread_bound_ns": 2.2189999999999994
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.16,
+                "max_ns": 5.557,
+                "spread_bound_ns": 1.3990000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.261,
+                "max_ns": 5.031,
+                "spread_bound_ns": 0.7719999999999996
+              }
+            },
+            "datapath_bound_ns": 0.8110000000000002,
+            "relative_arrival_spread_bound_ns": 2.982
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.328,
+                "max_ns": 4.407,
+                "spread_bound_ns": 1.0810000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.844,
+                "max_ns": 3.412,
+                "spread_bound_ns": 0.5700000000000001
+              }
+            },
+            "datapath_bound_ns": 0.48499999999999965,
+            "relative_arrival_spread_bound_ns": 2.136
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.154,
+                "max_ns": 5.555,
+                "spread_bound_ns": 1.4029999999999998
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.257,
+                "max_ns": 5.03,
+                "spread_bound_ns": 0.7750000000000006
+              }
+            },
+            "datapath_bound_ns": 0.885,
+            "relative_arrival_spread_bound_ns": 3.0630000000000006
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.321,
+                "max_ns": 4.405,
+                "spread_bound_ns": 1.086
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.839,
+                "max_ns": 3.411,
+                "spread_bound_ns": 0.5740000000000001
+              }
+            },
+            "datapath_bound_ns": 0.5190000000000003,
+            "relative_arrival_spread_bound_ns": 2.1790000000000003
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.258,
+                "max_ns": 5.026,
+                "spread_bound_ns": 0.7699999999999998
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.155,
+                "max_ns": 5.553,
+                "spread_bound_ns": 1.3999999999999997
+              }
+            },
+            "datapath_bound_ns": 0.954,
+            "relative_arrival_spread_bound_ns": 3.1239999999999997
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.84,
+                "max_ns": 3.408,
+                "spread_bound_ns": 0.5700000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.322,
+                "max_ns": 4.403,
+                "spread_bound_ns": 1.0829999999999995
+              }
+            },
+            "datapath_bound_ns": 0.5569999999999997,
+            "relative_arrival_spread_bound_ns": 2.209999999999999
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.143,
+                "max_ns": 5.54,
+                "spread_bound_ns": 1.3990000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.246,
+                "max_ns": 5.015,
+                "spread_bound_ns": 0.7709999999999992
+              }
+            },
+            "datapath_bound_ns": 0.9600000000000002,
+            "relative_arrival_spread_bound_ns": 3.13
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.311,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0809999999999997
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.829,
+                "max_ns": 3.396,
+                "spread_bound_ns": 0.5689999999999997
+              }
+            },
+            "datapath_bound_ns": 0.558,
+            "relative_arrival_spread_bound_ns": 2.2079999999999993
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.247,
+                "max_ns": 5.016,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.143,
+                "max_ns": 5.54,
+                "spread_bound_ns": 1.3990000000000002
+              }
+            },
+            "datapath_bound_ns": 0.8099999999999998,
+            "relative_arrival_spread_bound_ns": 2.9800000000000004
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.83,
+                "max_ns": 3.397,
+                "spread_bound_ns": 0.5689999999999997
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.311,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0809999999999997
+              }
+            },
+            "datapath_bound_ns": 0.4740000000000004,
+            "relative_arrival_spread_bound_ns": 2.1239999999999997
+          }
+        }
+      }
+    ],
+    "native_max_skew_report": false,
+    "all_bits_both_corners_early_late": true
+  },
+  "message_review": {
+    "reviewed_reference_pin_notices": [
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 11)] | Port b_out[7] has been placed at location T22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 18)] | Port b_out[6] has been placed at location R22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 25)] | Port b_out[5] has been placed at location N18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 60)] | Port b_out[0] has been placed at location P19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 74)] | Port g_out[6] has been placed at location N23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 81)] | Port g_out[5] has been placed at location N24, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 88)] | Port g_out[4] has been placed at location P23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 95)] | Port g_out[3] has been placed at location P24, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 102)] | Port g_out[2] has been placed at location R25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 109)] | Port g_out[1] has been placed at location P25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 116)] | Port g_out[0] has been placed at location T25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 123)] | Port r_out[7] has been placed at location P16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 130)] | Port r_out[6] has been placed at location K25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 137)] | Port r_out[5] has been placed at location K26, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 151)] | Port r_out[3] has been placed at location L25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 179)] | Port de_out has been placed at location N19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 186)] | Port hs_out has been placed at location R20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 200)] | Port rstn_out has been placed at location G25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 207)] | Port vs_out has been placed at location R21, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 252)] | Port hd_scl has been placed at location K22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 259)] | Port hd_sda has been placed at location K23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 314)] | Port b_in[4] has been placed at location L17, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 319)] | Port b_in[3] has been placed at location H18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 324)] | Port b_in[2] has been placed at location J18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 334)] | Port b_in[0] has been placed at location L18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 339)] | Port g_in[7] has been placed at location L15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 344)] | Port g_in[6] has been placed at location K16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 349)] | Port g_in[5] has been placed at location K17, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 354)] | Port g_in[4] has been placed at location K15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 359)] | Port g_in[3] has been placed at location J16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 364)] | Port g_in[2] has been placed at location J15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 369)] | Port g_in[1] has been placed at location J14, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 394)] | Port r_in[4] has been placed at location K20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 399)] | Port r_in[3] has been placed at location J20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 404)] | Port r_in[2] has been placed at location J19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 409)] | Port r_in[1] has been placed at location H19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 414)] | Port r_in[0] has been placed at location M15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 434)] | Port vs_in has been placed at location H24, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 574)] | Port mem_dq[15] has been placed at location G6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 588)] | Port mem_dq[13] has been placed at location E6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 595)] | Port mem_dq[12] has been placed at location G8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 602)] | Port mem_dq[11] has been placed at location D6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 609)] | Port mem_dq[10] has been placed at location H8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 623)] | Port mem_dq[8] has been placed at location H6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 630)] | Port mem_dq[7] has been placed at location J5, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 644)] | Port mem_dq[5] has been placed at location K7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 658)] | Port mem_dq[3] has been placed at location L8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 672)] | Port mem_dq[1] has been placed at location J6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 805)] | Port mem_dqs[1] has been placed at location H7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 812)] | Port mem_dqs[0] has been placed at location J4, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 833)] | Port mem_dqs_n[1] has been placed at location G7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 840)] | Port mem_dqs_n[0] has been placed at location H4, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/pds/20261104T090400_531207Z/src/fpga/pg2l100h/constraints/triha_face_board.fdc(line number: 889)] | Port mem_dm[0] has been placed at location K6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 3)] | Port hd_sda has been placed at location K23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 5)] | Port mem_dq[1] has been placed at location J6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 7)] | Port mem_dq[3] has been placed at location L8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 9)] | Port mem_dq[5] has been placed at location K7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 11)] | Port mem_dq[7] has been placed at location J5, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 12)] | Port mem_dq[8] has been placed at location H6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 14)] | Port mem_dq[10] has been placed at location H8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 15)] | Port mem_dq[11] has been placed at location D6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 16)] | Port mem_dq[12] has been placed at location G8, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 17)] | Port mem_dq[13] has been placed at location E6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 19)] | Port mem_dq[15] has been placed at location G6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 36)] | Port mem_dqs[0] has been placed at location J4, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 37)] | Port mem_dqs[1] has been placed at location H7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 40)] | Port mem_dqs_n[0] has been placed at location H4, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 41)] | Port mem_dqs_n[1] has been placed at location G7, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 44)] | Port b_out[0] has been placed at location P19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 49)] | Port b_out[5] has been placed at location N18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 50)] | Port b_out[6] has been placed at location R22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 51)] | Port b_out[7] has been placed at location T22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 53)] | Port de_out has been placed at location N19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 54)] | Port g_out[0] has been placed at location T25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 55)] | Port g_out[1] has been placed at location P25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 56)] | Port g_out[2] has been placed at location R25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 57)] | Port g_out[3] has been placed at location P24, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 58)] | Port g_out[4] has been placed at location P23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 59)] | Port g_out[5] has been placed at location N24, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 60)] | Port g_out[6] has been placed at location N23, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 62)] | Port hd_scl has been placed at location K22, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 65)] | Port hs_out has been placed at location R20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 90)] | Port mem_dm[0] has been placed at location K6, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 102)] | Port r_out[3] has been placed at location L25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 104)] | Port r_out[5] has been placed at location K26, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 105)] | Port r_out[6] has been placed at location K25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 106)] | Port r_out[7] has been placed at location P16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 107)] | Port rstn_out has been placed at location G25, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 109)] | Port vs_out has been placed at location R21, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 110)] | Port b_in[0] has been placed at location L18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 112)] | Port b_in[2] has been placed at location J18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 113)] | Port b_in[3] has been placed at location H18, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 114)] | Port b_in[4] has been placed at location L17, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 120)] | Port g_in[1] has been placed at location J14, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 121)] | Port g_in[2] has been placed at location J15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 122)] | Port g_in[3] has been placed at location J16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 123)] | Port g_in[4] has been placed at location K15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 124)] | Port g_in[5] has been placed at location K17, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 125)] | Port g_in[6] has been placed at location K16, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 126)] | Port g_in[7] has been placed at location L15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 130)] | Port r_in[0] has been placed at location M15, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 131)] | Port r_in[1] has been placed at location H19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 132)] | Port r_in[2] has been placed at location J19, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 133)] | Port r_in[3] has been placed at location J20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 134)] | Port r_in[4] has been placed at location K20, whose type is share pin.",
+      "C: ConstraintEditor-2002: [D:/FPGA/TriHaRiscv-main/build/video/dual_single_avatar_20261104/place4_measured/physical.pcf(line number: 143)] | Port vs_in has been placed at location H24, whose type is share pin."
+    ],
+    "reviewed_disabled_box_key": [],
+    "rejected": [],
+    "unused_historical_route_messages": []
+  },
+  "evidence_inputs": {
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\result.json": "3da3b8a1bfab5547bd4d35ab86f7993651d309a0da13c5d545bd159d71cdbea8",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\place4_measured\\receipt.json": "0b9dc15ca6bb092fd84f4f33514b56e7cf31865ac1c7724496d4b59a939a41e4",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\route4_measured\\receipt.json": "756417b2e8cfd94489a3a2649cc5030076d3d59974fcd6de775bd986930dde0b",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\result.json": "9f12d53b3ed02669679205347660909e53187344d0fb6d2bd5dbfa95cd969a56",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\clocks4_measured\\result.json": "92625241d1a5a7ce0013baae3bf6b10aff4c2b5cef062a4b228becceb7e1eb57",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\synthesize\\triha_face_board_top.snr": "7ae7940589382a554c928050d1730e7924ec888616f3f1e035e5c2d0dd036bc5",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\timing\\report_timing\\triha_face_board_top.rtr": "b021e65767e45b14810e813fffaedb1a034bac53d9e3d47c19d901dc4d301855",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\sites\\sites.pcf": "438fd7435f5808fae61f27c479596887bcce6be6d92618cf112901f33f047717",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\clocks4_measured\\report_timing\\triha_face_board_top.rtr": "aaff13074c7b7833e1db622f5e8393d4195f9007c8205b156c6e2ab23d0d14c3",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\route4_measured\\place_route\\triha_face_board_top_pnr.adf": "6000ed1e8d0f06161bb4755a5c0e61d4c72c43afe8673de6c2064c9fb7d682de",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\synth.log": "d3ac2105309f8b9d0c17f4d8527562d61c740ab2a15a7b9790ac21a82cd5a1a8",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\place4_measured\\place.log": "95499d5a9f200bdd7329bf40119912fad55ca14f8c38e7b1a3f24b9350a52563",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\route4_measured\\route.log": "809cf5c7e635aaa03383a007e1f2fbe2072992e8e1fffc65429e90057b4f897e",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\timing\\console.log": "f54843fd1f47145e02d62f53f2da8bafdc7b1d530e84260951b0b4f30904575f",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\review4_measured\\sites\\console.log": "df50234ef329c9b6247d5de87cab0e8b75f9e0d87cfcb8bb30e51c38c9d5736a",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\clocks4_measured\\console.log": "29aa0cac166835813dff8cc2a72fac2c99ac035ffd192c91b6861a9d197cd8b5"
+  },
+  "route_iterations": 241,
+  "routed_internal_timing_closed": true,
+  "cdc_timing_met": true,
+  "source_build_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map",
+  "source_build_status": "pass",
+  "source_snapshot_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\map\\src",
+  "directory": "build\\video\\dual_single_avatar_20261104\\qualified",
+  "scope": "Face application: CPU-managed B03 frame execution, HDMI RAW+BOX+fixed AVATAR, seven-segment checked boot, immutable full texture cache, KEY1 mode requests through CPU, RAW/NCHW capture without unused preview. Pending full pixel and physical acceptance; DEMO_BOX_ONLY remains TX-only bring-up.",
+  "face_profile": "avatar",
+  "top_parameters": {
+    "ENABLE_AVATAR": 1,
+    "ENABLE_MINIMAL_BOX": 0,
+    "DEMO_BOX_ONLY": 0
+  },
+  "firmware": {
+    "source": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261104T090317_445051Z\\firmware.elf",
+    "sha256": "876b3ceaa4581030967374ea7c41e40f26c9b1da9706ed24c923d025b53faa5c"
+  },
+  "timing_report": "build\\video\\dual_single_avatar_20261104\\review4_measured\\timing\\report_timing\\triha_face_board_top.rtr",
+  "inputs": {
+    "config/video_capture_v2.json": "01052e99ab6f2d065042d92dfe3b694d3ed42d452132c2a440d0e4dabceea128",
+    "config/video_cfg.json": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565",
+    "config/video_display.json": "ce0d7cba09f52283e604ff5221f472d7195aef20034e9608cbf68c9129199a3c",
+    "config/video_edid.hex": "efbf0925a534d3327dd3033d53ad2288816dfda12f7bbcaa866a28f6a1f13ada",
+    "fpga/pg2l100h/constraints/triha_face_avatar.fdc": "a3eabccb4adc0a3f5fa666449bebd6ecb52e6e7589638599187015d4e85ee17b",
+    "fpga/pg2l100h/constraints/triha_face_board.fdc": "002faaa4e33274f32c5f02fbda749e4b48d2c1f0a13e378d126a3cd87ee35758",
+    "fpga/pg2l100h/constraints/triha_face_cdc.fdc": "c959d15f6621d73ee21f3713e273efb9742ec3507faa0b3261031085e97fe767",
+    "fpga/pg2l100h/constraints/triha_face_phy.pcf": "63077bb3bdf02ab01f7b16ce84892a0ef6926c0512ebe23b3acedabc87f641d3",
+    "fpga/pg2l100h/constraints/triha_face_phy.rcf": "d4bd0a8d2f792277f99162d9376e8358df023c27a1fac11d551ca80ba1b2db9a",
+    "fpga/pg2l100h/ip/triha_compute_pll.json": "8c459df8cf0f5998c8b26ab5fad6486c6265de57e1168279f9998d1f857347b3",
+    "fpga/pg2l100h/ip/video_ddr_manifest.json": "89febae62916374f3f6e3abdf948ba3e3738e73d76609fc24f75889854bd59ce",
+    "fpga/pg2l100h/ip/video_mode_key_manifest.json": "bce392de0df098630a6cfd5d56a00f8fd6142e5556c35c00035cab5d69349e99",
+    "fpga/pg2l100h/ip/video_reference_manifest.json": "cfa35fbe4cfd28293c24bba794e2c5f9944a3cabcfa8cead4179848bcf6a1747",
+    "fpga/pg2l100h/project/triha_face_board.json": "faba24030626472125a9193dd0830d3544d107fe9786aed75164f7963aaf650c",
+    "fpga/pg2l100h/rtl/hdmi_rx_init.sv": "8700b74b9732c5d69e5d32a7c2f93a7b7bd07692ee8258b9d7845aa98d67603f",
+    "fpga/pg2l100h/rtl/hdmi_tx_init.sv": "d07440bb9f4d2889b8a3f22a92a92c1c45eb32aa45dd5ab62f4adc55eaeef12b",
+    "fpga/pg2l100h/rtl/triha_face_board_top.sv": "dd829b2ce7d5e39d11a9dc7d161da4ce3efb6aec5473ef05ce5b82644761d762",
+    "fpga/pg2l100h/rtl/video_preview_clock_reset.sv": "8768971f5be5afc421350dc2eb043e60c4d567d8526d7344336f73da8cccf8bc",
+    "fpga/pg2l100h/rtl/video_rx_telemetry.sv": "f342217de9b4a21e38ba155c04b0ed03cb3b15cf48563e5ceca2e89d5a5cf285",
+    "rtl/cpu/triha_btb.v": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+    "rtl/cpu/triha_cache_subsystem.v": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
+    "rtl/cpu/triha_core.v": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3",
+    "rtl/cpu/triha_cpu.v": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112",
+    "rtl/cpu/triha_csr.v": "c324c4d446b88bbd245324225afac71bf5f1273f4aa25a9d38272267c0d5c502",
+    "rtl/cpu/triha_csr_regfile.v": "ed515df4e1f6b2c0001b2cc5678269f174a9062f571742221fe97152a81581db",
+    "rtl/cpu/triha_dcache.v": "55c1bef2f572a76faacbbacf9a7b95b9cf973d771c0f0187651ecc226c0b11a2",
+    "rtl/cpu/triha_dcache_data_ram.v": "a165c46d9b2a8536e999a1a25650912fbfbdd1647e2ed62f1e0f509e08d775ff",
+    "rtl/cpu/triha_dcache_tag_ram.v": "1faeb4c71b51395e52cc2fb47bcda96a1e4844eecdd20cc1caf4a7383c18990f",
+    "rtl/cpu/triha_decode.v": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
+    "rtl/cpu/triha_divider.v": "63f5106e941e2e490abcee50321e49c7826df8e5daf35722902234be6109d732",
+    "rtl/cpu/triha_frontend.v": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23",
+    "rtl/cpu/triha_icache.v": "9854a5026723d76cfb0a67862abfadb25db8172bdf65c15c17ee3137378ef70f",
+    "rtl/cpu/triha_icache_data_ram.v": "2a5a5ed60c4996ab05c50ec4ebbf199eeb11a22220fb94a550ce3ad8032e9349",
+    "rtl/cpu/triha_icache_tag_ram.v": "87fbf39f7e7a14bcbe51f4463e81663d91fb636c309302da8b00689a6b1292c1",
+    "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+    "rtl/cpu/triha_issue.v": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
+    "rtl/cpu/triha_lsu.v": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
+    "rtl/cpu/triha_multiplier.v": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
+    "rtl/cpu/triha_npc.v": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
+    "rtl/cpu/triha_pipe_ctrl.v": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
+    "rtl/cpu/triha_regfile.v": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "9636343741cafe32a16764b7c83ef13a22e9b372ba672b2e4e6f41c1d9b37d16",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e7c519648f60149f0771afdb7f721ed1163f94dc05bef87c1b411bcb5a08d279",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "39b73d3627ec14852b3c2412b8af682a476d7733cada39966d6f4570c2c0dd1f",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "0207952c9924cdaee4ff44495dcffdcfd25657f0aaa56b49715691e757f5c129",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "1e611ef73eb823daf7976c793fe7b6314eaa8157a360612ecc426fc201c67774",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "e9411b29b5fb5fe5f85dfe52c1baea970e770e99a13e7006f784fdb7d4d23eb1",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "076c4c643dee9249fd3dd0112e3502203df2e8a9c59a8d4f9db1db7cd4476733",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "d404e16a36fd9e481e3fd4d97eec20bafe65d928c0ad45ca3d6a0d062b0c1587",
+    "rtl/npu/b03_block_dma_compact.v": "91b8da9c2dc52e3c7a7ea1b13a4eb5a3b1899a25703241513a411c44351d1412",
+    "rtl/npu/b03_frame_service.v": "d66fe8cfea2583ae8c9fd0e646deda69c506cfc2b8c5616ed3f9527560e7f215",
+    "rtl/npu/npu_frame_mmio.v": "101c8377a11c12cea00c802cd82efcf0dfd487fbff2c057c4129402777e4c7ea",
+    "rtl/npu/npu_frame_top.v": "6518d64c467b27cbfd05f824b81018c28f8be62702818cb766e17d8d3c282337",
+    "rtl/npu/upstream/b03/rtl/platform/b03_array_apmacc_rowctrl.v": "89ebe11bb255196ef842402018de68301436a7658efc4b747e7a92866ae99da5",
+    "rtl/npu/upstream/b03/rtl/platform/b03_bank_array.v": "667f7fe9e2170c3857ea8cebe080110a03e81e0f0aed0f83ceeb8b57102724ef",
+    "rtl/npu/upstream/b03/rtl/platform/b03_bank_array_payload.v": "28a1c24295a7692b0c427a55c2bdc0ce309ab5dccf9471cc1cc696a6e60a0e17",
+    "rtl/npu/upstream/b03/rtl/platform/b03_block_dma.v": "c8e7936f60ed4bb9cc72e21eedacb24293ea60a5605816b9b3674c90e14ce21b",
+    "rtl/npu/upstream/b03/rtl/platform/b03_crc32_parallel4.v": "50ec54e52f3e1e4dd5f9990ce72910243d1775d494a0d7b9526394d446f3a412",
+    "rtl/npu/upstream/b03/rtl/platform/b03_crc32_word_pipe.v": "76975c64dcfd7cfe6334e4862259967867ae241fe6788a441b98fb20b2914d0c",
+    "rtl/npu/upstream/b03/rtl/platform/b03_decode_lookup_roundstage.v": "05cffc242f5f86e9f14a21cb07a995361ac00fe7c638f16fec9c0cf09945350d",
+    "rtl/npu/upstream/b03/rtl/platform/b03_decode_math_roundstage.v": "98b53eff0c185766ce08e845697b15a5527b00f6e480f3ef87b3741c127aec2e",
+    "rtl/npu/upstream/b03/rtl/platform/b03_feature_pack_compact.v": "cf9a665e15edb511cd7e9275d7cf3def77716032a1d1629dd6cea7a1cd382799",
+    "rtl/npu/upstream/b03/rtl/platform/b03_fp32_q40.v": "0380055b8dc102b69e83d86cda738579a1d407b4bee9d48413ee03237794cfef",
+    "rtl/npu/upstream/b03/rtl/platform/b03_frame_exec_payload.v": "30f22602f78f83ea8fbc09a772226760c3a7fcc734b29427253d5d67b16d6b19",
+    "rtl/npu/upstream/b03/rtl/platform/b03_full_dw16_parallelfault.v": "92f4157694da6df0964fbe31e27e082ebb650819ba74f728cc3aa9bba9ad369c",
+    "rtl/npu/upstream/b03/rtl/platform/b03_full_mul_pair.v": "3724e0f41d6f30ad8c0d515b0479554f44db51ae0396b0f1290b016150511c64",
+    "rtl/npu/upstream/b03/rtl/platform/b03_gather_lean.v": "ab864e477548b1bc1dc06a87381eb7f335f83867e475ea66fca8b363443f6564",
+    "rtl/npu/upstream/b03/rtl/platform/b03_graph_engine_cap.v": "73fe8e48937f121494f2ce315e356673b8d89be1e3e30ad9b59ae723fc5aaee7",
+    "rtl/npu/upstream/b03/rtl/platform/b03_key_sort_mem2.v": "76c877aa455e11f79d4605a1afa68bafa0e6cd430af9da2267c90671455330d6",
+    "rtl/npu/upstream/b03/rtl/platform/b03_layer_exec_payload.v": "3dd3acd47565f3413522d8c6735fbbb8573615674e6c232d3b4bd1fd82c5247e",
+    "rtl/npu/upstream/b03/rtl/platform/b03_mac_pair_rowctrl.v": "adc4b878f19651c01c176b667c8a9a66efeb175a5c76a2f12e5310dc65a1c29c",
+    "rtl/npu/upstream/b03/rtl/platform/b03_model_input_payload.v": "1fea8d1fe915b66dd38c2225b2fff73c8b2936465a4686e87c986d6bb2b2a2c2",
+    "rtl/npu/upstream/b03/rtl/platform/b03_mul25x18_loan.v": "432abd17523f0bd4eb0c9826c8cde62b6955ba6319b85c428b5db2de90db52e9",
+    "rtl/npu/upstream/b03/rtl/platform/b03_mul_pool32_probe.v": "2bb05705837e52e12afe2037409e8c0311dbe52fc021fa2120ae0e00cf3fe14f",
+    "rtl/npu/upstream/b03/rtl/platform/b03_nms1_faultreg.v": "03c7e3ae30a01a341bc73a6b5bb779145810b2a7a2ea3800239bac0a0c1f1246",
+    "rtl/npu/upstream/b03/rtl/platform/b03_phase_mem_mux_burst.v": "f06fcf8f4591f284075a284536fb2f5ab25a8ec5157460fd0afc5569458cf8fb",
+    "rtl/npu/upstream/b03/rtl/platform/b03_post_frame_payload.v": "447b1c1fff749950bc2ba79f7f388b6cec16e25a9495994b1e19e6e9da22e4b5",
+    "rtl/npu/upstream/b03/rtl/platform/b03_post_mem_arbiter.v": "b569ecceae34fbc6d7685454dc495331d31b51130ad88a3b96822ab0ec95eaab",
+    "rtl/npu/upstream/b03/rtl/platform/b03_post_memory_engine_payload.v": "cbb4badf5ed3b0a851935a889e04488389af08d76af40937db4bc18ac5f2129f",
+    "rtl/npu/upstream/b03/rtl/platform/b03_post_read_dma.v": "7eb93afce0a5c75b72dd1c25c132680c2997013a479354b76776a723d0350bae",
+    "rtl/npu/upstream/b03/rtl/platform/b03_probability_pipe.v": "a8f4bdc0f2624b4d4d7288376f226efeb1d0f57d120b38fb33949e247574a2c5",
+    "rtl/npu/upstream/b03/rtl/platform/b03_q40_round2_stage.v": "1ce251af8d8a34f68e697c5032faada64e4a65bb40e4ef9436c367e20554b85f",
+    "rtl/npu/upstream/b03/rtl/platform/b03_quant4_core.v": "0c2cfa6840ca9fae7b8a2a54935c050c1b71dd794f9019e58d68bb1a25082db9",
+    "rtl/npu/upstream/b03/rtl/platform/b03_quant8_tdm1.v": "6f1d239f82b42cb1bbbb08a701c0358e77d8d99ce78ac526e24be97bfcbb9d95",
+    "rtl/npu/upstream/b03/rtl/platform/b03_quant8_tdm2.v": "99a0bf634548bf725097948992273af21542eebf6ef4d8b9098c4f6ba90cb1a9",
+    "rtl/npu/upstream/b03/rtl/platform/b03_raw_bank_response_pipe.v": "52de64802b8a73c61b6bdd7c7bf97fe35aeeef635e6e3cf3db10e13d97b41af8",
+    "rtl/npu/upstream/b03/rtl/platform/b03_record_batch_tx.v": "3a00f1c9bda4833153cc804a829976443481d033322ecb00c3bec977e9e99639",
+    "rtl/npu/upstream/b03/rtl/platform/b03_roi4_loan_registered.v": "3f17145903b6fba8f4b00d2e09792b24c49014d6a2044f927572ebd1ce3e72fd",
+    "rtl/npu/upstream/b03/rtl/platform/b03_row_tile_store_rotate.v": "aab18a4bcc2fcb467e8a969125fa547c49c9f7208f1f4866044eabe8118727b5",
+    "rtl/npu/upstream/b03/rtl/platform/b03_score_root.v": "31599d548bb7ea4740d1a39b6e4db80f6f074dc39e23bf206ea0ab22bd83b043",
+    "rtl/npu/upstream/b03/rtl/platform/b03_table_validation_cache.v": "f5348844d0f5ba091e93a5c3623c2a2275ff1aae796cf5800c5da0431eef3885",
+    "rtl/npu/upstream/b03/rtl/platform/b03_tdp2048_loan_bank.v": "49e1c712a18cca737026111378688e6f3e5ffed0c119115d86ea69beacfe5f10",
+    "rtl/npu/upstream/b03/rtl/platform/b03_vector_exec_compact.v": "baddf2d19efdfe50374c46076571169dee8bac12a5e716c35311cfbee12e8c45",
+    "rtl/npu/upstream/b03/rtl/platform/tdp32_probe.v": "de8e5f2201de2be33d420c12059ffaeb644d17da4db5f3611ca6ccd5d51ffd32",
+    "rtl/soc/cpu_native_axil.v": "af76419e2b5b6146ebe1bdb6a8efa6e95f2e7534ea0a7bc461bf2605aba90a87",
+    "rtl/soc/include/avatar_preset.vh": "4c10b8bb4684b0c306eace3fd86f04fa2513c4dccb2b1c1adf14cf56580f791e",
+    "rtl/soc/include/frame_config.vh": "73e71ae2420d03532cd0713f22dbb8b4d7ce89da8ac0adecee1d5054da75e133",
+    "rtl/soc/npu_service_axi128.v": "28aa34fb7080dae4d0d33e8429f3bc32265ff8a78ff57050fb08670371381ed8",
+    "rtl/soc/soc_axi128_arbiter.v": "034aa7662b741887bf80bb28ea02a896c0a826af2c5db5a153222a95c974f3dc",
+    "rtl/soc/soc_axil_cdc.v": "12f62ac3b71b0e21348f14fb003a4a574e4a126c112ff8b769cb1b8ee17a7bbd",
+    "rtl/soc/soc_ddr_fabric.v": "20e11ecae69a916edf867cbd0fb59d1450ad34f15293a6c878cf1611b4606731",
+    "rtl/soc/triha_application_cpu.v": "81adb6278c012fe337ba6946b52edc1164762c8c5d5953c2dfc8664973de8269",
+    "rtl/soc/triha_application_router.v": "ee88018c9c7107e96d161d22a169feb1246df72695e91d1601945f54f6e182a0",
+    "rtl/soc/triha_axi128_cdc.v": "4915b04169d7827adbf751d66c0ba4fa788cae90504eb1966603ad144966685e",
+    "rtl/soc/triha_boot_buffer.v": "279f271747e161692269740ccdc746a086804ed442f7e297e9df76de878565d7",
+    "rtl/soc/triha_boot_rom.v": "14e805d00471ff4a8c70c5930d2edfce23985dc99953ae4c878680b939eb06d5",
+    "rtl/soc/triha_compute_system.v": "c3978960be6960e15a59ca464d5c463285a013342f439c45363668e6354282cb",
+    "rtl/soc/triha_cpu_cache_axi.v": "a21d7a62fc7f2bcd05d09fed96b048fcd752358592e442469a6d6b2e1face6f9",
+    "rtl/soc/triha_face_mode_key.v": "ee63e2a97c3402a753818d06a9855e39e8acb9b2684726e4d29a306c8125612c",
+    "rtl/soc/triha_face_system.v": "6e144dc1fd0211491adcc9f58de1588660425b71059ab20b556903f79ae0f011",
+    "rtl/soc/triha_model_loader.v": "f5bd41217fbf86cf48909b28a37b4175f98e7dc05fde03844b934f7443573146",
+    "rtl/soc/triha_sram.v": "5adf422ab9de0c0bffb9f829e5b0dbf4c2a366e4b4d5a9a8c0966d6e3d26d66f",
+    "rtl/soc/triha_uart_rx.v": "0c8adab5825ed0ad6b5b0616b0ea0d4f24f750d0a6b4a743c03d55575995bbd4",
+    "rtl/soc/triha_uart_tx.v": "f28aee64020bc6a6b914f22b76bafb283adf07cda97a282447db5b9541e860a9",
+    "rtl/soc/video_axil_decode.v": "3c61a538376bbe37a9fee56f7d5c4f5280e32846b18ef6d38a32fbf134e50866",
+    "rtl/video/avatar_ddr_cache.sv": "49796e27ea917ba5d3e6c3ae99c069fa156e6b50b7f8a52266cc75a43a834e25",
+    "rtl/video/avatar_row_cache.sv": "ec3f9b466853cce4241daafa60ab6d37bd11b148c940af6fd603f44159b4589b",
+    "rtl/video/avatar_sample_map.sv": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+    "rtl/video/avatar_texture_cache.sv": "64047d7d16a3e2afa3acddfc0c97fee5eead350b8ae4ee8f91c311dc5be1a175",
+    "rtl/video/axi128_hmic256.sv": "8d93af1c8897abbd6ca229508a83f882ca4403b3fcb325863612f38789d15270",
+    "rtl/video/axi_write_arbiter3.sv": "993d359577602f1172be229bce06774c9da424606f9d056803c20260c9569425",
+    "rtl/video/detect_bilinear.sv": "3a9d06109bbf98c8280e4679bf59e1e1686c792b0a8852415d731226c65453fe",
+    "rtl/video/detect_nchw_dma.sv": "593034b60c29587a9fe7d01bb84e61d4ecf83a5ffca334b9091f377119da8f3a",
+    "rtl/video/display_box_only.sv": "759cc693dad4e41d3b3e025d8fe2ad9016f2c1a148167438dee40d83e900fae7",
+    "rtl/video/display_mode_cdc.sv": "a440d979cb82a199d18a6abb3d4e1995d319b238b4a0b684113545674c502559",
+    "rtl/video/display_mode_cdc_held.sv": "5ca0a64eec24f2c80b31706f1d7a63273d51832dde8360f2650df29ce41e2526",
+    "rtl/video/display_overlay.sv": "0d8fc22d1f153e092267b24fbdcc3815cc1f0f1298b4f9fa0233dde36f84f3cf",
+    "rtl/video/display_record_guard.sv": "3e5d01b75523764c843cd6d197e7b18143eaad5eb23f0c7cf7196b2a00adcf95",
+    "rtl/video/display_record_link.sv": "a5b2b50de313af4d910a05199ecac0d9e429f18ba6eaf9ad8afd8f5be513caf1",
+    "rtl/video/display_record_pixels.sv": "27858d0ffb4cba204b70e93fa2305834fbb99bef98030323fe09ec0fc2da5399",
+    "rtl/video/display_record_pixels_compact.sv": "046c60deddea1b532a4e98d29ff78b13977beaad48d2d01db1743beed97c5496",
+    "rtl/video/display_slot_owner.sv": "12ed11227aea3c385dd783ecb68f5128e2dd425d1d40ac8c91630c2ddd138981",
+    "rtl/video/include/avatar_span_identity.vh": "b7d813f73304070c96a4091b9ee98b47d20e5e74b66800e7b8f7160bb8983e20",
+    "rtl/video/include/avatar_span_table.vh": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e",
+    "rtl/video/include/video_capture_v2.vh": "f2cbb001255e035d4b5ee1584f3dc1ffca711d7fd738a21a268b5569bdf8deb3",
+    "rtl/video/include/video_cfg.vh": "9040799e693b864e6d14afa7044881ec001a71fc4fccb9e41e640c9f9c8c4233",
+    "rtl/video/include/video_display.vh": "da79f90c35112fc28f8f3ad199980b08decaf194ccaefc907595f72dd391d9e2",
+    "rtl/video/include/video_edid.vh": "ae1d2c5259416868258d78fff3fc21d416f53111ff321ea592f24bf53da201ff",
+    "rtl/video/preview_downscale.sv": "690f701b072123984e4352addb5058d1623e5937d5378967941e606d150fc957",
+    "rtl/video/raw_display.sv": "747a124021ce526d2ee0a24ac7b1be71846afa9baab3ce4918136c70dfa8cb4a",
+    "rtl/video/rgb888_packer.sv": "a44cf8dc0c36944001877ba65287ed4c754c03559012b831fc61be98b63a71db",
+    "rtl/video/video_application_engine.sv": "c7ef73e16f22a9178a4c30fd46637e5d90422ac94b7233ab958072a8dae8962f",
+    "rtl/video/video_async_fifo.sv": "7b2ca2c858b3ff38c9318bf2c2051fa570ec58efddafc6fd98a97d63e97d8c83",
+    "rtl/video/video_button_debounce.sv": "1cf1b6eb03e5b6e49a7d91d1b62757889974f8f9f09230080a25abe6368abb29",
+    "rtl/video/video_capture_ingress.sv": "172188fc8dd869d1799471ed9a66579e3925cdac45f41a13594595ca83a6054e",
+    "rtl/video/video_capture_mmio_v2.sv": "ff19bd2344a8ace300be8d4b0d49d7d2b8a1ecc508cb554c6de343afd09598c8",
+    "rtl/video/video_capture_startup_guard.sv": "458a4bf1cea977c3d53cd4bd731c3fa2ede0610d355dcd09fe53748919492287",
+    "rtl/video/video_display_mmio.sv": "bc250746ed9a43bd20384bcc45d8602e2677de04b4ed19c59ec2efd8896820df",
+    "rtl/video/video_display_mmio_box.sv": "b2f8a8c609b91412ce32f5b86ff405d012e06e4584bb8d57139fbc9f57864786",
+    "rtl/video/video_display_mmio_compact.sv": "3d8ff79473fff2bb9757bdf5bacd0bd467261ce2d6a6605b50fd9d6ed1355f50",
+    "rtl/video/video_display_record.sv": "302aca56cdd5b8fe981a28a797d5429c8665d3f9ce21b2c65c00b93029fb93b3",
+    "rtl/video/video_display_record_compact.sv": "4ffb7ca80c6e6946015b968d985adb0208b2cb3b2d20062878e12d029e107372",
+    "rtl/video/video_read_arbiter.sv": "2ac6edfda4b25560a34847828151dbe823d269414a93d413ed8ab11b0eed2189",
+    "rtl/video/video_record_renderer.sv": "26bf34640ee474f39127816cb9362923ce4a282b0f3727fa6c9e26959d8cf62b",
+    "rtl/video/video_record_renderer_compact.sv": "f4a1136ed764187936571ddcdc4552a90502e77513c27c449430f4084f54eff8",
+    "rtl/video/video_rx.sv": "8d1ee98ffad7e8f03152be66d5e013e8ead17281d10128416efdc7967aef501a",
+    "rtl/video/video_rx_measure.sv": "f02d4e4254d5fdb2ee12cb646ddf47c10548781177b7693609717ab141ff47f2",
+    "rtl/video/video_stream_register.sv": "2ce9846a85740dbe700d57a1e1a104b8742e0dc882fcb31d9dd773d5aff22a5d",
+    "rtl/video/video_three_branch_capture.sv": "05b4f40c613ef4a2c53ab2173fae3c54aa86cb96abcf969a550ae6a412dae425",
+    "rtl/video/video_timing.sv": "cc7ba17c3acf1334332a54be79cae25e95c29bb6836b465d80ed016420fe42ce",
+    "rtl/video/video_write_dma.sv": "1443b078d5574bb252dad7bb9b4e079c3f96b544263804efee10ef70fcc92a85",
+    "scripts/video/build_pds.py": "ce8a91ac08f9e2adbe2d0a98b6e3e065a7442bfadec6621d7567257853ec637f",
+    "scripts/video/common.py": "cb3ed29183034d4cea14419909010dffb8ebc1b767a4516bc8f33ecc427a447f",
+    "scripts/video/face_firmware.py": "adc464dfae50cede185926d5f69d7d2d250e5f24aa6df96f634abbec1cac8588",
+    "scripts/video/gen_capture_v2.py": "47fa1f45785792c3de41a2e646ab633f2ec024f34d5fc64db959f266a580dd03",
+    "scripts/video/gen_compute_pll.py": "f73c0a9abe070bc326558861015a8404e936e6381b165e777ad64381bb0dde17",
+    "scripts/video/gen_config.py": "414535c43594c3fb7e9d34ad75098f2b7374f4475dc9dd3f552c0362f5b9405d",
+    "scripts/video/gen_ddr.py": "8b4924d3e1513fc585e0f7d34cfb7e4598675f80018c799bd9d2199622e8dad2",
+    "scripts/video/gen_display_abi.py": "d95ac61cdfd08dcfb4ded2c7b1fe2a717d97071b1b8cba17a12780ee39e37946",
+    "scripts/video/gen_edid.py": "e8d089439adb24e9a983a61384a2c39d4bce699004c208a5a8ad0db5ea8df19a",
+    "scripts/video/gen_pll.py": "10ebf143abf103fe79ba40dbc4610bca528062769ec00f20c91458e6d5fc67b6",
+    "scripts/video/pds_timing.py": "e1018df86eeb4e66b4aa850d403442603034839cebd006d0ca940adda3afff16",
+    "scripts/video/record_probe_timing.py": "1f27c5537dc20e721f7845c3154e549549009c40b6a3b9d79d46a9171ff068f5",
+    "sw/include/video_capture_v2.h": "24b2882196c716fd75ba8257340a6e1089470cfd17ed91f31f8a4ac666bda3d4",
+    "sw/include/video_display_abi.h": "0be38d2527b09c2198777df05ea027865024488a2b3b16f774cd793525bb755d",
+    "fpga/pg2l100h/ip/video_pll.json": "a17af64bc9ce959a7a9b505a37256d4c14a53bffc6615a3a5d24726f877f5ffe",
+    "scripts/video/qualify_face_bitstream.py": "87ad16c23c24a0e7b47ac28f0881a5f67d7069da9bcb46424494cce7db09fca5",
+    "scripts/video/face_timing.py": "69e7e51757bdc61dbf0a39d1868208d9fc25f66f0ae37bc8f38c829243a13070",
+    "scripts/video/check_face_gray_clocks.py": "7f98d6b13ef1fcb5a3415d0265cb1330539967175eab9fecd8f8aba20aaed216",
+    "scripts/video/face_route_evidence.py": "2fef7e35698ea95d2ec4fe95a460e75886c438d12e10e3dc0e4fd91c0045a633",
+    "scripts/video/face_gray_netlist.py": "af436da293c34f5f02abe2e7e85e457203d8357bbf5df0ee30703632a0637bba",
+    "scripts/video/face_profiles.py": "f02a08b9a70ea4c373c178787392f29945541380719e4b17bedad7c672ad38be",
+    "assets/avatars/triha/manifest.json": "0bb3364b6e43555c63af47312e04791c5f1454ffb5a5ec10e2937bf7bfc25778",
+    "assets/avatars/triha/avatar.rgba": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+    "assets/avatars/triha/source.png": "c2904a1831374d73c1b1b83d58de6f7cfd54f14b9dbc029a585179f71094b3b1",
+    "assets/avatars/triha/source.json": "16ad97d9895e364b953ce12a87bae6b20089d6ceebf503aa4541e26ca913cfaa",
+    "scripts/video/gen_fixed_avatar.py": "24d0912b90f44e9b5ec2be9e388ebaafbb5b9b6eda335bef6a51c492ae1fd5c6"
+  },
+  "artifact": "build\\video\\dual_single_avatar_20261104\\qualified\\generate_bitstream\\triha_face_board_top.sbit",
+  "artifact_sha256": "86d7a14ce44324d02cc043d27bd5f881f996a630eb2c116a94b0bf03eeed276d",
+  "verify_mask": "build\\video\\dual_single_avatar_20261104\\qualified\\generate_bitstream\\triha_face_board_top.smsk",
+  "verify_mask_sha256": "e3c18e62ac3001390686069abd77e8beca68c4a6ac88965d4fa3433101b34d6f",
+  "input_snapshot_verified_before_and_after_build": true,
+  "bitstream_generation_inputs": {
+    "D:\\FPGA\\TriHaRiscv-main\\build\\video\\dual_single_avatar_20261104\\qualified\\bitstream.tcl": "8335f2a250141478a991b88bd4884488dbd0c6c87d65eb53b96b5c3b08fde7e6",
+    "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f"
+  },
+  "elapsed": 73.19318699836731
+}

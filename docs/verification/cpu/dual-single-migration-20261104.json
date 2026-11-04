@@ -1,0 +1,2289 @@
+{
+  "schema_version": 1,
+  "status": "PASS_FUNCTIONAL_MIGRATION",
+  "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+  "source_checkout": "D:/FPGA/TriHaRiscv-cpu-dualissue-windows",
+  "source_working_tree_ignored": true,
+  "application": {
+    "dual_issue": 0,
+    "minimal_control_cpu": 1,
+    "extra_decode_stage": 0,
+    "compute_hz": 50000000,
+    "video_ddr_hz": 125000000,
+    "pixel_hz": 40000000
+  },
+  "migration_files": [
+    {
+      "path": "rtl/cpu/triha_btb.v",
+      "before_sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+      "upstream_sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+      "cleaned_upstream_sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+      "after_sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+      "source_kind": "git",
+      "final_sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7"
+    },
+    {
+      "path": "rtl/cpu/triha_cached_core.v",
+      "before_sha256": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
+      "upstream_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
+      "cleaned_upstream_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
+      "after_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564",
+      "source_kind": "git",
+      "final_sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564"
+    },
+    {
+      "path": "rtl/cpu/triha_core.v",
+      "before_sha256": "ef3b92835d360432be77bd927f2953b79794bd591d11c27376329e70cfea0cca",
+      "upstream_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+      "cleaned_upstream_sha256": "cc75d4719d5c9ad1abf7813ad6f5482466c56bc370628f186e2a74a0796e0ce4",
+      "after_sha256": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3",
+      "source_kind": "reviewed_working_tree",
+      "final_sha256": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3"
+    },
+    {
+      "path": "rtl/cpu/triha_cpu.v",
+      "before_sha256": "e60ddf8e9d73f3f203b21d9958beda956609e3159d4bd80eceb7afd936ac8569",
+      "upstream_sha256": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38",
+      "cleaned_upstream_sha256": "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5",
+      "after_sha256": "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5",
+      "source_kind": "git",
+      "final_sha256": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112"
+    },
+    {
+      "path": "rtl/cpu/triha_decode.v",
+      "before_sha256": "17de66970beb7dfcf69c45e1ae76ce8aff0fe7785c4b82a461243e509220b44e",
+      "upstream_sha256": "1d89e0899fb31c64d64f61af39016d2f7f081ea35bc9abd06dc0e31cf497314a",
+      "cleaned_upstream_sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
+      "after_sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
+      "source_kind": "git",
+      "final_sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334"
+    },
+    {
+      "path": "rtl/cpu/triha_frontend.v",
+      "before_sha256": "9c2ca630e715785fccb39bc35b6583c3cc964c6dbf680d1d31c48a6a4f81194e",
+      "upstream_sha256": "92bf85932ebe747f9606b0e080f6f74cf14beb11987c7456e5b8e1a72aa83b58",
+      "cleaned_upstream_sha256": "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f",
+      "after_sha256": "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f",
+      "source_kind": "git",
+      "final_sha256": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23"
+    },
+    {
+      "path": "rtl/cpu/triha_issue.v",
+      "before_sha256": "de0fe3eb23257ec66eefe1401f31cb5d68aaea6536265df6691c8cc1f6bd7375",
+      "upstream_sha256": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e",
+      "cleaned_upstream_sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
+      "after_sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
+      "source_kind": "git",
+      "final_sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3"
+    },
+    {
+      "path": "rtl/cpu/triha_lsu.v",
+      "before_sha256": "1debf99c7df81ebe1d4ec47cf9d566794d26bbb6790a93d76ba1815125cdfaa3",
+      "upstream_sha256": "3d614d5f62f8e96184cade9cb0af4c18d070b8d6ea22fa1f2bdc9003acb4debd",
+      "cleaned_upstream_sha256": "47b617d5255720d531079aa60d1502b57b5d5896b617805536b11d55096096e6",
+      "after_sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
+      "source_kind": "reviewed_working_tree",
+      "final_sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a"
+    },
+    {
+      "path": "rtl/cpu/triha_multiplier.v",
+      "before_sha256": "7700190da3ac38cda8b8d2bc781a4519841de1eed7553161a5a6a8f78167a718",
+      "upstream_sha256": "cf73e46a04b6f0f78efa57d0a221047e9ef9cea54e9d6e0e68a6a141c8a6c903",
+      "cleaned_upstream_sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
+      "after_sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
+      "source_kind": "git",
+      "final_sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a"
+    },
+    {
+      "path": "rtl/cpu/triha_npc.v",
+      "before_sha256": "fff13ae91902edc1e4a6c1b1b668256aca8dcf2d52df7a13e76a469552fef023",
+      "upstream_sha256": "fb10fa1ea24289a0a11d387e1d8917624d3d851ab7d499bdbc97e40908f3115f",
+      "cleaned_upstream_sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
+      "after_sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
+      "source_kind": "git",
+      "final_sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e"
+    },
+    {
+      "path": "rtl/cpu/triha_pipe_ctrl.v",
+      "before_sha256": "d1342f52b6ff9b92ae322ea3d2bece076c080b3e0df28e8358dbbe0a80597299",
+      "upstream_sha256": "b789427ee8861cac6b29830903997e29b385e44ee36c1e61dd119acc0ba19c54",
+      "cleaned_upstream_sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
+      "after_sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
+      "source_kind": "git",
+      "final_sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da"
+    },
+    {
+      "path": "rtl/cpu/triha_regfile.v",
+      "before_sha256": "3feaad4519f6b841d2c49774c60a8674a674246225afab7b6718276ccce44014",
+      "upstream_sha256": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929",
+      "cleaned_upstream_sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
+      "after_sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
+      "source_kind": "git",
+      "final_sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820"
+    }
+  ],
+  "import_replay": {
+    "status": "PASS",
+    "applied": false,
+    "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+    "files": [
+      {
+        "source": "rtl/cpu/triha_btb.v",
+        "destination": "rtl/cpu/triha_btb.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7"
+      },
+      {
+        "source": "rtl/cpu/triha_cached_core.v",
+        "destination": "rtl/cpu/triha_cached_core.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564"
+      },
+      {
+        "source": "rtl/cpu/triha_core.v",
+        "destination": "rtl/cpu/triha_core.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3"
+      },
+      {
+        "source": "rtl/cpu/triha_cpu.v",
+        "destination": "rtl/cpu/triha_cpu.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5"
+      },
+      {
+        "source": "rtl/cpu/triha_decode.v",
+        "destination": "rtl/cpu/triha_decode.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334"
+      },
+      {
+        "source": "rtl/cpu/triha_frontend.v",
+        "destination": "rtl/cpu/triha_frontend.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f"
+      },
+      {
+        "source": "rtl/cpu/triha_issue.v",
+        "destination": "rtl/cpu/triha_issue.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3"
+      },
+      {
+        "source": "rtl/cpu/triha_lsu.v",
+        "destination": "rtl/cpu/triha_lsu.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a"
+      },
+      {
+        "source": "rtl/cpu/triha_multiplier.v",
+        "destination": "rtl/cpu/triha_multiplier.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a"
+      },
+      {
+        "source": "rtl/cpu/triha_npc.v",
+        "destination": "rtl/cpu/triha_npc.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e"
+      },
+      {
+        "source": "rtl/cpu/triha_pipe_ctrl.v",
+        "destination": "rtl/cpu/triha_pipe_ctrl.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da"
+      },
+      {
+        "source": "rtl/cpu/triha_regfile.v",
+        "destination": "rtl/cpu/triha_regfile.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820"
+      }
+    ]
+  },
+  "functional_runs": [
+    {
+      "status": "PASS",
+      "counts": {
+        "PASS": 1,
+        "FAIL": 1,
+        "TIMEOUT": 1
+      },
+      "total": 3,
+      "self_test": true,
+      "source_unchanged": true,
+      "dual_issue": 0,
+      "minimal_control_cpu": 0,
+      "path": "build/cpu/isa-20261104T082059900800Z/result.json",
+      "sha256": "00867e42a48f80fc0ab36d489c716595d5cf041726bde96476a791c7329460cc",
+      "cases": [
+        {
+          "suite": "monitor",
+          "case": "monitor-pass",
+          "status": "PASS",
+          "cycles": 10,
+          "second_issue": 0
+        },
+        {
+          "suite": "monitor",
+          "case": "monitor-fail",
+          "status": "FAIL",
+          "cycles": 10,
+          "second_issue": null
+        },
+        {
+          "suite": "monitor",
+          "case": "monitor-timeout",
+          "status": "TIMEOUT",
+          "cycles": 501,
+          "second_issue": null
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "counts": {
+        "PASS": 103
+      },
+      "total": 103,
+      "self_test": false,
+      "source_unchanged": true,
+      "dual_issue": 0,
+      "minimal_control_cpu": 0,
+      "path": "build/cpu/isa-20261104T082144373022Z/result.json",
+      "sha256": "ee5d1ed4eb84034f97d3218bf0452bf7b44d332e604392f65798fa63a8dd3eed",
+      "cases": [
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-simple",
+          "status": "PASS",
+          "cycles": 183,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-add",
+          "status": "PASS",
+          "cycles": 731,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-addi",
+          "status": "PASS",
+          "cycles": 436,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-and",
+          "status": "PASS",
+          "cycles": 751,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-andi",
+          "status": "PASS",
+          "cycles": 392,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-auipc",
+          "status": "PASS",
+          "cycles": 204,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-beq",
+          "status": "PASS",
+          "cycles": 589,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bge",
+          "status": "PASS",
+          "cycles": 643,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bgeu",
+          "status": "PASS",
+          "cycles": 668,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-blt",
+          "status": "PASS",
+          "cycles": 589,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bltu",
+          "status": "PASS",
+          "cycles": 614,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bne",
+          "status": "PASS",
+          "cycles": 597,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-jal",
+          "status": "PASS",
+          "cycles": 209,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-jalr",
+          "status": "PASS",
+          "cycles": 309,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lb",
+          "status": "PASS",
+          "cycles": 450,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lbu",
+          "status": "PASS",
+          "cycles": 450,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-ld_st",
+          "status": "PASS",
+          "cycles": 1253,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lh",
+          "status": "PASS",
+          "cycles": 466,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lhu",
+          "status": "PASS",
+          "cycles": 475,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lui",
+          "status": "PASS",
+          "cycles": 211,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lw",
+          "status": "PASS",
+          "cycles": 480,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-or",
+          "status": "PASS",
+          "cycles": 754,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-ori",
+          "status": "PASS",
+          "cycles": 399,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sb",
+          "status": "PASS",
+          "cycles": 728,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sh",
+          "status": "PASS",
+          "cycles": 781,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sll",
+          "status": "PASS",
+          "cycles": 759,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slli",
+          "status": "PASS",
+          "cycles": 435,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slt",
+          "status": "PASS",
+          "cycles": 725,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slti",
+          "status": "PASS",
+          "cycles": 431,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sltiu",
+          "status": "PASS",
+          "cycles": 431,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sltu",
+          "status": "PASS",
+          "cycles": 725,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sra",
+          "status": "PASS",
+          "cycles": 778,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srai",
+          "status": "PASS",
+          "cycles": 450,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srl",
+          "status": "PASS",
+          "cycles": 772,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srli",
+          "status": "PASS",
+          "cycles": 444,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-st_ld",
+          "status": "PASS",
+          "cycles": 629,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sub",
+          "status": "PASS",
+          "cycles": 723,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sw",
+          "status": "PASS",
+          "cycles": 788,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-xor",
+          "status": "PASS",
+          "cycles": 753,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-xori",
+          "status": "PASS",
+          "cycles": 401,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-div",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-divu",
+          "status": "PASS",
+          "cycles": 558,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mul",
+          "status": "PASS",
+          "cycles": 725,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulh",
+          "status": "PASS",
+          "cycles": 727,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulhsu",
+          "status": "PASS",
+          "cycles": 727,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulhu",
+          "status": "PASS",
+          "cycles": 727,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-rem",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-remu",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32mi-p-csr",
+          "status": "PASS",
+          "cycles": 340,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32mi-p-mcsr",
+          "status": "PASS",
+          "cycles": 230,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-add-00",
+          "status": "PASS",
+          "cycles": 8193,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-addi-00",
+          "status": "PASS",
+          "cycles": 7124,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-and-00",
+          "status": "PASS",
+          "cycles": 8209,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-andi-00",
+          "status": "PASS",
+          "cycles": 7120,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-auipc-00",
+          "status": "PASS",
+          "cycles": 3609,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-beq-00",
+          "status": "PASS",
+          "cycles": 8765,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bge-00",
+          "status": "PASS",
+          "cycles": 9474,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bgeu-00",
+          "status": "PASS",
+          "cycles": 9505,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-blt-00",
+          "status": "PASS",
+          "cycles": 9312,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bltu-00",
+          "status": "PASS",
+          "cycles": 9295,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bne-00",
+          "status": "PASS",
+          "cycles": 10013,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-fence-00",
+          "status": "PASS",
+          "cycles": 3110,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-jal-00",
+          "status": "PASS",
+          "cycles": 19956,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-jalr-00",
+          "status": "PASS",
+          "cycles": 7701,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lb-00",
+          "status": "PASS",
+          "cycles": 4564,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lbu-00",
+          "status": "PASS",
+          "cycles": 4579,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lh-00",
+          "status": "PASS",
+          "cycles": 4460,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lhu-00",
+          "status": "PASS",
+          "cycles": 4475,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lui-00",
+          "status": "PASS",
+          "cycles": 3579,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lw-00",
+          "status": "PASS",
+          "cycles": 4408,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-nop-00",
+          "status": "PASS",
+          "cycles": 3033,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-or-00",
+          "status": "PASS",
+          "cycles": 8182,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-ori-00",
+          "status": "PASS",
+          "cycles": 7113,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sb-00",
+          "status": "PASS",
+          "cycles": 4744,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sh-00",
+          "status": "PASS",
+          "cycles": 4656,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sll-00",
+          "status": "PASS",
+          "cycles": 8185,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slli-00",
+          "status": "PASS",
+          "cycles": 5272,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slt-00",
+          "status": "PASS",
+          "cycles": 8201,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slti-00",
+          "status": "PASS",
+          "cycles": 7120,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sltiu-00",
+          "status": "PASS",
+          "cycles": 7131,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sltu-00",
+          "status": "PASS",
+          "cycles": 8216,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sra-00",
+          "status": "PASS",
+          "cycles": 8205,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srai-00",
+          "status": "PASS",
+          "cycles": 5280,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srl-00",
+          "status": "PASS",
+          "cycles": 8197,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srli-00",
+          "status": "PASS",
+          "cycles": 5268,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sub-00",
+          "status": "PASS",
+          "cycles": 8193,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sw-00",
+          "status": "PASS",
+          "cycles": 4604,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-xor-00",
+          "status": "PASS",
+          "cycles": 8201,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-xori-00",
+          "status": "PASS",
+          "cycles": 7124,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-div-00",
+          "status": "PASS",
+          "cycles": 21921,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-divu-00",
+          "status": "PASS",
+          "cycles": 21920,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mul-00",
+          "status": "PASS",
+          "cycles": 8201,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulh-00",
+          "status": "PASS",
+          "cycles": 8208,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulhsu-00",
+          "status": "PASS",
+          "cycles": 8238,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulhu-00",
+          "status": "PASS",
+          "cycles": 8219,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-rem-00",
+          "status": "PASS",
+          "cycles": 21917,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-remu-00",
+          "status": "PASS",
+          "cycles": 21928,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrc-00",
+          "status": "PASS",
+          "cycles": 6587,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrci-00",
+          "status": "PASS",
+          "cycles": 5042,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrs-00",
+          "status": "PASS",
+          "cycles": 6591,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrsi-00",
+          "status": "PASS",
+          "cycles": 5042,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrw-00",
+          "status": "PASS",
+          "cycles": 6583,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrwi-00",
+          "status": "PASS",
+          "cycles": 5038,
+          "second_issue": 0
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "counts": {
+        "PASS": 7
+      },
+      "total": 7,
+      "self_test": false,
+      "source_unchanged": true,
+      "dual_issue": 1,
+      "minimal_control_cpu": 0,
+      "path": "build/cpu/isa-20261104T082214247295Z/result.json",
+      "sha256": "02e5625c27c815ef704fd4fba4ad63c7b54b67502328c9606ab6a654f8030371",
+      "cases": [
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-add",
+          "status": "PASS",
+          "cycles": 550,
+          "second_issue": 199
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-beq",
+          "status": "PASS",
+          "cycles": 495,
+          "second_issue": 109
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-jal",
+          "status": "PASS",
+          "cycles": 186,
+          "second_issue": 26
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lw",
+          "status": "PASS",
+          "cycles": 393,
+          "second_issue": 99
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sw",
+          "status": "PASS",
+          "cycles": 616,
+          "second_issue": 186
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-div",
+          "status": "PASS",
+          "cycles": 521,
+          "second_issue": 39
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mul",
+          "status": "PASS",
+          "cycles": 554,
+          "second_issue": 196
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "counts": {
+        "PASS": 103
+      },
+      "total": 103,
+      "self_test": false,
+      "source_unchanged": true,
+      "dual_issue": 0,
+      "minimal_control_cpu": 1,
+      "path": "build/cpu/isa-20261104T082646442690Z/result.json",
+      "sha256": "e4b5afc818dada7ddf770478921f59daba920e3a525bac4cdb763a0c1a5eff0e",
+      "cases": [
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-simple",
+          "status": "PASS",
+          "cycles": 183,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-add",
+          "status": "PASS",
+          "cycles": 671,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-addi",
+          "status": "PASS",
+          "cycles": 412,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-and",
+          "status": "PASS",
+          "cycles": 691,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-andi",
+          "status": "PASS",
+          "cycles": 368,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-auipc",
+          "status": "PASS",
+          "cycles": 204,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-beq",
+          "status": "PASS",
+          "cycles": 541,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bge",
+          "status": "PASS",
+          "cycles": 595,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bgeu",
+          "status": "PASS",
+          "cycles": 620,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-blt",
+          "status": "PASS",
+          "cycles": 541,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bltu",
+          "status": "PASS",
+          "cycles": 566,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-bne",
+          "status": "PASS",
+          "cycles": 549,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-jal",
+          "status": "PASS",
+          "cycles": 209,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-jalr",
+          "status": "PASS",
+          "cycles": 309,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lb",
+          "status": "PASS",
+          "cycles": 448,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lbu",
+          "status": "PASS",
+          "cycles": 448,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-ld_st",
+          "status": "PASS",
+          "cycles": 1419,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lh",
+          "status": "PASS",
+          "cycles": 456,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lhu",
+          "status": "PASS",
+          "cycles": 460,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lui",
+          "status": "PASS",
+          "cycles": 211,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-lw",
+          "status": "PASS",
+          "cycles": 462,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-or",
+          "status": "PASS",
+          "cycles": 694,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-ori",
+          "status": "PASS",
+          "cycles": 375,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sb",
+          "status": "PASS",
+          "cycles": 706,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sh",
+          "status": "PASS",
+          "cycles": 737,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sll",
+          "status": "PASS",
+          "cycles": 699,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slli",
+          "status": "PASS",
+          "cycles": 411,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slt",
+          "status": "PASS",
+          "cycles": 665,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-slti",
+          "status": "PASS",
+          "cycles": 407,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sltiu",
+          "status": "PASS",
+          "cycles": 407,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sltu",
+          "status": "PASS",
+          "cycles": 665,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sra",
+          "status": "PASS",
+          "cycles": 718,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srai",
+          "status": "PASS",
+          "cycles": 426,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srl",
+          "status": "PASS",
+          "cycles": 712,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-srli",
+          "status": "PASS",
+          "cycles": 420,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-st_ld",
+          "status": "PASS",
+          "cycles": 651,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sub",
+          "status": "PASS",
+          "cycles": 663,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-sw",
+          "status": "PASS",
+          "cycles": 740,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-xor",
+          "status": "PASS",
+          "cycles": 693,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32ui-p-xori",
+          "status": "PASS",
+          "cycles": 377,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-div",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-divu",
+          "status": "PASS",
+          "cycles": 558,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mul",
+          "status": "PASS",
+          "cycles": 687,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulh",
+          "status": "PASS",
+          "cycles": 684,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulhsu",
+          "status": "PASS",
+          "cycles": 684,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-mulhu",
+          "status": "PASS",
+          "cycles": 684,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-rem",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32um-p-remu",
+          "status": "PASS",
+          "cycles": 557,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32mi-p-csr",
+          "status": "PASS",
+          "cycles": 340,
+          "second_issue": 0
+        },
+        {
+          "suite": "riscv-tests",
+          "case": "rv32mi-p-mcsr",
+          "status": "PASS",
+          "cycles": 230,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-add-00",
+          "status": "PASS",
+          "cycles": 9877,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-addi-00",
+          "status": "PASS",
+          "cycles": 8701,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-and-00",
+          "status": "PASS",
+          "cycles": 9883,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-andi-00",
+          "status": "PASS",
+          "cycles": 8700,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-auipc-00",
+          "status": "PASS",
+          "cycles": 4521,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-beq-00",
+          "status": "PASS",
+          "cycles": 10043,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bge-00",
+          "status": "PASS",
+          "cycles": 10760,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bgeu-00",
+          "status": "PASS",
+          "cycles": 10789,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-blt-00",
+          "status": "PASS",
+          "cycles": 10586,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bltu-00",
+          "status": "PASS",
+          "cycles": 10583,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-bne-00",
+          "status": "PASS",
+          "cycles": 11291,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-fence-00",
+          "status": "PASS",
+          "cycles": 3967,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-jal-00",
+          "status": "PASS",
+          "cycles": 20907,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-jalr-00",
+          "status": "PASS",
+          "cycles": 8790,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lb-00",
+          "status": "PASS",
+          "cycles": 5538,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lbu-00",
+          "status": "PASS",
+          "cycles": 5555,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lh-00",
+          "status": "PASS",
+          "cycles": 5426,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lhu-00",
+          "status": "PASS",
+          "cycles": 5443,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lui-00",
+          "status": "PASS",
+          "cycles": 4479,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-lw-00",
+          "status": "PASS",
+          "cycles": 5370,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-nop-00",
+          "status": "PASS",
+          "cycles": 3878,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-or-00",
+          "status": "PASS",
+          "cycles": 9850,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-ori-00",
+          "status": "PASS",
+          "cycles": 8684,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sb-00",
+          "status": "PASS",
+          "cycles": 5698,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sh-00",
+          "status": "PASS",
+          "cycles": 5598,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sll-00",
+          "status": "PASS",
+          "cycles": 9868,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slli-00",
+          "status": "PASS",
+          "cycles": 6516,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slt-00",
+          "status": "PASS",
+          "cycles": 9876,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-slti-00",
+          "status": "PASS",
+          "cycles": 8701,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sltiu-00",
+          "status": "PASS",
+          "cycles": 8717,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sltu-00",
+          "status": "PASS",
+          "cycles": 9892,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sra-00",
+          "status": "PASS",
+          "cycles": 9876,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srai-00",
+          "status": "PASS",
+          "cycles": 6524,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srl-00",
+          "status": "PASS",
+          "cycles": 9875,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-srli-00",
+          "status": "PASS",
+          "cycles": 6515,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sub-00",
+          "status": "PASS",
+          "cycles": 9869,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-sw-00",
+          "status": "PASS",
+          "cycles": 5544,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-xor-00",
+          "status": "PASS",
+          "cycles": 9875,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "I-xori-00",
+          "status": "PASS",
+          "cycles": 8700,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-div-00",
+          "status": "PASS",
+          "cycles": 23596,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-divu-00",
+          "status": "PASS",
+          "cycles": 23607,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mul-00",
+          "status": "PASS",
+          "cycles": 9879,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulh-00",
+          "status": "PASS",
+          "cycles": 9891,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulhsu-00",
+          "status": "PASS",
+          "cycles": 9929,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-mulhu-00",
+          "status": "PASS",
+          "cycles": 9904,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-rem-00",
+          "status": "PASS",
+          "cycles": 23592,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "M-remu-00",
+          "status": "PASS",
+          "cycles": 23606,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrc-00",
+          "status": "PASS",
+          "cycles": 7783,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrci-00",
+          "status": "PASS",
+          "cycles": 6114,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrs-00",
+          "status": "PASS",
+          "cycles": 7785,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrsi-00",
+          "status": "PASS",
+          "cycles": 6113,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrw-00",
+          "status": "PASS",
+          "cycles": 7786,
+          "second_issue": 0
+        },
+        {
+          "suite": "act4",
+          "case": "Zicsr-csrrwi-00",
+          "status": "PASS",
+          "cycles": 6116,
+          "second_issue": 0
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "pass_line": "# CSR_UNIT_PASS operations=21 checks=91 forms=6 traps=2 returns=1",
+      "path": "build/cpu/csr-20261104T082144369893Z/result.json",
+      "sha256": "9fe2c29a4e79805a482a3561836ebd7dcba0e9c6f6c9379e54c83c9cb9407eca"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "path": "build/cpu/document-csr-green-20261104T082059867944Z/result.json",
+      "sha256": "c78444dacad1fe70e322511a274a1414b76ddc0b2f52d23c29ae8e8c08991de7"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "pass_line": "# CPU_CACHE_IRQ_PASS cycles=11724 checks=12616 reads=40 writes=192 entries=3 returns=3 resumes=3 retired=1110 wait_irq_cycles=67",
+      "statistics": {
+        "cycles": 11724,
+        "checks": 12616,
+        "reads": 40,
+        "writes": 192,
+        "entries": 3,
+        "returns": 3,
+        "resumes": 3,
+        "retired": 1110,
+        "wait_irq_cycles": 67
+      },
+      "path": "build/cpu/cache-soc-irq-20261104T082149569381Z/result.json",
+      "sha256": "3d4b9da74b13e2b1005b1af19bf79643c04eca3c8705ffb3faf046757a710951"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "pass_line": "# CPU_CACHE_SOC_PASS cycles=26356 checks=1278 reads=13 writes=35 traps=3 cache=1",
+      "path": "build/cpu/cache-soc-runtime-20261104T082146399697Z/result.json",
+      "sha256": "c18a2bc3750d3b5a1480492eba4e70e512d8f25804dc59a09785e5ded020ec46"
+    },
+    {
+      "status": "FAIL",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "none",
+      "error": "AssertionError: ",
+      "path": "build/cpu/squash-20261104T082152994276Z/result.json",
+      "sha256": "de42ec0827120c385c4e8e04ebe3249b3719c06387a0ad62804ea71848198d87"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "none",
+      "pass_line": "# CPU_SQUASH_PASS cycles=750 checks=2211 retired=162 traps=4 returns=4 fetched=7f decoded=7f normal_stores=1 mmio=1 csr=1 recoveries=f delay=32 wait=390 redirects=12",
+      "statistics": {
+        "cycles": 750,
+        "checks": 2211,
+        "retired": 162,
+        "traps": 4,
+        "returns": 4,
+        "normal_stores": 1,
+        "mmio": 1,
+        "csr": 1,
+        "delay": 32,
+        "wait": 390,
+        "redirects": 12
+      },
+      "path": "build/cpu/squash-20261104T082445433091Z/result.json",
+      "sha256": "0a37f5e995c70e95eed58ce8832fafaaa7164cfc2f165d740bb01ceb0cccfd82"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "none",
+      "pass_line": "# CPU_SQUASH_PASS cycles=1102 checks=3043 retired=162 traps=4 returns=4 fetched=7f decoded=7f normal_stores=1 mmio=1 csr=1 recoveries=f delay=64 wait=742 redirects=12",
+      "statistics": {
+        "cycles": 1102,
+        "checks": 3043,
+        "retired": 162,
+        "traps": 4,
+        "returns": 4,
+        "normal_stores": 1,
+        "mmio": 1,
+        "csr": 1,
+        "delay": 64,
+        "wait": 742,
+        "redirects": 12
+      },
+      "path": "build/cpu/squash-20261104T082448043685Z/result.json",
+      "sha256": "d0b2dd48e275d2472cff0bc7ed3581389b149d7cc2657d9375df270386107755"
+    },
+    {
+      "status": "FAIL",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "store",
+      "negative_rejected": true,
+      "negative_reason": "wrong-path SRAM store",
+      "path": "build/cpu/squash-20261104T082450572621Z/result.json",
+      "sha256": "db4a71fb1ab54b9b69fff3976a4e22b8f2833213a37ad927807a4458c7fb90d0"
+    },
+    {
+      "status": "FAIL",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "mmio",
+      "negative_rejected": true,
+      "negative_reason": "wrong-path MMIO write",
+      "path": "build/cpu/squash-20261104T082453090625Z/result.json",
+      "sha256": "9417109eee266acc96dd88c382f9c3cfe214611caaf8feb679afa3a86eff2d18"
+    },
+    {
+      "status": "FAIL",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "csr",
+      "negative_rejected": true,
+      "negative_reason": "wrong-path CSR write",
+      "path": "build/cpu/squash-20261104T082455554720Z/result.json",
+      "sha256": "5bea2c2dadff7626391f5530642da302577626f443544ba6174092623ebb316e"
+    },
+    {
+      "status": "FAIL",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "negative": "load",
+      "negative_rejected": true,
+      "negative_reason": "wrong-path SRAM store",
+      "path": "build/cpu/squash-20261104T082458054126Z/result.json",
+      "sha256": "c39c056bc7c5670e1b18ec6d7466dd65c0d96bdeca7b25b0ad4481a86c074110"
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "dual_issue": 0,
+      "minimal_control_cpu": 1,
+      "negative_rejected": false,
+      "path": "build/soc/application_cpu-20261104T082059881186Z/result.json",
+      "sha256": "8caea3bad30a70423358bb8d08e427d0fca8ad34a3980af5cc890d9503c48ee5",
+      "runs": [
+        {
+          "mode": "router",
+          "status": "PASS",
+          "negative_rejected": false,
+          "native_return_code": 0,
+          "marker": "# APPLICATION_ROUTER_PASS cycles=2149 checks=1971 waits=1882 ddr_reads=4 ddr_writes=10"
+        },
+        {
+          "mode": "cpu",
+          "status": "PASS",
+          "negative_rejected": false,
+          "native_return_code": 0,
+          "marker": "# APPLICATION_CPU_PASS cycles=476 checks=6 npu_reads=2 video_reads=1 ddr_reads=2 ddr_writes=2 irq=1"
+        }
+      ]
+    },
+    {
+      "status": "PASS",
+      "source_unchanged": true,
+      "external_unchanged": true,
+      "generated_unchanged": true,
+      "dual_issue": 0,
+      "minimal_control_cpu": 0,
+      "negative_rejected": false,
+      "path": "build/soc/application_cpu-20261104T082226587284Z/result.json",
+      "sha256": "f1e7d4afb61f3728e4ec6a23845a93a96e056a9c795a2bee232085171c7768ba",
+      "runs": [
+        {
+          "mode": "cpu",
+          "status": "PASS",
+          "negative_rejected": false,
+          "native_return_code": 0,
+          "marker": "# APPLICATION_CPU_PASS cycles=483 checks=6 npu_reads=2 video_reads=1 ddr_reads=2 ddr_writes=2 irq=1"
+        }
+      ]
+    }
+  ],
+  "full_system_run": "build/soc/face_system-20261104T082539_228673Z/result.json",
+  "new_synthesis": false,
+  "new_physical_timing": false,
+  "new_bitstream": false,
+  "board_access": false,
+  "deletion": {
+    "status": "BLOCKED_BY_POLICY",
+    "reason": "blocked by policy",
+    "reclaimed_bytes": 0,
+    "disposable_paths": [
+      "D:/FPGA/TriHaRiscv-cleanup-archive-20261104/build",
+      "D:/FPGA/TriHaRiscv-cleanup-archive-20261104/build-remainder"
+    ],
+    "estimated_gib": 51.65
+  },
+  "failures_resolved": [
+    {
+      "run": "build/cpu/squash-20261104T082152994276Z/result.json",
+      "cause": "Existing runner omitted simulation exit CSR opt-in. All four fault recoveries and final software checks completed before illegal 0x8b2 exit trapped repeatedly and overflowed the test stack.",
+      "fix": "Runner only: +define+TRIHA_SIM_CTRL_EXTERNAL. Production CSR RTL unchanged. Two positive delays and four deliberately broken negatives re-executed."
+    },
+    {
+      "runs": [
+        "build/soc/face_system-20261104T082214_234003Z/result.json",
+        "build/soc/face_system-20261104T082307_641955Z/result.json"
+      ],
+      "cause": "Old natural fixtures lack current generator provenance or carry an earlier generator hash.",
+      "fix": "Regenerated with current admitted reference using existing upstream Windows venv. All five data/image byte hashes match the earlier fixture. New path build/npu/cpu_migration_face_20261104_verified; old fixtures unchanged."
+    }
+  ],
+  "source_admission_tests": {
+    "import_tests": 20,
+    "support_tests": 4,
+    "result": "PASS",
+    "new_negative_tests": "per-file pinned revision, mutable ref rejection, reviewed delta base revision, secondary module notice across blank lines"
+  },
+  "unchanged_scope_counts": {
+    "technical_report": 130,
+    "releases": 94,
+    "npu_rtl": 54,
+    "video_rtl": 74,
+    "soc_rtl": 23,
+    "fpga_files": 124
+  },
+  "notes": [
+    "Existing source provenance and release timing evidence retain their historical meaning.",
+    "No Git commit or push is part of this CPU migration; the earlier cleanup was already published."
+  ],
+  "final_import_replay": {
+    "status": "PASS",
+    "applied": false,
+    "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+    "files": [
+      {
+        "source": "rtl/cpu/triha_btb.v",
+        "destination": "rtl/cpu/triha_btb.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7"
+      },
+      {
+        "source": "rtl/cpu/triha_cached_core.v",
+        "destination": "rtl/cpu/triha_cached_core.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "39bea9b17effe8119871f3c7667ea4bf999341a5d6c137e3abf53cdc664ea564"
+      },
+      {
+        "source": "rtl/cpu/triha_core.v",
+        "destination": "rtl/cpu/triha_core.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3"
+      },
+      {
+        "source": "rtl/cpu/triha_cpu.v",
+        "destination": "rtl/cpu/triha_cpu.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112"
+      },
+      {
+        "source": "rtl/cpu/triha_decode.v",
+        "destination": "rtl/cpu/triha_decode.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334"
+      },
+      {
+        "source": "rtl/cpu/triha_frontend.v",
+        "destination": "rtl/cpu/triha_frontend.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23"
+      },
+      {
+        "source": "rtl/cpu/triha_issue.v",
+        "destination": "rtl/cpu/triha_issue.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3"
+      },
+      {
+        "source": "rtl/cpu/triha_lsu.v",
+        "destination": "rtl/cpu/triha_lsu.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a"
+      },
+      {
+        "source": "rtl/cpu/triha_multiplier.v",
+        "destination": "rtl/cpu/triha_multiplier.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a"
+      },
+      {
+        "source": "rtl/cpu/triha_npc.v",
+        "destination": "rtl/cpu/triha_npc.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e"
+      },
+      {
+        "source": "rtl/cpu/triha_pipe_ctrl.v",
+        "destination": "rtl/cpu/triha_pipe_ctrl.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da"
+      },
+      {
+        "source": "rtl/cpu/triha_regfile.v",
+        "destination": "rtl/cpu/triha_regfile.v",
+        "source_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+        "sha256": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820"
+      }
+    ]
+  },
+  "final_header_relocation": [
+    {
+      "path": "rtl/cpu/triha_cpu.v",
+      "before_sha256": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38",
+      "after_sha256": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112",
+      "tested_sha256": "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5",
+      "non_comment_tokens_identical": true,
+      "removed_header_bytes": [
+        {
+          "start": 0,
+          "end": 1083,
+          "bytes_base64": "Ly8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KLy8gICAgICAgICAgICAgICAgICAgICAgICAgYmlSSVNDLVYgQ1BVDQovLyAgICAgICAgICAgICAgICAgICAgICAgICAgICBWMC44LjENCi8vICAgICAgICAgICAgICAgICAgICAgVWx0cmEtRW1iZWRkZWQuY29tDQovLyAgICAgICAgICAgICAgICAgICAgIENvcHlyaWdodCAyMDE5LTIwMjANCi8vDQovLyAgICAgICAgICAgICAgICAgICBhZG1pbkB1bHRyYS1lbWJlZGRlZC5jb20NCi8vDQovLyAgICAgICAgICAgICAgICAgICAgIExpY2Vuc2U6IEFwYWNoZSAyLjANCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCi8vIENvcHlyaWdodCAyMDIwIFVsdHJhLUVtYmVkZGVkLmNvbQ0KLy8gDQovLyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsNCi8vIHlvdSBtYXkgbm90IHVzZSB0aGlzIGZpbGUgZXhjZXB0IGluIGNvbXBsaWFuY2Ugd2l0aCB0aGUgTGljZW5zZS4NCi8vIFlvdSBtYXkgb2J0YWluIGEgY29weSBvZiB0aGUgTGljZW5zZSBhdA0KLy8gDQovLyAgICAgaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vuc2VzL0xJQ0VOU0UtMi4wDQovLyANCi8vIFVubGVzcyByZXF1aXJlZCBieSBhcHBsaWNhYmxlIGxhdyBvciBhZ3JlZWQgdG8gaW4gd3JpdGluZywgc29mdHdhcmUNCi8vIGRpc3RyaWJ1dGVkIHVuZGVyIHRoZSBMaWNlbnNlIGlzIGRpc3RyaWJ1dGVkIG9uIGFuICJBUyBJUyIgQkFTSVMsDQovLyBXSVRIT1VUIFdBUlJBTlRJRVMgT1IgQ09ORElUSU9OUyBPRiBBTlkgS0lORCwgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGllZC4NCi8vIFNlZSB0aGUgTGljZW5zZSBmb3IgdGhlIHNwZWNpZmljIGxhbmd1YWdlIGdvdmVybmluZyBwZXJtaXNzaW9ucyBhbmQNCi8vIGxpbWl0YXRpb25zIHVuZGVyIHRoZSBMaWNlbnNlLg0KLy8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K",
+          "text": "//-----------------------------------------------------------------\r\n//                         biRISC-V CPU\r\n//                            V0.8.1\r\n//                     Ultra-Embedded.com\r\n//                     Copyright 2019-2020\r\n//\r\n//                   admin@ultra-embedded.com\r\n//\r\n//                     License: Apache 2.0\r\n//-----------------------------------------------------------------\r\n// Copyright 2020 Ultra-Embedded.com\r\n// \r\n// Licensed under the Apache License, Version 2.0 (the \"License\");\r\n// you may not use this file except in compliance with the License.\r\n// You may obtain a copy of the License at\r\n// \r\n//     http://www.apache.org/licenses/LICENSE-2.0\r\n// \r\n// Unless required by applicable law or agreed to in writing, software\r\n// distributed under the License is distributed on an \"AS IS\" BASIS,\r\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n// See the License for the specific language governing permissions and\r\n// limitations under the License.\r\n//-----------------------------------------------------------------\r\n"
+        },
+        {
+          "start": 31507,
+          "end": 32659,
+          "bytes_base64": "Ly8gVGhlIG9yaWdpbmFsIGxpY2Vuc2VkIHZlbmRvciB0cmFuc2xhdGlvbiB1bml0IHJlbWFpbnMgdW5jaGFuZ2VkLg0KLy8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KLy8gICAgICAgICAgICAgICAgICAgICAgICAgYmlSSVNDLVYgQ1BVDQovLyAgICAgICAgICAgICAgICAgICAgICAgICAgICBWMC44LjENCi8vICAgICAgICAgICAgICAgICAgICAgVWx0cmEtRW1iZWRkZWQuY29tDQovLyAgICAgICAgICAgICAgICAgICAgIENvcHlyaWdodCAyMDE5LTIwMjANCi8vDQovLyAgICAgICAgICAgICAgICAgICBhZG1pbkB1bHRyYS1lbWJlZGRlZC5jb20NCi8vDQovLyAgICAgICAgICAgICAgICAgICAgIExpY2Vuc2U6IEFwYWNoZSAyLjANCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCi8vIENvcHlyaWdodCAyMDIwIFVsdHJhLUVtYmVkZGVkLmNvbQ0KLy8gDQovLyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsNCi8vIHlvdSBtYXkgbm90IHVzZSB0aGlzIGZpbGUgZXhjZXB0IGluIGNvbXBsaWFuY2Ugd2l0aCB0aGUgTGljZW5zZS4NCi8vIFlvdSBtYXkgb2J0YWluIGEgY29weSBvZiB0aGUgTGljZW5zZSBhdA0KLy8gDQovLyAgICAgaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vuc2VzL0xJQ0VOU0UtMi4wDQovLyANCi8vIFVubGVzcyByZXF1aXJlZCBieSBhcHBsaWNhYmxlIGxhdyBvciBhZ3JlZWQgdG8gaW4gd3JpdGluZywgc29mdHdhcmUNCi8vIGRpc3RyaWJ1dGVkIHVuZGVyIHRoZSBMaWNlbnNlIGlzIGRpc3RyaWJ1dGVkIG9uIGFuICJBUyBJUyIgQkFTSVMsDQovLyBXSVRIT1VUIFdBUlJBTlRJRVMgT1IgQ09ORElUSU9OUyBPRiBBTlkgS0lORCwgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGllZC4NCi8vIFNlZSB0aGUgTGljZW5zZSBmb3IgdGhlIHNwZWNpZmljIGxhbmd1YWdlIGdvdmVybmluZyBwZXJtaXNzaW9ucyBhbmQNCi8vIGxpbWl0YXRpb25zIHVuZGVyIHRoZSBMaWNlbnNlLg0KLy8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K",
+          "text": "// The original licensed vendor translation unit remains unchanged.\r\n//-----------------------------------------------------------------\r\n//                         biRISC-V CPU\r\n//                            V0.8.1\r\n//                     Ultra-Embedded.com\r\n//                     Copyright 2019-2020\r\n//\r\n//                   admin@ultra-embedded.com\r\n//\r\n//                     License: Apache 2.0\r\n//-----------------------------------------------------------------\r\n// Copyright 2020 Ultra-Embedded.com\r\n// \r\n// Licensed under the Apache License, Version 2.0 (the \"License\");\r\n// you may not use this file except in compliance with the License.\r\n// You may obtain a copy of the License at\r\n// \r\n//     http://www.apache.org/licenses/LICENSE-2.0\r\n// \r\n// Unless required by applicable law or agreed to in writing, software\r\n// distributed under the License is distributed on an \"AS IS\" BASIS,\r\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n// See the License for the specific language governing permissions and\r\n// limitations under the License.\r\n//-----------------------------------------------------------------\r\n"
+        },
+        {
+          "start": 46610,
+          "end": 47693,
+          "bytes_base64": "Ly8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KLy8gICAgICAgICAgICAgICAgICAgICAgICAgYmlSSVNDLVYgQ1BVDQovLyAgICAgICAgICAgICAgICAgICAgICAgICAgICBWMC44LjENCi8vICAgICAgICAgICAgICAgICAgICAgVWx0cmEtRW1iZWRkZWQuY29tDQovLyAgICAgICAgICAgICAgICAgICAgIENvcHlyaWdodCAyMDE5LTIwMjANCi8vDQovLyAgICAgICAgICAgICAgICAgICBhZG1pbkB1bHRyYS1lbWJlZGRlZC5jb20NCi8vDQovLyAgICAgICAgICAgICAgICAgICAgIExpY2Vuc2U6IEFwYWNoZSAyLjANCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCi8vIENvcHlyaWdodCAyMDIwIFVsdHJhLUVtYmVkZGVkLmNvbQ0KLy8gDQovLyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsNCi8vIHlvdSBtYXkgbm90IHVzZSB0aGlzIGZpbGUgZXhjZXB0IGluIGNvbXBsaWFuY2Ugd2l0aCB0aGUgTGljZW5zZS4NCi8vIFlvdSBtYXkgb2J0YWluIGEgY29weSBvZiB0aGUgTGljZW5zZSBhdA0KLy8gDQovLyAgICAgaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vuc2VzL0xJQ0VOU0UtMi4wDQovLyANCi8vIFVubGVzcyByZXF1aXJlZCBieSBhcHBsaWNhYmxlIGxhdyBvciBhZ3JlZWQgdG8gaW4gd3JpdGluZywgc29mdHdhcmUNCi8vIGRpc3RyaWJ1dGVkIHVuZGVyIHRoZSBMaWNlbnNlIGlzIGRpc3RyaWJ1dGVkIG9uIGFuICJBUyBJUyIgQkFTSVMsDQovLyBXSVRIT1VUIFdBUlJBTlRJRVMgT1IgQ09ORElUSU9OUyBPRiBBTlkgS0lORCwgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGllZC4NCi8vIFNlZSB0aGUgTGljZW5zZSBmb3IgdGhlIHNwZWNpZmljIGxhbmd1YWdlIGdvdmVybmluZyBwZXJtaXNzaW9ucyBhbmQNCi8vIGxpbWl0YXRpb25zIHVuZGVyIHRoZSBMaWNlbnNlLg0KLy8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K",
+          "text": "//-----------------------------------------------------------------\r\n//                         biRISC-V CPU\r\n//                            V0.8.1\r\n//                     Ultra-Embedded.com\r\n//                     Copyright 2019-2020\r\n//\r\n//                   admin@ultra-embedded.com\r\n//\r\n//                     License: Apache 2.0\r\n//-----------------------------------------------------------------\r\n// Copyright 2020 Ultra-Embedded.com\r\n// \r\n// Licensed under the Apache License, Version 2.0 (the \"License\");\r\n// you may not use this file except in compliance with the License.\r\n// You may obtain a copy of the License at\r\n// \r\n//     http://www.apache.org/licenses/LICENSE-2.0\r\n// \r\n// Unless required by applicable law or agreed to in writing, software\r\n// distributed under the License is distributed on an \"AS IS\" BASIS,\r\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n// See the License for the specific language governing permissions and\r\n// limitations under the License.\r\n//-----------------------------------------------------------------\r\n"
+        }
+      ]
+    },
+    {
+      "path": "rtl/cpu/triha_frontend.v",
+      "before_sha256": "92bf85932ebe747f9606b0e080f6f74cf14beb11987c7456e5b8e1a72aa83b58",
+      "after_sha256": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23",
+      "tested_sha256": "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f",
+      "non_comment_tokens_identical": true,
+      "removed_header_bytes": [
+        {
+          "start": 0,
+          "end": 1059,
+          "bytes_base64": "Ly8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQovLyAgICAgICAgICAgICAgICAgICAgICAgICBiaVJJU0MtViBDUFUKLy8gICAgICAgICAgICAgICAgICAgICAgICAgICAgVjAuOC4xCi8vICAgICAgICAgICAgICAgICAgICAgVWx0cmEtRW1iZWRkZWQuY29tCi8vICAgICAgICAgICAgICAgICAgICAgQ29weXJpZ2h0IDIwMTktMjAyMAovLwovLyAgICAgICAgICAgICAgICAgICBhZG1pbkB1bHRyYS1lbWJlZGRlZC5jb20KLy8KLy8gICAgICAgICAgICAgICAgICAgICBMaWNlbnNlOiBBcGFjaGUgMi4wCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLy8gQ29weXJpZ2h0IDIwMjAgVWx0cmEtRW1iZWRkZWQuY29tCi8vIAovLyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsKLy8geW91IG1heSBub3QgdXNlIHRoaXMgZmlsZSBleGNlcHQgaW4gY29tcGxpYW5jZSB3aXRoIHRoZSBMaWNlbnNlLgovLyBZb3UgbWF5IG9idGFpbiBhIGNvcHkgb2YgdGhlIExpY2Vuc2UgYXQKLy8gCi8vICAgICBodHRwOi8vd3d3LmFwYWNoZS5vcmcvbGljZW5zZXMvTElDRU5TRS0yLjAKLy8gCi8vIFVubGVzcyByZXF1aXJlZCBieSBhcHBsaWNhYmxlIGxhdyBvciBhZ3JlZWQgdG8gaW4gd3JpdGluZywgc29mdHdhcmUKLy8gZGlzdHJpYnV0ZWQgdW5kZXIgdGhlIExpY2Vuc2UgaXMgZGlzdHJpYnV0ZWQgb24gYW4gIkFTIElTIiBCQVNJUywKLy8gV0lUSE9VVCBXQVJSQU5USUVTIE9SIENPTkRJVElPTlMgT0YgQU5ZIEtJTkQsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQuCi8vIFNlZSB0aGUgTGljZW5zZSBmb3IgdGhlIHNwZWNpZmljIGxhbmd1YWdlIGdvdmVybmluZyBwZXJtaXNzaW9ucyBhbmQKLy8gbGltaXRhdGlvbnMgdW5kZXIgdGhlIExpY2Vuc2UuCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0K",
+          "text": "//-----------------------------------------------------------------\n//                         biRISC-V CPU\n//                            V0.8.1\n//                     Ultra-Embedded.com\n//                     Copyright 2019-2020\n//\n//                   admin@ultra-embedded.com\n//\n//                     License: Apache 2.0\n//-----------------------------------------------------------------\n// Copyright 2020 Ultra-Embedded.com\n// \n// Licensed under the Apache License, Version 2.0 (the \"License\");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n// \n//     http://www.apache.org/licenses/LICENSE-2.0\n// \n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an \"AS IS\" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n//-----------------------------------------------------------------\n"
+        },
+        {
+          "start": 10556,
+          "end": 11615,
+          "bytes_base64": "Ly8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQovLyAgICAgICAgICAgICAgICAgICAgICAgICBiaVJJU0MtViBDUFUKLy8gICAgICAgICAgICAgICAgICAgICAgICAgICAgVjAuOC4xCi8vICAgICAgICAgICAgICAgICAgICAgVWx0cmEtRW1iZWRkZWQuY29tCi8vICAgICAgICAgICAgICAgICAgICAgQ29weXJpZ2h0IDIwMTktMjAyMAovLwovLyAgICAgICAgICAgICAgICAgICBhZG1pbkB1bHRyYS1lbWJlZGRlZC5jb20KLy8KLy8gICAgICAgICAgICAgICAgICAgICBMaWNlbnNlOiBBcGFjaGUgMi4wCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLy8gQ29weXJpZ2h0IDIwMjAgVWx0cmEtRW1iZWRkZWQuY29tCi8vIAovLyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsKLy8geW91IG1heSBub3QgdXNlIHRoaXMgZmlsZSBleGNlcHQgaW4gY29tcGxpYW5jZSB3aXRoIHRoZSBMaWNlbnNlLgovLyBZb3UgbWF5IG9idGFpbiBhIGNvcHkgb2YgdGhlIExpY2Vuc2UgYXQKLy8gCi8vICAgICBodHRwOi8vd3d3LmFwYWNoZS5vcmcvbGljZW5zZXMvTElDRU5TRS0yLjAKLy8gCi8vIFVubGVzcyByZXF1aXJlZCBieSBhcHBsaWNhYmxlIGxhdyBvciBhZ3JlZWQgdG8gaW4gd3JpdGluZywgc29mdHdhcmUKLy8gZGlzdHJpYnV0ZWQgdW5kZXIgdGhlIExpY2Vuc2UgaXMgZGlzdHJpYnV0ZWQgb24gYW4gIkFTIElTIiBCQVNJUywKLy8gV0lUSE9VVCBXQVJSQU5USUVTIE9SIENPTkRJVElPTlMgT0YgQU5ZIEtJTkQsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQuCi8vIFNlZSB0aGUgTGljZW5zZSBmb3IgdGhlIHNwZWNpZmljIGxhbmd1YWdlIGdvdmVybmluZyBwZXJtaXNzaW9ucyBhbmQKLy8gbGltaXRhdGlvbnMgdW5kZXIgdGhlIExpY2Vuc2UuCi8vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0K",
+          "text": "//-----------------------------------------------------------------\n//                         biRISC-V CPU\n//                            V0.8.1\n//                     Ultra-Embedded.com\n//                     Copyright 2019-2020\n//\n//                   admin@ultra-embedded.com\n//\n//                     License: Apache 2.0\n//-----------------------------------------------------------------\n// Copyright 2020 Ultra-Embedded.com\n// \n// Licensed under the Apache License, Version 2.0 (the \"License\");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n// \n//     http://www.apache.org/licenses/LICENSE-2.0\n// \n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an \"AS IS\" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n//-----------------------------------------------------------------\n"
+        }
+      ]
+    }
+  ],
+  "full_system": {
+    "status": "PASS",
+    "real_cpu": true,
+    "actual_capture": true,
+    "actual_npu": true,
+    "actual_display": true,
+    "model_preloaded": false,
+    "model_loader_verified": true,
+    "source_frames": "natural face RGB through actual capture/preprocess",
+    "expected_faces": 1,
+    "inputs_unchanged": true,
+    "clock_contract": {
+      "compute_hz": 50000000,
+      "video_hz": 125000000,
+      "pixel_hz": 40000000
+    },
+    "scope": "Actual production application loop and display pixels/retirement; native DDR storage proxy; no board proof",
+    "pass_markers": [
+      "# FACE_SYSTEM_NPU_CPU_RESULT frame=1 reads=2148 cycles=21460577",
+      "# FACE_SYSTEM_NPU_CPU_RESULT frame=2 reads=4296 cycles=39518745",
+      "# FACE_CAPTURE_STREAM_PASS accepted=1920004 consumed=1920004 pending=0",
+      "# FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4296 nativeAW=89780 nativeAR=433797 cycles=40581783"
+    ],
+    "result_sha256": "f37d9c73fd0442f275ce494b4d5d72aec536e63590c232c5b1178f3af7e78023",
+    "transcript": {
+      "path": "docs/verification/cpu/dual-single-migration-20261104-system.txt",
+      "sha256": "49a547dfc8057fb9ff5e18225a69edf823220e58d9d39cdd7a20c5277efad564"
+    }
+  },
+  "tested_rtl_sha256": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "9636343741cafe32a16764b7c83ef13a22e9b372ba672b2e4e6f41c1d9b37d16",
+    "rtl/cpu/triha_csr_regfile.v": "ed515df4e1f6b2c0001b2cc5678269f174a9062f571742221fe97152a81581db",
+    "rtl/cpu/triha_csr.v": "c324c4d446b88bbd245324225afac71bf5f1273f4aa25a9d38272267c0d5c502",
+    "rtl/cpu/triha_decode.v": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e7c519648f60149f0771afdb7f721ed1163f94dc05bef87c1b411bcb5a08d279",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "0207952c9924cdaee4ff44495dcffdcfd25657f0aaa56b49715691e757f5c129",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "1e611ef73eb823daf7976c793fe7b6314eaa8157a360612ecc426fc201c67774",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "e9411b29b5fb5fe5f85dfe52c1baea970e770e99a13e7006f784fdb7d4d23eb1",
+    "rtl/cpu/triha_frontend.v": "fea0ad6ad3f68785a98295854c7fea42ed6abc23c58a7f2d08dbcd4affaa811f",
+    "rtl/cpu/triha_issue.v": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
+    "rtl/cpu/triha_regfile.v": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
+    "rtl/cpu/triha_divider.v": "63f5106e941e2e490abcee50321e49c7826df8e5daf35722902234be6109d732",
+    "rtl/cpu/triha_lsu.v": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "076c4c643dee9249fd3dd0112e3502203df2e8a9c59a8d4f9db1db7cd4476733",
+    "rtl/cpu/triha_multiplier.v": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
+    "rtl/cpu/triha_npc.v": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
+    "rtl/cpu/triha_btb.v": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+    "rtl/cpu/triha_pipe_ctrl.v": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "d404e16a36fd9e481e3fd4d97eec20bafe65d928c0ad45ca3d6a0d062b0c1587",
+    "rtl/cpu/triha_cpu.v": "86fc193f3fe70dc8ad9c5692dfe2d91939548275b45f9e672dd62e46b0df1ec5",
+    "rtl/cpu/triha_core.v": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3",
+    "rtl/cpu/triha_icache_tag_ram.v": "87fbf39f7e7a14bcbe51f4463e81663d91fb636c309302da8b00689a6b1292c1",
+    "rtl/cpu/triha_icache_data_ram.v": "2a5a5ed60c4996ab05c50ec4ebbf199eeb11a22220fb94a550ce3ad8032e9349",
+    "rtl/cpu/triha_icache.v": "9854a5026723d76cfb0a67862abfadb25db8172bdf65c15c17ee3137378ef70f",
+    "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+    "rtl/cpu/triha_dcache_tag_ram.v": "1faeb4c71b51395e52cc2fb47bcda96a1e4844eecdd20cc1caf4a7383c18990f",
+    "rtl/cpu/triha_dcache_data_ram.v": "a165c46d9b2a8536e999a1a25650912fbfbdd1647e2ed62f1e0f509e08d775ff",
+    "rtl/cpu/triha_dcache.v": "55c1bef2f572a76faacbbacf9a7b95b9cf973d771c0f0187651ecc226c0b11a2",
+    "rtl/cpu/triha_cache_subsystem.v": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "39b73d3627ec14852b3c2412b8af682a476d7733cada39966d6f4570c2c0dd1f"
+  },
+  "final_rtl_sha256": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "9636343741cafe32a16764b7c83ef13a22e9b372ba672b2e4e6f41c1d9b37d16",
+    "rtl/cpu/triha_csr_regfile.v": "ed515df4e1f6b2c0001b2cc5678269f174a9062f571742221fe97152a81581db",
+    "rtl/cpu/triha_csr.v": "c324c4d446b88bbd245324225afac71bf5f1273f4aa25a9d38272267c0d5c502",
+    "rtl/cpu/triha_decode.v": "0ca3a873de53005900c3832b4641f6d20b78872e8c9ad02f9ef5d88e0f522334",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e7c519648f60149f0771afdb7f721ed1163f94dc05bef87c1b411bcb5a08d279",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "0207952c9924cdaee4ff44495dcffdcfd25657f0aaa56b49715691e757f5c129",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "1e611ef73eb823daf7976c793fe7b6314eaa8157a360612ecc426fc201c67774",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "e9411b29b5fb5fe5f85dfe52c1baea970e770e99a13e7006f784fdb7d4d23eb1",
+    "rtl/cpu/triha_frontend.v": "38835591c8dd5d52b541a66028b474ffad1a0376ee852acc2478fea38d448b23",
+    "rtl/cpu/triha_issue.v": "0ae1b52e9195c2bdd2daf72eab60b9f9566a532d967a5dcbaee4dca195831eb3",
+    "rtl/cpu/triha_regfile.v": "5972508bdf182d350dc429c91d4daeb55c1dcc8fdfd416652a5aac2b97e50820",
+    "rtl/cpu/triha_divider.v": "63f5106e941e2e490abcee50321e49c7826df8e5daf35722902234be6109d732",
+    "rtl/cpu/triha_lsu.v": "70c852521b7f7343f17dde99678dc701b7562dcf9f7a6f2bacf6e8b99dbde76a",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "076c4c643dee9249fd3dd0112e3502203df2e8a9c59a8d4f9db1db7cd4476733",
+    "rtl/cpu/triha_multiplier.v": "ed3b6afe1a05bbe40b59135d591740753c42bef64be345399a905ead139f058a",
+    "rtl/cpu/triha_npc.v": "2d15f57c0f5cda38317a55d23435508dc3467e6542354cf2463c2816a70e826e",
+    "rtl/cpu/triha_btb.v": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+    "rtl/cpu/triha_pipe_ctrl.v": "2bb63a652ec3cf4d52fd6bfb800347cb297f16a4cca44696a06d7844374f61da",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "d404e16a36fd9e481e3fd4d97eec20bafe65d928c0ad45ca3d6a0d062b0c1587",
+    "rtl/cpu/triha_cpu.v": "406a607703a725ac87d849191282222ede36aea16cc1d60546a0ef3bdcd40112",
+    "rtl/cpu/triha_core.v": "3dad54e1f4924a5b9d3be1ea57c8ce4200c81af8868bdcb98c214ae1b90f2fc3",
+    "rtl/cpu/triha_icache_tag_ram.v": "87fbf39f7e7a14bcbe51f4463e81663d91fb636c309302da8b00689a6b1292c1",
+    "rtl/cpu/triha_icache_data_ram.v": "2a5a5ed60c4996ab05c50ec4ebbf199eeb11a22220fb94a550ce3ad8032e9349",
+    "rtl/cpu/triha_icache.v": "9854a5026723d76cfb0a67862abfadb25db8172bdf65c15c17ee3137378ef70f",
+    "rtl/cpu/triha_ifetch_uncached.v": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+    "rtl/cpu/triha_dcache_tag_ram.v": "1faeb4c71b51395e52cc2fb47bcda96a1e4844eecdd20cc1caf4a7383c18990f",
+    "rtl/cpu/triha_dcache_data_ram.v": "a165c46d9b2a8536e999a1a25650912fbfbdd1647e2ed62f1e0f509e08d775ff",
+    "rtl/cpu/triha_dcache.v": "55c1bef2f572a76faacbbacf9a7b95b9cf973d771c0f0187651ecc226c0b11a2",
+    "rtl/cpu/triha_cache_subsystem.v": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "39b73d3627ec14852b3c2412b8af682a476d7733cada39966d6f4570c2c0dd1f"
+  },
+  "final_admission_sha256": "4610c48701a794b13bee72a69976611d70f3f4221372083faab6c31e6575517b",
+  "comment_only_validation": "Two final source changes relocate inter-module comment headers only; string-aware Verilog token sequence equals frozen, fully simulated RTL. Fresh final application/router, delayed-fault squash and seven dual-issue ISA smoke checks PASS.",
+  "final_smoke_runs": [
+    {
+      "path": "build/soc/application_cpu-20261104T084910117531Z/result.json",
+      "sha256": "27259c70c78f79725ec5e35069b9e5ae1341579082d3897e2c3972c63a915bba",
+      "status": "PASS",
+      "source_unchanged": true,
+      "counts": null,
+      "runs": [
+        {
+          "mode": "router",
+          "status": "PASS",
+          "negative_rejected": false,
+          "native_return_code": 0,
+          "marker": "# APPLICATION_ROUTER_PASS cycles=2149 checks=1971 waits=1882 ddr_reads=4 ddr_writes=10"
+        },
+        {
+          "mode": "cpu",
+          "status": "PASS",
+          "negative_rejected": false,
+          "native_return_code": 0,
+          "marker": "# APPLICATION_CPU_PASS cycles=476 checks=6 npu_reads=2 video_reads=1 ddr_reads=2 ddr_writes=2 irq=1"
+        }
+      ],
+      "pass_line": null
+    },
+    {
+      "path": "build/cpu/squash-20261104T084910098023Z/result.json",
+      "sha256": "f5e6d3fe7ceeeeb45f937fcbd7334d213ac10e3e9d31372fe80b706c33b3cd5c",
+      "status": "PASS",
+      "source_unchanged": true,
+      "counts": null,
+      "runs": null,
+      "pass_line": "# CPU_SQUASH_PASS cycles=1102 checks=3043 retired=162 traps=4 returns=4 fetched=7f decoded=7f normal_stores=1 mmio=1 csr=1 recoveries=f delay=64 wait=742 redirects=12"
+    },
+    {
+      "path": "build/cpu/isa-20261104T084914643600Z/result.json",
+      "sha256": "91bd7099d7940c560d70c213f8ff288bc00979ffb78b9228e3d73531dfda7de6",
+      "status": "PASS",
+      "source_unchanged": true,
+      "counts": {
+        "PASS": 7
+      },
+      "runs": null,
+      "pass_line": null
+    }
+  ],
+  "final_boundary_hashes_verified": true
+}

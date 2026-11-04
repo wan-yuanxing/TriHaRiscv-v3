@@ -1,0 +1,26 @@
+{
+  "figure": "yunet-paper-architecture.pdf",
+  "title": "YuNet: A Tiny Millisecond-level Face Detector",
+  "authors": [
+    "Wei Wu",
+    "Hanyang Peng",
+    "Shiqi Yu"
+  ],
+  "doi": "10.1007/s11633-023-1423-y",
+  "source_url": "https://link.springer.com/content/pdf/10.1007/s11633-023-1423-y.pdf",
+  "original_figure": 4,
+  "printed_page": 659,
+  "pdf_page": 4,
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "modification": "Only surrounding page text and original caption were cropped; the figure itself is unchanged.",
+  "crop_top_left_points": [
+    110,
+    490,
+    485,
+    713
+  ],
+  "source_sha256": "25c917093d102848d8d028fc023f0a476a838ba982b984ff3466519004848168",
+  "figure_sha256": "4274ad3dde26a28b6e54a6e0e1c9af985d9953cfad7e40fb13e8471e0e753fac",
+  "retrieved": "2026-11-04"
+}

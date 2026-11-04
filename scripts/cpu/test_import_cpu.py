@@ -75,6 +75,43 @@ class AdmissionTests(unittest.TestCase):
         self.rejected('source hash mismatch')
         self.assertEqual(list(self.destination.iterdir()), [])
 
+    def test_file_revision_overrides_global_without_dirty_checkout_bytes(self):
+        name = 'rtl/cpu/vendor/test.v'
+        updated = b'new pinned implementation\n'
+        (self.source / name).write_bytes(updated)
+        self.git('add', '--', name)
+        self.git('commit', '-qm', 'new implementation')
+        newer = self.git('rev-parse', 'HEAD').strip()
+        self.manifest['files'][0].update(source_commit=newer,
+                                        sha256=hashlib.sha256(updated).hexdigest())
+        (self.source / name).write_bytes(b'unreviewed dirty source')
+        result = self.run_import(True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.destination / name).read_bytes(), updated)
+        self.assertEqual((self.destination / 'rtl/cpu/triha_csr.v').read_bytes(),
+                         self.files['rtl/cpu/triha_csr.v'])
+
+    def test_mutable_file_revision_prevents_all_writes(self):
+        self.manifest['files'][1]['source_commit'] = 'HEAD'
+        self.rejected('immutable file source commit')
+        self.assertEqual(list(self.destination.iterdir()), [])
+
+    def test_reviewed_delta_base_uses_its_own_pinned_revision(self):
+        name = 'rtl/cpu/triha_csr.v'
+        base = b'new revision base\n'
+        (self.source / name).write_bytes(base)
+        self.git('add', '--', name)
+        self.git('commit', '-qm', 'new csr base')
+        newer = self.git('rev-parse', 'HEAD').strip()
+        updated = b'main integration fix\n'
+        (self.source / name).write_bytes(updated)
+        self.manifest['files'][1].update(source_kind='reviewed_working_tree',
+            source_commit=newer, base_sha256=hashlib.sha256(base).hexdigest(),
+            sha256=hashlib.sha256(updated).hexdigest())
+        result = self.run_import(True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.destination / name).read_bytes(), updated)
+
     def test_collision_preserves_user_edit_and_prevents_partial_import(self):
         target = self.destination / 'rtl/cpu/triha_csr.v'
         target.parent.mkdir(parents=True)
@@ -182,6 +219,23 @@ class AdmissionTests(unittest.TestCase):
                     b'// Keep the mux description.\nmodule b; endmodule\n')
         cleaned = b'module a;\nendmodule\n\n// Keep the mux description.\nmodule b; endmodule\n'
         name = self.header_fixture(original, cleaned)
+        result = self.run_import(True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.destination / name).read_bytes(), cleaned)
+
+    def test_v2_relocates_full_secondary_notice_across_blank_lines(self):
+        notice = (b'//-----------------------------------------------------------------\r\n'
+                  b'//                         biRISC-V CPU\r\n'
+                  b'// Copyright 2020 fixture\r\n'
+                  b'// Licensed under the Apache License, Version 2.0\r\n'
+                  b'// limitations under the License.\r\n'
+                  b'//-----------------------------------------------------------------\r\n')
+        original = (b'module a;\r\nendmodule\r\n\r\n'
+                    b'// Keep functional description.\r\n' + notice +
+                    b'\r\n// Keep interface description.\r\nmodule b; endmodule\r\n')
+        cleaned = original.replace(notice, b'')
+        name = self.header_fixture(original, cleaned)
+        self.manifest['files'][0]['header_comment_cleanup']['algorithm'] = 'module-notice-v2'
         result = self.run_import(True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual((self.destination / name).read_bytes(), cleaned)

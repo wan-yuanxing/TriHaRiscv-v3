@@ -11,7 +11,9 @@
 
 module tb_triha_isa_official #(
     parameter [31:0] TOHOST_ADDR = 32'h8000_8000,
-    parameter integer MAX_CYCLES = 2000000
+    parameter integer MAX_CYCLES = 2000000,
+    parameter integer DUAL_ISSUE = 0,
+    parameter integer MINIMAL_CONTROL_CPU = 0
 )(
 );
     localparam integer IMAGE_BYTES = 262144;
@@ -25,6 +27,7 @@ module tb_triha_isa_official #(
     integer index;
     integer cycles;
     integer failed;
+    integer second_issue_count = 0;
     reg tohost_store_q;
     reg [31:0] tohost_value_q;
 
@@ -52,7 +55,8 @@ module tb_triha_isa_official #(
     wire [10:0] data_resp_tag;
 
     triha_core #(
-        .DUAL_ISSUE(0)
+        .DUAL_ISSUE(DUAL_ISSUE),
+        .MINIMAL_CONTROL_CPU(MINIMAL_CONTROL_CPU)
     ) u_dut (
         .clk_i(clk),
         .rst_ni(rst_ni),
@@ -112,6 +116,15 @@ module tb_triha_isa_official #(
 
     always #5 clk = ~clk;
 
+    always @(posedge clk) if (rst_ni) begin
+        if (!DUAL_ISSUE && u_dut.u_cpu.u_issue.opcode_b_issue_r !== 1'b0) begin
+            $display("RV32_ISA_FAIL reason=unexpected_second_issue");
+            $fatal(1, "single-issue configuration issued a second instruction");
+        end
+        if (u_dut.u_cpu.u_issue.opcode_b_issue_r)
+            second_issue_count = second_issue_count + 1;
+    end
+
     always @(posedge clk) begin
         if (!rst_ni) begin
             tohost_store_q <= 1'b0;
@@ -155,7 +168,7 @@ module tb_triha_isa_official #(
             cycles = cycles + 1;
             if (tohost_store_q && data_ack && !data_error) begin
                 if (tohost_value_q == 32'd1) begin
-                    $display("RV32_ISA_PASS tohost=%08h cycles=%0d", tohost_value_q, cycles);
+                    $display("RV32_ISA_PASS tohost=%08h cycles=%0d second_issue=%0d", tohost_value_q, cycles, second_issue_count);
                 end else begin
                     $display("RV32_ISA_FAIL tohost=%08h cycles=%0d", tohost_value_q, cycles);
                 end

@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "objective": "Close internal timing and generate a verified bitstream for the migrated CPU, single issue, full avatar three-mode main application.",
+  "status": "COMPLETE_OFFLINE_BITSTREAM_VERIFIED",
+  "profile": "avatar",
+  "clock_contract": {
+    "compute_hz": 50000000,
+    "video_ddr_hz": 125000000,
+    "pixel_hz": 40000000,
+    "additional_setup_margin_ns": 0.2
+  },
+  "plan": [
+    "Full avatar positive/no-face simulations using current exact source bytes and seven-segment loader.",
+    "Same positive-scene ELF synthesis, then mapping and one seed-4 placement with multicorner evaluation.",
+    "Inspect measured critical paths, preserve timing/CDC/DDR requirements, make justified corrections only if required.",
+    "Route reviewed placement; audit zero unrouted nets, all slow/fast timing tables, Gray clock/data bounds, matched constraints and DDR sites.",
+    "Generate sbit/smsk only after qualification, export and independently verify source-bound release."
+  ],
+  "constraints": [
+    "No clock or margin relaxation",
+    "No broad new false paths",
+    "No hardware scan/programming",
+    "No new chat/agent/background automation",
+    "Do not modify docs/technical-report or existing frozen releases"
+  ],
+  "prior_functional_receipt": "docs/verification/cpu/dual-single-migration-20261104.json",
+  "cpu_admission_sha256": "4610c48701a794b13bee72a69976611d70f3f4221372083faab6c31e6575517b",
+  "last_checked_utc": "2026-11-04T09:26:46.987571+00:00",
+  "physical_provenance": {
+    "source": "releases/face-photo-20261104",
+    "unchanged_vendor_ip": true,
+    "unchanged_non_cpu_snapshot": true,
+    "sites": 554,
+    "equivalent_cell_rebinding": "ADS merged ck_dqs_diff_sample_done group[2] into group[3]; retain prior location on surviving primitive. Native checks remain enabled.",
+    "timing_reused": false
+  },
+  "functional_binding": "build/video/dual_single_avatar_20261104/functional_binding.json",
+  "placement_review": {
+    "native_estimated_wns_ns": 1.005,
+    "native_estimated_tns_ns": 0,
+    "decision": "Proceed with fixed placement and vendor RCF, native hold repair target 200ps/30 iterations as in qualified baseline. No new priorities without measured current-route evidence.",
+    "unrouted_estimates_not_signoff": true
+  },
+  "packaging_fix": {
+    "files": [
+      "scripts/video/export_face_release.py",
+      "scripts/video/test_face_release_export.py"
+    ],
+    "reason": "Remove historical fixture-directory dependency; hash-bind and package actual functional external inputs.",
+    "regression": "14 export + 6 restore tests PASS; both new regressions failed before fix."
+  },
+  "correction": "Seven measured endpoint-cone site candidates plus six measured DDR setup-net priorities. No RTL, clock, timing/CDC exception or seed changes.",
+  "measured_placement_review": {
+    "admitted_sites": 561,
+    "native_estimated_wns_ns": 1.076,
+    "native_estimated_tns_ns": 0,
+    "decision": "Proceed with six observed critical DDR setup-net priorities; hold correction uses the qualified reference FF/RAM site pair. Physical-only changes; logic/firmware/clock contracts unchanged."
+  },
+  "audit_controls": {
+    "initial_route": "build/video/dual_single_avatar_20261104/initial_audit_controls.json",
+    "status": "PASS",
+    "negative_controls": 11,
+    "final_route": "build/video/dual_single_avatar_20261104/final_audit_controls.json",
+    "final_status": "PASS",
+    "final_negative_controls": 15
+  },
+  "prior_failure": {
+    "setup_slow_ns": -0.912,
+    "setup_failing_endpoints": 7,
+    "hold_fast_ns": -0.006,
+    "hold_failing_endpoints": 1,
+    "root_paths": [
+      "DDR shared CA alignment to CS/address/bank outputs",
+      "NPU rx_data[60] to shadow[1].wordbit[28] distributed RAM"
+    ],
+    "note": "Route complete; timing not qualified. No bitstream generated."
+  },
+  "all_timing_tables_met": true,
+  "routed_slack_ns": {
+    "setup_slow": 0.168,
+    "setup_fast": 2.818,
+    "hold_slow": 0.158,
+    "hold_fast": 0.117
+  },
+  "site_retention": {
+    "status": "PASS",
+    "checked": 561,
+    "path": "build\\video\\dual_single_avatar_20261104\\site_retention.json"
+  },
+  "internal_timing_closed": true,
+  "gray_clock_and_data": {
+    "status": "PASS",
+    "groups": 23,
+    "bits": 116,
+    "observations": 928,
+    "native_max_skew_report": false,
+    "method": "Conservative numerical clock+data arrival spread for each group, both corners, early/late clocks."
+  },
+  "bitstream": {
+    "artifact": "build\\video\\dual_single_avatar_20261104\\qualified\\generate_bitstream\\triha_face_board_top.sbit",
+    "artifact_sha256": "86d7a14ce44324d02cc043d27bd5f881f996a630eb2c116a94b0bf03eeed276d",
+    "verify_mask": "build\\video\\dual_single_avatar_20261104\\qualified\\generate_bitstream\\triha_face_board_top.smsk",
+    "verify_mask_sha256": "e3c18e62ac3001390686069abd77e8beca68c4a6ac88965d4fa3433101b34d6f"
+  },
+  "runs": [
+    {
+      "id": "avatar_positive",
+      "status": "PASS",
+      "pid": 50892,
+      "path": "build/soc/face_system-20261104T090317_445051Z",
+      "result": "result.json"
+    },
+    {
+      "id": "avatar_negative",
+      "status": "PASS",
+      "pid": 9188,
+      "path": "build/soc/face_system-20261104T090317_444929Z",
+      "result": "result.json"
+    },
+    {
+      "id": "synthesis",
+      "status": "FAIL_POST_SYNTH_REFERENCE_MISSING",
+      "pid": 6208,
+      "path": "build/video/pds/20261104T090400_531207Z",
+      "result": "result.json",
+      "note": "Native ADS synthesis completed; receipt review lacked staged KEY1 official FDC. Preserved original failure."
+    },
+    {
+      "id": "synthesis_revalidation",
+      "status": "PASS",
+      "path": "build\\video\\dual_single_avatar_20261104\\synth_verified",
+      "result": "result.json",
+      "resources": {
+        "lut": 46840.0,
+        "registers": 42653.0,
+        "drm": 113.5
+      }
+    },
+    {
+      "id": "mapping",
+      "status": "PASS",
+      "path": "build/video/dual_single_avatar_20261104/map",
+      "result": "result.json"
+    },
+    {
+      "id": "placement_seed4",
+      "status": "FAIL_CONSTRAINT_ADMISSION",
+      "path": "build/video/dual_single_avatar_20261104/place4",
+      "result": "receipt.json",
+      "session": 29394,
+      "note": "No placement performed: one historical DDR representative was merged into group[3]. Retargeting same physical location using explicit ADS equivalence log."
+    },
+    {
+      "id": "placement_seed4_admitted",
+      "status": "PLACEMENT_READY",
+      "path": "build/video/dual_single_avatar_20261104/place4_admitted",
+      "result": "receipt.json"
+    },
+    {
+      "id": "route_seed4",
+      "status": "ROUTE_REVIEW_READY",
+      "path": "build/video/dual_single_avatar_20261104/route4",
+      "result": "receipt.json",
+      "session": 24880,
+      "timing_passed": false
+    },
+    {
+      "id": "route_review",
+      "status": "TIMING_FAILED",
+      "path": "build/video/dual_single_avatar_20261104/review4",
+      "result": "result.json"
+    },
+    {
+      "id": "placement_seed4_measured",
+      "status": "PLACEMENT_READY",
+      "path": "build/video/dual_single_avatar_20261104/place4_measured",
+      "result": "receipt.json"
+    },
+    {
+      "id": "route_seed4_measured",
+      "status": "ROUTE_REVIEW_READY",
+      "path": "build/video/dual_single_avatar_20261104/route4_measured",
+      "result": "receipt.json"
+    },
+    {
+      "id": "measured_route_review",
+      "status": "REPORTS_READY",
+      "path": "build/video/dual_single_avatar_20261104/review4_measured",
+      "result": "result.json"
+    },
+    {
+      "id": "gray_clocks",
+      "status": "PASS",
+      "path": "build/video/dual_single_avatar_20261104/clocks4_measured",
+      "result": "result.json"
+    },
+    {
+      "id": "qualified_bitstream",
+      "status": "PASS",
+      "path": "build/video/dual_single_avatar_20261104/qualified",
+      "result": "result.json"
+    },
+    {
+      "id": "release_export",
+      "status": "PASS",
+      "path": "releases/face-dual-single-avatar-20261104",
+      "archive_members": 1281,
+      "source_files": 222
+    },
+    {
+      "id": "independent_replay",
+      "status": "PASS_CONFIGURATION_IDENTICAL",
+      "path": "build/video/dual_single_avatar_20261104/independent_replay.json"
+    }
+  ],
+  "active_runs": [],
+  "release": "releases/face-dual-single-avatar-20261104",
+  "physical_board": false,
+  "external_hdmi_ac_verified": false,
+  "updated_utc": "2026-11-04T10:31:14.757236+00:00",
+  "limitations": [
+    "Current migrated CPU bitstream has not been programmed or board tested.",
+    "External HDMI AC timing and board FPS require separate measurement.",
+    "Application still requires seven-segment UART model/avatar loading after programming."
+  ],
+  "format_check": {
+    "delivery_scripts": "PASS",
+    "imported_rtl": "Upstream trailing whitespace retained to preserve admitted and qualified source bytes; no post-signoff formatting changes."
+  }
+}

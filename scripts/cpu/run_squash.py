@@ -92,7 +92,10 @@ def main():
         native(SIM/'vsim.exe',['-version'],'modelsim-version')
         native(SIM/'vmap.exe',['-c'],'vmap')
         native(SIM/'vlib.exe',['work'],'vlib')
-        native(SIM/'vlog.exe',['+incdir+'+(work/'src/rtl/cpu/vendor/src/core').as_posix(),
+        # This bench observes the simulation-only exit CSR itself. Without this
+        # define the production CSR legality checks correctly trap on 0x8b2.
+        native(SIM/'vlog.exe',['+define+TRIHA_SIM_CTRL_EXTERNAL',
+            '+incdir+'+(work/'src/rtl/cpu/vendor/src/core').as_posix(),
             '+incdir+'+work.as_posix(),*[work/'src'/name for name in sources],*primitives],'compile')
         names = ('clk rst_n i_pc i_req i_valid saved_i_pc d_addr d_wr d_rd d_accept d_pending '
                  'd_ack d_error d_data saved_addr delay_left squash redirect redirect_pc decode_pc decode_valid '

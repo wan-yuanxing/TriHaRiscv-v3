@@ -44,6 +44,7 @@ module triha_lsu
     ,output          mem_flush_o
     ,output          writeback_valid_o
     ,output [ 31:0]  writeback_value_o
+    ,output         writeback_bypass_zero_o
     ,output [31:0]   writeback_bypass_o
     ,output [  5:0]  writeback_exception_o
     ,output          stall_o
@@ -216,7 +217,7 @@ begin
 
 end
 
-// Maintained machine-custom CSR ABI. Do not reuse vendor PMP-overlap defines.
+// Main SoC custom maintenance ABI; PMP CSR addresses must not flush caches.
 localparam [11:0] TRIHA_CSR_DFLUSH = 12'h7c1;
 localparam [11:0] TRIHA_CSR_DWRITEBACK = 12'h7c2;
 localparam [11:0] TRIHA_CSR_DINVALIDATE = 12'h7c3;
@@ -404,6 +405,31 @@ begin
 end
 assign writeback_value_o    = wb_commit_r;
 assign writeback_bypass_o   = wb_result_r;
+// Zero is invariant under byte/half sign extension. Compare each raw lane
+// before selection, using the same procedural metadata priority as payload.
+wire [3:0] byte_zero_w;
+wire [1:0] half_zero_w;
+assign byte_zero_w={(mem_data_rd_i[31:24]==8'b0),(mem_data_rd_i[23:16]==8'b0),
+                    (mem_data_rd_i[15:8]==8'b0),(mem_data_rd_i[7:0]==8'b0)};
+assign half_zero_w={(mem_data_rd_i[31:16]==16'b0),(mem_data_rd_i[15:0]==16'b0)};
+reg bypass_zero_r;
+always @* begin
+    bypass_zero_r=(mem_data_rd_i==32'b0);
+    if(resp_byte_w)begin
+        bypass_zero_r=1'b1;
+        case(resp_addr_w[1:0])
+            2'd0:bypass_zero_r=byte_zero_w[0];
+            2'd1:bypass_zero_r=byte_zero_w[1];
+            2'd2:bypass_zero_r=byte_zero_w[2];
+            2'd3:bypass_zero_r=byte_zero_w[3];
+        endcase
+    end else if(resp_half_w)begin
+        if(resp_addr_w[1])bypass_zero_r=half_zero_w[1];
+        else bypass_zero_r=half_zero_w[0];
+    end
+end
+assign writeback_bypass_zero_o=bypass_zero_r;
+
 
 wire fault_load_align_w     = mem_unaligned_e2_q & resp_load_w;
 wire fault_store_align_w    = mem_unaligned_e2_q & ~resp_load_w;

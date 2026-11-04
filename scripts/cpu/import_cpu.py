@@ -13,7 +13,8 @@ import sys
 from source_header_cleanup import replay_cleanup
 
 ROOT = Path(__file__).resolve().parents[2]
-PRODUCTION_DELTAS = {'rtl/cpu/triha_csr.v', 'rtl/cpu/ADAPTATIONS.json', 'rtl/cpu/triha_core.v'}
+PRODUCTION_DELTAS = {'rtl/cpu/triha_csr.v', 'rtl/cpu/ADAPTATIONS.json',
+                     'rtl/cpu/triha_core.v', 'rtl/cpu/triha_lsu.v'}
 
 
 def digest(data):
@@ -48,6 +49,9 @@ def import_sources(source, destination, manifest, apply=False):
     # Complete validation before the first write. A later conflict must not
     # leave an earlier source partially admitted.
     for row in files:
+        file_revision = row.get('source_commit', revision)
+        if not isinstance(file_revision, str) or not re.fullmatch('[0-9a-f]{40}', file_revision):
+            raise ValueError('manifest requires immutable file source commit')
         original = safe_path(source, row['source'])
         target = safe_path(destination, row['destination'])
         identity = str(target).casefold()
@@ -59,7 +63,7 @@ def import_sources(source, destination, manifest, apply=False):
             raise ValueError('invalid SHA-256: ' + row['source'])
         if kind == 'git':
             data = subprocess.check_output(['git', '-C', str(source), 'cat-file',
-                                            'blob', revision + ':' + row['source']])
+                                            'blob', file_revision + ':' + row['source']])
         elif kind == 'reviewed_working_tree':
             production = (row['source'].casefold().startswith('rtl/') or
                           row['destination'].casefold().startswith('rtl/'))
@@ -68,7 +72,7 @@ def import_sources(source, destination, manifest, apply=False):
                 raise ValueError('unapproved production delta: ' + row['source'])
             if production:
                 base = subprocess.check_output(['git', '-C', str(source), 'cat-file',
-                                               'blob', revision + ':' + row['source']])
+                                               'blob', file_revision + ':' + row['source']])
                 if digest(base) != row.get('base_sha256'):
                     raise ValueError('base hash mismatch: ' + row['source'])
             data = original.read_bytes()
@@ -89,6 +93,7 @@ def import_sources(source, destination, manifest, apply=False):
                 stream.write(data)
     return {'status': 'PASS', 'applied': apply, 'source_commit': revision,
             'files': [{'source': row['source'], 'destination': row['destination'],
+                       'source_commit': row.get('source_commit', revision),
                        'sha256': digest(data)} for target, data, row in planned]}
 
 

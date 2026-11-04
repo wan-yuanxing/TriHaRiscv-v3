@@ -1,5 +1,14 @@
 # TriHa CPU 开发与维护
 
+当前维护位置为本主工程 `rtl/cpu/`，不在外部 CPU 工作树继续维护。
+2026-11-04 按用户要求迁入固定提交 `12733df` 的新版双发射核，主应用保持
+`DUAL_ISSUE=0`，保留现有 CSR 修正、缓存维护 ABI 和最小控制核配置。
+迁移范围与验证见 [本轮记录](2026-11-04-dual-core-single-issue.md)，可执行入口见
+[脚本说明](../../scripts/cpu/README.md)。现有实测发布位流仍对应各自冻结源码，
+不代表此次迁移已经通过新的物理时序或板测。
+
+以下为 2026-10-18 历史开发记录；其中外部工作树、旧入口与未合入状态不再代表当前工程。
+
 主工程：`D:/FPGA/TriHaRiscv-main`。CPU 工作树：`D:/FPGA/TriHaRiscv-cpu-windows`，分支 `cpu/windows-baseline`。更新：2026-10-18。
 
 Windows ModelSim基线、GCC裸机启动、CoreMark1.0短RTL测量和CPU-only Pango综合/映射已经建立，并完成首轮隔离后布线；100MHz setup尚未收敛，详见 [STATUS.md](STATUS.md)。正式SoC、完整ISA及板测仍需后续验收，主目录中的Video分支尚未合入本批CPU RTL。

@@ -1,0 +1,55 @@
+{
+  "status": "BASELINE_READY_CODE_AND_RELEASE_VERIFIED_DOCUMENTS_PRESERVED",
+  "recorded_at": "2026-11-03T21:16:36.965926+08:00",
+  "repository": "https://github.com/wan-yuanxing/TriHaRiscv-v3",
+  "branch": "soc/face-box-integration",
+  "commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
+  "previous_head": "040c029fd1506dfd8c987c8d0ace07e0f2dd64de",
+  "main_project": "D:\\FPGA\\TriHaRiscv-main",
+  "backup_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\recovery\\pre-board-baseline-20261103T211108",
+  "code_and_release_files_verified": 783,
+  "qualified_source_files_verified": 209,
+  "archive_members_verified": 996,
+  "stable_existing_documents_hash_checked": 912,
+  "stable_existing_documents_unchanged": true,
+  "existing_documents_written": [],
+  "external_document_build": {
+    "process": "xelatex.exe",
+    "pid_observed": 51180,
+    "generated_files_excluded_from_stability_check": [
+      "docs/technical-report/latex/技术文档.aux",
+      "docs/technical-report/latex/技术文档.log",
+      "docs/technical-report/latex/技术文档.out",
+      "docs/technical-report/latex/技术文档.pdf",
+      "docs/technical-report/latex/技术文档.synctex(busy)",
+      "docs/technical-report/latex/技术文档.synctex.gz",
+      "docs/technical-report/latex/技术文档.toc"
+    ]
+  },
+  "local_experiment_files_isolated": 14,
+  "release_directory": "D:\\FPGA\\TriHaRiscv-main\\releases\\face-box-20261103",
+  "release_manifest_sha256": "3dd28be6401ef1a554bfa5773f3bf4e41506a857784c505cf3231d365c54e7a2",
+  "bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+  "verify_mask_sha256": "d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd",
+  "baseline_clock_hz": {
+    "compute": 50000000,
+    "video_ddr": 125000000,
+    "pixel": 40000000
+  },
+  "upstream_acceptance_status": "PASS_FIRST_PRIORITY_FACE_DETECTION_BOARD_ACCEPTANCE",
+  "upstream_internal_worst_setup_ns": 0.183,
+  "upstream_internal_worst_hold_ns": 0.108,
+  "board_operations_this_task": false,
+  "new_simulation_this_task": false,
+  "new_eda_build_this_task": false,
+  "full_release_install_performed": false,
+  "existing_build_payload_conflicts_preserved": [
+    "build/npu/b03_assets_20261030/host_reference.json",
+    "build/npu/b03_assets_20261030/recovery_plan.json",
+    "build/npu/b03_assets_20261030/recovery_report.json",
+    "build/npu/b03_assets_20261030/tool_snapshot/audit_b03_assets.py",
+    "build/npu/b03_assets_20261030/worker.log"
+  ],
+  "old_failed_run_status": "Preserved; not reclassified as passing",
+  "next_plan": "docs/superpowers/plans/2026-11-03-board-tested-baseline-next.md"
+}

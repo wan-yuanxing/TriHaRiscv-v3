@@ -1,0 +1,65 @@
+{
+  "status": "PASS_OFFLINE_TIMING_BITSTREAM_AND_REPLAY",
+  "date_local": "2026-11-04",
+  "profile": "avatar",
+  "cpu_implementation_commit": "12733df2650fa0daee98457889ee16588dd72b5c",
+  "dual_issue": 0,
+  "clocks_hz": {
+    "cpu_npu": 50000000,
+    "ddr_video": 125000000,
+    "pixel": 40000000
+  },
+  "additional_setup_margin_ns": 0.2,
+  "bitstream_sha256": "86d7a14ce44324d02cc043d27bd5f881f996a630eb2c116a94b0bf03eeed276d",
+  "mask_sha256": "e3c18e62ac3001390686069abd77e8beca68c4a6ac88965d4fa3433101b34d6f",
+  "manifest_sha256": "78c404bccc080f1059bb8f59e33931e6836e08b0d9c4c7f1757e279ea8b0e50d",
+  "slack_ns": {
+    "setup_slow": 0.168,
+    "setup_fast": 2.818,
+    "hold_slow": 0.158,
+    "hold_fast": 0.117
+  },
+  "unrouted_nets": 0,
+  "violating_endpoints": 0,
+  "retained_sites_checked": 561,
+  "gray_groups": 23,
+  "gray_bits": 116,
+  "gray_clock_observations": 928,
+  "functional": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261104T090317_445051Z",
+      "result_sha256": "e5eed5b03633f4dbae6b8cca501838c02eb85084ebc54e3c7f9605765ba4b1a8",
+      "shared_sources": 137,
+      "expected_faces": 1
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261104T090317_444929Z",
+      "result_sha256": "08f351b65b19ca13e2d60cf72a127731b6c667b25f1424a86111d4304beb2c03",
+      "shared_sources": 137,
+      "expected_faces": 0
+    }
+  ],
+  "audit_negative_controls": 15,
+  "independent_replay": {
+    "status": "PASS_CONFIGURATION_IDENTICAL",
+    "verified_sources": 222,
+    "installed_files": 1283
+  },
+  "physical_board": false,
+  "external_hdmi_ac_verified": false,
+  "limitations": [
+    "Current migrated CPU bitstream has not been programmed or board tested.",
+    "External HDMI AC timing and board FPS require separate measurement.",
+    "Application still requires seven-segment UART model/avatar loading after programming."
+  ],
+  "evidence_sha256": {
+    "audit-controls.json": "f483a246929e93f99cfdf28ccc980d6b2ce1d7fe11e22534173e9d410eb49cff",
+    "gray-clock-audit.json": "92625241d1a5a7ce0013baae3bf6b10aff4c2b5cef062a4b228becceb7e1eb57",
+    "independent-replay.json": "f4b44938020dfaf6522b22108f620d082613d8bedd555c9f7bcd4cb1a09f03d3",
+    "native-replay.json": "26f635a60eacdc71c44d12eb1eef3bf402483558b156c0accccb3f743936c629",
+    "physical-progress.json": "a5df7139bf5588dee803fd47ad8825ee2ed5211d64da9474a854284d731c08ba",
+    "qualification.json": "d224272ef1211db8289dfd86bd136801d47fb23d95590d871a14af94aeabd357",
+    "site-retention.json": "e44a82f7b594e9b6ab4152d931f7181b671b6f5f555673b0b8c1c77e4429766e",
+    "timing-summary.json": "fc11a14127d840b463452af28339a1a913284735adec4df02cb3d7cc5f848e47"
+  }
+}

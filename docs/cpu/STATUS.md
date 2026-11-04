@@ -102,3 +102,16 @@ performance slack与最差setup一致。该轮采用CPU直接顶层、自动I/O�
 - 新主工程地址/外设、DDR/AXI、NPU/Video集成和板级运行。
 
 主工程Video及技术报告修改保持原位；CPU实现尚未合入该分支。本批执行CPU原生综合/映射和隔离后布线，未生成bitstream或编程板卡。
+
+
+## 2026-11-04 新版双发射核以单发射配置接入
+
+主工程 CPU 迁入固定提交 `12733df2650fa0daee98457889ee16588dd72b5c` 的新版实现，
+主应用保持 `DUAL_ISSUE=0` 和原最小控制核配置，保留 CSR 合法性/IALIGN=32、
+缓存维护 ABI、50/125/40 MHz 时钟及外围接口。普通/最小配置各 103 项 ISA、
+CSR/缓存/IRQ/撤销/应用路由及两帧真实 CPU/NPU/主脸框逐像素仿真通过。
+六段模型加载和采集字节检查通过；最终头注释迁出后 RTL 非注释 token 一致，
+并重新通过应用、撤销和双发射冒烟。源码与准入清单已在本地更新。
+本轮无综合、物理时序、新位流、板卡操作或 GitHub 推送；技术报告和冻结发布包未改。
+详见 `docs/cpu/2026-11-04-dual-core-single-issue.md` 与
+`docs/verification/cpu/dual-single-migration-20261104.json`。

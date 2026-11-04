@@ -169,8 +169,11 @@
   },
   "current_revalidation": {
     "status": "PASS",
-    "directory": "build/soc/face_system-20261101T084921_612281Z",
-    "scope": "Adopted control_decode bytes; identity audited against full model boot and pixel simulation"
+    "directory": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T105532_568345Z",
+    "scope": "First box: six-segment checked model boot, real CPU/NPU, primary-box full pixels and frame ownership",
+    "inputs_unchanged": true,
+    "physical_ddr": false,
+    "physical_timing_closed": false
   },
   "graph_pair_candidate": {
     "adopted": false,
@@ -1474,12 +1477,12 @@
     "kind": "heartbeat",
     "id": "automation-5",
     "name": "人脸框工程时序收敛跟进",
-    "status": "ACTIVE",
+    "status": "DELETED_BY_USER_REQUEST",
     "interval_minutes": 30,
     "scope": "Current thread: monitor existing route, audit physical result, continue authorized critical-path work; silent without actionable change",
     "board_deferred": true,
-    "route_status": "No route active; see top-level active_runs and their receipt stage.",
-    "last_check_utc": "2026-11-02T12:57:06.013105+00:00",
+    "route_status": "Final CSR route timed out; engineering stopped; no active runs.",
+    "last_check_utc": "2026-11-03T13:03:37.382103+00:00",
     "active_run_source": "active_runs"
   },
   "interface_split_register_candidate": {
@@ -2187,7 +2190,7 @@
       }
     }
   },
-  "updated_utc": "2026-11-03T02:08:07.569549+00:00",
+  "updated_utc": "2026-11-03T13:03:37.382103+00:00",
   "raw_descriptor_range_fix_20261102": {
     "status": "COMPONENT_REGRESSION_AND_SYNTHESIS_PASS",
     "updated_utc": "2026-11-02T11:35:43.610303+00:00",
@@ -2639,11 +2642,11 @@
     "placement_review": "build/video/face_pointer_guard_20261103/previous_placement_review.json"
   },
   "pointer_guard_candidate_20261103": {
-    "status": "DIAGNOSTIC_INCOMPLETE_REVIEW_REQUIRED",
+    "status": "COMPARATIVE_PROBE_COMPLETE_REVIEW_REQUIRED",
     "directory": "build/video/face_pointer_guard_20261103",
     "adopted": false,
     "design": "Precompute FIFO read increment/Gray and empty alternatives, select only after arithmetic. Evaluate each box at a constant slice, select 1-bit result by lane; preserve validation order and cycle count.",
-    "next": "Inspect exported conflict nets and SRB hotspots; do not reroute or edit RTL without a specific evidence-supported hypothesis.",
+    "next": "Verify removal of redundant resets on MMIO and pixel record payload registers; no additional layout parameter sweep.",
     "focused_review": "build/video/face_pointer_guard_20261103/focused_review.json",
     "component_checks": {
       "fifo_ingress_cases": 9,
@@ -2725,6 +2728,27 @@
         "receipt": "build/video/pds/face_pointer_guard_congestion_20261103/receipt.json",
         "hard_timeout_seconds": 600,
         "acceptance_route": false
+      },
+      "pointer_guard_congestion_awake_diagnostic": {
+        "status": "CONGESTION_EVIDENCE_READY_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "python_pid": 36592,
+        "pds_pid": null,
+        "directory": "build/video/pds/face_pointer_guard_congestion_awake_20261103",
+        "receipt": "build/video/pds/face_pointer_guard_congestion_awake_20261103/receipt.json",
+        "wall_deadline_seconds": 600,
+        "acceptance_route": false
+      },
+      "pointer_guard_decongestion2_experiment": {
+        "status": "COMPARATIVE_PROBE_COMPLETE_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "pid": 12904,
+        "child_pid": null,
+        "seed": 4,
+        "plc_decongestion": 2,
+        "full_route_automatic": false,
+        "directory": "build/video/face_decongestion2_flow_20261103",
+        "receipt": "build/video/face_decongestion2_flow_20261103/receipt.json"
       }
     },
     "placement_review": {
@@ -2741,6 +2765,1552 @@
       "gray_bounds_matched": 23,
       "timing_closed": false
     },
-    "route_failure_review": "build/video/face_pointer_guard_route_failure_20261103/result.json"
+    "route_failure_review": "build/video/face_pointer_guard_route_failure_20261103/result.json",
+    "runtime_audit": {
+      "status": "POWER_STATE_CONTAMINATION_CONFIRMED",
+      "result": "build/video/face_route_runtime_audit_20261103/result.json",
+      "route_standby_overlap_seconds": 3863.0547509999997,
+      "diagnostic_standby_overlap_seconds": 1061.466362,
+      "exact_pds_cpu_time_known": false,
+      "supervision_tests": "3 PASS",
+      "original_route_reported_detail_cpu_seconds": 4993.0,
+      "correction": "Modern standby overlap is not a CPU-time loss measure. Original detailed iterations report 83.2 CPU minutes; standby cannot explain away the slow route."
+    },
+    "congestion_review": {
+      "status": "CONGESTION_BASELINE_VERIFIED_SINGLE_PLACEMENT_EXPERIMENT_ADMITTED",
+      "result": "build/video/face_congestion_analysis_20261103/result.json",
+      "inputs_verified": 487,
+      "exports_verified": 12,
+      "runtime": {
+        "wall_seconds": 265.9997900999151,
+        "awake_seconds": 265.99959130003117,
+        "max_poll_gap_seconds": 5.01557419996243,
+        "stop_seconds": 0.388683500001207,
+        "last_pds_tree_cpu_seconds": 270.46875
+      },
+      "iteration5_unrouted_nets": 77319,
+      "iteration5_unique_conflict_nets": 63149,
+      "iteration5_plot_sum": 167745,
+      "top10_net_conflict_score_fraction": 0.06872105908893023,
+      "original_route_detail_cpu_seconds": 4993.0
+    },
+    "decongestion2_review": {
+      "status": "REJECT_FULL_ROUTE",
+      "result": "build/video/face_payload_reset_20261103/placement_experiment_review.json",
+      "unrouted_reduction_fraction": 0.04719409200843261,
+      "plot_score_reduction_fraction": 0.13835285701511224
+    }
+  },
+  "payload_reset_candidate_20261103": {
+    "status": "REJECTED_FOR_ROUTE_SETUP",
+    "directory": "build/video/face_payload_reset_20261103",
+    "adopted": false,
+    "baseline_payload_reset_flops": 8969,
+    "constraints_unchanged_required": true,
+    "focused_review": "build/video/face_payload_reset_20261103/focused_review.json",
+    "next": "Investigate actual NPU op-to-ROI and display feedback-to-release control paths; no route or parameter sweep",
+    "stage": "PLACEMENT_REVIEW_COMPLETE",
+    "receipt": "build/video/face_payload_reset_validation_20261103/receipt.json",
+    "component_review": {
+      "status": "PASS",
+      "cases": 30,
+      "result": "build/soc/resource_probe_video_compact_20261103T032906_296081Z/result.json",
+      "result_sha256": "b6267f2e528651eff70b6af1519602d9482fdbd5854a57e2c22226f9137c80c2",
+      "inputs_verified": 36
+    },
+    "observed_system_run": "build/soc/face_system-20261103T033502_239590Z",
+    "last_checked_utc": "2026-11-03T04:48:52.103988+00:00",
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_CDC_RESET_RESOURCE_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 43360,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261103T032906_296081Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T033502_239590Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261103T035520_533767Z",
+      "runtime_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_payload_reset_validation_20261103\\synthesis",
+      "directory": "build/video/face_payload_reset_validation_20261103",
+      "receipt": "build/video/face_payload_reset_validation_20261103/receipt.json"
+    },
+    "synthesis_review": "build/video/face_payload_reset_synthesis_review_20261103/result.json",
+    "synthesis_review_sha256": "bbf2572869bf9bb7ec0eb5737548f309a66ab92dbebb1a62e29bceeec15f3414",
+    "resources": {
+      "lut": 49104.0,
+      "registers": 47676.0,
+      "drm": 141.5
+    },
+    "resource_delta_vs_pointer_guard": {
+      "lut": 17.0,
+      "registers": -2.0,
+      "drm": 0.0
+    },
+    "payload_reset_review": {
+      "groups": {
+        "video_display_mmio_compact": {
+          "payload": "record_data",
+          "count": 5120,
+          "cell_type": "GTP_DFF_E",
+          "runtime_reset_ports": 0,
+          "clocks": [
+            "clk_i"
+          ],
+          "enable_nets": [
+            "N1594"
+          ]
+        },
+        "display_record_pixels_compact": {
+          "payload": "active_data",
+          "count": 3849,
+          "cell_type": "GTP_DFF_E",
+          "runtime_reset_ports": 0,
+          "clocks": [
+            "pixel_clk"
+          ],
+          "enable_nets": [
+            "pixel_accept"
+          ]
+        }
+      },
+      "old_bank_rejected": "('payload runtime reset retained', 'record_data[0]', 'GTP_DFF_CE')",
+      "non_payload_controls": {
+        "video_display_mmio_compact": {
+          "non_payload_flops": 259,
+          "reset_clock_signatures_unchanged": true,
+          "reset_flops": 226
+        },
+        "display_record_pixels_compact": {
+          "non_payload_flops": 1109,
+          "reset_clock_signatures_unchanged": true,
+          "reset_flops": 1109
+        }
+      },
+      "global_configuration_GRS_unchanged": true,
+      "note": "8969 fewer asynchronous runtime C-pin loads; routed load, congestion and timing benefit remain unmeasured."
+    },
+    "frozen_inputs_verified": 459,
+    "functional": {
+      "status": "PASS",
+      "directory": "build/soc/face_system-20261103T033502_239590Z",
+      "pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=92506 nativeAR=380481 cycles=49663086",
+      "physical_ddr": false,
+      "three_modes": true
+    },
+    "synthesis": {
+      "status": "PASS",
+      "directory": "build/video/pds/20261103T035520_533767Z",
+      "timing_closed": false
+    },
+    "compute_synthesis_review": {
+      "previous_wns_ns": 0.112,
+      "current": {
+        "clocks": [
+          "compute_clk",
+          "compute_clk"
+        ],
+        "slack_ns": -0.316,
+        "tns_ns": -20.537,
+        "failing_endpoints": 90,
+        "total_endpoints": 53135
+      },
+      "critical_path": "NPU layer/state[1] -> input_path/shadow_valid[3]",
+      "logic_levels": 14,
+      "logic_ns": 1.593,
+      "estimated_route_ns": 8.237,
+      "interpretation": "Compute/PLL source bytes unchanged, but synthesis mapping/estimate is not unchanged. The regression is real in this estimate and its cause is not proven. Placement must recheck this pair; no full route is admitted here."
+    },
+    "placement_receipt": "build/video/face_payload_reset_place_flow_20261103/receipt.json",
+    "completed_runs": {
+      "payload_reset_seed4_placement": {
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_payload_reset_place_flow_20261103",
+        "receipt": "build/video/face_payload_reset_place_flow_20261103/receipt.json",
+        "python_pid": 16592,
+        "child_pid": null,
+        "placement": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_payload_reset_place_20261103",
+        "seed": 4,
+        "route_started": false
+      }
+    },
+    "placement_analysis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_payload_reset_place_20261103\\placement_analysis\\result.json",
+    "placement_review": "build\\video\\face_payload_reset_20261103\\placement_review.json",
+    "placement_summary": {
+      "setup_slow": {
+        "worst_ns": -0.12,
+        "failing_endpoints": 8
+      },
+      "setup_fast": {
+        "worst_ns": 0.919,
+        "failing_endpoints": 0
+      },
+      "hold_slow": {
+        "worst_ns": -0.354,
+        "failing_endpoints": 75
+      },
+      "hold_fast": {
+        "worst_ns": -0.398,
+        "failing_endpoints": 148
+      },
+      "recovery_slow": {
+        "worst_ns": 1.629,
+        "failing_endpoints": 0
+      },
+      "recovery_fast": {
+        "worst_ns": 1.848,
+        "failing_endpoints": 0
+      },
+      "removal_slow": {
+        "worst_ns": 0.448,
+        "failing_endpoints": 0
+      },
+      "removal_fast": {
+        "worst_ns": 0.372,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_slow": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0
+      },
+      "minimum pulse width_fast": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0
+      }
+    }
+  },
+  "control_reuse_candidate_20261103": {
+    "status": "FULL_ROUTE_REJECTED_CONGESTION_SCREEN",
+    "directory": "build/video/face_control_reuse_20261103",
+    "focused_review": "build/video/face_control_reuse_20261103/focused_review.json",
+    "changes": [
+      "Shared owner acceptance replaces duplicate MMIO state/comparison",
+      "100-bit feedback identity split into 4/32/32/32 kept comparisons",
+      "Existing is_dw_op drives DW coordinate mux"
+    ],
+    "npu_source_admission": "PASS_41_FILES",
+    "timing_closed": false,
+    "route_started": false,
+    "next": "Point interval dual comparisons are redundant; evaluate one unsigned-distance implementation in an isolated RTL copy before production adoption.",
+    "stage": "CONGESTION_REVIEW_DONE",
+    "receipt": "build/video/face_control_reuse_validation_v2_20261103/receipt.json",
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_CDC_RESET_RESOURCE_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 28636,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261103T045527_246695Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T050128_353798Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261103T052316_806105Z",
+      "runtime_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_control_reuse_validation_v2_20261103\\synthesis",
+      "directory": "build/video/face_control_reuse_validation_v2_20261103",
+      "receipt": "build/video/face_control_reuse_validation_v2_20261103/receipt.json"
+    },
+    "completed_runs": {
+      "validation_directory_collision": {
+        "status": "STOPPED_REVIEW_REQUIRED",
+        "stage": "COMPONENTS",
+        "pid": 32304,
+        "child_pid": null,
+        "component": null,
+        "system": null,
+        "synthesis": null,
+        "runtime_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_control_reuse_validation_20261103\\layer_controls",
+        "directory": "build/video/face_control_reuse_validation_20261103",
+        "receipt": "build/video/face_control_reuse_validation_20261103/receipt.json"
+      },
+      "control_reuse_seed4_placement": {
+        "status": "PLACEMENT_ANALYZED_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "directory": "build/video/face_control_reuse_place_flow_20261103",
+        "receipt": "build/video/face_control_reuse_place_flow_20261103/receipt.json",
+        "python_pid": 51436,
+        "child_pid": null,
+        "placement": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_control_reuse_place_20261103",
+        "seed": 4,
+        "route_started": false
+      },
+      "control_reuse_congestion_probe": {
+        "status": "COMPARATIVE_PROBE_COMPLETE_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "python_pid": 40984,
+        "pds_pid": null,
+        "directory": "build/video/pds/face_control_reuse_congestion_probe_20261103",
+        "receipt": "build/video/pds/face_control_reuse_congestion_probe_20261103/receipt.json",
+        "wall_deadline_seconds": 600,
+        "acceptance_route": false
+      }
+    },
+    "validation_harness_fix": "Layer test output must differ from runtime log directory; first launch stopped before ModelSim. New v2 coordinator preserves failed receipt; no RTL change.",
+    "last_checked_utc": "2026-11-03T06:05:52.973228+00:00",
+    "frozen_inputs_verified": 462,
+    "observed_system_run": "build/soc/face_system-20261103T050128_353798Z",
+    "component_review": {
+      "status": "PASS",
+      "cases": 42,
+      "result": "build/soc/resource_probe_video_compact_20261103T045527_246695Z/result.json",
+      "result_sha256": "9cb9e6e2d63d1c3604fcb5a99f6ec51447a1e836d0ae09954f3187efd56db248",
+      "inputs_verified": 37
+    },
+    "runtime_observation": {
+      "stages": {
+        "npu_admission": {
+          "stop_reason": "process_exit",
+          "stop_seconds": 0,
+          "tree_stop_code": null,
+          "wall_seconds": 5.0115947999292985,
+          "awake_seconds": 5.01165089989081,
+          "max_poll_gap_seconds": 0.00022109993733465672,
+          "exit_code": 0
+        },
+        "layer_controls": {
+          "stop_reason": "process_exit",
+          "stop_seconds": 0,
+          "tree_stop_code": null,
+          "wall_seconds": 10.032976899994537,
+          "awake_seconds": 10.033954999991693,
+          "max_poll_gap_seconds": 5.016315399901941,
+          "exit_code": 0
+        },
+        "component": {
+          "stop_reason": "process_exit",
+          "stop_seconds": 0,
+          "tree_stop_code": null,
+          "wall_seconds": 360.96950540004764,
+          "awake_seconds": 360.96945540001616,
+          "max_poll_gap_seconds": 5.026308799977414,
+          "exit_code": 0
+        },
+        "system": {
+          "stop_reason": "process_exit",
+          "stop_seconds": 0,
+          "tree_stop_code": null,
+          "wall_seconds": 1308.2473942999495,
+          "awake_seconds": 1308.248305200017,
+          "max_poll_gap_seconds": 5.0203515000175685,
+          "exit_code": 0
+        },
+        "synthesis": {
+          "stop_reason": "process_exit",
+          "stop_seconds": 0,
+          "tree_stop_code": null,
+          "wall_seconds": 441.2316874000244,
+          "awake_seconds": 441.23229079996236,
+          "max_poll_gap_seconds": 5.0183199000312015,
+          "exit_code": 0
+        }
+      },
+      "validation_processes_exited": true
+    },
+    "synthesis_review": "build/video/face_control_reuse_synthesis_review_20261103/result.json",
+    "synthesis_review_sha256": "15e27909376bea968746018050f785c1b9f4d2acd18a70a78607a9349b3b8caa",
+    "system_review": {
+      "status": "PASS",
+      "result": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T050128_353798Z\\result.json",
+      "pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=92506 nativeAR=380481 cycles=49663086",
+      "shared_source_count": 132,
+      "firmware_and_memory_equal": true
+    },
+    "resources": {
+      "lut": 49148.0,
+      "registers": 47677.0,
+      "drm": 141.5
+    },
+    "control_reuse_review": {
+      "feedback": {
+        "groups": [
+          {
+            "group": 0,
+            "identity_fields": [
+              "slot",
+              "mode"
+            ],
+            "input_bits": 8,
+            "carry_cells": 0
+          },
+          {
+            "group": 1,
+            "identity_fields": [
+              "frame"
+            ],
+            "input_bits": 64,
+            "carry_cells": 16
+          },
+          {
+            "group": 2,
+            "identity_fields": [
+              "generation"
+            ],
+            "input_bits": 64,
+            "carry_cells": 16
+          },
+          {
+            "group": 3,
+            "identity_fields": [
+              "seq"
+            ],
+            "input_bits": 64,
+            "carry_cells": 16
+          }
+        ],
+        "identity_root_count": 200,
+        "shared_acceptance_connected": true,
+        "duplicate_pending_flop_removed": true,
+        "previous_max_feedback_carry_cells": 50,
+        "previous_topology_rejected": "feedback word groups missing"
+      },
+      "dw_coordinate": {
+        "coordinate_bits": 13,
+        "root_count": 39,
+        "registered_selector": "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/is_dw_op",
+        "direct_input_primitive_loads": 18,
+        "raw_opcode_decode_roots": 0,
+        "roots": [
+          "dw_req_tap[0]",
+          "dw_req_tap[1]",
+          "dw_req_tap[2]",
+          "dw_req_tap[3]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[0]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[1]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[2]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[3]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[4]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[5]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[6]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[7]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/dw_issue_x[8]",
+          "g_full.impl/face/u_compute/u_npu/u_service/u_frame/layer/is_dw_op",
+          "row_code[0]",
+          "row_code[1]",
+          "row_code[2]",
+          "row_code[3]",
+          "row_kw[0]",
+          "row_kw[1]",
+          "row_pl[0]",
+          "row_pl[1]",
+          "row_pl[2]",
+          "row_pl[3]",
+          "row_pl[4]",
+          "row_pl[5]",
+          "row_pl[6]",
+          "row_pl[7]",
+          "row_sw[0]",
+          "row_sw[1]",
+          "x_begin[0]",
+          "x_begin[1]",
+          "x_begin[2]",
+          "x_begin[3]",
+          "x_begin[4]",
+          "x_begin[5]",
+          "x_begin[6]",
+          "x_begin[7]",
+          "x_begin[8]"
+        ],
+        "previous_topology_rejected": "input path does not consume registered decode"
+      },
+      "source_admission": {
+        "status": "PASS_SOURCE_ADMISSION",
+        "files": 41,
+        "modules": 41,
+        "source_commit": "558280b30219acdcf9f962acd6e907e0f680ab52",
+        "rtl_simulated": false,
+        "physical_admission": false
+      },
+      "allowed_source_delta": [
+        "rtl/npu/upstream/b03/rtl/platform/b03_layer_exec_payload.v"
+      ],
+      "no_new_pipeline_stage": true
+    },
+    "placement_decision": {
+      "admitted": true,
+      "seed": 4,
+      "options": "default placement, no decongestion override",
+      "reason": "Complete functional/source proof plus actual control reuse and bounded feedback comparison cones justify one physical placement measurement.",
+      "stop_before_route": true,
+      "risks": [
+        "video synthesis estimate -0.461ns",
+        "DRM 141.5/155",
+        "prior severe broad routing congestion"
+      ]
+    },
+    "synthesis_estimates": {
+      "clock_period_ns": {
+        "compute": 10,
+        "video": 8,
+        "pixel": 25
+      },
+      "slow_summaries": {
+        "Setup": [
+          {
+            "clocks": [
+              "sys_clk",
+              "sys_clk"
+            ],
+            "slack_ns": 34.888,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 56
+          },
+          {
+            "clocks": [
+              "pixel_clk",
+              "pixel_clk"
+            ],
+            "slack_ns": 16.217,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 10231
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "pixel_clk"
+            ],
+            "slack_ns": 2.267,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 7939
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "cfg_clk"
+            ],
+            "slack_ns": 89.85,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1041
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "cfg_clk"
+            ],
+            "slack_ns": 19.276,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 33
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 6.905,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1603
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 5.224,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 12
+          },
+          {
+            "clocks": [
+              "rst_clk",
+              "rst_clk"
+            ],
+            "slack_ns": 4.9,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 225
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": -0.461,
+            "tns_ns": -27.441,
+            "failing_endpoints": 101,
+            "total_endpoints": 36759
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_1",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 4.132,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 260
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_0",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 5.468,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1
+          },
+          {
+            "clocks": [
+              "compute_clk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 5.224,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 30
+          },
+          {
+            "clocks": [
+              "pixel_clk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 4.934,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 207
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 19.276,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 12
+          },
+          {
+            "clocks": [
+              "compute_clk",
+              "compute_clk"
+            ],
+            "slack_ns": 0.088,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 53135
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "compute_clk"
+            ],
+            "slack_ns": 5.224,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 30
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "phy_dq_sysclk_0"
+            ],
+            "slack_ns": 4.874,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 196
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "phy_dq_sysclk_1"
+            ],
+            "slack_ns": 5.122,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 420
+          }
+        ],
+        "Hold": [
+          {
+            "clocks": [
+              "sys_clk",
+              "sys_clk"
+            ],
+            "slack_ns": 0.619,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 56
+          },
+          {
+            "clocks": [
+              "pixel_clk",
+              "pixel_clk"
+            ],
+            "slack_ns": 0.619,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 10231
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "cfg_clk"
+            ],
+            "slack_ns": 0.619,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1041
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 0.619,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1603
+          },
+          {
+            "clocks": [
+              "rst_clk",
+              "rst_clk"
+            ],
+            "slack_ns": 0.507,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 225
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": -0.006,
+            "tns_ns": -0.03,
+            "failing_endpoints": 5,
+            "total_endpoints": 36759
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_1",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 1.311,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 260
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_0",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 0.992,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1
+          },
+          {
+            "clocks": [
+              "compute_clk",
+              "compute_clk"
+            ],
+            "slack_ns": 0.406,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 53135
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "phy_dq_sysclk_0"
+            ],
+            "slack_ns": -0.3,
+            "tns_ns": -3.159,
+            "failing_endpoints": 14,
+            "total_endpoints": 196
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "phy_dq_sysclk_1"
+            ],
+            "slack_ns": -1.536,
+            "tns_ns": -68.58,
+            "failing_endpoints": 52,
+            "total_endpoints": 420
+          }
+        ],
+        "Recovery": [
+          {
+            "clocks": [
+              "sys_clk",
+              "sys_clk"
+            ],
+            "slack_ns": 35.31,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 40
+          },
+          {
+            "clocks": [
+              "pixel_clk",
+              "pixel_clk"
+            ],
+            "slack_ns": 22.492,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1862
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "cfg_clk"
+            ],
+            "slack_ns": 98.062,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 283
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 10.45,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 888
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 8.833,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 676
+          },
+          {
+            "clocks": [
+              "rst_clk",
+              "rst_clk"
+            ],
+            "slack_ns": 6.816,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 161
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 3.266,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11837
+          },
+          {
+            "clocks": [
+              "compute_clk",
+              "compute_clk"
+            ],
+            "slack_ns": 3.246,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16819
+          }
+        ],
+        "Removal": [
+          {
+            "clocks": [
+              "sys_clk",
+              "sys_clk"
+            ],
+            "slack_ns": 1.464,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 40
+          },
+          {
+            "clocks": [
+              "pixel_clk",
+              "pixel_clk"
+            ],
+            "slack_ns": 0.872,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 1862
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "cfg_clk"
+            ],
+            "slack_ns": 1.529,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 283
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 0.959,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 888
+          },
+          {
+            "clocks": [
+              "cfg_clk",
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 2.971,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 676
+          },
+          {
+            "clocks": [
+              "rst_clk",
+              "rst_clk"
+            ],
+            "slack_ns": 0.864,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 161
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk",
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 0.374,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 11837
+          },
+          {
+            "clocks": [
+              "compute_clk",
+              "compute_clk"
+            ],
+            "slack_ns": 0.868,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 16819
+          }
+        ],
+        "Minimum Pulse Width": [
+          {
+            "clocks": [
+              "sys_clk"
+            ],
+            "slack_ns": 18.318,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 42
+          },
+          {
+            "clocks": [
+              "pixel_clk"
+            ],
+            "slack_ns": 11.539,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 6891
+          },
+          {
+            "clocks": [
+              "cfg_clk"
+            ],
+            "slack_ns": 49.038,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 545
+          },
+          {
+            "clocks": [
+              "rx_pixel_clk"
+            ],
+            "slack_ns": 11.54,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 901
+          },
+          {
+            "clocks": [
+              "rst_clk"
+            ],
+            "slack_ns": 3.8,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 163
+          },
+          {
+            "clocks": [
+              "ddrphy_sysclk"
+            ],
+            "slack_ns": 3.04,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 18255
+          },
+          {
+            "clocks": [
+              "compute_clk"
+            ],
+            "slack_ns": 3.655,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 22329
+          },
+          {
+            "clocks": [
+              "phy_dq_clk_0"
+            ],
+            "slack_ns": 0.035,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 35
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_0"
+            ],
+            "slack_ns": 1.85,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 35
+          },
+          {
+            "clocks": [
+              "phy_dq_clk_1"
+            ],
+            "slack_ns": 0.035,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 84
+          },
+          {
+            "clocks": [
+              "phy_dq_sysclk_1"
+            ],
+            "slack_ns": 2.4,
+            "tns_ns": 0.0,
+            "failing_endpoints": 0,
+            "total_endpoints": 88
+          }
+        ]
+      },
+      "physical_acceptance": false
+    },
+    "placement_receipt": "build/video/face_control_reuse_place_flow_20261103/receipt.json",
+    "placement_analysis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\face_control_reuse_place_20261103\\placement_analysis\\result.json",
+    "placement_review": "build/video/face_control_reuse_20261103/placement_review.json",
+    "placement_review_sha256": "74400f0aa6e6491869ba89b5f79ae35fde0956452ef5451c292bb4200675e29b",
+    "placement_timing_summary": {
+      "setup_slow": {
+        "worst_ns": 0.289,
+        "failing_endpoints": 0,
+        "clock_pairs": 18
+      },
+      "setup_fast": {
+        "worst_ns": 1.342,
+        "failing_endpoints": 0,
+        "clock_pairs": 18
+      },
+      "hold_slow": {
+        "worst_ns": -0.354,
+        "failing_endpoints": 77,
+        "clock_pairs": 11
+      },
+      "hold_fast": {
+        "worst_ns": -0.398,
+        "failing_endpoints": 131,
+        "clock_pairs": 11
+      },
+      "recovery_slow": {
+        "worst_ns": 0.857,
+        "failing_endpoints": 0,
+        "clock_pairs": 8
+      },
+      "recovery_fast": {
+        "worst_ns": 1.076,
+        "failing_endpoints": 0,
+        "clock_pairs": 8
+      },
+      "removal_slow": {
+        "worst_ns": 0.443,
+        "failing_endpoints": 0,
+        "clock_pairs": 8
+      },
+      "removal_fast": {
+        "worst_ns": 0.367,
+        "failing_endpoints": 0,
+        "clock_pairs": 8
+      },
+      "minimum pulse width_slow": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0,
+        "clock_pairs": 11
+      },
+      "minimum pulse width_fast": {
+        "worst_ns": 0.035,
+        "failing_endpoints": 0,
+        "clock_pairs": 11
+      }
+    },
+    "diagnostic_route_started": true,
+    "full_route_started": false,
+    "congestion_receipt": "build/video/pds/face_control_reuse_congestion_probe_20261103/receipt.json",
+    "congestion_comparison": {
+      "baseline_unrouted": 77319,
+      "candidate_unrouted": 73624,
+      "baseline_plot_score": 167745,
+      "candidate_plot_score": 163746,
+      "unrouted_reduction_fraction": 0.047789029863293586,
+      "plot_score_reduction_fraction": 0.023839756773674337,
+      "screen_passed": false
+    },
+    "congestion_review": "build\\video\\face_control_reuse_congestion_review_20261103\\result.json"
+  },
+  "point_interval_candidate_20261103": {
+    "status": "REJECTED_RESOURCE_REGRESSION",
+    "directory": "build\\video\\face_point_interval_20261103",
+    "production_unchanged": true,
+    "baseline_sha256": "303b2bbb91fe0fa1b956759c8c2378433ac06445445a2b4ca69f8c35982ccdb4",
+    "timing_closed": false,
+    "next": "Exploit width <= 62: split each interval into at most two 64-coordinate bins; high10 equality plus low6 range comparisons. Shared pixel-side boundary decode, no state/interface/latency changes. Test isolated before adoption.",
+    "stage": "DONE",
+    "receipt": "build/video/face_point_interval_20261103/receipt.json",
+    "completed_runs": {
+      "point_interval_isolated_experiment": {
+        "status": "REJECTED_RESOURCE_REGRESSION",
+        "stage": "DONE",
+        "python_pid": 44636,
+        "child_pid": null,
+        "directory": "build/video/face_point_interval_20261103",
+        "receipt": "build/video/face_point_interval_20261103/receipt.json",
+        "production_unchanged": true
+      }
+    },
+    "resource_comparison": {
+      "baseline": {
+        "stage": "SYN",
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_point_interval_20261103\\baseline_synthesis\\synthesize\\display_overlay.snr",
+        "sha256": "ffd1a5f66d3652599ecbf5cc6a194ae91551e4c4b33b310d4d6b58ced660cdaa",
+        "total": {
+          "lut": 4641.0,
+          "ff": 1645.0,
+          "apm": 6.0,
+          "drm": 0.0
+        },
+        "hierarchy": [
+          {
+            "path": "u_map",
+            "line": 88,
+            "lut": 478.0,
+            "ff": 593.0,
+            "lutram_included_in_lut": 0.0,
+            "apm": 0.0,
+            "drm": 0.0
+          }
+        ]
+      },
+      "candidate": {
+        "stage": "SYN",
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_point_interval_20261103\\candidate_synthesis\\synthesize\\display_overlay.snr",
+        "sha256": "8a37e180e32387fbaa3da967531abf78a326401898b73a5f4dd84a1c71639a79",
+        "total": {
+          "lut": 5473.0,
+          "ff": 1645.0,
+          "apm": 6.0,
+          "drm": 0.0
+        },
+        "hierarchy": [
+          {
+            "path": "u_map",
+            "line": 88,
+            "lut": 477.0,
+            "ff": 593.0,
+            "lutram_included_in_lut": 0.0,
+            "apm": 0.0,
+            "drm": 0.0
+          }
+        ]
+      },
+      "baseline_direct_carry": 3688,
+      "candidate_direct_carry": 3848,
+      "automatic_adoption": false,
+      "physical_congestion_improvement_proven": false
+    },
+    "adopted": false,
+    "review": "build/video/face_point_interval_20261103/review.json"
+  },
+  "point_bins_candidate_20261103": {
+    "status": "REJECTED_RESOURCE_REGRESSION_SUPERSEDED_BY_FIRST_BOX",
+    "directory": "build/video/face_point_bins_20261103",
+    "adopted": false,
+    "production_unchanged": true,
+    "timing_closed": false,
+    "hypothesis": "At most two 64-coordinate bins: signed16 high10 equality with low6 comparisons; shared pixel bounds, unchanged interfaces/state/pipeline",
+    "prerequisite_review": "build/video/face_point_interval_20261103/review.json",
+    "next": "Archived; first real CPU/NPU primary-box delivery takes priority",
+    "stage": "DONE",
+    "receipt": "build/video/face_point_bins_20261103/receipt.json",
+    "completed_runs": {
+      "point_bins_isolated_experiment": {
+        "status": "REJECTED_RESOURCE_REGRESSION_SUPERSEDED_BY_FIRST_BOX",
+        "stage": "DONE",
+        "python_pid": 23856,
+        "child_pid": null,
+        "directory": "build/video/face_point_bins_20261103",
+        "receipt": "build/video/face_point_bins_20261103/receipt.json",
+        "production_unchanged": true
+      }
+    },
+    "resource_comparison": {
+      "baseline": {
+        "stage": "SYN",
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_point_bins_20261103\\baseline_synthesis\\synthesize\\display_overlay.snr",
+        "sha256": "4c5d44fc54d1209d9d12f2de64fbf83e9c952c044042482cffb8ede4f368291a",
+        "total": {
+          "lut": 4641.0,
+          "ff": 1645.0,
+          "apm": 6.0,
+          "drm": 0.0
+        },
+        "hierarchy": [
+          {
+            "path": "u_map",
+            "line": 88,
+            "lut": 478.0,
+            "ff": 593.0,
+            "lutram_included_in_lut": 0.0,
+            "apm": 0.0,
+            "drm": 0.0
+          }
+        ]
+      },
+      "candidate": {
+        "stage": "SYN",
+        "path": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_point_bins_20261103\\candidate_synthesis\\synthesize\\display_overlay.snr",
+        "sha256": "b3afbfec908cdf7c30699c95371824f139724a9bf58a906a1f92a3738fb2bcf0",
+        "total": {
+          "lut": 4805.0,
+          "ff": 1645.0,
+          "apm": 6.0,
+          "drm": 0.0
+        },
+        "hierarchy": [
+          {
+            "path": "u_map",
+            "line": 87,
+            "lut": 478.0,
+            "ff": 593.0,
+            "lutram_included_in_lut": 0.0,
+            "apm": 0.0,
+            "drm": 0.0
+          }
+        ]
+      },
+      "baseline_direct_carry": 3688,
+      "candidate_direct_carry": 3696,
+      "automatic_adoption": false,
+      "physical_congestion_improvement_proven": false
+    },
+    "review": "build/video/face_point_bins_20261103/review.json"
+  },
+  "first_box_delivery_20261103": {
+    "status": "FAILED_ROUTE_TIMEOUT_STOPPED_BY_USER",
+    "authorized": "User accepted real CPU/NPU detection + primary box first; full avatar/points postponed",
+    "clock_contract": "100/125/40 MHz with 0.2 ns setup margin unchanged",
+    "retain": "six-segment model integrity, necessary preflight, display record guard, ownership and CDC",
+    "route_started": true,
+    "timing_closed": false,
+    "next": "NONE: stopped per user after final route timeout.",
+    "plan": "docs/superpowers/plans/2026-11-03-face-first-box.md",
+    "focused_review": "build/video/face_first_box_20261103/focused_review.json",
+    "profile": "box",
+    "guard_retained": true,
+    "full_sources_retained": true,
+    "prior_point_bins_status": "REJECTED_RESOURCE_REGRESSION_SUPERSEDED_BY_FIRST_BOX",
+    "stage": "STOPPED",
+    "receipt": "build/video/face_first_box_csr_validation_20261103/receipt.json",
+    "completed_run": {
+      "status": "SYNTHESIS_PASS_FIRST_BOX_REVIEW_REQUIRED",
+      "stage": "DONE",
+      "pid": 50636,
+      "child_pid": null,
+      "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261103T095007_186302Z",
+      "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T105532_568345Z",
+      "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261103T111540_488480Z",
+      "runtime_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_first_box_csr_validation_20261103\\synthesis",
+      "directory": "build/video/face_first_box_csr_validation_20261103",
+      "receipt": "build/video/face_first_box_csr_validation_20261103/receipt.json"
+    },
+    "startup_fix_review": "build/video/face_first_box_startup_fix_20261103/review.json",
+    "rejected_raw_only_system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T080128_481032Z",
+    "component_status": "PASS_42_CASES_INPUTS_UNCHANGED",
+    "first_box_functional_pass": true,
+    "accepted_system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T105532_568345Z",
+    "system_pass_line": "FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=010 cpu_reads=4296 nativeAW=91016 nativeAR=376746 cycles=48005166",
+    "system_completed_utc": "2026-11-03T08:51:15.782083+00:00",
+    "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261103T111540_488480Z",
+    "synthesis_review": "build/video/face_first_box_csr_synthesis_review_20261103/result.json",
+    "resources": {
+      "lut": 44059.0,
+      "registers": 43405.0,
+      "drm": 77.5
+    },
+    "completed_runs": {
+      "first_box_seed4_placement": {
+        "status": "PLACEMENT_COMPLETE",
+        "stage": "DONE",
+        "directory": "build/video/pds/face_first_box_place_20261103",
+        "receipt": "build/video/pds/face_first_box_place_20261103/receipt.json",
+        "seed": 4,
+        "route_started": false,
+        "execution": "foreground current chat",
+        "python_pid": null,
+        "foreground_session": 77090
+      },
+      "first_box_placement_analysis": {
+        "status": "ANALYZED",
+        "stage": "DONE",
+        "directory": "build/video/pds/face_first_box_place_20261103/placement_analysis",
+        "placement": "build/video/pds/face_first_box_place_20261103",
+        "result": "build/video/pds/face_first_box_place_20261103/placement_analysis/result.json"
+      },
+      "first_box_fixed_placement_route": {
+        "status": "STOPPED_REVIEW_REQUIRED",
+        "stage": "ROUTE_OUTPUT_CHECK",
+        "directory": "build/video/pds/face_first_box_route_20261103",
+        "receipt": "build/video/pds/face_first_box_route_20261103/receipt.json",
+        "python_pid": 22224,
+        "pds_pid": null,
+        "seed": 4,
+        "route_started": true,
+        "hard_timeout_seconds": 5400
+      },
+      "first_box_routed_diagnostics": {
+        "status": "ROUTED_DIAGNOSTICS_COMPLETE_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "python_pid": 15784,
+        "pds_pid": null,
+        "directory": "build\\video\\face_first_box_route_diagnostics_20261103",
+        "receipt": "build\\video\\face_first_box_route_diagnostics_20261103\\receipt.json"
+      },
+      "pathfix_trusted_input": {
+        "status": "PASS_TRUSTED_INPUT_SCOREBOARD",
+        "stage": "DONE",
+        "python_pid": null,
+        "directory": "build/video/face_first_box_path_fixes_20261103/input_trusted_venv",
+        "result": "build/video/face_first_box_path_fixes_20261103/input_trusted_venv/result.json",
+        "execution": "foreground current chat"
+      },
+      "pathfix_untrusted_input": {
+        "status": "PASS_INPUT_SCOREBOARD_AND_LOCKSTEP",
+        "stage": "DONE",
+        "python_pid": null,
+        "directory": "build/video/face_first_box_path_fixes_20261103/input_untrusted_venv",
+        "result": "build/video/face_first_box_path_fixes_20261103/input_untrusted_venv/result.json",
+        "execution": "foreground current chat"
+      },
+      "pathfix_video_components": {
+        "status": "PASS",
+        "stage": "DONE",
+        "python_pid": null,
+        "directory": "build/soc/resource_probe_video_compact_20261103T095007_186302Z",
+        "result": "build/soc/resource_probe_video_compact_20261103T095007_186302Z/result.json",
+        "execution": "foreground current chat"
+      },
+      "first_box_path_placement": {
+        "status": "PLACEMENT_COMPLETE",
+        "stage": "DONE",
+        "python_pid": 48688,
+        "pds_pid": null,
+        "directory": "build/video/pds/face_first_box_path_place_20261103",
+        "receipt": "build/video/pds/face_first_box_path_place_20261103/receipt.json",
+        "seed": 4,
+        "route_started": false
+      },
+      "first_box_path_placement_analysis": {
+        "status": "ANALYZED",
+        "stage": "DONE",
+        "python_pid": 15452,
+        "pds_pid": null,
+        "directory": "build/video/pds/face_first_box_path_place_20261103/placement_analysis",
+        "result": "build/video/pds/face_first_box_path_place_20261103/placement_analysis/result.json"
+      },
+      "first_box_csr_validation": {
+        "status": "SYNTHESIS_PASS_FIRST_BOX_REVIEW_REQUIRED",
+        "stage": "DONE",
+        "pid": 50636,
+        "child_pid": null,
+        "component": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\resource_probe_video_compact_20261103T095007_186302Z",
+        "system": "D:\\FPGA\\TriHaRiscv-main\\build\\soc\\face_system-20261103T105532_568345Z",
+        "synthesis": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\pds\\20261103T111540_488480Z",
+        "runtime_directory": "D:\\FPGA\\TriHaRiscv-main\\build\\video\\face_first_box_csr_validation_20261103\\synthesis",
+        "directory": "build/video/face_first_box_csr_validation_20261103",
+        "receipt": "build/video/face_first_box_csr_validation_20261103/receipt.json"
+      },
+      "first_box_csr_placement": {
+        "status": "PLACEMENT_COMPLETE",
+        "stage": "DONE",
+        "directory": "build/video/pds/face_first_box_csr_place_20261103",
+        "receipt": "build/video/pds/face_first_box_csr_place_20261103/receipt.json",
+        "seed": 4,
+        "route_started": false,
+        "execution": "foreground current chat",
+        "pds_pid": null,
+        "foreground_session": 7408,
+        "python_pid": null
+      },
+      "first_box_csr_placement_analysis": {
+        "status": "ANALYZED",
+        "stage": "DONE",
+        "directory": "build/video/pds/face_first_box_csr_place_20261103/placement_analysis",
+        "result": "build/video/pds/face_first_box_csr_place_20261103/placement_analysis/result.json"
+      },
+      "first_box_compact_candidate_components": {
+        "status": "CANCELLED_BY_USER_SCOPE",
+        "stage": "ISOLATED_COMPONENT_REGRESSION",
+        "directory": "build/soc/first_box_compact_candidate_components_20261103T123210_343314Z",
+        "result": "build/soc/first_box_compact_candidate_components_20261103T123210_343314Z/result.json",
+        "python_pid": null,
+        "production_changed": false,
+        "adopted": false,
+        "reason": "User: stop if the currently routing CSR first-box version fails. Alternative candidate regression cancelled; no candidate system/synthesis/placement/route will follow."
+      },
+      "first_box_csr_fixed_placement_route": {
+        "status": "FAILED_ROUTE_TIMEOUT_STOPPED_BY_USER",
+        "stage": "STOPPED",
+        "directory": "build/video/pds/face_first_box_csr_route_20261103",
+        "receipt": "build/video/pds/face_first_box_csr_route_20261103/receipt.json",
+        "python_pid": null,
+        "pds_pid": null,
+        "seed": 4,
+        "route_started": true,
+        "hard_timeout_seconds": 5400,
+        "wrapper_status": "STOPPED_REVIEW_REQUIRED",
+        "final_review": "build/video/pds/face_first_box_csr_route_20261103/final_review.json",
+        "last_reported_unrouted_nets": 11933
+      }
+    },
+    "placement_analysis": "build/video/pds/face_first_box_csr_place_20261103/placement_analysis/result.json",
+    "route_review": "build/video/face_first_box_route_review_20261103/result.json",
+    "route_receipt": "build/video/pds/face_first_box_csr_route_20261103/receipt.json",
+    "repair_review": "build/video/face_first_box_path_fixes_20261103/review.json",
+    "path_synthesis_review": "build/video/face_first_box_path_synthesis_review_20261103/result.json",
+    "route_decision": "build/video/face_first_box_csr_route_review_20261103/result.json",
+    "latest_place_setup": {
+      "ddrphy_sysclk_ns": 0.651,
+      "compute_clk_ns": 0.693,
+      "compute_failed_endpoints": 0
+    },
+    "latest_place_hold": {
+      "slow_ns": -0.438,
+      "fast_ns": -0.474
+    },
+    "physical_timing_closed": false,
+    "cpu_payload_review": "build/video/face_first_box_csr_path_20261103/review.json",
+    "staged_delivery_inputs": {
+      "status": "NOT_RELEASED_ROUTE_TIMEOUT_STOPPED_BY_USER",
+      "directory": "build\\video\\face_first_box_csr_delivery_staging_20261103",
+      "files_verified": 403,
+      "native_pds_references_verified": 154,
+      "bitstream": null
+    },
+    "minimal_pixel_fallback_probe": {
+      "adopted": false,
+      "production_changed": false,
+      "evidence": [
+        {
+          "path": "build\\video\\first_box_latency_probe_20261103\\result.json",
+          "sha256": "cd3d4029c252c912c0b8d951afb15e93bcbcc34e252d74bbaa23cdfb7cf742a4",
+          "status": "ISOLATED_BORDER_ONE_STAGE_PASS_NOT_ADOPTED"
+        },
+        {
+          "path": "build\\video\\first_box_compact_probe_20261103\\result.json",
+          "sha256": "5ee68558f82c1e4ebd88a84149890bc639f485abec424c4fdf351ddcdd6ecc73",
+          "status": "ISOLATED_COMPACT_BOX_PASS_NOT_ADOPTED"
+        },
+        {
+          "path": "build\\video\\first_box_compact_ownership_probe_20261103\\result.json",
+          "sha256": "e228583d2e63006ace4bacda6cb21112133565af6cc743e7b4b8e97f953d900e",
+          "status": "ISOLATED_COMPACT_BOX_OWNERSHIP_PASS_NOT_ADOPTED"
+        }
+      ],
+      "scope": "Select primary coordinates before pixel capture; remove redundant BOX alignment padding while preserving full record guard/held lease, identity and output-aligned acknowledgment. 32 primary/clock-ratio cases, 4 advancing-frame retirement cases, old latency and early-ACK negative controls. No synthesis/system/physical acceptance.",
+      "continuation": "CANCELLED_BY_USER_SCOPE; not adopted"
+    },
+    "stop_policy": {
+      "set_utc": "2026-11-03T12:36:02.781810+00:00",
+      "user_instruction": "这一版再失败就停止",
+      "last_attempt": "first_box_csr_fixed_placement_route",
+      "on_failure": "Stop engineering and further runs; preserve evidence; no automatic retry, alternate adoption, synthesis, placement or route.",
+      "on_success": "Review all internal timing/CDC/sites; generate and verify this version only if accepted. No board access.",
+      "alternative_candidate": "Isolated component regression cancelled; probe sources retained, not adopted.",
+      "triggered": true,
+      "triggered_utc": "2026-11-03T13:03:37.382103+00:00"
+    },
+    "final_review": "build/video/pds/face_first_box_csr_route_20261103/final_review.json",
+    "current_routed_sta_available": false,
+    "last_reported_unrouted_nets": 11933,
+    "bitstream": null,
+    "stopped_utc": "2026-11-03T13:03:37.382103+00:00",
+    "previous_first_box_routed_evidence": {
+      "scope": "Pre-CSR version only; cannot accept the final CSR version",
+      "route_setup_slow": {
+        "ddrphy_sysclk": {
+          "wns_ns": -0.933,
+          "failing_endpoints": 64
+        },
+        "compute_clk": {
+          "wns_ns": -0.716,
+          "failing_endpoints": 340
+        }
+      },
+      "max_skew_numeric_pass": true,
+      "gate_sites_verified": true,
+      "route_diagnostics": "build\\video\\face_first_box_route_diagnostics_20261103\\receipt.json"
+    }
+  },
+  "monitoring": {
+    "mode": "STOPPED_BY_USER_POLICY",
+    "automation_id": "automation-5",
+    "automation_status": "DELETED_BY_USER_REQUEST",
+    "instruction": "No scheduled or background task; no further engineering after final route failure.",
+    "updated_utc": "2026-11-03T13:03:37.382103+00:00"
+  },
+  "vendor_ddr_archived_timing_audit_20261103": {
+    "status": "ARCHIVED_IP_EXAMPLE_ROUTED_TIMING_PASS_UNDER_REPORTED_CONSTRAINTS",
+    "result": "build/video/vendor_ddr_timing_audit_20261103/result.json",
+    "report": "docs/verification/npu/2026-11-03-hmic-s-constraint-audit.md",
+    "scope": "Original archive ipcore/ddr3_test/pnr test_ddr; not a fresh rerun or current integrated design acceptance",
+    "fresh_pds_run": false,
+    "synthesis_slow_hold_ns": -0.805,
+    "synthesis_slow_hold_failed_endpoints": 53,
+    "routed_setup_slow_fast_ns": [
+      0.932,
+      3.218
+    ],
+    "routed_hold_slow_fast_ns": [
+      0.139,
+      0.102
+    ],
+    "all_reported_routed_corners_zero_failures": true,
+    "hold_repair_enabled_and_executed": true,
+    "final_unrouted_nets": 0,
+    "unconstrained_io_warnings": 112,
+    "integrated_face_timing_closed": false
+  },
+  "hmic_s_official_constraint_audit_20261103": {
+    "status": "PASS_THREE_INTEGRATION_CHECKS",
+    "report": "docs/verification/npu/2026-11-03-hmic-s-constraint-audit.md",
+    "result": "build/video/hmic_s_audit_20261103_checked/result.json",
+    "priority_nets_processed": 2,
+    "vendor_timing_commands_preserved": 16,
+    "routed_cpd_and_gate_sites_verified": true,
+    "synthesizer": "ADS",
+    "timing_closed": false,
+    "io_version_difference_requires_electrical_review": true
   }
 }
