@@ -1,6 +1,6 @@
 {
-  "status": "USER_PHOTO_ADMISSION_FULL_SYSTEM_PASS_ROUTING",
-  "updated_at": "2026-11-04T08:36:52.174981+08:00",
+  "status": "USER_PHOTO_SIM_PASS_TARGETED_ROUTING_JTAG_IDENTIFIED",
+  "updated_at": "2026-11-04T09:12:26.910663+08:00",
   "baseline_commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
   "baseline_tag": "face-box-20261103",
   "profile": {
@@ -19,7 +19,7 @@
   "board_access_performed_this_goal": true,
   "internal_routed_timing_closed": false,
   "external_io_ac_verified": false,
-  "next_step": "Finish routing at unchanged clocks, inspect actual dual-corner timing and all 558 retained sites, then qualify before generating or loading a photo bitstream.",
+  "next_step": "Finish the normal-mode reroute from the same placement with four measured data-net priorities. Offline functional and timing qualification required before any photo bitstream.",
   "host_application": "build/soc/face_avatar/20261103T131337_429232Z",
   "mode_key": "build/soc/face_mode_key-20261103T224930_061362Z",
   "asset_selection": "User-provided photographic head PNG supersedes the original cartoon on 2026-11-03",
@@ -58,9 +58,9 @@
   },
   "sd_fallback": "User permits SD storage. Current optimization preserves the uploaded full RGBA/CRC and uses lossless row-span zero elision in the immutable on-chip cache; no SD requirement added.",
   "asset_audit": "build/soc/model_upload-20261104T002736_210842Z",
-  "board_access_scope": "Read-only JTAG scan only; no reset/programming/upload",
-  "board_scan": "build/video/jtag_scan/20261104T003406_316770Z",
-  "board_scan_status": "USB Cable II present; 100 kHz read-only scan did not identify the target FPGA",
+  "board_access_scope": "Read-only JTAG scans, including successful device identification after user checked power, pin 1 and cable seating.",
+  "board_scan": "build/video/jtag_scan/20261104T010814_312494Z",
+  "board_scan_status": "PG2L100H ID 00602899, DONE=1; read only; photo not programmed.",
   "board_scan_history": [
     "build/video/jtag_scan/20261103T132743_664738Z",
     "build/video/jtag_scan/20261103T162500_414047Z",
@@ -70,7 +70,8 @@
     "build/video/jtag_scan/20261103T201338_456442Z",
     "build/video/jtag_scan/20261103T215645_584462Z",
     "build/video/jtag_scan/20261103T234117_115674Z",
-    "build/video/jtag_scan/20261104T003406_316770Z"
+    "build/video/jtag_scan/20261104T003406_316770Z",
+    "build/video/jtag_scan/20261104T010814_312494Z"
   ],
   "board_programmed_this_goal": false,
   "first_route_review": "build/video/face_photo_50_review_20261103/result.json",
@@ -958,6 +959,78 @@
     "native_locations_accepted": 558,
     "final_estimated_setup_ns": 0.638,
     "placed_db_sha256": "f110049f14fd64bb34d69eb0e7579b1d8d1397dd71ddae82a63363163137f931",
-    "actual_routed_retention_pending": true
+    "actual_routed_retention_pending": false,
+    "retention_evidence": "build/video/face_photo_admission_50_retention_20261104.json"
+  },
+  "admission_route_failure": {
+    "review": "build/video/face_photo_admission_50_review_20261104/result.json",
+    "review_sha256": "647df48e50f29cd21ada69f5085d46d64890ff1d3c154037819e44013ffa2834",
+    "routed_sha256": "c8e2a1b24e603a406b8bef617b5602871dfb8523b54349bbdb2d3fb671c8fcb9",
+    "negative": [
+      {
+        "kind": "setup",
+        "corner": "slow",
+        "launch_clock": "ddrphy_sysclk",
+        "capture_clock": "ddrphy_sysclk",
+        "wns_ns": -0.233,
+        "total_negative_slack_ns": -0.643,
+        "failing_endpoints": 9,
+        "endpoints": 47389
+      },
+      {
+        "kind": "setup",
+        "corner": "slow",
+        "launch_clock": "compute_clk",
+        "capture_clock": "compute_clk",
+        "wns_ns": -0.322,
+        "total_negative_slack_ns": -3.036,
+        "failing_endpoints": 14,
+        "endpoints": 79215
+      },
+      {
+        "kind": "hold",
+        "corner": "slow",
+        "launch_clock": "compute_clk",
+        "capture_clock": "compute_clk",
+        "wns_ns": -0.027,
+        "total_negative_slack_ns": -0.027,
+        "failing_endpoints": 1,
+        "endpoints": 79215
+      },
+      {
+        "kind": "hold",
+        "corner": "fast",
+        "launch_clock": "compute_clk",
+        "capture_clock": "compute_clk",
+        "wns_ns": -0.015,
+        "total_negative_slack_ns": -0.015,
+        "failing_endpoints": 1,
+        "endpoints": 79215
+      }
+    ],
+    "cross_srb_fast_hold_ns": 0.149,
+    "threshold_ns": 0.2,
+    "retained_locations": 558,
+    "paths": "build/video/face_photo_admission_failed_paths_20261104/paths.json"
+  },
+  "admission_targeted_retry": {
+    "pipeline": "build/video/face_photo_admission_targeted_50_pipeline_20261104/receipt.json",
+    "priorities": "build/video/face_photo_admission_targeted_20261104.json",
+    "setup_path_pairs": 23,
+    "priority_count": 4,
+    "normal_mode": true,
+    "same_placement": true
+  },
+  "scanout_stimulus": {
+    "host_only": true,
+    "source": "build/video/face-hdmi-source.html",
+    "scene_reference": "build/video/face_hdmi_source_check_1793753233389040800/scene_reference.json",
+    "physical_fps": null
+  },
+  "unselected_context_ring": {
+    "geometry": "build/video/context_ring_geometry/20261104T010123_980416Z/result.json",
+    "cases": 19,
+    "mutations": 6,
+    "physical_timing_verified": false
   }
 }
