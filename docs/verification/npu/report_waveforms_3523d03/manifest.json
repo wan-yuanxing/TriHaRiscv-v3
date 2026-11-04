@@ -1,0 +1,153 @@
+{
+  "repository": "https://github.com/keep-s/npu_zgtc",
+  "commit": "3523d030ded5fc67f3324c54d8a1f1419ac90768",
+  "material_type": "archived simulation evidence; native ModelSim Wave captures",
+  "new_simulation_run": false,
+  "figures": [
+    {
+      "section": "C.1",
+      "source_path": "word/triha-npu/assets/npu_dense_accumulate.png",
+      "source_sha256": "e0a23de98b2be355c96e4416c682d9ecfd5966f89fbe155bb850a2325f397f06",
+      "figure_path": "docs/technical-report/figure/npu-simulation/dense-accumulate.png",
+      "figure_sha256": "2955d9b3934c3af50f3a37c9031bd5773ee6280c16fafb3b990a94d67defc886",
+      "pixels": [
+        1516,
+        709
+      ],
+      "crop_box": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "pixel_processing": "top native panel only; pixels unchanged",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_dense_accumulate.json"
+    },
+    {
+      "section": "C.1",
+      "source_path": "word/triha-npu/assets/dw16_case7.png",
+      "source_sha256": "8733d1139d1e2133bf8475420b8d1fba7a922254374715b6b814afc2f8d23e15",
+      "figure_path": "docs/technical-report/figure/npu-simulation/dw16-tail-channel.png",
+      "figure_sha256": "8733d1139d1e2133bf8475420b8d1fba7a922254374715b6b814afc2f8d23e15",
+      "pixels": [
+        1516,
+        709
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/dw16_case7.json"
+    },
+    {
+      "section": "C.1",
+      "source_path": "word/triha-npu/assets/npu_q_rne.png",
+      "source_sha256": "99661f77bb1121eb9161a0122831daa1f312b994bc6b6b7e6cbad95e6af90246",
+      "figure_path": "docs/technical-report/figure/npu-simulation/quantization.png",
+      "figure_sha256": "99661f77bb1121eb9161a0122831daa1f312b994bc6b6b7e6cbad95e6af90246",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_q_rne.json"
+    },
+    {
+      "section": "C.2",
+      "source_path": "word/triha-npu/assets/npu_input_gather.png",
+      "source_sha256": "482ffdf16052cdd4f343c069d0b3ad78780b95550fdfec22391fab3681ef0a13",
+      "figure_path": "docs/technical-report/figure/npu-simulation/input-gather.png",
+      "figure_sha256": "482ffdf16052cdd4f343c069d0b3ad78780b95550fdfec22391fab3681ef0a13",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_input_gather.json"
+    },
+    {
+      "section": "C.2",
+      "source_path": "word/triha-npu/assets/npu_output_mask.png",
+      "source_sha256": "903a3e31405765ffca7b2e3c51771fe05f958039654e8b08c70c420fc60ea6ab",
+      "figure_path": "docs/technical-report/figure/npu-simulation/output-mask.png",
+      "figure_sha256": "903a3e31405765ffca7b2e3c51771fe05f958039654e8b08c70c420fc60ea6ab",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_output_mask.json"
+    },
+    {
+      "section": "C.3",
+      "source_path": "word/triha-npu/assets/npu_dma_retirement.png",
+      "source_sha256": "ce8fe6bd6fea451713d3b1e1b0b40786735268d4fc3060714929e55042f0ee7d",
+      "figure_path": "docs/technical-report/figure/npu-simulation/dma-completion.png",
+      "figure_sha256": "ce8fe6bd6fea451713d3b1e1b0b40786735268d4fc3060714929e55042f0ee7d",
+      "pixels": [
+        1516,
+        709
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_dma_retirement.json"
+    },
+    {
+      "section": "C.4",
+      "source_path": "word/triha-npu/assets/01_layer_mmio_actual_vcd.png",
+      "source_sha256": "6c46f6b53c3daff4ee492331d3bb561e8727ca3348d68b92bf7b5d4c4999f29b",
+      "figure_path": "docs/technical-report/figure/npu-simulation/layer-mmio.png",
+      "figure_sha256": "6c46f6b53c3daff4ee492331d3bb561e8727ca3348d68b92bf7b5d4c4999f29b",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/01_layer_mmio_actual_vcd.json"
+    },
+    {
+      "section": "C.4",
+      "source_path": "word/triha-npu/assets/03_fifo_payload_epoch_actual_vcd.png",
+      "source_sha256": "399cea4c32561c1faa47f05636868dda9be964a012a56ee18a5194df892af5bd",
+      "figure_path": "docs/technical-report/figure/npu-simulation/fifo-clear.png",
+      "figure_sha256": "399cea4c32561c1faa47f05636868dda9be964a012a56ee18a5194df892af5bd",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/03_fifo_payload_epoch_actual_vcd.json"
+    },
+    {
+      "section": "C.5",
+      "source_path": "word/triha-npu/assets/vector_q_requests.png",
+      "source_sha256": "dfc8913dc306765231263e3cc3c9a029e36a939a4e1a650afd60f08fc00a56c0",
+      "figure_path": "docs/technical-report/figure/npu-simulation/vector-quantization.png",
+      "figure_sha256": "dfc8913dc306765231263e3cc3c9a029e36a939a4e1a650afd60f08fc00a56c0",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/vector_q_requests.json"
+    },
+    {
+      "section": "C.5",
+      "source_path": "word/triha-npu/assets/npu_pool_resize.png",
+      "source_sha256": "ef111c73d22a822aa998ccc211856e376e17eab38f7ad61f4ed7f441f874f1b9",
+      "figure_path": "docs/technical-report/figure/npu-simulation/pool-resize.png",
+      "figure_sha256": "ef111c73d22a822aa998ccc211856e376e17eab38f7ad61f4ed7f441f874f1b9",
+      "pixels": [
+        1516,
+        1418
+      ],
+      "crop_box": null,
+      "pixel_processing": "byte-identical copy",
+      "provenance_path": "docs/verification/npu/report_waveforms_3523d03/provenance/npu_pool_resize.json"
+    }
+  ]
+}

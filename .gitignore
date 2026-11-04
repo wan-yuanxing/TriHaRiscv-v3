@@ -1,6 +1,7 @@
 # Reproducible build outputs and simulation traces
 /build/
 **/build/
+/log/
 *.vcd
 *.fst
 *.wlf
@@ -17,6 +18,12 @@
 *.toc
 *.xdv
 *.synctex.gz
+*.synctex(busy)
+
+# Disposable document previews and backup drawings
+/docs/technical-report/figure/backups/
+/docs/technical-report/figure/rv32-soc-redesign-preview/
+/docs/technical-report/figure/* - 副本.drawio
 
 # Editor and operating-system temporary files
 *.bkp

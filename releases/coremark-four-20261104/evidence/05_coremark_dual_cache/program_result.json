@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "operation": "volatile_cpu_program_verify",
+  "directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\board-ddr-program-20261102T021646852810Z",
+  "program_script_sha256": "31194458b806e6b917f0d14e16ba57859224f75dafd951b5a77c8249fb945335",
+  "package": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_77da07f738ce",
+  "manifest_sha256": "6c24283412205ef626bda08ca814dffe34125d6b2c08c7df5eb90b7219dc9861",
+  "bitstream_sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd",
+  "verify_mask_sha256": "6fffb9dfd6779095db24183c31ba16e4ddb10e5e0f72b1410c330c4e22f1e3a9",
+  "expected_device_id": "00602899",
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "serial_port_opened": false,
+  "board_coremark_validated": false,
+  "restore_video": false,
+  "tool_hashes": {
+    "D:\\pango\\PDS_2022.2-SP6.4\\bin\\cdt_cfg_shell.exe": "8c7f1ee99a1fcad01214d1c5f330da49c1a52cf83f2a237e62cad68c38d2c54f",
+    "D:\\pango\\PDS_2022.2-SP6.4\\bin\\cdt_js.exe": "46a0edb798df2aec07d184dd6a643953104032a4ad17e02adbed1c6464a57361"
+  },
+  "started_utc": "2026-11-02T02:16:46.863643+00:00",
+  "programmer_pid": 26080,
+  "native_return_code": 0,
+  "device_found": true,
+  "finished_utc": "2026-11-02T02:17:05.766548+00:00",
+  "output_hashes": {
+    "cfg_verify_result.sbit": "754518253599c6c8bdcc7e13e610309d89990f6ebaf379e204f80e413e9c3542",
+    "configuration_tcl.log": "f4df24e63f62de4cf28226b943a85cf1ee1d8a62e65286a39655565176da4283",
+    "program_verify.log": "b1c28e5002b7b8b0daed3276a6f079263a7e45f3d63ad06684036d0aa9223403",
+    "program_verify.tcl": "85fbcca3158c3b34a646085f9ee45f0c009d3a91d61ce895f3f084ec32a70b3a",
+    "server.log": "9eec1d5a23eed7665462f8b07af00f5fb9371157a84e6282287b453f7d7dedd7"
+  }
+}

@@ -1,0 +1,77 @@
+Model Technology ModelSim SE-64 vlog 2020.4 Compiler 2020.10 Oct 13 2020
+Start time: 17:39:07 on Nov 02,2026
+vlog -work work "+define+CPU_FRONTEND_MODULE=triha_frontend" "+incdir+D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core" D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_alu.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_csr_regfile.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_csr.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_decode.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_decoder.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_divider.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_exec.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_fetch.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_frontend.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_issue.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_lsu.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_mmu.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_multiplier.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_npc.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_pipe_ctrl.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\biriscv_regfile.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\src\core\riscv_core.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_frontend.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_npc.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_btb.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_decode.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_issue.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_regfile.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_divider.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_multiplier.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_csr.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_lsu.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_pipe_ctrl.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_cpu.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\triha_core.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\tb\tb_core_icarus\tcm_mem.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\rtl\cpu\vendor\tb\tb_core_icarus\tcm_mem_ram.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\tb\cpu\tb_fifo_head_ring.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\tb\cpu\tb_e1_branch_pair.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\tb\cpu\tb_mul_early_meta.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\tb\cpu\tb_frontend_redirect.v D:\FPGA\TriHaRiscv-cpu-dualissue-windows\tb\cpu\tb_lsu_queue.v D:\pango\PDS_2022.2-SP6.4\arch\vendor\pango\verilog\simulation\GTP_RAM32X2DP.v D:\pango\PDS_2022.2-SP6.4\arch\vendor\pango\verilog\simulation\INT_LUTMUX2_UDP.v D:\pango\PDS_2022.2-SP6.4\arch\vendor\pango\verilog\simulation\INT_LUTMUX4_UDP.v D:\pango\PDS_2022.2-SP6.4\arch\vendor\pango\verilog\simulation\GTP_LUT5.v D:\pango\PDS_2022.2-SP6.4\arch\vendor\pango\verilog\simulation\GTP_LUT6.v D:\FPGA\TriHaRiscv-main\build\cpu-diagram-review2-20261102\rtl-structural-checks\tb_diagram_contract.v 
+-- Compiling module biriscv_alu
+-- Compiling module biriscv_csr_regfile
+-- Compiling module biriscv_csr
+-- Compiling module biriscv_decode
+-- Compiling module fetch_fifo
+-- Compiling module biriscv_decoder
+-- Compiling module biriscv_divider
+-- Compiling module biriscv_exec
+-- Compiling module biriscv_fetch
+-- Compiling module biriscv_frontend
+-- Compiling module biriscv_issue
+-- Compiling module biriscv_lsu
+-- Compiling module biriscv_lsu_fifo
+-- Compiling module biriscv_mmu
+-- Compiling module biriscv_multiplier
+-- Compiling module biriscv_npc
+-- Compiling module biriscv_npc_lfsr
+-- Compiling module biriscv_pipe_ctrl
+-- Compiling module biriscv_regfile
+-- Compiling module riscv_core
+-- Compiling module triha_frontend
+-- Compiling module triha_fetch_prediction
+-- Compiling module triha_npc
+-- Compiling module triha_npc_equal
+-- Compiling module triha_npc_lfsr
+-- Compiling module triha_npc_select
+-- Compiling module triha_npc_priority
+-- Compiling module triha_btb
+-- Compiling module triha_btb_bank
+-- Compiling module triha_decode
+-- Compiling module triha_fetch_fifo
+-- Compiling module triha_exec_classify
+-- Compiling module triha_alu_predecode
+-- Compiling module triha_register_roles_predecode
+-- Compiling module triha_issue
+-- Compiling module triha_e1_branch
+-- Compiling module triha_regfile
+-- Compiling module triha_divider
+-- Compiling module triha_multiplier
+-- Compiling module triha_csr
+-- Compiling module triha_lsu
+-- Compiling module triha_lsu_fifo
+-- Compiling module triha_pipe_ctrl
+-- Compiling module triha_cpu
+-- Compiling module triha_branch_exec
+-- Compiling module triha_immediate_shift_alu
+-- Compiling module triha_core
+-- Compiling module tcm_mem
+-- Compiling module tcm_mem_ram
+-- Compiling module tb_fifo_head_ring
+-- Compiling module tb_e1_branch_pair
+-- Compiling module tb_mul_early_meta
+-- Compiling module triha_mul_meta_reference
+-- Compiling module tb_frontend_redirect
+-- Compiling module lsu_queue_case
+-- Compiling module tb_lsu_queue
+-- Compiling module GTP_RAM32X2DP
+-- Compiling UDP INT_LUTMUX2_UDP
+-- Compiling UDP INT_LUTMUX4_UDP
+-- Compiling module GTP_LUT5
+-- Compiling module GTP_LUT6
+-- Compiling module tb_diagram_contract
+
+Top level modules:
+	riscv_core
+	triha_core
+	tcm_mem
+	tb_fifo_head_ring
+	tb_mul_early_meta
+	tb_frontend_redirect
+	tb_lsu_queue
+	tb_diagram_contract
+End time: 17:39:07 on Nov 02,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

@@ -1,0 +1,232 @@
+{
+  "files": {
+    "demo.py": {
+      "bytes": 2732,
+      "sha256": "9cfaefc398ec0c920baeb2030f672c06ce80ae48b827a7d979de3793a95f0f38"
+    },
+    "evidence/02_coremark_single_sram/bitstream_result.json": {
+      "bytes": 1580,
+      "sha256": "e0edcc8432c76db908527c9955f434c7c685145bc4464131fd36ebd83d2acc95"
+    },
+    "evidence/02_coremark_single_sram/board_acceptance.json": {
+      "bytes": 14417,
+      "sha256": "26ca44a4b6dbc3bdb383dd3c56cacb80cd77ef4a1a7bf63d74359fbe3cecb0f0"
+    },
+    "evidence/02_coremark_single_sram/board_result.json": {
+      "bytes": 2257,
+      "sha256": "b3de92c2b95bdd86067f89b1c292fb91ff4186f1b3c3f32cac6984f8fad2b747"
+    },
+    "evidence/02_coremark_single_sram/program_verify.log": {
+      "bytes": 3182,
+      "sha256": "ff3e43d0ebf195bba337e4ab419c09aa8f7a60d6768821cf6091d016be02f1f5"
+    },
+    "evidence/02_coremark_single_sram/uart.txt": {
+      "bytes": 1161,
+      "sha256": "829d315b840ca239a289fc03daf7ae3ef112373553c62be68de6a9c762109612"
+    },
+    "evidence/03_coremark_single_cache/board_acceptance.json": {
+      "bytes": 4345,
+      "sha256": "efa07d62bf86cecf94ee1b77ba24584f7e880582c17309c149e298a1c92f2414"
+    },
+    "evidence/03_coremark_single_cache/original_manifest.json": {
+      "bytes": 2514,
+      "sha256": "e35b9fc787afc7d0d189c61f0918089b7731f947403e640eec9dfef14c9b7350"
+    },
+    "evidence/03_coremark_single_cache/program_result.json": {
+      "bytes": 1792,
+      "sha256": "238cba89363ae055da40ac9d56bae4c3187d2a19e525cccef33ab917aad57dd0"
+    },
+    "evidence/03_coremark_single_cache/uart.txt": {
+      "bytes": 1071,
+      "sha256": "d05ba913f4d34f46b4879669022095b170fa47f9241bb3ee907b29f34b00fdf6"
+    },
+    "evidence/04_coremark_dual_sram/board_acceptance.json": {
+      "bytes": 10899,
+      "sha256": "d4758d5953f38a524ef892b76adeff82569aada65b3c03a55af331572828cde1"
+    },
+    "evidence/04_coremark_dual_sram/original_manifest.json": {
+      "bytes": 1455,
+      "sha256": "b426291536ea256f65b310fcf99cd2eb8bbec052f6e8590f76a48f39c3902345"
+    },
+    "evidence/04_coremark_dual_sram/program_result.json": {
+      "bytes": 1916,
+      "sha256": "b24f951d4980ce095e7966b12e649b51788910698457111c9ef09e349baaeff6"
+    },
+    "evidence/04_coremark_dual_sram/uart.txt": {
+      "bytes": 1107,
+      "sha256": "ee7c61d0277c1c199d44830cba158219623af49cc892b44c9461ee0822b2254b"
+    },
+    "evidence/05_coremark_dual_cache/board_acceptance.json": {
+      "bytes": 1903,
+      "sha256": "ed4301a81d979380ec8f050d47ca1f60f9fc7e247e0f1440504128fa42e0485d"
+    },
+    "evidence/05_coremark_dual_cache/original_manifest.json": {
+      "bytes": 2597,
+      "sha256": "6c24283412205ef626bda08ca814dffe34125d6b2c08c7df5eb90b7219dc9861"
+    },
+    "evidence/05_coremark_dual_cache/program_result.json": {
+      "bytes": 1812,
+      "sha256": "dea8d5a17e811840202578ad8e37016e07c6736e5eb81ce3a16ac140b4df4979"
+    },
+    "evidence/05_coremark_dual_cache/uart.txt": {
+      "bytes": 1154,
+      "sha256": "3e6d91367261edccf3e1d6ea4090169cfc359f7b5f874c82d407b177347f4189"
+    },
+    "firmware/02_coremark_single_sram/firmware.elf": {
+      "bytes": 49184,
+      "sha256": "8f981818ddb312dd4f2eedd48fbea000f643e8c2b01e946a6e69b652fb728a86"
+    },
+    "firmware/02_coremark_single_sram/rom.hex": {
+      "bytes": 17408,
+      "sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170"
+    },
+    "firmware/02_coremark_single_sram/sram.hex": {
+      "bytes": 69632,
+      "sha256": "234565dc606a8f60cd36e17341249a0921723c0e859430a07455fadb28139089"
+    },
+    "firmware/03_coremark_single_cache/coremark.bin": {
+      "bytes": 20512,
+      "sha256": "04c2ae6b5d6efdb45a7432244d4f68c28441dbbf02937c9ed6f105ed14257216"
+    },
+    "firmware/03_coremark_single_cache/coremark.elf": {
+      "bytes": 49196,
+      "sha256": "4cc6b6235f852157343bd72cd9118eab5eefc8e60e7cef5989569abada383cae"
+    },
+    "firmware/03_coremark_single_cache/firmware.elf": {
+      "bytes": 26604,
+      "sha256": "850229d0c64c7f6211f327f0eb7956c897c301a0bdff1ebc97cd1fd50de9a3da"
+    },
+    "firmware/03_coremark_single_cache/rom.hex": {
+      "bytes": 17408,
+      "sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170"
+    },
+    "firmware/03_coremark_single_cache/sram.hex": {
+      "bytes": 69632,
+      "sha256": "b52d12c262f3041d6a8e7d55b04174474c01896729997b320acad80301da2158"
+    },
+    "firmware/04_coremark_dual_sram/firmware.elf": {
+      "bytes": 49260,
+      "sha256": "7a00358e2f07dde157176c87c4e68c16031499e8008d91d01c3ef7e94475d1df"
+    },
+    "firmware/04_coremark_dual_sram/rom.hex": {
+      "bytes": 17408,
+      "sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170"
+    },
+    "firmware/04_coremark_dual_sram/sram.hex": {
+      "bytes": 69632,
+      "sha256": "a816fee33705a708e79e035574864f381a8556429bed56e70d8fe44c9b52ada9"
+    },
+    "firmware/05_coremark_dual_cache/coremark.bin": {
+      "bytes": 20588,
+      "sha256": "aa76381092a4ee6ee9acbc72936fdf9caaddefaf855746dfff0a9189ce0de4ad"
+    },
+    "firmware/05_coremark_dual_cache/coremark.elf": {
+      "bytes": 49272,
+      "sha256": "9188eee48cd501f546055db5814c4e223902761c1d61d1e6bbb46520ddef2d85"
+    },
+    "firmware/05_coremark_dual_cache/firmware.elf": {
+      "bytes": 26680,
+      "sha256": "4dbac7f408bfd0ebcf272eef6993b86008e1b77778f5dbc303d53e066fe029ee"
+    },
+    "firmware/05_coremark_dual_cache/rom.hex": {
+      "bytes": 17408,
+      "sha256": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170"
+    },
+    "firmware/05_coremark_dual_cache/sram.hex": {
+      "bytes": 69632,
+      "sha256": "37ddac4e4c0248445b9ddf642c4de743f9842314e3f4d935c6069b1adfa20d53"
+    },
+    "flash/EF4018_W25Q128Q_x1/02_coremark_single_sram.sfc": {
+      "bytes": 3791112,
+      "sha256": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f"
+    },
+    "flash/EF4018_W25Q128Q_x1/03_coremark_single_cache.sfc": {
+      "bytes": 3791112,
+      "sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561"
+    },
+    "flash/EF4018_W25Q128Q_x1/04_coremark_dual_sram.sfc": {
+      "bytes": 3791112,
+      "sha256": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7"
+    },
+    "flash/EF4018_W25Q128Q_x1/05_coremark_dual_cache.sfc": {
+      "bytes": 3791112,
+      "sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd"
+    },
+    "flash/EF7018_W25Q128M_x1/02_coremark_single_sram.sfc": {
+      "bytes": 3791112,
+      "sha256": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f"
+    },
+    "flash/EF7018_W25Q128M_x1/03_coremark_single_cache.sfc": {
+      "bytes": 3791112,
+      "sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561"
+    },
+    "flash/EF7018_W25Q128M_x1/04_coremark_dual_sram.sfc": {
+      "bytes": 3791112,
+      "sha256": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7"
+    },
+    "flash/EF7018_W25Q128M_x1/05_coremark_dual_cache.sfc": {
+      "bytes": 3791112,
+      "sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd"
+    },
+    "images/02_coremark_single_sram/triha_cpu_board_top.sbit": {
+      "bytes": 3791112,
+      "sha256": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f"
+    },
+    "images/02_coremark_single_sram/triha_cpu_board_top.smsk": {
+      "bytes": 3791112,
+      "sha256": "fb946847d1be92b016ec331038ce3a9cfa1fba0f32458ab1efa80542e71554bc"
+    },
+    "images/03_coremark_single_cache/triha_cpu_ddr_board_top.sbit": {
+      "bytes": 3791112,
+      "sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561"
+    },
+    "images/03_coremark_single_cache/triha_cpu_ddr_board_top.smsk": {
+      "bytes": 3791112,
+      "sha256": "7acf46ac556f59cc60713cc8dd5f28f523169f806cf0956ac43631b492ff7eb8"
+    },
+    "images/04_coremark_dual_sram/triha_cpu_board_top.sbit": {
+      "bytes": 3791112,
+      "sha256": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7"
+    },
+    "images/04_coremark_dual_sram/triha_cpu_board_top.smsk": {
+      "bytes": 3791112,
+      "sha256": "45c22238b4f847665aab7f07ae606a7214c93be89d3d725fd1f6a0d6f6d6c654"
+    },
+    "images/05_coremark_dual_cache/triha_cpu_ddr_board_top.sbit": {
+      "bytes": 3791112,
+      "sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd"
+    },
+    "images/05_coremark_dual_cache/triha_cpu_ddr_board_top.smsk": {
+      "bytes": 3791112,
+      "sha256": "6fffb9dfd6779095db24183c31ba16e4ddb10e5e0f72b1410c330c4e22f1e3a9"
+    },
+    "manifest.json": {
+      "bytes": 6115,
+      "sha256": "0e8849523bf656cf6120ad57b3c31445f87b8583b53ef1f2b313aa7ce1de7540"
+    },
+    "ram_tcl/02_coremark_single_sram.tcl": {
+      "bytes": 876,
+      "sha256": "b19c38f0db15629e9ba2ebef3f849db5bef76bf30494abf5d4974c279530fc53"
+    },
+    "ram_tcl/03_coremark_single_cache.tcl": {
+      "bytes": 881,
+      "sha256": "5839ef9efe2de6a787c39201b1f055b1b390c5b0c5d1302dc208683da3739389"
+    },
+    "ram_tcl/04_coremark_dual_sram.tcl": {
+      "bytes": 874,
+      "sha256": "10c036d7d23ed7348bae2d84fc619f923f9e3cd972494878f6d88eb1a7ca994f"
+    },
+    "ram_tcl/05_coremark_dual_cache.tcl": {
+      "bytes": 879,
+      "sha256": "98a6ddc3748b3e04235b0b2e88b712f2d059e59062aa098666b57e2f560b5fa2"
+    },
+    "README.md": {
+      "bytes": 4359,
+      "sha256": "e090042d91b74ee9d5651b33e168040eda25281e0e8c343eb6f548b2a4bf37af"
+    },
+    "vendor/pyserial-3.5-py2.py3-none-any.whl": {
+      "bytes": 90585,
+      "sha256": "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0"
+    }
+  }
+}

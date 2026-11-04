@@ -1,0 +1,102 @@
+% !TEX root = ../../技术文档.tex
+\section{系统联合仿真验证}\label{sec:box-system-validation}
+
+本节采用板测发布版本配套的自然人脸与零RGB空场景，核对真实应用循环中的采集、推理、显示提交及帧槽释放。
+两组回归的结果、完整日志及配套验收记录集中保存于\path{docs/verification/soc/face_photo_report_20261104/}。
+
+\subsection{完整模型推理}
+
+测试台通过实际模型装载器传输六段模型数据及一段RGBA头像，共2,032,640\,B、7,940包，待写入确认及模型、素材封存后启动应用。
+装载激励连接字节握手接口，未按115200\,baud逐位模拟，因此本测试不提供串口实物装载时间。
+输入由数字视频激励提供，DDR端点采用native存储代理；采集预处理、CPU固件、NPU和显示路径使用工程实现。
+自然人脸场景以RGB图像作为采集输入，期望检测到1个人脸；零RGB空场景期望检测结果为空。
+
+每个接纳帧经采集路径写入1,440,000\,B原图和307,200\,B模型输入。NPU从对应输入槽执行模型计算图并写出九个输出头，
+CPU读取输出头，按0.6分数阈值筛选、解码检测框，并以0.3为IoU阈值执行非极大值抑制，构建同帧显示记录。
+两组场景均完成两个不同帧号的推理结果核对，并通过RAW、BOX、AVATAR完整画面的像素检查。
+
+\subsection{连续帧处理}
+
+采集请求依次将帧1、帧2和帧3分配到槽0、槽1和槽2。长时间推理期间，帧池保持计算和显示引用，三个槽占用后等待释放。
+帧1显示期间，HDMI重复扫描其活动记录；帧2的记录生效后，显示端排空帧1的旧引用并发布释放事件。
+CPU校验释放身份并完成ACK后，槽0用于采集帧4。
+
+表\ref{tbl:face-system-frame-counts}列出两组完整回归的事件统计。
+每组完成4次采集，其中帧1和帧2完成推理、显示记录提交及整幅画面核对；测试在确认一次旧槽释放和复用后结束。
+
+\begin{reporttable}
+\begin{longtable}{@{}p{0.42\linewidth}p{0.24\linewidth}p{0.24\linewidth}@{}}
+\caption{系统联合仿真帧事件统计}\label{tbl:face-system-frame-counts}\\
+\toprule
+统计事件 & 自然人脸 & 零RGB空场景 \\
+\midrule
+\endfirsthead
+\caption[]{系统联合仿真帧事件统计（续）}\\
+\toprule
+统计事件 & 自然人脸 & 零RGB空场景 \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+采集请求／完成 & 4／4 & 4／4 \\
+推理结果完成 & 2 & 2 \\
+新帧显示记录／实际提交 & 2／2 & 2／2 \\
+旧槽释放／复用 & 1／1 & 1／1 \\
+完整输出画面的不同帧号数 & 2 & 2 \\
+覆盖显示模式 & RAW、BOX、AVATAR & RAW、BOX、AVATAR \\
+\end{longtable}
+\end{reporttable}
+
+测试台同时检查采集写入不覆盖仍由显示端引用的槽，槽复用发生在CPU确认释放之后；显示输出的槽号、帧号、代次和提交序号与已提交记录一致。
+记录生效后，模式和提交序号在一幅有效画面内保持不变。
+表中的记录和提交次数按不同采集帧计数。帧1先以RAW生效，再使用同一帧切换BOX和AVATAR，提交序号依次为1、2、3；帧2以AVATAR生效，序号为4。仅模式切换的两次提交不计作新帧，也不重复释放当前槽。
+
+性能日志中的\texttt{FACE\_SYSTEM\_NPU\_CPU\_RESULT}由帧池\texttt{results}计数增加触发，表示CPU已完成后处理、显示记录构建及NPU完成确认。
+两组场景各有两个结果事件，只形成一个相邻间隔样本；周期差、时间和结果完成率见表\ref{tbl:face-result-intervals}。
+一次性装载位于首个结果之前；每帧图执行前的79次算子预检仍计入相邻结果间隔。
+日志中的\texttt{op=0,10,\ldots,70}是稀疏算子完成检查点，不能据此得到完整的逐算子耗时；两帧完整画面核对属于数字功能验收，也不替代持续板级帧率测量。
+
+\subsection{运行配置}
+
+回归在Windows原生ModelSim中运行，固件由xPack RISC-V GCC构建。
+自然人脸运行标识为\path{face_system-20261104T011551_456009Z}，零RGB空场景运行标识为\path{face_system-20261104T011551_453685Z}。
+两组运行均采用板级头像配置和七段数据装载流程，参数见表\ref{tbl:face-system-run-config}。
+
+\begin{reporttable}
+\begin{longtable}{@{}p{0.32\linewidth}p{0.60\linewidth}@{}}
+\caption{系统联合仿真运行配置}\label{tbl:face-system-run-config}\\
+\toprule
+项目 & 配置 \\
+\midrule
+\endfirsthead
+\caption[]{系统联合仿真运行配置（续）}\\
+\toprule
+项目 & 配置 \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+仿真工具 & ModelSim 10.5 \\
+固件工具 & xPack RISC-V GCC 15.2.0-1 \\
+CPU/NPU、Video、像素时钟 & 50\,MHz、125\,MHz、40\,MHz \\
+应用配置 & \texttt{board\_profile=true}，\texttt{boot\_load=true}，\texttt{avatar\_boot=true} \\
+输入及显示尺寸 & 800$\times$600 RGB888，RAW、BOX、AVATAR \\
+模型输入 & 320$\times$320 UINT8 BGR NCHW，上下各补40行零值 \\
+采集写入 & 原图与模型输入两路，每帧1,747,200\,B \\
+存储端点 & native DDR存储代理 \\
+结束时计算周期数 & 每组41,410,743周期 \\
+\end{longtable}
+\end{reporttable}
+
+\subsection{结果核对}
+
+测试台逐字节核对采集写入的原图和模型输入，检查写入覆盖范围与完成时的端口排空状态。
+每个已完成推理帧的26,368\,B输出头与独立参考比较，并核对CPU后处理结果有效标志和人脸数量：自然人脸为1，零RGB空场景为0。
+
+显示检查从有效图像起点累计每帧480000个像素，逐像素核对RGB、坐标顺序和帧身份。
+自然人脸场景在BOX模式检查矩形内两像素宽的红色边框，在AVATAR模式按素材采样、整数透明度混合及覆盖范围核对输出；RAW模式逐像素保持原图。
+两组回归均确认帧1、帧2的完整800$\times$600画面，显示模式覆盖位图为\texttt{111}，覆盖三种模式。
+自然人脸场景每幅AVATAR画面的矩形覆盖区为148,996个像素，实际与背景不同的像素为76,688个；覆盖数不等于非透明像素数。零RGB空场景的覆盖数和改变数均为0。
+
+两组完整日志均给出\texttt{FACE\_SYSTEM\_PASS}，错误和警告计数均为0。
+通过条件还包含显示欠载和硬件故障检查、帧池无空闲槽等待、释放确认及复用检查，验证了从输入预处理到同帧框及头像输出的数字功能链路。

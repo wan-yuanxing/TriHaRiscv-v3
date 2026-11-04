@@ -36,9 +36,6 @@ sw/tests/squash_runtime.S -text whitespace=cr-at-eol
 sw/tests/cache_soc_runtime.S -text whitespace=cr-at-eol
 sw/tests/cache_irq_runtime.S -text whitespace=cr-at-eol
 
-# Keep the pending timing candidate identical to its frozen simulation inputs.
-experiments/npu/stage_split_20261101/*.v -text whitespace=cr-at-eol
-
 # Byte-exact qualified 2026-11-03 face BOX sources and simulation evidence.
 fpga/pg2l100h/constraints/triha_face_board.fdc -text whitespace=cr-at-eol
 fpga/pg2l100h/constraints/triha_face_cdc.fdc -text whitespace=cr-at-eol
@@ -58,3 +55,12 @@ scripts/soc/run_face_system.py -text whitespace=cr-at-eol
 releases/**/*.sbit binary
 releases/**/*.smsk binary
 releases/**/*.zip binary
+
+# Preserve the verified CoreMark delivery and report evidence byte for byte.
+releases/coremark-four-20261104/** -text whitespace=cr-at-eol
+docs/verification/cpu/diagram_review2_2026-11-02/** -text whitespace=cr-at-eol
+docs/verification/cpu/document_review_zero_pair_20261102/** -text whitespace=cr-at-eol
+docs/verification/cpu/report_configurable_issue_2026-11-02/** -text whitespace=cr-at-eol
+docs/verification/npu/report_waveforms_3523d03/** -text whitespace=cr-at-eol
+docs/verification/soc/face_box_report_20261103/** -text whitespace=cr-at-eol
+docs/verification/soc/face_photo_report_20261104/** -text whitespace=cr-at-eol

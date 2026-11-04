@@ -1,0 +1,51 @@
+{
+  "status": "PASS_DEBUG_BOARD_COREMARK",
+  "started_utc": "2026-10-28T13:15:13.058489+00:00",
+  "physical_admission_sha256": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+  "bitstream_result_sha256": "e0edcc8432c76db908527c9955f434c7c685145bc4464131fd36ebd83d2acc95",
+  "programmed": true,
+  "verified": true,
+  "flash_written": false,
+  "cache": false,
+  "ddr": false,
+  "video": false,
+  "firmware_sha256": "8f981818ddb312dd4f2eedd48fbea000f643e8c2b01e946a6e69b652fb728a86",
+  "coremark_optimization": "-O2",
+  "uart_lut_metadata": 5933,
+  "actual_fresh_debug_cpu_luts": 6139,
+  "lut_note": "UART denominator is immutable historical release metadata; not debug area",
+  "physical_ipc": null,
+  "program_return_code": 0,
+  "measurement": {
+    "iterations": 5000,
+    "cycles": 1636465356,
+    "clock_hz": 100000000,
+    "seconds": 16.36465356,
+    "coremark": 305.5365627917393,
+    "coremark_per_mhz": 3.055365627917393,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.051497819449138595,
+    "coremark_per_actual_debug_cpu_lut": 0.04976976100207514
+  },
+  "ended_utc": "2026-10-28T13:15:45.762917+00:00",
+  "output_hashes": {
+    "capture.ps1": "09ed05db421c242c5f60640686d196edcaa48590db912a2cebe36a7cbe39eac0",
+    "capture.ready": "586c1714920ba7ff5354410291b438fae83934d1225d63604158b55da63e8466",
+    "capture.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "capture.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "capture.stop": "e3ef586ef573ff8dd3958b174b2ab2ecfab8d773764b989413cbc64c22b2882f",
+    "configuration_tcl.log": "0d6012da7bf09dd40e382821e6d50425c5b5af592d7268fbe8fcdd1ecb25b16a",
+    "program-verify.log": "ff3e43d0ebf195bba337e4ab419c09aa8f7a60d6768821cf6091d016be02f1f5",
+    "program-verify.tcl": "039371848282c422689528225afdec1008254ea24a00f008ffee1bba71ff2771",
+    "uart.bin": "29b17504eeb7127f5ed3d90e451690c997d629fef837e3bad933d2987bfb5e1d",
+    "uart.txt": "829d315b840ca239a289fc03daf7ae3ef112373553c62be68de6a9c762109612"
+  }
+}

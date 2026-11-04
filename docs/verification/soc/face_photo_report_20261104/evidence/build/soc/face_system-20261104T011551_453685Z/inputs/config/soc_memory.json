@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "ddr_base": 2147483648,
+  "ddr_bytes": 134217728,
+  "window_base": 33554432,
+  "window_bytes": 100663296,
+  "regions": [
+    {
+      "name": "CPU_PRIVATE",
+      "base": 2147483648,
+      "bytes": 33554432,
+      "cpu_cached": true
+    },
+    {
+      "name": "FRAMES",
+      "base": 2181038080,
+      "bytes": 6291456,
+      "cpu_cached": false
+    },
+    {
+      "name": "AVATAR",
+      "base": 2187329536,
+      "bytes": 2097152,
+      "cpu_cached": false
+    },
+    {
+      "name": "INPUT",
+      "base": 2189426688,
+      "bytes": 1048576,
+      "cpu_cached": false
+    },
+    {
+      "name": "OUTPUT",
+      "base": 2190475264,
+      "bytes": 2097152,
+      "cpu_cached": false
+    },
+    {
+      "name": "MODEL",
+      "base": 2192572416,
+      "bytes": 8388608,
+      "cpu_cached": false
+    },
+    {
+      "name": "WORKSPACE",
+      "base": 2200961024,
+      "bytes": 67108864,
+      "cpu_cached": false
+    },
+    {
+      "name": "RESERVED",
+      "base": 2268069888,
+      "bytes": 13631488,
+      "cpu_cached": false
+    }
+  ],
+  "b03": {
+    "input_bases": [
+      2189426688,
+      2189754368,
+      2190082048
+    ],
+    "input_slot_bytes": 327680,
+    "input_bytes": 307200,
+    "output_bases": [
+      2190475264,
+      2190737408,
+      2190999552
+    ],
+    "output_slot_bytes": 262144,
+    "heads_offset": 0,
+    "heads_bytes": 26368,
+    "result_offset": 32768,
+    "result_bytes": 67328,
+    "publish_offset": 131072,
+    "publish_bytes": 128,
+    "program_base": 2192572416,
+    "program_bytes": 10240,
+    "post_table_base": 2192637952,
+    "post_table_bytes": 1572864,
+    "workspace_base": 2200961024,
+    "workspace_bytes": 4876544,
+    "parameter_origin": 4768256,
+    "parameter_bytes": 108288,
+    "capacity": 2100,
+    "watchdog_cycles": 100000000,
+    "source_width": 800,
+    "source_height": 600,
+    "resized_width": 320,
+    "resized_height": 240,
+    "pad_left": 0,
+    "pad_top": 40,
+    "program_crc32": 508041292,
+    "parameter_crc32": 1157718071,
+    "model_tag": 1699593017,
+    "post_table_crc32": 2044218312
+  }
+}

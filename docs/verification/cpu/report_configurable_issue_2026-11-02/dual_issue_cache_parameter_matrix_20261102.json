@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "Compile-time parameter matrix for issue width and paired-cache enable",
+  "parameters": {
+    "DUAL_ISSUE": "0=single, 1=dual",
+    "CACHE_ENABLE": "0=bypass, 1=paired I/D Cache"
+  },
+  "cpu_modelsim": [
+    {
+      "directory": "build/cpu/cache-cpu-20261101T155558820470Z",
+      "result_sha256": "0f05579b1770f193556de9496d182453924f077291c97e1567abe72899e37098",
+      "status": "PASS",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "issue_observation": {
+        "actual_mode": 0,
+        "paired_cycles_total": 0,
+        "lane1_wb_total": 0
+      },
+      "memory_observation": {
+        "instruction_reads": 28,
+        "data_reads": 12,
+        "timed_stores": 9,
+        "cached_store_updates_total": 7,
+        "lower_writes": 33,
+        "protocol_fault": 0
+      }
+    },
+    {
+      "directory": "build/cpu/cache-cpu-20261101T155558855797Z",
+      "result_sha256": "9c93fa82386e4940d27d3598126e8de8ab6941bad719996b3b5d72ac6bcce9a9",
+      "status": "PASS",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "issue_observation": {
+        "actual_mode": 1,
+        "paired_cycles_total": 39,
+        "lane1_wb_total": 34
+      },
+      "memory_observation": {
+        "instruction_reads": 28,
+        "data_reads": 12,
+        "timed_stores": 9,
+        "cached_store_updates_total": 7,
+        "lower_writes": 33,
+        "protocol_fault": 0
+      }
+    },
+    {
+      "directory": "build/cpu/cache-cpu-20261101T155558934934Z",
+      "result_sha256": "3fbfcd90abc0e1ac17bdcc27a500a9f6491a237b0ab32ba96350ee7d4ffb387e",
+      "status": "PASS",
+      "issue_mode": "dual",
+      "cache_enable": false,
+      "issue_observation": {
+        "actual_mode": 1,
+        "paired_cycles_total": 25,
+        "lane1_wb_total": 22
+      },
+      "memory_observation": {
+        "instruction_reads": 114,
+        "data_reads": 14,
+        "timed_stores": 9,
+        "cached_store_updates_total": 0,
+        "lower_writes": 9,
+        "protocol_fault": 0
+      }
+    },
+    {
+      "directory": "build/cpu/cache-cpu-20261101T155558988249Z",
+      "result_sha256": "3649cd087390663b2f46915f56d01cfabd72dd0f31191a1254c39ca8f8c673f8",
+      "status": "PASS",
+      "issue_mode": "single",
+      "cache_enable": false,
+      "issue_observation": {
+        "actual_mode": 0,
+        "paired_cycles_total": 0,
+        "lane1_wb_total": 0
+      },
+      "memory_observation": {
+        "instruction_reads": 112,
+        "data_reads": 14,
+        "timed_stores": 9,
+        "cached_store_updates_total": 0,
+        "lower_writes": 9,
+        "protocol_fault": 0
+      }
+    }
+  ],
+  "soc_runtime": [
+    {
+      "directory": "build/cpu/cache-soc-runtime-20261101T155724964355Z",
+      "result_sha256": "3fa627b83799b4e2b02703fd5c54f15b981a05fcec576d8ecc83db313138bbe7",
+      "status": "PASS",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "issue_observation": {
+        "actual_mode": 0,
+        "paired_cycles_total": 0,
+        "lane1_wb_total": 0
+      }
+    },
+    {
+      "directory": "build/cpu/cache-soc-runtime-20261101T155725025561Z",
+      "result_sha256": "e4481ad74c9775146778dd5e3f52ba4f054b05c54de3ed68aee2f2b436a6a7f1",
+      "status": "PASS",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "issue_observation": {
+        "actual_mode": 1,
+        "paired_cycles_total": 80,
+        "lane1_wb_total": 72
+      }
+    },
+    {
+      "directory": "build/cpu/cache-soc-runtime-20261101T155725090581Z",
+      "result_sha256": "1f269096b74a7d3db5e9298914cda1c3419f5b7ceba2f1c6a103970c2927af40",
+      "status": "PASS",
+      "issue_mode": "single",
+      "cache_enable": false,
+      "issue_observation": {
+        "actual_mode": 0,
+        "paired_cycles_total": 0,
+        "lane1_wb_total": 0
+      }
+    },
+    {
+      "directory": "build/cpu/cache-soc-runtime-20261101T155725131525Z",
+      "result_sha256": "47f7f30f555f6dd5e2660742e91d5d16ad425e5b6dd9adfa418a1627a640a634",
+      "status": "PASS",
+      "issue_mode": "dual",
+      "cache_enable": false,
+      "issue_observation": {
+        "actual_mode": 1,
+        "paired_cycles_total": 80,
+        "lane1_wb_total": 72
+      }
+    }
+  ],
+  "pds_map": [
+    {
+      "directory": "build/cpu/cache-map-20261101T1558564583657Z",
+      "result_sha256": "5c9faf267709f0649e26d544fcc3db3e91925c4e739d4b76a9a20bcb2a22f8fc",
+      "status": "PASS",
+      "target": "cpu-soc",
+      "issue_mode": "single",
+      "cache_enable": true,
+      "actual_dual_issue": 0,
+      "resources": {
+        "lut": 8261,
+        "registers": 5384,
+        "distributed_ram": 656,
+        "apm": 4,
+        "drm": 27.5
+      },
+      "hierarchy_resources": {
+        "u_core": {
+          "lut": 7351,
+          "registers": 4425,
+          "distributed_ram": 656,
+          "apm": 4,
+          "drm": 0.0
+        },
+        "u_cache": {
+          "lut": 674,
+          "registers": 807,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 11.0
+        },
+        "u_memory": {
+          "lut": 181,
+          "registers": 136,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 16.5
+        }
+      },
+      "timing_closed": false
+    },
+    {
+      "directory": "build/cpu/cache-map-20261101T1602454332227Z",
+      "result_sha256": "e76e36e55024d66f20a6be8218190fc2c988ac3cd7d86dc5e61b1288d14e266f",
+      "status": "PASS",
+      "target": "cpu-soc",
+      "issue_mode": "dual",
+      "cache_enable": false,
+      "actual_dual_issue": 1,
+      "resources": {
+        "lut": 10141,
+        "registers": 5802,
+        "distributed_ram": 752,
+        "apm": 4,
+        "drm": 18.5
+      },
+      "hierarchy_resources": {
+        "u_core": {
+          "lut": 9581,
+          "registers": 4964,
+          "distributed_ram": 752,
+          "apm": 4,
+          "drm": 0.0
+        },
+        "u_cache": {
+          "lut": 333,
+          "registers": 686,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 2.0
+        },
+        "u_memory": {
+          "lut": 192,
+          "registers": 136,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 16.5
+        }
+      },
+      "timing_closed": false
+    },
+    {
+      "directory": "build/cpu/cache-map-20261101T1310250177597Z",
+      "result_sha256": "e435cc6a54bb8c032ca2185facff8c644d006f630c4fb725dc5d496670be89ac",
+      "status": "PASS",
+      "target": "cpu-soc",
+      "issue_mode": "dual",
+      "cache_enable": true,
+      "actual_dual_issue": 1,
+      "resources": {
+        "lut": 10502,
+        "registers": 5923,
+        "distributed_ram": 752,
+        "apm": 4,
+        "drm": 27.5
+      },
+      "hierarchy_resources": {
+        "u_core": {
+          "lut": 9598,
+          "registers": 4964,
+          "distributed_ram": 752,
+          "apm": 4,
+          "drm": 0.0
+        },
+        "u_cache": {
+          "lut": 672,
+          "registers": 807,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 11.0
+        },
+        "u_memory": {
+          "lut": 194,
+          "registers": 136,
+          "distributed_ram": 0,
+          "apm": 0,
+          "drm": 16.5
+        }
+      },
+      "timing_closed": false
+    }
+  ],
+  "board_timing_reused": "build/cpu/ddr-coremark-luts9707-physical-review-20261101.json",
+  "notes": [
+    "All four CPU and all four SoC combinations passed functional checks.",
+    "PDS checks cover single/cache-on, dual/cache-off and dual/cache-on actual elaboration; map results are not timing acceptance."
+  ]
+}

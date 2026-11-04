@@ -1,0 +1,90 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "a84954af2ba1be09213818d72d0550b56f4a46cc95590434ecaeb612ca126c79",
+      "native_postscript": "npu_q_rne_01.ps",
+      "native_postscript_sha256": "1dbb9eff527be969bae6b6b1e878b64971637b6f5660b735dbde2903d4806155",
+      "source": "DBG\\build\\platform\\b03_model_q8_v1\\simulation\\trace.vcd",
+      "source_sha256": "f24ff0fb9fc96e4a0a63be6213a587b4600cba4952cc97e7642869e999994add",
+      "signals": [
+        "clk",
+        "run_ce",
+        "in_valid",
+        "in_ready",
+        "out_valid",
+        "out_ready",
+        "category",
+        "actual_lane0_psum",
+        "actual_lane0_bias",
+        "actual_lane0_multiplier",
+        "actual_lane0_shift",
+        "actual_lane0_rounded",
+        "actual_lane0_value",
+        "actual_lane0_error"
+      ],
+      "window_ns": [
+        220080,
+        220275
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_q_rne_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_q_rne_01.ps"
+    },
+    {
+      "sha256": "5cc02e2c78e0f29aea2a1c602e9148e69cb186aac59035259693c828f54912e2",
+      "native_postscript": "npu_q_rne_02.ps",
+      "native_postscript_sha256": "28d18addded34fce5dd1dce6e47e9e8c56462fb9c54b0203a645d409ab6151c9",
+      "source": "DBG\\build\\platform\\b03_model_q8_v1\\simulation\\trace.vcd",
+      "source_sha256": "f24ff0fb9fc96e4a0a63be6213a587b4600cba4952cc97e7642869e999994add",
+      "signals": [
+        "clk",
+        "run_ce",
+        "in_valid",
+        "in_ready",
+        "out_valid",
+        "out_ready",
+        "category",
+        "actual_lane0_psum",
+        "actual_lane0_bias",
+        "actual_lane0_multiplier",
+        "actual_lane0_shift",
+        "actual_lane0_rounded",
+        "actual_lane0_value",
+        "actual_lane0_error"
+      ],
+      "window_ns": [
+        100,
+        124
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_q_rne_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_q_rne_02.ps"
+    }
+  ],
+  "image_sha256": "99661f77bb1121eb9161a0122831daa1f312b994bc6b6b7e6cbad95e6af90246",
+  "image": "npu_q_rne.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

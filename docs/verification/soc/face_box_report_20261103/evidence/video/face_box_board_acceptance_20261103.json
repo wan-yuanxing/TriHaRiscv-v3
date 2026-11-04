@@ -1,0 +1,83 @@
+{
+  "status": "PASS_FIRST_PRIORITY_FACE_DETECTION_BOARD_ACCEPTANCE",
+  "recorded_at_unix": 1793706239.897551,
+  "scope": "Real B03 face detection and primary BOX display; function-first milestone, no FPS threshold",
+  "target": "triha_face_board",
+  "profile": {
+    "ENABLE_AVATAR": 0,
+    "ENABLE_MINIMAL_BOX": 1,
+    "DEMO_BOX_ONLY": 0
+  },
+  "clocks_hz": {
+    "compute": 50000000,
+    "video_ddr": 125000000,
+    "pixel": 40000000
+  },
+  "bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+  "verify_mask_sha256": "d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd",
+  "evidence": {
+    "qualified": {
+      "path": "build/video/face_box_50_bridge_priority_qualified_20261103/result.json",
+      "sha256": "804f97befa07f90047e89b29da14326a4ed67e9a35f8c09adaf7ff9b7e45f16e"
+    },
+    "package_manifest": {
+      "path": "build/video/releases/triha_face_board_3939c52f4d94/manifest.json",
+      "sha256": "804f97befa07f90047e89b29da14326a4ed67e9a35f8c09adaf7ff9b7e45f16e"
+    },
+    "package_audit": {
+      "path": "build/video/face_box_50_release_audit_20261103.json",
+      "sha256": "22336d1bc763ed6b6a48215fa54c6c6305b9fc1ea1a56f8631776e172ff45aba"
+    },
+    "scan": {
+      "path": "build/video/jtag_scan/20261103T112627_147954Z/result.json",
+      "sha256": "59e8f49d89e0f3684db6007566c1713d09190c615c148e750feff2612c35f0fe"
+    },
+    "program": {
+      "path": "build/video/board_program/20261103T112808_536586Z/result.json",
+      "sha256": "306b50e32cab32f00f10b4e2078319fefd731f415676eadc2865527ddf253512"
+    },
+    "model_upload": {
+      "path": "build/soc/model_upload-20261103T113330_193913Z/result.json",
+      "sha256": "e9690f398fd3bae3c387e0af3d828bfc72bdd54c0849ca14e26ba7e090e29acb"
+    },
+    "positive_simulation": {
+      "path": "build/soc/face_system-20261103T070341_048946Z/result.json",
+      "sha256": "08b4305f84c63c5329ae293c20c20851f6245bf1ad79d44a09869b4d7d1c4c34"
+    },
+    "negative_simulation": {
+      "path": "build/soc/face_system-20261103T070341_033768Z/result.json",
+      "sha256": "494e5b528d8292a7ab20aff16bcf5a1f4e451b35da3f9c3ff839ee8fbf1f10c9"
+    }
+  },
+  "internal_routed_timing_closed": true,
+  "cdc_timing_met": true,
+  "worst_setup_ns": 0.183,
+  "worst_hold_ns": 0.108,
+  "gray_groups": 23,
+  "gray_bits": 116,
+  "gray_clock_observations": 928,
+  "physical_program_verify": true,
+  "model_sealed": true,
+  "model_transfer": {
+    "bytes": 1770496,
+    "packets": 6916,
+    "retries": 0,
+    "ack_segment": 6,
+    "ack_offset": 0
+  },
+  "manual_visual_acceptance": {
+    "source": "User confirmations in this chat after programming and model load; no automated video capture claimed",
+    "positive_face": "画面正常，且人脸上出现检测框",
+    "changed_face_and_negative_scene": "都正常：框更新、无脸消失、画面继续更新",
+    "positive_face_box": true,
+    "box_tracks_changed_position": true,
+    "no_face_clears_box": true,
+    "later_frames_continue_updating": true
+  },
+  "external_io_ac_timing_formally_signed_off": false,
+  "fps_measured": false,
+  "avatar_and_landmarks_in_scope": false,
+  "flash_written": false,
+  "restart_requirement": "Volatile JTAG configuration and six-segment model-only UART loading are needed after power loss.",
+  "state_after_acceptance": "Board left running; no reset or reprogramming after the acknowledged model load."
+}

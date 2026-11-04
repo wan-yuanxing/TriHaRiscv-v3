@@ -1,0 +1,72 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "5038bc765bfe94252538147437241756682ef5332756b9b895d8d0999e2642e8",
+      "native_postscript": "vector_q_requests_01.ps",
+      "native_postscript_sha256": "e64c519c9c6e196134bfa23edeaabbb448452d66e5117c3b20e5b53bf1d19cfb",
+      "source": "DBG\\build\\platform\\b03_vector_quant_tdm4_dev02\\simulation\\trace.vcd",
+      "source_sha256": "0784f4696dbd30a53411df1e88f3f7227e7029cb4a64f54d0a579ccbe27a29c5",
+      "signals": [
+        "run_ce",
+        "case_index",
+        "debug_stage",
+        "done_valid",
+        "done_status"
+      ],
+      "window_ns": [
+        3363505.0,
+        3363675.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "vector_q_requests_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/vector_q_requests_01.ps"
+    },
+    {
+      "sha256": "7b04a761df3e8a8397b321b47a2db11f77c20271a8f5cb83a99f8dccbea6f2a5",
+      "native_postscript": "vector_q_requests_02.ps",
+      "native_postscript_sha256": "d3cb151adb38a03f04b6855781f0d010e1244bcdde33ab178321b83e8b53d5b4",
+      "source": "DBG\\build\\platform\\b03_vector_quant_tdm4_dev02\\simulation\\trace.vcd",
+      "source_sha256": "0784f4696dbd30a53411df1e88f3f7227e7029cb4a64f54d0a579ccbe27a29c5",
+      "signals": [
+        "run_ce",
+        "case_index",
+        "debug_stage",
+        "done_valid",
+        "done_status"
+      ],
+      "window_ns": [
+        3602175.0,
+        3602345.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "vector_q_requests_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/vector_q_requests_02.ps"
+    }
+  ],
+  "image_sha256": "dfc8913dc306765231263e3cc3c9a029e36a939a4e1a650afd60f08fc00a56c0",
+  "image": "vector_q_requests.png",
+  "notes": "Only actual archived stage and completion signals are shown. Derived q_in_valid, q_out_ready and DMA request/data curves were removed.",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

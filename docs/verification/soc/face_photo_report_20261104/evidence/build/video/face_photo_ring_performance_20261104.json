@@ -1,0 +1,32 @@
+{
+  "status": "PASS_SIMULATION_ONLY",
+  "physical_board_measured": false,
+  "clock_hz": 50000000,
+  "scope": "One adjacent completed-result interval per scenario; native DDR proxy, not physical FPS or end-to-end latency.",
+  "scenarios": {
+    "face": {
+      "directory": "D:\\FPGA\\TriHaRiscv-v3\\build\\soc\\face_system-20261104T011551_456009Z",
+      "log_sha256": "1d3f0bb30302cd701f0dfdff294db45668f218294f1f7b80f1c1ef64784b09a7",
+      "result_sha256": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00",
+      "completion_cycles": [
+        22023646,
+        40102706
+      ],
+      "interval_cycles": 18079060,
+      "interval_ms": 361.5812,
+      "results_per_second": 2.7656305139758373
+    },
+    "no_face": {
+      "directory": "D:\\FPGA\\TriHaRiscv-v3\\build\\soc\\face_system-20261104T011551_453685Z",
+      "log_sha256": "f64a4114e834744492cd7b7f8b728a835db3cc07529ceb3eda6c0c72acb0e6e8",
+      "result_sha256": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44",
+      "completion_cycles": [
+        21998338,
+        40058656
+      ],
+      "interval_cycles": 18060318,
+      "interval_ms": 361.20636,
+      "results_per_second": 2.7685005324933925
+    }
+  }
+}

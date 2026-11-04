@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "changed_page": 8,
+  "edge_count": 21,
+  "all_other_pages_byte_identical_to_turn_start": true,
+  "all_geometries_preserved": true,
+  "backup": "D:\\FPGA\\TriHaRiscv-main\\build\\cpu-diagram-redesign-20261102\\before-page8-black-orthogonal-20261102-202655.drawio",
+  "before_sha256": "aa6280fecdd80014dda5948ad872b2f2d9b0fe4eda6e5f64a227bea4be41d813",
+  "after_sha256": "6afd3b6b1173b884f4f1a8daff2a7fef032470629a56bc4426bc1078675d30b0",
+  "preview_sha256": {
+    "page8.png": "0b6f95071918462cb479b0d145260e7936d36a792a48c1efc39138e377dd6db7",
+    "page8.svg": "516b4f6d69ef398b2e7aed19b12d7a9e203d5b2522a888310e67a4714439c985"
+  },
+  "native_png_visually_checked": true,
+  "final_snapshot_sha256": "8478a0f6e493f6e4e30ca21f1af3833a45814e0d16d6bd02b3a39b5fa9a87b75",
+  "page8_sha256": "2d112b66f17de680f00fd191d89742f0a019b026048ace7accbcad41ae9cda8a",
+  "current_page8_style_verified": true,
+  "subsequent_user_edits_preserved": true
+}

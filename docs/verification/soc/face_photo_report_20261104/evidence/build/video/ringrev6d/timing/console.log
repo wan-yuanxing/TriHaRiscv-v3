@@ -1,0 +1,707 @@
+License checkout: fabric_shell from D:\pango\lic\new_pds_00e04cf107df.lic
+Compiling architecture definition.
+Analyzing project file 'D:/FPGA/TriHaRiscv-v3/build/video/ringrev6d/timing/timing.pds'.
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676 successfully.
+
+
+Executing : report_timing -force_to_run -input_db_file D:/FPGA/TriHaRiscv-v3/build/video/pds/ringr6d/place_route/triha_face_board_top_pnr.adf -max_path 128 -nworst 1 -report_max_skew -report_io_datasheet
+
+
+Process "Report Timing" started.
+Current time: Wed Nov  4 10:42:44 2026
+Compiling architecture definition.
+Analyzing project file 'D:/FPGA/TriHaRiscv-v3/build/video/ringrev6d/timing/timing.pds'.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Reading design from pnr DB.
+Start Report Post-PnR timing.
+NOTE: The technology fpga was specified.
+NOTE: delay_model specified was generic_cmos.
+NOTE: Using the fpga syntax tables...
+Totals:
+ Calls to malloc = 0
+ Calls to calloc = 5993935
+
+Constructing timing graph ...
+Timing graph has been constructed successfully
+W: Timing-4086: Port 'hd_sda' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'hd_sda' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[0]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[0]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[1]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[1]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[2]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[2]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[3]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[3]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[4]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[4]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[5]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[5]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[6]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[6]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[7]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[7]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[8]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[8]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[9]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[9]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[10]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[10]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[11]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[11]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[12]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[12]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[13]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[13]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[14]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[14]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[15]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[15]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[16]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[16]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[17]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[17]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[18]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[18]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[19]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[19]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[20]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[20]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[21]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[21]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[22]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[22]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[23]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[23]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[24]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[24]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[25]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[25]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[26]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[26]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[27]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[27]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[28]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[28]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[29]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[29]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[30]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[30]' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'mem_dq[31]' is not constrained, it is treated as combinational input.
+W: Timing-4087: Port 'mem_dq[31]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs_n[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs_n[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs_n[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dqs_n[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'b_out[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'ddr_init_done' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'de_out' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'g_out[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'hd_scl' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'hdmi_int_led' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'heart_beat_led' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'hs_out' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'init_over_rx' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[8]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[9]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[10]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[11]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[12]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[13]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_a[14]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ba[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ba[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ba[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_cas_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ck' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ck_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_cke' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_cs_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dm[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dm[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dm[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_dm[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_odt' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_ras_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_rst_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'mem_we_n' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'pix_clk' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[0]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[1]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[2]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[3]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[4]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[5]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[6]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'r_out[7]' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'rstn_out' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'uart_tx' is not constrained, it is treated as combinational output.
+W: Timing-4087: Port 'vs_out' is not constrained, it is treated as combinational output.
+W: Timing-4086: Port 'b_in[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[3]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[4]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[5]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[6]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'b_in[7]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'de_in' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[3]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[4]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[5]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[6]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'g_in[7]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'hs_in' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'mode_button_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[0]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[1]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[2]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[3]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[4]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[5]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[6]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'r_in[7]' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'ref_clk_n' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'rst_in' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'uart_rx' is not constrained, it is treated as combinational input.
+W: Timing-4086: Port 'vs_in' is not constrained, it is treated as combinational input.
+Input Ports Setup/Hold
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Reference           Input               IO Reg  Delay   Setup(ns)           Process Corner  Hold(ns)            Process Corner  Internal   
+ Clock               Port                Type    Type    to Clk (Edge)                       to Clk (Edge)                       Clock      
+--------------------------------------------------------------------------------------------------------------------------------------------
+ sys_clk             rst_in                              0.784 (r)           SLOW            1.712 (r)           SLOW                       
+ sys_clk             rst_in                              0.326 (r)           FAST            1.150 (r)           FAST                       
+ pixel_clk           rst_in                              6.994 (r)           SLOW            2.446 (r)           SLOW                       
+ pixel_clk           rst_in                              4.131 (r)           FAST            1.655 (r)           FAST                       
+ cfg_clk             hd_sda                              2.292 (r)           SLOW            2.186 (r)           SLOW                       
+ cfg_clk             hd_sda                              1.283 (r)           FAST            1.584 (r)           FAST                       
+ cfg_clk             rst_in                              0.596 (r)           SLOW            2.371 (r)           SLOW                       
+ cfg_clk             rst_in                              0.141 (r)           FAST            1.603 (r)           FAST                       
+ rx_pixel_clk        b_in[0]                             -0.937 (f)          SLOW            2.091 (f)           SLOW                       
+ rx_pixel_clk        b_in[0]                             -0.759 (f)          FAST            1.467 (f)           FAST                       
+ rx_pixel_clk        b_in[1]                             -0.900 (f)          SLOW            2.042 (f)           SLOW                       
+ rx_pixel_clk        b_in[1]                             -0.706 (f)          FAST            1.432 (f)           FAST                       
+ rx_pixel_clk        b_in[2]                             -0.878 (f)          SLOW            2.032 (f)           SLOW                       
+ rx_pixel_clk        b_in[2]                             -0.698 (f)          FAST            1.406 (f)           FAST                       
+ rx_pixel_clk        b_in[3]                             -0.725 (f)          SLOW            1.960 (f)           SLOW                       
+ rx_pixel_clk        b_in[3]                             -0.616 (f)          FAST            1.357 (f)           FAST                       
+ rx_pixel_clk        b_in[4]                             -1.125 (f)          SLOW            2.211 (f)           SLOW                       
+ rx_pixel_clk        b_in[4]                             -0.867 (f)          FAST            1.555 (f)           FAST                       
+ rx_pixel_clk        b_in[5]                             -0.674 (f)          SLOW            1.918 (f)           SLOW                       
+ rx_pixel_clk        b_in[5]                             -0.577 (f)          FAST            1.348 (f)           FAST                       
+ rx_pixel_clk        b_in[6]                             -0.955 (f)          SLOW            2.118 (f)           SLOW                       
+ rx_pixel_clk        b_in[6]                             -0.765 (f)          FAST            1.489 (f)           FAST                       
+ rx_pixel_clk        b_in[7]                             -1.189 (f)          SLOW            2.266 (f)           SLOW                       
+ rx_pixel_clk        b_in[7]                             -0.891 (f)          FAST            1.579 (f)           FAST                       
+ rx_pixel_clk        de_in                               -0.930 (f)          SLOW            2.045 (f)           SLOW                       
+ rx_pixel_clk        de_in                               -0.718 (f)          FAST            1.428 (f)           FAST                       
+ rx_pixel_clk        g_in[0]                             -0.823 (f)          SLOW            2.044 (f)           SLOW                       
+ rx_pixel_clk        g_in[0]                             -0.708 (f)          FAST            1.431 (f)           FAST                       
+ rx_pixel_clk        g_in[1]                             -0.532 (f)          SLOW            1.808 (f)           SLOW                       
+ rx_pixel_clk        g_in[1]                             -0.453 (f)          FAST            1.265 (f)           FAST                       
+ rx_pixel_clk        g_in[2]                             -0.531 (f)          SLOW            1.817 (f)           SLOW                       
+ rx_pixel_clk        g_in[2]                             -0.446 (f)          FAST            1.270 (f)           FAST                       
+ rx_pixel_clk        g_in[3]                             -0.755 (f)          SLOW            1.952 (f)           SLOW                       
+ rx_pixel_clk        g_in[3]                             -0.614 (f)          FAST            1.364 (f)           FAST                       
+ rx_pixel_clk        g_in[4]                             -0.692 (f)          SLOW            1.926 (f)           SLOW                       
+ rx_pixel_clk        g_in[4]                             -0.583 (f)          FAST            1.349 (f)           FAST                       
+ rx_pixel_clk        g_in[5]                             -0.551 (f)          SLOW            1.813 (f)           SLOW                       
+ rx_pixel_clk        g_in[5]                             -0.485 (f)          FAST            1.276 (f)           FAST                       
+ rx_pixel_clk        g_in[6]                             -0.797 (f)          SLOW            2.003 (f)           SLOW                       
+ rx_pixel_clk        g_in[6]                             -0.644 (f)          FAST            1.396 (f)           FAST                       
+ rx_pixel_clk        g_in[7]                             -0.890 (f)          SLOW            2.083 (f)           SLOW                       
+ rx_pixel_clk        g_in[7]                             -0.714 (f)          FAST            1.445 (f)           FAST                       
+ rx_pixel_clk        hs_in                               -0.991 (f)          SLOW            2.110 (f)           SLOW                       
+ rx_pixel_clk        hs_in                               -0.774 (f)          FAST            1.478 (f)           FAST                       
+ rx_pixel_clk        r_in[0]                             -0.736 (f)          SLOW            1.946 (f)           SLOW                       
+ rx_pixel_clk        r_in[0]                             -0.597 (f)          FAST            1.354 (f)           FAST                       
+ rx_pixel_clk        r_in[1]                             -0.766 (f)          SLOW            1.971 (f)           SLOW                       
+ rx_pixel_clk        r_in[1]                             -0.636 (f)          FAST            1.370 (f)           FAST                       
+ rx_pixel_clk        r_in[2]                             -0.909 (f)          SLOW            2.072 (f)           SLOW                       
+ rx_pixel_clk        r_in[2]                             -0.711 (f)          FAST            1.436 (f)           FAST                       
+ rx_pixel_clk        r_in[3]                             -0.781 (f)          SLOW            1.969 (f)           SLOW                       
+ rx_pixel_clk        r_in[3]                             -0.647 (f)          FAST            1.370 (f)           FAST                       
+ rx_pixel_clk        r_in[4]                             -0.888 (f)          SLOW            2.045 (f)           SLOW                       
+ rx_pixel_clk        r_in[4]                             -0.703 (f)          FAST            1.423 (f)           FAST                       
+ rx_pixel_clk        r_in[5]                             -0.847 (f)          SLOW            2.011 (f)           SLOW                       
+ rx_pixel_clk        r_in[5]                             -0.678 (f)          FAST            1.392 (f)           FAST                       
+ rx_pixel_clk        r_in[6]                             -0.830 (f)          SLOW            1.999 (f)           SLOW                       
+ rx_pixel_clk        r_in[6]                             -0.626 (f)          FAST            1.387 (f)           FAST                       
+ rx_pixel_clk        r_in[7]                             -0.790 (f)          SLOW            2.018 (f)           SLOW                       
+ rx_pixel_clk        r_in[7]                             -0.635 (f)          FAST            1.392 (f)           FAST                       
+ rx_pixel_clk        rst_in                              2.804 (f)           SLOW            1.377 (r)           SLOW                       
+ rx_pixel_clk        rst_in                              1.517 (f)           FAST            0.870 (r)           FAST                       
+ rx_pixel_clk        vs_in                               -0.803 (f)          SLOW            1.999 (f)           SLOW                       
+ rx_pixel_clk        vs_in                               -0.662 (f)          FAST            1.392 (f)           FAST                       
+ rst_clk             rst_in                              0.669 (r)           SLOW            2.554 (r)           SLOW                       
+ rst_clk             rst_in                              0.294 (r)           FAST            1.927 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[0]                           -0.294 (r)          SLOW            3.166 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[0]                           -0.712 (r)          FAST            2.796 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[1]                           -0.045 (r)          SLOW            3.008 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[1]                           -0.571 (r)          FAST            2.698 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[2]                           0.114 (r)           SLOW            2.960 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[2]                           -0.495 (r)          FAST            2.637 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[3]                           -0.117 (r)          SLOW            3.075 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[3]                           -0.601 (r)          FAST            2.752 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[4]                           -0.183 (r)          SLOW            3.107 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[4]                           -0.660 (r)          FAST            2.757 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[5]                           -0.082 (r)          SLOW            3.047 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[5]                           -0.607 (r)          FAST            2.727 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[6]                           -0.696 (r)          SLOW            3.419 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[6]                           -0.979 (r)          FAST            2.979 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[7]                           -0.851 (r)          SLOW            3.529 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[7]                           -1.074 (r)          FAST            3.062 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[8]                           -0.178 (r)          SLOW            3.084 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[8]                           -0.640 (r)          FAST            2.765 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[9]                           0.094 (r)           SLOW            2.925 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[9]                           -0.466 (r)          FAST            2.642 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[10]                          -0.348 (r)          SLOW            3.226 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[10]                          -0.753 (r)          FAST            2.839 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[11]                          -0.496 (r)          SLOW            3.295 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[11]                          -0.820 (r)          FAST            2.888 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[12]                          -0.140 (r)          SLOW            3.103 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[12]                          -0.640 (r)          FAST            2.755 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[13]                          -0.395 (r)          SLOW            3.239 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[13]                          -0.774 (r)          FAST            2.854 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[14]                          -0.996 (r)          SLOW            3.591 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[14]                          -1.126 (r)          FAST            3.120 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[15]                          -0.886 (r)          SLOW            3.530 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[15]                          -1.070 (r)          FAST            3.069 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[16]                          -0.238 (r)          SLOW            3.141 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[16]                          -0.702 (r)          FAST            2.769 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[17]                          -0.229 (r)          SLOW            3.153 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[17]                          -0.716 (r)          FAST            2.796 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[18]                          -0.219 (r)          SLOW            3.092 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[18]                          -0.661 (r)          FAST            2.735 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[19]                          -0.079 (r)          SLOW            3.019 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[19]                          -0.600 (r)          FAST            2.709 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[20]                          -0.114 (r)          SLOW            3.034 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[20]                          -0.610 (r)          FAST            2.711 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[21]                          0.028 (r)           SLOW            2.971 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[21]                          -0.537 (r)          FAST            2.666 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[22]                          -0.657 (r)          SLOW            3.435 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[22]                          -0.973 (r)          FAST            2.981 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[23]                          -1.156 (r)          SLOW            3.680 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[23]                          -1.227 (r)          FAST            3.175 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[24]                          -0.542 (r)          SLOW            3.363 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[24]                          -0.913 (r)          FAST            2.936 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[25]                          -0.639 (r)          SLOW            3.387 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[25]                          -0.951 (r)          FAST            2.957 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[26]                          0.140 (r)           SLOW            2.897 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[26]                          -0.466 (r)          FAST            2.631 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[27]                          -0.371 (r)          SLOW            3.250 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[27]                          -0.771 (r)          FAST            2.843 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[28]                          -0.222 (r)          SLOW            3.119 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[28]                          -0.666 (r)          FAST            2.784 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[29]                          -0.508 (r)          SLOW            3.317 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[29]                          -0.845 (r)          FAST            2.893 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[30]                          0.255 (r)           SLOW            2.874 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[30]                          -0.405 (r)          FAST            2.606 (r)           FAST                       
+ ddrphy_sysclk       mem_dq[31]                          -0.373 (r)          SLOW            3.230 (r)           SLOW                       
+ ddrphy_sysclk       mem_dq[31]                          -0.773 (r)          FAST            2.834 (r)           FAST                       
+ ddrphy_sysclk       mode_button_n                       -1.231 (r)          SLOW            3.958 (r)           SLOW                       
+ ddrphy_sysclk       mode_button_n                       -1.364 (r)          FAST            3.312 (r)           FAST                       
+ ddrphy_sysclk       rst_in                              3.111 (r)           SLOW            2.452 (r)           SLOW                       
+ ddrphy_sysclk       rst_in                              1.374 (r)           FAST            2.289 (r)           FAST                       
+ ddrphy_sysclk       uart_rx                             0.231 (r)           SLOW            2.741 (r)           SLOW                       
+ ddrphy_sysclk       uart_rx                             -0.385 (r)          FAST            2.570 (r)           FAST                       
+ compute_clk         rst_in                              1.439 (r)           SLOW            1.600 (r)           SLOW                       
+ compute_clk         rst_in                              0.806 (r)           FAST            1.076 (r)           FAST                       
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Output Ports Clock-to-out
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Reference           Input               IO Reg  Delay   Max Clk (Edge)      Process Corner  Min Clk (Edge)      Process Corner  Internal   
+ Clock               Port                Type    Type    to port(ns)                         to port(ns)                         Clock      
+--------------------------------------------------------------------------------------------------------------------------------------------
+ sys_clk             heart_beat_led                      8.442 (r)           SLOW            6.646 (r)           SLOW                       
+ sys_clk             heart_beat_led                      5.883 (r)           FAST            4.828 (r)           FAST                       
+ pixel_clk           b_out[0]                            8.173 (r)           SLOW            6.429 (r)           SLOW                       
+ pixel_clk           b_out[0]                            5.940 (r)           FAST            4.851 (r)           FAST                       
+ pixel_clk           b_out[1]                            8.853 (r)           SLOW            6.946 (r)           SLOW                       
+ pixel_clk           b_out[1]                            6.382 (r)           FAST            5.176 (r)           FAST                       
+ pixel_clk           b_out[2]                            8.781 (r)           SLOW            6.849 (r)           SLOW                       
+ pixel_clk           b_out[2]                            6.356 (r)           FAST            5.137 (r)           FAST                       
+ pixel_clk           b_out[3]                            8.895 (r)           SLOW            6.983 (r)           SLOW                       
+ pixel_clk           b_out[3]                            6.432 (r)           FAST            5.222 (r)           FAST                       
+ pixel_clk           b_out[4]                            8.610 (r)           SLOW            6.728 (r)           SLOW                       
+ pixel_clk           b_out[4]                            6.264 (r)           FAST            5.067 (r)           FAST                       
+ pixel_clk           b_out[5]                            8.351 (r)           SLOW            6.577 (r)           SLOW                       
+ pixel_clk           b_out[5]                            6.082 (r)           FAST            4.966 (r)           FAST                       
+ pixel_clk           b_out[6]                            9.325 (r)           SLOW            7.304 (r)           SLOW                       
+ pixel_clk           b_out[6]                            6.694 (r)           FAST            5.435 (r)           FAST                       
+ pixel_clk           b_out[7]                            9.322 (r)           SLOW            7.302 (r)           SLOW                       
+ pixel_clk           b_out[7]                            6.683 (r)           FAST            5.420 (r)           FAST                       
+ pixel_clk           de_out                              9.778 (r)           SLOW            7.651 (r)           SLOW                       
+ pixel_clk           de_out                              7.005 (r)           FAST            5.619 (r)           FAST                       
+ pixel_clk           g_out[0]                            9.899 (r)           SLOW            7.688 (r)           SLOW                       
+ pixel_clk           g_out[0]                            7.066 (r)           FAST            5.652 (r)           FAST                       
+ pixel_clk           g_out[1]                            10.272 (r)          SLOW            7.978 (r)           SLOW                       
+ pixel_clk           g_out[1]                            7.363 (r)           FAST            5.844 (r)           FAST                       
+ pixel_clk           g_out[2]                            10.014 (r)          SLOW            7.855 (r)           SLOW                       
+ pixel_clk           g_out[2]                            7.216 (r)           FAST            5.755 (r)           FAST                       
+ pixel_clk           g_out[3]                            9.706 (r)           SLOW            7.589 (r)           SLOW                       
+ pixel_clk           g_out[3]                            7.005 (r)           FAST            5.598 (r)           FAST                       
+ pixel_clk           g_out[4]                            9.532 (r)           SLOW            7.399 (r)           SLOW                       
+ pixel_clk           g_out[4]                            6.788 (r)           FAST            5.462 (r)           FAST                       
+ pixel_clk           g_out[5]                            9.713 (r)           SLOW            7.555 (r)           SLOW                       
+ pixel_clk           g_out[5]                            6.997 (r)           FAST            5.585 (r)           FAST                       
+ pixel_clk           g_out[6]                            9.552 (r)           SLOW            7.463 (r)           SLOW                       
+ pixel_clk           g_out[6]                            6.859 (r)           FAST            5.490 (r)           FAST                       
+ pixel_clk           g_out[7]                            9.378 (r)           SLOW            7.338 (r)           SLOW                       
+ pixel_clk           g_out[7]                            6.730 (r)           FAST            5.437 (r)           FAST                       
+ pixel_clk           hs_out                              9.563 (r)           SLOW            7.421 (r)           SLOW                       
+ pixel_clk           hs_out                              6.811 (r)           FAST            5.467 (r)           FAST                       
+ pixel_clk           r_out[0]                            9.434 (r)           SLOW            7.317 (r)           SLOW                       
+ pixel_clk           r_out[0]                            6.739 (r)           FAST            5.442 (r)           FAST                       
+ pixel_clk           r_out[1]                            9.216 (r)           SLOW            7.229 (r)           SLOW                       
+ pixel_clk           r_out[1]                            6.626 (r)           FAST            5.383 (r)           FAST                       
+ pixel_clk           r_out[2]                            9.520 (r)           SLOW            7.389 (r)           SLOW                       
+ pixel_clk           r_out[2]                            6.799 (r)           FAST            5.472 (r)           FAST                       
+ pixel_clk           r_out[3]                            9.342 (r)           SLOW            7.294 (r)           SLOW                       
+ pixel_clk           r_out[3]                            6.680 (r)           FAST            5.425 (r)           FAST                       
+ pixel_clk           r_out[4]                            9.441 (r)           SLOW            7.262 (r)           SLOW                       
+ pixel_clk           r_out[4]                            6.728 (r)           FAST            5.420 (r)           FAST                       
+ pixel_clk           r_out[5]                            9.251 (r)           SLOW            7.189 (r)           SLOW                       
+ pixel_clk           r_out[5]                            6.655 (r)           FAST            5.369 (r)           FAST                       
+ pixel_clk           r_out[6]                            9.491 (r)           SLOW            7.370 (r)           SLOW                       
+ pixel_clk           r_out[6]                            6.783 (r)           FAST            5.480 (r)           FAST                       
+ pixel_clk           r_out[7]                            9.147 (r)           SLOW            7.142 (r)           SLOW                       
+ pixel_clk           r_out[7]                            6.589 (r)           FAST            5.374 (r)           FAST                       
+ pixel_clk           vs_out                              8.901 (r)           SLOW            6.905 (r)           SLOW                       
+ pixel_clk           vs_out                              6.243 (r)           FAST            4.893 (r)           FAST                       
+ cfg_clk             hd_scl                              11.960 (r)          SLOW            8.149 (r)           SLOW                       
+ cfg_clk             hd_scl                              8.306 (r)           FAST            5.945 (r)           FAST                       
+ cfg_clk             hd_sda                              13.204 (r)          SLOW            8.291 (r)           SLOW                       
+ cfg_clk             hd_sda                              9.182 (r)           FAST            6.001 (r)           FAST                       
+ cfg_clk             hdmi_int_led                        9.461 (r)           SLOW            7.324 (r)           SLOW                       
+ cfg_clk             hdmi_int_led                        6.782 (r)           FAST            5.515 (r)           FAST                       
+ cfg_clk             init_over_rx                        11.901 (r)          SLOW            6.656 (r)           SLOW                       
+ cfg_clk             init_over_rx                        8.103 (r)           FAST            4.782 (r)           FAST                       
+ cfg_clk             rstn_out                            9.745 (r)           SLOW            7.558 (r)           SLOW                       
+ cfg_clk             rstn_out                            6.787 (r)           FAST            5.330 (r)           FAST                       
+ rst_clk             ddr_init_done                       18.523 (r)          SLOW            14.075 (r)          SLOW                       
+ rst_clk             ddr_init_done                       12.654 (r)          FAST            9.585 (r)           FAST                       
+ rst_clk             init_over_rx                        19.623 (r)          SLOW            14.074 (r)          SLOW                       
+ rst_clk             init_over_rx                        13.369 (r)          FAST            9.570 (r)           FAST                       
+ ddrphy_sysclk       ddr_init_done                       11.493 (r)          SLOW            8.025 (r)           SLOW                       
+ ddrphy_sysclk       ddr_init_done                       8.636 (r)           FAST            6.204 (r)           FAST                       
+ ddrphy_sysclk       hdmi_int_led                        12.563 (r)          SLOW            9.036 (r)           SLOW                       
+ ddrphy_sysclk       hdmi_int_led                        9.465 (r)           FAST            7.129 (r)           FAST                       
+ ddrphy_sysclk       init_over_rx                        12.593 (r)          SLOW            7.922 (r)           SLOW                       
+ ddrphy_sysclk       init_over_rx                        9.351 (r)           FAST            6.121 (r)           FAST                       
+ ddrphy_sysclk       mem_rst_n                           10.176 (r)          SLOW            6.984 (r)           SLOW                       
+ ddrphy_sysclk       mem_rst_n                           7.754 (r)           FAST            5.322 (r)           FAST                       
+ ddrphy_sysclk       uart_tx                             11.925 (r)          SLOW            8.735 (r)           SLOW                       
+ ddrphy_sysclk       uart_tx                             9.156 (r)           FAST            6.827 (r)           FAST                       
+ compute_clk         hdmi_int_led                        14.171 (r)          SLOW            9.882 (r)           SLOW                       
+ compute_clk         hdmi_int_led                        9.917 (r)           FAST            7.133 (r)           FAST                       
+ compute_clk         init_over_rx                        14.070 (r)          SLOW            8.937 (r)           SLOW                       
+ compute_clk         init_over_rx                        9.704 (r)           FAST            6.233 (r)           FAST                       
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Combinational Delays
+
+----------------------------------------------------------------------------------------------------------------
+ From                To                  Max                 Process         Min                 Process        
+ Port                Port                Delay(ns)           Corner          Delays(ns)          Corner         
+----------------------------------------------------------------------------------------------------------------
+ sys_clk             pix_clk             6.968               SLOW            5.655               SLOW           
+ sys_clk             pix_clk             4.943               FAST            4.245               FAST           
+----------------------------------------------------------------------------------------------------------------
+
+Setup/Hold times for input bus
+Clocked by: ddrphy_sysclk
+------------------------------------------------------------------------------------------------------------------------------------
+                                     Process                         Process         Setup           Hold            Source Offset  
+ Source              Setup(ns)       Corner          Hold(ns)        Corner          Slack(ns)       Slack(ns)       to Center(ns)  
+ mem_dq[0]           -0.294          SLOW            3.166           SLOW                                                           
+ mem_dq[0]           -0.712          FAST            2.796           FAST                                                           
+ mem_dq[1]           -0.045          SLOW            3.008           SLOW                                                           
+ mem_dq[1]           -0.571          FAST            2.698           FAST                                                           
+ mem_dq[2]           0.114           SLOW            2.960           SLOW                                                           
+ mem_dq[2]           -0.495          FAST            2.637           FAST                                                           
+ mem_dq[3]           -0.117          SLOW            3.075           SLOW                                                           
+ mem_dq[3]           -0.601          FAST            2.752           FAST                                                           
+ mem_dq[4]           -0.183          SLOW            3.107           SLOW                                                           
+ mem_dq[4]           -0.660          FAST            2.757           FAST                                                           
+ mem_dq[5]           -0.082          SLOW            3.047           SLOW                                                           
+ mem_dq[5]           -0.607          FAST            2.727           FAST                                                           
+ mem_dq[6]           -0.696          SLOW            3.419           SLOW                                                           
+ mem_dq[6]           -0.979          FAST            2.979           FAST                                                           
+ mem_dq[7]           -0.851          SLOW            3.529           SLOW                                                           
+ mem_dq[7]           -1.074          FAST            3.062           FAST                                                           
+ mem_dq[8]           -0.178          SLOW            3.084           SLOW                                                           
+ mem_dq[8]           -0.640          FAST            2.765           FAST                                                           
+ mem_dq[9]           0.094           SLOW            2.925           SLOW                                                           
+ mem_dq[9]           -0.466          FAST            2.642           FAST                                                           
+ mem_dq[10]          -0.348          SLOW            3.226           SLOW                                                           
+ mem_dq[10]          -0.753          FAST            2.839           FAST                                                           
+ mem_dq[11]          -0.496          SLOW            3.295           SLOW                                                           
+ mem_dq[11]          -0.820          FAST            2.888           FAST                                                           
+ mem_dq[12]          -0.140          SLOW            3.103           SLOW                                                           
+ mem_dq[12]          -0.640          FAST            2.755           FAST                                                           
+ mem_dq[13]          -0.395          SLOW            3.239           SLOW                                                           
+ mem_dq[13]          -0.774          FAST            2.854           FAST                                                           
+ mem_dq[14]          -0.996          SLOW            3.591           SLOW                                                           
+ mem_dq[14]          -1.126          FAST            3.120           FAST                                                           
+ mem_dq[15]          -0.886          SLOW            3.530           SLOW                                                           
+ mem_dq[15]          -1.070          FAST            3.069           FAST                                                           
+ mem_dq[16]          -0.238          SLOW            3.141           SLOW                                                           
+ mem_dq[16]          -0.702          FAST            2.769           FAST                                                           
+ mem_dq[17]          -0.229          SLOW            3.153           SLOW                                                           
+ mem_dq[17]          -0.716          FAST            2.796           FAST                                                           
+ mem_dq[18]          -0.219          SLOW            3.092           SLOW                                                           
+ mem_dq[18]          -0.661          FAST            2.735           FAST                                                           
+ mem_dq[19]          -0.079          SLOW            3.019           SLOW                                                           
+ mem_dq[19]          -0.600          FAST            2.709           FAST                                                           
+ mem_dq[20]          -0.114          SLOW            3.034           SLOW                                                           
+ mem_dq[20]          -0.610          FAST            2.711           FAST                                                           
+ mem_dq[21]          0.028           SLOW            2.971           SLOW                                                           
+ mem_dq[21]          -0.537          FAST            2.666           FAST                                                           
+ mem_dq[22]          -0.657          SLOW            3.435           SLOW                                                           
+ mem_dq[22]          -0.973          FAST            2.981           FAST                                                           
+ mem_dq[23]          -1.156          SLOW            3.680           SLOW                                                           
+ mem_dq[23]          -1.227          FAST            3.175           FAST                                                           
+ mem_dq[24]          -0.542          SLOW            3.363           SLOW                                                           
+ mem_dq[24]          -0.913          FAST            2.936           FAST                                                           
+ mem_dq[25]          -0.639          SLOW            3.387           SLOW                                                           
+ mem_dq[25]          -0.951          FAST            2.957           FAST                                                           
+ mem_dq[26]          0.140           SLOW            2.897           SLOW                                                           
+ mem_dq[26]          -0.466          FAST            2.631           FAST                                                           
+ mem_dq[27]          -0.371          SLOW            3.250           SLOW                                                           
+ mem_dq[27]          -0.771          FAST            2.843           FAST                                                           
+ mem_dq[28]          -0.222          SLOW            3.119           SLOW                                                           
+ mem_dq[28]          -0.666          FAST            2.784           FAST                                                           
+ mem_dq[29]          -0.508          SLOW            3.317           SLOW                                                           
+ mem_dq[29]          -0.845          FAST            2.893           FAST                                                           
+ mem_dq[30]          0.255           SLOW            2.874           SLOW                                                           
+ mem_dq[30]          -0.405          FAST            2.606           FAST                                                           
+ mem_dq[31]          -0.373          SLOW            3.230           SLOW                                                           
+ mem_dq[31]          -0.773          FAST            2.834           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+ Worst Case Summary  0.255           SLOW            3.680           SLOW                                                           
+ Worst Case Summary  -0.405          FAST            3.175           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+Worst Case Data Window: 3.935 (slow corner), 2.770 (fast corner)
+Ideal Clock Offset to Actual Clock: 1.713 (slow corner), 1.790 (fast corner)
+
+Setup/Hold times for input bus
+Clocked by: rx_pixel_clk
+------------------------------------------------------------------------------------------------------------------------------------
+                                     Process                         Process         Setup           Hold            Source Offset  
+ Source              Setup(ns)       Corner          Hold(ns)        Corner          Slack(ns)       Slack(ns)       to Center(ns)  
+ b_in[0]             -0.937          SLOW            2.091           SLOW                                                           
+ b_in[0]             -0.759          FAST            1.467           FAST                                                           
+ b_in[1]             -0.900          SLOW            2.042           SLOW                                                           
+ b_in[1]             -0.706          FAST            1.432           FAST                                                           
+ b_in[2]             -0.878          SLOW            2.032           SLOW                                                           
+ b_in[2]             -0.698          FAST            1.406           FAST                                                           
+ b_in[3]             -0.725          SLOW            1.960           SLOW                                                           
+ b_in[3]             -0.616          FAST            1.357           FAST                                                           
+ b_in[4]             -1.125          SLOW            2.211           SLOW                                                           
+ b_in[4]             -0.867          FAST            1.555           FAST                                                           
+ b_in[5]             -0.674          SLOW            1.918           SLOW                                                           
+ b_in[5]             -0.577          FAST            1.348           FAST                                                           
+ b_in[6]             -0.955          SLOW            2.118           SLOW                                                           
+ b_in[6]             -0.765          FAST            1.489           FAST                                                           
+ b_in[7]             -1.189          SLOW            2.266           SLOW                                                           
+ b_in[7]             -0.891          FAST            1.579           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+ Worst Case Summary  -0.674          SLOW            2.266           SLOW                                                           
+ Worst Case Summary  -0.577          FAST            1.579           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+Worst Case Data Window: 1.592 (slow corner), 1.002 (fast corner)
+Ideal Clock Offset to Actual Clock: 1.470 (slow corner), 1.078 (fast corner)
+
+Setup/Hold times for input bus
+Clocked by: rx_pixel_clk
+------------------------------------------------------------------------------------------------------------------------------------
+                                     Process                         Process         Setup           Hold            Source Offset  
+ Source              Setup(ns)       Corner          Hold(ns)        Corner          Slack(ns)       Slack(ns)       to Center(ns)  
+ g_in[0]             -0.823          SLOW            2.044           SLOW                                                           
+ g_in[0]             -0.708          FAST            1.431           FAST                                                           
+ g_in[1]             -0.532          SLOW            1.808           SLOW                                                           
+ g_in[1]             -0.453          FAST            1.265           FAST                                                           
+ g_in[2]             -0.531          SLOW            1.817           SLOW                                                           
+ g_in[2]             -0.446          FAST            1.270           FAST                                                           
+ g_in[3]             -0.755          SLOW            1.952           SLOW                                                           
+ g_in[3]             -0.614          FAST            1.364           FAST                                                           
+ g_in[4]             -0.692          SLOW            1.926           SLOW                                                           
+ g_in[4]             -0.583          FAST            1.349           FAST                                                           
+ g_in[5]             -0.551          SLOW            1.813           SLOW                                                           
+ g_in[5]             -0.485          FAST            1.276           FAST                                                           
+ g_in[6]             -0.797          SLOW            2.003           SLOW                                                           
+ g_in[6]             -0.644          FAST            1.396           FAST                                                           
+ g_in[7]             -0.890          SLOW            2.083           SLOW                                                           
+ g_in[7]             -0.714          FAST            1.445           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+ Worst Case Summary  -0.531          SLOW            2.083           SLOW                                                           
+ Worst Case Summary  -0.446          FAST            1.445           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+Worst Case Data Window: 1.552 (slow corner), 0.999 (fast corner)
+Ideal Clock Offset to Actual Clock: 1.307 (slow corner), 0.946 (fast corner)
+
+Setup/Hold times for input bus
+Clocked by: rx_pixel_clk
+------------------------------------------------------------------------------------------------------------------------------------
+                                     Process                         Process         Setup           Hold            Source Offset  
+ Source              Setup(ns)       Corner          Hold(ns)        Corner          Slack(ns)       Slack(ns)       to Center(ns)  
+ r_in[0]             -0.736          SLOW            1.946           SLOW                                                           
+ r_in[0]             -0.597          FAST            1.354           FAST                                                           
+ r_in[1]             -0.766          SLOW            1.971           SLOW                                                           
+ r_in[1]             -0.636          FAST            1.370           FAST                                                           
+ r_in[2]             -0.909          SLOW            2.072           SLOW                                                           
+ r_in[2]             -0.711          FAST            1.436           FAST                                                           
+ r_in[3]             -0.781          SLOW            1.969           SLOW                                                           
+ r_in[3]             -0.647          FAST            1.370           FAST                                                           
+ r_in[4]             -0.888          SLOW            2.045           SLOW                                                           
+ r_in[4]             -0.703          FAST            1.423           FAST                                                           
+ r_in[5]             -0.847          SLOW            2.011           SLOW                                                           
+ r_in[5]             -0.678          FAST            1.392           FAST                                                           
+ r_in[6]             -0.830          SLOW            1.999           SLOW                                                           
+ r_in[6]             -0.626          FAST            1.387           FAST                                                           
+ r_in[7]             -0.790          SLOW            2.018           SLOW                                                           
+ r_in[7]             -0.635          FAST            1.392           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+ Worst Case Summary  -0.736          SLOW            2.072           SLOW                                                           
+ Worst Case Summary  -0.597          FAST            1.436           FAST                                                           
+------------------------------------------------------------------------------------------------------------------------------------
+Worst Case Data Window: 1.336 (slow corner), 0.839 (fast corner)
+Ideal Clock Offset to Actual Clock: 1.404 (slow corner), 1.017 (fast corner)
+
+Max/Min delays for output bus
+Clocked by: pixel_clk
+----------------------------------------------------------------------------------------------------
+                     Max             Process         Min             Process         Edge           
+ Pad                 Delay(ns)       Corner          Delay(ns)       Corner          Skew(ns)       
+ b_out[0]            8.173           SLOW            6.429           SLOW            0.000          
+ b_out[0]            5.940           FAST            4.851           FAST            0.000          
+ b_out[1]            8.853           SLOW            6.946           SLOW            0.680          
+ b_out[1]            6.382           FAST            5.176           FAST            0.442          
+ b_out[2]            8.781           SLOW            6.849           SLOW            0.608          
+ b_out[2]            6.356           FAST            5.137           FAST            0.416          
+ b_out[3]            8.895           SLOW            6.983           SLOW            0.722          
+ b_out[3]            6.432           FAST            5.222           FAST            0.492          
+ b_out[4]            8.610           SLOW            6.728           SLOW            0.437          
+ b_out[4]            6.264           FAST            5.067           FAST            0.324          
+ b_out[5]            8.351           SLOW            6.577           SLOW            0.178          
+ b_out[5]            6.082           FAST            4.966           FAST            0.142          
+ b_out[6]            9.325           SLOW            7.304           SLOW            1.152          
+ b_out[6]            6.694           FAST            5.435           FAST            0.754          
+ b_out[7]            9.322           SLOW            7.302           SLOW            1.149          
+ b_out[7]            6.683           FAST            5.420           FAST            0.743          
+----------------------------------------------------------------------------------------------------
+ Worst Case Summary  9.175           SLOW            6.579           SLOW            1.152          
+ Worst Case Summary  6.544           FAST            5.001           FAST            0.754          
+----------------------------------------------------------------------------------------------------
+Bus Skew: 1.152 (slow corner)
+Bus Skew: 0.754 (fast corner)
+
+Max/Min delays for output bus
+Clocked by: pixel_clk
+----------------------------------------------------------------------------------------------------
+                     Max             Process         Min             Process         Edge           
+ Pad                 Delay(ns)       Corner          Delay(ns)       Corner          Skew(ns)       
+ g_out[0]            9.899           SLOW            7.688           SLOW            0.000          
+ g_out[0]            7.066           FAST            5.652           FAST            0.000          
+ g_out[1]            10.272          SLOW            7.978           SLOW            0.373          
+ g_out[1]            7.363           FAST            5.844           FAST            0.297          
+ g_out[2]            10.014          SLOW            7.855           SLOW            0.115          
+ g_out[2]            7.216           FAST            5.755           FAST            0.150          
+ g_out[3]            9.706           SLOW            7.589           SLOW            -0.193         
+ g_out[3]            7.005           FAST            5.598           FAST            -0.061         
+ g_out[4]            9.532           SLOW            7.399           SLOW            -0.367         
+ g_out[4]            6.788           FAST            5.462           FAST            -0.278         
+ g_out[5]            9.713           SLOW            7.555           SLOW            -0.186         
+ g_out[5]            6.997           FAST            5.585           FAST            -0.069         
+ g_out[6]            9.552           SLOW            7.463           SLOW            -0.347         
+ g_out[6]            6.859           FAST            5.490           FAST            -0.207         
+ g_out[7]            9.378           SLOW            7.338           SLOW            -0.521         
+ g_out[7]            6.730           FAST            5.437           FAST            -0.336         
+----------------------------------------------------------------------------------------------------
+ Worst Case Summary  10.122          SLOW            7.488           SLOW            0.373          
+ Worst Case Summary  7.213           FAST            5.587           FAST            0.297          
+----------------------------------------------------------------------------------------------------
+Bus Skew: 0.373 (slow corner)
+Bus Skew: 0.297 (fast corner)
+
+Max/Min delays for output bus
+Clocked by: pixel_clk
+----------------------------------------------------------------------------------------------------
+                     Max             Process         Min             Process         Edge           
+ Pad                 Delay(ns)       Corner          Delay(ns)       Corner          Skew(ns)       
+ r_out[0]            9.434           SLOW            7.317           SLOW            0.000          
+ r_out[0]            6.739           FAST            5.442           FAST            0.000          
+ r_out[1]            9.216           SLOW            7.229           SLOW            -0.218         
+ r_out[1]            6.626           FAST            5.383           FAST            -0.113         
+ r_out[2]            9.520           SLOW            7.389           SLOW            0.086          
+ r_out[2]            6.799           FAST            5.472           FAST            0.060          
+ r_out[3]            9.342           SLOW            7.294           SLOW            -0.092         
+ r_out[3]            6.680           FAST            5.425           FAST            -0.059         
+ r_out[4]            9.441           SLOW            7.262           SLOW            0.007          
+ r_out[4]            6.728           FAST            5.420           FAST            -0.011         
+ r_out[5]            9.251           SLOW            7.189           SLOW            -0.183         
+ r_out[5]            6.655           FAST            5.369           FAST            -0.084         
+ r_out[6]            9.491           SLOW            7.370           SLOW            0.057          
+ r_out[6]            6.783           FAST            5.480           FAST            0.044          
+ r_out[7]            9.147           SLOW            7.142           SLOW            -0.287         
+ r_out[7]            6.589           FAST            5.374           FAST            -0.150         
+----------------------------------------------------------------------------------------------------
+ Worst Case Summary  9.370           SLOW            7.292           SLOW            0.086          
+ Worst Case Summary  6.649           FAST            5.519           FAST            0.060          
+----------------------------------------------------------------------------------------------------
+Bus Skew: 0.086 (slow corner)
+Bus Skew: 0.060 (fast corner)
+
+Report timing is finished successfully.
+Action report_timing: Real time elapsed is 0h:1m:13s
+Action report_timing: CPU time elapsed is 0h:1m:1s
+Action report_timing: Process CPU time elapsed is 0h:1m:26s
+Current time: Wed Nov  4 10:43:56 2026
+Action report_timing: Peak memory pool usage is 4,128 MB
+W: open run.log failed.
+Action from report_timing to report_timing: Total Real Time elapsed is 0h:1m:13s
+Action from report_timing to report_timing: Total CPU time elapsed is 0h:1m:1s
+Action from report_timing to report_timing: Total Process CPU Time elapsed is 0h:1m:26s
+Process "Report Timing" done.
+Executing : report_timing -force_to_run -input_db_file D:/FPGA/TriHaRiscv-v3/build/video/pds/ringr6d/place_route/triha_face_board_top_pnr.adf -max_path 128 -nworst 1 -report_max_skew -report_io_datasheet successfully.

@@ -1,0 +1,118 @@
+{
+  "source": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign.drawio",
+  "source_sha256": "0efc99b10bb1d0df78220b10f2457502a225d978760a8cf800d8e94da70d5694",
+  "records": [
+    {
+      "page": 6,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page6.png",
+      "exit": 0,
+      "sha256": "8c5f1f07db67490994bd9b2063a349bd83edb270b0a8b9b60955dadbf3640533"
+    },
+    {
+      "page": 6,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page6.svg",
+      "exit": 0,
+      "sha256": "af63deb416dc53dd9d8087eebcc7f5e0c519850a25deaad201a24466675ca1ea"
+    },
+    {
+      "page": 7,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page7.png",
+      "exit": 0,
+      "sha256": "f560c1a3184f2bed037c1369dff503ac34156e554fa36912f02742037eb24ae7"
+    },
+    {
+      "page": 7,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page7.svg",
+      "exit": 0,
+      "sha256": "62f2b83a6e6f297aee376ffe33079d70859f0dbebd9d526365945e97ba7dcc41"
+    },
+    {
+      "page": 9,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page9.png",
+      "exit": 0,
+      "sha256": "61df901e020a3d7948916de61cf53226d1f5655776018b4e0b9a6005a404434d"
+    },
+    {
+      "page": 9,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page9.svg",
+      "exit": 0,
+      "sha256": "be84d6e9a5cf7861e56c0c4ef0d6381d55abae385843ec1355a3bad1e2c37155"
+    },
+    {
+      "page": 10,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page10.png",
+      "exit": 0,
+      "sha256": "de688c57f54d4d1ab9c109a37f95e9ed23622d201803a53b17fe5a9b6a5c7cef"
+    },
+    {
+      "page": 10,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page10.svg",
+      "exit": 0,
+      "sha256": "a33e233fbc9fb78cf23e2f838fe87ed0f99d30a6cc570d496802b1ec36bfe8f4"
+    },
+    {
+      "page": 11,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page11.png",
+      "exit": 0,
+      "sha256": "f1057652c35d7dc4d5fa0e01e1715bf160c45c98f60bcdb783cf562980d3f4e5"
+    },
+    {
+      "page": 11,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page11.svg",
+      "exit": 0,
+      "sha256": "e220a498335218a938a5fcb316d5e0c9ca220910a6a6abf6c5ea88e1d5ce97ee"
+    },
+    {
+      "page": 12,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page12.png",
+      "exit": 0,
+      "sha256": "c8803d33b23d2839ebb9d72fe8613fae83d1fa327e25a141f108effb72b7ed07"
+    },
+    {
+      "page": 12,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page12.svg",
+      "exit": 0,
+      "sha256": "5863256b41d0fd8ec654120e7a95e8818ef82355a11a67b387051e49bdeeb7ca"
+    },
+    {
+      "page": 13,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page13.png",
+      "exit": 0,
+      "sha256": "85954ef1fdc7c71cb6fe77d52022921662c0ed3eed30846308257eebf800fc1e"
+    },
+    {
+      "page": 13,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page13.svg",
+      "exit": 0,
+      "sha256": "02543ff8b7ee01ec94073ffc28937d8abe5a16f5ad0a7cf4ccff0f4b47413da7"
+    },
+    {
+      "page": 14,
+      "format": "png",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page14.png",
+      "exit": 0,
+      "sha256": "bb1d735af837e208bf575a4b814fc041103711041a9c7ef60dddd108bb8c0c15"
+    },
+    {
+      "page": 14,
+      "format": "svg",
+      "path": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign-preview\\page14.svg",
+      "exit": 0,
+      "sha256": "b7a4ffc1694fc98ffbfa44fecfaddd38436362243a437d7d751f388c381f5ae5"
+    }
+  ]
+}

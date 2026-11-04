@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scope": "Current full-system simulation and source alignment only; no routed timing or board proof.",
+  "checks": [
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-v3\\build\\soc\\face_system-20261104T011551_456009Z",
+      "result_sha256": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00",
+      "shared_sources": 137,
+      "expected_faces": 1
+    },
+    {
+      "directory": "D:\\FPGA\\TriHaRiscv-v3\\build\\soc\\face_system-20261104T011551_453685Z",
+      "result_sha256": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44",
+      "shared_sources": 137,
+      "expected_faces": 0
+    }
+  ],
+  "inputs": {
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\record_ring_simulations_20261104.py": "9a1f2bcf9ef3fdb9f6aded697fd0fd3cdeacae6ee7f2839d898dbb40a82d0835",
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\pds\\face_photo_ring_50_map_20261104\\result.json": "591f5fb82bccc61ed6d9a2bdb23eec310bb573adea63cc34a8dc21f5ace67f71",
+    "D:\\FPGA\\TriHaRiscv-v3\\scripts\\video\\qualify_face_bitstream.py": "87ad16c23c24a0e7b47ac28f0881a5f67d7069da9bcb46424494cce7db09fca5"
+  }
+}

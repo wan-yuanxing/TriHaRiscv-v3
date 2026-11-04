@@ -1,0 +1,8 @@
+{
+  "pid": 22628,
+  "argv": [
+    "D:\\xpack-riscv-gcc\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+    "--version"
+  ],
+  "timeout": 120
+}

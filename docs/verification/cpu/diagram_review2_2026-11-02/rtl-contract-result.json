@@ -1,0 +1,245 @@
+{
+  "status": "PASS",
+  "scope": "Directed RTL contract checks; not full ISA or formal proof",
+  "inputs": {
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr_regfile.v": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr.v": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_decode.v": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_frontend.v": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_issue.v": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_lsu.v": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_multiplier.v": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_npc.v": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_pipe_ctrl.v": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\riscv_core.v": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_frontend.v": "92bf85932ebe747f9606b0e080f6f74cf14beb11987c7456e5b8e1a72aa83b58",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_npc.v": "fb10fa1ea24289a0a11d387e1d8917624d3d851ab7d499bdbc97e40908f3115f",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_btb.v": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_decode.v": "1d89e0899fb31c64d64f61af39016d2f7f081ea35bc9abd06dc0e31cf497314a",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_issue.v": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_regfile.v": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_multiplier.v": "cf73e46a04b6f0f78efa57d0a221047e9ef9cea54e9d6e0e68a6a141c8a6c903",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_csr.v": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_lsu.v": "3d614d5f62f8e96184cade9cb0af4c18d070b8d6ea22fa1f2bdc9003acb4debd",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_pipe_ctrl.v": "b789427ee8861cac6b29830903997e29b385e44ee36c1e61dd119acc0ba19c54",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_cpu.v": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_core.v": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\tb\\tb_core_icarus\\tcm_mem.v": "308c14bd6c97b0971472188edf584c8f2ed26fe55e59bee88766c1b7eca6b801",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\tb\\tb_core_icarus\\tcm_mem_ram.v": "f260e88fcf41d1983a117b53810173ea8ddaef8cd125c1aaa9ea5f22d5cd6ebe",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_fifo_head_ring.v": "dd348b999e46394e9a6db1522c4e689d5b3000c778c8edeef554ca59492d7ff0",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_e1_branch_pair.v": "406d75c1934fe8e2055dc1ac42cddc150fca5460793a931b6b2a329d645bcfae",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_mul_early_meta.v": "6a17e9d024c4c8ab2a6811e0d0f23acc6634856bd5c657dce91bc86a2e39ff85",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_frontend_redirect.v": "b01b97ee0b8ec945c1812d0c948309cfa13b9ac8b60139fa87931768d5597b1d",
+    "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_lsu_queue.v": "3ee90f9ea6cc33c846d1e674f6b46dc2a49077b8f5032d24102f191eb6c5bd42",
+    "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_RAM32X2DP.v": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307",
+    "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\INT_LUTMUX2_UDP.v": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a",
+    "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\INT_LUTMUX4_UDP.v": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841",
+    "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_LUT5.v": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9",
+    "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_LUT6.v": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17",
+    "D:\\FPGA\\TriHaRiscv-main\\build\\cpu-diagram-review2-20261102\\rtl-structural-checks\\tb_diagram_contract.v": "aaab08ae7a28751f3de0e0b13f53f6804d60c1d7881c4577571d9c7aecf8a92d"
+  },
+  "commands": [
+    {
+      "name": "vmap",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+        "-c"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "vlib",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+        "work"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "compile",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+        "-work",
+        "work",
+        "+define+CPU_FRONTEND_MODULE=triha_frontend",
+        "+incdir+D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_alu.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr_regfile.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_csr.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_decode.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_decoder.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_divider.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_exec.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_fetch.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_frontend.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_issue.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_lsu.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_mmu.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_multiplier.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_npc.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_pipe_ctrl.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\biriscv_regfile.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\src\\core\\riscv_core.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_frontend.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_npc.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_btb.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_decode.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_issue.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_regfile.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_divider.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_multiplier.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_csr.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_lsu.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_pipe_ctrl.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_cpu.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\triha_core.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\tb\\tb_core_icarus\\tcm_mem.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\rtl\\cpu\\vendor\\tb\\tb_core_icarus\\tcm_mem_ram.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_fifo_head_ring.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_e1_branch_pair.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_mul_early_meta.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_frontend_redirect.v",
+        "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\tb\\cpu\\tb_lsu_queue.v",
+        "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_RAM32X2DP.v",
+        "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\INT_LUTMUX2_UDP.v",
+        "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\INT_LUTMUX4_UDP.v",
+        "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_LUT5.v",
+        "D:\\pango\\PDS_2022.2-SP6.4\\arch\\vendor\\pango\\verilog\\simulation\\GTP_LUT6.v",
+        "D:\\FPGA\\TriHaRiscv-main\\build\\cpu-diagram-review2-20261102\\rtl-structural-checks\\tb_diagram_contract.v"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "tb_fifo_head_ring",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+        "-c",
+        "-onfinish",
+        "exit",
+        "-voptargs=+acc",
+        "tb_fifo_head_ring",
+        "-do",
+        "onerror {quit -f -code 2}; onbreak {quit -f -code 3}; run -all; quit -f -code 0"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "tb_e1_branch_pair",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+        "-c",
+        "-onfinish",
+        "exit",
+        "-voptargs=+acc",
+        "tb_diagram_contract",
+        "-do",
+        "onerror {quit -f -code 2}; onbreak {quit -f -code 3}; run -all; quit -f -code 0"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "tb_mul_early_meta",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+        "-c",
+        "-onfinish",
+        "exit",
+        "-voptargs=+acc",
+        "tb_mul_early_meta",
+        "-do",
+        "onerror {quit -f -code 2}; onbreak {quit -f -code 3}; run -all; quit -f -code 0"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "tb_frontend_redirect",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+        "-c",
+        "-onfinish",
+        "exit",
+        "-voptargs=+acc",
+        "tb_frontend_redirect",
+        "-do",
+        "onerror {quit -f -code 2}; onbreak {quit -f -code 3}; run -all; quit -f -code 0"
+      ],
+      "return_code": 0
+    },
+    {
+      "name": "tb_lsu_queue",
+      "cmd": [
+        "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+        "-c",
+        "-onfinish",
+        "exit",
+        "-voptargs=+acc",
+        "tb_lsu_queue",
+        "-do",
+        "onerror {quit -f -code 2}; onbreak {quit -f -code 3}; run -all; quit -f -code 0"
+      ],
+      "return_code": 0
+    }
+  ],
+  "tests": [
+    {
+      "name": "tb_fifo_head_ring",
+      "marker": "HEAD_RING_PASS",
+      "pass_lines": [
+        "# HEAD_RING_PASS steps=20821 storage=1 write_wraps=2008 read_wraps=1926"
+      ]
+    },
+    {
+      "name": "tb_e1_branch_pair",
+      "marker": "E1_PAIR_PASS",
+      "pass_lines": [
+        "# E1_PAIR_PASS cycles=156 holds=9 complete_recovery_overlap=1 traps=3 misalign=2/1 recoveries=4 speculative_pairs=1"
+      ]
+    },
+    {
+      "name": "tb_mul_early_meta",
+      "marker": "MUL_META_PASS",
+      "pass_lines": [
+        "# MUL_META_PASS samples=41027 full_writeback_early_value_ready"
+      ]
+    },
+    {
+      "name": "tb_frontend_redirect",
+      "marker": "FRONTEND_PASS",
+      "pass_lines": [
+        "# FRONTEND_PASS redirects=4 delivered=12 dropped=4"
+      ]
+    },
+    {
+      "name": "tb_lsu_queue",
+      "marker": "LSU_QUEUE_PASS",
+      "pass_lines": [
+        "# LSU_QUEUE_CASE_PASS depth=2 cycles=10001 pushes=3689 pops=3670 full_pair=606 empty_pair=618",
+        "# LSU_QUEUE_CASE_PASS depth=4 cycles=10001 pushes=4354 pops=4319 full_pair=303 empty_pair=317",
+        "# LSU_QUEUE_PASS two_and_four_entries_all_stale_and_valid_data"
+      ]
+    }
+  ],
+  "source_unchanged": true,
+  "outputs": {
+    "compile.log": "6b327bf0f23010614105c82e02da935757923990585fc8abf9333d36c79aa57a",
+    "cycle-contract.csv": "75f186a1c8f7055f05c5b4334d682691805dfdbe63e17454b953d0be36a94879",
+    "modelsim.ini": "766b785239121feb3c31a1909dec57455128095e2eb5e276a81ef537ee5cd620",
+    "tb_diagram_contract.v": "aaab08ae7a28751f3de0e0b13f53f6804d60c1d7881c4577571d9c7aecf8a92d",
+    "tb_e1_branch_pair.log": "31863062a8422c32ea2cb27684d120bb0ac62bfbf349cb055d676511959da419",
+    "tb_fifo_head_ring.log": "11f0931e56e17f7a28de2868609dd6ed30f60ccbc09ef0cef26f02475f9f81b3",
+    "tb_frontend_redirect.log": "807dca65771e8df95b913f636efd34a734aec118a776fd5b05d5d3278e203716",
+    "tb_lsu_queue.log": "bc530de4023ac1221377dfd7aaedf6832455aa82d920b4e968749ba0608967dd",
+    "tb_mul_early_meta.log": "512e43eb11717c4d4f16012e579b0a67569a7a6efc8775a61fcbcc6e2dc563d4",
+    "transcript": "53f4efc491d301816b7b9d58395db253a3aab9493f4add16b61dfa12d537d6e3",
+    "vlib.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vmap.log": "75e2fca886dec819f4d1e4c659b6a7dddad1259483abe415e7a220070061dbbc"
+  }
+}

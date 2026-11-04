@@ -1,0 +1,10 @@
+{
+  "pid": 29132,
+  "argv": [
+    "D:\\modeltech64_10.5\\win64\\vsim.exe",
+    "-c",
+    "-do",
+    "run.do"
+  ],
+  "timeout": 7200
+}

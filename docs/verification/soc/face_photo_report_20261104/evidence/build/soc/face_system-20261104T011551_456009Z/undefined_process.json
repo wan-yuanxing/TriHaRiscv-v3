@@ -1,0 +1,9 @@
+{
+  "pid": 29860,
+  "argv": [
+    "D:\\xpack-riscv-gcc\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-nm.exe",
+    "-u",
+    "D:\\FPGA\\photo-ring-lab-20261104\\build\\soc\\face_system-20261104T011551_456009Z\\firmware.elf"
+  ],
+  "timeout": 120
+}

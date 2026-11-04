@@ -1,0 +1,1175 @@
+{
+  "date": "2026-11-03",
+  "source_roots": {
+    "SOC": "TriHaRiscv-v3-soc-face-box-integration",
+    "DBG": "npu_zgtc",
+    "RENDER": "归档 VCD 原生窗口截图工作区",
+    "PACKAGE": "本次交付文件"
+  },
+  "architecture": {
+    "user_attachment": "TriHaRiscv_NPU_Reference_Style(1).drawio",
+    "source_bytes": 29311,
+    "source_sha256": "5e5a3b76a52f904c96d3a50b36a580d301ec9afc42cf35250b400f8e01fea4b8",
+    "delivered_drawio": "TriHaRiscv_NPU_Reference_Style.drawio",
+    "delivered_drawio_sha256": "5e5a3b76a52f904c96d3a50b36a580d301ec9afc42cf35250b400f8e01fea4b8",
+    "drawio_byte_identical": true,
+    "direct_png_export": "TriHaRiscv_NPU_Reference_Style.png",
+    "png_sha256": "30f9d9e479aa1ea59d87593b72aa989811ab27b99bba3ee05f60faadabb7ae64",
+    "embedded_geometry_styles_and_labels_match_attachment": true
+  },
+  "waveform_revision": {
+    "scope": "Only full SoC specification chapter 7 and matching standalone chapter 4; related figure provenance updated",
+    "native_waveform_figures": 14,
+    "untouched_architecture": true,
+    "untouched_other_chapter_waveforms": 2,
+    "new_simulation": false,
+    "synthetic_waveforms": false,
+    "capture_tool": "ModelSim SE-64 10.4 Wave / Win32 PrintWindow",
+    "multi_panel_composition": "Vertical join at original pixel size; exact panel pixels verified",
+    "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+  },
+  "sources": [
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_layer_20261102_v1/01_layer_mmio_actual_vcd.png",
+      "bytes": 63315,
+      "sha256": "40dc5a4d54fd5e0047ed582c2c31c9a030fe7c45ccb509f19627939b47bd4795",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/01_layer_mmio_actual_vcd.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_layer_20261102_v1/01_layer_mmio_actual_vcd.json",
+      "bytes": 542,
+      "sha256": "1e33e63562a0eba704cb3428fa99a53056468cc46237808a9926915893731aa1",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/01_layer_mmio_actual_vcd.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_board_20261102_v1/01_local_reset_actual_vcd.png",
+      "bytes": 103501,
+      "sha256": "accd9bf0847506b4d5481dd05bb6c077d8c937436d1d8f207536bd8606db1b55",
+      "role": "Archived simulation figure",
+      "file": "assets/02_local_reset_actual_vcd.png"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_board_20261102_v1/01_local_reset_actual_vcd.json",
+      "bytes": 659,
+      "sha256": "8516d89fe07615f12aec89e50fc6bdc0c38d5b7d2bf1e475b22075f8b5cca223",
+      "role": "Original image provenance"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_payload_20261103/01_fifo_payload_epoch_actual_vcd.png",
+      "bytes": 156394,
+      "sha256": "c5165858674ca956c023d273f63e4c76918d508e8d2990b02cdc1ca292a613ab",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/03_fifo_payload_epoch_actual_vcd.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_payload_20261103/01_fifo_payload_epoch_actual_vcd.json",
+      "bytes": 1169,
+      "sha256": "60d2e3274a5271def7803ed064d112b56a5a39fc563568cffe3fdfdeed3a32ad",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/03_fifo_payload_epoch_actual_vcd.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_board_20261102_v1/02_ingress_ready_actual_vcd.png",
+      "bytes": 89483,
+      "sha256": "1142ee5256fec6ad5dc4d4dc8aafb96456e32c2924f83eab524a0e7a44649ee1",
+      "role": "Archived simulation figure",
+      "file": "assets/04_ingress_ready_actual_vcd.png"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_board_20261102_v1/02_ingress_ready_actual_vcd.json",
+      "bytes": 583,
+      "sha256": "600ac8b11f38baebfd54bb487afe7ced4c8090e11ebea64da52b470014b9ecb5",
+      "role": "Original image provenance"
+    },
+    {
+      "source": "DBG/word/仿真截图/mem_bridge_v1/03_actual_hmic_read_write.png",
+      "bytes": 124838,
+      "sha256": "93b33e5cd4c5953a5981926c1c7bfa424dbde82648144246b735bedfe555ae81",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_dma_retirement.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/mem_bridge_v1/figure_manifest.json",
+      "bytes": 2584,
+      "sha256": "5ca9785fd252b8c81554544d52d2fead48cef204f0b603951a88f69683fb4b77",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/word/46_完整读写桥与本地完成验证.md",
+      "bytes": 13351,
+      "sha256": "efb692851b7b886aa3a6d490d1e58a8b51392bc5e2870fe751720a16b7aa978e",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_input_phase_v1/03_actual_resident_pipeline_wave.png",
+      "bytes": 96685,
+      "sha256": "e556605e440ea4ad19ec18e6116cb5add7128cc4f7f6ffca0cf4962808ddca85",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_input_gather.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_input_phase_v1/figure_manifest.json",
+      "bytes": 2094,
+      "sha256": "7d19e9c0f1bc90b4578e7484d4e0633d1d5bb4996120014ebd1ec7b2aea5893a",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/word/96_B03参数行缓存与整帧内存复用验证.md",
+      "bytes": 13069,
+      "sha256": "5a4a19a0de61918cb9225752598297cd07f453f171537885e24d6e06c61847c9",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_aux_rx_20261103/01_aux_rx_ce0_actual_vcd.png",
+      "bytes": 154231,
+      "sha256": "bcbfb821358b500c537dcac8368d6020bf8fa29047682b2517e93ff451c2e9b1",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_aux_coeff_rx.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/CPU_graph_aux_rx_20261103/01_aux_rx_ce0_actual_vcd.json",
+      "bytes": 950,
+      "sha256": "46990730b684f0cc603924a8be00a042e53a288a6db209eaffe6936ccbec1c8b",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/npu_aux_coeff_rx.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/175_NPU辅助参数偏移预计算与时序收敛评估.md",
+      "bytes": 10759,
+      "sha256": "24b09869c2dc7af5506fbb2ad47430f52d3bb566ac9351e709e41d4d32faa5a0",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_model_tile_v1/03_actual_Q8_O_and_readback.png",
+      "bytes": 156611,
+      "sha256": "9c2e2bbd60b540423498506ab3d29bae008970d4476d05fc605849340c4e882f",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_output_mask.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_model_tile_v1/figure_manifest.json",
+      "bytes": 92632,
+      "sha256": "89dc77c64ef27865efce874e4ba1e4c49db478c6895c8eb4c836962a5287116a",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/word/90_B03_MODEL阵列与实际缓存验证结果.md",
+      "bytes": 10769,
+      "sha256": "d2a74714cc99bcac266e5d70543798647590340abba5e35710f2d3a23d301cf9",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_model_tile_v1/01_actual_array_and_tile_path.png",
+      "bytes": 156310,
+      "sha256": "6be567d8e8d63a3057b800b1654caade66d602c7d325170fd161958e8764b678",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_dense_accumulate.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_model_q8_v1/02_actual_Q8_model_inputs_and_RNE.png",
+      "bytes": 174240,
+      "sha256": "047d3c3e6400f078f047230c4302392fdf8f8921e6f1434b241e35f78f6ee7e3",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_q_rne.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/b03_model_q8_v1/figure_manifest.json",
+      "bytes": 79406,
+      "sha256": "086f8366d12153bfb085f24e6f227846a29cb56616f2737b5ee59014a9b66d62",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/word/88_B03_MODEL_Q8量化流水验证结果.md",
+      "bytes": 8664,
+      "sha256": "95d488dbac561142066051cfd4aef88bbccfdc0f59bae7c74e9f548a1544e728",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/仿真截图/B03_release_layer_20261028/01_compact_layer18_actual_blockDMA.png",
+      "bytes": 131639,
+      "sha256": "78ec75a39d643d27110fab9d573b9056c4c526926da8107e0b27c981769c1cf3",
+      "role": "Archived simulation figure",
+      "superseded_delivery": "assets/npu_pool_resize.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/word/仿真截图/B03_release_layer_20261028/manifest.json",
+      "bytes": 805,
+      "sha256": "8649ea9cfe8a1cd3dc0a1396f1d420fb46e890d6c780988b9ccfbff3d66a2128",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/word/107_B03紧凑运算与行存储规格.md",
+      "bytes": 19051,
+      "sha256": "999af733db305574d2bdfa7e7042e523ef251c654b3030a512ea59a08547b950",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/layer_validation.json",
+      "bytes": 16218,
+      "sha256": "9285609a5b22c5b9dc7f704b844dec757611a89e761c6c5f944a4614d1c7ae91",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/simulation/console.log",
+      "bytes": 5714,
+      "sha256": "7c0d853c4ea9f49429f5bceeb424e6b89f5cd0c83b44567aed8350b574032a96",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/generated_module_figures/dw16_case7.png",
+      "bytes": 112767,
+      "sha256": "195e96d28e7f0659c03ab625cab977b0f77cf0cbced9de8ee6b9e53f67d00d2e",
+      "role": "New rendering of archived simulation VCD",
+      "superseded_delivery": "assets/dw16_case7.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "RENDER/generated_module_figures/dw16_case7.json",
+      "bytes": 1845,
+      "sha256": "db908cbf173b6f18e3e55b9d8549a34991e92fbfbf66b484c60f6e49f46748fe",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/dw16_case7.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/simulation/trace.vcd",
+      "bytes": 7273800,
+      "sha256": "6b683e7f8af4a620524944839a5eb9122a0541527e30028530bfd2648d7946d3",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/simulation/run.do",
+      "bytes": 624,
+      "sha256": "356e5c42975c1358d35f9e7fb2a98ddb78249a7d097dab9bb165ee315f8d880c",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/inputs_snapshot/rtl/platform/b03_layer_exec_release.v",
+      "bytes": 35651,
+      "sha256": "362a1ef27c83a3836c2f90c74786fd72cd12a5626b2768cbe54819068352b88a",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_layer_dma_release_dev01/inputs_snapshot/rtl/platform/b03_full_dw16.v",
+      "bytes": 5610,
+      "sha256": "665277963544e07d7d7faf420fba560ebbdd03641e70466c290599acbff480a0",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/module_trace_figures.py",
+      "bytes": 9504,
+      "sha256": "af41da87f8ee542b74b4c2ec3b94f64385965d17af93f67bbd69a65be60ff0ca",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/generated_module_figures/vector_q_requests.png",
+      "bytes": 169891,
+      "sha256": "501116b48ed518b41956b08b89dbde3253331753703f86e98cf9630c4f4c81a3",
+      "role": "New rendering of archived simulation VCD",
+      "superseded_delivery": "assets/vector_q_requests.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "RENDER/generated_module_figures/vector_q_requests.json",
+      "bytes": 1976,
+      "sha256": "cfaa4774f577e46dc79831269e5d732c9fcdb2bce92acc5d62d5073b5b80a69a",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/vector_q_requests.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/simulation/trace.vcd",
+      "bytes": 5342127,
+      "sha256": "0784f4696dbd30a53411df1e88f3f7227e7029cb4a64f54d0a579ccbe27a29c5",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/simulation/console.log",
+      "bytes": 3314,
+      "sha256": "5934adeb160cb27397c2d0bc97caeef309fe1537da44b0bd420a3f5b786fd357",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/simulation/run.do",
+      "bytes": 471,
+      "sha256": "fb07a3a6fb7813ee59cb471123af470a2fe4a3665d544e06511daa8c0cdb1d7d",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/result.json",
+      "bytes": 8139,
+      "sha256": "04bb2b0e867672dfd1a4782a4548a2f44e248a801f3e71a0f726e8cac8fe9c21",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/cases.json",
+      "bytes": 5848,
+      "sha256": "331ab751f4f03954f0d4358775711068a98c2c86fce65e979e3ade059c3ee593",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/source/rtl/platform/b03_vector_exec_compact.v",
+      "bytes": 16586,
+      "sha256": "c008b7a7a707df3e04a397d115de8dc6bcc2b55760e0d8ebcbdfe676171803ce",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_vector_quant_tdm4_dev02/source/rtl/platform/b03_quant8_tdm4.v",
+      "bytes": 4563,
+      "sha256": "2ff7dbc5dad23df5729d231bce885299fc16bcb6f4e6dcc2d07abe32bab9e206",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/97_B03串口装载与向量算子验证结果.md",
+      "bytes": 6478,
+      "sha256": "391839e3f153997d1ee11b86ae5c8e3efcfa8da800d272aa43129abdd72aa660",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/word/179_YuNet实际算子使用与向量通路资源核查.md",
+      "bytes": 2857,
+      "sha256": "ba09257e4d2716c0beaad45ce826a61edb4e136afe0de61d2774187ceab7d343",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/weight_input_read.png",
+      "bytes": 91846,
+      "sha256": "291a8d8f1957fe138d13c51dbcf9239472dbed7ac360a31b8be6599225003584",
+      "role": "New rendering of archived simulation VCD",
+      "superseded_delivery": "assets/weight_input_read.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/weight_input_read.json",
+      "bytes": 2089,
+      "sha256": "6d6c6543135af343906421de1a2c26a3b010746e04b8888c1f481687a320187f",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/weight_input_read.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/simulation/trace.vcd",
+      "bytes": 106414217,
+      "sha256": "22d43f30d21bf1d9ab9b5da1fa4bb77615da72ebf1ad264792f890a2ec781949",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/simulation/console.log",
+      "bytes": 976561,
+      "sha256": "558a3ad4a4a3c90442cc601b2738b5e58dc2b7414d3ce58bc9acaf080af3e158",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/simulation/run.do",
+      "bytes": 3628,
+      "sha256": "223b8fba98bdaf7f4a4363d995c5560c0369cec553f6edcebaa9994130d3d434",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/case_0_params.hex",
+      "bytes": 4096,
+      "sha256": "520ef90b5ad13267a240f7258ae4b7650810d6f75841c587dfe1e0ed793d943d",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/inputs_snapshot/Testbench/platform/tb_b03_model_input_resident.sv",
+      "bytes": 22093,
+      "sha256": "1772f8030a5ab1315d430d4dc14e064f701a159a2fa086f049f5ef165007ea39",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/render_module_io.py",
+      "bytes": 10585,
+      "sha256": "ed42935062e43ee15af376ad063b63333991bb32f57ae3750d1e4b446d475355",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/conv_channel_params.png",
+      "bytes": 124760,
+      "sha256": "d8d1f19523916644beb5cf7f2d1902ab1593014cfdca75eedda89f84fe0988cd",
+      "role": "New rendering of archived simulation VCD",
+      "superseded_delivery": "assets/conv_channel_params.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/conv_channel_params.json",
+      "bytes": 2363,
+      "sha256": "67a81da53a7a3669f2decad3daf22a1808532c6aecfa97cf2b5f05e54721335c",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/conv_channel_params.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/case_manifest.json",
+      "bytes": 12137,
+      "sha256": "548cf5c7b37543fb0eef5be1fee78910c439c2251206720dee1ba958af9bfc90",
+      "role": "Simulation evidence metadata"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_input_resident_v1/inputs_snapshot/rtl/platform/b03_model_input_resident.v",
+      "bytes": 34745,
+      "sha256": "9f5c8b00e81415ad90b32f3cb8f72d8077d42c1b20b4c2806e1ac7cf5849198b",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/render_conv_params.py",
+      "bytes": 8542,
+      "sha256": "571bfc7d58061a34d595b66603d7922769059cb690c5e1c9ec514dd323e0eb47",
+      "role": "Simulation evidence source"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/vector_dma_rw.png",
+      "bytes": 148521,
+      "sha256": "1765c125636fa9385e3356c79e3d22b368f49a8fcc853bacf61023993e90a6d0",
+      "role": "New rendering of archived simulation VCD",
+      "superseded_delivery": "assets/vector_dma_rw.png",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "RENDER/extra_module_evidence/vector_dma_rw.json",
+      "bytes": 2406,
+      "sha256": "d37de030fea600a171c8020ae72f1362d26a3ee73c36f0809908f4090255d3fb",
+      "role": "Original image provenance",
+      "superseded_delivery": "assets/vector_dma_rw.json",
+      "status": "Historical plot/metadata; replaced by a native ModelSim capture in this revision"
+    },
+    {
+      "source": "TriHaRiscv_NPU_Reference_Style(1).drawio",
+      "bytes": 29311,
+      "sha256": "5e5a3b76a52f904c96d3a50b36a580d301ec9afc42cf35250b400f8e01fea4b8",
+      "role": "User-supplied editable source; delivered byte-for-byte",
+      "file": "TriHaRiscv_NPU_Reference_Style.drawio"
+    },
+    {
+      "source": "PACKAGE/TriHaRiscv_NPU_Reference_Style.png",
+      "bytes": 709085,
+      "sha256": "30f9d9e479aa1ea59d87593b72aa989811ab27b99bba3ee05f60faadabb7ae64",
+      "role": "Direct PNG export of the user-supplied drawing",
+      "file": "TriHaRiscv_NPU_Reference_Style.png"
+    },
+    {
+      "source": "SOC/docs/TriHaRiscv_SoC_Design_Spec_v0.6.md",
+      "bytes": 103632,
+      "sha256": "49412c94841971a5688916c1d550cd1f4eb7010542eb4d5148310d2b8c757818",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/docs/npu/cpu-graph-layer-abi.md",
+      "bytes": 7213,
+      "sha256": "edb1d2f67a0e20b2634926278b4e4617cb17f27d40c0bf01f52b6037c68546e3",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/docs/npu/verification-20261103-payload-local-write.json",
+      "bytes": 16223,
+      "sha256": "36c737329515e54e499e3f26b48e62688609065eafc7e5feaba5e5aa68d46671",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/config/npu_layer_regs.json",
+      "bytes": 691,
+      "sha256": "dc68f261a5899ba3c7ae556e7b31a508604972cfca04b1b26360b56b81448342",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/config/npu_layer_sources.f",
+      "bytes": 1056,
+      "sha256": "530cbabcb4db82f3bf6191fd9862e8907029cd681cb98d88485c106a8b0756c0",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/config/soc_memory.json",
+      "bytes": 2085,
+      "sha256": "2eb7ced865eb1ff7fddc21d1f810e8696823a661966f3864d77c9d56b11c648f",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/npu_layer_top.v",
+      "bytes": 9074,
+      "sha256": "a503d6a1b30e7a6b3d2ca8ef9b0dfbc4a85060ef5ca77bd3f67b2d9a7590e16c",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/soc/triha_compute_system.v",
+      "bytes": 15891,
+      "sha256": "52c405f29eb537f3117ec9e73f8091ebdfe70561fbdc9d872c6913dce050bf4c",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/sw/apps/face_avatar/face_avatar.c",
+      "bytes": 8256,
+      "sha256": "f06ad6a02be3c6a94efe010bf8a78ae2c98f3994f8ed862c690257b081aef32a",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/npu_layer_mmio.v",
+      "bytes": 8255,
+      "sha256": "1bfa7f0306078385927d2a2792c01be07bd71228544f51e6a044d1e26a5edd31",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/sw/drivers/npu_graph.c",
+      "bytes": 10328,
+      "sha256": "49737e49cb2d113bd9604c078c26fe51281f232c89bacdcd04ecc65bcd128939",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/sw/drivers/npu_cpu_post.c",
+      "bytes": 6885,
+      "sha256": "16a846fca4224d13bb0257ed79189b0920ae99b9337990e833009dc068bb5f54",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/soc/npu_service_axi128.v",
+      "bytes": 9763,
+      "sha256": "28aa34fb7080dae4d0d33e8429f3bc32265ff8a78ff57050fb08670371381ed8",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_layer_exec_payload.v",
+      "bytes": 40849,
+      "sha256": "3dd3acd47565f3413522d8c6735fbbb8573615674e6c232d3b4bd1fd82c5247e",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/PAYLOAD_ADAPTATIONS.json",
+      "bytes": 1807,
+      "sha256": "65e6775c5fcb549359b61812972158bd60342ed6b45427c33a370c0268eddf2d",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "bytes": 20483,
+      "sha256": "c6a3f9830ced1fb8f1287b835a9e370ff5aacdf5ca9724839d7de235c02e1ab9",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/build/soc/face_system-20261102T181751_435455Z/result.json",
+      "bytes": 30685,
+      "sha256": "0ef032550798e44fd2883189829b6e9f37224d05fe5892fa6db534d5b5706275",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/build/soc/face_system-20261102T183452_302498Z/result.json",
+      "bytes": 32491,
+      "sha256": "f5624f15111ac28d19115129e92cd16a83065df6005c1f9887b4b429648aae5f",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/build/soc/face_system-20261102T183452_302498Z/simulation.log",
+      "bytes": 23675,
+      "sha256": "fbbf5b546278c5fa03db13ee2f6a170ae950c03c0db6ef599e9ca1ecd23c89cd",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/build/soc/cpu_graph_rtl/20261102T034122_779389Z/result.json",
+      "bytes": 19036,
+      "sha256": "5df9cbdf8038f93795a40dcbf84e3f55e2ad050064f24d3cd4c33f354569cf56",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/build/soc/cpu_graph_rtl/20261102T034122_779389Z/tb_npu_layer_graph_simulation.log",
+      "bytes": 15947,
+      "sha256": "f28f9b6d3e3820c7da3186937ed7fe55708f5ba0eb6f6c2d9f8c37ba29981b1a",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/README.md",
+      "bytes": 25947,
+      "sha256": "40a02b19541282b6a32c47286a1d4ede329f3871db7eb9180ec5387961ce0872",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/11_YuNet模型与算子评估.md",
+      "bytes": 7068,
+      "sha256": "655a44ba06464afe9abf857b07b6508effaf67ee0339897ce27f7a6b819230e3",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/24_INT8校准与整数数值方案.md",
+      "bytes": 11566,
+      "sha256": "93e0a1dd47d530990c6bea76c68ad60cdef13b99f2eaaeb37fe882df0966499e",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/107_B03紧凑运算与行存储规格.md",
+      "bytes": 19051,
+      "sha256": "999af733db305574d2bdfa7e7042e523ef251c654b3030a512ea59a08547b950",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/166_新版CPU融合工程审查与待统一接口.md",
+      "bytes": 11109,
+      "sha256": "5058f743c4396f156d49f1915fd5c0105ce46cc014b25592bf3964b4a427824f",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/167_CPU图调度迁移与单算子接口实现验证.md",
+      "bytes": 11310,
+      "sha256": "521397f5b349f40e0e51e93600a6e575acb98697f6945e82d8ae1305a074f1ec",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/168_CPU调度融合首版FPGA下载程序构建与验收.md",
+      "bytes": 13857,
+      "sha256": "87d82074004ea49d8f24530a45fc1c5c607f3b3e074432afb10ea3f04b4b5eed",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/169_NPU数据载荷复位优化候选与验收门槛.md",
+      "bytes": 6882,
+      "sha256": "c834856176c516885dbfa178b51427ba296c1160f4f8f31d75657ee689bd3c57",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/175_NPU辅助参数偏移预计算与时序收敛评估.md",
+      "bytes": 10759,
+      "sha256": "24b09869c2dc7af5506fbb2ad47430f52d3bb566ac9351e709e41d4d32faa5a0",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/176_NPU局部复位释放寄存树备选评估.md",
+      "bytes": 7444,
+      "sha256": "42b004dced738837704f3f2cf93060e9b051aae17bd880203736b5cc2b484a9f",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/177_CPU与NPU共用100MHz时钟核查.md",
+      "bytes": 4399,
+      "sha256": "7a9adff868d7361c2e5e54bdb50a2f19f544687dbbcf3e829a543611235f3577",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/word/178_整板布线拥塞定位与工具参数评估.md",
+      "bytes": 16065,
+      "sha256": "e9dbd017a5e8da5b6c317c0316d350829ea672708680df9b7701712fd4c077f6",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/yunet/models/integer_numerics_v1.json",
+      "bytes": 57629,
+      "sha256": "8152d6bbf187bb7041d225f23f35f731d5e20ccc1be7410c46e000c9aeb060a2",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/yunet/reports/b03_runtime_v1/compile_report.json",
+      "bytes": 150838,
+      "sha256": "6df81ec764ae2626084784ee903e2b487cc5705ea1fec141a284f436ac5bcb6c",
+      "role": "Technical source"
+    },
+    {
+      "source": "DBG/yunet/reports/b03_runtime_v1/runtime_decoded.json",
+      "bytes": 86307,
+      "sha256": "235f35aead5730ce1f51131f3ecdbfb096ef61e9788ebdce0306eacda0fe8592",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/b03_block_dma_compact.v",
+      "bytes": 11003,
+      "sha256": "91b8da9c2dc52e3c7a7ea1b13a4eb5a3b1899a25703241513a411c44351d1412",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/b03_dw16_lane_write.v",
+      "bytes": 7830,
+      "sha256": "f562782bcdaf7c7bb533c6c547c9844683705e26766dedf50b490f5c1a75a41f",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/b03_feature_pack_epoch.v",
+      "bytes": 2107,
+      "sha256": "86ac92985e0cd0c7b2e169d6516b7192ef960c81b4a1dda10b0967a05d2e6255",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_model_input_payload.v",
+      "bytes": 50994,
+      "sha256": "1fea8d1fe915b66dd38c2225b2fff73c8b2936465a4686e87c986d6bb2b2a2c2",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_vector_exec_compact.v",
+      "bytes": 17787,
+      "sha256": "baddf2d19efdfe50374c46076571169dee8bac12a5e716c35311cfbee12e8c45",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_row_tile_store_rotate.v",
+      "bytes": 10015,
+      "sha256": "aab18a4bcc2fcb467e8a969125fa547c49c9f7208f1f4866044eabe8118727b5",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_quant8_tdm1.v",
+      "bytes": 7984,
+      "sha256": "6f1d239f82b42cb1bbbb08a701c0358e77d8d99ce78ac526e24be97bfcbb9d95",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_quant8_tdm2.v",
+      "bytes": 6348,
+      "sha256": "99a0bf634548bf725097948992273af21542eebf6ef4d8b9098c4f6ba90cb1a9",
+      "role": "Technical source"
+    },
+    {
+      "source": "SOC/rtl/npu/upstream/b03/rtl/platform/b03_array_apmacc_rowctrl.v",
+      "bytes": 10404,
+      "sha256": "89ebe11bb255196ef842402018de68301436a7658efc4b747e7a92866ae99da5",
+      "role": "Technical source"
+    },
+    {
+      "source": "PACKAGE/assets/01_layer_mmio_actual_vcd.png",
+      "bytes": 163754,
+      "sha256": "6c46f6b53c3daff4ee492331d3bb561e8727ca3348d68b92bf7b5d4c4999f29b",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/01_layer_mmio_actual_vcd.png"
+    },
+    {
+      "source": "PACKAGE/assets/01_layer_mmio_actual_vcd.json",
+      "bytes": 2782,
+      "sha256": "078855ee8872e7f86eee48487980e30129a9cbaecd3826d3d78e0e37ee10b1e3",
+      "role": "Native screenshot provenance",
+      "file": "assets/01_layer_mmio_actual_vcd.json",
+      "original_local_metadata_sha256": "255f391bcd1a09a2d6b73437ebf4453d72ef06945c05261ec88c0a4d57a25909",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "SOC/build/soc/cpu_graph_rtl/20261102T034839_254662Z/layer_mmio.vcd",
+      "bytes": 881,
+      "sha256": "2fd418845e5f4f5d7cf55fd0671e22770ec836f2bc581b7bd821d6f16ad2e72d",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/01_layer_mmio_actual_vcd_01.ps",
+      "bytes": 7721,
+      "sha256": "be17a8c6e0a3a3ecdf319443a154cc2505b94943df6fec07c662461e11c9a892",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/01_layer_mmio_actual_vcd_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/01_layer_mmio_actual_vcd_02.ps",
+      "bytes": 7828,
+      "sha256": "1d450fedc118da9973fa443ed21e712e11c813736697278029fc3390ef8015e4",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/01_layer_mmio_actual_vcd_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/03_fifo_payload_epoch_actual_vcd.png",
+      "bytes": 283905,
+      "sha256": "399cea4c32561c1faa47f05636868dda9be964a012a56ee18a5194df892af5bd",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/03_fifo_payload_epoch_actual_vcd.png"
+    },
+    {
+      "source": "PACKAGE/assets/03_fifo_payload_epoch_actual_vcd.json",
+      "bytes": 2899,
+      "sha256": "278385d1260d28305e9547789fcccc350682ec92cc5db19012bbaaf142f737a1",
+      "role": "Native screenshot provenance",
+      "file": "assets/03_fifo_payload_epoch_actual_vcd.json",
+      "original_local_metadata_sha256": "428c6e2b04ced665c1b0ff51ef0fea08c1e02ad10984894c39bcf9eb34d736fa",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "SOC/build/npu/payload_reset/20261102T174626_621493Z/feature_payload.vcd",
+      "bytes": 3127467,
+      "sha256": "8ac3eb773c2bf1debf37bdf030b9d9ff9b5c3b1b3c0a72f88bef5cfdfab8f553",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/03_fifo_payload_epoch_actual_vcd_01.ps",
+      "bytes": 23229,
+      "sha256": "0cb1e04913b6a7793c7f869f92c1f67f332093f33f407b5fb9394cbe417b8ad1",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/03_fifo_payload_epoch_actual_vcd_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/03_fifo_payload_epoch_actual_vcd_02.ps",
+      "bytes": 27987,
+      "sha256": "87fc8f114ca7fcf501db9dca79183546069307a1ed132c0410f670c953f5752b",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/03_fifo_payload_epoch_actual_vcd_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_dma_retirement.png",
+      "bytes": 106579,
+      "sha256": "ce8fe6bd6fea451713d3b1e1b0b40786735268d4fc3060714929e55042f0ee7d",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_dma_retirement.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_dma_retirement.json",
+      "bytes": 1696,
+      "sha256": "db4f8deeed5c242b44ce76982ba59c06580ef6f5a43b553f35ead1319f35e868",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_dma_retirement.json",
+      "original_local_metadata_sha256": "cc3aa1cd1a706fd409606a22be7ee1752cedf668abe5f9dd2a150afeace8338d",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "DBG/build/platform/mem_bridge_v1_final/hmic_bridge.vcd",
+      "bytes": 650009,
+      "sha256": "9d52006f3098975463312e62bd68ab35457f08443870eb03d95c143b0d0a0503",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_dma_retirement_01.ps",
+      "bytes": 170912,
+      "sha256": "50362a2cfe2f0391b6cd79acaaf7d3a0862f287b4a1c6fad7d91f37042488b76",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_dma_retirement_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_input_gather.png",
+      "bytes": 175024,
+      "sha256": "482ffdf16052cdd4f343c069d0b3ad78780b95550fdfec22391fab3681ef0a13",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_input_gather.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_input_gather.json",
+      "bytes": 2671,
+      "sha256": "49e841f69d24d790b71856d96d5368ab13bd3175380727076170748e7acfe7e6",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_input_gather.json",
+      "original_local_metadata_sha256": "5b02a401ec840d9a06aaca049efbfa2a28234dee52182c907602632db9dbfe45",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_input_gather_01.ps",
+      "bytes": 7412,
+      "sha256": "8421cff193a420dc0668376f28ce1bd19ed1f566f5e667717d24201741bb30bf",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_input_gather_01.ps"
+    },
+    {
+      "source": "DBG/build/platform/b03_gather_pipeline_dev02/simulation/trace.vcd",
+      "bytes": 1370979,
+      "sha256": "992869fe307a4f80d9f533c8431f4b4921e14a8f8fe7c54f549fda59313cb45d",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_input_gather_02.ps",
+      "bytes": 15195,
+      "sha256": "492e8b8a046703c94bd48c92d061e90ad4d1a8f7de792949d888ecf2d9fd7de8",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_input_gather_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_aux_coeff_rx.png",
+      "bytes": 203430,
+      "sha256": "db79012fea704724b480952e7300463efb26895e822e0a5c229dac6b26e855f0",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_aux_coeff_rx.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_aux_coeff_rx.json",
+      "bytes": 2814,
+      "sha256": "5d9e45f9bc653ae157a8d008431e135ea498d72317a88a06982a0a90902b9c7d",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_aux_coeff_rx.json",
+      "original_local_metadata_sha256": "2f923a56ed70040f80aa2340c9b3be3dafaa35258327430c13d7ed3899110ba5",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "SOC/build/npu/aux_rx_words_ce0_wave/20261103T001244_162336Z/aux_rx_words.vcd",
+      "bytes": 7645337,
+      "sha256": "96de089a3489bf45a1dbb576d91741f54a871f5dc8e799419bbd4dfcfe0ca5f2",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_aux_coeff_rx_01.ps",
+      "bytes": 8533,
+      "sha256": "9ba6f5b617b1a5757d09dd1aa549dd9e987af91fe6ea10341ab597bb265b6520",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_aux_coeff_rx_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_aux_coeff_rx_02.ps",
+      "bytes": 8038,
+      "sha256": "10439eef8e9daa704d55be7b04b773bfd686b906ae5555736e5523f94fe43262",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_aux_coeff_rx_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_output_mask.png",
+      "bytes": 314382,
+      "sha256": "903a3e31405765ffca7b2e3c51771fe05f958039654e8b08c70c420fc60ea6ab",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_output_mask.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_output_mask.json",
+      "bytes": 2839,
+      "sha256": "f7a5345a7be61b4c6b9ab2351294707651e5d02aa5b276d1d9f6d333ded899ed",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_output_mask.json",
+      "original_local_metadata_sha256": "db65fc74cd7973c163fb9cc539ecb8718e865f3170bf1b3de7a433cebf8e4cca",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_tile_v1/tile/trace.vcd",
+      "bytes": 23262016,
+      "sha256": "187c22c2ff797a147e723501bfd67d6df73588566f4e0563292a279bfc47cab7",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_output_mask_01.ps",
+      "bytes": 26987,
+      "sha256": "1dccf4f6def633395c9cf9c70b15b1112b15fadb0cb8afcdae59d4d5dd8ea6e9",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_output_mask_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_output_mask_02.ps",
+      "bytes": 26308,
+      "sha256": "0fda53d87af19293f79d828c94ed7f6f691c500a802e5e941d80cb4474f60424",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_output_mask_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_dense_accumulate.png",
+      "bytes": 273124,
+      "sha256": "e0a23de98b2be355c96e4416c682d9ecfd5966f89fbe155bb850a2325f397f06",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_dense_accumulate.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_dense_accumulate.json",
+      "bytes": 2773,
+      "sha256": "f68392d3a1c2128e4b358af8b60541b2fc811cecbcb9d1a9013514cc353645c9",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_dense_accumulate.json",
+      "original_local_metadata_sha256": "599c0a280e07ffeaa76e1604c8842f0cf02747a4b1fa3005f4e7a999282c4a6f",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_tile_v1/array/trace.vcd",
+      "bytes": 3209612,
+      "sha256": "f9ba6353d0de22f4863647955884c884b62388e5887ddf448de0dc88e1f1af82",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_dense_accumulate_01.ps",
+      "bytes": 37099,
+      "sha256": "7784b6bc613687d61ebf7f0e1b35d08b692e57fe31b5de32d193b51a91e3885f",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_dense_accumulate_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_dense_accumulate_02.ps",
+      "bytes": 81122,
+      "sha256": "43ebd261cd2c800257b5f3a2aae20c188d9bc1ddd1533323a44398c0e6eb6452",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_dense_accumulate_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_q_rne.png",
+      "bytes": 294909,
+      "sha256": "99661f77bb1121eb9161a0122831daa1f312b994bc6b6b7e6cbad95e6af90246",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_q_rne.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_q_rne.json",
+      "bytes": 3003,
+      "sha256": "3c67174f8883a5e30d9579581a35d3dd74b1ec5fe337a3b886e36e1957063aaa",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_q_rne.json",
+      "original_local_metadata_sha256": "53f105dfc0a8034fac59687e7f70958048e7071de3f0fd46e09c01113ceb8bf4",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "DBG/build/platform/b03_model_q8_v1/simulation/trace.vcd",
+      "bytes": 68778203,
+      "sha256": "f24ff0fb9fc96e4a0a63be6213a587b4600cba4952cc97e7642869e999994add",
+      "role": "Archived VCD used for native display; not a new simulation"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_q_rne_01.ps",
+      "bytes": 48318,
+      "sha256": "1dbb9eff527be969bae6b6b1e878b64971637b6f5660b735dbde2903d4806155",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_q_rne_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_q_rne_02.ps",
+      "bytes": 16726,
+      "sha256": "28d18addded34fce5dd1dce6e47e9e8c56462fb9c54b0203a645d409ab6151c9",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_q_rne_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/npu_pool_resize.png",
+      "bytes": 202778,
+      "sha256": "ef111c73d22a822aa998ccc211856e376e17eab38f7ad61f4ed7f441f874f1b9",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/npu_pool_resize.png"
+    },
+    {
+      "source": "PACKAGE/assets/npu_pool_resize.json",
+      "bytes": 2978,
+      "sha256": "5f831d7f8961e153b044c2379b358e9871fddc921c6a02a76f4eb60c10bb9d28",
+      "role": "Native screenshot provenance",
+      "file": "assets/npu_pool_resize.json",
+      "original_local_metadata_sha256": "ab1b9cf5f08b69e052d94fa250e543e7becac608ebc2cb073486968400adbe3e",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_pool_resize_01.ps",
+      "bytes": 7727,
+      "sha256": "9b077a59a00a00e04e35c0424c227537e55b5a7f9ae98ac3721e658320097a51",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_pool_resize_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/npu_pool_resize_02.ps",
+      "bytes": 8016,
+      "sha256": "89432dbf93d86354395c908e738667aa43e1c42e8cef9a5ad7bbfbfa3fb4b4fa",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/npu_pool_resize_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/dw16_case7.png",
+      "bytes": 117567,
+      "sha256": "8733d1139d1e2133bf8475420b8d1fba7a922254374715b6b814afc2f8d23e15",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/dw16_case7.png"
+    },
+    {
+      "source": "PACKAGE/assets/dw16_case7.json",
+      "bytes": 1575,
+      "sha256": "3da14d4eec76f38f7cde5ee0fcf222407feab38cba2e72b69c318ec2849b0497",
+      "role": "Native screenshot provenance",
+      "file": "assets/dw16_case7.json",
+      "original_local_metadata_sha256": "486417a6d19acb37c57eb1e33d3b9c50d23ac4c6ee252c98bb3f79ba233f15d4",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/dw16_case7_01.ps",
+      "bytes": 207521,
+      "sha256": "a75eb0fd6ef0afcf9377e820a7eacd4333128fa8b1e81414ea6d692fb2ae8fa3",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/dw16_case7_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/vector_q_requests.png",
+      "bytes": 171835,
+      "sha256": "dfc8913dc306765231263e3cc3c9a029e36a939a4e1a650afd60f08fc00a56c0",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/vector_q_requests.png"
+    },
+    {
+      "source": "PACKAGE/assets/vector_q_requests.json",
+      "bytes": 2751,
+      "sha256": "4a52de0a2d28112f2f4d38cb5c58798b5abcab4518b254eb4598ff63ff56c637",
+      "role": "Native screenshot provenance",
+      "file": "assets/vector_q_requests.json",
+      "original_local_metadata_sha256": "485c835f233aae78342dc1cde8e120c66cfa983e9bd973f81a2de640ab149466",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/vector_q_requests_01.ps",
+      "bytes": 7457,
+      "sha256": "e64c519c9c6e196134bfa23edeaabbb448452d66e5117c3b20e5b53bf1d19cfb",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/vector_q_requests_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/vector_q_requests_02.ps",
+      "bytes": 7378,
+      "sha256": "d3cb151adb38a03f04b6855781f0d010e1244bcdde33ab178321b83e8b53d5b4",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/vector_q_requests_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/vector_dma_rw.png",
+      "bytes": 174942,
+      "sha256": "9ff0b11d14000d73d2d6dd150a0b30ba875455e0f26252f2e6f6f461902ed3ae",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/vector_dma_rw.png"
+    },
+    {
+      "source": "PACKAGE/assets/vector_dma_rw.json",
+      "bytes": 2723,
+      "sha256": "29fdd62eba927438f5df42d1b6ab28e37c5e42f76e9e40878a326839a3d10aaa",
+      "role": "Native screenshot provenance",
+      "file": "assets/vector_dma_rw.json",
+      "original_local_metadata_sha256": "209d63cec5bdb1aaa436607ffc276f8b314e7dac79cde171b4dd52fee0c2a7d8",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/vector_dma_rw_01.ps",
+      "bytes": 6968,
+      "sha256": "cabd1ff76a942a7c85c113430d0a72990529d7452039a3b2e4f436370f726913",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/vector_dma_rw_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/vector_dma_rw_02.ps",
+      "bytes": 8554,
+      "sha256": "73e6b2b92d99431274f286de33c171514314ab781c247f1edc9a1be0b325cc2d",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/vector_dma_rw_02.ps"
+    },
+    {
+      "source": "PACKAGE/assets/weight_input_read.png",
+      "bytes": 123742,
+      "sha256": "62096c820576e510a42e80982d16a1cf95bdb24810262578520b33b82ccd74fa",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/weight_input_read.png"
+    },
+    {
+      "source": "PACKAGE/assets/weight_input_read.json",
+      "bytes": 1648,
+      "sha256": "d61876d85c899cd5cc578c1d426d347726cfd656f29573fee710ce964007c706",
+      "role": "Native screenshot provenance",
+      "file": "assets/weight_input_read.json",
+      "original_local_metadata_sha256": "2956b642f7a34507bb96eb913196e1330835f136378adb25f5104df9a95c7f22",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/weight_input_read_01.ps",
+      "bytes": 12075,
+      "sha256": "cd16846b235514e26c355572988f33a506f00dfeaae7596eed88964d8703f164",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/weight_input_read_01.ps"
+    },
+    {
+      "source": "PACKAGE/assets/conv_channel_params.png",
+      "bytes": 89444,
+      "sha256": "16a367621c46e1c05e6df6180ca0dc393530a2d149917309f2d2e7a75c8dc56e",
+      "role": "Native ModelSim Wave-window screenshot",
+      "file": "assets/conv_channel_params.png"
+    },
+    {
+      "source": "PACKAGE/assets/conv_channel_params.json",
+      "bytes": 1577,
+      "sha256": "d53df0280996222167a481202773784e02b53b33f37f19e148156cb09b8d1e8e",
+      "role": "Native screenshot provenance",
+      "file": "assets/conv_channel_params.json",
+      "original_local_metadata_sha256": "67e0823de93cb61bb0d0cadc75cea58d66c22df6f6c62bc5164d00c1984b0070",
+      "transformation": "Absolute VCD/workspace paths replaced with logical source-root identifiers; panel crop coordinates added"
+    },
+    {
+      "source": "PACKAGE/assets/native_exports/conv_channel_params_01.ps",
+      "bytes": 6740,
+      "sha256": "fe97cadcfa22aab545c4993c6f8d18c9e346000bedae594891775a676d3cdb24",
+      "role": "Direct ModelSim PostScript export",
+      "file": "assets/native_exports/conv_channel_params_01.ps"
+    }
+  ]
+}

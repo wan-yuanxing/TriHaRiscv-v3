@@ -1,0 +1,120 @@
+{
+  "status": "READY_ORIGINAL_FOUR_IMAGES_PC_SWITCH_WAITING_BOARD_CONNECTION",
+  "prepared_date": "2026-11-04",
+  "source_manifest_sha256": "0e3d77d30cfe0347bab076dd5c53b8aee1d45566161fe6c3ac762f323f126c61",
+  "expected_fpga_id": "00602899",
+  "device": "PG2L100H",
+  "package": "FBG676",
+  "images": [
+    {
+      "id": "02_coremark_single_sram",
+      "label": "Single issue / local SRAM / Cache off",
+      "clock_hz": 100000000,
+      "score_per_mhz": 3.055365627917393,
+      "cycles": 1636465356,
+      "board_status": "PASS_DEBUG_BOARD_COREMARK",
+      "post_boot": "Embedded firmware; UART benchmark starts after configuration/reset. KEY0 reruns.",
+      "bitstream": {
+        "path": "images/02_coremark_single_sram/triha_cpu_board_top.sbit",
+        "bytes": 3791112,
+        "sha256": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\generate_bitstream\\triha_cpu_board_top.sbit"
+      },
+      "verify_mask": {
+        "path": "images/02_coremark_single_sram/triha_cpu_board_top.smsk",
+        "bytes": 3791112,
+        "sha256": "fb946847d1be92b016ec331038ce3a9cfa1fba0f32458ab1efa80542e71554bc",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\generate_bitstream\\triha_cpu_board_top.smsk"
+      }
+    },
+    {
+      "id": "03_coremark_single_cache",
+      "label": "Single issue / I+D Cache / DDR",
+      "clock_hz": 100000000,
+      "score_per_mhz": 2.497435167798046,
+      "cycles": 2002053973,
+      "board_status": "PASS_BOARD_COREMARK",
+      "post_boot": "Embedded boot/payload firmware; Cache variants wait for DDR and copy/verify the embedded benchmark. KEY0 reruns.",
+      "bitstream": {
+        "path": "images/03_coremark_single_cache/triha_cpu_ddr_board_top.sbit",
+        "bytes": 3791112,
+        "sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_478149ee9e63\\triha_cpu_ddr_board_top.sbit"
+      },
+      "verify_mask": {
+        "path": "images/03_coremark_single_cache/triha_cpu_ddr_board_top.smsk",
+        "bytes": 3791112,
+        "sha256": "7acf46ac556f59cc60713cc8dd5f28f523169f806cf0956ac43631b492ff7eb8",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_478149ee9e63\\triha_cpu_ddr_board_top.smsk"
+      }
+    },
+    {
+      "id": "04_coremark_dual_sram",
+      "label": "Dual issue / local SRAM / Cache off",
+      "clock_hz": 100000000,
+      "score_per_mhz": 4.092789905721094,
+      "cycles": 1221660558,
+      "board_status": "PHYSICAL_COREMARK_PASS",
+      "post_boot": "Embedded SRAM firmware starts after configuration/reset; KEY0 reruns. No DDR dependency.",
+      "bitstream": {
+        "path": "images/04_coremark_dual_sram/triha_cpu_board_top.sbit",
+        "bytes": 3791112,
+        "sha256": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\releases\\cpu_coremark_4a3932361535\\triha_cpu_board_top.sbit"
+      },
+      "verify_mask": {
+        "path": "images/04_coremark_dual_sram/triha_cpu_board_top.smsk",
+        "bytes": 3791112,
+        "sha256": "45c22238b4f847665aab7f07ae606a7214c93be89d3d725fd1f6a0d6f6d6c654",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\releases\\cpu_coremark_4a3932361535\\triha_cpu_board_top.smsk"
+      }
+    },
+    {
+      "id": "05_coremark_dual_cache",
+      "label": "Dual issue / I+D Cache / DDR",
+      "clock_hz": 100000000,
+      "score_per_mhz": 3.152166819708779,
+      "cycles": 1586210466,
+      "board_status": "PASS",
+      "post_boot": "Embedded boot/payload firmware; Cache variants wait for DDR and copy/verify the embedded benchmark. KEY0 reruns.",
+      "bitstream": {
+        "path": "images/05_coremark_dual_cache/triha_cpu_ddr_board_top.sbit",
+        "bytes": 3791112,
+        "sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_77da07f738ce\\triha_cpu_ddr_board_top.sbit"
+      },
+      "verify_mask": {
+        "path": "images/05_coremark_dual_cache/triha_cpu_ddr_board_top.smsk",
+        "bytes": 3791112,
+        "sha256": "6fffb9dfd6779095db24183c31ba16e4ddb10e5e0f72b1410c330c4e22f1e3a9",
+        "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_77da07f738ce\\triha_cpu_ddr_board_top.smsk"
+      }
+    }
+  ],
+  "original_bitstreams_modified": false,
+  "compressed_research_outputs_included": false,
+  "face_or_model_included": false,
+  "four_resident_button_switch_requirement": false,
+  "button_switch_implemented": false,
+  "flash_written": false,
+  "board_accessed": false,
+  "actual_flash_jedec_id": null,
+  "standalone_flash_address": 0,
+  "standalone_flash_files_are_alternatives": true,
+  "first_stage_scope": "Four original images only; no Golden, model autoload, compression or new button logic.",
+  "capacity_probe": {
+    "status": "PASS_NATIVE_FORMAT_CAPACITY_ONLY",
+    "bytes": 15196160,
+    "sha256": "6a21ecb5fb2504f581d7ffca0f348b007f558abc87cd1971efd124dfacee93f8",
+    "flash_capacity_bytes": 16777216,
+    "spare_bytes": 1581056,
+    "native_type": 1,
+    "button_switch_verified": false,
+    "cold_boot_verified": false,
+    "candidate_delivered": false
+  },
+  "switching_method": "PC-selected volatile JTAG Program+Verify; one user-selected original image is the Flash cold-boot default",
+  "new_rtl_or_rebuild_required": false,
+  "default_flash_image_id": null,
+  "confirmed_user_scope": "Only prepare and program the four original board-tested bitstreams; use the computer for switching."
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "page": 5,
+    "pdf_pages": 1,
+    "width_pt": 808.07996,
+    "height_pt": 558.95996,
+    "minimum_equivalent_font_pt_at_157mm": 8.55,
+    "text": "Six-Stage In-Order Dual-Issue CPU\nIF1 IF2 ID E1 E2 WB\nRedirect / flush\nFetch Pairing\nPC / BPU Memory\nresponse RF + forwarding ALU result\nwait\nBranch\nMUL WB0\nresolve\nresult WB1\nMemory\nResult\nPredecode ALU0 / ALU1\nrequest\nselect\n6-word FIFO AGU / CSR\nE1 / E2 / WB forwarding\nSolid: data Dashed: control Pink: register boundary"
+  },
+  {
+    "page": 6,
+    "pdf_pages": 1,
+    "width_pt": 816,
+    "height_pt": 563.03998,
+    "minimum_equivalent_font_pt_at_157mm": 8.47,
+    "text": "Fetch Front End\nPC select Request control Request / accept I-Cache / TCM\nNext PC\nAccepted PC Response\nRequest context Response skid\nBTB / BHT / RAS PC / prediction\nPC / prediction Bypass / hold\nValid packet\nDrop stale response\nPredecode + FIFO\nRaw flush\nRedirect register\nRedirect\nIssue / recovery\nCandidates"
+  },
+  {
+    "page": 7,
+    "pdf_pages": 1,
+    "width_pt": 806.88,
+    "height_pt": 432.95999,
+    "minimum_equivalent_font_pt_at_157mm": 9.34,
+    "text": "Memory Hierarchy — Supporting View\nI$ / D$ or bypass\nDual-issue CPU Address / attribute\n16 KiB each\nI: 64-bit / D: 32-bit decode\n2-way / 32-byte line\nROM / SRAM / MMIO AXI128 / CDC / DDR\nD-Cache: write-back / write-allocate"
+  },
+  {
+    "page": 8,
+    "pdf_pages": 1,
+    "width_pt": 832.07996,
+    "height_pt": 671.03998,
+    "minimum_equivalent_font_pt_at_157mm": 8.31,
+    "text": "Video Capture and Frame-Synchronous Display\nRAW writer RAW read DMA\nHDMI RX\n800 × 600\nVideo DMA\nscheduler\nPreview writer Preview\n400 × 300 diagnostics\nDDR frame slots\nRAW / Preview\nPixels\nNCHW / Assets\nScale / pad / BGR\n320 × 320 NCHW\nFull-screen\nRAW / BOX /\nAVATAR\nRelease retired slot\nNCHW\nPixel + sync × 13\nReady display record NPU + CPU\nFrame + results Postprocessing\nRGB / HS / VS / DE\nSafe SOF Overlay context\nActive record HDMI TX\nRepeat until replaced 800 × 600"
+  },
+  {
+    "page": 9,
+    "pdf_pages": 1,
+    "width_pt": 816,
+    "height_pt": 576.95996,
+    "minimum_equivalent_font_pt_at_157mm": 8.47,
+    "text": "Branch Predictor\nBTB lower bank\n256 entries\nFetch PC Word select\nLower hit first\nBTB upper bank\n256 entries BTB target\nWord index\nPC / accept\nCall / return type BHT: 512 × 2 Next-PC select\nSelected direction RAS / BTB\nalign8(PC) + 8\nRAS: 4 × 32\nSpeculative index Return target\nReference index\nBranch event\nCall / return repair Taken / not taken\nregister"
+  },
+  {
+    "page": 10,
+    "pdf_pages": 1,
+    "width_pt": 806.88,
+    "height_pt": 486.95999,
+    "minimum_equivalent_font_pt_at_157mm": 8.57,
+    "text": "Instruction FIFO and Ordered Consumption\n64-bit packet Word selection Head0\nPC / prediction Enqueue 1 or 2\nOrdered issue\nA = Head0\nRefill\nB = Head1\nPC1 = PC0 + 4\nFlush / update Six-word ring Head1\n6 × 119 bits\nHead update / count\npop0 / pop1\nReady: count ≤ 4\n⇒\nCPU contract: pop1 pop0"
+  },
+  {
+    "page": 11,
+    "pdf_pages": 1,
+    "width_pt": 806.88,
+    "height_pt": 529.91998,
+    "minimum_equivalent_font_pt_at_157mm": 9.34,
+    "text": "Issue Pairing — Supporting Rule Table\nSlot A Allowed Slot B\nALU Simple ALU / branch / LSU / MUL\nLSU Simple ALU / branch / MUL\nMUL Simple ALU / branch / LSU\nUnresolved branch Simple ALU; killed on recovery\nEarly not-taken BEQ/BNE x0 Simple ALU / LSU / MUL\nDIV / CSR None\nAll pairs require valid operands, no RAW/WAW or unit conflict, and A accepted."
+  },
+  {
+    "page": 12,
+    "pdf_pages": 1,
+    "width_pt": 834,
+    "height_pt": 742.07996,
+    "minimum_equivalent_font_pt_at_157mm": 8.29,
+    "text": "Dual-Issue Datapath and Control\nID/E1\nALU0 Pipe0\nA\nFull integer ALU E1 branch / E2 / WB\nRF + forwarding\n4 reads / 2 writes\nPair / hazard check\nFinal A / B enables\nALU1 Pipe1\nB\nSimple integer ALU E1 branch / E2 / WB\nPermit Zero / ready A / B\nIndependent LSU MUL\nID early branch check A LSU / MUL select\nBEQ/BNE x0\nForwarded zero + ready\nShared result selection\nA-only DIV / CSR\nAge / exception control\nRedirect / valid kill\nCancel younger"
+  },
+  {
+    "page": 13,
+    "pdf_pages": 1,
+    "width_pt": 808.07996,
+    "height_pt": 464.87997,
+    "minimum_equivalent_font_pt_at_157mm": 8.94,
+    "text": "Per-Lane ALU — Appendix\nAdd / subtract\nID/E1\nCompare\nOperand select\nE1\nResult select\nRF / PC / immediate\nresult\nAND / OR / XOR\nShift\nTwo independent instances: EX0 supports register shifts; EX1 supports immediate shifts."
+  },
+  {
+    "page": 14,
+    "pdf_pages": 1,
+    "width_pt": 822,
+    "height_pt": 579.12,
+    "minimum_equivalent_font_pt_at_157mm": 8.41,
+    "text": "Load / Store Unit\nAddress generation\nRequest\nRequest register\nD-Cache / TCM\nAccept / pending\nAccept\nAccess / align check\nIssue /\npipe control\nMetadata Response data\nStore data / strobes\nRequest metadata\nFormat Load select / extend\nAddress / attributes\nAlignment fault\nCompletion / exception\nResult / status"
+  }
+]

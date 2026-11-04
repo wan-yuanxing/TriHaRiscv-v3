@@ -1,0 +1,18 @@
+{
+  "status": "PASS_BITSTREAM",
+  "return_code": 0,
+  "input_hashes": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\place_route\\triha_cpu_board_top_pnr.adf": "8a8305dccd1bf0319621d4e4e6a45b5cc03924d6938026b2d2a78631c7222111",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-result.json": "d93eeda0d1910fc3f4f534665e2e4fd1fa63d66c1bf56455294fad13277a285c",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-admission.json": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\bitstream.tcl": "47e738d4a2f9e72393802637da6b3bf90e8cb23b54537a0e37a279c51c59b651"
+  },
+  "output_hashes": {
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\generate_bitstream\\triha_cpu_board_top.sbit": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\generate_bitstream\\triha_cpu_board_top.smsk": "fb946847d1be92b016ec331038ce3a9cfa1fba0f32458ab1efa80542e71554bc",
+    "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\bitstream.log": "5071945be9b3028c618d805ff6a2d96e6044a1362d91a7e766b18e5340441c1b"
+  },
+  "physical_admission_sha256": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+  "programmed": false,
+  "flash_written": false
+}

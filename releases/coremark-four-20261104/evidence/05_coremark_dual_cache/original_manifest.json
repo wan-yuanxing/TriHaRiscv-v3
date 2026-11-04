@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "target": "cpu_ddr_board",
+  "firmware_profile": "ddr-coremark",
+  "issue_mode": "dual",
+  "dcache_write_policy": "write_back",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\ddr-board-route-20261101T152951966724Z",
+  "package_work_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\ddr-board-package-20261101T165706760355Z",
+  "timing_closed": true,
+  "programmed": false,
+  "board_validated": false,
+  "physical_ddr_training_validated": false,
+  "bitstream_sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd",
+  "verify_mask_sha256": "6fffb9dfd6779095db24183c31ba16e4ddb10e5e0f72b1410c330c4e22f1e3a9",
+  "files": {
+    "coremark.bin": "aa76381092a4ee6ee9acbc72936fdf9caaddefaf855746dfff0a9189ce0de4ad",
+    "coremark.elf": "9188eee48cd501f546055db5814c4e223902761c1d61d1e6bbb46520ddef2d85",
+    "coremark.map": "8894544147bacebb1a5f5d62aa087d9e22fbc7ef96331872b0fec66c9069bd63",
+    "cpu_ddr_board.fdc": "b9ebf6eaf4b39ada1d043e4183889ad9054952127cf90e6d262472335fa26290",
+    "firmware.elf": "4dbac7f408bfd0ebcf272eef6993b86008e1b77778f5dbc303d53e066fe029ee",
+    "firmware.map": "8c0be3805ef587ee6fd4354501cfa17005a4decdd175c8f6c727cb20bb59c48c",
+    "README.md": "7b81ee5d6e1495e7491cdafba0cb540dec5a2b410c1ce558061fd454a4aec348",
+    "review.json": "7abc5edab739e6c19498cc184fcaca4de0998002d49f4a60ae74f57e4d399b04",
+    "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+    "route-result.json": "42d1de3300a004856e96385b432ddefe3a54d7272be8bff6e7cd8fc98fa508b7",
+    "rtr.db": "47347ddfd9c9f38812315dad576f93e924ed1d32b0752b70cc4ace01158a1837",
+    "sram.hex": "37ddac4e4c0248445b9ddf642c4de743f9842314e3f4d935c6069b1adfa20d53",
+    "triha_cpu_ddr_board_top.rtr": "a5a3e12e8ad7cc31d5b5dc1f671bec2f20278687910fab645d08cfa0b6f49e48",
+    "triha_cpu_ddr_board_top.sbit": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd",
+    "triha_cpu_ddr_board_top.smsk": "6fffb9dfd6779095db24183c31ba16e4ddb10e5e0f72b1410c330c4e22f1e3a9",
+    "triha_cpu_ddr_board_top_pnr.adf": "12249a4bdeacbfff399e7a7dbb66adae5ac75e92011fa4918427476228f73561"
+  },
+  "cpu_only_resources": {
+    "lut": 9707,
+    "registers": 4995,
+    "distributed_ram": 752,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_enable": 1,
+  "placement_base": 2147483648,
+  "payload_sha256": "aa76381092a4ee6ee9acbc72936fdf9caaddefaf855746dfff0a9189ce0de4ad",
+  "iterations": 5000,
+  "cache_resources": {
+    "lut": 675,
+    "registers": 807,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  }
+}

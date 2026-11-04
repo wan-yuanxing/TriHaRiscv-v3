@@ -1,0 +1,1017 @@
+{
+  "status": "PASS",
+  "started": 1793704730.8227334,
+  "scope": "Bound all Gray crossing arrival windows using routed clock and data delays.\n\nFor each group and corner, the relative arrival spread is bounded by source\nclock spread + nonnegative datapath-delay upper bound + destination clock\nspread. Both early/late clock models and all 116 bits are required. This\nconservative check does not depend on PDS's omitted max-skew summary.\n",
+  "inputs": {
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\face_box_50_bridge_priority_review_20261103\\result.json": "cbe0cca0bf5137c6e5d1863d97dee8fe64d1a1a71f13335a88411f0ad9684953",
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\pds\\face_box_50_bridge_priority_20261103\\place_route\\triha_face_board_top_pnr.adf": "cbd0f3c2c9365d264f42b2b9d46e95424bd3c223f9002c2888bfb0254a8b8f62",
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\face_box_50_bridge_priority_review_20261103\\sites\\sites.pcf": "c16bd1ffb3ae8b2a2e9b81c98ebc9805914948704b71cb371b95b60b449fa729",
+    "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\face_box_50_bridge_priority_clocks_20261103\\query.tcl": "a40cddae52c9ebb15b147c3674be7e88d3da951d133c6353cb960ea63940d1e4",
+    "D:\\FPGA\\TriHaRiscv-v3\\scripts\\video\\check_face_gray_clocks.py": "7f98d6b13ef1fcb5a3415d0265cb1330539967175eab9fecd8f8aba20aaed216",
+    "D:\\pango\\PDS_2022.2-SP6.4\\bin\\pds_shell.exe": "631ffd8f14d6246872873c72025cbc2734c9f8c388075b7afb0b042f3a684e6f"
+  },
+  "pid": 26916,
+  "report": {
+    "path": "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\face_box_50_bridge_priority_clocks_20261103\\report_timing\\triha_face_board_top.rtr",
+    "sha256": "b9069d18e1f4021baa05238ace5bd3906fe2e617fd06044342aa560fa16c3ee8"
+  },
+  "analysis": {
+    "status": "PASS_CONSERVATIVE_CLOCK_AND_DATA_BOUND",
+    "bits": 116,
+    "clock_observations": 928,
+    "groups": [
+      {
+        "constraint": "set_max_skew 20.0 -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/ingress/fifo/wr_gray_rd_sync1*}]",
+        "bits": 12,
+        "limit_ns": 20.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.953,
+                "max_ns": 3.461,
+                "spread_bound_ns": 0.51
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.152,
+                "max_ns": 5.56,
+                "spread_bound_ns": 1.4099999999999995
+              }
+            },
+            "datapath_bound_ns": 1.1229999999999987,
+            "relative_arrival_spread_bound_ns": 3.0429999999999984
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 1.985,
+                "max_ns": 2.346,
+                "spread_bound_ns": 0.363
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.319,
+                "max_ns": 4.41,
+                "spread_bound_ns": 1.0930000000000002
+              }
+            },
+            "datapath_bound_ns": 0.6650000000000003,
+            "relative_arrival_spread_bound_ns": 2.1210000000000004
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/ingress/fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/ingress/fifo/rd_gray_wr_sync1*}]",
+        "bits": 12,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.14,
+                "max_ns": 5.542,
+                "spread_bound_ns": 1.4040000000000001
+              },
+              "destination": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.956,
+                "max_ns": 3.461,
+                "spread_bound_ns": 0.5069999999999999
+              }
+            },
+            "datapath_bound_ns": 2.3219999999999996,
+            "relative_arrival_spread_bound_ns": 4.233
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.307,
+                "max_ns": 4.392,
+                "spread_bound_ns": 1.0870000000000004
+              },
+              "destination": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 1.988,
+                "max_ns": 2.346,
+                "spread_bound_ns": 0.3600000000000001
+              }
+            },
+            "datapath_bound_ns": 1.417,
+            "relative_arrival_spread_bound_ns": 2.8640000000000008
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 20.0 -from [get_cells -regexp {^g_full[.]impl/rx_telemetry/gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/rx_telemetry/gray_meta*}]",
+        "bits": 32,
+        "limit_ns": 20.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.969,
+                "max_ns": 3.474,
+                "spread_bound_ns": 0.5070000000000003
+              },
+              "destination": {
+                "clock": "cfg_clk",
+                "min_ns": 3.699,
+                "max_ns": 4.358,
+                "spread_bound_ns": 0.6609999999999998
+              }
+            },
+            "datapath_bound_ns": 1.218000000000001,
+            "relative_arrival_spread_bound_ns": 2.386000000000001
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "rx_pixel_clk",
+                "min_ns": 2.002,
+                "max_ns": 2.36,
+                "spread_bound_ns": 0.3600000000000001
+              },
+              "destination": {
+                "clock": "cfg_clk",
+                "min_ns": 2.505,
+                "max_ns": 2.992,
+                "spread_bound_ns": 0.4890000000000001
+              }
+            },
+            "datapath_bound_ns": 0.7230000000000001,
+            "relative_arrival_spread_bound_ns": 1.5720000000000003
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.561,
+                "spread_bound_ns": 1.4419999999999995
+              }
+            },
+            "datapath_bound_ns": 1.114,
+            "relative_arrival_spread_bound_ns": 3.324
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.411,
+                "spread_bound_ns": 1.1179999999999997
+              }
+            },
+            "datapath_bound_ns": 0.6399999999999999,
+            "relative_arrival_spread_bound_ns": 2.3249999999999993
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_aw_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_aw_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.562,
+                "spread_bound_ns": 1.4429999999999998
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              }
+            },
+            "datapath_bound_ns": 1.1150000000000004,
+            "relative_arrival_spread_bound_ns": 3.3260000000000005
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.412,
+                "spread_bound_ns": 1.119
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              }
+            },
+            "datapath_bound_ns": 0.683,
+            "relative_arrival_spread_bound_ns": 2.3689999999999998
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.237,
+                "max_ns": 5.006,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.131,
+                "max_ns": 5.531,
+                "spread_bound_ns": 1.4019999999999995
+              }
+            },
+            "datapath_bound_ns": 0.8570000000000004,
+            "relative_arrival_spread_bound_ns": 3.0300000000000002
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.827,
+                "max_ns": 3.396,
+                "spread_bound_ns": 0.571
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.306,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0859999999999996
+              }
+            },
+            "datapath_bound_ns": 0.5139999999999996,
+            "relative_arrival_spread_bound_ns": 2.1709999999999994
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_w_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_w_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.133,
+                "max_ns": 5.527,
+                "spread_bound_ns": 1.3960000000000001
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.237,
+                "max_ns": 5.006,
+                "spread_bound_ns": 0.7710000000000001
+              }
+            },
+            "datapath_bound_ns": 0.933,
+            "relative_arrival_spread_bound_ns": 3.1000000000000005
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.308,
+                "max_ns": 4.385,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.827,
+                "max_ns": 3.396,
+                "spread_bound_ns": 0.571
+              }
+            },
+            "datapath_bound_ns": 0.5229999999999999,
+            "relative_arrival_spread_bound_ns": 2.173
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              }
+            },
+            "datapath_bound_ns": 1.1549999999999996,
+            "relative_arrival_spread_bound_ns": 3.318999999999999
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              }
+            },
+            "datapath_bound_ns": 0.7160000000000004,
+            "relative_arrival_spread_bound_ns": 2.362
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_ar_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_ar_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              }
+            },
+            "datapath_bound_ns": 1.098,
+            "relative_arrival_spread_bound_ns": 3.2619999999999996
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              }
+            },
+            "datapath_bound_ns": 0.6280000000000003,
+            "relative_arrival_spread_bound_ns": 2.274
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              }
+            },
+            "datapath_bound_ns": 1.3730000000000004,
+            "relative_arrival_spread_bound_ns": 3.537
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              }
+            },
+            "datapath_bound_ns": 0.7660000000000002,
+            "relative_arrival_spread_bound_ns": 2.412
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_b_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_b_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.225,
+                "max_ns": 4.991,
+                "spread_bound_ns": 0.768
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.121,
+                "max_ns": 5.515,
+                "spread_bound_ns": 1.3959999999999992
+              }
+            },
+            "datapath_bound_ns": 0.9769999999999996,
+            "relative_arrival_spread_bound_ns": 3.140999999999999
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.814,
+                "max_ns": 3.379,
+                "spread_bound_ns": 0.567
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.295,
+                "max_ns": 4.372,
+                "spread_bound_ns": 1.079
+              }
+            },
+            "datapath_bound_ns": 0.5690000000000002,
+            "relative_arrival_spread_bound_ns": 2.215
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.138,
+                "max_ns": 5.543,
+                "spread_bound_ns": 1.4070000000000003
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.245,
+                "max_ns": 5.02,
+                "spread_bound_ns": 0.7769999999999995
+              }
+            },
+            "datapath_bound_ns": 1.0590000000000004,
+            "relative_arrival_spread_bound_ns": 3.2430000000000003
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.401,
+                "spread_bound_ns": 1.091
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.834,
+                "max_ns": 3.409,
+                "spread_bound_ns": 0.5769999999999997
+              }
+            },
+            "datapath_bound_ns": 0.6239999999999999,
+            "relative_arrival_spread_bound_ns": 2.292
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_compute_cdc/u_r_fifo/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_compute_cdc/u_r_fifo/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.254,
+                "max_ns": 5.02,
+                "spread_bound_ns": 0.768
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.138,
+                "max_ns": 5.543,
+                "spread_bound_ns": 1.4070000000000003
+              }
+            },
+            "datapath_bound_ns": 1.2240000000000004,
+            "relative_arrival_spread_bound_ns": 3.399000000000001
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.844,
+                "max_ns": 3.409,
+                "spread_bound_ns": 0.567
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.401,
+                "spread_bound_ns": 1.091
+              }
+            },
+            "datapath_bound_ns": 0.752,
+            "relative_arrival_spread_bound_ns": 2.41
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.269,
+                "max_ns": 5.039,
+                "spread_bound_ns": 0.7719999999999996
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.159,
+                "max_ns": 5.564,
+                "spread_bound_ns": 1.4070000000000003
+              }
+            },
+            "datapath_bound_ns": 1.1609999999999998,
+            "relative_arrival_spread_bound_ns": 3.34
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.852,
+                "max_ns": 3.421,
+                "spread_bound_ns": 0.571
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.327,
+                "max_ns": 4.415,
+                "spread_bound_ns": 1.09
+              }
+            },
+            "datapath_bound_ns": 0.6609999999999998,
+            "relative_arrival_spread_bound_ns": 2.322
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_aw/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_aw/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.164,
+                "max_ns": 5.561,
+                "spread_bound_ns": 1.3990000000000002
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.264,
+                "max_ns": 5.039,
+                "spread_bound_ns": 0.7769999999999995
+              }
+            },
+            "datapath_bound_ns": 1.0039999999999998,
+            "relative_arrival_spread_bound_ns": 3.1799999999999997
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.332,
+                "max_ns": 4.411,
+                "spread_bound_ns": 1.0809999999999997
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.847,
+                "max_ns": 3.421,
+                "spread_bound_ns": 0.5759999999999998
+              }
+            },
+            "datapath_bound_ns": 0.5939999999999996,
+            "relative_arrival_spread_bound_ns": 2.2509999999999994
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.25,
+                "max_ns": 5.02,
+                "spread_bound_ns": 0.7719999999999996
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.144,
+                "max_ns": 5.55,
+                "spread_bound_ns": 1.4079999999999997
+              }
+            },
+            "datapath_bound_ns": 1.1620000000000001,
+            "relative_arrival_spread_bound_ns": 3.3419999999999996
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.833,
+                "max_ns": 3.401,
+                "spread_bound_ns": 0.5699999999999996
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.312,
+                "max_ns": 4.401,
+                "spread_bound_ns": 1.091
+              }
+            },
+            "datapath_bound_ns": 0.7070000000000001,
+            "relative_arrival_spread_bound_ns": 2.3679999999999994
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_w/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_w/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.146,
+                "max_ns": 5.553,
+                "spread_bound_ns": 1.409
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.251,
+                "max_ns": 5.021,
+                "spread_bound_ns": 0.7719999999999996
+              }
+            },
+            "datapath_bound_ns": 0.9929999999999997,
+            "relative_arrival_spread_bound_ns": 3.1739999999999995
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.314,
+                "max_ns": 4.403,
+                "spread_bound_ns": 1.0909999999999995
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.834,
+                "max_ns": 3.402,
+                "spread_bound_ns": 0.5700000000000001
+              }
+            },
+            "datapath_bound_ns": 0.6330000000000002,
+            "relative_arrival_spread_bound_ns": 2.2939999999999996
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.254,
+                "max_ns": 5.024,
+                "spread_bound_ns": 0.7720000000000005
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.153,
+                "max_ns": 5.556,
+                "spread_bound_ns": 1.4050000000000005
+              }
+            },
+            "datapath_bound_ns": 1.1540000000000001,
+            "relative_arrival_spread_bound_ns": 3.3310000000000013
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.836,
+                "max_ns": 3.406,
+                "spread_bound_ns": 0.5720000000000003
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.32,
+                "max_ns": 4.406,
+                "spread_bound_ns": 1.0879999999999999
+              }
+            },
+            "datapath_bound_ns": 0.6819999999999997,
+            "relative_arrival_spread_bound_ns": 2.3419999999999996
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_ar/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_ar/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.156,
+                "max_ns": 5.554,
+                "spread_bound_ns": 1.4000000000000006
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.258,
+                "max_ns": 5.033,
+                "spread_bound_ns": 0.7770000000000004
+              }
+            },
+            "datapath_bound_ns": 0.9660000000000004,
+            "relative_arrival_spread_bound_ns": 3.1430000000000016
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.323,
+                "max_ns": 4.404,
+                "spread_bound_ns": 1.083
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.84,
+                "max_ns": 3.414,
+                "spread_bound_ns": 0.5760000000000003
+              }
+            },
+            "datapath_bound_ns": 0.5469999999999999,
+            "relative_arrival_spread_bound_ns": 2.2060000000000004
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.163,
+                "max_ns": 5.565,
+                "spread_bound_ns": 1.4040000000000001
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.259,
+                "max_ns": 5.036,
+                "spread_bound_ns": 0.7789999999999992
+              }
+            },
+            "datapath_bound_ns": 1.114,
+            "relative_arrival_spread_bound_ns": 3.2969999999999997
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.331,
+                "max_ns": 4.416,
+                "spread_bound_ns": 1.0870000000000004
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.841,
+                "max_ns": 3.417,
+                "spread_bound_ns": 0.5779999999999996
+              }
+            },
+            "datapath_bound_ns": 0.6559999999999999,
+            "relative_arrival_spread_bound_ns": 2.3209999999999997
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_b/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_b/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.268,
+                "max_ns": 5.037,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.165,
+                "max_ns": 5.565,
+                "spread_bound_ns": 1.4020000000000004
+              }
+            },
+            "datapath_bound_ns": 1.1280000000000003,
+            "relative_arrival_spread_bound_ns": 3.301000000000001
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.851,
+                "max_ns": 3.418,
+                "spread_bound_ns": 0.5690000000000002
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.333,
+                "max_ns": 4.416,
+                "spread_bound_ns": 1.0850000000000002
+              }
+            },
+            "datapath_bound_ns": 0.6559999999999999,
+            "relative_arrival_spread_bound_ns": 2.3100000000000005
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/wr_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/wr_gray_rd_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.141,
+                "max_ns": 5.55,
+                "spread_bound_ns": 1.4109999999999998
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 4.247,
+                "max_ns": 5.025,
+                "spread_bound_ns": 0.7800000000000005
+              }
+            },
+            "datapath_bound_ns": 1.3599999999999997,
+            "relative_arrival_spread_bound_ns": 3.551
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.308,
+                "max_ns": 4.401,
+                "spread_bound_ns": 1.095
+              },
+              "destination": {
+                "clock": "compute_clk",
+                "min_ns": 2.83,
+                "max_ns": 3.407,
+                "spread_bound_ns": 0.579
+              }
+            },
+            "datapath_bound_ns": 0.8160000000000001,
+            "relative_arrival_spread_bound_ns": 2.49
+          }
+        }
+      },
+      {
+        "constraint": "set_max_skew 6.0 -from [get_cells -regexp {^g_full[.]impl/face/u_control_cdc/u_r/rd_gray\\[[0-9:]+\\]$}] -to [get_cells {g_full.impl/face/u_control_cdc/u_r/rd_gray_wr_sync1*}]",
+        "bits": 3,
+        "limit_ns": 6.0,
+        "corners": {
+          "slow": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 4.252,
+                "max_ns": 5.021,
+                "spread_bound_ns": 0.7710000000000001
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 4.141,
+                "max_ns": 5.54,
+                "spread_bound_ns": 1.401
+              }
+            },
+            "datapath_bound_ns": 1.002,
+            "relative_arrival_spread_bound_ns": 3.1740000000000004
+          },
+          "fast": {
+            "clocks": {
+              "source": {
+                "clock": "compute_clk",
+                "min_ns": 2.835,
+                "max_ns": 3.402,
+                "spread_bound_ns": 0.5690000000000002
+              },
+              "destination": {
+                "clock": "ddrphy_sysclk",
+                "min_ns": 3.308,
+                "max_ns": 4.39,
+                "spread_bound_ns": 1.0839999999999999
+              }
+            },
+            "datapath_bound_ns": 0.6129999999999998,
+            "relative_arrival_spread_bound_ns": 2.266
+          }
+        }
+      }
+    ],
+    "native_max_skew_report": false,
+    "all_bits_both_corners_early_late": true
+  },
+  "elapsed": 49.37234425544739
+}

@@ -1,0 +1,449 @@
+{
+  "status": "PASS_TIMING_AND_HARDWARE_CAPTURE",
+  "date": "2026-10-28",
+  "scope": "Standalone six-stage single-issue RV32IM/CSR SRAM CPU; no Cache, DDR, Video or NPU",
+  "work_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2",
+  "wrapper_change": "Register four LED outputs; asynchronous reset; one-cycle LED status latency",
+  "production_rtl_changed": false,
+  "cpu_and_firmware_unchanged": true,
+  "optimization": "-O2",
+  "original_constraints_byte_identical": true,
+  "clock_hz_configured": 100000000,
+  "physical_timing": [
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.366,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 18499
+    },
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 23.906,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 480
+    },
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_CAPTURE",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 20.091,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 94
+    },
+    {
+      "corner": "Slow",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 46.699,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.061,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 18499
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 0.37,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 480
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_CAPTURE",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 22.863,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 94
+    },
+    {
+      "corner": "Slow",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 1.284,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16
+    },
+    {
+      "corner": "Slow",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.322,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 2674
+    },
+    {
+      "corner": "Slow",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.416,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 2674
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 3.655,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3510
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 24.04,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 126
+    },
+    {
+      "corner": "Slow",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 49.8,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 11
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 3.662,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 18499
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 24.345,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 480
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_CAPTURE",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 22.047,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 94
+    },
+    {
+      "corner": "Fast",
+      "check": "Setup",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 47.82,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.034,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 18499
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 0.251,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 480
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_CAPTURE",
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 23.725,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 94
+    },
+    {
+      "corner": "Fast",
+      "check": "Hold",
+      "clocks": [
+        "DebugCore_JCLK",
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 1.031,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 16
+    },
+    {
+      "corner": "Fast",
+      "check": "Recovery",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 5.029,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 2674
+    },
+    {
+      "corner": "Fast",
+      "check": "Removal",
+      "clocks": [
+        "cpu_clk",
+        "cpu_clk"
+      ],
+      "slack_ns": 0.277,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 2674
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "cpu_clk"
+      ],
+      "slack_ns": 4.202,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 3510
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "DebugCore_JCLK"
+      ],
+      "slack_ns": 24.43,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 126
+    },
+    {
+      "corner": "Fast",
+      "check": "Minimum Pulse Width",
+      "clocks": [
+        "DebugCore_CAPTURE"
+      ],
+      "slack_ns": 49.8,
+      "total_negative_slack_ns": 0.0,
+      "failing_endpoints": 0,
+      "endpoints": 11
+    }
+  ],
+  "worst_cpu_setup_ns": 0.366,
+  "performance_slack_consistent": true,
+  "actual_led_ioregs": true,
+  "program_verified": true,
+  "flash_written": false,
+  "board_image_retained": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\generate_bitstream\\triha_cpu_board_top.sbit",
+  "board_measurement": {
+    "iterations": 5000,
+    "cycles": 1636465356,
+    "clock_hz": 100000000,
+    "seconds": 16.36465356,
+    "coremark": 305.5365627917393,
+    "coremark_per_mhz": 3.055365627917393,
+    "crc": [
+      "e9f5",
+      "e714",
+      "1fd7",
+      "8e3a"
+    ],
+    "duration_valid": true,
+    "official_submission": false,
+    "cpu_core_luts": 5933,
+    "coremark_per_lut": 0.051497819449138595,
+    "coremark_per_actual_debug_cpu_lut": 0.04976976100207514
+  },
+  "cpu_area_note": "Original accepted no-debug CPU5933 LUT. Fresh debug-context synthesis u_core6139 LUT/3528 FF/688 RAM-LUT included/0 DRM/4 APM. Firmware still prints immutable historical5933 metadata; use6139 for this debug build CPU-only denominator.",
+  "captures": {
+    "status": "PASS_HARDWARE_CAPTURES",
+    "source": "PDS native Fabric Debugger saved hardware WDF",
+    "sample_clock_hz_configured": 100000000,
+    "independent_clock_calibration": false,
+    "native_vcd_crosscheck": "All 38 channels and PC bus, all 1024 state samples match native VCD",
+    "native_vcd_time_note": "Tool exports 100ns per sample; use sample index. Configured hardware sampling is CPU100MHz (nominal10ns). Native file unchanged.",
+    "probe_binding_verified_on_hardware": true,
+    "probe_bits": 38,
+    "kernels": {
+      "list": {
+        "samples": 1024,
+        "trigger_sample_index": 1,
+        "trigger_pc": "0x00011d48",
+        "wb_events": 951,
+        "stall_samples": 0,
+        "memory_wb_valid_samples": 119,
+        "kernel_start": "0x00011d48",
+        "kernel_end_exclusive": "0x00011ef8",
+        "wb_events_in_kernel": 118,
+        "files": {
+          "list.wdf": "e573a46ea15ddac632be7e2a893b26388ed51df11b554bf4c71abd1c9f592d65",
+          "list.dprj": "5483b1ca721a3aef0e14a341d33b2a492fced0797d717fd4b93c171cb6b3680f",
+          "list.samples.csv": "4c5bea9c79f92670a1e9c1beabbb628022f4385780d50847a949e8159670c351"
+        }
+      },
+      "matrix": {
+        "samples": 1024,
+        "trigger_sample_index": 1,
+        "trigger_pc": "0x000124e8",
+        "wb_events": 964,
+        "stall_samples": 0,
+        "memory_wb_valid_samples": 247,
+        "kernel_start": "0x000124e8",
+        "kernel_end_exclusive": "0x00012588",
+        "wb_events_in_kernel": 963,
+        "files": {
+          "matrix.wdf": "7d51766653e007fc5e5d78bf61efeef85c74d34d9dd4ccf4c2f39461ac2c4a06",
+          "matrix.dprj": "ddc05427a0384feb650980810ddaf508ae4c82cb6ede08bf5e40dd9440c59d6c",
+          "matrix.samples.csv": "cf7d73ad7cc639b95798976372a7429ad2f93a84e8c89fba3583783bc7050489"
+        }
+      },
+      "state": {
+        "samples": 1024,
+        "trigger_sample_index": 1,
+        "trigger_pc": "0x00012c1c",
+        "wb_events": 916,
+        "stall_samples": 0,
+        "memory_wb_valid_samples": 182,
+        "kernel_start": "0x00012c1c",
+        "kernel_end_exclusive": "0x00012f04",
+        "wb_events_in_kernel": 783,
+        "files": {
+          "state.wdf": "eb195c9672a2194493b811c2c2fa39701c7417590b8665f08c84d004d03409d0",
+          "state.dprj": "23d6cf0565d61cef498b94a18c26ba4e55d473e24621a079af352a3ea734ec18",
+          "state.samples.csv": "453462edc105406078ad0503e8a4ff1a232ce3b3760c5f5ce46fcda35f1c5bd2"
+        }
+      }
+    },
+    "uart_complete_epochs": 2,
+    "uart_measurement": {
+      "iterations": 5000,
+      "cycles": 1636465356,
+      "clock_hz": 100000000,
+      "seconds": 16.36465356,
+      "coremark": 305.5365627917393,
+      "coremark_per_mhz": 3.055365627917393,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "duration_valid": true,
+      "official_submission": false,
+      "cpu_core_luts": 5933,
+      "coremark_per_lut": 0.051497819449138595
+    },
+    "uart_sha256": "223be4a26e5a3ee0678f41b1f02ed9069a271e61f9e30a80f73a28662e6dffe9",
+    "physical_admission_sha256": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+    "bitstream_result_sha256": "e0edcc8432c76db908527c9955f434c7c685145bc4464131fd36ebd83d2acc95",
+    "board_program_verify_result_sha256": "b3de92c2b95bdd86067f89b1c292fb91ff4186f1b3c3f32cac6984f8fad2b747",
+    "bitstream_sha256": "6a7329d7354c05cac9b8e6637337b10d8ace6def5218dd18edf2ddd3b5e8a36f",
+    "firmware_sha256": "8f981818ddb312dd4f2eedd48fbea000f643e8c2b01e946a6e69b652fb728a86",
+    "scope": "Standalone no-Cache SRAM CPU; 1024-cycle local windows, not whole-program IPC or Cache/DDR evidence",
+    "original_releases_unchanged": true,
+    "flash_written": false
+  },
+  "corrections": [
+    "Earlier requested38-bit FIC architecture tuple described one trigger port. Native insertion success alone did not validate all requested probes. Hardware import caught the mismatch; corrected tuple1 3 1 1 1, new map/PNR and native30/1/7-bit readback passed.",
+    "Native dbg_save_project also rewrites the current project WDF on Save As. Rapid successive saves mixed earlier file names with later buffers. Only immutable captures-accepted copies with PC/valid/stall assertions are admitted; exploratory captures/captures-final files are not the final evidence.",
+    "First wrapper-fix programming attempt actually Program/Verify succeeded, but its Python UTF-8-only reader rejected progress-bar bytes and stopped UART early. The first script FAIL record is retained. Error-tolerant log reading and separate board-v2 run passed; no timing failure.",
+    "Native VCD100ns time unit is a tool export convention. CSV uses sample index; configured rising CPU clock is nominal100MHz. No external clock calibration or whole-program physical IPC claim."
+  ],
+  "evidence_hashes": {
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-result.json": "d93eeda0d1910fc3f4f534665e2e4fd1fa63d66c1bf56455294fad13277a285c",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\physical-admission.json": "0b01437ac764bfc61a7ff51e63f2133bcf43e42c38a740425d7f143e012a3337",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\bitstream\\result.json": "e0edcc8432c76db908527c9955f434c7c685145bc4464131fd36ebd83d2acc95",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\board-v2\\result.json": "b3de92c2b95bdd86067f89b1c292fb91ff4186f1b3c3f32cac6984f8fad2b747",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\capture-review.json": "43dc1236ffc1ba43685f5e5f845d49c151e67593fe64be4e319fa3dedf7d84bd",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\captures-accepted\\debugger-console-final.txt": "6049175e4eb9f3ea7914cb2bcd4c70b5d0bd2006585cf21e9c96d39059c79eb1",
+    "build\\cpu\\sram-debug-ledreg-20261028-v2\\review-captures.py": "38e4a8e5707d31d7b04d441509b6b00134f6c8217c130267714cd1556f56decb"
+  }
+}

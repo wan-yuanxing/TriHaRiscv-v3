@@ -1,0 +1,74 @@
+{
+  "verified_at": "2026-11-02T23:27:42.979214",
+  "checks": {
+    "template_and_compile": "PASS",
+    "image_and_archived_source_bytes": "PASS",
+    "cpu_functional_result_hashes": 4,
+    "soc_functional_result_hashes": 4,
+    "pds_mapping_result_hashes": 3,
+    "ddr_board_package_matches_reviewed_route": "PASS",
+    "duplicate_or_unused_labels": 0,
+    "overfull_boxes": 0,
+    "undefined_references": 0,
+    "underfull_hbox_notices": 5
+  },
+  "pdf_pages": 79,
+  "pdf_rendered_or_viewed": false,
+  "new_hardware_tests_performed": false,
+  "files": [
+    {
+      "file": "docs/technical-report/README.md",
+      "sha256": "8fd046f41c96c8c873040782e8db12e47de1cf7d20b78405d923f8707ab3e3ee"
+    },
+    {
+      "file": "docs/technical-report/latex/技术文档.pdf",
+      "sha256": "e723ee13e2186dbb2d4930481c69f8c9a75ef8b79847af39bf5c90a7d4a2ce9e"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/01-overview/01-功能与特性.tex",
+      "sha256": "6a9515a8a8db7c7e27d97bc35d4d4cfc52a8483b1b252dea35b9165112af44bc"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/01-overview/03-主要技术特点.tex",
+      "sha256": "23dc74049c64b39830c215f50658758d38be7f7f3b1f1b43a99556ccae87fec3"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/01-overview/04-设计流程.tex",
+      "sha256": "cb5c45025e04e03e5e73484a1870036fba6dc421aeeb42cd6b026f3dadbf8c75"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/02-system/01-系统整体介绍.tex",
+      "sha256": "26da57e49bcd292dc8fa95cb22c5427d6efc4510a4f97f65e7e629a766631d35"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/02-system/02-CPU设计.tex",
+      "sha256": "dd7496422f24b3aea109b6ba28fb588116dec97514f253c04c993e4edc20231c"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/02-system/07-FPGA实现.tex",
+      "sha256": "077b10e0422550e94e6097d527f30b4d85e8db84cc6f6c9d0b3e0d92b777b322"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/03-results/01-整体介绍.tex",
+      "sha256": "1b70fa52a3e2c00713b0efd3d4ff2393ba4d700b4b80b8bd848e869111f5068e"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/03-results/02-工程成果.tex",
+      "sha256": "98c62af93a1ccf014078b8e2724bbe5f797dcb470fb4541b2cfb6ee99f8e9974"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/03-results/03-特性成果.tex",
+      "sha256": "5bd2ba576811859f5ef34580e0ac690e51f6cc20a8b4a4e92d79051e5c8d2318"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/04-summary/02-工程取舍与心得体会.tex",
+      "sha256": "a4d5618f9db0fb76cfb62892bb96745851012a6897a4313f2b7aaeca4e5843a3"
+    },
+    {
+      "file": "docs/technical-report/latex/chapters/06-appendix/B-CPU仿真验证.tex",
+      "sha256": "62dfb4569f521710bcba61cb5457aebb423e5ae6b8e1e950f25e6756210599d0"
+    }
+  ],
+  "compile_log": "build/report-cpu-config-20261102-231653/compile-check.log",
+  "compile_log_sha256": "a3c60ff84a909ba47a7746a975a47bb79e7427e63daa5e1842e37b657135782b"
+}

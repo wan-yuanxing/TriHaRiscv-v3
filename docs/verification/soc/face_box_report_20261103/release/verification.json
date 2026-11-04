@@ -1,0 +1,66 @@
+{
+  "status": "PASS_CLEAN_EXPORT_RESTORE_COMPILE_AND_NATIVE_REPLAY",
+  "recorded_at": "2026-11-03T20:27:53.466589+08:00",
+  "clean_directory": "D:\\FPGA\\TriHaRiscv-v3\\build\\video\\face_release_clean_20261103",
+  "qualified_source_hashes_checked": 209,
+  "archive_members_verified": 996,
+  "restored_files": 998,
+  "model_asset_audit": "PASS_ASSET_AUDIT",
+  "source_compile": "PASS_COMPILE_ONLY",
+  "new_full_system_simulation_run": false,
+  "full_system_evidence": "Previously qualified positive/negative full-system runs are preserved; current source identity checked.",
+  "firmware_memory_images_byte_identical": true,
+  "simulation_image_sha256": {
+    "rom.hex": "adb7124238cc78d3e13f7eada1f14fd34d6e89c46a0c7a54c7f6c6a1d1045ddf",
+    "sram.hex": "f79ca0df8c9ac0a5358dc6d253bc3f791b124327c49a258b0e74c482f20c5f74"
+  },
+  "rebuilt_elf_sha256": "a3174a109364bf7dca72b226ba4354f7222f302c543eb9398d9aa5eb5fc11108",
+  "original_elf_sha256": "207a99384c6ceb83f4c4845511778db6782d0fb1eab82ae64ef5a9b7e6eba86b",
+  "elf_difference": "6 bytes of GCC-generated temporary object filename in non-loadable symbol string table; loadable images identical.",
+  "native_replay": {
+    "bitstream_sha256": "4da4c45f7bc31b1d4bc5ec4843658784ff08271fe7bff744f8c29d934642f6a6",
+    "verify_mask_sha256": "6f7e3437d373fbd8d4e32a732b4b97614daa61433daa074038ba3e4e29ec3f70",
+    "reference_bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+    "reference_verify_mask_sha256": "d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd",
+    "bitstream_comparison": {
+      "byte_identical": false,
+      "configuration_identical": true,
+      "timestamp_fields": {
+        "c": {
+          "reference": "11/03/26",
+          "regenerated": "11/03/26"
+        },
+        "d": {
+          "reference": "19:21:21",
+          "regenerated": "20:27:03"
+        }
+      },
+      "comparison_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65"
+    },
+    "mask_comparison": {
+      "byte_identical": false,
+      "configuration_identical": true,
+      "timestamp_fields": {
+        "c": {
+          "reference": "11/03/26",
+          "regenerated": "11/03/26"
+        },
+        "d": {
+          "reference": "19:21:21",
+          "regenerated": "20:27:03"
+        }
+      },
+      "comparison_sha256": "d3ca5bbce1a9e90e4ee1ca568df24fd1d10d78505e96ecaff1da8bad5a8997fd"
+    },
+    "status": "PASS_CONFIGURATION_IDENTICAL"
+  },
+  "native_replay_log_sha256": "1af7150b11f36a9b78e29c12737771c7014403e2593ea97162b0e0473ec4a777",
+  "release_script_sha256": "a1230661a508c16d08af5bf41df4173d945ef5a0f0f6e8832daceecb2a3136d9",
+  "checks": {
+    "path_traversal_source_mutation_existing_asset_conflict": 8,
+    "timestamp_only_comparison_and_corruption": 6,
+    "gray_identity_proof": 10,
+    "route_constraint_admission": 4
+  },
+  "physical_board_touched": false
+}

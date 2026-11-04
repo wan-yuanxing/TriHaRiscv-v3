@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "target": "cpu_coremark",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\dual-board-v83-ledreg-20261101\\project\\build\\soc\\board-route-20261101T1117136198580Z",
+  "firmware_profile": "coremark",
+  "cpu_core_luts": 9677,
+  "timing_closed": true,
+  "programmed": false,
+  "board_validated": false,
+  "bitstream_sha256": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7",
+  "verify_mask_sha256": "45c22238b4f847665aab7f07ae606a7214c93be89d3d725fd1f6a0d6f6d6c654",
+  "files": {
+    "firmware.elf": "7a00358e2f07dde157176c87c4e68c16031499e8008d91d01c3ef7e94475d1df",
+    "firmware.map": "0e554822c14f9c2242b26517f4bb73c501cc2dc021492c03657352f4ef7bbbdd",
+    "README.md": "2b2a2058645a6de329d479a9babf9df8d48dfebd573b52b048dfffbf22f68167",
+    "result.json": "f3d7ea7d7712482177cb3a2e4db01e504083027a02dbf7267c95e7507adae8ca",
+    "review.json": "ad4604851e9477269efa67ce9f885578b8031fe52f64d400291cb6da29c17121",
+    "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+    "sram.hex": "a816fee33705a708e79e035574864f381a8556429bed56e70d8fe44c9b52ada9",
+    "triha_cpu_board_top.rtr": "6511185346716e6638e3c26b5f47a4df9cd856a2d07b66dd8d797ab1a2af86e1",
+    "triha_cpu_board_top.sbit": "4a39323615353feb6baf2a125e9d7fb693a85498c6a45ed25e0963d89dd4eea7",
+    "triha_cpu_board_top.smsk": "45c22238b4f847665aab7f07ae606a7214c93be89d3d725fd1f6a0d6f6d6c654"
+  }
+}

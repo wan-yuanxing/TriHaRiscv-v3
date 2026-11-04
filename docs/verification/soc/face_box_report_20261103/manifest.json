@@ -1,0 +1,99 @@
+{
+  "repository": "https://github.com/wan-yuanxing/TriHaRiscv-v3",
+  "commit": "ab8ebb3db671ff4eab02d7b87a344567b7b60a6e",
+  "release": "face-box-20261103",
+  "files": [
+    {
+      "source_path": "build/soc/face_system-20261103T070341_033768Z/result.json",
+      "archived_path": "evidence/soc/face_system-20261103T070341_033768Z/result.json",
+      "bytes": 32155,
+      "sha256": "494e5b528d8292a7ab20aff16bcf5a1f4e451b35da3f9c3ff839ee8fbf1f10c9"
+    },
+    {
+      "source_path": "build/soc/face_system-20261103T070341_048946Z/result.json",
+      "archived_path": "evidence/soc/face_system-20261103T070341_048946Z/result.json",
+      "bytes": 33132,
+      "sha256": "08b4305f84c63c5329ae293c20c20851f6245bf1ad79d44a09869b4d7d1c4c34"
+    },
+    {
+      "source_path": "build/video/face_box_50_bridge_priority_clocks_20261103/result.json",
+      "archived_path": "evidence/video/face_box_50_bridge_priority_clocks_20261103/result.json",
+      "bytes": 36757,
+      "sha256": "6a9b9d9ee54153e9a857b99a9948e16505dbf88a7746fd886c6969d8c5c91abc"
+    },
+    {
+      "source_path": "build/video/face_box_50_bridge_priority_qualified_20261103/result.json",
+      "archived_path": "evidence/video/face_box_50_bridge_priority_qualified_20261103/result.json",
+      "bytes": 114472,
+      "sha256": "804f97befa07f90047e89b29da14326a4ed67e9a35f8c09adaf7ff9b7e45f16e"
+    },
+    {
+      "source_path": "build/video/face_box_50_bridge_priority_review_20261103/result.json",
+      "archived_path": "evidence/video/face_box_50_bridge_priority_review_20261103/result.json",
+      "bytes": 129880,
+      "sha256": "cbe0cca0bf5137c6e5d1863d97dee8fe64d1a1a71f13335a88411f0ad9684953"
+    },
+    {
+      "source_path": "build/video/face_box_board_acceptance_20261103.json",
+      "archived_path": "evidence/video/face_box_board_acceptance_20261103.json",
+      "bytes": 3482,
+      "sha256": "d39f350fd2b74b739ee63585c68d256d8b66d7716c86f8ffaf365e3c7e7c0e5e"
+    },
+    {
+      "source_path": "build/video/face_box_performance_20261103.json",
+      "archived_path": "evidence/video/face_box_performance_20261103.json",
+      "bytes": 3138,
+      "sha256": "41ab2dbf557eb065de5939a8d199a76905bec3206f34819e07f905156da2622a"
+    },
+    {
+      "source_path": "build/video/pds/20261103T070558_933114Z/result.json",
+      "archived_path": "evidence/video/pds/20261103T070558_933114Z/result.json",
+      "bytes": 50215,
+      "sha256": "1a6f654dd9b79957f47dca4eb7414f72bd31650eafd9461499dded425f5c8962"
+    },
+    {
+      "source_path": "build/soc/face_system-20261103T070341_033768Z/simulation.log",
+      "archived_path": "evidence/soc/face_system-20261103T070341_033768Z/simulation.log",
+      "bytes": 14608,
+      "sha256": "e7f76e8a4748a9fca2acf212126dea0442bb2ca99b0b03e7aae850b698618ecd"
+    },
+    {
+      "source_path": "build/soc/face_system-20261103T070341_048946Z/simulation.log",
+      "archived_path": "evidence/soc/face_system-20261103T070341_048946Z/simulation.log",
+      "bytes": 14608,
+      "sha256": "a4c0d3bf8d5d540663990523645f886407f14ab8f4a0fb114a47729c94d0ac8d"
+    },
+    {
+      "source_path": "build/video/pds/20261103T070558_933114Z/synthesize/triha_face_board_top.snr",
+      "archived_path": "evidence/video/pds/20261103T070558_933114Z/synthesize/triha_face_board_top.snr",
+      "bytes": 1227395,
+      "sha256": "355ed4faa8c272c92376b42ccebe1b8426a071aa39987d9c59bc181d23ec86d0"
+    },
+    {
+      "source_path": "releases/face-box-20261103/README.md",
+      "archived_path": "release/README.md",
+      "sha256": "2c598a836cd88626ff6df092a1571bd630ae477dce800a5a09ef7288964112f4",
+      "bytes": 9114
+    },
+    {
+      "source_path": "releases/face-box-20261103/manifest.json",
+      "archived_path": "release/manifest.json",
+      "sha256": "3dd28be6401ef1a554bfa5773f3bf4e41506a857784c505cf3231d365c54e7a2",
+      "bytes": 227437
+    },
+    {
+      "source_path": "releases/face-box-20261103/verification.json",
+      "archived_path": "release/verification.json",
+      "sha256": "59020b572353a7b185028defb35f8a9c75e261c35c12fe250b09fb3050ba1e73",
+      "bytes": 2900
+    },
+    {
+      "source_path": "docs/verification/npu/2026-11-03-face-box-bringup.json",
+      "archived_path": "release/2026-11-03-face-box-bringup.json",
+      "sha256": "84eab26dc2094b2302c82438444c42941fd2cd28d9e2b299c4480f5302034c6c",
+      "bytes": 18446
+    }
+  ],
+  "new_simulation_run": false,
+  "new_board_run": false
+}

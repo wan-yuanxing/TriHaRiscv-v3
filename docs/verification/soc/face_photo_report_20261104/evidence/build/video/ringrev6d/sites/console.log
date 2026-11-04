@@ -1,0 +1,16 @@
+License checkout: fabric_shell from D:\pango\lic\new_pds_00e04cf107df.lic
+Compiling architecture definition.
+Analyzing project file 'D:/FPGA/TriHaRiscv-v3/build/video/ringrev6d/sites/sites.pds'.
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676
+Executing : set_arch -family Logos2 -device PG2L100H -speedgrade -6 -package FBG676 successfully.
+Executing : generate_constraint -db D:/FPGA/TriHaRiscv-v3/build/video/pds/ringr6d/place_route/triha_face_board_top_pnr.adf -compile_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/compile/triha_face_board_top_comp.adf -synthesize_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/synthesize/triha_face_board_top_syn.adf -devmap_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/device_map/triha_face_board_top_map.adf -file D:/FPGA/TriHaRiscv-v3/build/video/ringrev6d/sites/sites.pcf
+Compiling architecture definition.
+Compiling verification operator library.
+Compiling common defs.
+Compiling prim grid devices.
+Compiling gate devices.
+Compiling gate operators.
+Building architecture model.
+Loading device packaging model.
+Building architecture floorplan logic view.
+Executing : generate_constraint -db D:/FPGA/TriHaRiscv-v3/build/video/pds/ringr6d/place_route/triha_face_board_top_pnr.adf -compile_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/compile/triha_face_board_top_comp.adf -synthesize_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/synthesize/triha_face_board_top_syn.adf -devmap_db D:/FPGA/TriHaRiscv-v3/build/video/pds/face_photo_ring_50_map_20261104/device_map/triha_face_board_top_map.adf -file D:/FPGA/TriHaRiscv-v3/build/video/ringrev6d/sites/sites.pcf successfully.

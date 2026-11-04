@@ -1,0 +1,19 @@
+% !TEX root = ../../技术文档.tex
+\section{功能与特性}
+
+TriHaRiscv\footnote{名称取自团队名“哈哈哈”，即Triple Ha。}是基于盘古100pro+国产FPGA的RISC-V CPU与NPU异构系统，完成YuNet人脸检测与同帧头像叠加。
+
+\begin{itemize}
+    \item CPU采用六级顺序流水线，可配置单/双发射，支持RV32IM、Zicsr和Zifencei。
+    \item CPU运行于机器模式，支持异常处理、中断及周期计数。
+    \item I/D-Cache各16\,KiB、两路组相联，D-Cache采用写回、写分配策略。
+    \item BHT、BTB和返回地址栈提供动态分支预测，双队首指令FIFO支持跨取指包配对。
+    \item NPU支持普通、逐点和深度卷积及辅助算子，采用8位定点乘法、32位累加。
+    \item CPU提交整帧任务，NPU执行计算图，DMA搬运权重、特征图和结果。
+    \item 配置32\,bit AXI4-Lite控制接口和128\,bit AXI4 DMA数据接口。
+    \item 集成Boot ROM、SRAM及1\,GB DDR3，区分CPU可缓存私有区与DMA不可缓存共享区。
+    \item UART装载模型，I\textsuperscript{2}C初始化HDMI芯片，LED指示运行状态。
+    \item 支持800$\times$600 HDMI输入输出、全画面人脸检测及原图、检测框、透明头像显示。
+    \item 视频硬件完成双线性缩放与补边，生成320$\times$320 UINT8 BGR NCHW模型输入。
+    \item CPU完成定点解码、NMS和主人脸选择，三帧槽保持采集、推理与显示的帧对应关系。
+\end{itemize}

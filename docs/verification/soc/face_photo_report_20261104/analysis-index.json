@@ -1,0 +1,27 @@
+[
+  {
+    "path": "analysis/design-audit-evidence.json",
+    "sha256": "6659c986f03d0c0869fef6eafc41e960753439dd2aeb320cd722d6359722c9b4",
+    "kind": "derived read-only audit"
+  },
+  {
+    "path": "analysis/design-audit.md",
+    "sha256": "dc10043fe4a0af23aee1b540f7ac69e7f960a3f9fdf2e099e3d38012add6b98e",
+    "kind": "derived read-only audit"
+  },
+  {
+    "path": "analysis/snr-resource-excerpt.json",
+    "sha256": "be95433dc0d4a3006732195001a260dc9de1a18b2fe4bee18243069815ac81ff",
+    "kind": "derived read-only audit"
+  },
+  {
+    "path": "analysis/timing-audit.json",
+    "sha256": "f60355f82ca360dae919ce3f7bd520d01b410704347be18f1510bed0c6d7b2ae",
+    "kind": "derived read-only audit"
+  },
+  {
+    "path": "analysis/timing-audit.md",
+    "sha256": "4486d3a62270126c491d5a708d100c45f3df2d58f3a427dedd60423ff4390399",
+    "kind": "derived read-only audit"
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "native_waveform_figures": 14,
+  "original_other_chapter_waveforms_unchanged": 2,
+  "architecture_files_byte_identical": true,
+  "npu_waveform_and_provenance_only": true,
+  "all_unrelated_chapters_unchanged": true,
+  "original_top_level_chapters_present": 20,
+  "original_cpu_chapter_unchanged": true,
+  "embedded_html_figures": 17,
+  "embedded_figures_match_delivered_bytes_and_order": true,
+  "native_panel_pixels_preserved": true,
+  "actual_recorded_signals_only": true,
+  "derived_handshake_curves_removed": true,
+  "new_simulation": false,
+  "new_pds_run": false,
+  "new_board_test": false,
+  "npu_chapter_anchor": "npu-modules",
+  "source_snapshot_note": "Historical source records retained; current raw VCD hashes verified"
+}

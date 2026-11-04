@@ -1,1 +1,132 @@
-% 在此添加本次技术文档实际使用的参考文献。
+% 正文采用 GB/T 7714 数字顺序制，仅收录实际引用的文献。
+% 规范版本、模型版本及测试集版本分别记录，不以网站最新版替代工程版本。
+
+@standard{riscv-unpriv-20260120,
+  author    = {{RISC-V International}},
+  title     = {The {RISC-V} Instruction Set Manual, Volume {I}: Unprivileged Architecture},
+  number    = {Version 20260120},
+  year      = {2026},
+  url       = {https://docs.riscv.org/reference/isa/v20260120/unpriv/unpriv-index.html},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+@standard{riscv-priv-20260120,
+  author    = {{RISC-V International}},
+  title     = {The {RISC-V} Instruction Set Manual, Volume {II}: Privileged Architecture},
+  number    = {Version 20260120},
+  year      = {2026},
+  url       = {https://docs.riscv.org/reference/isa/v20260120/priv/priv-index.html},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+@standard{arm-axi-ihi0022e,
+  author    = {{ARM}},
+  title     = {{AMBA AXI and ACE} Protocol Specification},
+  number    = {ARM IHI 0022E},
+  year      = {2013},
+  url       = {https://developer.arm.com/documentation/ihi0022/e},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+@article{wu2023yunet,
+  author    = {Wu, Wei and Peng, Hanyang and Yu, Shiqi},
+  title     = {{YuNet}: A Tiny Millisecond-level Face Detector},
+  journal   = {Machine Intelligence Research},
+  year      = {2023},
+  volume    = {20},
+  number    = {5},
+  pages     = {656--665},
+  doi       = {10.1007/s11633-023-1423-y},
+  language  = {english}
+}
+
+% 此提交中的模型 LFS SHA-256 与工程原始模型一致：
+% 8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4
+@online{opencv-zoo-yunet-2023mar,
+  author    = {{OpenCV}},
+  title     = {{OpenCV Zoo}: {YuNet} Face Detection Model},
+  year      = {2023},
+  date      = {2023-06-06},
+  note      = {Model version: 2023mar},
+  url       = {https://github.com/opencv/opencv_zoo/tree/f12e12798e8314f7c074a6656816c048dcc95b7a/models/face_detection_yunet},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+@techreport{krishnamoorthi2018quantization,
+  author    = {Krishnamoorthi, Raghuraman},
+  title     = {Quantizing Deep Convolutional Networks for Efficient Inference: A Whitepaper},
+  number    = {arXiv:1806.08342},
+  year      = {2018},
+  url       = {https://arxiv.org/abs/1806.08342},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+@article{sze2017efficient,
+  author    = {Sze, Vivienne and Chen, Yu-Hsin and Yang, Tien-Ju and Emer, Joel S.},
+  title     = {Efficient Processing of Deep Neural Networks: A Tutorial and Survey},
+  journal   = {Proceedings of the IEEE},
+  year      = {2017},
+  volume    = {105},
+  number    = {12},
+  pages     = {2295--2329},
+  doi       = {10.1109/JPROC.2017.2761740},
+  language  = {english}
+}
+
+@inproceedings{cummings2008cdc,
+  author    = {Cummings, Clifford E.},
+  title     = {Clock Domain Crossing ({CDC}) Design \& Verification Techniques Using {SystemVerilog}},
+  booktitle = {SNUG Boston},
+  address   = {Boston},
+  publisher = {Synopsys},
+  year      = {2008},
+  url       = {https://www.sunburst-design.com/papers/CummingsSNUG2008Boston_CDC.pdf},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+% 本机配套资料：6_doc/VESA/Vesa Monitor Timing_v1r12.pdf
+@standard{vesa-dmt-2008,
+  author    = {{Video Electronics Standards Association}},
+  title     = {{VESA} and Industry Standards and Guidelines for Computer Display Monitor Timing ({DMT})},
+  edition   = {Version 1.0, Revision 12},
+  address   = {Milpitas},
+  publisher = {VESA},
+  year      = {2008},
+  language  = {english}
+}
+
+@online{eembc-coremark-rules,
+  author    = {{EEMBC}},
+  title     = {{CoreMark}: Run and Reporting Rules},
+  note      = {CoreMark 1.0},
+  url       = {https://github.com/eembc/coremark/blob/main/README.md},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+% 本条用于说明公开测试集来源。实际执行的 ELF/日志哈希以
+% docs/verification/cpu/isa_support/regression-2026-10-29.json 为准。
+@online{riscv-tests,
+  author    = {{RISC-V Software}},
+  title     = {{riscv-tests}: Unit Tests for {RISC-V} Processors},
+  url       = {https://github.com/riscv-software-src/riscv-tests},
+  urldate   = {2026-11-03},
+  language  = {english}
+}
+
+% 提交号与主工程归档的 ACT4 实际回归记录一致。
+@online{riscv-act4,
+  author    = {{RISC-V International}},
+  title     = {{RISC-V} Architectural Certification Tests and the {ACT4} Framework},
+  year      = {2026},
+  date      = {2026-07-10},
+  url       = {https://github.com/riscv/riscv-arch-test/tree/375292312d3d02b7468272eb550d81cb74be53d8},
+  urldate   = {2026-11-03},
+  language  = {english}
+}

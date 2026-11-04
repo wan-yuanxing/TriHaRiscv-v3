@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "compiler": "D:/AI_Tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/riscv-none-elf-gcc.exe",
+  "gcc_version": "15.2.0",
+  "release": "15.2.0-1",
+  "abi": "ilp32",
+  "baseline_march": "rv32i",
+  "performance_march": "rv32im_zicsr",
+  "benchmark": "CoreMark",
+  "benchmark_version": "1.0",
+  "archive_sha256": "85ef714dacd273b1dadf4af4892774520ac01915bfa6da816a56e7e41591e09e"
+}

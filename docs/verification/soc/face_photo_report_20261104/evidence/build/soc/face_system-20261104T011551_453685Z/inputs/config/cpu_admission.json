@@ -1,0 +1,817 @@
+{
+  "accepted_implementation_commit": "febadb38f7bc36ad878a619ecfa9439edbd0d483",
+  "cache_sources": [
+    "rtl/cpu/triha_icache_tag_ram.v",
+    "rtl/cpu/triha_icache_data_ram.v",
+    "rtl/cpu/triha_icache.v",
+    "rtl/cpu/triha_ifetch_uncached.v",
+    "rtl/cpu/triha_dcache_tag_ram.v",
+    "rtl/cpu/triha_dcache_data_ram.v",
+    "rtl/cpu/triha_dcache.v",
+    "rtl/cpu/triha_cache_subsystem.v",
+    "rtl/soc/triha_cpu_cache_axi.v"
+  ],
+  "constraints": "100MHz physical timing must be rerun after CSR correction and main integration; no board action in admission.",
+  "core": {
+    "constraints": [
+      "fpga/pg2l100h/constraints/cpu_core.fdc"
+    ],
+    "device": "PG2L100H",
+    "family": "Logos2",
+    "headers": [
+      "rtl/cpu/vendor/src/core/biriscv_defs.v"
+    ],
+    "include_directory": "rtl/cpu/vendor/src/core",
+    "modes": {
+      "dual": 1,
+      "single": 0
+    },
+    "package": "FBG676",
+    "schema_version": 1,
+    "scope": "CPU-only standalone synthesis; no TCM/cache/SoC/DDR/NPU/Video; I/O timing unvalidated",
+    "sources": [
+      "rtl/cpu/vendor/src/core/biriscv_alu.v",
+      "rtl/cpu/triha_csr_regfile.v",
+      "rtl/cpu/triha_csr.v",
+      "rtl/cpu/triha_decode.v",
+      "rtl/cpu/vendor/src/core/biriscv_decoder.v",
+      "rtl/cpu/vendor/src/core/biriscv_divider.v",
+      "rtl/cpu/vendor/src/core/biriscv_exec.v",
+      "rtl/cpu/vendor/src/core/biriscv_fetch.v",
+      "rtl/cpu/triha_frontend.v",
+      "rtl/cpu/triha_issue.v",
+      "rtl/cpu/triha_regfile.v",
+      "rtl/cpu/triha_divider.v",
+      "rtl/cpu/triha_lsu.v",
+      "rtl/cpu/vendor/src/core/biriscv_mmu.v",
+      "rtl/cpu/triha_multiplier.v",
+      "rtl/cpu/triha_npc.v",
+      "rtl/cpu/triha_btb.v",
+      "rtl/cpu/triha_pipe_ctrl.v",
+      "rtl/cpu/vendor/src/core/biriscv_regfile.v",
+      "rtl/cpu/triha_cpu.v",
+      "rtl/cpu/triha_core.v"
+    ],
+    "speedgrade": "-6",
+    "target": "cpu_core",
+    "top": "triha_core"
+  },
+  "files": [
+    {
+      "destination": "tb/cpu/fixtures/config/cpu_cache.json",
+      "sha256": "9bae4534ffe4ae4fe141e823acd5e21bcbe4ce21f54d65cc180c775f8b492e48",
+      "source": "config/cpu_cache.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/config/cpu_cache_soc.json",
+      "sha256": "c8e411a18d9a3a129cf9b34efa8f10a292d8eb5a7a0210b16874bcfbdb7af20c",
+      "source": "config/cpu_cache_soc.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "config/cpu_toolchain.json",
+      "sha256": "026670e776703cb5b839fce8bb8c110b8342b437fb26506d429dae89427a1fb8",
+      "source": "config/cpu_toolchain.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/config/soc_map.json",
+      "sha256": "284413d5c643641339258d7292039f49eb97d2d47b794592d5321cdd3ca5f875",
+      "source": "config/soc_map.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/fpga/pg2l100h/project/cpu_core.json",
+      "sha256": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96",
+      "source": "fpga/pg2l100h/project/cpu_core.json",
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+    },
+    {
+      "base_sha256": "2325a576e02f36a1768ca2b9b5d2fb191cb9c660d6d96d75aaed6a6bd0533cdc",
+      "destination": "rtl/cpu/ADAPTATIONS.json",
+      "sha256": "9b9291b50ee2ffa237d3b13b6cb181eacaefcc63361f08f1619101be56af3d25",
+      "source": "rtl/cpu/ADAPTATIONS.json",
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "4ea558b1e7c5a1384def4e5e80f1077df5905e08eb19fb73a7242210eaa78aa4"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+    },
+    {
+      "destination": "rtl/cpu/CACHE_ADAPTATIONS.json",
+      "sha256": "3c8f455301d4d44e5619aa19b67de5d7ab317946f75ccb0abc5cfa016fcd91ab",
+      "source": "rtl/cpu/CACHE_ADAPTATIONS.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_btb.v",
+      "sha256": "f707db96f500c9c26afcd771c1dde61a5551964c363c49a45a8a9fa21393e572",
+      "source": "rtl/cpu/triha_btb.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_cache_subsystem.v",
+      "sha256": "d43d066b20a452d19506f69ff4c4d4fee11188bd2e006c0090668afebb1be732",
+      "source": "rtl/cpu/triha_cache_subsystem.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_cached_core.v",
+      "sha256": "0f100b6951b817f15cbe8bff1d01c8c474916d29c844627211b7dfa70bf45fc1",
+      "source": "rtl/cpu/triha_cached_core.v",
+      "source_kind": "git"
+    },
+    {
+      "base_sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+      "destination": "rtl/cpu/triha_core.v",
+      "sha256": "99499e22eb1f6c4f906879508214b5de77e12a832d0c38ad2c3abf6bc7853f1a",
+      "source": "rtl/cpu/triha_core.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "destination": "rtl/cpu/triha_cpu.v",
+      "sha256": "f76429f94bd7c5b92a6346a167257409e9ee48dcdbf6a3491c06f378f4d4a0f5",
+      "source": "rtl/cpu/triha_cpu.v",
+      "source_kind": "git"
+    },
+    {
+      "base_sha256": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+      "destination": "rtl/cpu/triha_csr.v",
+      "sha256": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+      "source": "rtl/cpu/triha_csr.v",
+      "source_kind": "reviewed_working_tree",
+      "previous_admitted_sha256": [
+        "8e53738c6c76eb9086a1f332fe3c2fd797f50caf666ff48ab9b199701cb20c49"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+    },
+    {
+      "destination": "rtl/cpu/triha_dcache.v",
+      "sha256": "d0bf26cb7505a333758698f4ffaf765293c38f8ddfbe381fc48008d6bd1dbb03",
+      "source": "rtl/cpu/triha_dcache.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_dcache_data_ram.v",
+      "sha256": "1d75b4e7c7828f14a1376858c69364b6c95d8013d44b0deff23f24660c95ae01",
+      "source": "rtl/cpu/triha_dcache_data_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_dcache_tag_ram.v",
+      "sha256": "4b954b099b6aefca050b310aee64f5484a7c710cc2047f474164c782b678594b",
+      "source": "rtl/cpu/triha_dcache_tag_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_decode.v",
+      "sha256": "446bc1595bd332998d402a6f8f9f9e29dcc0fb63fa82cfd855f02757a18c193f",
+      "source": "rtl/cpu/triha_decode.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_divider.v",
+      "sha256": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+      "source": "rtl/cpu/triha_divider.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_frontend.v",
+      "sha256": "3ab9960ade7756eb974df0c35a1b94faf9d380f584aaf642dd3f577655bf0a76",
+      "source": "rtl/cpu/triha_frontend.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_icache.v",
+      "sha256": "a6a1832d480503cb552a7115bfc99b81904ffd638d1581a6ccb2438fdb7c3bd9",
+      "source": "rtl/cpu/triha_icache.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_icache_data_ram.v",
+      "sha256": "30cf9b214900dd2791477bd35b4c4731eb115fb8d3e2e53e076bd03d2644780d",
+      "source": "rtl/cpu/triha_icache_data_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_icache_tag_ram.v",
+      "sha256": "9efd437f1c09bd6662f0d78d5edbb36e347c408fc3b2829eb22e4989fca2eb7a",
+      "source": "rtl/cpu/triha_icache_tag_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_ifetch_uncached.v",
+      "sha256": "73151458a49f96b1a90eba30d2800c2472d7aacdd0485f120540dcb6911c495d",
+      "source": "rtl/cpu/triha_ifetch_uncached.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_issue.v",
+      "sha256": "934e7c65e757bea45da0f74e035778231482012d4470d5d43b0a9eb5abd661a7",
+      "source": "rtl/cpu/triha_issue.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_lsu.v",
+      "sha256": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "source": "rtl/cpu/triha_lsu.v",
+      "source_kind": "git",
+      "previous_admitted_sha256": [
+        "bf59741f5246f5bf281bd69bdb868a2ba5571e00c88397f042a55a4b92bb21e4"
+      ],
+      "current_change": "2026-11-03 P0 CSR correction; source lineage retained; simulation validation recorded separately."
+    },
+    {
+      "destination": "rtl/cpu/triha_multiplier.v",
+      "sha256": "de63d0c630d748805fb8c46b3ddc92c1d2366ad5c0e57517f0207e8441294510",
+      "source": "rtl/cpu/triha_multiplier.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_npc.v",
+      "sha256": "fb5d4f9d76482c3197c4ca4c3d1e37109ee837735448998e522500cb8ee2dfa4",
+      "source": "rtl/cpu/triha_npc.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_pipe_ctrl.v",
+      "sha256": "9228793aa33fa2c7bd626105b038ebe78e8372b8893549a1ce51093b8c7e50f5",
+      "source": "rtl/cpu/triha_pipe_ctrl.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_regfile.v",
+      "sha256": "fcd980b71b3957e82d9378fd8ae09edd41b34a29696cd08505a0cb502e66f779",
+      "source": "rtl/cpu/triha_regfile.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/CACHE_UPSTREAM.json",
+      "sha256": "1d61783ffa147c697292032791c8b98bcd2f6fb0314b0c047feff7eedd387a57",
+      "source": "rtl/cpu/vendor/CACHE_UPSTREAM.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/LICENSE",
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "source": "rtl/cpu/vendor/LICENSE",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/README.md",
+      "sha256": "133b19df1165963753b52ed65d823664f222d7fcf0b7ab4cc74eeebc6dfccfd2",
+      "source": "rtl/cpu/vendor/README.md",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/UPSTREAM.json",
+      "sha256": "0ec4b9a2d06cbe37eb8de7b607e4e363c1f2addbddf3ecbb737b2565ec651d04",
+      "source": "rtl/cpu/vendor/UPSTREAM.json",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/cache/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "source": "rtl/cpu/vendor/cache/LICENSE",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/docs/configuration.md",
+      "sha256": "60ea5fac0ef03803afa65ca6f585b35a96fd8fcbbadd437e07d92a3b823a8785",
+      "source": "rtl/cpu/vendor/docs/configuration.md",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/docs/integration.md",
+      "sha256": "c8d37c77de855afdca52a86287a2598f41306a27afef29d73622c82233d25674",
+      "source": "rtl/cpu/vendor/docs/integration.md",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_alu.v",
+      "sha256": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+      "source": "rtl/cpu/vendor/src/core/biriscv_alu.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_csr.v",
+      "sha256": "eda8c8194eff9cd430d4adf3e9100987b21fe9c67f40ebcc12cdd3a54c15c2d3",
+      "source": "rtl/cpu/vendor/src/core/biriscv_csr.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+      "sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "source": "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_decode.v",
+      "sha256": "243f0f3262ece429178cd50fe6ff4bc7509bb669008f6a8ea626064e73e629c1",
+      "source": "rtl/cpu/vendor/src/core/biriscv_decode.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_decoder.v",
+      "sha256": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+      "source": "rtl/cpu/vendor/src/core/biriscv_decoder.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_defs.v",
+      "sha256": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a",
+      "source": "rtl/cpu/vendor/src/core/biriscv_defs.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_divider.v",
+      "sha256": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+      "source": "rtl/cpu/vendor/src/core/biriscv_divider.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_exec.v",
+      "sha256": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+      "source": "rtl/cpu/vendor/src/core/biriscv_exec.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_fetch.v",
+      "sha256": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+      "source": "rtl/cpu/vendor/src/core/biriscv_fetch.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
+      "sha256": "3358927454aebe6b0fb1ac7aa042871bb8e3a08c588bc09d62a5476f8a2c546c",
+      "source": "rtl/cpu/vendor/src/core/biriscv_frontend.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+      "sha256": "2a117e4759432fbd0f5c8f062062baf3ed0b6febcff64394a2ceb9952c2b59b2",
+      "source": "rtl/cpu/vendor/src/core/biriscv_issue.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
+      "sha256": "6a538d0c1f54bcb4327a1ee5353db4168630d6c06c0494721e22a3bc3d535ea0",
+      "source": "rtl/cpu/vendor/src/core/biriscv_lsu.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_mmu.v",
+      "sha256": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+      "source": "rtl/cpu/vendor/src/core/biriscv_mmu.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
+      "sha256": "f160b2e304731102adbf7afca7e6c04299a16ebf00c4bd71c8ce93aa5f441d39",
+      "source": "rtl/cpu/vendor/src/core/biriscv_multiplier.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_npc.v",
+      "sha256": "959ee2326446928f46e0053e302389c565123349bf339e2062bf38150d534049",
+      "source": "rtl/cpu/vendor/src/core/biriscv_npc.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
+      "sha256": "4a7f1cccbf4ccd0bc96a1be4e141280ce389106617a730ebb554220043a8944e",
+      "source": "rtl/cpu/vendor/src/core/biriscv_pipe_ctrl.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
+      "sha256": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+      "source": "rtl/cpu/vendor/src/core/biriscv_regfile.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_trace_sim.v",
+      "sha256": "f58a5df55c1130f376f684a5b8c37a32665a0abb3cc459c45f56c3c1d30323cb",
+      "source": "rtl/cpu/vendor/src/core/biriscv_trace_sim.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
+      "sha256": "cf9fe13b903b1982793265d040271e0c418c10b8829157d8ea058e78b79265e1",
+      "source": "rtl/cpu/vendor/src/core/biriscv_xilinx_2r1w.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/core/riscv_core.v",
+      "sha256": "9db454e5120cdbd85ecd4a9052e64eefaa376409610e53ff99717c8bda143632",
+      "source": "rtl/cpu/vendor/src/core/riscv_core.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/dcache/dcache_core.v",
+      "sha256": "794472a57ef3b6fa7acb7eff5253d15d774361ba3bb1975392d1bd7ac1fcfe9e",
+      "source": "rtl/cpu/vendor/src/dcache/dcache_core.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/dcache/dcache_core_data_ram.v",
+      "sha256": "6f23ad31f338d5f38d63c2b3fa9a54cc552c11c0e8cfc6af7d492e80168452de",
+      "source": "rtl/cpu/vendor/src/dcache/dcache_core_data_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
+      "sha256": "87da2141cf7206e27a2822b8fd922c9d5e263a35211a17a3442145a1d1396843",
+      "source": "rtl/cpu/vendor/src/dcache/dcache_core_tag_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/icache/icache.v",
+      "sha256": "d0bacf65944aa3733af423c494c26ae80a2169b6702cd653d67f6371d87bc5c9",
+      "source": "rtl/cpu/vendor/src/icache/icache.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/icache/icache_data_ram.v",
+      "sha256": "266cc767e208f14121ccb6db3f05091da9fca594da55e4b0194ef0f251db4ea3",
+      "source": "rtl/cpu/vendor/src/icache/icache_data_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/src/icache/icache_tag_ram.v",
+      "sha256": "afa3355b6089d65fb6301f700a84d949fdf7e97007cd3e610d361625cadd2389",
+      "source": "rtl/cpu/vendor/src/icache/icache_tag_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/tb/tb_core_icarus/tb_top.v",
+      "sha256": "a3681633bcf5ce38c69ed3f4891f0e434833dc590480f5966ea94d6648e8d71e",
+      "source": "rtl/cpu/vendor/tb/tb_core_icarus/tb_top.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem.v",
+      "sha256": "308c14bd6c97b0971472188edf584c8f2ed26fe55e59bee88766c1b7eca6b801",
+      "source": "rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem_ram.v",
+      "sha256": "f260e88fcf41d1983a117b53810173ea8ddaef8cd125c1aaa9ea5f22d5cd6ebe",
+      "source": "rtl/cpu/vendor/tb/tb_core_icarus/tcm_mem_ram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/vendor/tb/tb_core_icarus/test.elf",
+      "sha256": "6f97ed791e339f8b3c6a8a96496f5a5eacf1e55f1fcc8a3aa824cd711bf8f11e",
+      "source": "rtl/cpu/vendor/tb/tb_core_icarus/test.elf",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/rtl/soc/include/cpu_cache_map.vh",
+      "sha256": "8bbe95e2965453ee0f94d0f2c7e29c0ada8f8b954fc9eae3b895905597991f3b",
+      "source": "rtl/soc/include/cpu_cache_map.vh",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/rtl/soc/include/soc_map.vh",
+      "sha256": "bb6181c9440ee7d1922034927b0c48115726b5b0ed120d5d56a41bbd6e2eddaa",
+      "source": "rtl/soc/include/soc_map.vh",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/soc/triha_axi128_cdc.v",
+      "sha256": "4915b04169d7827adbf751d66c0ba4fa788cae90504eb1966603ad144966685e",
+      "source": "rtl/soc/triha_axi128_cdc.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/soc/triha_boot_rom.v",
+      "sha256": "14e805d00471ff4a8c70c5930d2edfce23985dc99953ae4c878680b939eb06d5",
+      "source": "rtl/soc/triha_boot_rom.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/rtl/soc/triha_cached_soc.v",
+      "sha256": "d2b6e47a7828ce641e15c31cad56aab58a5457747c2476d13349c5fac21af667",
+      "source": "rtl/soc/triha_cached_soc.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/soc/triha_cpu_cache_axi.v",
+      "sha256": "a21d7a62fc7f2bcd05d09fed96b048fcd752358592e442469a6d6b2e1face6f9",
+      "source": "rtl/soc/triha_cpu_cache_axi.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/rtl/soc/triha_cpu_memory_router.v",
+      "sha256": "9f2f6125a7d78a242d277d3102aec4eabc22c5c65940c7b95ce99a9807d688f2",
+      "source": "rtl/soc/triha_cpu_memory_router.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "tb/cpu/fixtures/rtl/soc/triha_soc_memory.v",
+      "sha256": "b7cefe61cd83a0b03a45248186728722a46e1102d79f1ca04cddecfde81936f2",
+      "source": "rtl/soc/triha_soc_memory.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/soc/triha_sram.v",
+      "sha256": "5adf422ab9de0c0bffb9f829e5b0dbf4c2a366e4b4d5a9a8c0966d6e3d26d66f",
+      "source": "rtl/soc/triha_sram.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/soc/triha_uart_tx.v",
+      "sha256": "f28aee64020bc6a6b914f22b76bafb283adf07cda97a282447db5b9541e860a9",
+      "source": "rtl/soc/triha_uart_tx.v",
+      "source_kind": "git"
+    },
+    {
+      "base_sha256": null,
+      "destination": "sw/runtime/triha_cache_irq.ld",
+      "sha256": "a422c092b4ad3f12b32c8305b9c0177ea0b0f877aa718ad9f5bf56e29adb18a0",
+      "source": "sw/runtime/triha_cache_irq.ld",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "destination": "sw/runtime/triha_sram.ld",
+      "sha256": "f9c8e1a8489d08af68331adee09e17e6cdf7c7eb5275d7cc56bf5f838799de2c",
+      "source": "sw/runtime/triha_sram.ld",
+      "source_kind": "git"
+    },
+    {
+      "destination": "sw/runtime/triha_tcm.ld",
+      "sha256": "02f9066348f72f170911194dbd9855c358ac5d1e0f03e3fd3820bfce174610a7",
+      "source": "sw/runtime/triha_tcm.ld",
+      "source_kind": "git"
+    },
+    {
+      "base_sha256": null,
+      "destination": "sw/tests/cache_irq_runtime.S",
+      "sha256": "78a703e954af8e8cbd55b5f3de361bc9db113e860dbc4d569c3e10527c433cb5",
+      "source": "sw/tests/cache_irq_runtime.S",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "destination": "sw/tests/cache_soc_runtime.S",
+      "sha256": "34c76ab70c725537527d0c84881a84ed575bca53bb49983baf8e0e75de8f9a6b",
+      "source": "sw/tests/cache_soc_runtime.S",
+      "source_kind": "git"
+    },
+    {
+      "base_sha256": null,
+      "destination": "sw/tests/squash_runtime.S",
+      "sha256": "aaa076e789552f225aa05b3f6a6e404ee6b96c99a5c36446df759b2d286abad0",
+      "source": "sw/tests/squash_runtime.S",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "base_sha256": null,
+      "destination": "tb/cpu/tb_cpu_squash.v",
+      "sha256": "96419570f428e61d13dbc54e31fbdda5a16df9a59b1667ecfcabe6f2f5750336",
+      "source": "tb/cpu/tb_cpu_squash.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "base_sha256": null,
+      "destination": "tb/cpu/tb_csr_functional.v",
+      "sha256": "f0648e9d5a94666720d52685a2cc021a0fda26bc17be14248cf168ad43a38546",
+      "source": "tb/cpu/tb_csr_functional.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "base_sha256": null,
+      "destination": "tb/cpu/tb_triha_isa_official.v",
+      "sha256": "ed72aa4e7b9796a7fbd8eb0eaf07c0eb143ef4220b12f2ae46d28583bb75e204",
+      "source": "tb/cpu/tb_triha_isa_official.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "base_sha256": null,
+      "destination": "tb/soc/tb_cpu_cache_irq.v",
+      "sha256": "39d566c800432041695b231ad0641f7995e6cf5122267290c2be5a514fc0fcff",
+      "source": "tb/soc/tb_cpu_cache_irq.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "base_sha256": "52f71db09238583a8e30b93eef777209845f34f28c5c93159d8310cabd00a67f",
+      "destination": "tb/soc/tb_cpu_cache_router.v",
+      "sha256": "9bfd2228bb2828b9914d1961e6da640f54e63908069fdc1bd5d08036d2cce1bc",
+      "source": "tb/soc/tb_cpu_cache_router.v",
+      "source_kind": "reviewed_working_tree"
+    },
+    {
+      "destination": "tb/soc/tb_cpu_cache_soc.v",
+      "sha256": "bc738fea9830b455b88b7a89567d94f2cc68f03fede4aa9f288b8bf70e46e9cd",
+      "source": "tb/soc/tb_cpu_cache_soc.v",
+      "source_kind": "git"
+    },
+    {
+      "destination": "scripts/cpu/run_modelsim.do",
+      "sha256": "d672123410c32d618a87745653f16133fd3916911a199a6c4c20525654ed87a9",
+      "source": "scripts/cpu/run_modelsim.do",
+      "source_kind": "git"
+    },
+    {
+      "destination": "rtl/cpu/triha_csr_regfile.v",
+      "source": "rtl/cpu/triha_csr_regfile.v",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+      "base_sha256": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93"
+    },
+    {
+      "destination": "tb/cpu/tb_document_csr.v",
+      "source": "tb/cpu/tb_document_csr.v",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "7ead647055828e7d62f49f6852a23f9e97dc4b44c60e9d63a6a4b1d5c206856e",
+      "base_sha256": null
+    },
+    {
+      "destination": "scripts/cpu/run_document_csr.py",
+      "source": "scripts/cpu/run_document_csr.py",
+      "source_kind": "reviewed_working_tree",
+      "sha256": "1b69e8a61aef2f0781e1cdb02fee6312a67f942fcdeb47a4d32059e51ed159ba",
+      "base_sha256": null
+    }
+  ],
+  "fixture_include": "tb/cpu/fixtures/rtl/soc/include",
+  "fixture_sources": [
+    "tb/cpu/fixtures/rtl/soc/triha_cpu_memory_router.v",
+    "tb/cpu/fixtures/rtl/soc/triha_soc_memory.v",
+    "tb/cpu/fixtures/rtl/soc/triha_cached_soc.v"
+  ],
+  "isa_archive": {
+    "path": "docs/verification/cpu/isa_support/cpu-isa-support-2026-10-29.zip",
+    "sha256": "79e5c590f1937cc1b994c51b692b920bdd98f80c41bd96e9b8b9423c9eeb82ab"
+  },
+  "local_primitives": [
+    "rtl/soc/triha_sram.v",
+    "rtl/soc/triha_boot_rom.v",
+    "rtl/soc/triha_uart_tx.v"
+  ],
+  "schema_version": 1,
+  "scope": "CPU/cache source admission. Legacy maps and SoC wrappers are isolated simulation fixtures, not the main SoC address authority.",
+  "simulation_models": [
+    {
+      "module": "GTP_RAM32X2DP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
+      "sha256": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307"
+    },
+    {
+      "module": "INT_LUTMUX2_UDP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v",
+      "sha256": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a"
+    },
+    {
+      "module": "INT_LUTMUX4_UDP",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v",
+      "sha256": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841"
+    },
+    {
+      "module": "GTP_LUT5",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+      "sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9"
+    },
+    {
+      "module": "GTP_LUT6",
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+      "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+    }
+  ],
+  "source_commit": "340bcc222da9c39cb1ad42de3b3baa74ce3f8a5c",
+  "tool_adaptations": {
+    "scripts/cpu/run_cache_soc.py": {
+      "reason": "Use admitted local sources/config/fixtures and pinned main archive; preserve original test logic and failure checks.",
+      "source": "scripts/cpu/run_cache_soc.py",
+      "source_sha256": "ef99e95028bdd49edc751b579aca4f23a4f4cfd4541b2975d7260c515db9bafb"
+    },
+    "scripts/cpu/run_isa_regression.py": {
+      "reason": "Use admitted local sources/config/fixtures and pinned main archive; preserve original test logic and failure checks.",
+      "source": "scripts/cpu/run_isa_regression.py",
+      "source_sha256": "c09fc7afc559b52f670fb16956ae19904dc1b4abd8ee23ee9b112b9eebe2bc39"
+    },
+    "scripts/cpu/run_squash.py": {
+      "reason": "Use admitted local sources/config/fixtures and pinned main archive; preserve original test logic and failure checks.",
+      "source": "scripts/cpu/run_squash.py",
+      "source_sha256": "936927302367e26c9717b4e22bf258bea1cc446b9600a22c1e90b31489a328aa"
+    }
+  },
+  "tools": [
+    {
+      "evidence_sha256": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307",
+      "matches": true,
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_RAM32X2DP.v",
+      "sha256": "b9d8dc6cc17d5f515a47d61ad15e3eab25b30440b4ea053507d3bd49f90e8307"
+    },
+    {
+      "evidence_sha256": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a",
+      "matches": true,
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX2_UDP.v",
+      "sha256": "8d4ac4b61d25107396bb362c2ea4b668a5747f0fd7094bcb258ac29f0225342a"
+    },
+    {
+      "evidence_sha256": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841",
+      "matches": true,
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/INT_LUTMUX4_UDP.v",
+      "sha256": "11b26877f200570e3685e41ce8c72c9c396caaa12a3c46d0ff9e034c5f899841"
+    },
+    {
+      "evidence_sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9",
+      "matches": true,
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT5.v",
+      "sha256": "7835a0cf88a3249b36615ea127eb3b32b18f4e118ce0efb70907720a140beaf9"
+    },
+    {
+      "evidence_sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17",
+      "matches": true,
+      "path": "D:/pango/PDS_2022.2-SP6.4/arch/vendor/pango/verilog/simulation/GTP_LUT6.v",
+      "sha256": "b228940718adc4a60e1a280ccf394a62e1f5a8900a641b9943de4a244d5a3a17"
+    },
+    {
+      "evidence_sha256": "9fd3aecdd6ae127a5545709f44f8f154b4a39898b021fe87d2991947b0a235c5",
+      "matches": true,
+      "path": "D:\\AI_Tools\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-gcc.exe",
+      "sha256": "9fd3aecdd6ae127a5545709f44f8f154b4a39898b021fe87d2991947b0a235c5"
+    },
+    {
+      "evidence_sha256": "9ab395ada4e901a56a16dc7753275488885f6960bf31cdf5089a8a9e59372643",
+      "matches": true,
+      "path": "D:\\AI_Tools\\xpack-riscv-none-elf-gcc-15.2.0-1\\bin\\riscv-none-elf-nm.exe",
+      "sha256": "9ab395ada4e901a56a16dc7753275488885f6960bf31cdf5089a8a9e59372643"
+    },
+    {
+      "evidence_sha256": "011f110291dc69707d7118e8f8d712b91438e0c837f9bc10ce6bf53c1d048cfd",
+      "matches": true,
+      "path": "D:\\modeltech64_2020.4\\win64\\vsim.exe",
+      "sha256": "011f110291dc69707d7118e8f8d712b91438e0c837f9bc10ce6bf53c1d048cfd"
+    },
+    {
+      "evidence_sha256": "0043766bd4ea69921769e3bb7d571de9bf2aa713a8a8d81fac02a10fae8f0d28",
+      "matches": true,
+      "path": "D:\\modeltech64_2020.4\\win64\\vmap.exe",
+      "sha256": "0043766bd4ea69921769e3bb7d571de9bf2aa713a8a8d81fac02a10fae8f0d28"
+    },
+    {
+      "evidence_sha256": "12fa9f43fac4af70f9694e6055f376dcc419c39518a0e30d7aa047c37aaca576",
+      "matches": true,
+      "path": "D:\\modeltech64_2020.4\\win64\\vlib.exe",
+      "sha256": "12fa9f43fac4af70f9694e6055f376dcc419c39518a0e30d7aa047c37aaca576"
+    },
+    {
+      "evidence_sha256": "39e7f5cbae66a5aa65a179f5ab8faee01a0c53dc838e5e2b76510ac6c77e80a6",
+      "matches": true,
+      "path": "D:\\modeltech64_2020.4\\win64\\vlog.exe",
+      "sha256": "39e7f5cbae66a5aa65a179f5ab8faee01a0c53dc838e5e2b76510ac6c77e80a6"
+    },
+    {
+      "evidence_sha256": "f3c05e11e9fc3fc0941fda221b1dfb0aac39d6ef298078054a5d949d620f3d6c",
+      "matches": true,
+      "path": "D:\\miniconda3\\python.exe",
+      "sha256": "f3c05e11e9fc3fc0941fda221b1dfb0aac39d6ef298078054a5d949d620f3d6c"
+    }
+  ],
+  "csr_review_20261103": {
+    "scope": "Current source changes only; earlier route/board results remain bound to original packages.",
+    "evidence": "docs/verification/cpu/document_review_csr_20261102/",
+    "physical_revalidated": false,
+    "board_revalidated": false,
+    "verified_simulations": [
+      {
+        "result": "build/cpu/document-csr-green-20261102T162606470413Z/result.json",
+        "sha256": "d2feac6eebb09ff4f3c31435a607d80e79970390511d06364948931640ed0bb5",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/isa-20261102T161819241208Z/result.json",
+        "sha256": "a7d86cd962e13a36d2189bb112ba489dbd941404691247678fb19cc9e1758fc8",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/cache-soc-runtime-20261102T161859720964Z/result.json",
+        "sha256": "29fcac33dee9f1a1b5c1cadaa05b2cf7d06fe0a4994eeb3ff96f31cfc72bdf30",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/cache-soc-irq-20261102T161902579373Z/result.json",
+        "sha256": "c47b42eb501f7c6f797c3efc5d49f8179e7a49f743c5b4b38f81de79706621ba",
+        "status": "PASS"
+      },
+      {
+        "result": "build/cpu/csr-20261102T162618445255Z/result.json",
+        "sha256": "1c448923b5069eafbc7c0fcd544c87ee657e80a558458658a12a9610a0a57e99",
+        "status": "PASS"
+      }
+    ],
+    "verified_rtl_sha256": {
+      "rtl/cpu/triha_csr.v": "628ee3e651e394c656434ccc2dff77baa2708eefc18457dee8b3b4370d59a2ee",
+      "rtl/cpu/triha_lsu.v": "89a1a25844c2ac0cf5a0540140722ddd75d5965877237187d88009f2b9ccc7fc",
+      "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+    }
+  }
+}

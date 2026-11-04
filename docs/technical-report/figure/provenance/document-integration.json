@@ -1,0 +1,251 @@
+{
+  "status": "PASS",
+  "source": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-redesign.drawio",
+  "source_sha256": "a6f9f2f7459f7e17947c4d130b5ef7f1c5ddc6b1dc7778067cbb82ead6555692",
+  "updated_pdf_pages": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "unchanged_legacy_source_and_pdf_pages_1_to_4": {
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc.drawio": "bdd887d39bd2d226a716671d3b205cf5dc8832ea8b82c3af903884c81fecc3be",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page1.pdf": "94e5fadbfa4ab994bd3bc4ad309d2b25d9455754baed74852da9d5305c1a1092",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page2.pdf": "1dc5dda0019fee65ac5935107d3ada1427c63d353a7d79d630dc222d33af358e",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page3.pdf": "699dbf9f53808f42d533cc6ec02fc7c8ee8f8ad27b3f53a430730088dd514c89",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page4.pdf": "1609a5c82157a7ee693822f2a1a993885e61d65ce0b27b847f310b79291c9e14"
+  },
+  "added_figure_references": [
+    7,
+    11
+  ],
+  "moved_figure_12": "Instruction execution subsection",
+  "pdf_rendered_or_previewed": false,
+  "build_script": "latex/scripts/build.ps1",
+  "build_exit_code": 0,
+  "template_check": "PASS",
+  "compiled_figure_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "figure_labels": [
+    "cpu-pipeline",
+    "cpu-frontend",
+    "cpu-branch-prediction",
+    "fetch-fifo",
+    "cpu-decode-issue",
+    "cpu-execute",
+    "cpu-lsu",
+    "cpu-memory-interfaces",
+    "video-subsystem",
+    "cpu-alu"
+  ],
+  "document_pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\技术文档.pdf",
+  "document_pdf_sha256": "54e8f0f9e4d33a5856ca1ac29e1ccdeeccd5281189975299e798013da765579c",
+  "document_page_count": 74,
+  "unresolved_references_or_overflow_warnings": [],
+  "edited_sources": {
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\latex\\chapters\\02-system\\02-CPU设计.tex": "d25c238afa14092478271b695cfc155a4c9d9350f8fbb63613f6067186b9abb4",
+    "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\README.md": "de8ffc1d794af8c0b3b4344418db9acce9eff7f74370f42c9a35f3f0d92e73bc"
+  },
+  "exports": [
+    {
+      "page": 5,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page5.pdf",
+      "sha256": "192d14cb0890442e2f95a10a64384294ba4ce5d82ad7f88968f38044c017f500",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "14ce262ef8722c9761370c06e6e385c166e4a20ae7bb6e853ec8f63578b977a3",
+      "crop_box_pt": [
+        6.439700573179128,
+        0.9727551969697288,
+        1245.49699104679,
+        657.12
+      ],
+      "width_pt": 1239.05728943,
+      "height_pt": 656.1472448,
+      "minimum_font_at_body_width_157mm_pt": 8.253,
+      "vector_paths": 335,
+      "raster_images": 0
+    },
+    {
+      "page": 6,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page6.pdf",
+      "sha256": "555c745fd36959ea538dbc686846abddef786f2ae2381414362b9bfb47a31513",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "ad1af8a88b709dde80f01babb645cc47c3a1209ecc9ffb2edec0ec3a4a7d1464",
+      "crop_box_pt": [
+        6.442706813053869,
+        8.572131188327603,
+        1266.7615004247684,
+        766.07996
+      ],
+      "width_pt": 1260.3187931900002,
+      "height_pt": 757.50782881,
+      "minimum_font_at_body_width_157mm_pt": 8.118,
+      "vector_paths": 618,
+      "raster_images": 0
+    },
+    {
+      "page": 7,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page7.pdf",
+      "sha256": "324db3bec5adbcc833b8dc694aee0ba1cd127c31106b9b9f8b6d284f11b24b9f",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "27ee41ef8b20dbcf2e6d10a890f3ec449c97b0d511da986580af2575a5c138b7",
+      "crop_box_pt": [
+        0.5157769560092902,
+        0.7383132067380984,
+        1225.3982468442375,
+        636
+      ],
+      "width_pt": 1224.88247304,
+      "height_pt": 635.26168679,
+      "minimum_font_at_body_width_157mm_pt": 8.357,
+      "vector_paths": 106,
+      "raster_images": 0
+    },
+    {
+      "page": 8,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page8.pdf",
+      "sha256": "83e28004938d4c51fb1ea0e766ba7f87d695ae33d1bf0f48d2bf00384e15b856",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "af0777c3fb2b4d5961fcad7fa9ff358da1269c5edea4469242513150c05ed712",
+      "crop_box_pt": [
+        0,
+        0.07486029438268815,
+        1223.6384512375625,
+        598.08002
+      ],
+      "width_pt": 1223.63845,
+      "height_pt": 598.005159706,
+      "minimum_font_at_body_width_157mm_pt": 8.359,
+      "vector_paths": 169,
+      "raster_images": 0
+    },
+    {
+      "page": 9,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page9.pdf",
+      "sha256": "6f4f3999f9a3a8581853fe543eb1977aab32a19ddb20fdeb049b6c089047d80a",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "92320c8f065855609c97235125885f5c471ad54eb93eda08ec7a6bebb82d6341",
+      "crop_box_pt": [
+        0,
+        0.7390940167057352,
+        1246.203667177345,
+        762
+      ],
+      "width_pt": 1246.20367,
+      "height_pt": 761.26090598,
+      "minimum_font_at_body_width_157mm_pt": 8.216,
+      "vector_paths": 486,
+      "raster_images": 0
+    },
+    {
+      "page": 10,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page10.pdf",
+      "sha256": "0d25dd4c47651a80f083756888f3c02c8730e1c4752554953c5b1c81ff2d32da",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "5768a2b7f9e56ea7946f8463f5ee90409d70ae2bff3b3b06eb6a8b99602fb8de",
+      "crop_box_pt": [
+        0.5141835960756804,
+        1.2755393843535785,
+        1237.9712624723622,
+        708
+      ],
+      "width_pt": 1237.4570764,
+      "height_pt": 706.72446062,
+      "minimum_font_at_body_width_157mm_pt": 8.267,
+      "vector_paths": 373,
+      "raster_images": 0
+    },
+    {
+      "page": 11,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page11.pdf",
+      "sha256": "e4f2f6d05174186f71d5a0a36300599fd686c754dfe491c2e83ecda390c8de33",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "b7c66fed38980b834f1d62ea3d1df2eaef040674b903b158e8dfd083907283f4",
+      "crop_box_pt": [
+        4.643071004038697,
+        0.7342042269095828,
+        1245.4532359286131,
+        818.88
+      ],
+      "width_pt": 1240.810169,
+      "height_pt": 818.14579577,
+      "minimum_font_at_body_width_157mm_pt": 8.245,
+      "vector_paths": 447,
+      "raster_images": 0
+    },
+    {
+      "page": 12,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page12.pdf",
+      "sha256": "a4884d581a1f52395ba9fd097e2d7e70e424223aac4ce21944dffcac59692b73",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "ce88ba63802eaa35c1c80e236299946cff158727c9b0ae827906b3f059ceda1c",
+      "crop_box_pt": [
+        2.4625398628941655,
+        1.2170622667906628,
+        1275.6599168860012,
+        830.88
+      ],
+      "width_pt": 1273.19738014,
+      "height_pt": 829.66293773,
+      "minimum_font_at_body_width_157mm_pt": 8.043,
+      "vector_paths": 362,
+      "raster_images": 0
+    },
+    {
+      "page": 13,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page13.pdf",
+      "sha256": "8f7e8e5edffc69a2e2a31c829a44383a4f0cd1c4863499ecf76e66be53658153",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "d33600ec5f8b5fe0cbe449db229a0efcf972cc8c5236a6d3785525a7b2193e7c",
+      "crop_box_pt": [
+        5.6947142042202294,
+        1.4564348168164543,
+        1253.4310475162042,
+        705.12
+      ],
+      "width_pt": 1247.7363358,
+      "height_pt": 703.66356518,
+      "minimum_font_at_body_width_157mm_pt": 8.205,
+      "vector_paths": 230,
+      "raster_images": 0
+    },
+    {
+      "page": 14,
+      "pdf": "D:\\FPGA\\TriHaRiscv-main\\docs\\technical-report\\figure\\rv32-soc-page14.pdf",
+      "sha256": "e6539de220b6757b9e1c8ac2a67b3f4091632f09ccefba6c8e3abf8f6e635330",
+      "native_export_exit": 0,
+      "native_pdf_sha256": "4af1fda04f4c49cdab820506236784b3fc3eab567ce148e8e727d488c672e7e4",
+      "crop_box_pt": [
+        7.161325991111399,
+        8.82010071399634,
+        1291.4251724531157,
+        841.91998
+      ],
+      "width_pt": 1284.26384401,
+      "height_pt": 833.09987929,
+      "minimum_font_at_body_width_157mm_pt": 7.969,
+      "vector_paths": 618,
+      "raster_images": 0
+    }
+  ]
+}

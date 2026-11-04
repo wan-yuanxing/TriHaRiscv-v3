@@ -1,0 +1,152 @@
+{
+  "status": "PASS",
+  "drawio_sha256": "0efc99b10bb1d0df78220b10f2457502a225d978760a8cf800d8e94da70d5694",
+  "changed_pages": [
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "protected_pages_byte_identical": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8
+  ],
+  "page_names_ids_unchanged": true,
+  "all_connectors_black_orthogonal": true,
+  "fully_editable_shapes_and_edges": true,
+  "native_export_verified": true,
+  "page_checks": [
+    {
+      "page": 6,
+      "name": "Fetch Front End — Request and Response Control",
+      "vertices": 23,
+      "connected_edges": 29,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1750.0,
+        1143.0
+      ],
+      "minimum_font_at_160mm_pt": 8.293,
+      "width_mm": 160,
+      "height_mm": 104.5
+    },
+    {
+      "page": 7,
+      "name": "CPU Memory Interfaces — Module View",
+      "vertices": 18,
+      "connected_edges": 14,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1749.0,
+        929.0
+      ],
+      "minimum_font_at_160mm_pt": 8.298,
+      "width_mm": 160,
+      "height_mm": 84.99
+    },
+    {
+      "page": 9,
+      "name": "Branch Predictor — Query, Selection and Update",
+      "vertices": 28,
+      "connected_edges": 33,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1749.0,
+        1143.0
+      ],
+      "minimum_font_at_160mm_pt": 8.298,
+      "width_mm": 160,
+      "height_mm": 104.56
+    },
+    {
+      "page": 10,
+      "name": "Instruction FIFO — Head Refill and Queue Control",
+      "vertices": 20,
+      "connected_edges": 22,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1749.0,
+        1093.0
+      ],
+      "minimum_font_at_160mm_pt": 8.298,
+      "width_mm": 160,
+      "height_mm": 99.99
+    },
+    {
+      "page": 11,
+      "name": "Decode and Issue — Operands, Hazards and Final Enables",
+      "vertices": 23,
+      "connected_edges": 24,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1750.0,
+        1184.0
+      ],
+      "minimum_font_at_160mm_pt": 8.293,
+      "width_mm": 160,
+      "height_mm": 108.25
+    },
+    {
+      "page": 12,
+      "name": "Dual-Issue Execution — State, Shared Units and Recovery",
+      "vertices": 35,
+      "connected_edges": 32,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1769.0,
+        1273.0
+      ],
+      "minimum_font_at_160mm_pt": 8.204,
+      "width_mm": 160,
+      "height_mm": 115.14
+    },
+    {
+      "page": 13,
+      "name": "Integer ALU — Operand Selection and Result Capture",
+      "vertices": 24,
+      "connected_edges": 22,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1750.0,
+        1024.0
+      ],
+      "minimum_font_at_160mm_pt": 8.293,
+      "width_mm": 160,
+      "height_mm": 93.62
+    },
+    {
+      "page": 14,
+      "name": "LSU — Request, Pending State and Response Formatting",
+      "vertices": 26,
+      "connected_edges": 33,
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1750.0,
+        1253.0
+      ],
+      "minimum_font_at_160mm_pt": 8.293,
+      "width_mm": 160,
+      "height_mm": 114.56
+    }
+  ],
+  "geometry_errors": [],
+  "scope": "Visual layout only; no RTL modification or new hardware validation.",
+  "conventions": "Signal bundles group independent values; they are not electrical wired-OR nets.",
+  "video": "Page 8 retained verbatim; existing full-screen requirement unchanged."
+}

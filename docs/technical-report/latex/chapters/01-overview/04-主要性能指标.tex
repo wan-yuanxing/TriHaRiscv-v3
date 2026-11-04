@@ -1,0 +1,52 @@
+% !TEX root = ../../技术文档.tex
+\section{主要性能指标}
+
+表\ref{tab:cpu_performance}列独立CPU板测；表\ref{tab:system_performance}列整机数据。
+
+\begin{reporttable}
+\footnotesize
+\begin{longtable}{@{}llrrr@{}}
+\caption{100 MHz CPU独立板测（核级LUT）}\label{tab:cpu_performance}\\
+\toprule
+发射 & 存储 & CoreMark/MHz & LUT & CoreMark/LUT \\
+\midrule
+\endfirsthead
+\caption[]{100 MHz CPU独立板测}\\
+\toprule
+发射 & 存储 & CoreMark/MHz & LUT & CoreMark/LUT \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+双 & SRAM & 4.093 & 9677 & 0.04229 \\
+双 & Cache＋DDR & 3.152 & 9707 & 0.03247 \\
+单 & SRAM & 3.055 & 6139 & 0.04977 \\
+单 & Cache＋DDR & 2.497 & 6507 & 0.03838 \\
+\end{longtable}
+\end{reporttable}
+
+\begin{reporttable}
+\footnotesize
+\begin{longtable}{@{}l>{\raggedright\arraybackslash}p{0.47\linewidth}l@{}}
+\caption{系统性能}\label{tab:system_performance}\\
+\toprule
+指标 & 数值或现象 & 统计口径 \\
+\midrule
+\endfirsthead
+\caption[]{系统性能（续）}\\
+\toprule
+指标 & 数值或现象 & 统计口径 \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+CPU/NPU & 50\,MHz & 应用配置 \\
+LUT/FF & 45716/41848 & 整机综合 \\
+DRM/APM & 113.5/64 & 整机综合 \\
+建立裕量 & +0.100\,ns & 内部后布线 \\
+结果完成率 & 约2.77\,fps & 融合仿真 \\
+头像叠加 & 三模式、头像跟随、透明合成 & 板级功能观察 \\
+\end{longtable}
+\end{reporttable}
+
+DRM按36\,Kbit等效块计。板级新图帧率尚未测得。

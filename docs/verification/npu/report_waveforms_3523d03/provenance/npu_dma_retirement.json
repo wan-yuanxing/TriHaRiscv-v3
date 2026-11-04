@@ -1,0 +1,51 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "ce8fe6bd6fea451713d3b1e1b0b40786735268d4fc3060714929e55042f0ee7d",
+      "native_postscript": "npu_dma_retirement_01.ps",
+      "native_postscript_sha256": "50362a2cfe2f0391b6cd79acaaf7d3a0862f287b4a1c6fad7d91f37042488b76",
+      "source": "DBG\\build\\platform\\mem_bridge_v1_final\\hmic_bridge.vcd",
+      "source_sha256": "9d52006f3098975463312e62bd68ab35457f08443870eb03d95c143b0d0a0503",
+      "signals": [
+        "compute_clk",
+        "ui_clk",
+        "case_id",
+        "awvalid",
+        "awready",
+        "wready",
+        "wlast",
+        "arvalid",
+        "arready",
+        "rvalid",
+        "rlast",
+        "done_valid",
+        "done_ready",
+        "done_status"
+      ],
+      "window_ns": [
+        74120.0,
+        77560.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_dma_retirement_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_dma_retirement_01.ps"
+    }
+  ],
+  "image_sha256": "ce8fe6bd6fea451713d3b1e1b0b40786735268d4fc3060714929e55042f0ee7d",
+  "image": "npu_dma_retirement.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

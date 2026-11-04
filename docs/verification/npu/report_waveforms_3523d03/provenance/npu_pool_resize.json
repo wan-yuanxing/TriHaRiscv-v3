@@ -1,0 +1,79 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "f73cd1c68b2eba772d908d6720d3f37c30a76d686049115a50485b4214e9966a",
+      "native_postscript": "npu_pool_resize_01.ps",
+      "native_postscript_sha256": "9b077a59a00a00e04e35c0424c227537e55b5a7f9ae98ac3721e658320097a51",
+      "source": "DBG\\build\\platform\\b03_layer_dma_release_dev01\\simulation\\trace.vcd",
+      "source_sha256": "6b683e7f8af4a620524944839a5eb9122a0541527e30028530bfd2648d7946d3",
+      "signals": [
+        "run_ce",
+        "case_index",
+        "debug_stage",
+        "stat_mac_vectors",
+        "stat_quant_groups",
+        "stat_rows",
+        "done_valid",
+        "done_status"
+      ],
+      "window_ns": [
+        1906415.0,
+        1906595.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_pool_resize_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_pool_resize_01.ps"
+    },
+    {
+      "sha256": "2de87abe54aaa84b17c7b86014a0c2f117d1281c81fbd61f45aeb1a16ae4d5c0",
+      "native_postscript": "npu_pool_resize_02.ps",
+      "native_postscript_sha256": "89432dbf93d86354395c908e738667aa43e1c42e8cef9a5ad7bbfbfa3fb4b4fa",
+      "source": "DBG\\build\\platform\\b03_layer_dma_release_dev01\\simulation\\trace.vcd",
+      "source_sha256": "6b683e7f8af4a620524944839a5eb9122a0541527e30028530bfd2648d7946d3",
+      "signals": [
+        "run_ce",
+        "case_index",
+        "debug_stage",
+        "stat_mac_vectors",
+        "stat_quant_groups",
+        "stat_rows",
+        "done_valid",
+        "done_status"
+      ],
+      "window_ns": [
+        2021545.0,
+        2021725.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_pool_resize_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_pool_resize_02.ps"
+    }
+  ],
+  "image_sha256": "ef111c73d22a822aa998ccc211856e376e17eab38f7ad61f4ed7f441f874f1b9",
+  "image": "npu_pool_resize.png",
+  "notes": "Original case16 MaxPool and case17 Resize completion edges; native stat_rows and done_valid are directly visible.",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280",
+  "capture_refinement_script_sha256": "343bb58c3e7eb3dff7425c919b1678638ab734f8953a4e9a8c496fe980e1c833"
+}

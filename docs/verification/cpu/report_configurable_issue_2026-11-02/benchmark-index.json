@@ -1,0 +1,125 @@
+{
+  "source_type": "User-supplied original screenshots, cross-checked against existing CPU worktree records",
+  "archived_at": "2026-11-02T23:16:53.726771",
+  "scope": "Documentation audit; no new RTL simulation, synthesis, timing run or physical board test",
+  "screenshots": [
+    {
+      "configuration": "sram",
+      "source": "C:\\Users\\m\\AppData\\Local\\Temp\\codex-clipboard-23d0525c-8e1b-4f14-8e75-1fc8bbb1cd69.png",
+      "project_file": "docs\\technical-report\\figure\\cpu-dualissue-sram-coremark-uart-original.png",
+      "sha256": "f956693aba8c637a8b03dfaf61381a5375f6a490a030218a7a579152b0df0034",
+      "issue": 2,
+      "stages": 6,
+      "cache": false,
+      "cycles": 1221660558,
+      "clock_hz": 100000000,
+      "iterations": 5000,
+      "seconds_recomputed": 12.21660558,
+      "coremark_recomputed": 409.2789905721095,
+      "coremark_per_mhz_recomputed": 4.092789905721094,
+      "cpu_core_luts": 9677,
+      "coremark_per_lut_recomputed": 0.0422939950989056,
+      "errors": 0,
+      "short": 0,
+      "board_pass": true,
+      "crc": {
+        "seed": "e9f5",
+        "list": "e714",
+        "matrix": "1fd7",
+        "state": "8e3a",
+        "final": "bd59"
+      }
+    },
+    {
+      "configuration": "cache-ddr",
+      "source": "C:\\Users\\m\\AppData\\Local\\Temp\\codex-clipboard-f3d8be25-fac5-4daf-9d0d-740e8ae4ca37.png",
+      "project_file": "docs\\technical-report\\figure\\cpu-dualissue-cache-ddr-coremark-uart-original.png",
+      "sha256": "4e786b0136113b29f02438cab603cee5881923bd0ff1e9479e94b0b82d1fdaf1",
+      "issue": 2,
+      "stages": 6,
+      "cache": true,
+      "cycles": 1586210467,
+      "clock_hz": 100000000,
+      "iterations": 5000,
+      "seconds_recomputed": 15.86210467,
+      "coremark_recomputed": 315.21668177215474,
+      "coremark_per_mhz_recomputed": 3.1521668177215476,
+      "cpu_core_luts": 9707,
+      "coremark_per_lut_recomputed": 0.03247313091296536,
+      "errors": 0,
+      "short": 0,
+      "board_pass": true,
+      "crc": {
+        "seed": "e9f5",
+        "list": "e714",
+        "matrix": "1fd7",
+        "state": "8e3a",
+        "final": "bd59"
+      }
+    }
+  ],
+  "supporting_sources": [
+    {
+      "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\dualissue_board_coremark_deployment_20261101.json",
+      "project_file": "docs\\verification\\cpu\\report_configurable_issue_2026-11-02\\dualissue_board_coremark_deployment_20261101.json",
+      "sha256": "d4758d5953f38a524ef892b76adeff82569aada65b3c03a55af331572828cde1"
+    },
+    {
+      "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\coremark_dual_cache_board_20261102.json",
+      "project_file": "docs\\verification\\cpu\\report_configurable_issue_2026-11-02\\coremark_dual_cache_board_20261102.json",
+      "sha256": "ed4301a81d979380ec8f050d47ca1f60f9fc7e247e0f1440504128fa42e0485d"
+    },
+    {
+      "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\coremark_dual_cache_bitstream_20261101.json",
+      "project_file": "docs\\verification\\cpu\\report_configurable_issue_2026-11-02\\coremark_dual_cache_bitstream_20261101.json",
+      "sha256": "eff125c9964087276290bae9702d527c841294c5222b340e55fe128ad060f809"
+    },
+    {
+      "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\docs\\verification\\cpu\\dual_issue_cache_parameter_matrix_20261102.json",
+      "project_file": "docs\\verification\\cpu\\report_configurable_issue_2026-11-02\\dual_issue_cache_parameter_matrix_20261102.json",
+      "sha256": "632cac4bca450f2a2063650126bc9a44f82836cef22d84614e46f7b0eb9b1a69"
+    },
+    {
+      "source": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\soc\\releases\\cpu_ddr_coremark_on_77da07f738ce\\manifest.json",
+      "project_file": "docs\\verification\\cpu\\report_configurable_issue_2026-11-02\\ddr-board-manifest.json",
+      "sha256": "6c24283412205ef626bda08ca814dffe34125d6b2c08c7df5eb90b7219dc9861"
+    }
+  ],
+  "cpu_source_root": "D:/FPGA/TriHaRiscv-cpu-dualissue-windows",
+  "cpu_source_files": [
+    {
+      "file": "rtl/cpu/triha_core.v",
+      "sha256": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd"
+    },
+    {
+      "file": "rtl/cpu/triha_cpu.v",
+      "sha256": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38"
+    },
+    {
+      "file": "rtl/cpu/triha_decode.v",
+      "sha256": "1d89e0899fb31c64d64f61af39016d2f7f081ea35bc9abd06dc0e31cf497314a"
+    },
+    {
+      "file": "rtl/cpu/triha_issue.v",
+      "sha256": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e"
+    },
+    {
+      "file": "rtl/cpu/triha_regfile.v",
+      "sha256": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929"
+    },
+    {
+      "file": "rtl/soc/triha_cached_soc.v",
+      "sha256": "0d8edd379b79da4609ca173ea3b67a45266f930aa3edd1206fc910371f3e25d0"
+    },
+    {
+      "file": "rtl/soc/triha_cpu_ddr.v",
+      "sha256": "007ed7afc7ccc40d00504edf59cd7cdd228b83fe39cedfafdad0afd56426e453"
+    }
+  ],
+  "ddr_cycle_source_difference": {
+    "screenshot_cycles": 1586210467,
+    "existing_uart_record_cycles": 1586210466,
+    "difference_cycles": 1,
+    "report_uses": "User-supplied screenshot; the independent existing UART run is retained unchanged"
+  }
+}

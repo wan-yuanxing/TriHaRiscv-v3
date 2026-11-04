@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "name": "User supplied photographic avatar",
+  "asset_id": 1,
+  "generation": 2,
+  "base": 2187329536,
+  "width": 256,
+  "height": 256,
+  "stride": 1024,
+  "bytes": 262144,
+  "format": "RGBA8888",
+  "byte_order": "R G B A",
+  "premultiplied": false,
+  "anchor_x": 128,
+  "anchor_y": 160,
+  "coverage_q8": 384,
+  "crc32": 3989127336,
+  "sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+  "source": "assets/avatars/triha/source.png",
+  "source_sha256": "c2904a1831374d73c1b1b83d58de6f7cfd54f14b9dbc029a585179f71094b3b1",
+  "conversion": "Full original square canvas resized to 256x256 with Pillow LANCZOS; preserve alpha, no crop, retouching, synthesis or background replacement.",
+  "generator": "scripts/video/gen_fixed_avatar.py",
+  "origin": "PNG supplied by the user in this chat on 2026-11-03 for the face-overlay application; described by the user as Eddie Peng. No identity recognition performed.",
+  "cache_storage": {
+    "format": "lossless_row_spans",
+    "texels": 34331,
+    "bytes": 137324,
+    "table": "rtl/video/include/avatar_span_table.vh",
+    "table_sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e"
+  },
+  "limitations": "Fixed 2D square overlay; not segmentation, tracking, or a guarantee of full profile-face coverage"
+}

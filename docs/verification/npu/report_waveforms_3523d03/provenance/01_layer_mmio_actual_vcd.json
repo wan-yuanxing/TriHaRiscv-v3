@@ -1,0 +1,80 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "1deea3f6cb2a4eedf01db9312a44feb446483c84e8ae2ceac500f48cc5459e9c",
+      "native_postscript": "01_layer_mmio_actual_vcd_01.ps",
+      "native_postscript_sha256": "be17a8c6e0a3a3ecdf319443a154cc2505b94943df6fec07c662461e11c9a892",
+      "source": "SOC\\build\\soc\\cpu_graph_rtl\\20261102T034839_254662Z\\layer_mmio.vcd",
+      "source_sha256": "2fd418845e5f4f5d7cf55fd0671e22770ec836f2bc581b7bd821d6f16ad2e72d",
+      "signals": [
+        "rst",
+        "sealed",
+        "start_valid",
+        "start_ready",
+        "done_valid",
+        "done_ready",
+        "retired",
+        "active",
+        "fault"
+      ],
+      "window_ns": [
+        3700,
+        4350
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "01_layer_mmio_actual_vcd_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/01_layer_mmio_actual_vcd_01.ps"
+    },
+    {
+      "sha256": "7a607cd509b30b6c1c09235968b409bfb99bcd2a04523315516b379d328c50de",
+      "native_postscript": "01_layer_mmio_actual_vcd_02.ps",
+      "native_postscript_sha256": "1d450fedc118da9973fa443ed21e712e11c813736697278029fc3390ef8015e4",
+      "source": "SOC\\build\\soc\\cpu_graph_rtl\\20261102T034839_254662Z\\layer_mmio.vcd",
+      "source_sha256": "2fd418845e5f4f5d7cf55fd0671e22770ec836f2bc581b7bd821d6f16ad2e72d",
+      "signals": [
+        "rst",
+        "sealed",
+        "start_valid",
+        "start_ready",
+        "done_valid",
+        "done_ready",
+        "retired",
+        "active",
+        "fault"
+      ],
+      "window_ns": [
+        5800,
+        6410
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "01_layer_mmio_actual_vcd_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/01_layer_mmio_actual_vcd_02.ps"
+    }
+  ],
+  "image_sha256": "6c46f6b53c3daff4ee492331d3bb561e8727ca3348d68b92bf7b5d4c4999f29b",
+  "image": "01_layer_mmio_actual_vcd.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "Physical board CoreMark for dual-issue CPU with paired I/D Cache",
+  "package": {
+    "directory": "build/soc/releases/cpu_ddr_coremark_on_77da07f738ce",
+    "manifest_sha256": "6c24283412205ef626bda08ca814dffe34125d6b2c08c7df5eb90b7219dc9861",
+    "bitstream_sha256": "77da07f738ce309fc937fc2580e8434f3a08765169d8ffb150dfbeb36c319cdd",
+    "issue_mode": "dual",
+    "cache_enable": 1,
+    "timing_closed": true
+  },
+  "program_verify": {
+    "result_file": "build/soc/board-ddr-program-20261102T021646852810Z/result.json",
+    "result_sha256": "dea8d5a17e811840202578ad8e37016e07c6736e5eb81ce3a16ac140b4df4979",
+    "status": "PASS",
+    "programmed": true,
+    "verified": true,
+    "flash_written": false
+  },
+  "capture": {
+    "directory": "build/soc/ddr-coremark-physical-20261102T024953744585Z",
+    "result_sha256": "b420139a2f71417d2ffc5aed0223d6379e4ffee3e11f8659e317aa1cb03c57b2",
+    "status": "PASS",
+    "board_coremark_validated": true,
+    "uart_sha256": "3e6d91367261edccf3e1d6ea4090169cfc359f7b5f874c82d407b177347f4189",
+    "measurement_sha256": "b07efffe5d8eb704b78eaa441175bbaf6f364b191c211fa4a5d8c29ca1c3b6ed",
+    "observed_loader_epochs": 1,
+    "measurement": {
+      "iterations": 5000,
+      "cycles": 1586210466,
+      "clock_hz": 100000000,
+      "seconds": 15.86210466,
+      "coremark": 315.21668197087786,
+      "coremark_per_mhz": 3.152166819708779,
+      "crc": [
+        "e9f5",
+        "e714",
+        "1fd7",
+        "8e3a"
+      ],
+      "duration_valid": true,
+      "official_submission": false,
+      "cpu_core_luts": 9707,
+      "coremark_per_lut": 0.032473130933437504
+    },
+    "cpu_plus_cache_luts": 10382,
+    "coremark_per_cpu_plus_cache_lut": 0.03036184569166614,
+    "port": "COM12"
+  },
+  "claims": {
+    "official_submission": false,
+    "physical_ipc": false,
+    "flash_written": false
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "operation": "read_only_scan",
+  "device_found": true,
+  "frequency": null,
+  "programmed": false,
+  "directory": "build\\video\\jtag_scan\\20261104T024955_244738Z",
+  "exit_code": 0,
+  "status": "identified"
+}

@@ -1,0 +1,25 @@
+{
+  "source_sha256": "0efc99b10bb1d0df78220b10f2457502a225d978760a8cf800d8e94da70d5694",
+  "pages": [
+    {
+      "page": 5,
+      "format": "png",
+      "sha256": "c10136bb3ea739d6e87eccf55439f83e729fae27478f8df6ccaf67a7eaf772d8"
+    },
+    {
+      "page": 5,
+      "format": "svg",
+      "sha256": "81e1082be29cdc548be764475f6b562d6d27d5cfab7ae89ef6c9a0a4548a2cde"
+    },
+    {
+      "page": 8,
+      "format": "png",
+      "sha256": "2940478357c41b013e83ef728a7904c094efc28341438d0781fac8eef6cb7fc9"
+    },
+    {
+      "page": 8,
+      "format": "svg",
+      "sha256": "2c02410751054253ca7e95059e9439a8c351277e391bf8cf88648867937d8c17"
+    }
+  ]
+}

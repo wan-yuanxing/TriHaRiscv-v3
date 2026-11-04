@@ -1,0 +1,82 @@
+{
+  "status": "DERIVED_FROM_QUALIFIED_SIMULATION_NOT_BOARD_MEASUREMENT",
+  "recorded_at": "2026-11-03T20:06:55.742443+08:00",
+  "bitstream_sha256": "3939c52f4d94cd50476905a206f50ae82347f864604f4b8bb8c98a6fefd51e65",
+  "qualified_result": "build/video/face_box_50_bridge_priority_qualified_20261103/result.json",
+  "qualified_result_sha256": "804f97befa07f90047e89b29da14326a4ed67e9a35f8c09adaf7ff9b7e45f16e",
+  "method": "Difference of consecutive CPU postprocessed frame-result completion cycle markers, divided by compute frequency; excludes boot/model upload, not per-frame end-to-end latency.",
+  "simulation": [
+    {
+      "scene": "positive_face",
+      "result_cycles": [
+        21491404,
+        39578629
+      ],
+      "interval_cycles": 18087225,
+      "interval_ms": 361.7445,
+      "result_rate_fps": 2.7643820431271244,
+      "interval_samples": 1,
+      "source": "build/soc/face_system-20261103T070341_048946Z/simulation.log",
+      "log_sha256": "a4c0d3bf8d5d540663990523645f886407f14ab8f4a0fb114a47729c94d0ac8d",
+      "result_sha256": "08b4305f84c63c5329ae293c20c20851f6245bf1ad79d44a09869b4d7d1c4c34"
+    },
+    {
+      "scene": "no_face",
+      "result_cycles": [
+        21466225,
+        39528043
+      ],
+      "interval_cycles": 18061818,
+      "interval_ms": 361.23636,
+      "result_rate_fps": 2.768270613733346,
+      "interval_samples": 1,
+      "source": "build/soc/face_system-20261103T070341_033768Z/simulation.log",
+      "log_sha256": "e7f76e8a4748a9fca2acf212126dea0442bb2ca99b0b03e7aae850b698618ecd",
+      "result_sha256": "494e5b528d8292a7ab20aff16bcf5a1f4e451b35da3f9c3ff839ee8fbf1f10c9"
+    }
+  ],
+  "video_config": {
+    "width": 800,
+    "height": 600,
+    "pixel_hz": 40000000,
+    "horizontal_total": 1056,
+    "vertical_total": 628,
+    "nominal_scan_hz": 60.31654120826095,
+    "scan_period_ms": 16.5792,
+    "config_sha256": "c0c9b7c0ef0b16759a7cbf0bcd83bc35be223338b2d8995ef8155f3fb3ffd565"
+  },
+  "detector_input": {
+    "active_width": 320,
+    "active_height": 240,
+    "storage_height": 320,
+    "pad_top": 40,
+    "pad_bottom": 40,
+    "valid_channels": 3,
+    "storage_channels": 3,
+    "channel_order": "BGR",
+    "layout": "NCHW",
+    "dtype": "UINT8",
+    "scale": 1,
+    "zero_point": 0,
+    "preprocess_version": 1,
+    "reference_commit": "4fc0fc882a6e92ec662a4f9b27b105182da444b8"
+  },
+  "clock_contract": {
+    "compute_hz": 50000000,
+    "video_hz": 125000000,
+    "pixel_hz": 40000000
+  },
+  "resources": {
+    "lut": 42531.0,
+    "registers": 43408.0,
+    "drm": 77.5,
+    "apm": 58.0
+  },
+  "limitations": [
+    "Only two completed results per scene; one interval per scene, not a sustained benchmark.",
+    "Simulation models the native DDR endpoint and source stimulus; physical DDR/HDMI timing and arbitration differ.",
+    "Current bitstream UART is boot ACK only; no runtime performance readout.",
+    "Pure NPU latency and capture-to-visible latency have no matched timestamp evidence.",
+    "Board FPS remains unmeasured; previous functional acceptance does not measure FPS."
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PASS_ASSET_AUDIT",
+  "port": null,
+  "baud": 115200,
+  "board_verified": false,
+  "segments": [
+    {
+      "name": "program.bin",
+      "bytes": 10240,
+      "sha256": "54d3a900a9edc78407c7e4faaf8b10604c39deb14811cd5380033595a29ccb4f",
+      "crc32": "1e48184c"
+    },
+    {
+      "name": "parameter_image.bin",
+      "bytes": 108288,
+      "sha256": "1a69fa4e8edd20c739e0d12a437a8d076abac6029ab6dcbbbf6a7023424896f6",
+      "crc32": "45016037"
+    },
+    {
+      "name": "post_table.bin",
+      "bytes": 1572864,
+      "sha256": "544dca442bdcdeba15c6ae4a8f0e1c9e701697b90aac8a1651f68b6101ba4546",
+      "crc32": "79d84bc8"
+    },
+    {
+      "name": "heads_init.bin",
+      "bytes": 26368,
+      "sha256": "d265c405e6a9d8060a78eb30a8ce328548c1d8d970b54db967d4ac3f719b7f15",
+      "crc32": "ed5ca9c5"
+    },
+    {
+      "name": "heads_init.bin",
+      "bytes": 26368,
+      "sha256": "d265c405e6a9d8060a78eb30a8ce328548c1d8d970b54db967d4ac3f719b7f15",
+      "crc32": "ed5ca9c5"
+    },
+    {
+      "name": "heads_init.bin",
+      "bytes": 26368,
+      "sha256": "d265c405e6a9d8060a78eb30a8ce328548c1d8d970b54db967d4ac3f719b7f15",
+      "crc32": "ed5ca9c5"
+    },
+    {
+      "name": "avatar.rgba",
+      "base": 2187329536,
+      "bytes": 262144,
+      "sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+      "crc32": "edc540a8",
+      "asset_id": 1,
+      "generation": 2
+    }
+  ],
+  "serial_lower_bound_seconds": 195.74305555555554
+}

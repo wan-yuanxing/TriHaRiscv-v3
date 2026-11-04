@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "target": "cpu_ddr_board",
+  "firmware_profile": "ddr-coremark",
+  "route_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-route-20261022T150815081810Z",
+  "package_work_directory": "D:\\FPGA\\TriHaRiscv-cpu-windows\\build\\cpu\\ddr-board-package-20261022T154526724916Z",
+  "timing_closed": true,
+  "programmed": false,
+  "board_validated": false,
+  "physical_ddr_training_validated": false,
+  "bitstream_sha256": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561",
+  "verify_mask_sha256": "7acf46ac556f59cc60713cc8dd5f28f523169f806cf0956ac43631b492ff7eb8",
+  "files": {
+    "coremark.bin": "04c2ae6b5d6efdb45a7432244d4f68c28441dbbf02937c9ed6f105ed14257216",
+    "coremark.elf": "4cc6b6235f852157343bd72cd9118eab5eefc8e60e7cef5989569abada383cae",
+    "coremark.map": "51e26abf23dc98d6f88424fde56aae808ffbf61f67f9f22cfb7649c1f1d19296",
+    "cpu_ddr_board.fdc": "b9ebf6eaf4b39ada1d043e4183889ad9054952127cf90e6d262472335fa26290",
+    "firmware.elf": "850229d0c64c7f6211f327f0eb7956c897c301a0bdff1ebc97cd1fd50de9a3da",
+    "firmware.map": "ac8f59942db80f3ec9fd12907b2aa18a559ef1557c4c2b4704ed6ad6720c8627",
+    "README.md": "6a51218db4ab3faab9118c1acbdda223ea9cd89e09fc7e272e856af33fc801f9",
+    "review.json": "e864e8b33c14c1dbc62026006e346a3be4ce818e6159cd368027d581653fe535",
+    "rom.hex": "ed51d10e9094efc6724ce8893177d170350589bf265d5deedb6ff76dca1b9170",
+    "route-result.json": "89984114decd97dbfd3372f010562b6cb6653a2baa227ebe668326f2a552edbf",
+    "rtr.db": "97225119fc276210c397816ecb07711e0e3b3f125ec44d884a7e2373e4c18a09",
+    "sram.hex": "b52d12c262f3041d6a8e7d55b04174474c01896729997b320acad80301da2158",
+    "triha_cpu_ddr_board_top.rtr": "8c80e092ae82ff702aab0aa668fb0b26efcb09107ca8469a5abfce1167bd3e62",
+    "triha_cpu_ddr_board_top.sbit": "478149ee9e631ca60590c5d8b8d63c1a245924823613b98f3c59a5530554f561",
+    "triha_cpu_ddr_board_top.smsk": "7acf46ac556f59cc60713cc8dd5f28f523169f806cf0956ac43631b492ff7eb8",
+    "triha_cpu_ddr_board_top_pnr.adf": "8a69a9de31fdc8807a87c44a8dbfb954ec3a3c5db675961ad63d8fe7489137b8"
+  },
+  "cpu_only_resources": {
+    "lut": 6507,
+    "registers": 3562,
+    "distributed_ram": 688,
+    "apm": 4,
+    "drm": 0.0
+  },
+  "cache_enable": 1,
+  "placement_base": 2147483648,
+  "payload_sha256": "04c2ae6b5d6efdb45a7432244d4f68c28441dbbf02937c9ed6f105ed14257216",
+  "iterations": 5000,
+  "cache_resources": {
+    "lut": 668,
+    "registers": 807,
+    "distributed_ram": 0,
+    "apm": 0,
+    "drm": 11.0
+  }
+}

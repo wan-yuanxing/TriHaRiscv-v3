@@ -1,0 +1,879 @@
+{
+  "schema_version": 1,
+  "audit": "avatar design read-only audit",
+  "created_at": "2026-11-04T03:35:18.978514+00:00",
+  "repository": "D:/FPGA/TriHaRiscv-main",
+  "commit": "edfa1992f604e5887e04f7cad2d81aeff122dd4b",
+  "scope": [
+    "avatar placement and sampling",
+    "integer alpha blend",
+    "lossless row spans",
+    "pixel context circular RAM",
+    "read burst page boundary",
+    "compact record and 640-byte ABI",
+    "mode key",
+    "sealing and coordinated reset"
+  ],
+  "excluded": [
+    "release package verification",
+    "device resource and physical timing results",
+    "system simulation evidence",
+    "RTL changes",
+    "TeX or figure changes",
+    "hardware operation"
+  ],
+  "verification_kind": "static source, Git object and integer arithmetic only; no HDL execution",
+  "manifest_verification": {
+    "path": "build/technical-report-avatar-edfa199/source-manifest.json",
+    "sha256": "351716685a9ef489f1a9877a918b33004bddaec1fe12628210001dfc90bc7343",
+    "files_checked": 660,
+    "size_mismatches": 0,
+    "sha256_mismatches": 0,
+    "git_blob_mismatches": 0,
+    "commit_tree_mismatches": 0
+  },
+  "cited_source_files": [
+    {
+      "path": "assets/avatars/triha/manifest.json",
+      "blob": "1170b7eaee88e25a39fb2759fc8993e4e18c7cd8",
+      "size": 1325,
+      "sha256": "0bb3364b6e43555c63af47312e04791c5f1454ffb5a5ec10e2937bf7bfc25778",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/assets/avatars/triha/manifest.json",
+      "line_count": 32
+    },
+    {
+      "path": "fpga/pg2l100h/constraints/triha_face_board.fdc",
+      "blob": "59bf1d09a6264c6e78a489ec83ff61a7192627a0",
+      "size": 56763,
+      "sha256": "002faaa4e33274f32c5f02fbda749e4b48d2c1f0a13e378d126a3cd87ee35758",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/fpga/pg2l100h/constraints/triha_face_board.fdc",
+      "line_count": 988
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "blob": "560a9d8cdce55ef4a7188b61b054855ab81d03ea",
+      "size": 21488,
+      "sha256": "dd829b2ce7d5e39d11a9dc7d161da4ce3efb6aec5473ef05ce5b82644761d762",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_count": 338
+    },
+    {
+      "path": "rtl/soc/triha_axi128_cdc.v",
+      "blob": "185b16480c0ec303336f70f0e297a00fc28c12e1",
+      "size": 5790,
+      "sha256": "4915b04169d7827adbf751d66c0ba4fa788cae90504eb1966603ad144966685e",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/soc/triha_axi128_cdc.v",
+      "line_count": 137
+    },
+    {
+      "path": "rtl/soc/triha_face_mode_key.v",
+      "blob": "54c4df57786469230c39ac68f98bd519249f0490",
+      "size": 733,
+      "sha256": "ee63e2a97c3402a753818d06a9855e39e8acb9b2684726e4d29a306c8125612c",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/soc/triha_face_mode_key.v",
+      "line_count": 16
+    },
+    {
+      "path": "rtl/soc/triha_face_system.v",
+      "blob": "02f7b3e279403e8a85dd53eed8907e224830e421",
+      "size": 32485,
+      "sha256": "6e144dc1fd0211491adcc9f58de1588660425b71059ab20b556903f79ae0f011",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/soc/triha_face_system.v",
+      "line_count": 830
+    },
+    {
+      "path": "rtl/soc/triha_model_loader.v",
+      "blob": "76630dab476437814806b1a75728553c9d528a3a",
+      "size": 7391,
+      "sha256": "f5bd41217fbf86cf48909b28a37b4175f98e7dc05fde03844b934f7443573146",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/soc/triha_model_loader.v",
+      "line_count": 136
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "blob": "a6e22173026411c4e5493878bf3f873ad2d8ac4c",
+      "size": 9128,
+      "sha256": "49796e27ea917ba5d3e6c3ae99c069fa156e6b50b7f8a52266cc75a43a834e25",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/avatar_ddr_cache.sv",
+      "line_count": 144
+    },
+    {
+      "path": "rtl/video/avatar_sample_map.sv",
+      "blob": "13e6cdcd967474b6b60e319c53036699e6ca91ed",
+      "size": 3160,
+      "sha256": "6931f7a1248c476437f0f7fb263a25d91dec80c094e4b0de38c868f15a495bc5",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/avatar_sample_map.sv",
+      "line_count": 67
+    },
+    {
+      "path": "rtl/video/avatar_texture_cache.sv",
+      "blob": "11f0499660c7671cef62faa95afd9f483b4476ff",
+      "size": 8342,
+      "sha256": "64047d7d16a3e2afa3acddfc0c97fee5eead350b8ae4ee8f91c311dc5be1a175",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/avatar_texture_cache.sv",
+      "line_count": 152
+    },
+    {
+      "path": "rtl/video/display_mode_cdc_held.sv",
+      "blob": "7c1ab40e8a85f36eced0dea018b9e7521a94c1e8",
+      "size": 5879,
+      "sha256": "5ca0a64eec24f2c80b31706f1d7a63273d51832dde8360f2650df29ce41e2526",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/display_mode_cdc_held.sv",
+      "line_count": 113
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "blob": "f82272107d9fe407e51452bcad68c07c146c2ed3",
+      "size": 9015,
+      "sha256": "0d8fc22d1f153e092267b24fbdcc3815cc1f0f1298b4f9fa0233dde36f84f3cf",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/display_overlay.sv",
+      "line_count": 179
+    },
+    {
+      "path": "rtl/video/display_record_guard.sv",
+      "blob": "09579182d2ccf73610c4c646806d8a445ea12211",
+      "size": 6236,
+      "sha256": "3e5d01b75523764c843cd6d197e7b18143eaad5eb23f0c7cf7196b2a00adcf95",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/display_record_guard.sv",
+      "line_count": 105
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "blob": "ba008818f510d091f3812890cdb46157029653d9",
+      "size": 16888,
+      "sha256": "046c60deddea1b532a4e98d29ff78b13977beaad48d2d01db1743beed97c5496",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/display_record_pixels_compact.sv",
+      "line_count": 248
+    },
+    {
+      "path": "rtl/video/include/avatar_span_table.vh",
+      "blob": "ab5919a4ab4fad839fb1d63299d39e1a033e6b75",
+      "size": 13987,
+      "sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/include/avatar_span_table.vh",
+      "line_count": 264
+    },
+    {
+      "path": "rtl/video/raw_display.sv",
+      "blob": "e574fd59764e001c2c67fe6680b19fd0e0c185bf",
+      "size": 27149,
+      "sha256": "747a124021ce526d2ee0a24ac7b1be71846afa9baab3ce4918136c70dfa8cb4a",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/raw_display.sv",
+      "line_count": 444
+    },
+    {
+      "path": "rtl/video/video_application_engine.sv",
+      "blob": "97b6b974b5539568c2c07d701b5503f96510f34e",
+      "size": 20708,
+      "sha256": "c7ef73e16f22a9178a4c30fd46637e5d90422ac94b7233ab958072a8dae8962f",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_application_engine.sv",
+      "line_count": 598
+    },
+    {
+      "path": "rtl/video/video_button_debounce.sv",
+      "blob": "94a18eeca0c30ce690cac96455645625ee601b81",
+      "size": 1738,
+      "sha256": "1cf1b6eb03e5b6e49a7d91d1b62757889974f8f9f09230080a25abe6368abb29",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_button_debounce.sv",
+      "line_count": 42
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "blob": "c4d492040b1b57af2bf0175041779a5616e93a2e",
+      "size": 22184,
+      "sha256": "3d8ff79473fff2bb9757bdf5bacd0bd467261ce2d6a6605b50fd9d6ed1355f50",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_display_mmio_compact.sv",
+      "line_count": 359
+    },
+    {
+      "path": "rtl/video/video_display_record_compact.sv",
+      "blob": "10b37d32e1c634d465c76ce7d6da8b0b81226a59",
+      "size": 18960,
+      "sha256": "4ffb7ca80c6e6946015b968d985adb0208b2cb3b2d20062878e12d029e107372",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_display_record_compact.sv",
+      "line_count": 616
+    },
+    {
+      "path": "rtl/video/video_read_arbiter.sv",
+      "blob": "24eab67768cc27648d606d44dee38f0d15b9bb34",
+      "size": 5210,
+      "sha256": "2ac6edfda4b25560a34847828151dbe823d269414a93d413ed8ab11b0eed2189",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_read_arbiter.sv",
+      "line_count": 89
+    },
+    {
+      "path": "rtl/video/video_record_renderer_compact.sv",
+      "blob": "7038501323d85c72a52fe412f65f91809e162484",
+      "size": 11332,
+      "sha256": "f4a1136ed764187936571ddcdc4552a90502e77513c27c449430f4084f54eff8",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/rtl/video/video_record_renderer_compact.sv",
+      "line_count": 221
+    },
+    {
+      "path": "scripts/video/face_profiles.py",
+      "blob": "91c03b0a43cba50003508a2d82964f0172419dce",
+      "size": 1596,
+      "sha256": "f02a08b9a70ea4c373c178787392f29945541380719e4b17bedad7c672ad38be",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/scripts/video/face_profiles.py",
+      "line_count": 34
+    },
+    {
+      "path": "scripts/video/gen_fixed_avatar.py",
+      "blob": "5bdca3a07772c06f9f8759bb16fd9c14c41d84a0",
+      "size": 6761,
+      "sha256": "24d0912b90f44e9b5ec2be9e388ebaafbb5b9b6eda335bef6a51c492ae1fd5c6",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/scripts/video/gen_fixed_avatar.py",
+      "line_count": 116
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "blob": "0a4013030ebdaa9f0af8845f688ff4302b6082aa",
+      "size": 11259,
+      "sha256": "6bd95dbf027b05793147f6028322199e4119bfcde32f290d667df2d47b5a8992",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/apps/face_avatar/face_avatar.c",
+      "line_count": 199
+    },
+    {
+      "path": "sw/apps/face_avatar/main.c",
+      "blob": "fe0fd15e15c59cbc8b63c56c1b4a8e1ef6af1334",
+      "size": 3618,
+      "sha256": "8ae218b24f3a7832a717d207a959ab9c3cc5eead30ff35ad956e21e4ec13a067",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/apps/face_avatar/main.c",
+      "line_count": 75
+    },
+    {
+      "path": "sw/drivers/video_display.c",
+      "blob": "33ae9b9a0715327c2c78535418cd8c0cde121a41",
+      "size": 4065,
+      "sha256": "af359ecc9c895ab7c98f45de394109981b2baedd8d5f1600cc8b579b677b6b1d",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/drivers/video_display.c",
+      "line_count": 65
+    },
+    {
+      "path": "sw/drivers/video_frame_pool.c",
+      "blob": "6452a833ff012e186858459238646ce6b2e8c224",
+      "size": 14039,
+      "sha256": "b8c06b9a823d0ad9516837d1b2ca36abb3a6f49a359321db41b900c40bb8375e",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/drivers/video_frame_pool.c",
+      "line_count": 260
+    },
+    {
+      "path": "sw/include/avatar_preset.h",
+      "blob": "551bc836c610404e08034977f43438fe03af1148",
+      "size": 473,
+      "sha256": "a92305698c628923d195e91f03ebc9f5b5504bcfe69fbd195e1e9df769ff75f4",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/include/avatar_preset.h",
+      "line_count": 12
+    },
+    {
+      "path": "sw/include/video_display_abi.h",
+      "blob": "4105c28c8b8bac8d0ace5627a0b99ef939266314",
+      "size": 3239,
+      "sha256": "0be38d2527b09c2198777df05ea027865024488a2b3b16f774cd793525bb755d",
+      "absolute_snapshot_path": "D:/FPGA/TriHaRiscv-main/build/technical-report-avatar-edfa199/source/sw/include/video_display_abi.h",
+      "line_count": 78
+    }
+  ],
+  "citations": [
+    {
+      "path": "scripts/video/face_profiles.py",
+      "line_start": 1,
+      "line_end": 4
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 20,
+      "line_end": 36
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 202,
+      "line_end": 221
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 264,
+      "line_end": 266
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 290,
+      "line_end": 324
+    },
+    {
+      "path": "rtl/soc/triha_face_system.v",
+      "line_start": 594,
+      "line_end": 600
+    },
+    {
+      "path": "rtl/video/video_application_engine.sv",
+      "line_start": 338,
+      "line_end": 339
+    },
+    {
+      "path": "rtl/video/video_display_record_compact.sv",
+      "line_start": 290,
+      "line_end": 317
+    },
+    {
+      "path": "rtl/video/video_display_record_compact.sv",
+      "line_start": 495,
+      "line_end": 495
+    },
+    {
+      "path": "rtl/video/video_record_renderer_compact.sv",
+      "line_start": 90,
+      "line_end": 106
+    },
+    {
+      "path": "rtl/video/video_record_renderer_compact.sv",
+      "line_start": 151,
+      "line_end": 151
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 212,
+      "line_end": 225
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 27,
+      "line_end": 79
+    },
+    {
+      "path": "sw/include/avatar_preset.h",
+      "line_start": 4,
+      "line_end": 11
+    },
+    {
+      "path": "assets/avatars/triha/manifest.json",
+      "line_start": 4,
+      "line_end": 16
+    },
+    {
+      "path": "assets/avatars/triha/manifest.json",
+      "line_start": 7,
+      "line_end": 13
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 119,
+      "line_end": 126
+    },
+    {
+      "path": "rtl/video/avatar_sample_map.sv",
+      "line_start": 13,
+      "line_end": 65
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 43,
+      "line_end": 51
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 130,
+      "line_end": 175
+    },
+    {
+      "path": "scripts/video/gen_fixed_avatar.py",
+      "line_start": 18,
+      "line_end": 38
+    },
+    {
+      "path": "rtl/video/include/avatar_span_table.vh",
+      "line_start": 1,
+      "line_end": 5
+    },
+    {
+      "path": "rtl/video/avatar_texture_cache.sv",
+      "line_start": 22,
+      "line_end": 74
+    },
+    {
+      "path": "rtl/video/avatar_texture_cache.sv",
+      "line_start": 84,
+      "line_end": 149
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 39,
+      "line_end": 51
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 75,
+      "line_end": 83
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 119,
+      "line_end": 135
+    },
+    {
+      "path": "assets/avatars/triha/manifest.json",
+      "line_start": 4,
+      "line_end": 18
+    },
+    {
+      "path": "assets/avatars/triha/manifest.json",
+      "line_start": 24,
+      "line_end": 29
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 3,
+      "line_end": 6
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 106,
+      "line_end": 175
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 128,
+      "line_end": 156
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 197,
+      "line_end": 209
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 240,
+      "line_end": 246
+    },
+    {
+      "path": "rtl/video/raw_display.sv",
+      "line_start": 122,
+      "line_end": 144
+    },
+    {
+      "path": "rtl/video/raw_display.sv",
+      "line_start": 226,
+      "line_end": 261
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 48,
+      "line_end": 51
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 69,
+      "line_end": 73
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 134,
+      "line_end": 135
+    },
+    {
+      "path": "rtl/video/video_read_arbiter.sv",
+      "line_start": 17,
+      "line_end": 43
+    },
+    {
+      "path": "rtl/video/video_read_arbiter.sv",
+      "line_start": 73,
+      "line_end": 83
+    },
+    {
+      "path": "sw/include/video_display_abi.h",
+      "line_start": 4,
+      "line_end": 14
+    },
+    {
+      "path": "sw/include/video_display_abi.h",
+      "line_start": 49,
+      "line_end": 76
+    },
+    {
+      "path": "sw/drivers/video_display.c",
+      "line_start": 6,
+      "line_end": 31
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "line_start": 36,
+      "line_end": 46
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "line_start": 144,
+      "line_end": 205
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "line_start": 303,
+      "line_end": 337
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "line_start": 345,
+      "line_end": 356
+    },
+    {
+      "path": "rtl/video/display_record_guard.sv",
+      "line_start": 26,
+      "line_end": 36
+    },
+    {
+      "path": "rtl/video/display_record_guard.sv",
+      "line_start": 55,
+      "line_end": 83
+    },
+    {
+      "path": "rtl/video/display_mode_cdc_held.sv",
+      "line_start": 3,
+      "line_end": 9
+    },
+    {
+      "path": "rtl/video/display_mode_cdc_held.sv",
+      "line_start": 45,
+      "line_end": 72
+    },
+    {
+      "path": "rtl/video/display_mode_cdc_held.sv",
+      "line_start": 84,
+      "line_end": 95
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 118,
+      "line_end": 169
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 7,
+      "line_end": 10
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 43,
+      "line_end": 50
+    },
+    {
+      "path": "rtl/video/display_overlay.sv",
+      "line_start": 73,
+      "line_end": 103
+    },
+    {
+      "path": "sw/drivers/video_display.c",
+      "line_start": 6,
+      "line_end": 16
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 27,
+      "line_end": 79
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 86,
+      "line_end": 88
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 167,
+      "line_end": 198
+    },
+    {
+      "path": "sw/apps/face_avatar/main.c",
+      "line_start": 46,
+      "line_end": 71
+    },
+    {
+      "path": "rtl/soc/triha_face_mode_key.v",
+      "line_start": 3,
+      "line_end": 14
+    },
+    {
+      "path": "rtl/video/video_button_debounce.sv",
+      "line_start": 5,
+      "line_end": 38
+    },
+    {
+      "path": "rtl/video/video_display_mmio_compact.sv",
+      "line_start": 234,
+      "line_end": 267
+    },
+    {
+      "path": "fpga/pg2l100h/constraints/triha_face_board.fdc",
+      "line_start": 3,
+      "line_end": 8
+    },
+    {
+      "path": "sw/drivers/video_frame_pool.c",
+      "line_start": 159,
+      "line_end": 180
+    },
+    {
+      "path": "sw/drivers/video_frame_pool.c",
+      "line_start": 224,
+      "line_end": 244
+    },
+    {
+      "path": "rtl/soc/triha_model_loader.v",
+      "line_start": 3,
+      "line_end": 11
+    },
+    {
+      "path": "rtl/soc/triha_model_loader.v",
+      "line_start": 42,
+      "line_end": 55
+    },
+    {
+      "path": "rtl/soc/triha_model_loader.v",
+      "line_start": 74,
+      "line_end": 82
+    },
+    {
+      "path": "rtl/soc/triha_model_loader.v",
+      "line_start": 104,
+      "line_end": 132
+    },
+    {
+      "path": "rtl/soc/triha_face_system.v",
+      "line_start": 327,
+      "line_end": 357
+    },
+    {
+      "path": "rtl/soc/triha_face_system.v",
+      "line_start": 439,
+      "line_end": 446
+    },
+    {
+      "path": "rtl/soc/triha_face_system.v",
+      "line_start": 704,
+      "line_end": 710
+    },
+    {
+      "path": "rtl/video/avatar_ddr_cache.sv",
+      "line_start": 119,
+      "line_end": 138
+    },
+    {
+      "path": "rtl/video/avatar_texture_cache.sv",
+      "line_start": 22,
+      "line_end": 74
+    },
+    {
+      "path": "rtl/video/avatar_texture_cache.sv",
+      "line_start": 114,
+      "line_end": 144
+    },
+    {
+      "path": "rtl/video/display_record_guard.sv",
+      "line_start": 22,
+      "line_end": 22
+    },
+    {
+      "path": "rtl/video/display_record_guard.sv",
+      "line_start": 79,
+      "line_end": 99
+    },
+    {
+      "path": "rtl/video/display_record_pixels_compact.sv",
+      "line_start": 118,
+      "line_end": 126
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 93,
+      "line_end": 111
+    },
+    {
+      "path": "fpga/pg2l100h/rtl/triha_face_board_top.sv",
+      "line_start": 202,
+      "line_end": 221
+    },
+    {
+      "path": "fpga/pg2l100h/constraints/triha_face_board.fdc",
+      "line_start": 239,
+      "line_end": 243
+    },
+    {
+      "path": "fpga/pg2l100h/constraints/triha_face_board.fdc",
+      "line_start": 969,
+      "line_end": 970
+    },
+    {
+      "path": "rtl/soc/triha_axi128_cdc.v",
+      "line_start": 77,
+      "line_end": 89
+    },
+    {
+      "path": "sw/apps/face_avatar/main.c",
+      "line_start": 33,
+      "line_end": 44
+    },
+    {
+      "path": "sw/apps/face_avatar/main.c",
+      "line_start": 64,
+      "line_end": 73
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 3,
+      "line_end": 9
+    },
+    {
+      "path": "sw/apps/face_avatar/face_avatar.c",
+      "line_start": 183,
+      "line_end": 198
+    }
+  ],
+  "chapter_snapshots": [
+    {
+      "path": "docs/technical-report/latex/chapters/02-system/05-图像采集与显示链路.tex",
+      "sha256": "064ddf78b0f8692452649f8eac4d11c0d323923979b8ffbf17768dbdb4411584",
+      "line_count": 171,
+      "excerpts": [
+        {
+          "line_start": 5,
+          "line_end": 9,
+          "text": "MS7200将HDMI输入转换为并行RGB888像素，FPGA从同一源帧生成原图和模型输入两类数据并写入DDR；\n显示端按行读取已提交的原图，叠加同帧主人脸检测框，经MS7210输出800$\\times$600全屏画面。\n\n像素处理和数据搬运由Video硬件及DMA完成，CPU负责帧调度、检测后处理和显示提交，NPU从输入槽读取张量并执行模型计算图。\n应用采用BOX模式，在完整原图上绘制CPU选择的主人脸框；原图引用与检测参数在有效图像边界整体切换。"
+        },
+        {
+          "line_start": 24,
+          "line_end": 24,
+          "text": "DDR初始化、时钟和接口状态满足要求且模型装载封存后，CPU进入应用循环并提交采集任务。输入与采集参数见表\\ref{tbl:video-capture-parameters}。"
+        },
+        {
+          "line_start": 82,
+          "line_end": 103,
+          "text": "帧缓存放置在DDR3，片上保留跨域FIFO、缩放行缓存和显示行缓冲。\n公共配置分配三个2\\,MiB帧槽和三个320\\,KiB模型输入槽；每个帧槽保存原图，同槽号的独立输入槽保存模型张量。\n有效数据量与预留容量分开管理，两类数据的组织见表\\ref{tbl:video-frame-layout}。\n\n\\begin{reporttable}\n\\begin{longtable}{@{}p{0.15\\linewidth}p{0.26\\linewidth}p{0.18\\linewidth}>{\\raggedright\\arraybackslash}p{0.34\\linewidth}@{}}\n\\caption{图像数据与缓存组织}\\label{tbl:video-frame-layout}\\\\\n\\toprule\n数据对象 & 尺寸与格式 & 有效数据量 & 槽内布局 \\\\\n\\midrule\n\\endfirsthead\n\\caption[]{图像数据与缓存组织（续）}\\\\\n\\toprule\n数据对象 & 尺寸与格式 & 有效数据量 & 槽内布局 \\\\\n\\midrule\n\\endhead\n\\bottomrule\n\\endfoot\n原图 & 800$\\times$600 RGB888 & 1,440,000\\,B & 帧槽偏移0，行跨度2400\\,B \\\\\n模型输入 & 320$\\times$320$\\times$3 UINT8 BGR NCHW & 307,200\\,B & 独立输入槽，行跨度320\\,B \\\\\n\\end{longtable}\n\\end{reporttable}"
+        },
+        {
+          "line_start": 109,
+          "line_end": 109,
+          "text": "槽号标识物理位置，帧号关联原图、模型输入和结果，代次标识共同复位后的运行会话，槽复用时分配新的帧号；预处理版本限定输入数值含义。"
+        },
+        {
+          "line_start": 113,
+          "line_end": 113,
+          "text": "原图槽在计算、后处理及显示引用期间保持所有权。CPU将同一槽号、帧号和代次的原图引用、检测结果及BOX模式组成就绪记录，显示记录中的结果帧号与原图帧号一致。"
+        },
+        {
+          "line_start": 122,
+          "line_end": 130,
+          "text": "\\subsection{检测框叠加}\n\nCPU完成检测框解码、非极大值抑制和原图坐标裁剪后，将最多16个保留框写入显示记录。\n主人脸从这些框中按面积最大、分数最高、候选序号最小的顺序确定，像素端根据主框索引读取其矩形坐标。\n检测框坐标采用800$\\times$600原图坐标，左上角包含在矩形内，右下角作为不包含的边界。\n\n叠加通路在主框矩形内部绘制两像素宽的红色边框，其余位置输出原图RGB888像素。\n有效无脸结果保持原图。每个输出像素同时核对原图槽号、帧号和代次与活动显示记录的一致性，使主框与对应原图共同生效。\nRGB、HS、VS、DE、坐标与帧标识沿像素流水同步传递，合成像素直接送往HDMI发送端，省去整帧叠加图的DDR写回。"
+        },
+        {
+          "line_start": 134,
+          "line_end": 136,
+          "text": "显示读取器依据已提交记录中的原图地址、行跨度和帧标识按行获取RGB888数据。\n每行2400\\,B，对应150个128\\,bit数据拍；核心域预取下一行，像素域读取当前行，双行缓冲衔接突发访问和连续扫描。\n新帧数据准备完成后在有效图像起点切换，准备不足时保留已有有效帧。扫描期间检测供数不足和读响应错误，并锁存故障状态。"
+        },
+        {
+          "line_start": 168,
+          "line_end": 171,
+          "text": "固件在首次采集前选择BOX模式。CPU通过显示接口写入640\\,B记录，填充原图地址、行跨度、槽号、帧号及代次、结果标识、检测框和主框索引，再写入显示模式、提交序号并发出提交请求。\n硬件检查记录格式、地址范围和身份信息，在跨域握手期间保持整组参数稳定，并在匹配的有效图像起点整体应用。\nVSYNC维持固定的扫描光栅，COMMIT反馈标识新记录的实际像素生效；旧帧引用解除后另行返回RELEASE事件。\n显示接口分别保持提交和释放事件，供CPU读取并确认。"
+        }
+      ]
+    },
+    {
+      "path": "docs/technical-report/latex/chapters/02-system/06-模型部署与应用软件.tex",
+      "sha256": "fe7538b4ebef0600df006afcb13430587a7f07565bf6d5d887ec6d4ebc993331",
+      "line_count": 229,
+      "excerpts": [
+        {
+          "line_start": 9,
+          "line_end": 9,
+          "text": "CPU对九头输出进行解码和NMS，选择主人脸并提交显示记录，Video在同帧原图上绘制检测框。"
+        },
+        {
+          "line_start": 133,
+          "line_end": 133,
+          "text": "主人脸框叠加 & --- & Video & 原图读取与流式边框绘制 & RGB888、原图坐标 \\\\"
+        },
+        {
+          "line_start": 184,
+          "line_end": 186,
+          "text": "主人脸从保留的NMS结果中选择，优先取有效面积最大者，同面积时按分数高者、候选序号小者决定。\nCPU将检测框及主人脸索引写入显示记录，应用自动采用BOX模式，由Video绘制主人脸框。\n显示记录中的原图坐标与帧号、槽号及会话身份共同提交，使检测结果与所显示的原图对应。"
+        },
+        {
+          "line_start": 194,
+          "line_end": 199,
+          "text": "装载顺序为NPM3程序、参数镜像、CPU解码表及A、B、C三个输出槽的头数据初值，共六段、1,770,496\\,B。\nUART采用115200\\,baud、8N1，装载器按256\\,B载荷接收数据包，核对段号、偏移和CRC，并等待DDR写入确认；全部段通过校验后封存模型。\n仅传输有效载荷的理论时间为$1,770,496\\times10/115200\\approx153.689$\\,s。\n计入每包16\\,B包头及12\\,B确认包后，6,916包的停等协议线速预算约为170.499\\,s，尚未计入主机调度、确认周转及DDR等待。\n装载记录没有保存实际起止时刻，因此上述数值仅为启动传输预算，与逐帧推理耗时分别统计。\nCPU轮询NPU就绪状态，重复读取IDLE与有效会话标识并确认一致，随后初始化三帧槽、选择BOX模式并开放采集和推理。"
+        },
+        {
+          "line_start": 203,
+          "line_end": 204,
+          "text": "应用采用轮询主循环，依次处理显示事件、采集完成、NPU完成、显示提交和下一帧采集。\nNPU忙时轮询返回主循环；整帧结果就绪后，CPU在本次收取过程中完成后处理并生成显示记录。运行计数及错误信息保存在SRAM。"
+        },
+        {
+          "line_start": 213,
+          "line_end": 213,
+          "text": "CPU完成定点解码、NMS和主人脸选择，构建显示记录，然后以匹配身份ACK整帧任务。"
+        },
+        {
+          "line_start": 223,
+          "line_end": 228,
+          "text": "启动阶段等待硬件就绪与模型封存，任务提交时核对接口版本及会话身份。\n运行中发生I/O错误、NPU执行错误或帧事件不匹配时，驱动在SRAM中保存首个错误域和错误码，帧池进入错误保持状态，主程序记录运行状态后停驻。\n计算和显示引用保留原有归属，软件停止提交后续任务。\n\nCPU异常入口将\\texttt{mcause}、\\texttt{mepc}和\\texttt{mtval}保存到SRAM，并保持停驻以保留现场。\n有效无脸结果按正常完成流程发布空检测记录，使同帧画面清除检测框；执行错误保留错误状态和帧引用。"
+        }
+      ]
+    }
+  ],
+  "asset_lossless_verification": {
+    "path": "assets/avatars/triha/avatar.rgba",
+    "read_method": "git cat-file blob commit:path; no binary file written",
+    "blob": "79644bad18fa6338da7be9e3406a7cb488458dfc",
+    "sha256": "4e4f435800f7b0e0dc5e7ac1ccef57db36ac286df7203556c7820b69f5479537",
+    "crc32_hex": "edc540a8",
+    "input_bytes": 262144,
+    "rows_checked": 256,
+    "packed_texels": 34331,
+    "packed_bytes": 137324,
+    "nonzero_rgba_words": 33834,
+    "zero_words_inside_retained_spans": 497,
+    "empty_rows": 9,
+    "reconstructed_equal": true,
+    "storage_ratio": 0.5238494873046875,
+    "bytes_saved": 124820,
+    "table_sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e"
+  },
+  "arithmetic_verification": {
+    "alpha_s_min": 0,
+    "alpha_s_max": 65152,
+    "alpha_s_count": 65153,
+    "alpha_div255_mismatches": 0,
+    "page_guard_cases": 4096,
+    "page_guard_mismatches": 0,
+    "raw_frame_base": "0x82000000",
+    "raw_stride": 2400,
+    "raw_rows": 600,
+    "raw_bursts_per_row_distribution": {
+      "10": 507,
+      "11": 93
+    },
+    "raw_total_bursts": 6093,
+    "raw_cross_page_bursts": 0
+  },
+  "parameter_scope": {
+    "profile": "avatar",
+    "ENABLE_AVATAR": 1,
+    "ENABLE_MINIMAL_BOX": 0,
+    "DEMO_BOX_ONLY": 0,
+    "BOOT_AVATAR": 1,
+    "ENABLE_MODE_KEY": 1,
+    "ENABLE_COMPACT": 1,
+    "ENABLE_CAPTURE_PREVIEW": 0,
+    "ENABLE_LANDMARKS": 0,
+    "ENABLE_ROW_CACHE": 0,
+    "COMPACT_AVATAR": 1,
+    "board_frame_epoch": 1,
+    "asset_id": 1,
+    "asset_generation": 2,
+    "coverage_q8": 384,
+    "anchor_x": 128,
+    "anchor_y": 160
+  },
+  "audit_report": {
+    "path": "docs/reviews/support_avatar_edfa199/design-audit.md",
+    "sha256": "dc10043fe4a0af23aee1b540f7ac69e7f960a3f9fdf2e099e3d38012add6b98e",
+    "bytes": 25142
+  }
+}

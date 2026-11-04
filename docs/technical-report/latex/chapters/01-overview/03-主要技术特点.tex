@@ -1,0 +1,9 @@
+% !TEX root = ../../技术文档.tex
+\section{主要技术特点}
+
+\begin{itemize}
+    \item \textbf{可配置顺序处理器}： CPU 采用 IF1、IF2、ID、E1、E2、WB 六级流水线；通过双队首指令 FIFO、跨取指包配对和两条整数执行通路实现可选双发射，共享 LSU 与乘法器以控制资源开销。
+    \item \textbf{面向模型的定点加速}： 针对YuNet框检测部署图，CPU提交整帧任务，NPU读取79条算子记录并按依赖顺序执行；广播式并行MAC阵列和独立深度卷积通路支持U8/S8激活、S8权重和定点重定标。
+    \item \textbf{分层存储与数据搬运}： 利用片上多存储体缓冲和 DMA 复用特征、权重与中间结果，CPU、NPU 和 Video 经共享 DDR 交换数据。
+    \item \textbf{同帧视频显示}： 视频硬件生成BGR NCHW模型输入，并在原图扫描时叠加检测框或透明头像；通过帧号、槽状态和释放确认维持采集、推理与显示的对应关系。
+\end{itemize}

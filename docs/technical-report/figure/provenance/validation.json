@@ -1,0 +1,103 @@
+{
+  "status": "PASS",
+  "source_sha256": "bdd887d39bd2d226a716671d3b205cf5dc8832ea8b82c3af903884c81fecc3be",
+  "redesign_sha256": "8478a0f6e493f6e4e30ca21f1af3833a45814e0d16d6bd02b3a39b5fa9a87b75",
+  "changed_pages": [
+    5,
+    8
+  ],
+  "unchanged_pages": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "page_ids_and_names_unchanged": true,
+  "original_not_modified": true,
+  "all_nodes_editable": true,
+  "video_requirement": "User confirmed keeping 800x600 fullscreen RAW/BOX/AVATAR on this turn",
+  "orthogonal_routes_and_no_unrelated_module_crossings": true,
+  "checks": [
+    {
+      "page": 5,
+      "name": "Six-Stage Dual-Issue CPU — Module View",
+      "vertices": 36,
+      "edges": 39,
+      "preview_png_px": [
+        1735,
+        945
+      ],
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1748.0,
+        958.0
+      ],
+      "width_mm": 160,
+      "height_mm": 87.69,
+      "minimum_equivalent_font_pt": 8.303,
+      "before_png_px": [
+        1190,
+        1008
+      ],
+      "before_height_mm_at_160mm": 135.53
+    },
+    {
+      "page": 8,
+      "name": "Video Capture and Frame-Synchronous Display",
+      "vertices": 23,
+      "edges": 21,
+      "preview_png_px": [
+        1735,
+        865
+      ],
+      "svg_viewbox": [
+        0.0,
+        0.0,
+        1748.0,
+        878.0
+      ],
+      "width_mm": 160,
+      "height_mm": 80.37,
+      "minimum_equivalent_font_pt": 8.303,
+      "before_png_px": [
+        1225,
+        963
+      ],
+      "before_height_mm_at_160mm": 125.78
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "This is a visual sample, not RTL validation.",
+    "Grouped result/forwarding lines are logical bundles, not electrical wired-OR buses.",
+    "No PDF page was rendered or viewed."
+  ],
+  "all_vertices_inside_canvas": true,
+  "manual_png_review": {
+    "full_size": [
+      5,
+      8
+    ],
+    "equivalent_160mm_at_96dpi": [
+      5,
+      8
+    ],
+    "observed_clipping_or_text_overflow": false
+  },
+  "previous_redesign_sha256": "527f9b2c7f9879a0fefa3a99b3f3b2d6dea3d2817328251aa02e8aed4ede25ba",
+  "latest_edit": {
+    "page": 8,
+    "change": "All 21 edge objects use black orthogonal connectors",
+    "geometry_and_other_pages_preserved": true,
+    "evidence": "page8-black-orthogonal-validation.json"
+  }
+}

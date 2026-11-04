@@ -1,0 +1,44 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "8733d1139d1e2133bf8475420b8d1fba7a922254374715b6b814afc2f8d23e15",
+      "native_postscript": "dw16_case7_01.ps",
+      "native_postscript_sha256": "a75eb0fd6ef0afcf9377e820a7eacd4333128fa8b1e81414ea6d692fb2ae8fa3",
+      "source": "DBG\\build\\platform\\b03_layer_dma_release_dev01\\simulation\\trace.vcd",
+      "source_sha256": "6b683e7f8af4a620524944839a5eb9122a0541527e30028530bfd2648d7946d3",
+      "signals": [
+        "case_index",
+        "debug_stage",
+        "done_status",
+        "done_valid",
+        "stat_mac_vectors",
+        "stat_quant_groups",
+        "stat_rows"
+      ],
+      "window_ns": [
+        200025.0,
+        232915.0
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "dw16_case7_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/dw16_case7_01.ps"
+    }
+  ],
+  "image_sha256": "8733d1139d1e2133bf8475420b8d1fba7a922254374715b6b814afc2f8d23e15",
+  "image": "dw16_case7.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

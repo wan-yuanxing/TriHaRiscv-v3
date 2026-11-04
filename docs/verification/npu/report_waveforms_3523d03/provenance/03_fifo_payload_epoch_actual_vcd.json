@@ -1,0 +1,82 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "f117d8d9366e9582baed4ae5c3e55e7fdea29012a33523d6ecba0105b837fb06",
+      "native_postscript": "03_fifo_payload_epoch_actual_vcd_01.ps",
+      "native_postscript_sha256": "0cb1e04913b6a7793c7f869f92c1f67f332093f33f407b5fb9394cbe417b8ad1",
+      "source": "SOC\\build\\npu\\payload_reset\\20261102T174626_621493Z\\feature_payload.vcd",
+      "source_sha256": "8ac3eb773c2bf1debf37bdf030b9d9ff9b5c3b1b3c0a72f88bef5cfdfab8f553",
+      "signals": [
+        "clk",
+        "rst_n",
+        "clear",
+        "dut.payload_live",
+        "count_ref",
+        "count_dut",
+        "dbg_ref_bank0",
+        "dbg_dut_bank0",
+        "od_ref",
+        "od_dut"
+      ],
+      "window_ns": [
+        20,
+        130
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "03_fifo_payload_epoch_actual_vcd_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/03_fifo_payload_epoch_actual_vcd_01.ps"
+    },
+    {
+      "sha256": "8da59f3f9b32cb6ff2344c7436f849b1ca927081b0aed4fdaa7cd83807c17982",
+      "native_postscript": "03_fifo_payload_epoch_actual_vcd_02.ps",
+      "native_postscript_sha256": "87fc8f114ca7fcf501db9dca79183546069307a1ed132c0410f670c953f5752b",
+      "source": "SOC\\build\\npu\\payload_reset\\20261102T174626_621493Z\\feature_payload.vcd",
+      "source_sha256": "8ac3eb773c2bf1debf37bdf030b9d9ff9b5c3b1b3c0a72f88bef5cfdfab8f553",
+      "signals": [
+        "clk",
+        "rst_n",
+        "clear",
+        "dut.payload_live",
+        "count_ref",
+        "count_dut",
+        "dbg_ref_bank0",
+        "dbg_dut_bank0",
+        "od_ref",
+        "od_dut"
+      ],
+      "window_ns": [
+        130,
+        260
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "03_fifo_payload_epoch_actual_vcd_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/03_fifo_payload_epoch_actual_vcd_02.ps"
+    }
+  ],
+  "image_sha256": "399cea4c32561c1faa47f05636868dda9be964a012a56ee18a5194df892af5bd",
+  "image": "03_fifo_payload_epoch_actual_vcd.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

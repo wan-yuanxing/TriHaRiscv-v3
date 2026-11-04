@@ -1,0 +1,26 @@
+CPU_COREMARK_START iterations=5000 clock_hz=100000000
+CoreMark running; precise scores follow the CRC report.
+CPU_COREMARK_START iterations=5000 clock_hz=100000000
+CoreMark running; precise scores follow the CRC report.
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 1636465356
+Total time (secs): 16
+Iterations/Sec (whole seconds): 312
+Iterations       : 5000
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32im_zicsr -mabi=ilp32 -std=gnu99 -O2 -mcmodel=medany -mno-relax -msmall-data-limit=0 -ffreestanding -fno-builtin -ffunction-sections -fdata-sections -nostdlib -Wl,--gc-sections
+Memory location  : SRAM stack
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xbd59
+Correct operation validated. See readme.txt for run and reporting rules.
+CPU_COREMARK_STATUS errors=0 short=0
+CPU_COREMARK_TIME seconds=16.364653 cycles_hi=0 cycles_lo=1636465356 clock_hz=100000000
+CoreMark       : 305.536562
+CoreMark/MHz   : 3.055365
+CPU core LUTs  : 5933
+CoreMark/LUTs  : 0.051497
+CPU_COREMARK_BOARD_PASS iterations=5000

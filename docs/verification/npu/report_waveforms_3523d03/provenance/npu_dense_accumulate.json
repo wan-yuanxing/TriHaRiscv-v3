@@ -1,0 +1,82 @@
+{
+  "origin": "Actual ModelSim Wave-window screenshots of archived VCD data, joined vertically at original pixel size",
+  "new_simulation": false,
+  "synthetic_waveforms": false,
+  "pixels_restyled": false,
+  "native_screenshot_panels": [
+    {
+      "sha256": "bf982455596db624c1520b2be65e58355b39e630e75cf708250c5981b7a188f9",
+      "native_postscript": "npu_dense_accumulate_01.ps",
+      "native_postscript_sha256": "7784b6bc613687d61ebf7f0e1b35d08b692e57fe31b5de32d193b51a91e3885f",
+      "source": "DBG\\build\\platform\\b03_model_tile_v1\\array\\trace.vcd",
+      "source_sha256": "f9ba6353d0de22f4863647955884c884b62388e5887ddf448de0dc88e1f1af82",
+      "signals": [
+        "clk",
+        "run_ce",
+        "in_valid",
+        "in_ready",
+        "in_k",
+        "retire_valid",
+        "retire_k",
+        "accepted",
+        "retired",
+        "pending",
+        "acc_flat[31:0]",
+        "fault"
+      ],
+      "window_ns": [
+        70,
+        210
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_dense_accumulate_01.png",
+      "composite_crop_pixels": [
+        0,
+        0,
+        1516,
+        709
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_dense_accumulate_01.ps"
+    },
+    {
+      "sha256": "1803c3a9689b230b4e601add6961e6d94cdd22517d0a169ae4155379fb1478ee",
+      "native_postscript": "npu_dense_accumulate_02.ps",
+      "native_postscript_sha256": "43ebd261cd2c800257b5f3a2aae20c188d9bc1ddd1533323a44398c0e6eb6452",
+      "source": "DBG\\build\\platform\\b03_model_tile_v1\\tile\\trace.vcd",
+      "source_sha256": "187c22c2ff797a147e723501bfd67d6df73588566f4e0563292a279bfc47cab7",
+      "signals": [
+        "run_ce",
+        "stage",
+        "mac_issues",
+        "spill_words",
+        "reload_words",
+        "q8_groups",
+        "done_valid",
+        "done_error"
+      ],
+      "window_ns": [
+        87420,
+        90480
+      ],
+      "width": 1516,
+      "height": 709,
+      "window_title": "Wave",
+      "capture_method": "Win32 PrintWindow of the actual ModelSim Wave window; no waveform drawing or pixel retouching",
+      "raw_capture_filename": "npu_dense_accumulate_02.png",
+      "composite_crop_pixels": [
+        0,
+        709,
+        1516,
+        1418
+      ],
+      "native_postscript_delivered_path": "assets/native_exports/npu_dense_accumulate_02.ps"
+    }
+  ],
+  "image_sha256": "e0a23de98b2be355c96e4416c682d9ecfd5966f89fbe155bb850a2325f397f06",
+  "image": "npu_dense_accumulate.png",
+  "notes": "",
+  "capture_script_sha256": "ee6277f608b0c2fadcfef6c3371ad4d20c0a892c99a9291e13f94a2ecaac6280"
+}

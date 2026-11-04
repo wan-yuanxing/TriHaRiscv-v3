@@ -1,0 +1,125 @@
+# 真实检测驱动的照片头像
+
+当前素材是用户于 2026-11-03 提供的透明 PNG，原图保存在
+`assets/avatars/triha/source.png`。`source.json` 绑定原始 SHA256、转换方式和对齐参数；
+`gen_fixed_avatar.py` 仅把原图转换为 256×256、RGBA8888、非预乘 alpha 的固定加载格式。
+没有生成或修饰人物。`avatar.png` 是加载副本的预览；`avatar.rgba` 是 FPGA 实际使用的字节。
+
+运行时沿用真实 B03 人脸检测和 CPU 主脸选择，由矩形框定位、缩放透明头像。
+锚点为图片坐标 (128,160)，覆盖边长为检测框长边的 1.5 倍，保留头发上方空间。
+这是固定二维近似对齐，不提供五点配准或随头部姿态旋转。
+
+## 构建与加载契约
+
+- 目标 `triha_face_board`，profile `avatar`：`ENABLE_AVATAR=1`、
+  `ENABLE_MINIMAL_BOX=0`、`DEMO_BOX_ONLY=0`。
+- 实板设置 `ENABLE_LANDMARKS=0`，省去当前 NPU 未输出的五点存储及绘制电路；
+  保留 640 字节记录格式、16 个人脸矩形和主脸照片叠加。实板拒绝五点标志或非零点数据；
+  通用模块默认仍支持五点。`--board-profile` 整机仿真采用相同配置。
+- 实板活跃记录仅存 32 个头部字和 16×2 个矩形字，另保留每框的非法点数据摘要；
+  点数据非零仍拒绝，X/Z 仍优先报未知数据。MMIO shadow、历史 RAM 和模式切换比较
+  均保留完整 160 字，合法命令仍逐位输出原始 640 字节记录，不增加处理周期。
+- CPU/NPU 50MHz，Video/DDR 125MHz，像素 40MHz。HDMI 输入为 800×600 标称 60Hz。
+- 七段上传包含模型 1,770,496 字节和头像 262,144 字节，共 2,032,640 字节、7,940 包。
+  最后 ACK 游标必须为 `(7,0)`；不能使用 BOX 版本的 `--model-only`。
+- 初始 RAW；KEY1（C23）依次切换 RAW → BOX → AVATAR。按两次可到达头像模式。
+  模式经 CPU 按帧提交，需等待下一次结果更新，不保证按键后立即切换。
+- KEY0 会复位并使模型/素材封存失效，需重新加载全部七段。易失 JTAG 配置断电后需重新下载。
+- 确认素材字节、CRC、代数及 C/RTL 常量完全匹配后才允许叠加；换图需重建对应固件和位流。
+
+片上缓存使用无损行区间压缩：只省去每行两侧 RGBA 四字节均为零的像素，
+其余 34,331 个像素全部保留，读取时补零。原始 256×256 图像、上传字节、CRC、
+一个时钟的采样延迟均不变。生成的 `avatar_span_table.vh` 与指定素材身份、CRC 绑定，
+身份不符或被省略位置出现非零数据时拒绝封存。RAM 写使能/地址/数据经过一级寄存器；
+仅在最后一次物理写入完成后封存，像素读取仍为一个时钟。换图时必须重新生成表并重建硬件。
+
+输入 PNG、原始 RGBA、生成的 C/RTL 常量及行区间表均由源码和验收记录绑定。
+运行 `python scripts/video/gen_fixed_avatar.py --check` 检查生成结果；Python 依赖见
+`config/avatar_python_requirements.txt`。PNG 压缩字节可不同，解码像素必须相同；
+硬件加载的 RGBA、元数据和常量要求逐字节一致。
+
+## 已验收版本与上板
+
+2026-11-04 的照片版已完成正脸及无脸整机仿真、布线后双角时序和跨域检查。实板通过 JTAG 下载和掩码校验，七段串口加载共 7,940 包，重试 0 次。用户在 HDMI 输出上确认了 RAW、BOX、AVATAR、头像跟随、透明背景及消失恢复。独立克隆从冻结数据库重放，得到相同的配置内容。[发布包及操作说明](../../releases/face-photo-20261104/README.md) · [验收证据](../../releases/face-photo-20261104/acceptance.json)
+
+在干净克隆的仓库根目录运行以下命令，将 COM12 替换为本机串口。
+
+```powershell
+git checkout face-photo-20261104
+python scripts/video/restore_face_release.py --release releases/face-photo-20261104 --install
+python scripts/video/program_board.py --target triha_face_board --start-server
+python scripts/soc/upload_face_model.py --port COM12
+```
+
+板测需分别观察 RAW 原画面、BOX 真实人脸框、AVATAR 指定照片；头像应随人脸位置/大小变化，
+无脸时消失，透明区域显示背景，画面持续更新。UART ACK 和 Program/Verify 单独不能证明画面正确。
+外部 HDMI I/O AC 正式签核和实板帧率测量是独立事项，本功能验收没有帧率门槛。
+
+## 从源码重建
+
+工具沿用 BOX 发布所冻结的 PDS 2022.2-SP6.4、ModelSim 10.5、xPack RISC-V GCC 15.2.0-1。
+模型及自然人脸 fixture 沿用已验收来源。Windows 环境先设置工具位置，再运行新素材的两组回归：
+
+```powershell
+$env:TRIHA_VSIM='D:/modeltech64_10.5/win64/vsim.exe'
+$env:TRIHA_RISCV_GCC='D:/xpack-riscv-gcc/xpack-riscv-none-elf-gcc-15.2.0-1/bin/riscv-none-elf-gcc.exe'
+$env:TRIHA_PDS_SHELL='D:/pango/PDS_2022.2-SP6.4/bin/pds_shell.exe'
+python -m pip install --target build/python-deps --only-binary=:all: -r config/face_python_requirements.txt -r config/avatar_python_requirements.txt
+$env:PYTHONPATH="$PWD/build/python-deps"
+python scripts/video/gen_fixed_avatar.py --check
+python scripts/video/test_face_rect_profile.py
+python scripts/video/test_avatar_ddr.py --asset assets/avatars/triha/avatar.rgba --compact
+python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot --fixture build/npu/face_fixture_20261103
+python scripts/soc/run_face_system.py --board-profile --boot-load --avatar-boot
+```
+
+两组运行必须分别为 PASS。将实际输出目录记为 `$positive`、`$negative`，使用正脸运行的固件综合。下面的 `$synthesis` 是综合输出目录，`$mapped` 是新的映射目录。
+
+```powershell
+python scripts/video/build_pds.py --target triha_face_board --face-profile avatar --stage synth --firmware-elf "$positive/firmware.elf"
+python scripts/video/map_face_synthesis.py --synthesis $synthesis --output $mapped
+```
+
+发布版本采用 seed 6 和 performance 模式布局。恢复包内 `build/video/pds/ringp6/place.tcl`、`physical.pcf` 记录了原生布局命令及全部 554 个位置，`build/video/pds/ringr6d/route.tcl`、`routing.rcf` 记录了最终布线命令与采集 DMA 网络优先级。原生日志中的绝对路径指向原构建机。复现发布配置可直接使用发布页的 `--replay-bitstream` 命令。重新实现时，先对新映射和布局核对位置并生成匹配的布局记录，以下命令的 `$placement` 为其目录，`$route`、`$review`、`$clocks` 和 `$qualified` 均为新目录。
+
+```powershell
+python scripts/video/reroute_face.py --base $mapped --placement $placement --output $route --seed 6 --mode performance --decongestion 3 --priority-constraints build/video/ringdma.rcf --hold-iterations 30 --hold-margin-ps 200
+python scripts/video/review_face_route.py --base $mapped --route $route --output $review
+python scripts/video/check_face_gray_clocks.py --review "$review/result.json" --output $clocks
+python scripts/video/test_face_route_audit.py --base $mapped --review $review --clock-review $clocks --output build/video/new_photo_controls.json
+python scripts/video/qualify_face_bitstream.py --base $mapped --placement $placement --route $route --review $review --clock-review $clocks --positive $positive --negative $negative --output $qualified --generate
+python scripts/video/package_board.py --target triha_face_board
+```
+
+每一步失败都必须先处理并生成新的验收记录。保留原失败日志，不把旧记录改成通过。
+不同工具或布局布线结果不承诺逐字节相同，必须重新通过时序和功能资格检查。
+官方管脚/KEY1 手册来源约束见 `fpga/pg2l100h/ip/video_mode_key_manifest.json`；换机时核对
+其实际路径与 SHA256。仅恢复已验收包或回放冻结布线数据库，无需重新执行完整源码构建。
+
+## 实板画面与更新率验收
+
+在照片位流通过 Program/Verify、七段数据均收到 ACK 后，可用整机仿真的正脸输入复测：
+
+```powershell
+python scripts/video/make_face_hdmi_source.py --fixture "$positive/fixture"
+```
+
+在 HDMI 输入源的浏览器中打开生成的 `build/video/face-hdmi-source.html`，把对应显示输出设为
+800×600、60 Hz，进入全屏。检查 KEY1 的 RAW → BOX → AVATAR；页面每 8 秒切换原图、
+左移缩小、右移放大和黑场，观察板卡的 HDMI OUT，检查位置、大小、透明边缘和无脸清除。
+空格切至无帧号的仿真原图：对应正脸参考框 `(349,215,166,257)`。
+在浏览器源帧号 1987 的四个场景上，冻结的整数模型分别得到框
+`(349,216,166,255)`、`(182,293,117,160)`、`(446,220,171,251)`、无框。
+这些是主机参考值，录制设备或其他源帧号可以改变个别像素。
+
+要测可见画面更新率，用独立采集设备按已知恒定采样率记录 **板卡输出**，保留左上角编号条，
+导出连续、未缩放的数字序号 PNG（不要补帧或删帧）；取正常显示之后至少 30 秒，保持同一模式。
+运行 `python scripts/video/measure_face_scanout.py --frames <目录> --capture-hz <实际录制频率>`。
+脚本校验编号及其反码，排除首尾不完整间隔，统计每秒出现多少个不同的源帧。
+此数描述显示更新率：不等于 HDMI 刷新率，也不是 NPU 内部吞吐量。没有采集记录时不要报实测值。
+
+## SD 卡后备方案
+
+已发布的实现通过 UART 将指定照片装入 DDR，再以无损行区间格式存入片上缓存供逐像素显示。该方案在 50/125/40 MHz 时钟下完成时序收敛，上板时无需 SD 卡。
+
+已验收 BOX 版本始终保留在 Git 标签 `face-box-20261103`。

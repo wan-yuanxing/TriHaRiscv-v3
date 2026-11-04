@@ -1,0 +1,311 @@
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LC_ALL = "C.UTF-8",
+	LC_CTYPE = "C",
+	LC_NUMERIC = "C",
+	LC_COLLATE = "C",
+	LC_TIME = (unset),
+	LC_MONETARY = (unset),
+	LANG = "C.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to the system default locale ("Chinese (Simplified)_China.936").
+Initial Win CP for (console input, console output, system): (CP936, CP65001, CP936)
+I changed them all to CP936
+Rc files read:
+  latexmkrc
+Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+Latexmk: applying rule 'xelatex'...
+Rule 'xelatex':  Reasons for rerun
+Changed files or newly in use/created:
+  chapters/02-system/02-CPU���.tex
+  chapters/02-system/05-ͼ��ɼ�����ʾ��·.tex
+  chapters/06-appendix/B-CPU������֤.tex
+Category 'changed_user':
+  chapters/02-system/02-CPU���.tex
+  chapters/02-system/05-ͼ��ɼ�����ʾ��·.tex
+  chapters/06-appendix/B-CPU������֤.tex
+
+------------
+Run number 1 of rule 'xelatex'
+------------
+------------
+Running 'xelatex -interaction=nonstopmode -halt-on-error -file-line-error -no-pdf -synctex=1 -interaction=nonstopmode -halt-on-error -file-line-error -recorder  "�����ĵ�.tex"'
+------------
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex)
+ restricted \write18 enabled.
+entering extended mode
+(./技术文档.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/ctexrep.cls
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/config/ctexbackend.cfg)
+(d:/texlive/2026/texmf-dist/tex/latex/l3kernel/expl3.sty
+(d:/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-xetex.def))
+Document Class: ctexrep 2022/07/14 v2.5.10 Chinese adapter for class report (CT
+EX)
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/ctexhook.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/ctexpatch.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/base/fix-cm.sty
+(d:/texlive/2026/texmf-dist/tex/latex/base/ts1enc.def))
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/config/ctexopts.cfg)
+(d:/texlive/2026/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
+(d:/texlive/2026/texmf-dist/tex/latex/base/size12.clo))
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/engine/ctex-engine-xetex.def
+(d:/texlive/2026/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+(d:/texlive/2026/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/fontspec/fontspec.sty
+(d:/texlive/2026/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(d:/texlive/2026/texmf-dist/tex/latex/base/fontenc.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(d:/texlive/2026/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg)))
+(d:/texlive/2026/texmf-dist/tex/latex/zhnumber/zhnumber.sty
+(d:/texlive/2026/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg))
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/scheme/ctex-scheme-chinese-report.de
+f (d:/texlive/2026/texmf-dist/tex/latex/ctex/config/ctex-name-utf8.cfg))
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/ctex-cs4size.clo))
+(d:/texlive/2026/texmf-dist/tex/latex/ctex/config/ctex.cfg) (./metadata.tex)
+(./triha-report.sty (d:/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+(d:/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty)
+(d:/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+(d:/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty)))
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(d:/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+(d:/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+(d:/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(d:/texlive/2026/texmf-dist/tex/latex/graphics-def/xetex.def)))
+(d:/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/tools/array.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/tools/tabularx.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/tools/calc.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+(d:/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(d:/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx))
+(d:/texlive/2026/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/enumitem/enumitem.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/fvextra/fvextra.sty
+(d:/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/upquote/upquote.sty
+(d:/texlive/2026/texmf-dist/tex/latex/base/textcomp.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/lineno/lineno.sty
+(d:/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+(d:/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty))))
+(d:/texlive/2026/texmf-dist/tex/latex/caption/caption.sty
+(d:/texlive/2026/texmf-dist/tex/latex/caption/caption3.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/caption/ltcaption.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/placeins/placeins.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/pgf.revision.tex)))
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.co
+de.tex)) (d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.def
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx.def
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def))
+))
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+)) (d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.te
+x)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric
+.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.t
+ex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.co
+de.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex
+)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.te
+x)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex
+)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithm
+etics.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex))
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.cod
+e.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.te
+x)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code
+.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.c
+ode.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex)
+
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.co
+de.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+) (d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code
+.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+) (d:/texlive/2026/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex)))
+ (d:/texlive/2026/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex)
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.st
+y)
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.st
+y)) (d:/texlive/2026/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(d:/texlive/2026/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex))
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.co
+de.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
+brarytopaths.code.tex)))
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.cod
+e.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
+brarypositioning.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
+brarycalc.code.tex)
+(d:/texlive/2026/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
+braryfit.code.tex) (d:/texlive/2026/texmf-dist/tex/latex/natbib/natbib.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/xurl/xurl.sty
+(d:/texlive/2026/texmf-dist/tex/latex/url/url.sty))
+(d:/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+(d:/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(d:/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(d:/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(d:/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(d:/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+(d:/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty)
+(d:/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(d:/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(d:/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(d:/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def)
+(d:/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+(d:/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty)))
+(d:/texlive/2026/texmf-dist/tex/latex/hyperref/hxetex.def
+(d:/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(d:/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty))))
+(./技术文档.aux)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+(./技术文档.out) (./技术文档.out) (./chapters/00-abstract.tex) [1] (./技术文档.toc
+(d:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(d:/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd) [2] [3]) [4]
+(./chapters/01-overview.tex
+第一部分
+(./chapters/01-overview/01-功能与特性.tex) (./chapters/01-overview/02-应用领域.tex
+[1]) (./chapters/01-overview/03-主要技术特点.tex) (./chapters/01-overview/04-设计流程.tex
+[2] [3])) (./chapters/02-system.tex [4]
+第二部分
+(./chapters/02-system/01-系统整体介绍.tex [5] [6]) (./chapters/02-system/02-CPU设计.tex
+[7] [8] [9] [10] [11] [12] [13] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 252--252
+[]|\TU/TimesNewRoman(0)/m/n/10.53937 ID \TU/SimSun(0)/m/n/10.53937 确 认 不 跳 转 的
+[15]
+Underfull \hbox (badness 1308) in paragraph at lines 289--292
+[]\TU/SimSun(0)/m/n/12.045 请 求 接 纳 和 访 问 完 成 是 两 个 事 件：| \TU/Consolas(0)/m/n/12
+.045 mem_accept \TU/SimSun(0)/m/n/12.045 接 纳 请 求，| \TU/Consolas(0)/m/n/12.045 m
+em_ack \TU/SimSun(0)/m/n/12.045 报 告 响 应，|
+[16] [17] [18] [19]) (./chapters/02-system/03-NPU设计.tex [20] [21] [22])
+(./chapters/02-system/04-系统互连与存储.tex [23] [24])
+(./chapters/02-system/05-图像采集与显示链路.tex [25] [26] [27] [28])
+(./chapters/02-system/06-模型部署与应用软件.tex [29] [30] [31])
+(./chapters/02-system/07-FPGA实现.tex
+Underfull \hbox (badness 5954) in paragraph at lines 13--18
+\TU/SimSun(0)/m/n/12.045 封 装 厂 商 \TU/TimesNewRoman(0)/m/n/12.045 DDR3 IP\TU/Sim
+Sun(0)/m/n/12.045 、|  初 始 化 状 态 和 用 户 接 口；| \TU/Consolas(0)/m/n/12.045 board_io
+_wrapper \TU/SimSun(0)/m/n/12.045 连 接 \TU/TimesNewRoman(0)/m/n/12.045 UART\TU/S
+imSun(0)/m/n/12.045 、|
+[32] [33])) (./chapters/03-results.tex [34]
+第三部分
+(./chapters/03-results/01-整体介绍.tex) (./chapters/03-results/02-工程成果.tex [35])
+(./chapters/03-results/03-特性成果.tex [36] [37] [38] [39] [40] [41] [42]))
+(./chapters/04-summary.tex [43]
+第四部分
+(./chapters/04-summary/01-可扩展之处.tex) (./chapters/04-summary/02-工程取舍与心得体会.tex))
+(./chapters/05-references.tex [44]
+第五部分
+) (./chapters/06-appendix.tex [45] (./chapters/06-appendix/A-仿真环境与验证方法.tex)
+(./chapters/06-appendix/B-CPU仿真验证.tex [46] [47] [48] [49] [50]
+Underfull \hbox (badness 4582) in paragraph at lines 217--222
+\TU/Consolas(0)/m/n/12.045 0x12345678\TU/SimSun(0)/m/n/12.045 ，|  再 用 \TU/Conso
+las(0)/m/n/12.045 0x00F0000F \TU/SimSun(0)/m/n/12.045 置 位 得 到 \TU/Consolas(0)/m
+/n/12.045 0x12F4567F\TU/SimSun(0)/m/n/12.045 、|  清 位 得 到 \TU/Consolas(0)/m/n/12
+.045 0x12045670\TU/SimSun(0)/m/n/12.045 ；|  立
+[51] [52] [53] [54] [55] [56] [57] [58] [59]
+Underfull \hbox (badness 10000) in paragraph at lines 441--444
+[]\TU/SimSun(0)/m/n/12.045 三 次 中 断 入 口 均 检 查 \TU/Consolas(0)/m/n/12.045 mcause\
+TU/TimesNewRoman(0)/m/n/12.045 =\TU/Consolas(0)/m/n/12.045 0x8000000B\TU/SimSun
+(0)/m/n/12.045 、| \TU/Consolas(0)/m/n/12.045 mtval\TU/TimesNewRoman(0)/m/n/12.0
+45 =0\TU/SimSun(0)/m/n/12.045 、| \TU/Consolas(0)/m/n/12.045 mstatus\TU/TimesNew
+Roman(0)/m/n/12.045 =\TU/Consolas(0)/m/n/12.045 0x1880 \TU/SimSun(0)/m/n/12.045
+ 和
+[60] [61] [62]) (./chapters/06-appendix/C-NPU仿真验证.tex)
+(./chapters/06-appendix/D-系统互连与存储仿真验证.tex [63] [64] [65] [66])
+(./chapters/06-appendix/E-图像采集与显示链路仿真验证.tex [67] [68])
+(./chapters/06-appendix/F-系统联合仿真验证.tex)) [69] [70] (./技术文档.aux) )
+(see the transcript file for additional information)
+Output written on 技术文档.xdv (74 pages, 991076 bytes).
+SyncTeX written on 技术文档.synctex.gz.
+
+Transcript written on 技术文档.log.
+Latexmk: Getting log file '�����ĵ�.log'
+Latexmk: Examining '�����ĵ�.fls'
+Latexmk: Examining '�����ĵ�.log'
+Latexmk: Log file says output to '�����ĵ�.xdv'
+Latexmk: Using bibtex to make bibliography file(s).
+Latexmk: applying rule 'xdvipdfmx'...
+Rule 'xdvipdfmx':  Reasons for rerun
+Changed files or newly in use/created:
+  �����ĵ�.xdv
+Category 'changed_source_rules':
+  xelatex
+
+------------
+Run number 1 of rule 'xdvipdfmx'
+------------
+------------
+Running 'xdvipdfmx -E -o "�����ĵ�.pdf"  "�����ĵ�.xdv"'
+------------
+技术文档.xdv -> 技术文档.pdf
+[1][2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18][19][20][21][22][23][24][25][26][27][28][29][30][31][32][33][34][35][36][37][38][39][40][41][42][43][44][45][46][47][48][49][50][51][52][53][54][55][56][57][58][59][60][61][62][63][64][65][66][67][68][69][70][71][72][73][74]
+11302408 bytes written
+Latexmk: All targets (�����ĵ�.xdv �����ĵ�.pdf) are up-to-date
+Reverting Windows console CPs to (in,out) = (936,65001)
+
+D:\FPGA\TriHaRiscv-main\docs\technical-report\latex\技术文档.pdf

@@ -1,0 +1,286 @@
+Reading D:/modeltech64_10.5/tcl/vsim/pref.tcl
+
+# 10.5
+
+# do run.do
+# Model Technology ModelSim SE-64 vlog 10.5 Compiler 2016.02 Feb 13 2016
+# Start time: 09:15:58 on Nov 04,2026
+# vlog -sv -mfcu -f sources.f "+incdir+D:/FPGA/photo-ring-lab-20261104/build/soc/face_system-20261104T011551_456009Z" "+incdir+D:/FPGA/photo-ring-lab-20261104/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/cpu/vendor/src/core" "+incdir+D:/FPGA/photo-ring-lab-20261104/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/soc/include" "+incdir+D:/FPGA/photo-ring-lab-20261104/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include" 
+# -- Compiling module GTP_RAM32X2DP
+# -- Compiling UDP INT_LUTMUX2_UDP
+# -- Compiling UDP INT_LUTMUX4_UDP
+# -- Compiling module GTP_LUT5
+# -- Compiling module GTP_LUT6
+# -- Compiling module GTP_GRS
+# -- Compiling module GTP_DRM18K_E1
+# -- Compiling module GTP_APM_E2
+# -- Compiling module GTP_RAM32X1DP
+# -- Compiling module GTP_LUT1
+# -- Compiling module biriscv_alu
+# -- Compiling module triha_csr_regfile
+# -- Compiling module triha_csr
+# -- Compiling module triha_decode
+# -- Compiling module triha_fetch_fifo
+# -- Compiling module biriscv_decoder
+# -- Compiling module biriscv_divider
+# -- Compiling module biriscv_exec
+# -- Compiling module biriscv_fetch
+# -- Compiling module triha_frontend
+# -- Compiling module triha_issue
+# -- Compiling module triha_regfile
+# -- Compiling module triha_divider
+# -- Compiling module triha_lsu
+# -- Compiling module triha_lsu_fifo
+# -- Compiling module biriscv_mmu
+# -- Compiling module triha_multiplier
+# -- Compiling module triha_npc
+# -- Compiling module triha_npc_equal
+# -- Compiling module triha_npc_lfsr
+# -- Compiling module triha_npc_select
+# -- Compiling module triha_npc_priority
+# -- Compiling module triha_btb
+# -- Compiling module triha_btb_bank
+# -- Compiling module triha_pipe_ctrl
+# -- Compiling module biriscv_regfile
+# -- Compiling module triha_cpu
+# -- Compiling module triha_core
+# -- Compiling module triha_icache_tag_ram
+# -- Compiling module triha_icache_data_ram
+# -- Compiling module triha_icache
+# -- Compiling module triha_ifetch_uncached
+# -- Compiling module triha_dcache_tag_ram
+# -- Compiling module triha_dcache_data_ram
+# -- Compiling module triha_dcache
+# -- Compiling module triha_cache_subsystem
+# -- Compiling module triha_cpu_cache_axi
+# -- Compiling module triha_sram
+# -- Compiling module triha_boot_rom
+# -- Compiling module cpu_native_axil
+# -- Compiling module triha_application_router
+# -- Compiling module triha_application_cpu
+# -- Compiling module b03_array_apmacc_rowctrl
+# -- Compiling module b03_bank_array
+# -- Compiling module b03_bank_array_payload
+# -- Compiling module b03_block_dma
+# -- Compiling module b03_crc32_parallel4
+# -- Compiling module b03_crc32_word_pipe
+# -- Compiling module b03_decode_lookup_roundstage
+# -- Compiling module b03_decode_math_roundstage
+# -- Compiling module b03_feature_pack_compact
+# -- Compiling module b03_fp32_q40
+# -- Compiling module b03_frame_exec_payload
+# -- Compiling module b03_full_dw16_parallelfault
+# -- Compiling module b03_full_mul_pair
+# -- Compiling module b03_gather_lean
+# -- Compiling module b03_graph_engine_cap
+# -- Compiling module b03_key_sort_mem2
+# -- Compiling module b03_layer_exec_payload
+# -- Compiling module b03_mac_pair_rowctrl
+# -- Compiling module b03_model_input_payload
+# -- Compiling module b03_mul25x18_loan
+# -- Compiling module b03_mul_pool32_probe
+# -- Compiling module b03_nms1_faultreg
+# -- Compiling module b03_phase_mem_mux_burst
+# -- Compiling module b03_post_frame_payload
+# -- Compiling module b03_post_mem_arbiter
+# -- Compiling module b03_post_memory_engine_payload
+# -- Compiling module b03_post_read_dma
+# -- Compiling module b03_probability_pipe
+# -- Compiling module b03_q40_round2_stage
+# -- Compiling module b03_quant4_core
+# -- Compiling module b03_quant8_tdm1
+# -- Compiling module b03_quant8_tdm2
+# -- Compiling module b03_raw_bank_response_pipe
+# -- Compiling module b03_record_batch_tx
+# -- Compiling module b03_roi4_loan_registered
+# -- Compiling module b03_row_tile_store_rotate
+# -- Compiling module b03_score_root
+# -- Compiling module b03_table_validation_cache
+# -- Compiling module b03_tdp2048_loan_bank
+# -- Compiling module b03_vector_exec_compact
+# -- Compiling module tdp32_probe
+# -- Compiling module video_capture_mmio_v2
+# -- Compiling module video_three_branch_capture
+# -- Compiling module axi_write_arbiter3
+# -- Compiling module video_write_dma
+# -- Compiling module rgb888_packer
+# -- Compiling module preview_downscale
+# -- Compiling module detect_bilinear
+# -- Compiling module detect_nchw_dma
+# -- Compiling module raw_display
+# -- Compiling module axi128_hmic256
+# -- Compiling module display_slot_owner
+# -- Compiling module display_record_guard
+# -- Compiling module video_display_mmio
+# -- Compiling module display_mode_cdc_held
+# -- Compiling module display_record_pixels_compact
+# -- Compiling module display_mode_cdc
+# -- Compiling module video_read_arbiter
+# -- Compiling module avatar_texture_cache
+# -- Compiling module avatar_ddr_cache
+# -- Compiling module avatar_row_cache
+# -- Compiling module avatar_sample_map
+# -- Compiling module display_overlay
+# -- Compiling module display_record_pixels
+# -- Compiling module video_record_renderer
+# -- Compiling module display_record_link
+# -- Compiling module video_display_record
+# -- Compiling module npu_frame_mmio
+# -- Compiling module b03_frame_service
+# -- Compiling module b03_block_dma_compact
+# -- Compiling module npu_frame_top
+# -- Compiling module npu_service_axi128
+# -- Compiling module soc_axi128_arbiter
+# -- Compiling module soc_ddr_fabric
+# -- Compiling module triha_axi128_cdc
+# -- Compiling module soc_axil_cdc
+# -- Compiling module video_axil_decode
+# -- Compiling module video_stream_register
+# -- Compiling module video_application_engine
+# -- Compiling module triha_compute_system
+# -- Compiling module triha_face_system
+# -- Compiling module triha_face_mode_key
+# -- Compiling module video_button_debounce
+# -- Compiling module triha_model_loader
+# -- Compiling module triha_boot_buffer
+# -- Compiling module video_display_mmio_compact
+# -- Compiling module video_display_record_compact
+# -- Compiling module video_record_renderer_compact
+# -- Compiling module video_async_fifo
+# -- Compiling module display_box_only
+# -- Compiling module tb_face_system
+# 
+# Top level modules:
+# 	b03_block_dma
+# 	tb_face_system
+# End time: 09:15:59 on Nov 04,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -t 1ps work.tb_face_system -gBOARD_PROFILE=1 -gBOOT_ONLY=0 -gAVATAR_BOOT=1 -gBOOT_LOAD=1 
+# Start time: 09:15:59 on Nov 04,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# //  ModelSim SE-64 10.5 Feb 13 2016 
+# //
+# //  Copyright 1991-2016 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  ModelSim SE-64 and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.tb_face_system(fast)
+# Loading work.triha_compute_system(fast)
+# Loading work.GTP_DRM18K_E1(fast)
+# FACE_BOOT_SEGMENT segment=0 bytes=10240 packets=40
+# FACE_BOOT_SEGMENT segment=1 bytes=108288 packets=463
+# FACE_SYSTEM_PROGRESS cycles=1000000 captures=0 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=2000000 captures=0 results=0 records=0 commits=0 releases=0
+# FACE_BOOT_SEGMENT segment=2 bytes=1572864 packets=6607
+# FACE_BOOT_SEGMENT segment=3 bytes=26368 packets=6710
+# FACE_SYSTEM_PROGRESS cycles=3000000 captures=0 results=0 records=0 commits=0 releases=0
+# FACE_BOOT_SEGMENT segment=4 bytes=26368 packets=6813
+# FACE_BOOT_SEGMENT segment=5 bytes=26368 packets=6916
+# FACE_BOOT_SEGMENT segment=6 bytes=262144 packets=7940
+# FACE_SYSTEM_CAPTURE_START slot=0 frame=1
+# FACE_SYSTEM_PROGRESS cycles=4000000 captures=0 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_CAPTURE_DONE slot=0 frame=1 bytes=1747200
+# FACE_SYSTEM_NPU_START frame=1
+# FACE_SYSTEM_CAPTURE_START slot=1 frame=2
+# FACE_SYSTEM_CAPTURE_DONE slot=1 frame=2 bytes=1747200
+# FACE_SYSTEM_CAPTURE_START slot=2 frame=3
+# FACE_SYSTEM_CAPTURE_DONE slot=2 frame=3 bytes=1747200
+# FACE_SYSTEM_PROGRESS cycles=5000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=6000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_OP frame=1 op=0 cycles=6353520
+# FACE_SYSTEM_PROGRESS cycles=7000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=8000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=9000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=10000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=11000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=12000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=13000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=14000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_OP frame=1 op=10 cycles=14461283
+# FACE_SYSTEM_PROGRESS cycles=15000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=16000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=17000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=18000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_OP frame=1 op=20 cycles=18075497
+# FACE_SYSTEM_OP frame=1 op=30 cycles=18468263
+# FACE_SYSTEM_PROGRESS cycles=19000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_PROGRESS cycles=20000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_OP frame=1 op=40 cycles=20693761
+# FACE_SYSTEM_PROGRESS cycles=21000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_OP frame=1 op=50 cycles=21517509
+# FACE_SYSTEM_OP frame=1 op=60 cycles=21671147
+# FACE_SYSTEM_OP frame=1 op=70 cycles=21714240
+# FACE_SYSTEM_PROGRESS cycles=22000000 captures=3 results=0 records=0 commits=0 releases=0
+# FACE_SYSTEM_NPU_CPU_RESULT frame=1 reads=2148 cycles=22023646
+# FACE_SYSTEM_PRESENT frame=1 slot=0
+# FACE_SYSTEM_NPU_START frame=2
+# FACE_SYSTEM_PROGRESS cycles=23000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=0 seq=1
+# FACE_SYSTEM_PROGRESS cycles=24000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=1 seq=2
+# FACE_SYSTEM_OP frame=2 op=0 cycles=24296260
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=25000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=26000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=27000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=28000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=29000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=30000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=31000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=32000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_OP frame=2 op=10 cycles=32469860
+# FACE_SYSTEM_PROGRESS cycles=33000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=34000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=35000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=36000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_OP frame=2 op=20 cycles=36128290
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_OP frame=2 op=30 cycles=36527073
+# FACE_SYSTEM_PROGRESS cycles=37000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=38000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_OP frame=2 op=40 cycles=38780437
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_PROGRESS cycles=39000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_OP frame=2 op=50 cycles=39607557
+# FACE_SYSTEM_OP frame=2 op=60 cycles=39744041
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_OP frame=2 op=70 cycles=39787278
+# FACE_SYSTEM_PROGRESS cycles=40000000 captures=3 results=1 records=1 commits=1 releases=0
+# FACE_SYSTEM_NPU_CPU_RESULT frame=2 reads=4296 cycles=40102706
+# FACE_SYSTEM_PRESENT frame=2 slot=1
+# FACE_SYSTEM_NPU_START frame=3
+# FACE_SYSTEM_FULL_PIXELS frame=1 mode=2 seq=3
+# FACE_SYSTEM_RELEASE frame=1 slot=0
+# FACE_SYSTEM_CAPTURE_START slot=0 frame=4
+# FACE_SYSTEM_PROGRESS cycles=41000000 captures=3 results=2 records=2 commits=2 releases=1
+# FACE_SYSTEM_CAPTURE_DONE slot=0 frame=4 bytes=1747200
+# FACE_SYSTEM_FULL_PIXELS frame=2 mode=2 seq=4
+# FACE_CAPTURE_STREAM_PASS accepted=1920004 consumed=1920004 pending=0
+# FACE_SYSTEM_PASS captures=4 requests=4 results=2 records=2 commits=2 releases=1 reuses=1 full_pixel_frames=2 modes=111 cpu_reads=4296 nativeAW=91000 nativeAR=436453 cycles=41410743
+# ** Note: $finish    : D:/FPGA/photo-ring-lab-20261104/build/soc/face_system-20261104T011551_456009Z/inputs/tb/soc/tb_face_system.sv(628)
+#    Time: 828214870 ns  Iteration: 1  Instance: /tb_face_system
+# End time: 09:39:15 on Nov 04,2026, Elapsed time: 0:23:16
+# Errors: 0, Warnings: 0

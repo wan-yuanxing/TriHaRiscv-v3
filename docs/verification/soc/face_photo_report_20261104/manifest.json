@@ -1,0 +1,532 @@
+{
+  "commit": "edfa1992f604e5887e04f7cad2d81aeff122dd4b",
+  "release": "face-photo-20261104",
+  "source_files_checked": 340,
+  "byte_exact": 338,
+  "verified_crlf_checkout": 2,
+  "files": [
+    {
+      "path": "release/acceptance.json",
+      "origin": "edfa199:releases/face-photo-20261104/acceptance.json",
+      "bytes": 3810,
+      "sha256": "64dd7fa19522b8a1a8929dcb39263fabd8071aca54b654476ae25fa9757ae9f7"
+    },
+    {
+      "path": "release/manifest.json",
+      "origin": "edfa199:releases/face-photo-20261104/manifest.json",
+      "bytes": 505954,
+      "sha256": "98bcd6f51b1a9efe5ae291bd7903306ae3fa2ca1600d02be645a033d18d4dffb"
+    },
+    {
+      "path": "release/README.md",
+      "origin": "edfa199:releases/face-photo-20261104/README.md",
+      "bytes": 3324,
+      "sha256": "00f091b18e6ddb2e352a87840f9ed5175dbbd05c3f193e340a9ec69ec1074733"
+    },
+    {
+      "path": "release/evidence/board.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/board.json",
+      "bytes": 766,
+      "sha256": "65d4c0cff00ddf7586ed3c8441c9c3a57c73603f250298af7d2ec70a63ad5c3a"
+    },
+    {
+      "path": "release/evidence/offline-assets.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/offline-assets.json",
+      "bytes": 1534,
+      "sha256": "ffe8e0dac376ae9d62480875a9802e4681acbc3ed910b89939c957f9f3dbde2f"
+    },
+    {
+      "path": "release/evidence/program.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/program.json",
+      "bytes": 658,
+      "sha256": "9d94cf1c3230bafeae5084995b682bd6d6207f83f86d01fbb07b5b1a93d8e90f"
+    },
+    {
+      "path": "release/evidence/program.txt",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/program.txt",
+      "bytes": 3130,
+      "sha256": "005fedd839f1964dc7f540c60fd5536efd6417adbed7f69b50e916124e48dc39"
+    },
+    {
+      "path": "release/evidence/replay.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/replay.json",
+      "bytes": 1265,
+      "sha256": "a78681a102d9660f72d72430d64f0bfd6696ecc7b5383bb46273dbcc9943a4cc"
+    },
+    {
+      "path": "release/evidence/scan.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/scan.json",
+      "bytes": 215,
+      "sha256": "1adf2c0a1e92960d0995758c502dccd38cc36ed0c9f04e45af6536eaf508407b"
+    },
+    {
+      "path": "release/evidence/scan.txt",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/scan.txt",
+      "bytes": 940,
+      "sha256": "0aa89ba61a63196bb22f4c4ea6d417c6d1252c1f13e9c2cadce83766abe9c54d"
+    },
+    {
+      "path": "release/evidence/uart.json",
+      "origin": "edfa199:releases/face-photo-20261104/evidence/uart.json",
+      "bytes": 1708,
+      "sha256": "a8bd4631bd4174e57523286dd0dc87cbc64ebc90120cb36ffa9d8983ee57c96e"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_50_sim_alignment_20261104.json",
+      "origin": "release archive member build/video/face_photo_ring_50_sim_alignment_20261104.json",
+      "bytes": 1151,
+      "sha256": "7f78e28da3dbe8987edbd679cc08006bef26d96241e4c778790a6522f2f4958b"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_admitted_site_candidates_20261104.json",
+      "origin": "release archive member build/video/face_photo_ring_admitted_site_candidates_20261104.json",
+      "bytes": 108390,
+      "sha256": "3246553fa003ed316bce0dce9a7bb177ed3b954df49a45a632baa88ea4df0146"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_performance_20261104.json",
+      "origin": "release archive member build/video/face_photo_ring_performance_20261104.json",
+      "bytes": 1243,
+      "sha256": "054aae1ca4fa174d594db2851cf0815052233211533247b1b4a1462816595776"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_release_components_20261104.json",
+      "origin": "release archive member build/video/face_photo_ring_release_components_20261104.json",
+      "bytes": 219506,
+      "sha256": "573477d7bf6d32e1b3deefa9d8d7b6b5e63c7e4c7653dafa6989773840b9c2d7"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_site_candidates_20261104.json",
+      "origin": "release archive member build/video/face_photo_ring_site_candidates_20261104.json",
+      "bytes": 109739,
+      "sha256": "85508a326e50fcadf8ffd101138293e83ef5dbd53d873ab21f873c53c06491a9"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_50_pipeline_20261104/receipt.json",
+      "origin": "release archive member build/video/face_photo_ring_50_pipeline_20261104/receipt.json",
+      "bytes": 8236,
+      "sha256": "58598f27bf3b8b2093d03117c1e7fa7eaf28aa41ee4917467598e3b41486aa47"
+    },
+    {
+      "path": "evidence/build/video/face_photo_ring_admitted_50_pipeline_20261104/receipt.json",
+      "origin": "release archive member build/video/face_photo_ring_admitted_50_pipeline_20261104/receipt.json",
+      "bytes": 8211,
+      "sha256": "e1abb2f67abb1343875dfd48ae8e11d45d390159d5bd99c0f5f3706bb50c3a2d"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/bitstream.log",
+      "origin": "release archive member build/video/ringbit6d/bitstream.log",
+      "bytes": 2104,
+      "sha256": "c99dcaaa858a70906f28c301246ae27d66b0f169019df0cfc237f584659b1c0f"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/flow.log",
+      "origin": "release archive member build/video/ringbit6d/flow.log",
+      "bytes": 1500,
+      "sha256": "49a1474dc1018c7165da1d98fdce180e827d82827375d2019df21c2142a2fb1b"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/message_review.json",
+      "origin": "release archive member build/video/ringbit6d/message_review.json",
+      "bytes": 22591,
+      "sha256": "8b27e17b4e5db04600e4800f839dd8104272c0493e0fdf81a2db6a481c6fd98e"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/result.json",
+      "origin": "release archive member build/video/ringbit6d/result.json",
+      "bytes": 113983,
+      "sha256": "004f50053d737ac28694048d6c9f4070c601113dbe06bd1a9d796141c92386d5"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/run.log",
+      "origin": "release archive member build/video/ringbit6d/run.log",
+      "bytes": 2197,
+      "sha256": "3e1a893f7e1bbd6b19b7de68c08c6f3630b2085f19f8122bd3c597fade165765"
+    },
+    {
+      "path": "evidence/build/video/ringclk6d/console.log",
+      "origin": "release archive member build/video/ringclk6d/console.log",
+      "bytes": 45687,
+      "sha256": "7233f5641aff1cd69b2d543ba2bfe97bfceeb0db2504e88c49bee40447c52314"
+    },
+    {
+      "path": "evidence/build/video/ringclk6d/result.json",
+      "origin": "release archive member build/video/ringclk6d/result.json",
+      "bytes": 36417,
+      "sha256": "68e44d4a2ca5045368e4d6319b5b1f7b96a6889a667c4bb93b991e0c791b9220"
+    },
+    {
+      "path": "evidence/build/video/ringrev6d/result.json",
+      "origin": "release archive member build/video/ringrev6d/result.json",
+      "bytes": 129811,
+      "sha256": "3d1b7f437b451b259a3128231f5c6a7e21fbd00a590b94eb0d9eea0c40a3d1fe"
+    },
+    {
+      "path": "evidence/build/video/ringrev6d/sites/console.log",
+      "origin": "release archive member build/video/ringrev6d/sites/console.log",
+      "bytes": 1800,
+      "sha256": "4d847d5030f9cc0cbeb5dd6ece8a104d3324ede876cb484145d4a545922dd73f"
+    },
+    {
+      "path": "evidence/build/video/ringrev6d/timing/console.log",
+      "origin": "release archive member build/video/ringrev6d/timing/console.log",
+      "bytes": 78749,
+      "sha256": "91557ddb844546018746c85ce8822b7a382101fbae6fd968d390348ed62e0791"
+    },
+    {
+      "path": "evidence/build/video/ringbit6d/generate_bitstream/run.log",
+      "origin": "release archive member build/video/ringbit6d/generate_bitstream/run.log",
+      "bytes": 1118,
+      "sha256": "b48d539cb17af2936e4ce17883f3eb1046c16f8f58c84a8d86f4adf7c6987854"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/compiler_version.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/compiler_version.log",
+      "bytes": 276,
+      "sha256": "56e9ba794dc0f3d4846eef892db8f5528046f8dfb5dbec6d5f63ddf06d5fea40"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/compiler_version_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/compiler_version_process.json",
+      "bytes": 169,
+      "sha256": "06ce20242bd4a1a859144a565e05c44295cae86ed557ba582f71c8de51200d1c"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/firmware.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/firmware.log",
+      "bytes": 270,
+      "sha256": "7af9186a759c4dae553b19149ae7e4bb1dc4766cf43de98ca40b85fade42b526"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/firmware_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/firmware_process.json",
+      "bytes": 1935,
+      "sha256": "282ad086de9b0c9299d4de4fbea5645d095f0e44f29fcd3e45593bd9a0ec5e2f"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/result.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/result.json",
+      "bytes": 33919,
+      "sha256": "dc4bdbfc1605872e9122157b9c949a00e92f354552d28b2d7734089099adde44"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/simulation.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/simulation.log",
+      "bytes": 14924,
+      "sha256": "f64a4114e834744492cd7b7f8b728a835db3cc07529ceb3eda6c0c72acb0e6e8"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/simulation_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/simulation_process.json",
+      "bytes": 144,
+      "sha256": "d7c3db4568d4949d9d83b9b2515f7217cf08d50c1e16db1a89d48afa1e8fdc9c"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/simulator_version.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/simulator_version.log",
+      "bytes": 73,
+      "sha256": "c3a014928dfded9260e534537b0c87166907b71922850e6afc33450b4c079d49"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/simulator_version_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/simulator_version_process.json",
+      "bytes": 122,
+      "sha256": "effd714013bbbeb03bb4c8a9967b1c4f19d21e3ecdae41e490f63b048d1b4539"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/symbols.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/symbols.log",
+      "bytes": 2219,
+      "sha256": "8f43c3c591b471eea7e9c74b21a66c1094efa36fc0454667e4d755e34a77033d"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/symbols_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/symbols_process.json",
+      "bytes": 266,
+      "sha256": "ffe555310523984a429915cb43d1296d11cbb3bfa84916cfc17c9516adb0548c"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/test_config.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/test_config.vh",
+      "bytes": 1027,
+      "sha256": "cb5e050a9afd83181ad5050fdee5008a24c52396b099c87f6db6e9a5bb1e7241"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/undefined.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/undefined.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/undefined_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/undefined_process.json",
+      "bytes": 266,
+      "sha256": "e5aa09ed74c04603c5b95b19dd2cdd1f67251c85bca96763d7621659f32c3de1"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/compiler_version.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/compiler_version.log",
+      "bytes": 276,
+      "sha256": "56e9ba794dc0f3d4846eef892db8f5528046f8dfb5dbec6d5f63ddf06d5fea40"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/compiler_version_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/compiler_version_process.json",
+      "bytes": 169,
+      "sha256": "f58d2655a1ac9909d77a9ea0db2bb4f5d348c8e390ebe7a69aab5ff6075c8f58"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/firmware.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/firmware.log",
+      "bytes": 270,
+      "sha256": "73a1ccc7e2fe1d51a098d2bfbb8b8b9479141a62b09b7ca48f54bc11beb85143"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/firmware_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/firmware_process.json",
+      "bytes": 1935,
+      "sha256": "af2a2ab1c7dce21ba26478b8e362f35fc262a8ec54c2e2c06457992a12c53af5"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/result.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/result.json",
+      "bytes": 34927,
+      "sha256": "e30077739efaffd2fbb7cdcaede7190ad6b9892b461c16b9a9c18544123c5c00"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/simulation.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/simulation.log",
+      "bytes": 14924,
+      "sha256": "1d3f0bb30302cd701f0dfdff294db45668f218294f1f7b80f1c1ef64784b09a7"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/simulation_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/simulation_process.json",
+      "bytes": 144,
+      "sha256": "4c737dc69eb82662ffb2fe8d802d5169a6782b141a1ef71432ed4dcc8d212e0c"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/simulator_version.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/simulator_version.log",
+      "bytes": 73,
+      "sha256": "c3a014928dfded9260e534537b0c87166907b71922850e6afc33450b4c079d49"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/simulator_version_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/simulator_version_process.json",
+      "bytes": 121,
+      "sha256": "8f12a0095ef83545db413fc4652ca47b513ef0e28dabf7cc3863ae91662e2e90"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/symbols.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/symbols.log",
+      "bytes": 2219,
+      "sha256": "8f43c3c591b471eea7e9c74b21a66c1094efa36fc0454667e4d755e34a77033d"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/symbols_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/symbols_process.json",
+      "bytes": 266,
+      "sha256": "896116850d03b10b6e9a801ccaa2382591875bfa061ebf96bbe6416fcff66f36"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/test_config.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/test_config.vh",
+      "bytes": 1035,
+      "sha256": "a3000755c83b982804f7abacf520cccd8be438324d947f5868a13de8bc43d369"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/undefined.log",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/undefined.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/undefined_process.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/undefined_process.json",
+      "bytes": 266,
+      "sha256": "a0848375c77a057d96823a717866d0f03e4e82f3418aa9eb0b752843d91139cf"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/assets/manifest.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/assets/manifest.json",
+      "bytes": 1325,
+      "sha256": "0bb3364b6e43555c63af47312e04791c5f1454ffb5a5ec10e2937bf7bfc25778"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/fixture/reference.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/fixture/reference.json",
+      "bytes": 4258,
+      "sha256": "30d560eb6fa1de035262c036e5660ff5d880c1bdbc95a7d711f450bc0f95d9df"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/config/cpu_admission.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/config/cpu_admission.json",
+      "bytes": 33287,
+      "sha256": "318f3df132d910a00bbda071a29f26abe1cf445444c0f40ad4e738636d5e3db9"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/config/cpu_toolchain.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/config/cpu_toolchain.json",
+      "bytes": 399,
+      "sha256": "026670e776703cb5b839fce8bb8c110b8342b437fb26506d429dae89427a1fb8"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/config/soc_memory.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/config/soc_memory.json",
+      "bytes": 2085,
+      "sha256": "2eb7ced865eb1ff7fddc21d1f810e8696823a661966f3864d77c9d56b11c648f"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/avatar_span_identity.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/avatar_span_identity.vh",
+      "bytes": 187,
+      "sha256": "b7d813f73304070c96a4091b9ee98b47d20e5e74b66800e7b8f7160bb8983e20"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/avatar_span_table.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/avatar_span_table.vh",
+      "bytes": 13987,
+      "sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_capture_v2.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_capture_v2.vh",
+      "bytes": 6859,
+      "sha256": "f2cbb001255e035d4b5ee1584f3dc1ffca711d7fd738a21a268b5569bdf8deb3"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_cfg.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_cfg.vh",
+      "bytes": 1690,
+      "sha256": "9040799e693b864e6d14afa7044881ec001a71fc4fccb9e41e640c9f9c8c4233"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_display.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/video/include/video_display.vh",
+      "bytes": 3307,
+      "sha256": "da79f90c35112fc28f8f3ad199980b08decaf194ccaefc907595f72dd391d9e2"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/soc/include/avatar_preset.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/soc/include/avatar_preset.vh",
+      "bytes": 480,
+      "sha256": "4c10b8bb4684b0c306eace3fd86f04fa2513c4dccb2b1c1adf14cf56580f791e"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/rtl/soc/include/frame_config.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/rtl/soc/include/frame_config.vh",
+      "bytes": 4036,
+      "sha256": "73e71ae2420d03532cd0713f22dbb8b4d7ce89da8ac0adecee1d5054da75e133"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/fpga/pg2l100h/ip/triha_compute_pll.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/fpga/pg2l100h/ip/triha_compute_pll.json",
+      "bytes": 309,
+      "sha256": "8c459df8cf0f5998c8b26ab5fad6486c6265de57e1168279f9998d1f857347b3"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_456009Z/inputs/fpga/pg2l100h/project/triha_face_board.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_456009Z/inputs/fpga/pg2l100h/project/triha_face_board.json",
+      "bytes": 8142,
+      "sha256": "faba24030626472125a9193dd0830d3544d107fe9786aed75164f7963aaf650c"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/assets/manifest.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/assets/manifest.json",
+      "bytes": 1325,
+      "sha256": "0bb3364b6e43555c63af47312e04791c5f1454ffb5a5ec10e2937bf7bfc25778"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/config/cpu_admission.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/config/cpu_admission.json",
+      "bytes": 33287,
+      "sha256": "318f3df132d910a00bbda071a29f26abe1cf445444c0f40ad4e738636d5e3db9"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/config/cpu_toolchain.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/config/cpu_toolchain.json",
+      "bytes": 399,
+      "sha256": "026670e776703cb5b839fce8bb8c110b8342b437fb26506d429dae89427a1fb8"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/config/soc_memory.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/config/soc_memory.json",
+      "bytes": 2085,
+      "sha256": "2eb7ced865eb1ff7fddc21d1f810e8696823a661966f3864d77c9d56b11c648f"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/avatar_span_identity.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/avatar_span_identity.vh",
+      "bytes": 187,
+      "sha256": "b7d813f73304070c96a4091b9ee98b47d20e5e74b66800e7b8f7160bb8983e20"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/avatar_span_table.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/avatar_span_table.vh",
+      "bytes": 13987,
+      "sha256": "b5a18b43b5992c5cfc1c61bedcb895c55d06fdab69eccc638eb9b22c04e0ee9e"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_capture_v2.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_capture_v2.vh",
+      "bytes": 6859,
+      "sha256": "f2cbb001255e035d4b5ee1584f3dc1ffca711d7fd738a21a268b5569bdf8deb3"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_cfg.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_cfg.vh",
+      "bytes": 1690,
+      "sha256": "9040799e693b864e6d14afa7044881ec001a71fc4fccb9e41e640c9f9c8c4233"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_display.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/video/include/video_display.vh",
+      "bytes": 3307,
+      "sha256": "da79f90c35112fc28f8f3ad199980b08decaf194ccaefc907595f72dd391d9e2"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/soc/include/avatar_preset.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/soc/include/avatar_preset.vh",
+      "bytes": 480,
+      "sha256": "4c10b8bb4684b0c306eace3fd86f04fa2513c4dccb2b1c1adf14cf56580f791e"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/rtl/soc/include/frame_config.vh",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/rtl/soc/include/frame_config.vh",
+      "bytes": 4036,
+      "sha256": "73e71ae2420d03532cd0713f22dbb8b4d7ce89da8ac0adecee1d5054da75e133"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/fpga/pg2l100h/ip/triha_compute_pll.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/fpga/pg2l100h/ip/triha_compute_pll.json",
+      "bytes": 309,
+      "sha256": "8c459df8cf0f5998c8b26ab5fad6486c6265de57e1168279f9998d1f857347b3"
+    },
+    {
+      "path": "evidence/build/soc/face_system-20261104T011551_453685Z/inputs/fpga/pg2l100h/project/triha_face_board.json",
+      "origin": "release archive member build/soc/face_system-20261104T011551_453685Z/inputs/fpga/pg2l100h/project/triha_face_board.json",
+      "bytes": 8142,
+      "sha256": "faba24030626472125a9193dd0830d3544d107fe9786aed75164f7963aaf650c"
+    },
+    {
+      "path": "source-notes/docs/video/FACE_AVATAR_BRINGUP.md",
+      "origin": "edfa199:docs/video/FACE_AVATAR_BRINGUP.md",
+      "bytes": 9696,
+      "sha256": "d8cf40dea2f82e52be7b433af955d9e8108f1476b55915925e14c30773413666"
+    },
+    {
+      "path": "source-notes/assets/avatars/triha/manifest.json",
+      "origin": "edfa199:assets/avatars/triha/manifest.json",
+      "bytes": 1325,
+      "sha256": "0bb3364b6e43555c63af47312e04791c5f1454ffb5a5ec10e2937bf7bfc25778"
+    },
+    {
+      "path": "source-notes/assets/avatars/triha/source.json",
+      "origin": "edfa199:assets/avatars/triha/source.json",
+      "bytes": 784,
+      "sha256": "16ad97d9895e364b953ce12a87bae6b20089d6ceebf503aa4541e26ca913cfaa"
+    }
+  ],
+  "scope": "Read-only verification of existing release evidence; no simulation, synthesis, implementation or board operation rerun."
+}

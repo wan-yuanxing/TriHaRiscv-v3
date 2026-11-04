@@ -1,0 +1,75 @@
+{
+  "cpu_head": "12733df2650fa0daee98457889ee16588dd72b5c",
+  "branch": "cpu-github",
+  "modified_by_this_task": {
+    "scripts/cpu/run_document_zero_pair.py": "209e006dd8cd80d3731ef26210a4e828b88a590a7749b5bbbeb0b5232d06d89d",
+    "tb/cpu/tb_zero_pair_trace.v": "8721c5b40097883e781c4bb72872deb146ce0c4b59e3527998d52b70ed3090d0",
+    "tb/cpu/tb_issue_zero_pair_decoded.v": "256d57476c901cd4a62a07f09ac513fb1cafbcaec7503d5d9c9abd537dfc4997",
+    "tb/cpu/tb_zero_pair_program.v": "268107e3d81d6ffd2e1eccfa7fc9e774eb01ca035464477426fa53ee42cc37ce",
+    "tb/cpu/tb_issue_branch_zero_sources_head.v": "0e000c8b4a18953655ab4267aa0f85e494280422e374ae1e2e3b94876506ffe3"
+  },
+  "unchanged_originals": {
+    "tb/cpu/tb_issue_zero_pair_pending.v": "5720d6577ddd83a7e5400d8ddea5002b74f5100d80457f2254f8f201e75a3819",
+    "tb/cpu/tb_issue_branch_zero_sources.v": "d8e74e0b02e59c619d2d7b23df718c7e1bceae2e6865e5939edcceaad605084c",
+    "rtl/cpu/triha_issue.v": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e"
+  },
+  "issue_unchanged_since_first_reproduction": true,
+  "original_fixture_unchanged_since_first_reproduction": true,
+  "matrix_rtl_hashes": {
+    "rtl/cpu/vendor/src/core/biriscv_alu.v": "65ac656a0e3101f4ee1adc50eba19842b286cbe997e80ba62f94913bec22142e",
+    "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413",
+    "rtl/cpu/triha_csr.v": "1c67c2fe6b9a37beea1959dfdb290d2340b0d3f2223348d23c9bc97252532012",
+    "rtl/cpu/triha_decode.v": "1d89e0899fb31c64d64f61af39016d2f7f081ea35bc9abd06dc0e31cf497314a",
+    "rtl/cpu/vendor/src/core/biriscv_decoder.v": "e39e7828d630784b047b0adba962499e5eb8cf51cfc73d135e18f74ba66dc4c4",
+    "rtl/cpu/vendor/src/core/biriscv_divider.v": "6e68a6cc46fc8526f2a6af0d262565d6230b7f7c4162620ca86932d7d7bcc20b",
+    "rtl/cpu/vendor/src/core/biriscv_exec.v": "b0bfd91b344335a0906fab3a6c1c0c7ee372e10ca2bfee1e3b3bfea9420359c7",
+    "rtl/cpu/vendor/src/core/biriscv_fetch.v": "653a9ebf8a729fea141de381e8160ae8df7028df72493b76a29f1272037b3fe0",
+    "rtl/cpu/triha_frontend.v": "92bf85932ebe747f9606b0e080f6f74cf14beb11987c7456e5b8e1a72aa83b58",
+    "rtl/cpu/triha_issue.v": "fb372787780ef1333e5a7c1af2d56dfbcfff7abb205fff4bea7dea6b26a2935e",
+    "rtl/cpu/triha_regfile.v": "05a756cc45ad991fe654aa226549dc019d4e520de3dfeb892bd008eca6966929",
+    "rtl/cpu/triha_divider.v": "c14074038b625f7f9ce372c390c84ac56b1af89af4fd0e3a117c1b29e7d6fc55",
+    "rtl/cpu/triha_lsu.v": "9900f6842cc0698bd519f86c64034df81b85e3a2c98ac65b2a4aaae10b16f2e9",
+    "rtl/cpu/vendor/src/core/biriscv_mmu.v": "2f57825178e5455ed9d9915eae09ae2448c9f16903f11b62d78679ddf4f5124a",
+    "rtl/cpu/triha_multiplier.v": "cf73e46a04b6f0f78efa57d0a221047e9ef9cea54e9d6e0e68a6a141c8a6c903",
+    "rtl/cpu/triha_npc.v": "fb10fa1ea24289a0a11d387e1d8917624d3d851ab7d499bdbc97e40908f3115f",
+    "rtl/cpu/triha_btb.v": "2c637a63388ae123b1534daf46eb1b01c8d4b34857b2494b2e164d24ba95f8c7",
+    "rtl/cpu/triha_pipe_ctrl.v": "b789427ee8861cac6b29830903997e29b385e44ee36c1e61dd119acc0ba19c54",
+    "rtl/cpu/vendor/src/core/biriscv_regfile.v": "81100e24b936fe790d53b802caed5830cc112462fd55d5614dbb94c2a471b9d9",
+    "rtl/cpu/triha_cpu.v": "04a1e49b02b6de7760d1dd1c3869ffb5e023251e4cfa6b4a72517627ccff9d38",
+    "rtl/cpu/triha_core.v": "240c8f3c32512fe1c0812a6693a6872dafa56ad01ac7ac627d8250bd1948c4dd",
+    "rtl/cpu/vendor/src/core/biriscv_defs.v": "4e31701c150b6764fb5bfef6c38fc21219b80338d0d0fefd5a94d3de19d44e2a"
+  },
+  "matrix_config_hashes": {
+    "fpga/pg2l100h/project/cpu_core.json": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96",
+    "config/cpu_primitives.json": "facc28ac7bc97623df97e1bb10b92be26a36698b435baaf971b75d25dfbb0484"
+  },
+  "changes_between_initial_reproduction_and_matrix": {
+    "rtl/cpu/vendor/src/core/biriscv_csr_regfile.v": {
+      "initial": "8afe1e9ead386b401f326c2d1ebd06aeea00c26b6abb5764e737ebe7e9ae9f93",
+      "matrix": null
+    },
+    "rtl/cpu/triha_csr.v": {
+      "initial": "5382fb9388acd3e60ccba2ac20eff096bbc248b13d23d56cecb2a21291e67425",
+      "matrix": "1c67c2fe6b9a37beea1959dfdb290d2340b0d3f2223348d23c9bc97252532012"
+    },
+    "rtl/cpu/triha_lsu.v": {
+      "initial": "3d614d5f62f8e96184cade9cb0af4c18d070b8d6ea22fa1f2bdc9003acb4debd",
+      "matrix": "9900f6842cc0698bd519f86c64034df81b85e3a2c98ac65b2a4aaae10b16f2e9"
+    },
+    "fpga/pg2l100h/project/cpu_core.json": {
+      "initial": "e412a84e4c6e64e43e0085667905f482e36421cd58e072b5c323ff9debe72441",
+      "matrix": "5bcb47c64e0f721c1e03b49ea9a20c2dacb189102a06bf819ea5d20f339d2f96"
+    }
+  },
+  "matrix_added_sources": {
+    "rtl/cpu/triha_csr_regfile.v": "d2bcebd4292b93cccda685667fd8647e829e96ec20193aa453f98d62975fa413"
+  },
+  "matrix_live_source_changes": {},
+  "final_git_status": " M config/cpu_sources.f\n M fpga/pg2l100h/project/cpu_cached_core.json\n M fpga/pg2l100h/project/cpu_cached_soc.json\n M fpga/pg2l100h/project/cpu_cached_soc_map.json\n M fpga/pg2l100h/project/cpu_core.json\n M fpga/pg2l100h/project/cpu_ddr_map.json\n M rtl/cpu/ADAPTATIONS.json\n M rtl/cpu/triha_csr.v\n M rtl/cpu/triha_lsu.v\n M scripts/cpu/run.ps1\n M scripts/cpu/run_cache.py\n M scripts/cpu/run_dual_diagnostic.py\n M scripts/cpu/run_equivalence.ps1\n M scripts/cpu/run_firmware.ps1\n M scripts/cpu/run_redirect.ps1\n M scripts/cpu/run_tcm_profile.py\n M sw/tests/cache_runtime.S\n?? rtl/cpu/triha_csr_regfile.v\n?? scripts/cpu/run_document_csr.py\n?? scripts/cpu/run_document_zero_pair.py\n?? tb/cpu/tb_document_csr.v\n?? tb/cpu/tb_issue_branch_zero_sources_head.v\n?? tb/cpu/tb_issue_zero_pair_decoded.v\n?? tb/cpu/tb_zero_pair_program.v\n?? tb/cpu/tb_zero_pair_trace.v\n",
+  "audit_dir": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-zero-pair-audit-20261102T162423924108Z",
+  "matrix_result_path": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-zero-pair-20261102T163017039365Z\\result.json",
+  "matrix_prior_snapshot": {
+    "result": "D:\\FPGA\\TriHaRiscv-cpu-dualissue-windows\\build\\cpu\\document-zero-pair-20261102T161158704045Z\\result.json",
+    "csr_sha256": "7326de098bbdaab6ae4eb5b72088d6a4cc4d5735fdb755bbbfdf6ae52d9e0f80"
+  }
+}

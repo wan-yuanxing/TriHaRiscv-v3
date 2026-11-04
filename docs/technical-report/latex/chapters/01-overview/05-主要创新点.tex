@@ -1,0 +1,7 @@
+% !TEX root = ../../技术文档.tex
+\section{主要创新点}
+\begin{enumerate}[label=\arabic*.]
+    \item 设计可配置单/双发射六级 RISC-V CPU，结合跨取指包指令配对、双执行通路和共享运算单元，提供不同的性能与资源配置。
+    \item 围绕固定YuNet计算图设计广播式MAC与独立深度卷积通路，由NPU完成图遍历和层内分块，利用片上数据复用控制外存访问和FPGA资源开销。
+    \item 构建采集、推理和显示的同帧管理机制，采用三帧槽、显示边界切换与流式头像合成，避免整帧合成结果再次写回DDR。
+\end{enumerate}
